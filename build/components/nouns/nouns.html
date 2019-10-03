@@ -1,0 +1,31 @@
+<div class="rs-component component-nouns">
+	<div class="selection">
+		<label class="">
+			Noun:
+			<select v-model="state.current">
+				<option v-for="type in nouns" :value="type">{{type}}</option>
+			</select>
+		</label>
+	</div>
+	
+	<div class="sourcing">
+		<label class="">
+			Copy:
+			<select v-model="copy">
+				<option v-for="(object, id) in universe.nouns[state.current]" :value="id">{{id}}</option>
+			</select>
+		</label>
+	</div>
+	
+	<div class="building">
+		<textarea v-model="rawValue">
+		</textarea>
+	</div>
+	
+	<div class="actions">
+		<button class="primary-action">
+			<span class="action-icon fas fa-cloud-upload"></span>
+			<span class="action-text">Upload</span>
+		</button>
+	</div>
+</div>

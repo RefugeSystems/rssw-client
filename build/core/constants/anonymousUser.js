@@ -4,4 +4,4 @@
  * @type UserInformation
  * @for rsSystem
  */
-rsSystem.AnonymousUser = new UserInformation("Anonymous");
+rsSystem.AnonymousUser = new UserInformation("Anonymous", "__anonymous");

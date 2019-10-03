@@ -4,8 +4,8 @@
  * @constructor
  * @module Library
  * @param {String} username
- * @param {String} token
  * @param {String} id
+ * @param {String} token
  * @param {String} [name] Optional additional identifier for the name of the user.
  */
 class UserInformation {

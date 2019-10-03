@@ -110,8 +110,8 @@ var config = {
 		},
 		"app": [
 			"spec/app/**/*.js",
-			"app/**/*.js",
-			"app/*.js"
+			"build/**/*.js",
+			"build/*.js"
 		]
 	},
 	"connect": {
@@ -152,6 +152,7 @@ var config = {
 			"files": [
 				"Gruntfile.js",
 				"app/manifest.json",
+				"build/**/*.less",
 				"build/**/*.json",
 				"build/**/*.html",
 				"build/**/*.css",
@@ -209,10 +210,9 @@ var config = {
 		},
 		"less": {
 			"src": [
-				"build/styles/core/*.less",
 				"build/styles/*.less",
-				"build/pages/*.less",
-				"build/pages/*.less",
+				"build/styles/*/**/*.less",
+				"build/pages/**/*.less",
 				"build/components/**/*.less"
 			],
 			"dest": "build/app.less"

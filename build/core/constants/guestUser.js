@@ -4,4 +4,4 @@
  * @type UserInformation
  * @for rsSystem
  */
-rsSystem.GuestUser = new UserInformation("Guest", "", "", "Guest User");
+rsSystem.GuestUser = new UserInformation("Guest", "__guest", "", "Guest User");

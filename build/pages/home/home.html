@@ -1,4 +1,20 @@
 <div class="rs-page page-home">
-	<h1>Home</h1>
-
+	<div class="login prompt" v-if="state === 0">
+		<div class="boxed">
+			<div class="message" v-if="message">{{message}}</div>
+			<rs-connect v-on:connect="connect"></rs-connect>
+		</div>
+	</div>
+	<div class="login waiting" v-if="0 < state && state < 10">
+		<div class="titling">
+			<span v-if="state === 1">Connecting</span>
+			<span v-if="state === 2">Loading</span>
+		</div>
+		<div class="status">
+			<span class="far fa-spinner fa-pulse"></span>
+		</div>
+	</div>
+	<div class="active" v-if="state === 10">
+		<router-view :universe="universe" :player="player"></router-view>
+	</div>
 </div>

@@ -1,0 +1,85 @@
+.rs-component {
+	.flow-h {
+		display: flex !important;
+		flex-direction: row !important;
+	
+		&.wrap {
+			flex-wrap: wrap;
+		}
+	
+		&.reversed {
+			flex-direction: row-reversed;
+		}
+		
+		&.lefted {
+			justify-content: flex-start;
+		}
+		
+		&.justified {
+			justify-content: space-between;
+		}
+		
+		&.righted {
+			justify-content: flex-end;
+		}
+		
+		&.centered {
+			align-items: center;
+		}
+		
+		&.middled {
+			align-content: center;
+		}
+	}
+	
+	.flow-v {
+		display: flex !important;
+		flex-direction: column !important;
+	
+		&.wrap {
+			flex-wrap: wrap;
+		}
+	
+		&.reversed {
+			flex-direction: column-reversed;
+		}
+		
+		&.lefted {
+			justify-content: flex-start;
+		}
+		
+		&.justified {
+			justify-content: space-between;
+		}
+		
+		&.righted {
+			justify-content: flex-end;
+		}
+		
+		&.centered {
+			align-items: center;
+		}
+		
+		&.middled {
+			align-content: center;
+		}
+	}
+	
+	.flipped-h {
+		transform: scaleX(-1);
+	}
+	
+	.flipped-v {
+		transform: scaleY(-1);
+	}
+	
+	.aligned-left {
+		text-align: left;
+	}
+	.aligned-right {
+		text-align: right;
+	}
+	.aligned-center {
+		text-align: center;
+	}
+}

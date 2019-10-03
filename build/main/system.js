@@ -19,16 +19,24 @@ rsSystem.App = new Vue({
 	"mounted": function() {
 		rsSystem.Router.addRoutes([{
 			"path": "/",
-			"component": rsSystem.components.RSHome
-		}, {
-			"path": "/hangar",
-			"component": rsSystem.components.RSSWHangar
-		}, {
-			"path": "/ship",
-			"component": rsSystem.components.RSSWShip
-		}, {
-			"path": "/about",
-			"component": rsSystem.components.RSAbout
+			"component": rsSystem.components.RSHome,
+			"children": [{
+				"path": "nouns",
+				"component": rsSystem.components.RSNounControls
+			}, {
+				"path": "hangar",
+				"component": rsSystem.components.RSSWHangar,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWHangar
+				}]
+			}, {
+				"path": "ship",
+				"component": rsSystem.components.RSSWShip
+			}, {
+				"path": "about",
+				"component": rsSystem.components.RSAbout
+			}]
 		}]);
 	},
 	"router": rsSystem.Router,

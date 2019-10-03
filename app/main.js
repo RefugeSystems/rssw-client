@@ -18225,13 +18225,15 @@ Templify.install = function(Vue, options) {
 	options.name = options.name || "templified";
 	Vue[options.name] = function(name) {
 		switch(name) {
-			case "components/connect.html": return "";
+			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<form onsubmit=\"return false;\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<span class=\"heading-icon\"></span>\r\n\t\t\t<span>Login</span>\r\n\t\t</div>\r\n\t\t<div class=\"fields\">\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t\t</label>\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t\t</label>\r\n\t\t\t<div class=\"actions\">\r\n\t\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\t\tSecure?\r\n\t\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</form>\r\n</div>";
 			case "components/gyroscope.html": return "";
 			case "components/info.html": return "";
+			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/table.html": return "";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
-			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<h1>Home</h1>\r\n\r\n</div>\r\n";
+			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"active\" v-if=\"state === 10\">\r\n\t\t<router-view :universe=\"universe\" :player=\"player\"></router-view>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
+			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<h1>Nouns</h1>\r\n\t<rs-nouns :universe=\"universe\" :player=\"player\"></rs-nouns>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
 			default: return null;
 		}
@@ -19733,8 +19735,8 @@ var Random = (function() {
  * @constructor
  * @module Library
  * @param {String} username
- * @param {String} token
  * @param {String} id
+ * @param {String} token
  * @param {String} [name] Optional additional identifier for the name of the user.
  */
 class UserInformation {
@@ -19974,14 +19976,14 @@ rsSystem.dismissError = function() {
  * @type UserInformation
  * @for rsSystem
  */
-rsSystem.AnonymousUser = new UserInformation("Anonymous");
+rsSystem.AnonymousUser = new UserInformation("Anonymous", "__anonymous");
 /**
  * 
  * @property GuestUser
  * @type UserInformation
  * @for rsSystem
  */
-rsSystem.GuestUser = new UserInformation("Guest", "", "", "Guest User");
+rsSystem.GuestUser = new UserInformation("Guest", "__guest", "", "Guest User");
 /* */
 rsSystem.settings.logging.default = true;
 rsSystem.settings.logging.trace = true;
@@ -20007,6 +20009,37 @@ rsSystem.settings.logging.warn = true;
 rsSystem.component = {};
 rsSystem.component = function(name, definition) {
 	rsSystem.components[name] = Vue.component(name, definition);
+};
+
+/**
+ * Maps type or class names to the constructor for that named type of noun.
+ * 
+ * This is used by the Universe when loading and constructing objects.
+ * @property availableNouns
+ * @type Object
+ * @for rsSystem
+ */
+rsSystem.availableNouns = {};
+/**
+ * List of all nouns that are currently registered.
+ * 
+ * Used by system controls for easy reference.
+ * @property listingNouns
+ * @type Array
+ * @for rsSystem
+ */
+rsSystem.listingNouns = [];
+
+/**
+ * Maps type or class names to the constructor for that named type of noun. 
+ * @method registerNoun
+ * @param {Function | Class} constructor The constructor to use for the named type.
+ * @param {String} [name] The name for the noun. Defaults to the name of the constructor.
+ */
+rsSystem.registerNoun = function(constructor, name) {
+	name = name || constructor.name;
+	rsSystem.availableNouns[name] = constructor;
+	rsSystem.listingNouns.push(name);
 };
 
 
@@ -20910,8 +20943,8 @@ class RSObject extends EventEmitter {
  * 		received from the Universe.
  */
 class RSAbility extends RSObject {
-	constructor(details) {
-		super(details);
+	constructor(details, universe) {
+		super(details, universe);
 		
 	}
 	
@@ -20927,11 +20960,45 @@ class RSAbility extends RSObject {
  * 		received from the Universe.
  */
 class RSEffect extends RSObject {
-	constructor(details) {
-		super(details);
+	constructor(details, universe) {
+		super(details, universe);
 		
 	}
 	
+}
+
+/**
+ * Handles what would commonly be considered Players or other such beings, structures, or vehicles.
+ * @class RSEntity
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSEntity extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+
+		/**
+		 * List of the keys available for this Entity in the "equiped" map.
+		 * @property slots
+		 * @type Array
+		 */
+		if(!this.slots) {
+			this.slots = [];
+		}
+
+		/**
+		 * Maps an ID identifying a slot to an ID of some item that is in that "slot".
+		 * @property equipped
+		 * @type Object
+		 */
+		if(!this.equipped) {
+			this.equipped = {};
+		}
+		
+	}
 }
 
 /**
@@ -20944,8 +21011,41 @@ class RSEffect extends RSObject {
  * 		received from the Universe.
  */
 class RSItem extends RSObject {
-	constructor(details) {
-		super(details);
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}
+	
+}
+
+/**
+ * Representation for locations
+ * @class RSEntity
+ * @extends RSLocation
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSLocation extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}
+}
+
+/**
+ * 
+ * @class RSPlayer
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSPlayer extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
 		
 	}
 	
@@ -20963,6 +21063,10 @@ class RSItem extends RSObject {
 class RSUniverse extends RSObject {
 	constructor(details) {
 		super(details);
+		
+		this.initialized = false;
+		this.indexes = {};
+		this.nouns = {};
 		
 		this.connection = {};
 		this.connection.maxHistory = 100;
@@ -20986,6 +21090,14 @@ class RSUniverse extends RSObject {
 				this.connection.history.pop();
 			}
 		};
+		
+		
+		this.$on("world:state", (event) => {
+			if(!this.initialized) {
+				this.$emit("initializing", event);
+			}
+			this.loadState(event)
+		});
 	}
 	
 	/**
@@ -21012,7 +21124,7 @@ class RSUniverse extends RSObject {
 				"address": address
 			});
 			
-			var socket = new WebSocket(address + "?authenticator=" + userInformation.token + "&user=" + userInformation.username + "&userid=" + userInformation.id + "&name=" + userInformation.name);
+			var socket = new WebSocket(address + "?authenticator=" + userInformation.token + "&username=" + userInformation.username + "&id=" + userInformation.id + "&name=" + userInformation.name);
 			
 			socket.onopen = (event) => {
 				this.closing = false;
@@ -21052,9 +21164,9 @@ class RSUniverse extends RSObject {
 			
 			socket.onclose = (event) => {
 				this.connection.entry({
-						"message": "Connection Closed",
-						"event": event
-					});
+					"message": "Connection Closed",
+					"event": event
+				});
 				if(!this.connection.closing && !this.connection.reconnecting) {
 					this.connection.entry("Mitigating Lost Connection");
 					this.connection.reconnecting = true;
@@ -21065,7 +21177,7 @@ class RSUniverse extends RSObject {
 					});
 					this.reconnect(event);
 				} else if(this.connection.closing) {
-					this.$emit("closed", this);
+					this.$emit("disconnected", this);
 				}
 				this.connection.socket = null;
 			};
@@ -21073,10 +21185,17 @@ class RSUniverse extends RSObject {
 			socket.onmessage = (message) => {
 				try {
 					this.connection.entry(message, "Message Received");
+					this.connection.syncMark = message.time;
+					this.connection.last = Date.now();
+					
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
-					message.event.echo = message.echo;
+					if(message.echo && !message.event.echo) {
+						message.event.echo = message.echo;
+					}
+					console.log("Received: ", message);
+					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
 				} catch(exception) {
@@ -21113,12 +21232,16 @@ class RSUniverse extends RSObject {
 				this.connection.retries++;
 				this.connect(this.connection.user, this.connection.address);
 			} else {
-				this.$emit("closed", this);
+				this.$emit("disconnected", this);
 				rsSystem.log.error("Reconnect Giving up\n", this);
 			}
 		}, 1000);
 	}
 	
+	/**
+	 * 
+	 * @method disconnect
+	 */
 	disconnect() {
 		if(!this.connection.socket) {
 			this.connection.entry("Unable to disconnect, Universe not connected");
@@ -21134,6 +21257,53 @@ class RSUniverse extends RSObject {
 	
 	/**
 	 * 
+	 * @param {Object} state
+	 * @return {Promise}
+	 */
+	loadState(state) {
+		return new Promise((done, fail) => {
+			console.log("Loading State: ", state);
+			var keys = Object.keys(state),
+				Constructor,
+				noun,
+				type,
+				ids,
+				id,
+				i,
+				t;
+			
+			for(t=0; t<keys.length; t++) {
+				type = keys[t];
+				Constructor = rsSystem.availableNouns[type];
+				if(Constructor) {
+					ids = Object.keys(state[type]);
+					if(!this.nouns[type]) {
+						this.indexes[type] = new SearchIndex();
+						this.nouns[type] = {};
+					}
+					for(i=0; i<ids.length; i++) {
+						id = ids[i];
+						if(this.nouns[type][id]) {
+							this.nouns[type][id].delta(state[type][id]);
+						} else {
+							this.nouns[type][id] = new Constructor(state[type][id], this);
+							this.indexes[type].indexItem(this.nouns[type][id]);
+						}
+						noun = this.nouns[type][id];
+					}
+				} else {
+					rsSystem.log.error("Noun does not have a registered constructor: " + type);
+				}
+			}
+			
+			if(!this.initialized) {
+				this.$emit("initialized", this);
+			}
+		});
+	}
+	
+	/**
+	 * 
 	 * @method send
 	 * @param {String} type
 	 * @param {Object} data
@@ -21145,13 +21315,18 @@ class RSUniverse extends RSObject {
 			if(typeof data !== "object") {
 				throw new Error("Only objects can be sent");
 			}
+			if(!data.echo) {
+				data.echo = Random.identifier("echo");
+			}
 			data = {
+				"sent": Date.now(),
+				"echo": data.echo,
 				"event": type,
-				"data": data,
-				"sent": Date.now()
+				"data": data
 			};
 			console.log("Sending: ", data);
 			this.connection.socket.send(JSON.stringify(data));
+			return data.data.echo;
 		} else {
 			// TODO: Buffer for connection restored
 		}
@@ -21678,30 +21853,182 @@ class SearchIndex extends EventEmitter {
  * @module Components
  * @main Components
  */
+/**
+ * 
+ * @class StorageManager
+ * @constructor
+ * @param {String} [storageKey] The default storage-key to use with localStorage for save and recall
+ */
+rsSystem.component("StorageManager", {
+	"inherit": true,
+	"mixins": [
+	],
+	"props": [
+		"storageKey"
+	],
+	"mounted": function() {
+	},
+	"methods": {
+		"loadStorage": function(key, defaults) {
+			key = key || this.storageKey;
+			var data = localStorage.getItem(key);
+			if(data) {
+				console.log("Load[" + key + "]: ", data);
+				return JSON.parse(data);
+			} else {
+				console.log("Load[" + key + "]: Defaulted");
+				return defaults;
+			}
+		},
+		"saveStorage": function(key, object) {
+			key = key || this.storageKey;
+			if(!key || !object) {
+				throw new Error("Missing arguments");
+			}
+			console.log("Save[" + key + "]: ", object);
+			localStorage.setItem(key, JSON.stringify(object));
+		}
+	}
+}); 
 
 /**
  * 
  * 
- * @class RSConnect
+ * @class rsConnect
  * @constructor
  * @module Components
  */
-rsSystem.components.RSConnect = Vue.component("RSConnect", {
-	"inherit": true,
-	"mixins": [],
-	"mounted": function() {
-		rsSystem.register(this);
-	},
-	"data": function() {
-		var data = {};
-		return data;
-	},
-	"methods": {
-	},
-	"template": Vue.templified("components/connect.html")
-});
+(function() {
+	var storageKey = "_rs_connectComponentKey";
+	
+	rsSystem.component("rsConnect", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.StorageManager
+		],
+		"mounted": function() {
+			rsSystem.register(this);
+			if(this.$route.fullPath !== "/") {
+				this.connect();
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.store = this.loadStorage(storageKey, {
+				"secure": false,
+				"username": "",
+				"address": ""
+			});
+			console.log("Loaded Data[" + storageKey + "]: ", data.store);
+			
+			return data;
+		},
+		"methods": {
+			"connect": function() {
+				this.saveStorage(storageKey, this.store);
+				var event = {};
+				event.user = new UserInformation(this.store.username, this.store.username);
+				event.address = "://" + this.store.address + "/connect";
+				if(this.store.secure) {
+					event.address = "wss" + event.address;
+				} else {
+					event.address = "ws" + event.address;
+				}
+				this.$emit("connect", event);
+				console.warn("connect");
+			}
+		},
+		"template": Vue.templified("components/connect.html")
+	});
+})();
 
 
+
+
+/**
+ * 
+ * 
+ * @class rsNoun
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_nounComponentKey";
+	
+	rsSystem.component("rsNouns", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.StorageManager
+		],
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			},
+			"player": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		},
+		"data": function() {
+			var data = {};
+			
+			data.message = null;
+			data.rawValue = "{}";
+			data.copy = null;
+			data.nouns = rsSystem.listingNouns;
+			data.state = this.loadStorage(storageKey, {
+				"current": "player",
+				"building": {}
+			});
+			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+			
+			return data;
+		},
+		"watch": {
+			"copy": function(value) {
+				if(value) {
+					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
+					Vue.set(this, "rawValue", JSON.stringify(copy, null, 4));
+					Vue.set(this, "copy", null);
+				}
+			},
+			"rawValue": function(value) {
+				try {
+					var parsed = JSON.parse(value);
+					Vue.set(this.state.building, this.state.current, parsed);
+					this.saveStorage(storageKey, this.state);
+					Vue.set(this, "message", null);
+				} catch(exception) {
+					Vue.set(this, "message", "Invalid: " + exception.message);
+				}
+			}
+		},
+		"methods": {
+			"copyNoun": function(source) {
+				var result = {},
+					keys = Object.keys(source),
+					x;
+				
+				for(x=0; x<keys.length; x++) {
+					if(keys[x] && keys[x][0] !== "_") {
+						result[keys[x]] = source[keys[x]];
+					}
+				}
+				
+				return result;
+			},
+			"modify": function() {
+				
+			}
+		},
+		"template": Vue.templified("components/nouns.html")
+	});
+})();
 
 
 /**
@@ -21763,11 +22090,70 @@ rsSystem.component("RSHome", {
 	},
 	"data": function() {
 		var data = {};
+		
+		data.message = "";
+		data.state = 0;
+		
+		// Track Connection Information
+		data.universe = null;
+		data.player = null;
+		
 		return data;
 	},
 	"methods": {
+		"connect": function(event) {
+			Vue.set(this, "state", 1);
+			Vue.set(this, "universe", new RSUniverse({}));
+			Vue.set(this, "player", event.user);
+			
+			this.universe.$on("disconnected", () => {
+				Vue.set(this, "message", "Disconnected");
+				Vue.set(this, "state", 0);
+			});
+			this.universe.$on("initializing", () => {
+				Vue.set(this, "state", 2);
+			});
+			this.universe.$on("initialized", () => {
+				Vue.set(this, "state", 10);
+			});
+			this.universe.connect(event.user, event.address);
+		}
 	},
 	"template": Vue.templified("pages/home.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSNounControls
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSNounControls", {
+	"inherit": true,
+	"mixins": [],
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"player": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"methods": {
+	},
+	"template": Vue.templified("pages/noun/controls.html")
 });
 
 
@@ -21799,6 +22185,14 @@ rsSystem.device = {
  * @module Main
  * @main Main
  */
+
+rsSystem.registerNoun(RSLocation, "location");
+rsSystem.registerNoun(RSAbility, "ability");
+rsSystem.registerNoun(RSPlayer, "player");
+rsSystem.registerNoun(RSEntity, "entity");
+rsSystem.registerNoun(RSEffect, "effect");
+rsSystem.registerNoun(RSItem, "item");
+
 // Assist function for Reactive Component Printing
 var _p = function(x) {return JSON.parse(JSON.stringify(x));};
 
@@ -21820,16 +22214,24 @@ rsSystem.App = new Vue({
 	"mounted": function() {
 		rsSystem.Router.addRoutes([{
 			"path": "/",
-			"component": rsSystem.components.RSHome
-		}, {
-			"path": "/hangar",
-			"component": rsSystem.components.RSSWHangar
-		}, {
-			"path": "/ship",
-			"component": rsSystem.components.RSSWShip
-		}, {
-			"path": "/about",
-			"component": rsSystem.components.RSAbout
+			"component": rsSystem.components.RSHome,
+			"children": [{
+				"path": "nouns",
+				"component": rsSystem.components.RSNounControls
+			}, {
+				"path": "hangar",
+				"component": rsSystem.components.RSSWHangar,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWHangar
+				}]
+			}, {
+				"path": "ship",
+				"component": rsSystem.components.RSSWShip
+			}, {
+				"path": "about",
+				"component": rsSystem.components.RSAbout
+			}]
 		}]);
 	},
 	"router": rsSystem.Router,

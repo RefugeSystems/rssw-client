@@ -11,6 +11,10 @@ class RSUniverse extends RSObject {
 	constructor(details) {
 		super(details);
 		
+		this.initialized = false;
+		this.indexes = {};
+		this.nouns = {};
+		
 		this.connection = {};
 		this.connection.maxHistory = 100;
 		this.connection.authenticator = null;
@@ -33,6 +37,14 @@ class RSUniverse extends RSObject {
 				this.connection.history.pop();
 			}
 		};
+		
+		
+		this.$on("world:state", (event) => {
+			if(!this.initialized) {
+				this.$emit("initializing", event);
+			}
+			this.loadState(event)
+		});
 	}
 	
 	/**
@@ -59,7 +71,7 @@ class RSUniverse extends RSObject {
 				"address": address
 			});
 			
-			var socket = new WebSocket(address + "?authenticator=" + userInformation.token + "&user=" + userInformation.username + "&userid=" + userInformation.id + "&name=" + userInformation.name);
+			var socket = new WebSocket(address + "?authenticator=" + userInformation.token + "&username=" + userInformation.username + "&id=" + userInformation.id + "&name=" + userInformation.name);
 			
 			socket.onopen = (event) => {
 				this.closing = false;
@@ -99,9 +111,9 @@ class RSUniverse extends RSObject {
 			
 			socket.onclose = (event) => {
 				this.connection.entry({
-						"message": "Connection Closed",
-						"event": event
-					});
+					"message": "Connection Closed",
+					"event": event
+				});
 				if(!this.connection.closing && !this.connection.reconnecting) {
 					this.connection.entry("Mitigating Lost Connection");
 					this.connection.reconnecting = true;
@@ -112,7 +124,7 @@ class RSUniverse extends RSObject {
 					});
 					this.reconnect(event);
 				} else if(this.connection.closing) {
-					this.$emit("closed", this);
+					this.$emit("disconnected", this);
 				}
 				this.connection.socket = null;
 			};
@@ -120,10 +132,17 @@ class RSUniverse extends RSObject {
 			socket.onmessage = (message) => {
 				try {
 					this.connection.entry(message, "Message Received");
+					this.connection.syncMark = message.time;
+					this.connection.last = Date.now();
+					
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
-					message.event.echo = message.echo;
+					if(message.echo && !message.event.echo) {
+						message.event.echo = message.echo;
+					}
+					console.log("Received: ", message);
+					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
 				} catch(exception) {
@@ -160,12 +179,16 @@ class RSUniverse extends RSObject {
 				this.connection.retries++;
 				this.connect(this.connection.user, this.connection.address);
 			} else {
-				this.$emit("closed", this);
+				this.$emit("disconnected", this);
 				rsSystem.log.error("Reconnect Giving up\n", this);
 			}
 		}, 1000);
 	}
 	
+	/**
+	 * 
+	 * @method disconnect
+	 */
 	disconnect() {
 		if(!this.connection.socket) {
 			this.connection.entry("Unable to disconnect, Universe not connected");
@@ -181,6 +204,53 @@ class RSUniverse extends RSObject {
 	
 	/**
 	 * 
+	 * @param {Object} state
+	 * @return {Promise}
+	 */
+	loadState(state) {
+		return new Promise((done, fail) => {
+			console.log("Loading State: ", state);
+			var keys = Object.keys(state),
+				Constructor,
+				noun,
+				type,
+				ids,
+				id,
+				i,
+				t;
+			
+			for(t=0; t<keys.length; t++) {
+				type = keys[t];
+				Constructor = rsSystem.availableNouns[type];
+				if(Constructor) {
+					ids = Object.keys(state[type]);
+					if(!this.nouns[type]) {
+						this.indexes[type] = new SearchIndex();
+						this.nouns[type] = {};
+					}
+					for(i=0; i<ids.length; i++) {
+						id = ids[i];
+						if(this.nouns[type][id]) {
+							this.nouns[type][id].delta(state[type][id]);
+						} else {
+							this.nouns[type][id] = new Constructor(state[type][id], this);
+							this.indexes[type].indexItem(this.nouns[type][id]);
+						}
+						noun = this.nouns[type][id];
+					}
+				} else {
+					rsSystem.log.error("Noun does not have a registered constructor: " + type);
+				}
+			}
+			
+			if(!this.initialized) {
+				this.$emit("initialized", this);
+			}
+		});
+	}
+	
+	/**
+	 * 
 	 * @method send
 	 * @param {String} type
 	 * @param {Object} data
@@ -192,13 +262,18 @@ class RSUniverse extends RSObject {
 			if(typeof data !== "object") {
 				throw new Error("Only objects can be sent");
 			}
+			if(!data.echo) {
+				data.echo = Random.identifier("echo");
+			}
 			data = {
+				"sent": Date.now(),
+				"echo": data.echo,
 				"event": type,
-				"data": data,
-				"sent": Date.now()
+				"data": data
 			};
 			console.log("Sending: ", data);
 			this.connection.socket.send(JSON.stringify(data));
+			return data.data.echo;
 		} else {
 			// TODO: Buffer for connection restored
 		}

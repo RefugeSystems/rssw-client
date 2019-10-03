@@ -8,8 +8,8 @@
  * 		received from the Universe.
  */
 class RSAbility extends RSObject {
-	constructor(details) {
-		super(details);
+	constructor(details, universe) {
+		super(details, universe);
 		
 	}
 	

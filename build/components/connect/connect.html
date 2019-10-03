@@ -1,0 +1,28 @@
+<div class="rs-component connect-component">
+	<form onsubmit="return false;">
+		<div class="heading">
+			<span class="heading-icon"></span>
+			<span>Login</span>
+		</div>
+		<div class="fields">
+			<label class="full">
+				<span class="field-text">Username</span>
+				<input type="text" v-model="store.username" />
+			</label>
+			<label class="full">
+				<span class="field-text">Address</span>
+				<input type="text" v-model="store.address" />
+			</label>
+			<div class="actions">
+				<button class="primary-action" v-on:click="connect()">
+					<span class="action-icon fas fa-sign-in"></span>
+					<span class="action-text">Connect</span>
+				</button>
+				<button class="toggle-action" v-on:click="store.secure = !store.secure">
+					Secure?
+					<span class="far" :class="store.secure?'fa-check-square':'fa-square'"></span>
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
