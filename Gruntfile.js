@@ -99,11 +99,13 @@ var config = {
 				"EventEmitter",
 				"Invasion",
 				"Anomaly",
-				
-				"AQCharacter",
-				"AQPlayer",
-				"AQWorlds",
-				"AQWorld"
+				"_p",
+
+				"RSObject",
+				"RSUniverse",
+				"RSAbility",
+				"RSEffect",
+				"RSItem"
 			]
 		},
 		"app": [
@@ -167,6 +169,9 @@ var config = {
 	},
 	"concat": {
 		"app": {
+			"options": {
+				"sourceMap": true
+			},
 			"src": [
 				"node_modules/hammerjs/hammer.js",
 				"node_modules/showdown/dist/showdown.min.js",
@@ -184,9 +189,6 @@ var config = {
 
 				"build/core/*.js",
 				"build/core/*/**/*.js",
-
-				"build/main/*/**/*.js",
-				"build/main/*.js",
 				
 				"build/common/*.js",
 				"build/common/*/**/*.js",
@@ -195,7 +197,13 @@ var config = {
 				"build/components/*/**/*.js",
 
 				"build/subcomponents/*.js",
-				"build/subcomponents/*/**/*.js"
+				"build/subcomponents/*/**/*.js",
+
+				"build/pages/*.js",
+				"build/pages/*/**/*.js",
+
+				"build/main/*/**/*.js",
+				"build/main/*.js"
 			],
 			"dest": "app/main.js"
 		},

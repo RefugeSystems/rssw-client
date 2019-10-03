@@ -1,7 +1,7 @@
 
 /**
  * 
- * @class RSSystem
+ * @class rsSystem
  * @constructor
  * @module Core
  * @static
@@ -28,6 +28,7 @@ rsSystem.loading._tracking = 200;
  * @param {VueComponent} component
  */
 rsSystem.register = function(component) {
+	rsSystem.log.debug("Registering Component: ", component);
 	var element = component.$el,
 		scan = $(component.$el);
 	rsSystem.loading.components[component.$options._componentTag] = rsSystem.loading.components[component.$options._componentTag] || [];
@@ -83,11 +84,11 @@ rsSystem.lookup = function(element) {
 
 rsSystem.settings = {};
 rsSystem.settings.logging = {};
-rsSystem.settings.logging.default = true;
-rsSystem.settings.logging.trace = true;
-rsSystem.settings.logging.debug = true;
-rsSystem.settings.logging.info = true;
-rsSystem.settings.logging.warn = true;
+rsSystem.settings.logging.default = false;
+rsSystem.settings.logging.trace = false;
+rsSystem.settings.logging.debug = false;
+rsSystem.settings.logging.info = false;
+rsSystem.settings.logging.warn = false;
 rsSystem.settings.logging.error = true;
 rsSystem.settings.logging.fatal = true;
 

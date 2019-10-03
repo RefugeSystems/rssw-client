@@ -1,10 +1,12 @@
-rsSystem.components = rsSystem.components || {};
-rsSystem.components.aq = rsSystem.components.aq || {};
+
 
 /**
  * 
- * @class aq.dragonHTML
+ * @class RSShowdown
  * @constructor
+ * @module Common
+ * @see Showdown: https://www.npmjs.com/package/showdown
+ * @see Markdown: https://www.markdownguide.org/
  */
 (function() {
 	var converter = new showdown.Converter();
@@ -60,13 +62,13 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 								
 								value = $("<span/>");
 								value.addClass(mark.repeat);
-								value.html(rsSystem.calculator.reduceDiceRoll(mark[keys[x]], character));
+								value.html(RSCalculator.reduceDiceRoll(mark[keys[x]], character));
 								element.append(value);
 								
 								value = $("<span> )</span>");
 								element.append(value);
 							} else {
-								element.html(rsSystem.calculator.reduceDiceRoll(mark[keys[x]], character));
+								element.html(RSCalculator.reduceDiceRoll(mark[keys[x]], character));
 							}
 							break;
 					}
@@ -82,13 +84,13 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 				target = sourceText.substring(index + 2, end);
 				value = target.indexOf(",");
 				if(value === -1) {
-					mark = rsSystem.calculator.reduceDiceRoll(target, character);
+					mark = RSCalculator.reduceDiceRoll(target, character);
 					if(mark !== undefined && mark !== null) {
 						sourceText = sourceText.replace(tracking, mark);
 					}
 				} else {
 					target = target.split(",");
-					mark = rsSystem.calculator.reduceDiceRoll(target[0].trim(), character);
+					mark = RSCalculator.reduceDiceRoll(target[0].trim(), character);
 					if(mark !== undefined && mark !== null) {
 						element = $("<span style=\"color:" + target[1] + "\">" + mark + "</span>");
 						sourceText = sourceText.replace(tracking, element[0].outerHTML);
@@ -102,7 +104,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 		return sourceText;
 	};
 	
-	rsSystem.components.aq.dragonHTML = Vue.component("dragonHTML", {
+	rsSystem.component("RSShowdown", {
 		"inherit": true,
 		"props": {
 			"character": {
@@ -115,7 +117,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 			}
 		},
 		"methods": {
-			"dragonHTML": function(sourceText) {
+			"rsshowdown": function(sourceText) {
 				return converter.makeHtml(formatMarkdown(this.character, this.world, sourceText));
 			}
 		}

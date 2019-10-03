@@ -3,7 +3,7 @@
  * 
  * @class Random
  * @constructor
- * @module RSystem
+ * @module Library
  */
 var Random = (function() {
 	/**

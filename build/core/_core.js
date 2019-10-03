@@ -3,7 +3,7 @@
  * in declarations outside of Vue.
  * 
  *  Follows: Library  
- * Precedes: Main
+ * Precedes: Common
  * 
  * @module Core
  * @main Core

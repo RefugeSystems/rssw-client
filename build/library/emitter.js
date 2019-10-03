@@ -4,6 +4,7 @@
  * act as emitters.
  * @class EventEmitter
  * @constructor
+ * @module Library
  */
 class EventEmitter {
 	constructor() {

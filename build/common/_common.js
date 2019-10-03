@@ -3,7 +3,7 @@
  * 
  * Common functionality that doesn't rely on Vue should likely be present in Library or Core.
  * 
- *  Follows: Main  
+ *  Follows: Core  
  * Precedes: Components
  * 
  * @module Common

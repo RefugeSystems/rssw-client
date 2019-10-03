@@ -4,7 +4,7 @@
  * This is the last set of script execution before the page enters a ready state and begins loading.
  * 
  *  Follows: Components  
- * Precedes: [Final Load]
+ * Precedes: Pages
  * 
  * @module Subcomponents
  * @main Subcomponents

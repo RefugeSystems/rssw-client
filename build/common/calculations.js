@@ -1,5 +1,3 @@
-rsSystem.components.aq = rsSystem.components.aq || {};
-
 /**
  * 
  * 
@@ -8,10 +6,11 @@ rsSystem.components.aq = rsSystem.components.aq || {};
  * Instead Re-compute modifier instead of attempting a negative.
  * Things like "gender" don't directly undo without the overhead of tracking.
  * 
- * @class AQCalculator
+ * @class RSCalculator
  * @constructor
+ * @module Common
  */
-(function() {
+var RSCalculator = (function() {
 	var rolled = {
 		"armor": true,
 		"maxHealth": true,
@@ -529,7 +528,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 		return parseInt(roll);
 	};
 	
-	rsSystem.components.calculator = Vue.component("Calculator", {
+	rsSystem.component("RSCalculator", {
 		"inherit": true,
 		"props": [],
 		"mounted": function() {
@@ -615,14 +614,8 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 		}
 	});
 	
+	var calculator = {};
 	
-	/**
-	 * 
-	 * @class rsSystem.calculator
-	 * @constructor
-	 * @static 
-	 */
-	rsSystem.calculator = rsSystem.calculator || {};
 	/**
 	 * 
 	 * @method translateModifiers
@@ -630,7 +623,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * 		modifiers are considered active. 
 	 * @param {Array | Modifier} modifiers The array of modifiers to process into a computed modifier.
 	 */
-	rsSystem.calculator.translateModifiers =  translateModifiers;
+	calculator.translateModifiers =  translateModifiers;
 	/**
 	 * 
 	 * @method resolve
@@ -639,7 +632,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * @param {AQWorld} world 
 	 * @return {Array | Object} Array of the IDs resolved to objects
 	 */
-	rsSystem.calculator.resolve =  resolveWorldReferences;
+	calculator.resolve =  resolveWorldReferences;
 	/**
 	 * 
 	 * @method modifiers
@@ -647,7 +640,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * 		modifiers are considered active. Pass false to force all true for display conditions. 
 	 * @param {Array | Modifier} modifiers The array of modifiers to process into a computed modifier.
 	 */
-	rsSystem.calculator.modifiers = calculateModifiers;
+	calculator.modifiers = calculateModifiers;
 	/**
 	 * 
 	 * @method diceRoll
@@ -656,13 +649,13 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * @param {Character | NPC | Monster} [target] Drives 'target; arguments for stats such as "target.str"
 	 * 		and "target.wis".
 	 */
-	rsSystem.calculator.diceRoll = calculateDiceRoll;
+	calculator.diceRoll = calculateDiceRoll;
 	/**
 	 * 
 	 * @method calculateThrow
 	 * @param {Number} score
 	 */
-	rsSystem.calculator.calculateThrow = calculateThrow;
+	calculator.calculateThrow = calculateThrow;
 	/**
 	 * 
 	 * @method reduceDiceRoll
@@ -671,7 +664,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * @param {Character | NPC | Monster} [target] Drives 'target; arguments for stats such as "target.str"
 	 * 		and "target.wis".
 	 */
-	rsSystem.calculator.reduceDiceRoll = reduceDiceRoll;
+	calculator.reduceDiceRoll = reduceDiceRoll;
 	
 	/**
 	 * 
@@ -682,7 +675,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * @param {Modifier} to
 	 * @param {String} [key]
 	 */
-	rsSystem.calculator.addObject = addModifiers;
+	calculator.addObject = addModifiers;
 	/**
 	 * 
 	 * @method addModifiers
@@ -691,7 +684,7 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * @param {Modifier} to
 	 * @param {String} [key]
 	 */
-	rsSystem.calculator.addModifiers = addModifiers;
+	calculator.addModifiers = addModifiers;
 	/**
 	 * 
 	 * @method spellDC
@@ -699,5 +692,5 @@ rsSystem.components.aq = rsSystem.components.aq || {};
 	 * @param {AQSpell} spell
 	 * @return {Number} SpellDC for that character
 	 */
-	rsSystem.calculator.spellDC = spellDC;
+	calculator.spellDC = spellDC;
 })();

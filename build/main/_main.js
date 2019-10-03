@@ -4,8 +4,8 @@
  * 
  * General components are in Common and specific top level pieces reside in Components.
  * 
- *  Follows: Core  
- * Precedes: Common
+ *  Follows: Pages  
+ * Precedes: [Terminal]
  * 
  * @module Main
  * @main Main

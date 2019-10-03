@@ -1,8 +1,8 @@
 /**
- * Contains HTML for templates used to assemble pages and layout components.
+ * Components designed for general page handling. Should also generally simply layout components.
  * 
- *  Follows: Irrelevant  
- * Precedes: Irrelevant
+ *  Follows: Subcomponents  
+ * Precedes: Main
  * 
  * @module Pages
  * @main Pages
