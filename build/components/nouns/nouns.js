@@ -32,6 +32,7 @@
 			
 			data.message = null;
 			data.rawValue = "{}";
+			data.isValid = true;
 			data.copy = null;
 			data.nouns = rsSystem.listingNouns;
 			data.state = this.loadStorage(storageKey, {
@@ -45,8 +46,8 @@
 		"watch": {
 			"copy": function(value) {
 				if(value) {
-					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", JSON.stringify(copy, null, 4));
+//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
+					Vue.set(this, "rawValue", JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4));
 					Vue.set(this, "copy", null);
 				}
 			},
@@ -56,8 +57,10 @@
 					Vue.set(this.state.building, this.state.current, parsed);
 					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
+					Vue.set(this, "isValid", true);
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
+					Vue.set(this, "isValid", false);
 				}
 			}
 		},
@@ -76,7 +79,9 @@
 				return result;
 			},
 			"modify": function() {
-				
+				if(this.isValid) {
+					this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
+				}
 			}
 		},
 		"template": Vue.templified("components/nouns.html")

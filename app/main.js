@@ -18228,7 +18228,7 @@ Templify.install = function(Vue, options) {
 			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<form onsubmit=\"return false;\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<span class=\"heading-icon\"></span>\r\n\t\t\t<span>Login</span>\r\n\t\t</div>\r\n\t\t<div class=\"fields\">\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t\t</label>\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t\t</label>\r\n\t\t\t<div class=\"actions\">\r\n\t\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\t\tSecure?\r\n\t\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</form>\r\n</div>";
 			case "components/gyroscope.html": return "";
 			case "components/info.html": return "";
-			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/table.html": return "";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"active\" v-if=\"state === 10\">\r\n\t\t<router-view :universe=\"universe\" :player=\"player\"></router-view>\r\n\t</div>\r\n</div>\r\n";
@@ -20014,7 +20014,10 @@ rsSystem.component = function(name, definition) {
 /**
  * Maps type or class names to the constructor for that named type of noun.
  * 
- * This is used by the Universe when loading and constructing objects.
+ * This is used by the Universe when loading and constructing objects. This should
+ * only be accessed if the key is listed in the listingNouns property, otherwise
+ * the noun likely isn't meant for direct use.
+ * 
  * @property availableNouns
  * @type Object
  * @for rsSystem
@@ -20034,12 +20037,16 @@ rsSystem.listingNouns = [];
  * Maps type or class names to the constructor for that named type of noun. 
  * @method registerNoun
  * @param {Function | Class} constructor The constructor to use for the named type.
+ * @param {Boolean} [constructor.unavailable] When true, the noun is considered registered
+ * 		but listed in the noun listing but _is_ still an availableNoun.
  * @param {String} [name] The name for the noun. Defaults to the name of the constructor.
  */
 rsSystem.registerNoun = function(constructor, name) {
 	name = name || constructor.name;
 	rsSystem.availableNouns[name] = constructor;
-	rsSystem.listingNouns.push(name);
+	if(!constructor.unavailable) {
+		rsSystem.listingNouns.push(name);
+	}
 };
 
 
@@ -20763,6 +20770,150 @@ var RSCalculator = (function() {
 	calculator.spellDC = spellDC;
 })();
 
+
+/**
+ * Logging object that handles send data back to the Universe for sorting/debugging
+ * as well as local tracknig for follow-up.
+ * @class RSLog
+ * @extends EventEmitter
+ * @constructor
+ * @module Common
+ * @param {RSUniverse} universe 
+ */
+class RSLog extends EventEmitter {
+	constructor(universe, init) {
+		super();
+		this.universe = universe;
+		this.tracked = 100;
+		this.recent = [];
+		
+		this.levels = init || {
+			"log": 30,
+			"trace": 10,
+			"debug": 20,
+			"info": 30,
+			"warn": 40,
+			"error": 50,
+			"fatal": 60
+		};
+	}
+	
+	/**
+	 * 
+	 * @method setLogging
+	 * @param {Object} levels
+	 */
+	setLogging(levels) {
+		Object.assign(this.levels, levels);
+	}
+	
+	/**
+	 * 
+	 * @method toJSON
+	 * @return {Object} Maps the known logging levels to their set value
+	 */
+	toJSON() {
+		return levels;
+	}
+	
+	/**
+	 * Typically called by the support methods directly, but custom levels would need to have this method
+	 * invoked directly.
+	 * 
+	 * @method createLogEntry
+	 * @param {String} type The type of log entry, such as "info", "error", or "fatal". Should correspond to
+	 * 		a known logging level in levels or it will be ignored as 'off'.
+	 * @param {Array} details Contains information describing what occurred. Ideally a single object mapping
+	 * 		key concepts (such as player, record, and id) to values to help track the cause of the error.
+	 */
+	createLogEntry(type, details) {
+		if(this.levels[type]) {
+			var entry = {
+				"level": this.levels[type],
+				"time": Date.now(),
+				"details": details,
+				"type": type
+			};
+
+			if(console[type]) {
+				console[type].apply(console[type], details);
+			}
+			
+			this.universe.send("log", entry);
+			this.recent.unshift(entry);
+			if(this.tracked && this.recent > this.tracked) {
+				this.recent.pop();
+			}
+			
+			this.$emit(type, entry);
+		}
+	}
+	
+	/**
+	 * 
+	 * @method log
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	log(...args) {
+		this.createLogEntry("log", args);
+	}
+
+	/**
+	 * 
+	 * @method trace
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	trace(...args) {
+		this.createLogEntry("trace", args);
+	}
+
+	/**
+	 * 
+	 * @method debug
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	debug(...args) {
+		this.createLogEntry("debug", args);
+	}
+
+	/**
+	 * 
+	 * @method info
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	info(...args) {
+		this.createLogEntry("info", args);
+	}
+
+	/**
+	 * 
+	 * @method warn
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	warn(...args) {
+		this.createLogEntry("warn", args);
+	}
+
+	/**
+	 * 
+	 * @method error
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	error(...args) {
+		this.createLogEntry("error", args);
+	}
+
+	/**
+	 * 
+	 * @method fatal
+	 * @param {Object | String | Number | Boolean} ...args 
+	 */
+	fatal(...args) {
+		this.createLogEntry("fatal", args);
+	}
+}
+
+
 /**
  * 
  * @class RSObject
@@ -20775,6 +20926,7 @@ var RSCalculator = (function() {
 class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
+		this.universe = universe;
 		var keys = Object.keys(details),
 			x;
 			
@@ -20786,16 +20938,48 @@ class RSObject extends EventEmitter {
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
-				console.log("Object Processing Modification: ", this);
 				if(event.id === this.id) {
-					this.loadDelta(event.data);
+					console.log("Object Processing Modification: ", this, event);
+					this.loadDelta(event);
 				}
 			});
 		}
 	}
 	
+	toJSON() {
+		var keys = Object.keys(this),
+			json = {},
+			value,
+			x;
+		
+		for(x=0; x<keys.length; x++) {
+			// Fields matching ^[_\$\#] are for data handling and should not be considered in stringification and other conversions
+			// Universe field is reserved property and shouldn't come out either
+			if(keys[x] && keys[x] !== "universe" && keys[x][0] !== "_" && keys[x][0] !== "$" && keys[x][0] !== "#") {
+				value = this[keys[x]];
+				switch(typeof(value)) {
+					case "number":
+					case "string":
+					case "boolean":
+					case "boolean":
+						json[keys[x]] = value;
+						break;
+					case "object":
+						// RSObjects should be flat but arrays are valid
+						if(value instanceof Array) {
+							json[keys[x]] = value;
+						}
+						break;
+					case "function":
+						// Ignored
+				}
+			}
+		}
+		
+		return json;
+	}
+	
 	loadDelta(delta) {
-		console.log("Object Processing Delta: ", this, delta);
 		var keys = Object.keys(delta),
 			x;
 		
@@ -20807,6 +20991,18 @@ class RSObject extends EventEmitter {
 	}
 }
 
+/**
+ * 
+ * @class RSSheet
+ * @constructor
+ * @module Common
+ * @param {RSEntity} entity The entity for which this sheet represents the composed data.
+ */
+class RSSheet extends EventEmitter {
+	constructor(entity) {
+		
+	}
+}
 
 
 /**
@@ -20951,6 +21147,39 @@ class RSAbility extends RSObject {
 }
 
 /**
+ * Archetypes are for concepts that are usually tied to some form of leveling where a linked list is
+ * implemented and a pointed to the "next" set of modifiers to incur based on entity properties is
+ * used.
+ * 
+ * @class RSArchetype
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSArchetype extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+/**
+ * 
+ * @class RSBook
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSBook extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+/**
  * 
  * @class RSEffect
  * @extends RSObject
@@ -21034,6 +21263,138 @@ class RSLocation extends RSObject {
 	}
 }
 
+
+/**
+ * Piggy-backing on the standard load process, these are loaded as common objects
+ * but exist only to modify the universes active level.
+ * 
+ * While this class is registered, it shoould be ignored.
+ * @class RSLogLevel
+ * @constructor
+ * @module Common
+ * @param {RSUniverse} universe
+ * @param {Object} details 
+ * @param {Number} [details.level] The level to set such as "info", or "error"
+ * @param {Number} [details.value] The value to set for the passed level
+ * @param {Number} [details.setTracked] The number of entries the client universe should
+ * 		track. 
+ */
+class RSLogLevel {
+	constructor(universe, details) {
+		if(details.level) {
+			universe.log.levels[details.level] = details.value;
+		}
+		if(details.setTracked) {
+			universe.log.tracked = details.setTracked;
+		}
+	}
+}
+
+RSLogLevel.ignore = true;
+
+/**
+ * Modifiers represent changes to the properties of an entity and are computed and the summed result
+ * is placed in a RSSheet for the corresponding entity.
+ * 
+ * Attribute Modifiers are for flat information that doesn't have a computation involved, such as adding descriptions
+ * or setting age.
+ * 
+ * Properties in this section are considered to simple "set" or, in rare cases, "addend to" their corresponding
+ * values on the entity.
+ * 
+ * @class RSModifierAttributes
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSModifierAttributes extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+
+/**
+ * Flags if a property key should be appended instead of set.
+ * @property _appendedProperties
+ * @type {Object}
+ * @private (Considered, not literal)
+ * @static
+ */
+RSModifierAttributes._appendedProperties = {
+	"description": true,
+	"note": true
+};
+
+/**
+ * 
+ * @method _setAppend
+ * @static
+ * @param {String} key The key value for which to set the appending process
+ * @param {Boolean} [state] The state to set for the key. Defaults to true.
+ */
+RSModifierAttributes._setAppend = function(key, state) {
+	if(state === undefined) {
+		state = true;
+	}
+	RSModifierAttributes._appendedProperties[key] = !!state;
+};
+
+/**
+ * Modifiers represent changes to the properties of an entity and are computed and the summed result
+ * is placed in a RSSheet for the corresponding entity.
+ * 
+ * Stats Modifiers are for values that need some form of computation. In this case, a String value is considered
+ * a mathematical additive and then passed to the Calculator to determine the result, which is used as a number.
+ * 
+ * Numbers are simply summed and boolean values are treated as or conditions.
+ * 
+ * @class RSModifierStats
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSModifierStats extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+
+/**
+ * 
+ * @class RSNote
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSNote extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+/**
+ * 
+ * @class RSParty
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSParty extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
 /**
  * 
  * @class RSPlayer
@@ -21051,6 +21412,21 @@ class RSPlayer extends RSObject {
 	
 }
 
+/**
+ * 
+ * @class RSSkill
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSSkill extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
 /**
  * 
  * @class RSUniverse
@@ -21091,6 +21467,12 @@ class RSUniverse extends RSObject {
 			}
 		};
 		
+		/**
+		 * Logging point for this universe.
+		 * @property log
+		 * @type RSLog
+		 */
+		this.log = new RSLog(this);
 		
 		this.$on("world:state", (event) => {
 			if(!this.initialized) {
@@ -21191,7 +21573,7 @@ class RSUniverse extends RSObject {
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
-					if(message.echo && !message.event.echo) {
+					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
 					console.log("Received: ", message);
@@ -21284,7 +21666,7 @@ class RSUniverse extends RSObject {
 					for(i=0; i<ids.length; i++) {
 						id = ids[i];
 						if(this.nouns[type][id]) {
-							this.nouns[type][id].delta(state[type][id]);
+							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
 							this.nouns[type][id] = new Constructor(state[type][id], this);
 							this.indexes[type].indexItem(this.nouns[type][id]);
@@ -21979,6 +22361,7 @@ rsSystem.component("StorageManager", {
 			
 			data.message = null;
 			data.rawValue = "{}";
+			data.isValid = true;
 			data.copy = null;
 			data.nouns = rsSystem.listingNouns;
 			data.state = this.loadStorage(storageKey, {
@@ -21992,8 +22375,8 @@ rsSystem.component("StorageManager", {
 		"watch": {
 			"copy": function(value) {
 				if(value) {
-					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", JSON.stringify(copy, null, 4));
+//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
+					Vue.set(this, "rawValue", JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4));
 					Vue.set(this, "copy", null);
 				}
 			},
@@ -22003,8 +22386,10 @@ rsSystem.component("StorageManager", {
 					Vue.set(this.state.building, this.state.current, parsed);
 					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
+					Vue.set(this, "isValid", true);
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
+					Vue.set(this, "isValid", false);
 				}
 			}
 		},
@@ -22023,7 +22408,9 @@ rsSystem.component("StorageManager", {
 				return result;
 			},
 			"modify": function() {
-				
+				if(this.isValid) {
+					this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
+				}
 			}
 		},
 		"template": Vue.templified("components/nouns.html")
@@ -22186,11 +22573,19 @@ rsSystem.device = {
  * @main Main
  */
 
+rsSystem.registerNoun(RSModifierAttributes, "modifierattributes");
+rsSystem.registerNoun(RSModifierStats, "modifierstats");
+rsSystem.registerNoun(RSArchetype, "archetype");
+rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
 rsSystem.registerNoun(RSAbility, "ability");
 rsSystem.registerNoun(RSPlayer, "player");
 rsSystem.registerNoun(RSEntity, "entity");
 rsSystem.registerNoun(RSEffect, "effect");
+rsSystem.registerNoun(RSParty, "party");
+rsSystem.registerNoun(RSSkill, "skill");
+rsSystem.registerNoun(RSNote, "note");
+rsSystem.registerNoun(RSBook, "book");
 rsSystem.registerNoun(RSItem, "item");
 
 // Assist function for Reactive Component Printing

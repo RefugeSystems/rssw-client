@@ -10,6 +10,7 @@
 class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
+		this.universe = universe;
 		var keys = Object.keys(details),
 			x;
 			
@@ -21,16 +22,48 @@ class RSObject extends EventEmitter {
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
-				console.log("Object Processing Modification: ", this);
 				if(event.id === this.id) {
-					this.loadDelta(event.data);
+					console.log("Object Processing Modification: ", this, event);
+					this.loadDelta(event);
 				}
 			});
 		}
 	}
 	
+	toJSON() {
+		var keys = Object.keys(this),
+			json = {},
+			value,
+			x;
+		
+		for(x=0; x<keys.length; x++) {
+			// Fields matching ^[_\$\#] are for data handling and should not be considered in stringification and other conversions
+			// Universe field is reserved property and shouldn't come out either
+			if(keys[x] && keys[x] !== "universe" && keys[x][0] !== "_" && keys[x][0] !== "$" && keys[x][0] !== "#") {
+				value = this[keys[x]];
+				switch(typeof(value)) {
+					case "number":
+					case "string":
+					case "boolean":
+					case "boolean":
+						json[keys[x]] = value;
+						break;
+					case "object":
+						// RSObjects should be flat but arrays are valid
+						if(value instanceof Array) {
+							json[keys[x]] = value;
+						}
+						break;
+					case "function":
+						// Ignored
+				}
+			}
+		}
+		
+		return json;
+	}
+	
 	loadDelta(delta) {
-		console.log("Object Processing Delta: ", this, delta);
 		var keys = Object.keys(delta),
 			x;
 		

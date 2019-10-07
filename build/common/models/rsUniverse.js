@@ -38,6 +38,12 @@ class RSUniverse extends RSObject {
 			}
 		};
 		
+		/**
+		 * Logging point for this universe.
+		 * @property log
+		 * @type RSLog
+		 */
+		this.log = new RSLog(this);
 		
 		this.$on("world:state", (event) => {
 			if(!this.initialized) {
@@ -138,7 +144,7 @@ class RSUniverse extends RSObject {
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
-					if(message.echo && !message.event.echo) {
+					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
 					console.log("Received: ", message);
@@ -231,7 +237,7 @@ class RSUniverse extends RSObject {
 					for(i=0; i<ids.length; i++) {
 						id = ids[i];
 						if(this.nouns[type][id]) {
-							this.nouns[type][id].delta(state[type][id]);
+							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
 							this.nouns[type][id] = new Constructor(state[type][id], this);
 							this.indexes[type].indexItem(this.nouns[type][id]);

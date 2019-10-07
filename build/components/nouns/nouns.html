@@ -23,7 +23,7 @@
 	</div>
 	
 	<div class="actions">
-		<button class="primary-action">
+		<button class="primary-action" v-on:click="modify()" :disabled="!isValid">
 			<span class="action-icon fas fa-cloud-upload"></span>
 			<span class="action-text">Upload</span>
 		</button>

@@ -355,3 +355,7 @@ form {
   border-radius: 6px;
   padding: 8px;
 }
+.rs-component.component-nouns textarea {
+  min-width: 500px;
+  min-height: 350px;
+}
