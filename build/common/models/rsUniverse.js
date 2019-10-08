@@ -10,7 +10,16 @@
 class RSUniverse extends RSObject {
 	constructor(details) {
 		super(details);
-		
+
+		/**
+		 * Tracks if the system has been logged out and flags as such to prevent
+		 * automatic reconnection attempts.
+		 * 
+		 * Automatic connection processing tends to be handled in the Connect component.
+		 * @property loggedOut
+		 * @type Boolean
+		 */
+		this.loggedOut = false;
 		this.initialized = false;
 		this.indexes = {};
 		this.nouns = {};
@@ -49,7 +58,7 @@ class RSUniverse extends RSObject {
 			if(!this.initialized) {
 				this.$emit("initializing", event);
 			}
-			this.loadState(event)
+			this.loadState(event);
 		});
 	}
 	
@@ -72,6 +81,7 @@ class RSUniverse extends RSObject {
 		this.connection.address = address;
 		
 		return new Promise((done, fail) => {
+			this.loggedOut = false;
 			this.connection.entry({
 				"message": "Connecting to Universe",
 				"address": address
@@ -187,6 +197,7 @@ class RSUniverse extends RSObject {
 			} else {
 				this.$emit("disconnected", this);
 				rsSystem.log.error("Reconnect Giving up\n", this);
+				this.loggedOut = true;
 			}
 		}, 1000);
 	}
@@ -206,6 +217,15 @@ class RSUniverse extends RSObject {
 			this.connection.socket = null;
 			this.connection.address = null;
 		}
+	}
+	
+	/**
+	 * 
+	 * @method logout
+	 */
+	logout() {
+		this.loggedOut = true;
+		this.disconnect();
 	}
 	
 	/**

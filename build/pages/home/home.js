@@ -26,21 +26,26 @@ rsSystem.component("RSHome", {
 	},
 	"methods": {
 		"connect": function(event) {
-			Vue.set(this, "state", 1);
-			Vue.set(this, "universe", new RSUniverse({}));
-			Vue.set(this, "player", event.user);
-			
-			this.universe.$on("disconnected", () => {
-				Vue.set(this, "message", "Disconnected");
-				Vue.set(this, "state", 0);
-			});
-			this.universe.$on("initializing", () => {
-				Vue.set(this, "state", 2);
-			});
-			this.universe.$on("initialized", () => {
-				Vue.set(this, "state", 10);
-			});
-			this.universe.connect(event.user, event.address);
+			if(this.universe && this.universe.loggedOut) {
+				console.warn("Logged out, blocking reconnection and clearing");
+				this.universe.loggedOut = false;
+			} else {
+				Vue.set(this, "state", 1);
+				Vue.set(this, "universe", new RSUniverse({}));
+				Vue.set(this, "player", event.user);
+				
+				this.universe.$on("disconnected", () => {
+					Vue.set(this, "message", "Disconnected");
+					Vue.set(this, "state", 0);
+				});
+				this.universe.$on("initializing", () => {
+					Vue.set(this, "state", 2);
+				});
+				this.universe.$on("initialized", () => {
+					Vue.set(this, "state", 10);
+				});
+				this.universe.connect(event.user, event.address);
+			}
 		}
 	},
 	"template": Vue.templified("pages/home.html")

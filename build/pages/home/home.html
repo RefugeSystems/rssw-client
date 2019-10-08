@@ -14,7 +14,9 @@
 			<span class="far fa-spinner fa-pulse"></span>
 		</div>
 	</div>
-	<div class="active" v-if="state === 10">
-		<router-view :universe="universe" :player="player"></router-view>
+	<div class="system-display active" v-if="state === 10">
+		<system-menu :universe="universe" :player="player"></system-menu>
+		<router-view class="system-view" :universe="universe" :player="player"></router-view>
+		<system-info :universe="universe" :player="player"></system-info>
 	</div>
 </div>

@@ -55,7 +55,7 @@ var config = {
 				}
 				return response;
 			},
-			"envs": ["browser", "node", "jasmine"],
+			"envs": ["browser", "jasmine", "es6"],
 			"globals": [
 				"DocumentTouch",
 				"XMLHttpRequest",
@@ -101,11 +101,25 @@ var config = {
 				"Anomaly",
 				"_p",
 
-				"RSObject",
+				"RSModifierAttributes",
+				"UserInformation",
+				"RSModifierStats",
+				"RSCalculator",
+				"RSArchetype",
+				"RSLogLevel",
+				"RSLocation",
 				"RSUniverse",
 				"RSAbility",
+				"RSPlayer",
+				"RSObject",
 				"RSEffect",
-				"RSItem"
+				"RSEntity",
+				"RSParty",
+				"RSSkill",
+				"RSNote",
+				"RSBook",
+				"RSItem",
+				"RSLog"
 			]
 		},
 		"app": [
@@ -291,6 +305,6 @@ module.exports = function (grunt) {
 
 	grunt.initConfig(config);
 
-	grunt.registerTask("build", ["templify:app","concat:app","concat:less","less:app"]);
+	grunt.registerTask("build", ["eslint", "templify:app","concat:app","concat:less","less:app"]);
 	grunt.registerTask("default", ["build","connect:app","open:app", "watch:app"]);
 };

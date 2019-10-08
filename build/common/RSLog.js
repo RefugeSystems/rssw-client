@@ -41,7 +41,7 @@ class RSLog extends EventEmitter {
 	 * @return {Object} Maps the known logging levels to their set value
 	 */
 	toJSON() {
-		return levels;
+		return this.levels;
 	}
 	
 	/**

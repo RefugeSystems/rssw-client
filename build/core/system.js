@@ -28,7 +28,7 @@ rsSystem.loading._tracking = 200;
  * @param {VueComponent} component
  */
 rsSystem.register = function(component) {
-	rsSystem.log.debug("Registering Component: ", component);
+//	rsSystem.log.debug("Registering Component: ", component);
 	var element = component.$el,
 		scan = $(component.$el);
 	rsSystem.loading.components[component.$options._componentTag] = rsSystem.loading.components[component.$options._componentTag] || [];
