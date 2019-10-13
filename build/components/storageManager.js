@@ -12,6 +12,11 @@ rsSystem.component("StorageManager", {
 		"storageKey"
 	],
 	"mounted": function() {
+		if(this.universe) {
+			this.universe.$on("universe:modified", () => {
+				this.$forceUpdate();
+			});
+		}
 	},
 	"methods": {
 		"loadStorage": function(key, defaults) {

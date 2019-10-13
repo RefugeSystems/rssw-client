@@ -21,8 +21,19 @@ rsSystem.App = new Vue({
 			"path": "/",
 			"component": rsSystem.components.RSHome,
 			"children": [{
-				"path": "nouns",
-				"component": rsSystem.components.RSNounControls
+				"path": "dashboard",
+				"component": rsSystem.components.RSSWDashboard,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWDashboard
+				}]
+			}, {
+				"path": "character",
+				"component": rsSystem.components.RSSWCharacter,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWCharacter
+				}]
 			}, {
 				"path": "hangar",
 				"component": rsSystem.components.RSSWHangar,
@@ -30,6 +41,23 @@ rsSystem.App = new Vue({
 					"path": ":oid",
 					"component": rsSystem.components.RSSWHangar
 				}]
+			}, {
+				"path": "ship",
+				"component": rsSystem.components.RSSWShip,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWShip
+				}]
+			}, {
+				"path": "map",
+				"component": rsSystem.components.RSSWMap,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWMap
+				}]
+			}, {
+				"path": "nouns",
+				"component": rsSystem.components.RSNounControls
 			}, {
 				"path": "ship",
 				"component": rsSystem.components.RSSWShip

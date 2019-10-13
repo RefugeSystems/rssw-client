@@ -18228,13 +18228,22 @@ Templify.install = function(Vue, options) {
 			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<form onsubmit=\"return false;\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<span class=\"heading-icon\"></span>\r\n\t\t\t<span>Login</span>\r\n\t\t</div>\r\n\t\t<div class=\"fields\">\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t\t</label>\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t\t</label>\r\n\t\t\t<div class=\"actions\">\r\n\t\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\t\tSecure?\r\n\t\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</form>\r\n</div>";
 			case "components/gyroscope.html": return "";
 			case "components/info.html": return "<div class=\"system-component system-info\">\r\n\r\n</div>\r\n";
-			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<button class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t</button>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<button class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
+			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-button\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-item\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t\t<router-link class=\"navigation-button\" v-else :to=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/rssw/character.html": return "<div class=\"rssw-component component-character\">\r\n\r\n</div>\r\n";
+			case "components/rssw/character/stats.html": return "<div class=\"rssw-component component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"value\">\r\n\t\t\t\t{{character[stat]}}\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t\t<button class=\"level\" v-on:click=\"levelStat(stat)\">\r\n\t\t\t\t<span v-if=\"getXPCost(stat) < character.xp?'available':'unavailable'\" class=\"fas fa-user-slash\"></span>\r\n\t\t\t\t<span>+1</span>\r\n\t\t\t\t<span>{{getXPCost(stat)}}XP</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship.html": return "<div class=\"rssw-component component-ship\">\r\n\r\n</div>\r\n";
+			case "components/rssw/ship/stats.html": return "<div class=\"rssw-component component-ship-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in shipStats\" :key=\"stat\">\r\n\t\t\t<select class=\"\"\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table.html": return "";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
-			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :player=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :player=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :player=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
 			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<h1>Nouns</h1>\r\n\t<rs-nouns :universe=\"universe\" :player=\"player\"></rs-nouns>\r\n</div>\r\n";
+			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n\t<rssw-character-stats :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n</div>\r\n";
+			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div class=\"title\">\r\n\t\t{{player.name}} Overview\r\n\t</div>\r\n\t\r\n\t<div class=\"self\" v-if=\"self\">\r\n\t\t<router-link class=\"navigation-button\" :to=\"'/character/' + self.id\">\r\n\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t</router-link>\r\n\t</div>\r\n\t\r\n\t<div class=\"control\">\r\n\t\t<div class=\"title\">\r\n\t\t\tOthers\r\n\t\t</div>\r\n\t\t<div class=\"entities\">\r\n\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
+			case "pages/rssw/map.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
+			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
 			default: return null;
 		}
@@ -20928,6 +20937,7 @@ class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
 		this.universe = universe;
+		this._sheet = {};
 		var keys = Object.keys(details),
 			x;
 			
@@ -20939,12 +20949,16 @@ class RSObject extends EventEmitter {
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
-				if(event.id === this.id) {
+				if(event && event.id === this.id) {
 					console.log("Object Processing Modification: ", this, event);
-					this.loadDelta(event);
+					this.loadDelta(event.modification);
 				}
 			});
 		}
+	}
+	
+	get sheet() {
+		return this._sheet;
 	}
 	
 	toJSON() {
@@ -20980,15 +20994,94 @@ class RSObject extends EventEmitter {
 		return json;
 	}
 	
+	recalculateSheet() {
+		// Establish Base
+		var references = [],
+			base = {},
+			keys,
+			load,
+			x;
+		
+		keys = Object.keys(this);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_") {
+				switch(typeof(this[keys[x]])) {
+					case "boolean":
+					case "string":
+					case "number":
+						base[keys[x]] = this[keys[x]];
+						break;
+				}
+
+				// Isolate Reference Fields
+				if(this.universe.nouns[keys[x]]) {
+					references.push(keys[x]);
+				}
+			}
+		}
+		
+		console.log("References: ", references);
+		if(references && references.length) {
+			for(x=0; x<references.length; x++) {
+				this.loadNounReferenceModifications(references[x], base);
+			}
+		}
+		
+	}
+	
+	loadNounReferenceModifications(noun, base) {
+		var reference = this[noun],
+			x;
+		
+		console.log("Load Noun[" + noun + "]: ", reference);
+		if(reference instanceof Array) {
+			for(x=0; x<reference.length; x++) {
+				this.universe.nouns[noun][reference[x]].performModifications(base);
+			}
+		} else {
+			this.universe.nouns[noun][reference].performModifications(base);
+		}
+	}
+	
+	performModifications(base) {
+		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
+		var x;
+		
+		try {
+			if(this.modifierstats) {
+				for(x=0; x<this.modifierstats.length; x++) {
+					this.universe.nouns.modifierstats[this.modifierstats[x]].performModifications(base);
+				}
+			}
+			if(this.modifierattrs) {
+				for(x=0; x<this.modifierattrs.length; x++) {
+					this.universe.nouns.modifierattrs[this.modifierattrs[x]].performModifications(base);
+				}
+			}
+			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+		} catch(exception) {
+			console.error("RSObject Root Failed[" + this.id + "]: " + exception.message);
+		}
+
+	}
+	
 	loadDelta(delta) {
 		var keys = Object.keys(delta),
 			x;
 		
 		for(x=0; x<keys.length; x++) {
-			if(this[keys[x]] && typeof(this[keys[x]]) !== "function") {
+			if(typeof(this[keys[x]]) !== "function") {
 				this[keys[x]] = delta[keys[x]];
 			}
 		}
+		
+		if(this.loadDeltaHook) {
+			this.loadDeltaHook(delta);
+		}
+		
+		this.recalculateSheet();
+		
+		this.$emit("modified", this);
 	}
 }
 
@@ -20998,9 +21091,10 @@ class RSObject extends EventEmitter {
  * @constructor
  * @module Common
  * @param {RSEntity} entity The entity for which this sheet represents the composed data.
+ * @param {RSUniverse} universe The universe in which the entity exists
  */
 class RSSheet extends EventEmitter {
-	constructor(entity) {
+	constructor(entity, universe) {
 		
 	}
 }
@@ -21130,6 +21224,85 @@ class RSSheet extends EventEmitter {
 	});
 })();
 
+rsSystem.component("RSSWStats", {
+	"inherit": true,
+	"data": function() {
+		var data = {};
+		
+		data.entityStats = {
+			// Character
+			"brawn": {
+				"name": "Brawn",
+				"info": "Similar to strength",
+				"class": "rs-red",
+				"icon": "fas fa-fist-raised"
+			},
+			"agility": {
+				"name": "Agility",
+				"info": "",
+				"class": "rs-red",
+				"icon": "fas fa-fist-raised"
+			},
+			"intellect": {
+				"name": "Intellect",
+				"info": "",
+				"class": "rs-red",
+				"icon": "fas fa-fist-raised"
+			},
+			"cunning": {
+				"name": "Cunning",
+				"info": "",
+				"class": "rs-red",
+				"icon": "fas fa-fist-raised"
+			},
+			"willpower": {
+				"name": "Willpower",
+				"info": "",
+				"class": "rs-red",
+				"icon": "fas fa-fist-raised"
+			},
+			"pressence": {
+				"name": "Pressence",
+				"info": "",
+				"class": "rs-red",
+				"icon": "fas fa-fist-raised"
+			},
+			
+			// Ships
+			"attack": {
+				"name": "Attack",
+				"info": "Similar to strength",
+				"class": "rs-red",
+				"icon": "fas fa-flame rot135"
+			},
+			"maneuverability": {
+				"name": "Maneuverability",
+				"info": "Similar to strength",
+				"class": "rs-green",
+				"icon": "fad fa-long-arrow-alt-right"
+			},
+			"hull": {
+				"name": "Hull",
+				"info": "Similar to strength",
+				"class": "rs-yellow",
+				"icon": "fas fa-th"
+			},
+			"shield": {
+				"name": "Shield",
+				"info": "Similar to strength",
+				"class": "rs-blue",
+				"icon": "fal fa-futbol rot45"
+			}
+		};
+
+		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
+		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
+		
+		return data;
+	},
+	"methods": {
+	}
+});
 /**
  * 
  * @class RSAbility
@@ -21209,28 +21382,46 @@ class RSEffect extends RSObject {
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-
-		/**
-		 * List of the keys available for this Entity in the "equiped" map.
-		 * @property slots
-		 * @type Array
-		 */
-		if(!this.slots) {
-			this.slots = [];
-		}
-
-		/**
-		 * Maps an ID identifying a slot to an ID of some item that is in that "slot".
-		 * @property equipped
-		 * @type Object
-		 */
-		if(!this.equipped) {
-			this.equipped = {};
-		}
+	}
+	
+	loadDeltaHook(event) {
 		
 	}
 }
 
+/**
+ * 
+ * @class RSHistory
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSHistory extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+
+RSHistory.ignore = true;
+
+/**
+ * 
+ * @class RSInventory
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSInventory extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
 /**
  * 
  * @class RSItem
@@ -21246,6 +21437,22 @@ class RSItem extends RSObject {
 		
 	}
 	
+}
+
+/**
+ * 
+ * @class RSLoadout
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSLoadout extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+
+	}
 }
 
 /**
@@ -21413,6 +21620,22 @@ class RSPlayer extends RSObject {
 	
 }
 
+/**
+ * 
+ * 
+ * @class RSRace
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSRace extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
 /**
  * 
  * @class RSSkill
@@ -21604,6 +21827,19 @@ class RSUniverse extends RSObject {
 					});
 				}
 			};
+			
+			this.$on("model:modified", (event) => {
+				console.log("Modifying: ", event);
+				var record = this.nouns[event.type][event.id];
+				if(!record) {
+					console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
+					if(!this.nouns[event.type]) {
+						this.nouns[event.type] = {};
+					}
+					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
+					this.$emit("universe:modified", this);
+				}
+			});
 			
 			this.connection.socket = socket;
 			this.user = userInformation;
@@ -22270,6 +22506,11 @@ rsSystem.component("StorageManager", {
 		"storageKey"
 	],
 	"mounted": function() {
+		if(this.universe) {
+			this.universe.$on("universe:modified", () => {
+				this.$forceUpdate();
+			});
+		}
 	},
 	"methods": {
 		"loadStorage": function(key, defaults) {
@@ -22369,7 +22610,7 @@ rsSystem.component("StorageManager", {
 				"required": true,
 				"type": Object
 			},
-			"player": {
+			"user": {
 				"required": true,
 				"type": Object
 			}
@@ -22412,7 +22653,7 @@ rsSystem.component("StorageManager", {
 				"required": true,
 				"type": Object
 			},
-			"player": {
+			"user": {
 				"required": true,
 				"type": Object
 			}
@@ -22432,11 +22673,25 @@ rsSystem.component("StorageManager", {
 				"highlight": "/dashboard"
 			});
 			data.navigationItems.push({
+				"icon": "fas fa-fighter-jet",
+				"action": "navigate",
+				"label": "Hangar",
+				"path": "/hangar",
+				"highlight": "/hangar"
+			});
+			data.navigationItems.push({
 				"icon": "fas fa-treasure-chest",
 				"action": "navigate",
 				"label": "Nouns",
 				"path": "/nouns",
 				"highlight": "/nouns"
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-map",
+				"action": "navigate",
+				"label": "Map",
+				"path": "/map",
+				"highlight": "/map"
 			});
 			
 			data.generalItems = [];
@@ -22451,6 +22706,20 @@ rsSystem.component("StorageManager", {
 		"watch": {
 		},
 		"methods": {
+			"isActive": function(navItem) {
+				if(navItem.conditionals) {
+					for(var x=0; x<navItem.conditionals.length; x++) {
+						if(this.evaluateConditional(navItem.conditionals[x])) {
+							return true;
+						}
+					}
+					return false;
+				}
+				return true;
+			},
+			"evaluateConditional": function() {
+				
+			},
 			"getClassSettings": function() {
 				return "full standard undocked";
 			},
@@ -22553,6 +22822,7 @@ rsSystem.component("StorageManager", {
 			},
 			"modify": function() {
 				if(this.isValid) {
+					this.state.building[this.state.current]._type = this.state.current;
 					this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
 				}
 			}
@@ -22560,6 +22830,171 @@ rsSystem.component("StorageManager", {
 		"template": Vue.templified("components/nouns.html")
 	});
 })();
+
+
+/**
+ * 
+ * 
+ * @class RSCore
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("RSCore", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.StorageManager
+	],
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"user": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"computed": {
+		"player": function() {
+			return this.universe.nouns.player[this.user.id];
+		}
+	},
+	"watch": {
+	},
+	"methods": {
+	}
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWCharacterView
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWCharacterView", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("components/rssw/character.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class rsswCharacterStats
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsswCharacterStats", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSSWStats,
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"character": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		data.keys = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
+		
+		return data;
+	},
+	"methods": {
+		"getXPCost": function(stat) {
+			return (parseInt(this.character[stat]) + 1) * 10;
+		},
+		"levelStat": function(stat) {
+			console.log("Level Stat: " + stat);
+		}
+	},
+	"template": Vue.templified("components/rssw/character/stats.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWShipView
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWShipView", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("components/rssw/ship.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class rsswShipStats
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsswShipStats", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSSWStats,
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"character": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {},
+			x;
+		
+		data.damage = {};
+		for(x=0; x<this.shipStats.length; x++) {
+			
+		}
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("components/rssw/ship/stats.html")
+});
 
 
 /**
@@ -22582,6 +23017,39 @@ rsSystem.component("StorageManager", {
  * @module Pages
  * @main Pages
  */
+
+/**
+ * 
+ * 
+ * @class RSCorePage
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("RSCorePage", {
+	"inherit": true,
+	"mixins": [
+	],
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"user": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"computed": {
+		"player": function() {
+			return this.universe.nouns.player[this.user.id];
+		}
+	},
+	"watch": {
+	},
+	"methods": {
+	}
+});
+
 
 /**
  * 
@@ -22615,7 +23083,8 @@ rsSystem.component("RSAbout", {
  */
 rsSystem.component("RSHome", {
 	"inherit": true,
-	"mixins": [],
+	"mixins": [
+	],
 	"mounted": function() {
 		rsSystem.register(this);
 	},
@@ -22668,17 +23137,9 @@ rsSystem.component("RSHome", {
  */
 rsSystem.component("RSNounControls", {
 	"inherit": true,
-	"mixins": [],
-	"props": {
-		"universe": {
-			"required": true,
-			"type": Object
-		},
-		"player": {
-			"required": true,
-			"type": Object
-		}
-	},
+	"mixins": [
+		rsSystem.components.RSCorePage
+	],
 	"data": function() {
 		var data = {};
 		
@@ -22690,6 +23151,188 @@ rsSystem.component("RSNounControls", {
 	"methods": {
 	},
 	"template": Vue.templified("pages/noun/controls.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWDashboard
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWCharacter", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"computed": {
+		"entity": function() {
+			return this.universe.nouns.entity[this.$route.params.oid];
+		}
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("pages/rssw/character.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWDashboard
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWDashboard", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"mounted": function() {
+		this.universe.$on("universe:modified", this.updateEntities);
+		this.universe.$on("model:modified", this.updateDisplay);
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {},
+			entities,
+			entity,
+			x;
+		
+		entities = Object.keys(this.universe.nouns.entity);
+		data.owned = [];
+		for(x=0; x<entities.length; x++) {
+			entity = this.universe.nouns.entity[entities[x]];
+			if(entity && entity.owners && entity.owners.indexOf(this.user.id) !== -1) {
+				entity.$on("modified", this.updateDisplay);
+				data.owned.push(entity);
+			}
+		}
+		
+		return data;
+	},
+	"computed": {
+		"self": function() {
+			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
+		}
+	},
+	"methods": {
+		"updateDisplay": function() {
+			this.$forceUpdate();
+		},
+		"updateEntities": function() {
+			var entities,
+				entity,
+				owned,
+				x;
+			
+			for(x=0; x<this.owned.length; x++) {
+				this.owned[x].$off("modified", this.updateDisplay);
+			}
+			
+			entities = Object.keys(this.universe.nouns.entity);
+			owned = [];
+			for(x=0; x<entities.length; x++) {
+				entity = this.universe.nouns.entity[entities[x]];
+				if(entity && entity.owners && entity.owners.indexOf(this.player.id) !== -1) {
+					entity.$on("modified", this.updateDisplay);
+					owned.push(entity);
+				}
+			}
+			
+			this.owned.splice(0);
+			this.owned.push.apply(this.owned, owned);
+			this.$forceUpdate();
+		}
+	},
+	"beforeDestroy": function() {
+		this.universe.$off("universe:modified", this.updateEntities);
+		this.universe.$off("model:modified", this.updateDisplay);
+	},
+	"template": Vue.templified("pages/rssw/dashboard.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWDashboard
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWHangar", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("pages/rssw/hangar.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWMap
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWMap", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("pages/rssw/map.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWShip
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWShip", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("pages/rssw/ship.html")
 });
 
 
@@ -22722,12 +23365,15 @@ rsSystem.device = {
  * @main Main
  */
 
-rsSystem.registerNoun(RSModifierAttributes, "modifierattributes");
+rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");
 rsSystem.registerNoun(RSModifierStats, "modifierstats");
 rsSystem.registerNoun(RSArchetype, "archetype");
+rsSystem.registerNoun(RSInventory, "inventory");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
 rsSystem.registerNoun(RSAbility, "ability");
+rsSystem.registerNoun(RSHistory, "history");
+rsSystem.registerNoun(RSLoadout, "loadout");
 rsSystem.registerNoun(RSPlayer, "player");
 rsSystem.registerNoun(RSEntity, "entity");
 rsSystem.registerNoun(RSEffect, "effect");
@@ -22736,6 +23382,7 @@ rsSystem.registerNoun(RSSkill, "skill");
 rsSystem.registerNoun(RSNote, "note");
 rsSystem.registerNoun(RSBook, "book");
 rsSystem.registerNoun(RSItem, "item");
+rsSystem.registerNoun(RSRace, "race");
 
 // Assist function for Reactive Component Printing
 var _p = function(x) {return JSON.parse(JSON.stringify(x));};
@@ -22760,8 +23407,19 @@ rsSystem.App = new Vue({
 			"path": "/",
 			"component": rsSystem.components.RSHome,
 			"children": [{
-				"path": "nouns",
-				"component": rsSystem.components.RSNounControls
+				"path": "dashboard",
+				"component": rsSystem.components.RSSWDashboard,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWDashboard
+				}]
+			}, {
+				"path": "character",
+				"component": rsSystem.components.RSSWCharacter,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWCharacter
+				}]
 			}, {
 				"path": "hangar",
 				"component": rsSystem.components.RSSWHangar,
@@ -22769,6 +23427,23 @@ rsSystem.App = new Vue({
 					"path": ":oid",
 					"component": rsSystem.components.RSSWHangar
 				}]
+			}, {
+				"path": "ship",
+				"component": rsSystem.components.RSSWShip,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWShip
+				}]
+			}, {
+				"path": "map",
+				"component": rsSystem.components.RSSWMap,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWMap
+				}]
+			}, {
+				"path": "nouns",
+				"component": rsSystem.components.RSNounControls
 			}, {
 				"path": "ship",
 				"component": rsSystem.components.RSSWShip

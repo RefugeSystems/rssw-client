@@ -461,6 +461,59 @@ form {
 	display: block;
 }
 
+.rssw-page.page-dashboard {
+
+}
+
+.rssw-page.page-dashboard {
+
+	.title {
+		font-size: 20px;
+		margin-bottom: 7px;
+	}
+	
+	.navigation-button {
+		text-decoration: none;
+		color: @rsOrange;
+		
+		&:active,
+		&:hover {
+			color: @rsBlue;
+		}
+	}
+
+	.self {
+		margin: 7px;
+		font-size: 17px;
+	}
+	
+	.control {
+		margin: 7px;
+		
+		
+		.entities {
+			display: flex;
+			flex-direction: column;
+			
+			.entity {
+				margin: 5px 0px;
+			}
+		}
+	}
+}
+
+.rssw-page.page-dashboard {
+
+}
+
+.rssw-page.page-dashboard {
+
+}
+
+.rssw-page.page-dashboard {
+
+}
+
 .rs-component.connect-component {
 	max-width: 400px;
 	border: 1px solid white;
@@ -537,10 +590,14 @@ form {
 		background: transparent;
 		
 		.navigation-item {
-			display: block;
+			display: flex;
 			height: 36px;
 			flex-shrink: 0;
 			flex-grow: 0;
+			font-size: 18px;
+			align-content: flex-start;
+			align-items: center;
+			padding: 0px 10px;
 			
 			background: transparent;
 			border: 0px;
@@ -551,6 +608,13 @@ form {
 			&:hover {
 				background: white;
 				color: black;
+			}
+			
+			.navigation-button {
+				background: transparent;
+				color: inherit;
+				display: inline-block;
+				text-decoration: none;
 			}
 		}
 		
@@ -567,5 +631,63 @@ form {
 		min-height: 350px;
 	}
 
+}
+
+.rssw-component.component-character {
+
+}
+
+.rssw-component.component-character-stats {
+
+
+	.stats {
+		display: flex;
+		flex-direction: row;
+		
+		.stat {
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+			justify-content: center;
+			
+			.level {
+				color: @rsOrange;
+				
+				&.available {
+				}
+				
+				&.unavailable {
+				}
+			}
+		}
+	}
+}
+
+.rssw-component.component-ship {
+
+}
+
+.rssw-component.component-ship-stats {
+
+
+	.stats {
+		display: flex;
+		flex-direction: row;
+		
+		.stat {
+			display: flex;
+			flex-direciton: column;
+			
+			.level {
+				color: @rsOrange;
+				
+				&.available {
+				}
+				
+				&.unavailable {
+				}
+			}
+		}
+	}
 }
 

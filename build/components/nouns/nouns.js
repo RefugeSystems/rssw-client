@@ -80,6 +80,7 @@
 			},
 			"modify": function() {
 				if(this.isValid) {
+					this.state.building[this.state.current]._type = this.state.current;
 					this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
 				}
 			}

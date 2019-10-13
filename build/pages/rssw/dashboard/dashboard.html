@@ -1,0 +1,24 @@
+<div class="rssw-page page-dashboard">
+	<div class="title">
+		{{player.name}} Overview
+	</div>
+	
+	<div class="self" v-if="self">
+		<router-link class="navigation-button" :to="'/character/' + self.id">
+			<span class="link-icon" :class="self.icon || 'fas fa-user-circle'"></span>
+			<span class="link-label">{{self.name}}</span>
+		</router-link>
+	</div>
+	
+	<div class="control">
+		<div class="title">
+			Others
+		</div>
+		<div class="entities">
+			<router-link class="entity navigation-button" v-for="entity in owned" :to="'/' + entity.classification + '/' + entity.id" :key="entity.id" v-if="!self || entity.id !== self.id">
+				<span class="link-icon" :class="entity.icon || 'fas fa-user-circle'"></span>
+				<span class="link-label">{{entity.name}}</span>
+			</router-link>
+		</div>
+	</div>
+</div>

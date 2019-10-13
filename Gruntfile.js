@@ -106,10 +106,13 @@ var config = {
 				"RSModifierStats",
 				"RSCalculator",
 				"RSArchetype",
+				"RSInventory",
 				"RSLogLevel",
 				"RSLocation",
 				"RSUniverse",
 				"RSAbility",
+				"RSHistory",
+				"RSLoadout",
 				"RSPlayer",
 				"RSObject",
 				"RSEffect",
@@ -119,6 +122,7 @@ var config = {
 				"RSNote",
 				"RSBook",
 				"RSItem",
+				"RSRace",
 				"RSLog"
 			]
 		},
@@ -251,10 +255,11 @@ var config = {
 					"rewrite": function (name) {
 						var ex = seek.exec(name);
 						if(ex) {
-							var st = name.replace(ex[0], "");
-							var i = st.indexOf("/");
+							var st = name.replace(ex[0], ""),
+								i = st.lastIndexOf("/"),
+								d = st.lastIndexOf(".");
 							if(i !== -1) {
-								st = st.substring(i);
+								st = "/" + st.substring(0, i) + st.substring(d);
 							} else {
 								st = "/" + st;
 							}

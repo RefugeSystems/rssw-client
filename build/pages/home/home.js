@@ -8,7 +8,8 @@
  */
 rsSystem.component("RSHome", {
 	"inherit": true,
-	"mixins": [],
+	"mixins": [
+	],
 	"mounted": function() {
 		rsSystem.register(this);
 	},

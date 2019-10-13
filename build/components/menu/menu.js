@@ -20,7 +20,7 @@
 				"required": true,
 				"type": Object
 			},
-			"player": {
+			"user": {
 				"required": true,
 				"type": Object
 			}
@@ -40,11 +40,25 @@
 				"highlight": "/dashboard"
 			});
 			data.navigationItems.push({
+				"icon": "fas fa-fighter-jet",
+				"action": "navigate",
+				"label": "Hangar",
+				"path": "/hangar",
+				"highlight": "/hangar"
+			});
+			data.navigationItems.push({
 				"icon": "fas fa-treasure-chest",
 				"action": "navigate",
 				"label": "Nouns",
 				"path": "/nouns",
 				"highlight": "/nouns"
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-map",
+				"action": "navigate",
+				"label": "Map",
+				"path": "/map",
+				"highlight": "/map"
 			});
 			
 			data.generalItems = [];
@@ -59,6 +73,20 @@
 		"watch": {
 		},
 		"methods": {
+			"isActive": function(navItem) {
+				if(navItem.conditionals) {
+					for(var x=0; x<navItem.conditionals.length; x++) {
+						if(this.evaluateConditional(navItem.conditionals[x])) {
+							return true;
+						}
+					}
+					return false;
+				}
+				return true;
+			},
+			"evaluateConditional": function() {
+				
+			},
 			"getClassSettings": function() {
 				return "full standard undocked";
 			},

@@ -175,6 +175,19 @@ class RSUniverse extends RSObject {
 				}
 			};
 			
+			this.$on("model:modified", (event) => {
+				console.log("Modifying: ", event);
+				var record = this.nouns[event.type][event.id];
+				if(!record) {
+					console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
+					if(!this.nouns[event.type]) {
+						this.nouns[event.type] = {};
+					}
+					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
+					this.$emit("universe:modified", this);
+				}
+			});
+			
 			this.connection.socket = socket;
 			this.user = userInformation;
 			done();

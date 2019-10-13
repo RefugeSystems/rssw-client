@@ -382,6 +382,32 @@ form {
 .rs-page.page-noun_controls {
   display: block;
 }
+.rssw-page.page-dashboard .title {
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+.rssw-page.page-dashboard .navigation-button {
+  text-decoration: none;
+  color: #FF9560;
+}
+.rssw-page.page-dashboard .navigation-button:active,
+.rssw-page.page-dashboard .navigation-button:hover {
+  color: #617EB8;
+}
+.rssw-page.page-dashboard .self {
+  margin: 7px;
+  font-size: 17px;
+}
+.rssw-page.page-dashboard .control {
+  margin: 7px;
+}
+.rssw-page.page-dashboard .control .entities {
+  display: flex;
+  flex-direction: column;
+}
+.rssw-page.page-dashboard .control .entities .entity {
+  margin: 5px 0px;
+}
 .rs-component.connect-component {
   max-width: 400px;
   border: 1px solid white;
@@ -443,10 +469,14 @@ form {
   background: transparent;
 }
 .system-component.system-menu .navigation .navigation-item {
-  display: block;
+  display: flex;
   height: 36px;
   flex-shrink: 0;
   flex-grow: 0;
+  font-size: 18px;
+  align-content: flex-start;
+  align-items: center;
+  padding: 0px 10px;
   background: transparent;
   border: 0px;
   color: inherit;
@@ -457,10 +487,40 @@ form {
   background: white;
   color: black;
 }
+.system-component.system-menu .navigation .navigation-item .navigation-button {
+  background: transparent;
+  color: inherit;
+  display: inline-block;
+  text-decoration: none;
+}
 .system-component.system-menu .navigation .separator {
   flex-grow: 100;
 }
 .rs-component.component-nouns textarea {
   min-width: 500px;
   min-height: 350px;
+}
+.rssw-component.component-character-stats .stats {
+  display: flex;
+  flex-direction: row;
+}
+.rssw-component.component-character-stats .stats .stat {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+.rssw-component.component-character-stats .stats .stat .level {
+  color: #FF9560;
+}
+.rssw-component.component-ship-stats .stats {
+  display: flex;
+  flex-direction: row;
+}
+.rssw-component.component-ship-stats .stats .stat {
+  display: flex;
+  flex-direciton: column;
+}
+.rssw-component.component-ship-stats .stats .stat .level {
+  color: #FF9560;
 }

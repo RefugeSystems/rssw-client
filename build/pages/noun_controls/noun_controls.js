@@ -8,17 +8,9 @@
  */
 rsSystem.component("RSNounControls", {
 	"inherit": true,
-	"mixins": [],
-	"props": {
-		"universe": {
-			"required": true,
-			"type": Object
-		},
-		"player": {
-			"required": true,
-			"type": Object
-		}
-	},
+	"mixins": [
+		rsSystem.components.RSCorePage
+	],
 	"data": function() {
 		var data = {};
 		
