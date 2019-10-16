@@ -156,7 +156,7 @@ rsSystem.component("RSSWStats", {
 			"brawl": {
 				"section": "combat",
 				"info": "",
-				"icon": "fas fa-raised-fist",
+				"icon": "fas fa-fist-raised",
 				"base": "brawn"
 			},
 			"melee": {
@@ -307,6 +307,10 @@ rsSystem.component("RSSWStats", {
 				data.entityStats[keys[x]].propertyKey = "skill_" + keys[x];
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
+				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
+				if(data.entityStats[keys[x]].info) {
+					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
+				}
 			}
 		}
 

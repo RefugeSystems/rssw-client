@@ -18233,7 +18233,7 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\r\n\r\n\r\n</div>\r\n";
 			case "components/rssw/character.html": return "<div class=\"rssw-component component-character\">\r\n\r\n</div>\r\n";
 			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"fas fa-user\"></span>\r\n\t\t<span>{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span>{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"archetype in careers\" class=\"archetype\">{{archetype.name}}</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"archetype in specializations\" class=\"archetype\">{{archetype.name}}</span>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\">\r\n\t<div class=\"filter\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"search\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.general\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.combat\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.knowledge\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.general\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.combat\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.knowledge\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship.html": return "<div class=\"rssw-component component-ship\">\r\n\r\n</div>\r\n";
 			case "components/rssw/ship/stats.html": return "<div class=\"rssw-component component-ship-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in shipStats\" :key=\"stat\">\r\n\t\t\t<select class=\"\"\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -21400,7 +21400,7 @@ rsSystem.component("RSSWStats", {
 			"brawl": {
 				"section": "combat",
 				"info": "",
-				"icon": "fas fa-raised-fist",
+				"icon": "fas fa-fist-raised",
 				"base": "brawn"
 			},
 			"melee": {
@@ -21551,6 +21551,10 @@ rsSystem.component("RSSWStats", {
 				data.entityStats[keys[x]].propertyKey = "skill_" + keys[x];
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
+				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
+				if(data.entityStats[keys[x]].info) {
+					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
+				}
 			}
 		}
 
@@ -23429,7 +23433,6 @@ rsSystem.component("rsswCharacterInfo", {
 	"template": Vue.templified("components/rssw/character/info.html")
 });
 
-
 /**
  * 
  * 
@@ -23437,62 +23440,76 @@ rsSystem.component("rsswCharacterInfo", {
  * @constructor
  * @module Components
  */
-rsSystem.component("rsswCharacterSkills", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.RSSWStats,
-		rsSystem.components.RSCore
-	],
-	"props": {
-		"character": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"mounted": function() {
-		this.character.$on("modified", this.update);
-		rsSystem.register(this);
-		this.update();
-	},
-	"data": function() {
-		var data = {};
-		
-		data.search = "";
-		
-		return data;
-	},
-	"methods": {
-		"getDice": function(skill) {
-			var roll = [],
-				x;
-			
-			for(x=0; x<this.character[skill.base]; x++) {
-				if(x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
-					roll.push("fas fa-dice-d12 rs-yellow");
-				} else {
-					roll.push("fas fa-dice-d8 rs-green rot45");
+(function() {
+	var storageKey = "_rssw_characterskillsComponentKey";
+
+	rsSystem.component("rsswCharacterSkills", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSSWStats, rsSystem.components.RSCore
+		],
+		"props": {
+			"character": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					if(this.state.search !== this.state.search.toLowerCase()) {
+						Vue.set(this.state, "search", this.state.search.toLowerCase());
+					}
+					this.saveStorage(storageKey, this.state);
 				}
 			}
-			
-			return roll;
 		},
-		"enhancedSkill": function(skill) {
-			return !!this.character[skill.enhancementKey];
+		"mounted": function() {
+			this.character.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
 		},
-		"update": function() {
-			var buffer,
-				x;
-			
-			
-			
-			this.$forceUpdate();
-		}
-	},
-	"beforeDestroy": function() {
-		this.character.$off("modified", this.update);
-	},
-	"template": Vue.templified("components/rssw/character/skills.html")
-});
+		"data": function() {
+			var data = {};
+
+			data.state = this.loadStorage(storageKey, {
+				"hideNames": false,
+				"search": ""
+			});
+			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+
+			return data;
+		},
+		"methods": {
+			"getDice": function(skill) {
+				var roll = [], x;
+
+				for (x = 0; x < this.character[skill.base]; x++) {
+					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
+						roll.push("fas fa-dice-d12 rs-yellow");
+					} else {
+						roll.push("fas fa-dice-d8 rs-green rot45");
+					}
+				}
+
+				return roll;
+			},
+			"enhancedSkill": function(skill) {
+				return !!this.character[skill.enhancementKey];
+			},
+			"update": function() {
+				var buffer, x;
+
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/skills.html")
+	});	
+})();
 
 
 /**

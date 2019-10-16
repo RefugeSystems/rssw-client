@@ -1,8 +1,12 @@
-<div class="rs-component rssw component-character-skills flow-v">
-	<div class="filter">
+<div class="rs-component rssw component-character-skills flow-v" :class="{'no-names':state.hideNames}">
+	<div class="filter flow-v">
 		<label>
 			<span>Filter Skills</span>
-			<input type="text" v-model="search" />
+			<input type="text" v-model="state.search" />
+		</label>
+		<label>
+			<span>Hide Names</span>
+			<input type="checkbox" v-model="state.hideNames" />
 		</label>
 	</div>
 	
@@ -14,7 +18,7 @@
 					<span>General Skills</span>
 				</h3>
 				<table>
-					<tr class="skill" v-for="skill in skillStatsSections.general">
+					<tr class="skill" v-for="skill in skillStatsSections.general" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
 						<td class="name aligned-right">
 							<span>{{skill.name}}</span>
 						</td>
@@ -39,7 +43,7 @@
 					<span>Combat Skills</span>
 				</h3>
 				<table>
-					<tr class="skill" v-for="skill in skillStatsSections.combat">
+					<tr class="skill" v-for="skill in skillStatsSections.combat" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
 						<td class="name aligned-right">
 							<span>{{skill.name}}</span>
 						</td>
@@ -62,7 +66,7 @@
 					<span>Knowledge Skills</span>
 				</h3>
 				<table>
-					<tr class="skill" v-for="skill in skillStatsSections.knowledge">
+					<tr class="skill" v-for="skill in skillStatsSections.knowledge" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
 						<td class="name aligned-right">
 							<span>{{skill.name}}</span>
 						</td>
