@@ -1,7 +1,7 @@
 .rs-component {
 	.flow-h {
-		display: flex !important;
-		flex-direction: row !important;
+		display: flex;
+		flex-direction: row;
 	
 		&.wrap {
 			flex-wrap: wrap;
@@ -30,11 +30,15 @@
 		&.middled {
 			align-content: center;
 		}
+		
+		&.inline {
+			display: inline-flex;
+		}
 	}
 	
 	.flow-v {
-		display: flex !important;
-		flex-direction: column !important;
+		display: flex;
+		flex-direction: column;
 	
 		&.wrap {
 			flex-wrap: wrap;
@@ -63,6 +67,34 @@
 		&.middled {
 			align-content: center;
 		}
+		
+		&.inline {
+			display: inline-flex;
+		}
+	}
+	
+	.grow-0 {
+		flex-grow: 0;
+	}
+	
+	.grow-1 {
+		flex-grow: 1;
+	}
+	
+	.grow-2 {
+		flex-grow: 2;
+	}
+	
+	.shrink-0 {
+		flex-shrink: 0;
+	}
+	
+	.shrink-1 {
+		flex-shrink: 1;
+	}
+	
+	.shrink-2 {
+		flex-shrink: 2;
 	}
 	
 	.flipped-h {

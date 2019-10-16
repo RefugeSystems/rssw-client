@@ -8,10 +8,9 @@
  */
 rsSystem.component("RSSWCharacter", {
 	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
-	"mounted": function() {
-		rsSystem.register(this);
-	},
+	"mixins": [
+		rsSystem.components.RSCore
+	],
 	"data": function() {
 		var data = {};
 		
@@ -21,6 +20,9 @@ rsSystem.component("RSSWCharacter", {
 		"entity": function() {
 			return this.universe.nouns.entity[this.$route.params.oid];
 		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
 	},
 	"methods": {
 		

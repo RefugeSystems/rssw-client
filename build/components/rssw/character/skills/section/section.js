@@ -1,16 +1,14 @@
 /**
  * 
  * 
- * @class rsswCharacterSkills
+ * @class rsswSkillSection
  * @constructor
  * @module Components
  */
 (function() {
-	var storageKey = "_rssw_characterskillsComponentKey";
-	
 	var levelBars = [0,1,2,3,4];
-
-	rsSystem.component("rsswCharacterSkills", {
+	
+	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSSWStats,
@@ -20,35 +18,26 @@
 			"character": {
 				"required": true,
 				"type": Object
+			},
+			"skills": {
+				"required": true,
+				"type": Array
+			},
+			"state": {
+				"required": true,
+				"type": Object
 			}
 		},
 		"data": function() {
 			var data = {};
 			
-			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
-			data.state = this.loadStorage(data.storageKeyID, {
-				"hideNames": false,
-				"search": ""
-			});
 
 			return data;
-		},
-		"watch": {
-			"state": {
-				"deep": true,
-				"handler": function() {
-					if(this.state.search !== this.state.search.toLowerCase()) {
-						Vue.set(this.state, "search", this.state.search.toLowerCase());
-					}
-					this.saveStorage(this.storageKeyID, this.state);
-				}
-			}
 		},
 		"mounted": function() {
 			this.character.$on("modified", this.update);
 			rsSystem.register(this);
-			this.update();
 		},
 		"methods": {
 			"getDice": function(skill) {
@@ -61,21 +50,18 @@
 						roll.push("fas fa-dice-d8 rs-green rot45");
 					}
 				}
-
 				return roll;
 			},
 			"enhancedSkill": function(skill) {
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
-				var buffer, x;
-
 				this.$forceUpdate();
 			}
 		},
 		"beforeDestroy": function() {
 			this.character.$off("modified", this.update);
 		},
-		"template": Vue.templified("components/rssw/character/skills.html")
+		"template": Vue.templified("components/rssw/character/skills/section.html")
 	});	
 })();

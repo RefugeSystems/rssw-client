@@ -1,22 +1,28 @@
 <div class="rs-component rssw component-character-info">
 	<div class="property name">
-		<span class="fas fa-user"></span>
-		<span>{{character.name}}</span>
+		<span class="icon fas fa-user"></span>
+		<span class="value">{{character.name}}</span>
 		<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>
 	</div>
 	<div class="property species">
-		<span class="fas fa-bug rot45"></span>
+		<span class="icon fas fa-bug rot45"></span>
 		<span class="label">Species:</span>
-		<span>{{race?race.name:"No Species"}}</span>
+		<span class="value">{{race?race.name:"No Species"}}</span>
 	</div>
 	<div class="property career">
-		<span class="fas fa-user-hard-hat"></span>
+		<span class="icon fas fa-user-hard-hat"></span>
 		<span class="label">Careers:</span>
-		<span v-for="archetype in careers" class="archetype">{{archetype.name}}</span>
+		<span v-for="(archetype, $index) in careers" class="archetype">
+			<span class="divide" v-if="$index !== 0">, </span>
+			<span class="value">{{archetype.name}}</span>
+		</span>
 	</div>
 	<div class="property speciailization">
-		<span class="fas fa-gavel"></span>
+		<span class="icon fas fa-gavel"></span>
 		<span class="label">Specializations:</span>
-		<span v-for="archetype in specializations" class="archetype">{{archetype.name}}</span>
+		<span v-for="(archetype, $index) in specializations" class="archetype">
+			<span class="divide" v-if="$index !== 0">, </span>
+			<span class="value">{{archetype.name}}</span>
+		</span>
 	</div>
 </div>

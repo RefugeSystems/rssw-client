@@ -2,10 +2,15 @@
 
 
 	.stats {
-		display: flex;
+		display: inline-flex;
 		flex-direction: row;
 		text-align: center;
-		justify-content: center;
+		min-width: 510px;
+		justify-content: space-between;
+		
+		label {
+			display: inline-block;
+		}
 		
 		.stat {
 			display: flex;

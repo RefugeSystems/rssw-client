@@ -16,6 +16,10 @@
 	    "defense_range",
 	    "defense_melee"
 	    ];
+	
+	
+	var highValues = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+	var lowValues = [-2,-1,0,1,2,3,4,5,6,7,8,9,10];
 
 	rsSystem.component("rsswCharacterBoard", {
 		"inherit": true,
@@ -29,20 +33,29 @@
 				"type": Object
 			}
 		},
-		"mounted": function() {
-			this.character.$on("modified", this.update);
-			rsSystem.register(this);
-			this.update();
-		},
 		"data": function() {
 			var data = {},
 				x;
-			
+
+			data.highValues = highValues;
+			data.lowValues = lowValues;
 			for(x=0; x<keys.length; x++) {
 				data[keys[x]] = 0;
 			}
 			
 			return data;
+		},
+		"mounted": function() {
+			this.character.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"watch": {
+			"wounds": function(nV, oV) {
+				this.character.commit({
+					"wounds": nV
+				});
+			}
 		},
 		"methods": {
 			"setStat": function() {

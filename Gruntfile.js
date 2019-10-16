@@ -29,7 +29,6 @@ var config = {
 				"block-scoped-var": 2,
 				"no-undef": 2,
 				"semi": 2,
-				"camelcase": 2,
 				"max-depth": [1, {
 						"max": 10
 					}

@@ -1,5 +1,5 @@
 <div class="rs-component rssw component-character-skills flow-v" :class="{'no-names':state.hideNames}">
-	<div class="filter flow-v">
+	<div class="filter flow-v inline">
 		<label>
 			<span>Filter Skills</span>
 			<input type="text" v-model="state.search" />
@@ -17,22 +17,7 @@
 					<span class="fas fa-tools"></span>
 					<span>General Skills</span>
 				</h3>
-				<table>
-					<tr class="skill" v-for="skill in skillStatsSections.general" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
-						<td class="name aligned-right">
-							<span>{{skill.name}}</span>
-						</td>
-						<td class="icon">
-							<span :class="skill.icon"></span>
-						</td>
-						<td class="enhanced">
-							<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
-						</td>
-						<td class="roll">
-							<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
-						</td>
-					</tr>
-				</table>
+				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.general" :state="state" :user="user"></rssw-skill-section>
 			</div>
 		</div>
 		
@@ -42,22 +27,7 @@
 					<span class="fas fa-swords"></span>
 					<span>Combat Skills</span>
 				</h3>
-				<table>
-					<tr class="skill" v-for="skill in skillStatsSections.combat" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
-						<td class="name aligned-right">
-							<span>{{skill.name}}</span>
-						</td>
-						<td class="icon">
-							<span :class="skill.icon"></span>
-						</td>
-						<td class="enhanced">
-							<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
-						</td>
-						<td class="roll">
-							<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
-						</td>
-					</tr>
-				</table>
+				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.combat" :state="state" :user="user"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list knowledge flow-v">
@@ -65,22 +35,7 @@
 					<span class="fas fa-brain"></span>
 					<span>Knowledge Skills</span>
 				</h3>
-				<table>
-					<tr class="skill" v-for="skill in skillStatsSections.knowledge" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
-						<td class="name aligned-right">
-							<span>{{skill.name}}</span>
-						</td>
-						<td class="icon">
-							<span :class="skill.icon"></span>
-						</td>
-						<td class="enhanced">
-							<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
-						</td>
-						<td class="roll">
-							<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
-						</td>
-					</tr>
-				</table>
+				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.knowledge" :state="state" :user="user"></rssw-skill-section>
 			</div>
 		</div>
 	</div>

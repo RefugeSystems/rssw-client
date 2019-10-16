@@ -1,0 +1,25 @@
+
+<table>
+	<tr class="skill" v-for="skill in skills" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
+		<td class="name aligned-right flow-v">
+			<span class="naming">
+				<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
+				{{skill.name}}
+			</span>
+			<span class="base">
+				{{skill.base.capitalize()}}
+			</span>
+		</td>
+		<td class="icon">
+			<span :class="skill.icon"></span>
+		</td>
+		<td class="stats">
+			<div class="level">
+				<div class="level-block" v-for="level in levelBars" :class="{'acquired':level < character[skill.propertyKey], 'first':level === 0}"></div>
+			</div>
+			<div class="roll">
+				<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
+			</div>
+		</td>
+	</tr>
+</table>

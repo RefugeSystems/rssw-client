@@ -1,7 +1,57 @@
-<div class="rssw-component component-ship-stats">
-	<div class="stats">
-		<div class="stat" v-for="stat in shipStats" :key="stat">
-			<select class=""
+<div class="rs-component rssw component-ship-stats">
+	<div class="picture">
+		<img :src="'/images/rssw/ships/' + ship.profile" />
+	</div>
+	<div class="information flow-h">
+		<div class="skill">
+			<span v-if="!pilot" class="fas fa-ban"></span>
+			<span v-if="pilot">{{pilot.skill}}</span>
+		</div>
+		<div class="container flow-v">
+			<div class="pilot">
+				<span v-if="!pilot" class="fas fa-ban"></span>
+				<span v-if="pilot">{{pilot.name}}</span>
+			</div>
+			<div class="name">
+				<span>{{ship.name}}</span>
+			</div>
+		</div>
+		<div class="alliance">
+			<span v-if="!pilot" class="fab fa-rebel"></span>
+			<span v-if="pilot" class="fab fa-empire"></span>
+		</div>
+	</div>
+	<div class="data flow-h">
+		<div class="stats flow-v">
+			<div class="stat flow-h" v-for="stat in shipStatList" :key="stat.id" :class="stat.class">
+				<span class="icon-bubble">
+					<span class="icon" :class="stat.icon"></span>
+				</span>
+				<span class="value">{{ship[stat.id]}}</span>
+			</div>
+		</div>
+		<div class="details flow-v">
+			<div class="ability">
+				<p v-if="!pilot || !ability">{{ship.description}}</p>
+				<p v-if="pilot && ability">{{ability.description}}</p>
+			</div>
+			<div class="abilities">
+				<div class="ability" v-for="ability in ship.abilities">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mounts flow-h">
+		<div class="icon-bubble">
+			<span class="icon" v-if="ship.icon" :class="ship.icon"></span>
+		</div>
+		<div class="slots flow-h">
+			<div class="slot" v-for="mount in ship.slot">
+				{{mount}}
+			</div>
+		</div>
+		<div class="points">
+			{{points}}
 		</div>
 	</div>
 </div>

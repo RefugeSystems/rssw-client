@@ -18230,13 +18230,12 @@ Templify.install = function(Vue, options) {
 			case "components/info.html": return "<div class=\"system-component system-info\">\r\n\r\n</div>\r\n";
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
-			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\r\n\r\n\r\n</div>\r\n";
-			case "components/rssw/character.html": return "<div class=\"rssw-component component-character\">\r\n\r\n</div>\r\n";
-			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"fas fa-user\"></span>\r\n\t\t<span>{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span>{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"archetype in careers\" class=\"archetype\">{{archetype.name}}</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"archetype in specializations\" class=\"archetype\">{{archetype.name}}</span>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.general\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.combat\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.knowledge\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"value\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span class=\"value\">{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"(archetype, $index) in careers\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"(archetype, $index) in specializations\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/ship.html": return "<div class=\"rssw-component component-ship\">\r\n\r\n</div>\r\n";
-			case "components/rssw/ship/stats.html": return "<div class=\"rssw-component component-ship-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in shipStats\" :key=\"stat\">\r\n\t\t\t<select class=\"\"\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<span>{{ship.name}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\">\r\n\t\t\t{{points}}\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table.html": return "";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
@@ -18246,7 +18245,7 @@ Templify.install = function(Vue, options) {
 			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div class=\"title\">\r\n\t\t{{player.name}} Overview\r\n\t</div>\r\n\t\r\n\t<div class=\"self\" v-if=\"self\">\r\n\t\t<router-link class=\"navigation-button\" :to=\"'/character/' + self.id\">\r\n\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t</router-link>\r\n\t</div>\r\n\t\r\n\t<div class=\"control\">\r\n\t\t<div class=\"title\">\r\n\t\t\tOthers\r\n\t\t</div>\r\n\t\t<div class=\"entities\">\r\n\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/map.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
-			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
+			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
 			default: return null;
 		}
@@ -20961,12 +20960,23 @@ class RSObject extends EventEmitter {
 		}
 	}
 	
+	/**
+	 * 
+	 * @method commit
+	 * @param {Object} change
+	 */
 	commit(change) {
 		change._type = this._type;
 		change.id = this.id;
 		this.universe.send("modify:" + this._type, change);
 	}
+
 	
+	/**
+	 * 
+	 * @method toJSON
+	 * @return {Object}
+	 */
 	toJSON() {
 		var keys = Object.keys(this._coreData),
 			json = {},
@@ -21000,6 +21010,10 @@ class RSObject extends EventEmitter {
 		return json;
 	}
 	
+	/**
+	 * 
+	 * @method recalculateProperties
+	 */
 	recalculateProperties() {
 		// Establish Base
 		var references = [],
@@ -21049,7 +21063,13 @@ class RSObject extends EventEmitter {
 		
 		this.$emit("modified", this);
 	}
-	
+
+	/**
+	 * 
+	 * @method loadNounReferenceModifications
+	 * @param {String} noun
+	 * @param {Object} base
+	 */
 	loadNounReferenceModifications(noun, base) {
 		var reference = this[noun],
 			x;
@@ -21067,7 +21087,12 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @method performModifications
+	 * @param {Object} base
+	 */
 	performModifications(base) {
 //		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
 		var x;
@@ -21084,7 +21109,12 @@ class RSObject extends EventEmitter {
 		}
 //		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 	}
-	
+
+	/**
+	 * 
+	 * @method loadDelta
+	 * @param {Object} delta
+	 */
 	loadDelta(delta) {
 		var keys = Object.keys(delta),
 			x;
@@ -21299,13 +21329,13 @@ rsSystem.component("RSSWStats", {
 				"name": "Attack",
 				"info": "Similar to strength",
 				"class": "rs-red",
-				"icon": "fas fa-flame rot135"
+				"icon": "fas fa-flame rot315"
 			},
 			"maneuverability": {
 				"name": "Maneuverability",
 				"info": "Similar to strength",
 				"class": "rs-green",
-				"icon": "fad fa-long-arrow-alt-right"
+				"icon": "fad fa-chevron-double-right"
 			},
 			"hull": {
 				"name": "Hull",
@@ -21460,7 +21490,7 @@ rsSystem.component("RSSWStats", {
 				"icon": "fas fa-eye-slash",
 				"base": "agility"
 			},
-			"gyunnery": {
+			"gunnery": {
 				"section": "combat",
 				"info": "",
 				"icon": "fas fa-bow-arrow",
@@ -21575,6 +21605,10 @@ rsSystem.component("RSSWStats", {
 			}
 		}
 		data.skillStatsSectionsListing = Object.keys(data.skillStatsSections);
+		data.shipStatList = [];
+		for(x=0;x<data.shipStats.length;x++) {
+			data.shipStatList.push(data.entityStats[data.shipStats[x]]);
+		}
 		
 		return data;
 	},
@@ -22921,10 +22955,10 @@ rsSystem.component("StorageManager", {
 			key = key || this.storageKey;
 			var data = localStorage.getItem(key);
 			if(data) {
-				console.log("Load[" + key + "]: ", data);
+//				console.log("Load[" + key + "]: ", data);
 				return JSON.parse(data);
 			} else {
-				console.log("Load[" + key + "]: Defaulted");
+//				console.log("Load[" + key + "]: Defaulted");
 				return defaults;
 			}
 		},
@@ -22933,7 +22967,7 @@ rsSystem.component("StorageManager", {
 			if(!key || !object) {
 				throw new Error("Missing arguments");
 			}
-			console.log("Save[" + key + "]: ", object);
+//			console.log("Save[" + key + "]: ", object);
 			localStorage.setItem(key, JSON.stringify(object));
 		}
 	}
@@ -23287,6 +23321,10 @@ rsSystem.component("RSCore", {
 	    "defense_range",
 	    "defense_melee"
 	    ];
+	
+	
+	var highValues = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+	var lowValues = [-2,-1,0,1,2,3,4,5,6,7,8,9,10];
 
 	rsSystem.component("rsswCharacterBoard", {
 		"inherit": true,
@@ -23300,20 +23338,29 @@ rsSystem.component("RSCore", {
 				"type": Object
 			}
 		},
-		"mounted": function() {
-			this.character.$on("modified", this.update);
-			rsSystem.register(this);
-			this.update();
-		},
 		"data": function() {
 			var data = {},
 				x;
-			
+
+			data.highValues = highValues;
+			data.lowValues = lowValues;
 			for(x=0; x<keys.length; x++) {
 				data[keys[x]] = 0;
 			}
 			
 			return data;
+		},
+		"mounted": function() {
+			this.character.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"watch": {
+			"wounds": function(nV, oV) {
+				this.character.commit({
+					"wounds": nV
+				});
+			}
 		},
 		"methods": {
 			"setStat": function() {
@@ -23334,31 +23381,6 @@ rsSystem.component("RSCore", {
 		"template": Vue.templified("components/rssw/character/board.html")
 	});
 })();
-
-/**
- * 
- * 
- * @class RSSWCharacterView
- * @constructor
- * @module Pages
- */
-rsSystem.component("RSSWCharacterView", {
-	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
-	"mounted": function() {
-		rsSystem.register(this);
-	},
-	"data": function() {
-		var data = {};
-		
-		return data;
-	},
-	"methods": {
-		
-	},
-	"template": Vue.templified("components/rssw/character.html")
-});
-
 
 /**
  * 
@@ -23436,23 +23458,106 @@ rsSystem.component("rsswCharacterInfo", {
 /**
  * 
  * 
+ * @class rsswSkillSection
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var levelBars = [0,1,2,3,4];
+	
+	rsSystem.component("rsswSkillSection", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"character": {
+				"required": true,
+				"type": Object
+			},
+			"skills": {
+				"required": true,
+				"type": Array
+			},
+			"state": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.levelBars = levelBars;
+
+			return data;
+		},
+		"mounted": function() {
+			this.character.$on("modified", this.update);
+			rsSystem.register(this);
+		},
+		"methods": {
+			"getDice": function(skill) {
+				var roll = [], x;
+
+				for (x = 0; x < this.character[skill.base]; x++) {
+					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
+						roll.push("fas fa-dice-d12 rs-yellow");
+					} else {
+						roll.push("fas fa-dice-d8 rs-green rot45");
+					}
+				}
+				return roll;
+			},
+			"enhancedSkill": function(skill) {
+				return !!this.character[skill.enhancementKey];
+			},
+			"update": function() {
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/skills/section.html")
+	});	
+})();
+
+/**
+ * 
+ * 
  * @class rsswCharacterSkills
  * @constructor
  * @module Components
  */
 (function() {
 	var storageKey = "_rssw_characterskillsComponentKey";
+	
+	var levelBars = [0,1,2,3,4];
 
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
-			rsSystem.components.RSSWStats, rsSystem.components.RSCore
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
 		],
 		"props": {
 			"character": {
 				"required": true,
 				"type": Object
 			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.storageKeyID = storageKey + this.character.id;
+			data.levelBars = levelBars;
+			data.state = this.loadStorage(data.storageKeyID, {
+				"hideNames": false,
+				"search": ""
+			});
+
+			return data;
 		},
 		"watch": {
 			"state": {
@@ -23461,7 +23566,7 @@ rsSystem.component("rsswCharacterInfo", {
 					if(this.state.search !== this.state.search.toLowerCase()) {
 						Vue.set(this.state, "search", this.state.search.toLowerCase());
 					}
-					this.saveStorage(storageKey, this.state);
+					this.saveStorage(this.storageKeyID, this.state);
 				}
 			}
 		},
@@ -23469,17 +23574,6 @@ rsSystem.component("rsswCharacterInfo", {
 			this.character.$on("modified", this.update);
 			rsSystem.register(this);
 			this.update();
-		},
-		"data": function() {
-			var data = {};
-
-			data.state = this.loadStorage(storageKey, {
-				"hideNames": false,
-				"search": ""
-			});
-			console.log("Loaded Data[" + storageKey + "]: ", data.state);
-
-			return data;
 		},
 		"methods": {
 			"getDice": function(skill) {
@@ -23563,31 +23657,6 @@ rsSystem.component("rsswCharacterStats", {
 /**
  * 
  * 
- * @class RSSWShipView
- * @constructor
- * @module Pages
- */
-rsSystem.component("RSSWShipView", {
-	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
-	"mounted": function() {
-		rsSystem.register(this);
-	},
-	"data": function() {
-		var data = {};
-		
-		return data;
-	},
-	"methods": {
-		
-	},
-	"template": Vue.templified("components/rssw/ship.html")
-});
-
-
-/**
- * 
- * 
  * @class rsswShipStats
  * @constructor
  * @module Components
@@ -23599,27 +23668,93 @@ rsSystem.component("rsswShipStats", {
 		rsSystem.components.RSCore
 	],
 	"props": {
-		"character": {
+		"ship": {
 			"required": true,
 			"type": Object
 		}
 	},
-	"mounted": function() {
-		rsSystem.register(this);
-	},
 	"data": function() {
-		var data = {},
-			x;
-		
-		data.damage = {};
-		for(x=0; x<this.shipStats.length; x++) {
-			
-		}
+		var data = {};
+
+		data.points = 0;
+		data.mounted = {};
+		data.abilities = [];
+		data.ability = null;
+		data.pilot = null;
 		
 		return data;
 	},
+	"mounted": function() {
+		this.ship.$on("modified", this.update);
+		rsSystem.register(this);
+		this.update();
+	},
 	"methods": {
-		
+		"update": function() {
+			var points = this.ship.points || 0,
+				buffer,
+				x;
+			
+			buffer = Object.keys(this.mounted);
+			for(x=0; x< buffer.length; x++) {
+				Vue.delete(this.mounted, buffer[x]);
+			}
+			
+			buffer = this.universe.nouns.entity[this.ship.pilot];
+			if(buffer) {
+				if(this.pilot) {
+					if(this.pilot.id !== buffer.id) {
+						this.pilot.$off("modified", this.update);
+						buffer.$on("modified", this.update);
+						Vue.set(this, "pilot", buffer);
+					}
+				} else {
+					buffer.$on("modified", this.update);
+					Vue.set(this, "pilot", buffer);
+				}
+			} else if(this.pilot) {
+				this.pilot.$off("modified", this.update);
+			}
+			
+			if(this.pilot) {
+				Vue.set(this, "ability", this.universe.nouns.ability[this.pilot.active_ship_ability]);
+			} else if(this.ability) {
+				Vue.set(this, "ability", null);
+			}
+			
+			this.abilities.splice(0);
+			for(x=0; this.ship.ability && x<this.ship.ability.length; x++) {
+				buffer = this.universe.nouns.ability[this.ship.ability[x]];
+				if(buffer) {
+					this.abilities.push(buffer);
+				} else {
+					console.warn("Unidentified Ability: " + this.ship.ability[x]);
+				}
+			}
+			for(x=0; this.pilot && this.pilot.ship_abilities && x<this.pilot.ship_abilities.length; x++) {
+				buffer = this.universe.nouns.ability[this.pilot.ship_abilities[x]];
+				if(buffer) {
+					this.abilities.push(buffer);
+				} else {
+					console.warn("Unidentified Ability: " + this.pilot.ship_abilities[x]);
+				}
+			}
+			
+			for(x=0; this.ship.slot && x<this.ship.slot.length; x++) {
+				buffer = this.ship["slot_" + this.ship.slot[x]];
+				if(buffer) {
+					Vue.set(this.mounted, this.ship.slot[x], buffer);
+				}
+			}
+			
+			this.$forceUpdate();
+		}
+	},
+	"beforeDestroy": function() {
+		if(this.pilot) {
+			this.pilot.$off("modified", this.update);
+		}
+		this.ship.$off("modified", this.update);
 	},
 	"template": Vue.templified("components/rssw/ship/stats.html")
 });
@@ -23791,10 +23926,9 @@ rsSystem.component("RSNounControls", {
  */
 rsSystem.component("RSSWCharacter", {
 	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
-	"mounted": function() {
-		rsSystem.register(this);
-	},
+	"mixins": [
+		rsSystem.components.RSCore
+	],
 	"data": function() {
 		var data = {};
 		
@@ -23804,6 +23938,9 @@ rsSystem.component("RSSWCharacter", {
 		"entity": function() {
 			return this.universe.nouns.entity[this.$route.params.oid];
 		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
 	},
 	"methods": {
 		
@@ -23849,7 +23986,7 @@ rsSystem.component("RSSWDashboard", {
 	},
 	"computed": {
 		"self": function() {
-			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].self];
+			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
 		}
 	},
 	"methods": {
@@ -23948,14 +24085,21 @@ rsSystem.component("RSSWMap", {
  */
 rsSystem.component("RSSWShip", {
 	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
-	"mounted": function() {
-		rsSystem.register(this);
-	},
+	"mixins": [
+		rsSystem.components.RSCore
+	],
 	"data": function() {
 		var data = {};
 		
 		return data;
+	},
+	"computed": {
+		"entity": function() {
+			return this.universe.nouns.entity[this.$route.params.oid];
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
 	},
 	"methods": {
 		

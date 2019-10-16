@@ -4,22 +4,61 @@
 	.skill-list {
 		.titling {
 			border-bottom: 1px solid @rsWhite;
+			padding-right: 15px;
 		}
 	
 		.icon {
+			text-align: center;
 			color: @rsOrange;
 		}
 		
-		.name span {
+		.name .naming{
 			display: inline-block;
 			overflow: hidden;
 			width: 140px;
 			transition: width .5s, padding .5s, border .5s;
 			white-space: nowrap;
 		}
+		
+		.skill {
+			* {
+				vertical-align: middle;
+			}
+		}
+		
+		.base {
+			color: @rsOrange;
+			font-size: .8em;
+		}
+		
+		.stats {
 	
-		.dice {
-			margin: 0px 2px;
+			.level {
+				white-space: nowrap;
+				margin: 5px 0px 3px 0px;
+			}
+	
+			.level-block {
+				display: inline-block;
+				width: 14px;
+				height: 6px;
+				margin: 0px;
+				border: 1px solid @rsBlue;
+				background-color: transparent;
+				border-width: 1px 1px 1px 0px;
+				
+				&.first {
+					border-left-width: 1px;
+				}
+				
+				&.acquired {
+					background-color: @rsWhite;
+				}
+			}
+		
+			.dice {
+				margin: 0px 2px;
+			}
 		}
 	}
 	
@@ -29,5 +68,13 @@
 			border: 0px !important;
 			width: 0px !important;
 		}
+		
+		.icon {
+			text-align: right;
+		}
+	}
+	
+	label {
+		display: inline-block;
 	}
 }

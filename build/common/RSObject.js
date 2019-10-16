@@ -31,12 +31,23 @@ class RSObject extends EventEmitter {
 		}
 	}
 	
+	/**
+	 * 
+	 * @method commit
+	 * @param {Object} change
+	 */
 	commit(change) {
 		change._type = this._type;
 		change.id = this.id;
 		this.universe.send("modify:" + this._type, change);
 	}
+
 	
+	/**
+	 * 
+	 * @method toJSON
+	 * @return {Object}
+	 */
 	toJSON() {
 		var keys = Object.keys(this._coreData),
 			json = {},
@@ -70,6 +81,10 @@ class RSObject extends EventEmitter {
 		return json;
 	}
 	
+	/**
+	 * 
+	 * @method recalculateProperties
+	 */
 	recalculateProperties() {
 		// Establish Base
 		var references = [],
@@ -119,7 +134,13 @@ class RSObject extends EventEmitter {
 		
 		this.$emit("modified", this);
 	}
-	
+
+	/**
+	 * 
+	 * @method loadNounReferenceModifications
+	 * @param {String} noun
+	 * @param {Object} base
+	 */
 	loadNounReferenceModifications(noun, base) {
 		var reference = this[noun],
 			x;
@@ -137,7 +158,12 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @method performModifications
+	 * @param {Object} base
+	 */
 	performModifications(base) {
 //		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
 		var x;
@@ -154,7 +180,12 @@ class RSObject extends EventEmitter {
 		}
 //		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 	}
-	
+
+	/**
+	 * 
+	 * @method loadDelta
+	 * @param {Object} delta
+	 */
 	loadDelta(delta) {
 		var keys = Object.keys(delta),
 			x;

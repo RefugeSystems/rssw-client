@@ -55,13 +55,13 @@ rsSystem.component("RSSWStats", {
 				"name": "Attack",
 				"info": "Similar to strength",
 				"class": "rs-red",
-				"icon": "fas fa-flame rot135"
+				"icon": "fas fa-flame rot315"
 			},
 			"maneuverability": {
 				"name": "Maneuverability",
 				"info": "Similar to strength",
 				"class": "rs-green",
-				"icon": "fad fa-long-arrow-alt-right"
+				"icon": "fad fa-chevron-double-right"
 			},
 			"hull": {
 				"name": "Hull",
@@ -216,7 +216,7 @@ rsSystem.component("RSSWStats", {
 				"icon": "fas fa-eye-slash",
 				"base": "agility"
 			},
-			"gyunnery": {
+			"gunnery": {
 				"section": "combat",
 				"info": "",
 				"icon": "fas fa-bow-arrow",
@@ -331,6 +331,10 @@ rsSystem.component("RSSWStats", {
 			}
 		}
 		data.skillStatsSectionsListing = Object.keys(data.skillStatsSections);
+		data.shipStatList = [];
+		for(x=0;x<data.shipStats.length;x++) {
+			data.shipStatList.push(data.entityStats[data.shipStats[x]]);
+		}
 		
 		return data;
 	},

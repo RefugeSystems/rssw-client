@@ -36,7 +36,7 @@ rsSystem.component("RSSWDashboard", {
 	},
 	"computed": {
 		"self": function() {
-			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].self];
+			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
 		}
 	},
 	"methods": {

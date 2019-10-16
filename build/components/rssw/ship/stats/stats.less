@@ -1,23 +1,78 @@
-.rssw-component.component-ship-stats {
-
-
-	.stats {
-		display: flex;
-		flex-direction: row;
+.rs-component.rssw.component-ship-stats {
+	display: inline-flex;
+	flex-direction: column;
+	width: 300px;
+						
+	.icon {
+		display: inline-block;
+		vertical-align: middle;
+		text-align: center;
 		
-		.stat {
-			display: flex;
-			flex-direciton: column;
-			
-			.level {
-				color: @rsOrange;
+		* {
+			vertical-align: middle;
+		}
+	}
+	
+	.icon-bubble {
+		display: inline-flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+	}
+
+	.picture {
+		
+		
+		img {
+			width: 300px;
+		}
+	}
+	
+	.information {
+		
+	}
+	
+	.data {
+		.stats {
+			.stat {
+				font-size: 28px;
+				align-items: center;
+				margin: 3px 0px;
 				
-				&.available {
+				.icon-bubble {
+					height: 30px;
+					width: 30px;
+					border: 1px solid @rsGray;
+					border-radius: 17px;
+					font-size: 20px;
+					vertical-align: middle;
 				}
 				
-				&.unavailable {
+				.value {
+					margin-left: 5px;
 				}
 			}
+		}
+	}
+	
+	.mounts {
+		justify-content: space-between;
+		
+		.icon-bubble {
+			border: 1px solid @rsGray;
+			border-radius: 14px;
+			height: 26px;
+			line-height: 26px;
+			width: 26px;
+			flex-shrink: 0;
+			
+			.ship-icon {
+				color: @rsWhite;
+			}
+		}
+		
+		.slots {
+			flex-grow: 9;
 		}
 	}
 }

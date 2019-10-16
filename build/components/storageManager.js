@@ -23,10 +23,10 @@ rsSystem.component("StorageManager", {
 			key = key || this.storageKey;
 			var data = localStorage.getItem(key);
 			if(data) {
-				console.log("Load[" + key + "]: ", data);
+//				console.log("Load[" + key + "]: ", data);
 				return JSON.parse(data);
 			} else {
-				console.log("Load[" + key + "]: Defaulted");
+//				console.log("Load[" + key + "]: Defaulted");
 				return defaults;
 			}
 		},
@@ -35,7 +35,7 @@ rsSystem.component("StorageManager", {
 			if(!key || !object) {
 				throw new Error("Missing arguments");
 			}
-			console.log("Save[" + key + "]: ", object);
+//			console.log("Save[" + key + "]: ", object);
 			localStorage.setItem(key, JSON.stringify(object));
 		}
 	}
