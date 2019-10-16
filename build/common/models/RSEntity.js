@@ -10,6 +10,7 @@
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		
 	}
 	
 	loadDeltaHook(event) {

@@ -19,4 +19,40 @@ class RSModifierStats extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	performModifications(base) {
+		var keys = Object.keys(this._coreData),
+			x;
+
+		for(x=0; x<keys.length; x++) {
+//			console.warn("Check[" + this.id + ":" + keys[x] + "]: " + base[keys[x]] + " | " + this[keys[x]]);
+			if(!RSModifierStats._skip[keys[x]]) {
+				if(base[keys[x]]) {
+					switch(typeof(this[keys[x]])) {
+						case "string":
+							base[keys[x]] = this._coreData[keys[x]] + " + " + base[keys[x]];
+							break;
+						case "boolean":
+							base[keys[x]] = this._coreData[keys[x]] || base[keys[x]];
+							break;
+						case "number":
+							if(typeof(base[keys[x]]) === "number") {
+								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
+							} else {
+								base[keys[x]] = base[keys[x]].toString() + " + " + this._coreData[keys[x]];
+							}
+							break;
+					}
+				} else {
+//					console.warn("Check[" + this.id + "]: Straight Add");
+					base[keys[x]] = this._coreData[keys[x]];
+				}
+			}
+		}
+	}
 }
+
+RSModifierStats._skip = {
+	"name": true,
+	"id": true
+};

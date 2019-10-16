@@ -19,6 +19,7 @@ rsSystem.component("rsswCharacterStats", {
 		}
 	},
 	"mounted": function() {
+		this.character.$on("modified", this.update);
 		rsSystem.register(this);
 	},
 	"data": function() {
@@ -29,12 +30,18 @@ rsSystem.component("rsswCharacterStats", {
 		return data;
 	},
 	"methods": {
+		"update": function() {
+			this.$forceUpdate();
+		},
 		"getXPCost": function(stat) {
 			return (parseInt(this.character[stat]) + 1) * 10;
 		},
 		"levelStat": function(stat) {
 			console.log("Level Stat: " + stat);
 		}
+	},
+	"beforeDestroy": function() {
+		this.character.$off("modified", this.update);
 	},
 	"template": Vue.templified("components/rssw/character/stats.html")
 });

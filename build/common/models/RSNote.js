@@ -12,4 +12,6 @@ class RSNote extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	recalculateSheet() {}
 }

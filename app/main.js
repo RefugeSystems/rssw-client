@@ -18228,10 +18228,13 @@ Templify.install = function(Vue, options) {
 			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<form onsubmit=\"return false;\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<span class=\"heading-icon\"></span>\r\n\t\t\t<span>Login</span>\r\n\t\t</div>\r\n\t\t<div class=\"fields\">\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t\t</label>\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t\t</label>\r\n\t\t\t<div class=\"actions\">\r\n\t\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\t\tSecure?\r\n\t\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</form>\r\n</div>";
 			case "components/gyroscope.html": return "";
 			case "components/info.html": return "<div class=\"system-component system-info\">\r\n\r\n</div>\r\n";
-			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-button\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-item\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t\t<router-link class=\"navigation-button\" v-else :to=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\r\n\r\n\r\n</div>\r\n";
 			case "components/rssw/character.html": return "<div class=\"rssw-component component-character\">\r\n\r\n</div>\r\n";
-			case "components/rssw/character/stats.html": return "<div class=\"rssw-component component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"value\">\r\n\t\t\t\t{{character[stat]}}\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t\t<button class=\"level\" v-on:click=\"levelStat(stat)\">\r\n\t\t\t\t<span v-if=\"getXPCost(stat) < character.xp?'available':'unavailable'\" class=\"fas fa-user-slash\"></span>\r\n\t\t\t\t<span>+1</span>\r\n\t\t\t\t<span>{{getXPCost(stat)}}XP</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"fas fa-user\"></span>\r\n\t\t<span>{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span>{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"archetype in careers\" class=\"archetype\">{{archetype.name}}</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"archetype in specializations\" class=\"archetype\">{{archetype.name}}</span>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\">\r\n\t<div class=\"filter\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"search\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.general\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.combat\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"skill\" v-for=\"skill in skillStatsSections.knowledge\">\r\n\t\t\t\t\t\t<td class=\"name aligned-right\">\r\n\t\t\t\t\t\t\t<span>{{skill.name}}</span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"icon\">\r\n\t\t\t\t\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"enhanced\">\r\n\t\t\t\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"roll\">\r\n\t\t\t\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship.html": return "<div class=\"rssw-component component-ship\">\r\n\r\n</div>\r\n";
 			case "components/rssw/ship/stats.html": return "<div class=\"rssw-component component-ship-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in shipStats\" :key=\"stat\">\r\n\t\t\t<select class=\"\"\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table.html": return "";
@@ -18239,7 +18242,7 @@ Templify.install = function(Vue, options) {
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
 			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<h1>Nouns</h1>\r\n\t<rs-nouns :universe=\"universe\" :player=\"player\"></rs-nouns>\r\n</div>\r\n";
-			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n\t<rssw-character-stats :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n</div>\r\n";
+			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n</div>\r\n";
 			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div class=\"title\">\r\n\t\t{{player.name}} Overview\r\n\t</div>\r\n\t\r\n\t<div class=\"self\" v-if=\"self\">\r\n\t\t<router-link class=\"navigation-button\" :to=\"'/character/' + self.id\">\r\n\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t</router-link>\r\n\t</div>\r\n\t\r\n\t<div class=\"control\">\r\n\t\t<div class=\"title\">\r\n\t\t\tOthers\r\n\t\t</div>\r\n\t\t<div class=\"entities\">\r\n\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/map.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
@@ -19819,6 +19822,7 @@ class UserInformation {
  * @main Core
  */
 var rsSystem = {};
+rsSystem.version = "0.0.1";
 
 /**
  * 
@@ -20937,15 +20941,15 @@ class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
 		this.universe = universe;
-		this._sheet = {};
+		this._coreData = {};
 		var keys = Object.keys(details),
 			x;
-			
+		
 		for(x=0; x<keys.length; x++) {
-			if(!this[keys[x]]) {
-				this[keys[x]] = details[keys[x]];
-			}
+			this._coreData[keys[x]] = details[keys[x]];
 		}
+		this.name = details.name;
+		this.id = details.id;
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
@@ -20957,12 +20961,14 @@ class RSObject extends EventEmitter {
 		}
 	}
 	
-	get sheet() {
-		return this._sheet;
+	commit(change) {
+		change._type = this._type;
+		change.id = this.id;
+		this.universe.send("modify:" + this._type, change);
 	}
 	
 	toJSON() {
-		var keys = Object.keys(this),
+		var keys = Object.keys(this._coreData),
 			json = {},
 			value,
 			x;
@@ -20971,7 +20977,7 @@ class RSObject extends EventEmitter {
 			// Fields matching ^[_\$\#] are for data handling and should not be considered in stringification and other conversions
 			// Universe field is reserved property and shouldn't come out either
 			if(keys[x] && keys[x] !== "universe" && keys[x][0] !== "_" && keys[x][0] !== "$" && keys[x][0] !== "#") {
-				value = this[keys[x]];
+				value = this._coreData[keys[x]];
 				switch(typeof(value)) {
 					case "number":
 					case "string":
@@ -20994,7 +21000,7 @@ class RSObject extends EventEmitter {
 		return json;
 	}
 	
-	recalculateSheet() {
+	recalculateProperties() {
 		// Establish Base
 		var references = [],
 			base = {},
@@ -21002,14 +21008,20 @@ class RSObject extends EventEmitter {
 			load,
 			x;
 		
-		keys = Object.keys(this);
+		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_") {
-				switch(typeof(this[keys[x]])) {
+				switch(typeof(this._coreData[keys[x]])) {
 					case "boolean":
 					case "string":
 					case "number":
-						base[keys[x]] = this[keys[x]];
+						base[keys[x]] = this._coreData[keys[x]];
+						break;
+					case "object":
+						// RSObjects should be flat but arrays are valid
+						if(this._coreData[keys[x]] instanceof Array) {
+							base[keys[x]] = this._coreData[keys[x]];
+						}
 						break;
 				}
 
@@ -21020,49 +21032,57 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		console.log("References: ", references);
+//		console.log("References: ", references, _p(base));
 		if(references && references.length) {
 			for(x=0; x<references.length; x++) {
 				this.loadNounReferenceModifications(references[x], base);
 			}
 		}
 		
+		//console.log("Final: ", base);
+		keys = Object.keys(base);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && typeof(this[keys[x]]) !== "function" ) {
+				this[keys[x]] = base[keys[x]];
+			}
+		}
+		
+		this.$emit("modified", this);
 	}
 	
 	loadNounReferenceModifications(noun, base) {
 		var reference = this[noun],
 			x;
 		
-		console.log("Load Noun[" + noun + "]: ", reference);
+//		console.log("Load Noun[" + noun + "]: ", reference);
 		if(reference instanceof Array) {
 			for(x=0; x<reference.length; x++) {
-				this.universe.nouns[noun][reference[x]].performModifications(base);
+				if(this.universe.nouns[noun][reference[x]] && this.universe.nouns[noun][reference[x]].performModifications) {
+					this.universe.nouns[noun][reference[x]].performModifications(base);
+				}
 			}
 		} else {
-			this.universe.nouns[noun][reference].performModifications(base);
+			if(this.universe.nouns[noun][reference] && this.universe.nouns[noun][reference].performModifications) {
+				this.universe.nouns[noun][reference].performModifications(base);
+			}
 		}
 	}
 	
 	performModifications(base) {
-		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
+//		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
 		var x;
 		
-		try {
-			if(this.modifierstats) {
-				for(x=0; x<this.modifierstats.length; x++) {
-					this.universe.nouns.modifierstats[this.modifierstats[x]].performModifications(base);
-				}
+		if(this._coreData.modifierstats) {
+			for(x=0; x<this._coreData.modifierstats.length; x++) {
+				this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
 			}
-			if(this.modifierattrs) {
-				for(x=0; x<this.modifierattrs.length; x++) {
-					this.universe.nouns.modifierattrs[this.modifierattrs[x]].performModifications(base);
-				}
-			}
-			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
-		} catch(exception) {
-			console.error("RSObject Root Failed[" + this.id + "]: " + exception.message);
 		}
-
+		if(this._coreData.modifierattrs) {
+			for(x=0; x<this._coreData.modifierattrs.length; x++) {
+				this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+			}
+		}
+//		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 	}
 	
 	loadDelta(delta) {
@@ -21071,7 +21091,7 @@ class RSObject extends EventEmitter {
 		
 		for(x=0; x<keys.length; x++) {
 			if(typeof(this[keys[x]]) !== "function") {
-				this[keys[x]] = delta[keys[x]];
+				this._coreData[keys[x]] = delta[keys[x]];
 			}
 		}
 		
@@ -21079,9 +21099,7 @@ class RSObject extends EventEmitter {
 			this.loadDeltaHook(delta);
 		}
 		
-		this.recalculateSheet();
-		
-		this.$emit("modified", this);
+		this.recalculateProperties();
 	}
 }
 
@@ -21224,13 +21242,21 @@ class RSSheet extends EventEmitter {
 	});
 })();
 
+/**
+ * Mixin for getting the stat listing for the RSSWx system.
+ * @class RSSWStats
+ * @constructor
+ */
 rsSystem.component("RSSWStats", {
 	"inherit": true,
 	"data": function() {
-		var data = {};
+		var data = {},
+			buffer,
+			keys,
+			x;
 		
-		data.entityStats = {
-			// Character
+		data.entityStats = {};
+		data.entityStats.character = {
 			"brawn": {
 				"name": "Brawn",
 				"info": "Similar to strength",
@@ -21266,9 +21292,9 @@ rsSystem.component("RSSWStats", {
 				"info": "",
 				"class": "rs-red",
 				"icon": "fas fa-fist-raised"
-			},
-			
-			// Ships
+			}
+		};
+		data.entityStats.ship = {
 			"attack": {
 				"name": "Attack",
 				"info": "Similar to strength",
@@ -21294,9 +21320,257 @@ rsSystem.component("RSSWStats", {
 				"icon": "fal fa-futbol rot45"
 			}
 		};
+		data.entityStats.skill = {
+			"astrogation": {
+				"name": "Astrogation",
+				"section": "general",
+				"info": "Course plotting.",
+				"icon": "fas fa-route",
+				"base": "intellect"
+			},
+			"computers": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-phone-laptop",
+				"base": "intellect"
+			},
+			"mechanics": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-wrench",
+				"base": "intellect"
+			},
+			"medicine": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-pills",
+				"base": "intellect"
+			},
+			"coreworlds": {
+				"name": "Core Worlds",
+				"section": "knowledge",
+				"info": "",
+				"icon": "fas fa-globe",
+				"base": "intellect"
+			},
+			"education": {
+				"section": "knowledge",
+				"info": "",
+				"icon": "fas fa-graduation-cap",
+				"base": "intellect"
+			},
+			"lore": {
+				"section": "knowledge",
+				"info": "",
+				"icon": "fas fa-journal-whills",
+				"base": "intellect"
+			},
+			"outerrim": {
+				"name": "Outer Rim",
+				"section": "knowledge",
+				"info": "",
+				"icon": "far fa-circle",
+				"base": "intellect"
+			},
+			"underworld": {
+				"section": "knowledge",
+				"info": "",
+				"icon": "fas fa-dungeon",
+				"base": "intellect"
+			},
+			"xenology": {
+				"section": "knowledge",
+				"info": "",
+				"icon": "fab fa-reddit-alien",
+				"base": "intellect"
+			},
+			"athletics": {
+				"name": "Athletics",
+				"section": "general",
+				"info": "Your innate abilities toward feats of body endurance and control.",
+				"icon": "fas fa-running",
+				"base": "brawn"
+			},
+			"resilience": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-shield",
+				"base": "brawn"
+			},
+			"brawl": {
+				"section": "combat",
+				"info": "",
+				"icon": "fas fa-raised-fist",
+				"base": "brawn"
+			},
+			"melee": {
+				"section": "combat",
+				"info": "",
+				"icon": "fas fa-running",
+				"base": "brawn"
+			},
+			"charm": {
+				"name": "Charm",
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-grin-hearts",
+				"base": "pressence"
+			},
+			"cool": {
+				"section": "general",
+				"info": "",
+				"icon": "fal fa-snowflake",
+				"base": "pressence"
+			},
+			"leadership": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-users-crown",
+				"base": "pressence"
+			},
+			"negotiation": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-comments-dollar",
+				"base": "pressence"
+			},
+			"coordination": {
+				"section": "general",
+				"info": "",
+				"icon": "fal fa-balance-scale",
+				"base": "agility"
+			},
+			"pilotingplanetary": {
+				"name": "Piloting (Planetary)",
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-fighter-jet",
+				"base": "agility"
+			},
+			"pilotingspace": {
+				"name": "Piloting (Space)",
+				"section": "general",
+				"info": "",
+				"icon": "fad fa-fighter-jet",
+				"base": "agility"
+			},
+			"stealth": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-eye-slash",
+				"base": "agility"
+			},
+			"gyunnery": {
+				"section": "combat",
+				"info": "",
+				"icon": "fas fa-bow-arrow",
+				"base": "agility"
+			},
+			"rangedweaponlight": {
+				"name": "Ranged (Light)",
+				"section": "combat",
+				"info": "",
+				"icon": "fas fa-horizontal-rule",
+				"base": "agility"
+			},
+			"rangedweaponheavy": {
+				"name": "Ranged (Heavy)",
+				"section": "combat",
+				"info": "",
+				"icon": "fad fa-barcode-scan",
+				"base": "agility"
+			},
+			"deception": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-user-secret",
+				"base": "cunning"
+			},
+			"perception": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-eye",
+				"base": "cunning"
+			},
+			"skulduggery": {
+				"section": "general",
+				"info": "",
+				"icon": "fad fa-briefcase",
+				"base": "cunning"
+			},
+			"streetwise": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-road",
+				"base": "cunning"
+			},
+			"survival": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-campground",
+				"base": "cunning"
+			},
+			"coercion": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-comment-slash",
+				"base": "willpower"
+			},
+			"discipline": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-alarm-exclamation",
+				"base": "willpower"
+			},
+			"vigilance": {
+				"section": "general",
+				"info": "",
+				"icon": "fas fa-street-view",
+				"base": "willpower"
+			},
+			"planetary": {
+				"name": "Planetary Knowledge",
+				"section": "knowledge",
+				"info": "General knowledge of planets. Can not be leveled manually.",
+				"controlled": true,
+				"icon": "fas fa-globe-stand",
+				"base": "intellect"
+			}
+		};
+		
+		Object.assign(data.entityStats, data.entityStats.character);
+		Object.assign(data.entityStats, data.entityStats.skill);
+		Object.assign(data.entityStats, data.entityStats.ship);
+		
+		keys = Object.keys(data.entityStats);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x] !== "character" && keys[x] !== "ship" && keys[x] !== "skill") {
+				if(!data.entityStats[keys[x]].name) {
+					data.entityStats[keys[x]].name = keys[x].capitalize();
+				}
+				data.entityStats[keys[x]].propertyKey = "skill_" + keys[x];
+				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
+				data.entityStats[keys[x]].id = keys[x];
+			}
+		}
 
 		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
 		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
+		data.skillStats = Object.keys(data.entityStats.skill).sort();
+		data.listAllStats = data.characterStats.concat(data.shipStats).concat(data.skillStats);
+		data.skillStatsSections = {};
+		for(x=0; x<data.skillStats.length; x++) {
+			buffer = data.entityStats[data.skillStats[x]];
+			if(buffer) {
+				if(buffer.section && !data.skillStatsSections[buffer.section]) {
+					data.skillStatsSections[buffer.section] = [];
+				}
+				data.skillStatsSections[buffer.section].push(data.entityStats[data.skillStats[x]]);
+			} else {
+				console.error("Unaligned Skill/Stat Key: " + data.skillStats[x]);
+			}
+		}
+		data.skillStatsSectionsListing = Object.keys(data.skillStatsSections);
 		
 		return data;
 	},
@@ -21382,6 +21656,7 @@ class RSEffect extends RSObject {
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		
 	}
 	
 	loadDeltaHook(event) {
@@ -21437,6 +21712,22 @@ class RSItem extends RSObject {
 		
 	}
 	
+}
+
+/**
+ * 
+ * @class RSKnowledge
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSKnowledge extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+
+	}
 }
 
 /**
@@ -21522,6 +21813,31 @@ class RSModifierAttributes extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	performModifications(base) {
+		var keys = Object.keys(this._coreData),
+			x;
+
+		for(x=0; x<keys.length; x++) {
+			if(!RSModifierAttributes._skip[keys[x]]) {
+				if(base[keys[x]]) {
+					switch(typeof(this._coreData[keys[x]])) {
+						case "boolean":
+						case "string":
+						case "number":
+							if(RSModifierAttributes._appendedProperties[keys[x]]) {
+								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
+							} else {
+								base[keys[x]] = this._coreData[keys[x]];
+							}
+							break;
+					}
+				} else {
+					base[keys[x]] = this._coreData[keys[x]];
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -21550,6 +21866,11 @@ RSModifierAttributes._setAppend = function(key, state) {
 	RSModifierAttributes._appendedProperties[key] = !!state;
 };
 
+RSModifierAttributes._skip = {
+	"name": true,
+	"id": true
+};
+
 /**
  * Modifiers represent changes to the properties of an entity and are computed and the summed result
  * is placed in a RSSheet for the corresponding entity.
@@ -21571,7 +21892,43 @@ class RSModifierStats extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	performModifications(base) {
+		var keys = Object.keys(this._coreData),
+			x;
+
+		for(x=0; x<keys.length; x++) {
+//			console.warn("Check[" + this.id + ":" + keys[x] + "]: " + base[keys[x]] + " | " + this[keys[x]]);
+			if(!RSModifierStats._skip[keys[x]]) {
+				if(base[keys[x]]) {
+					switch(typeof(this[keys[x]])) {
+						case "string":
+							base[keys[x]] = this._coreData[keys[x]] + " + " + base[keys[x]];
+							break;
+						case "boolean":
+							base[keys[x]] = this._coreData[keys[x]] || base[keys[x]];
+							break;
+						case "number":
+							if(typeof(base[keys[x]]) === "number") {
+								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
+							} else {
+								base[keys[x]] = base[keys[x]].toString() + " + " + this._coreData[keys[x]];
+							}
+							break;
+					}
+				} else {
+//					console.warn("Check[" + this.id + "]: Straight Add");
+					base[keys[x]] = this._coreData[keys[x]];
+				}
+			}
+		}
+	}
 }
+
+RSModifierStats._skip = {
+	"name": true,
+	"id": true
+};
 
 /**
  * 
@@ -21587,6 +21944,8 @@ class RSNote extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	recalculateSheet() {}
 }
 /**
  * 
@@ -21605,6 +21964,21 @@ class RSParty extends RSObject {
 }
 /**
  * 
+ * @class RSPlanet
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSPlanet extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+/**
+ * 
  * @class RSPlayer
  * @extends RSObject
  * @constructor
@@ -21615,9 +21989,20 @@ class RSParty extends RSObject {
 class RSPlayer extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
 	}
 	
+	loadDeltaHook() {
+		var keys = Object.keys(this._coreData),
+			x;
+		
+		for(x=0; x<keys.length; x++) {
+			if(typeof(this[keys[x]]) !== "function") {
+				this[keys[x]] = this._coreData[keys[x]];
+			}
+		}
+	}
+	
+	recalculateSheet() {}
 }
 
 /**
@@ -21674,6 +22059,7 @@ class RSUniverse extends RSObject {
 		 */
 		this.loggedOut = false;
 		this.initialized = false;
+		this.index = new SearchIndex();
 		this.indexes = {};
 		this.nouns = {};
 		
@@ -21926,12 +22312,26 @@ class RSUniverse extends RSObject {
 							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
 							this.nouns[type][id] = new Constructor(state[type][id], this);
+							this.nouns[type][id]._type = type;
 							this.indexes[type].indexItem(this.nouns[type][id]);
+							this.index.indexItem(this.nouns[type][id]);
 						}
 						noun = this.nouns[type][id];
 					}
 				} else {
 					rsSystem.log.error("Noun does not have a registered constructor: " + type);
+				}
+			}
+			
+			for(i=0; i<this.index.listing.length; i++) {
+				if(this.index.listing[i].recalculateProperties) {
+					this.index.listing[i].recalculateProperties();
+				}
+			}
+			
+			for(i=0; i<this.index.listing.length; i++) {
+				if(this.index.listing[i].recalculateProperties) {
+					this.index.listing[i].recalculateProperties();
 				}
 			}
 			
@@ -22869,6 +23269,71 @@ rsSystem.component("RSCore", {
 /**
  * 
  * 
+ * @class rsswCharacterBoard
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var keys = [
+		"soak",
+	    "wounds",
+	    "wounds_max",
+	    "strain",
+	    "strain_max",
+	    "defense_range",
+	    "defense_melee"
+	    ];
+
+	rsSystem.component("rsswCharacterBoard", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"character": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"mounted": function() {
+			this.character.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"data": function() {
+			var data = {},
+				x;
+			
+			for(x=0; x<keys.length; x++) {
+				data[keys[x]] = 0;
+			}
+			
+			return data;
+		},
+		"methods": {
+			"setStat": function() {
+				
+			},
+			"update": function() {
+				var buffer,
+					x;
+				
+				for(x=0; x<keys.length; x++) {
+					Vue.set(this, keys[x], this.character[keys[x]]);
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/board.html")
+	});
+})();
+
+/**
+ * 
+ * 
  * @class RSSWCharacterView
  * @constructor
  * @module Pages
@@ -22894,6 +23359,145 @@ rsSystem.component("RSSWCharacterView", {
 /**
  * 
  * 
+ * @class rsswCharacterInfo
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsswCharacterInfo", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSSWStats,
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"character": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"mounted": function() {
+		this.character.$on("modified", this.update);
+		rsSystem.register(this);
+		this.update();
+	},
+	"data": function() {
+		var data = {};
+		data.race = null;
+		data.specializations = [];
+		data.careers = [];
+		
+		return data;
+	},
+	"methods": {
+		"getSex": function() {
+			if(this.character.sex) {
+				var index = this.character.sex.indexOf(":");
+				if(index === -1) {
+					return this.character.sex;
+				}
+				return this.character.sex.substring(index + 1);
+			}
+			return "";
+		},
+		"update": function() {
+			var buffer,
+				x;
+			
+			Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
+			this.specializations.splice(0);
+			this.careers.splice(0);
+			if(this.character.archetype) {
+				for(x=0; x<this.character.archetype.length; x++) {
+					buffer = this.universe.nouns.archetype[this.character.archetype[x]];
+					if(buffer) {
+						switch(buffer.classification) {
+							case "secondary":
+								this.specializations.push(buffer);
+								break;
+							case "primary":
+								this.careers.push(buffer);
+								break;
+						}
+					}
+				}
+			}
+		}
+	},
+	"beforeDestroy": function() {
+		this.character.$off("modified", this.update);
+	},
+	"template": Vue.templified("components/rssw/character/info.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class rsswCharacterSkills
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsswCharacterSkills", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSSWStats,
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"character": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"mounted": function() {
+		this.character.$on("modified", this.update);
+		rsSystem.register(this);
+		this.update();
+	},
+	"data": function() {
+		var data = {};
+		
+		data.search = "";
+		
+		return data;
+	},
+	"methods": {
+		"getDice": function(skill) {
+			var roll = [],
+				x;
+			
+			for(x=0; x<this.character[skill.base]; x++) {
+				if(x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
+					roll.push("fas fa-dice-d12 rs-yellow");
+				} else {
+					roll.push("fas fa-dice-d8 rs-green rot45");
+				}
+			}
+			
+			return roll;
+		},
+		"enhancedSkill": function(skill) {
+			return !!this.character[skill.enhancementKey];
+		},
+		"update": function() {
+			var buffer,
+				x;
+			
+			
+			
+			this.$forceUpdate();
+		}
+	},
+	"beforeDestroy": function() {
+		this.character.$off("modified", this.update);
+	},
+	"template": Vue.templified("components/rssw/character/skills.html")
+});
+
+
+/**
+ * 
+ * 
  * @class rsswCharacterStats
  * @constructor
  * @module Components
@@ -22911,6 +23515,7 @@ rsSystem.component("rsswCharacterStats", {
 		}
 	},
 	"mounted": function() {
+		this.character.$on("modified", this.update);
 		rsSystem.register(this);
 	},
 	"data": function() {
@@ -22921,12 +23526,18 @@ rsSystem.component("rsswCharacterStats", {
 		return data;
 	},
 	"methods": {
+		"update": function() {
+			this.$forceUpdate();
+		},
 		"getXPCost": function(stat) {
 			return (parseInt(this.character[stat]) + 1) * 10;
 		},
 		"levelStat": function(stat) {
 			console.log("Level Stat: " + stat);
 		}
+	},
+	"beforeDestroy": function() {
+		this.character.$off("modified", this.update);
 	},
 	"template": Vue.templified("components/rssw/character/stats.html")
 });
@@ -23221,7 +23832,7 @@ rsSystem.component("RSSWDashboard", {
 	},
 	"computed": {
 		"self": function() {
-			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
+			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].self];
 		}
 	},
 	"methods": {
@@ -23369,6 +23980,7 @@ rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");
 rsSystem.registerNoun(RSModifierStats, "modifierstats");
 rsSystem.registerNoun(RSArchetype, "archetype");
 rsSystem.registerNoun(RSInventory, "inventory");
+rsSystem.registerNoun(RSKnowledge, "knowledge");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
 rsSystem.registerNoun(RSAbility, "ability");
@@ -23377,6 +23989,7 @@ rsSystem.registerNoun(RSLoadout, "loadout");
 rsSystem.registerNoun(RSPlayer, "player");
 rsSystem.registerNoun(RSEntity, "entity");
 rsSystem.registerNoun(RSEffect, "effect");
+rsSystem.registerNoun(RSPlanet, "planet");
 rsSystem.registerNoun(RSParty, "party");
 rsSystem.registerNoun(RSSkill, "skill");
 rsSystem.registerNoun(RSNote, "note");

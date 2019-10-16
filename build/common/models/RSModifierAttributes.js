@@ -20,6 +20,31 @@ class RSModifierAttributes extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	performModifications(base) {
+		var keys = Object.keys(this._coreData),
+			x;
+
+		for(x=0; x<keys.length; x++) {
+			if(!RSModifierAttributes._skip[keys[x]]) {
+				if(base[keys[x]]) {
+					switch(typeof(this._coreData[keys[x]])) {
+						case "boolean":
+						case "string":
+						case "number":
+							if(RSModifierAttributes._appendedProperties[keys[x]]) {
+								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
+							} else {
+								base[keys[x]] = this._coreData[keys[x]];
+							}
+							break;
+					}
+				} else {
+					base[keys[x]] = this._coreData[keys[x]];
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -46,4 +71,9 @@ RSModifierAttributes._setAppend = function(key, state) {
 		state = true;
 	}
 	RSModifierAttributes._appendedProperties[key] = !!state;
+};
+
+RSModifierAttributes._skip = {
+	"name": true,
+	"id": true
 };

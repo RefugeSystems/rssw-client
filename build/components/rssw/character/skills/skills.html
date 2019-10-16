@@ -1,0 +1,83 @@
+<div class="rs-component rssw component-character-skills flow-v">
+	<div class="filter">
+		<label>
+			<span>Filter Skills</span>
+			<input type="text" v-model="search" />
+		</label>
+	</div>
+	
+	<div class="skill-container flow-h">
+		<div class="skill-container">
+			<div class="skill-list general flow-v">
+				<h3 class="titling">
+					<span class="fas fa-tools"></span>
+					<span>General Skills</span>
+				</h3>
+				<table>
+					<tr class="skill" v-for="skill in skillStatsSections.general">
+						<td class="name aligned-right">
+							<span>{{skill.name}}</span>
+						</td>
+						<td class="icon">
+							<span :class="skill.icon"></span>
+						</td>
+						<td class="enhanced">
+							<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
+						</td>
+						<td class="roll">
+							<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="skill-container">
+			<div class="skill-list combat flow-v">
+				<h3 class="titling">
+					<span class="fas fa-swords"></span>
+					<span>Combat Skills</span>
+				</h3>
+				<table>
+					<tr class="skill" v-for="skill in skillStatsSections.combat">
+						<td class="name aligned-right">
+							<span>{{skill.name}}</span>
+						</td>
+						<td class="icon">
+							<span :class="skill.icon"></span>
+						</td>
+						<td class="enhanced">
+							<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
+						</td>
+						<td class="roll">
+							<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div class="skill-list knowledge flow-v">
+				<h3 class="titling">
+					<span class="fas fa-brain"></span>
+					<span>Knowledge Skills</span>
+				</h3>
+				<table>
+					<tr class="skill" v-for="skill in skillStatsSections.knowledge">
+						<td class="name aligned-right">
+							<span>{{skill.name}}</span>
+						</td>
+						<td class="icon">
+							<span :class="skill.icon"></span>
+						</td>
+						<td class="enhanced">
+							<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
+						</td>
+						<td class="roll">
+							<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

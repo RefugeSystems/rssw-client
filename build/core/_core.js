@@ -9,3 +9,4 @@
  * @main Core
  */
 var rsSystem = {};
+rsSystem.version = "0.0.1";

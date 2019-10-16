@@ -1,24 +1,43 @@
-.rssw-component.component-character-stats {
+.rs-component.rssw.component-character-stats {
 
 
 	.stats {
 		display: flex;
 		flex-direction: row;
+		text-align: center;
+		justify-content: center;
 		
 		.stat {
 			display: flex;
 			flex-direction: column;
 			text-align: center;
 			justify-content: center;
+			align-items: center;
+			width: 70px;
+			border: 1px solid @rsWhite;
+			border-radius: 5px;
+			padding: 3px;
+			margin: 3px;
 			
-			.level {
-				color: @rsOrange;
+			.bubble {
+				display: flex;
+				justify-content: center;
+				align-content: center;
+				align-items: center;
+				height: 30px;
+				width: 50px;
+				background-color: @rsWhite;
+				border: 1px solid @rsBlue;
+				border-radius: 30px;
+			}
+			
+			.value {
+				color: @rsBlack;
+				font-size: 20px;
+			}
+			
+			.label {
 				
-				&.available {
-				}
-				
-				&.unavailable {
-				}
 			}
 		}
 	}
