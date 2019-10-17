@@ -2,7 +2,7 @@
 <div class="rs-component component-viewer">
 
 	<div class="map" v-if="location && sourceImage">
-		<div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown.stop.prevent="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" >
+		<div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown.stop.prevent="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" v-on:mouseleave="out($event)">
 			<!-- <div class="shadow"></div> -->
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" v-on:click.right.stop.prevent="openActions($event)">
 				<div class="pointsOfInterest" v-if="pins && pointsOfInterest && pointsOfInterest.length">
@@ -25,7 +25,7 @@
 						</button>
 					</div>
 					<div class="actions-options">
-						<button class="option" v-for="option in actions.options" v-on:click.stop.prevent="fire(option)">
+						<button class="option" v-for="option in actions.options" v-on:click.stop.prevent="fire(option, $event)">
 							<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
 							<span>{{option.text}}</span>
 						</button>

@@ -50,6 +50,7 @@ rsSystem.component("rsViewer", {
 		data.actions.open = false;
 		data.actions.header = "Location";
 		data.actions.options = [];
+		data.actions.menu = null;
 		
 		return data;
 	},
@@ -75,8 +76,9 @@ rsSystem.component("rsViewer", {
 		"closeActions": function() {
 			Vue.set(this.actions, "open", false);
 		},
-		"fire": function(option) {
+		"fire": function(option, event) {
 			console.log("Fire Option: ", option);
+			event.actionMenu = true;
 			if(this.player.master) {
 				
 			} else {
@@ -100,35 +102,32 @@ rsSystem.component("rsViewer", {
 				this.image.ratio = img.width / img.height;
 
 				Vue.set(this, "ready", true);
+				Vue.set(this, "parchment", this.element.find(".parchment"));
 				this.apply(this.image);
 			};
 
 			img.src = path;
 		},
 		"clicking": function(event) {
-			console.log("click");
+//			console.log("click");
 
 		},
 		"down": function(event) {
-			console.log("down:" + event.button, event);
+//			console.log("down:" + event.button, event);
 			switch(event.button) {
 				case 0:
-					event.preventDefault();
 					this.isDragging = true;
 					this.dragX = event.pageX;
 					this.dragY = event.pageY;
 					break;
-				case 1:
-					this.optenActions(event);
-					break;
 			}
 		},
 		"up": function(event) {
-			console.log("up");
+//			console.log("up");
 			this.isDragging = false;
 		},
 		"out": function(event) {
-			console.log("out");
+//			console.log("out");
 			if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
 				this.isDragging = false;
 			}
@@ -138,7 +137,7 @@ rsSystem.component("rsViewer", {
 		},
 		"dragging": function(event) {
 			if(this.isDragging) {
-				console.log("drag");
+//				console.log("drag");
 				var left = this.parchment.css("left") || "0px",
 					top = this.parchment.css("top") || "0px",
 					dX = this.dragX - event.pageX,
@@ -168,8 +167,7 @@ rsSystem.component("rsViewer", {
 			
 		},
 		"apply": function(applying) {
-			Vue.set(this, "parchment", this.element.find(".parchment"));
-			console.log("apply: ", applying, this.parchment);
+//			console.log("apply: ", applying, this.parchment);
 			if(this.parchment && this.parchment.length) {
 				applying.height = applying.height || this.image.height || 0;
 				applying.width = applying.width || this.image.width || 0;
