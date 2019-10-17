@@ -72,7 +72,28 @@
 		}
 		
 		.slots {
+			justify-content: center;
 			flex-grow: 9;
+			
+			.slot {
+				line-height: 26px;
+				vertical-align: middle;
+			}
+		}
+		
+		.points {
+			line-height: 18px;
+			border: 1px solid @rsWhite;
+			padding: 3px 6px;
+			border-radius: 16px;
+			text-align: left;
+			position: relative;
+			flex-shrink: 0;
+			
+			.icon {
+				color: @rsWhite;
+				font-size: .7em;
+			}
 		}
 	}
 }

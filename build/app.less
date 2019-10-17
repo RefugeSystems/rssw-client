@@ -540,7 +540,10 @@ form {
 
 }
 
-.rssw-page.page-dashboard {
+.rs-page.rssw.page-map {
+	position: relative;
+	width: 100%
+	height: 100%;
 
 }
 
@@ -965,8 +968,303 @@ form {
 		}
 		
 		.slots {
+			justify-content: center;
 			flex-grow: 9;
+			
+			.slot {
+				line-height: 26px;
+				vertical-align: middle;
+			}
+		}
+		
+		.points {
+			line-height: 18px;
+			border: 1px solid @rsWhite;
+			padding: 3px 6px;
+			border-radius: 16px;
+			text-align: left;
+			position: relative;
+			flex-shrink: 0;
+			
+			.icon {
+				color: @rsWhite;
+				font-size: .7em;
+			}
 		}
 	}
 }
 
+
+.rs-component.component-viewer {
+	position: relative;
+	width: 100%
+	height: 100%;
+
+	.map {
+		position: relative;
+		touch-action: none;
+		user-select: none;
+		width: 100%;
+		height: 100%;
+	
+		.barrier {
+			background-color: transparent;
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			left: 0px;
+			top: 0px;
+			z-index: 4;
+		}
+	
+		.view {
+			position: relative;
+			overflow: hidden;
+			z-index: 5;
+			width: 100%;
+			height: 100%;
+			
+			.shadow {
+				position: absolute;
+				z-index: 4;
+				background: transparent;
+				width: 100%;
+				height: 100%;
+				top: 0px;
+				left: 0px;
+				box-shadow: 0px 0px 15px inset black;
+			}
+			
+			.coordinates {
+				position: absolute;
+				background: transparent;
+				z-index: 3;
+				height: 100%;
+				width: 100%;
+				
+				.coordinate {
+					position: absolute;
+					background: transparent;
+					
+					&.top {
+						top: 0px;
+						border-bottom-width: 1px;
+						border-bottom-style: solid;
+						border-bottom-color: red;
+					}
+					
+					&.left {
+						left: 0px;
+						border-right: 1px solid red;
+					}
+					
+					&.bottom {
+						border-top: 1px solid red;
+					}
+					
+					&.right {
+						border-left: 1px solid red;
+					}
+				}
+			}
+			
+			.coordinate-dots {
+				position: absolute;
+				background: transparent;
+				height: 100%;
+				width: 100%;
+				z-index: 6;
+					
+				.dot {
+					background-color: red;
+					border-radius: 10px;
+					margin-left: -5px;
+					margin-top: -5px;
+					height: 10px;
+					width: 10px;
+				}
+			}
+			
+			.crosshair {
+				position: absolute;
+				background: transparent;
+				z-index: 3;
+				
+				&.x {
+					border-right: 1px solid red;
+					border-bottom: 1px solid red;
+					left: 0px;
+					top: 0px;
+					width: 30%;
+					height: 30%;
+				}
+				
+				&.y {
+					border-left: 1px solid red;
+					border-top: 1px solid red;
+					left: 30%;
+					top: 30%;
+					width: 70%;
+					height: 70%;
+				}
+			}
+			
+			.dot {
+				position: absolute;
+				left: ~"calc( 30% - 4px )";
+				top: ~"calc( 30% - 4px )";
+				border-radius: 5px;
+				width: 9px;
+				height: 9px;
+				background-color: red;
+				z-index: 2
+			}
+			
+			.parchment {
+				position: absolute;
+				z-index: 1;
+				
+				img {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+				}
+				
+				.poi {
+					position: absolute;
+					width: 20px;
+					height: 20px;
+					margin-left: -10px;
+					border-radius: 10px;
+					
+					margin-top: -10px;
+					color: #451458;
+					text-align: center;
+					/*
+					margin-top: -10px;
+					opacity: .5;
+					background: red;
+					*/
+
+					> * {
+						color: inherit;
+					}
+
+					&:hover {
+						background: rgba(18, 33, 146, 0.6);
+						/*opacity: .5;*/
+					}
+					
+					a {
+						text-decoration: none;
+					}
+					
+					.readout {
+						text-align: left;
+					}
+				}
+			}
+		}
+		
+		.actions {
+			position: absolute;
+			border: 1px solid black;
+			z-index: 20;
+			background-color: white;
+			
+			.actions-header {
+				display: flex;
+				flex-direction: row;
+				
+				span {
+					line-height: 26px;
+					flex-grow: 10;
+					color: black;
+				}
+				
+				.heading {
+					line-height: 26px;
+					font-size: 18px;
+				}
+				
+				.menu-close {
+					background-color: @rsRed;
+					flex-grow: 1;
+					font-size: 22px;
+					height: 26px;
+					width: 26px;
+				}
+			}
+			
+			.actions-options {
+				flex-direction: column;
+				display: flex;
+			
+				button.option {
+					border-bottom: 3px solid transparent;
+					text-align: left;
+					color: black;
+					padding: 4px 7px;
+					margin: 5px;
+					
+					span.fas,
+					span.far,
+					span.fal {
+						display: inline-block;
+						position: relative;
+						width: 16px;
+					}
+				}
+				
+				button.option:hover {
+					border-bottom: 3px solid blue;
+				}	
+			}
+		}
+	}
+
+	.controls {
+	}
+
+	.menu {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		display: flex;
+		flex-direction: column;
+		width: 40px;
+		min-height: 40px;
+		max-height: 40px;
+		transition: width .5s, max-height .5s;
+		overflow: hidden;
+		z-index: 50;
+		
+		border: 1px solid @rsWhite;
+		border-radius: 5px;
+		background: @rsBlack;
+		color: @rsWhite;
+		
+		button {
+			background: transparent;
+			border: 0px;
+			padding: 0px;
+			margin: 0px;
+			line-height: 40px;
+			height: 40px;
+			flex-shrink: 0;
+			color: inherit;
+			
+			&:active,
+			&:hover {
+				background-color: @rsWhite;
+				color: @rsBlack;
+				cursor: pointer;
+			}
+		}
+		
+		&.open {
+			max-height: 500px;
+			width: 200px;
+		}
+	}
+}

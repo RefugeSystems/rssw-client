@@ -434,6 +434,11 @@ form {
 .rssw-page.page-dashboard .control .entities .entity {
   margin: 5px 0px;
 }
+.rs-page.rssw.page-map {
+  position: relative;
+  width: 100%
+	height: 100%;
+}
 .rs-component.connect-component {
   max-width: 400px;
   border: 1px solid white;
@@ -743,5 +748,255 @@ form {
   color: #EAEFF9;
 }
 .rs-component.rssw.component-ship-stats .mounts .slots {
+  justify-content: center;
   flex-grow: 9;
+}
+.rs-component.rssw.component-ship-stats .mounts .slots .slot {
+  line-height: 26px;
+  vertical-align: middle;
+}
+.rs-component.rssw.component-ship-stats .mounts .points {
+  line-height: 18px;
+  border: 1px solid #EAEFF9;
+  padding: 3px 6px;
+  border-radius: 16px;
+  text-align: left;
+  position: relative;
+  flex-shrink: 0;
+}
+.rs-component.rssw.component-ship-stats .mounts .points .icon {
+  color: #EAEFF9;
+  font-size: 0.7em;
+}
+.rs-component.component-viewer {
+  position: relative;
+  width: 100%
+	height: 100%;
+}
+.rs-component.component-viewer .map {
+  position: relative;
+  touch-action: none;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+}
+.rs-component.component-viewer .map .barrier {
+  background-color: transparent;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  z-index: 4;
+}
+.rs-component.component-viewer .map .view {
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+}
+.rs-component.component-viewer .map .view .shadow {
+  position: absolute;
+  z-index: 4;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  box-shadow: 0px 0px 15px inset black;
+}
+.rs-component.component-viewer .map .view .coordinates {
+  position: absolute;
+  background: transparent;
+  z-index: 3;
+  height: 100%;
+  width: 100%;
+}
+.rs-component.component-viewer .map .view .coordinates .coordinate {
+  position: absolute;
+  background: transparent;
+}
+.rs-component.component-viewer .map .view .coordinates .coordinate.top {
+  top: 0px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: red;
+}
+.rs-component.component-viewer .map .view .coordinates .coordinate.left {
+  left: 0px;
+  border-right: 1px solid red;
+}
+.rs-component.component-viewer .map .view .coordinates .coordinate.bottom {
+  border-top: 1px solid red;
+}
+.rs-component.component-viewer .map .view .coordinates .coordinate.right {
+  border-left: 1px solid red;
+}
+.rs-component.component-viewer .map .view .coordinate-dots {
+  position: absolute;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+  z-index: 6;
+}
+.rs-component.component-viewer .map .view .coordinate-dots .dot {
+  background-color: red;
+  border-radius: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  height: 10px;
+  width: 10px;
+}
+.rs-component.component-viewer .map .view .crosshair {
+  position: absolute;
+  background: transparent;
+  z-index: 3;
+}
+.rs-component.component-viewer .map .view .crosshair.x {
+  border-right: 1px solid red;
+  border-bottom: 1px solid red;
+  left: 0px;
+  top: 0px;
+  width: 30%;
+  height: 30%;
+}
+.rs-component.component-viewer .map .view .crosshair.y {
+  border-left: 1px solid red;
+  border-top: 1px solid red;
+  left: 30%;
+  top: 30%;
+  width: 70%;
+  height: 70%;
+}
+.rs-component.component-viewer .map .view .dot {
+  position: absolute;
+  left: calc( 30% - 4px );
+  top: calc( 30% - 4px );
+  border-radius: 5px;
+  width: 9px;
+  height: 9px;
+  background-color: red;
+  z-index: 2;
+}
+.rs-component.component-viewer .map .view .parchment {
+  position: absolute;
+  z-index: 1;
+}
+.rs-component.component-viewer .map .view .parchment img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.rs-component.component-viewer .map .view .parchment .poi {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  border-radius: 10px;
+  margin-top: -10px;
+  color: #451458;
+  text-align: center;
+  /*
+					margin-top: -10px;
+					opacity: .5;
+					background: red;
+					*/
+}
+.rs-component.component-viewer .map .view .parchment .poi > * {
+  color: inherit;
+}
+.rs-component.component-viewer .map .view .parchment .poi:hover {
+  background: rgba(18, 33, 146, 0.6);
+  /*opacity: .5;*/
+}
+.rs-component.component-viewer .map .view .parchment .poi a {
+  text-decoration: none;
+}
+.rs-component.component-viewer .map .view .parchment .poi .readout {
+  text-align: left;
+}
+.rs-component.component-viewer .map .actions {
+  position: absolute;
+  border: 1px solid black;
+  z-index: 20;
+  background-color: white;
+}
+.rs-component.component-viewer .map .actions .actions-header {
+  display: flex;
+  flex-direction: row;
+}
+.rs-component.component-viewer .map .actions .actions-header span {
+  line-height: 26px;
+  flex-grow: 10;
+  color: black;
+}
+.rs-component.component-viewer .map .actions .actions-header .heading {
+  line-height: 26px;
+  font-size: 18px;
+}
+.rs-component.component-viewer .map .actions .actions-header .menu-close {
+  background-color: #a91124;
+  flex-grow: 1;
+  font-size: 22px;
+  height: 26px;
+  width: 26px;
+}
+.rs-component.component-viewer .map .actions .actions-options {
+  flex-direction: column;
+  display: flex;
+}
+.rs-component.component-viewer .map .actions .actions-options button.option {
+  border-bottom: 3px solid transparent;
+  text-align: left;
+  color: black;
+  padding: 4px 7px;
+  margin: 5px;
+}
+.rs-component.component-viewer .map .actions .actions-options button.option span.fas,
+.rs-component.component-viewer .map .actions .actions-options button.option span.far,
+.rs-component.component-viewer .map .actions .actions-options button.option span.fal {
+  display: inline-block;
+  position: relative;
+  width: 16px;
+}
+.rs-component.component-viewer .map .actions .actions-options button.option:hover {
+  border-bottom: 3px solid blue;
+}
+.rs-component.component-viewer .menu {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  transition: width 0.5s, max-height 0.5s;
+  overflow: hidden;
+  z-index: 50;
+  border: 1px solid #EAEFF9;
+  border-radius: 5px;
+  background: #000000;
+  color: #EAEFF9;
+}
+.rs-component.component-viewer .menu button {
+  background: transparent;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+  line-height: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: inherit;
+}
+.rs-component.component-viewer .menu button:active,
+.rs-component.component-viewer .menu button:hover {
+  background-color: #EAEFF9;
+  color: #000000;
+  cursor: pointer;
+}
+.rs-component.component-viewer .menu.open {
+  max-height: 500px;
+  width: 200px;
 }

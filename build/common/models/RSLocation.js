@@ -10,6 +10,8 @@
 class RSLocation extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
+		if(!this.coordinates) {
+			this.coordinates = [];
+		}
 	}
 }

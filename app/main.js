@@ -18235,8 +18235,9 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<span>{{ship.name}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\">\r\n\t\t\t{{points}}\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<span>{{ship.name}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\">\r\n\t\t\t<span class=\"fad fa-coin rs-gray\"></span>\r\n\t\t\t<span>{{points}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table.html": return "";
+			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown.stop.prevent=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" >\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\" v-on:click.right.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pins && pointsOfInterest && pointsOfInterest.length\">\r\n\t\t\t\t\t\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in location.coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in location.coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span>\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<button class=\"control back\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
@@ -18244,7 +18245,7 @@ Templify.install = function(Vue, options) {
 			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n</div>\r\n";
 			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div class=\"title\">\r\n\t\t{{player.name}} Overview\r\n\t</div>\r\n\t\r\n\t<div class=\"self\" v-if=\"self\">\r\n\t\t<router-link class=\"navigation-button\" :to=\"'/character/' + self.id\">\r\n\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t</router-link>\r\n\t</div>\r\n\t\r\n\t<div class=\"control\">\r\n\t\t<div class=\"title\">\r\n\t\t\tOthers\r\n\t\t</div>\r\n\t\t<div class=\"entities\">\r\n\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
-			case "pages/rssw/map.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
+			case "pages/rssw/map.html": return "<div class=\"rs-page map rssw\">\r\n\r\n\t<rs-viewer :user=\"user\" :player=\"player\" :universe=\"universe\" :location=\"location\"></rs-viewer>\r\n\t\r\n</div>\r\n";
 			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
 			default: return null;
@@ -21796,7 +21797,9 @@ class RSLoadout extends RSObject {
 class RSLocation extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
+		if(!this.coordinates) {
+			this.coordinates = [];
+		}
 	}
 }
 
@@ -23760,6 +23763,248 @@ rsSystem.component("rsswShipStats", {
 });
 
 
+
+/**
+ * 
+ * 
+ * @class rsViewer
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsViewer", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"location": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"data": function() {
+		var data = {};
+
+		data.image = {};
+		data.sourceImage = null;
+		data.parchment = null;
+		data.element = null;
+		data.ready = false;
+		
+		data.isDragging = false;
+		data.dragX = null;
+		data.dragY = null;
+		
+		data.pointsOfInterest = [];
+		data.pins = true;
+		data.alter = "";
+		
+		data.menuOpen = false;
+		data.menuItems = [{
+			"action": "back",
+			"text": "Back",
+			"icon": "fas fa-arrow-left"
+		}, {
+			"action": "reset",
+			"text": "Reset",
+			"icon": "far fa-refresh"
+		}];
+		
+
+		data.actions = {};
+		data.actions.open = false;
+		data.actions.header = "Location";
+		data.actions.options = [];
+		
+		return data;
+	},
+	"mounted": function() {
+		Vue.set(this, "element", $(this.$el));
+		rsSystem.register(this);
+		this.location.$on("modified", this.update);
+		this.update();
+	},
+	"methods": {
+		"toggleMenu": function() {
+			Vue.set(this, "menuOpen", !this.menuOpen);
+		},
+		"processAction": function(item) {
+			console.log("Process Action: ", item);
+		},
+		"openActions": function(event) {
+			console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
+			Vue.set(this.actions, "x", event.offsetX);
+			Vue.set(this.actions, "y", event.offsetY);
+			Vue.set(this.actions, "open", true);
+		},
+		"closeActions": function() {
+			Vue.set(this.actions, "open", false);
+		},
+		"fire": function(option) {
+			console.log("Fire Option: ", option);
+			if(this.player.master) {
+				
+			} else {
+				
+			}
+			this.closeActions();
+		},
+		"dismissCoordinate": function(coordinate) {
+			
+		},
+		"getViewport": function() {
+
+		},
+		"getDimensions": function(path) {
+			console.log("Get Dimensions: " + path);
+			var img = new Image;
+
+			img.onload = () => {
+				this.image.height = img.height;
+				this.image.width = img.width;
+				this.image.ratio = img.width / img.height;
+
+				Vue.set(this, "ready", true);
+				this.apply(this.image);
+			};
+
+			img.src = path;
+		},
+		"clicking": function(event) {
+			console.log("click");
+
+		},
+		"down": function(event) {
+			console.log("down:" + event.button, event);
+			switch(event.button) {
+				case 0:
+					event.preventDefault();
+					this.isDragging = true;
+					this.dragX = event.pageX;
+					this.dragY = event.pageY;
+					break;
+				case 1:
+					this.optenActions(event);
+					break;
+			}
+		},
+		"up": function(event) {
+			console.log("up");
+			this.isDragging = false;
+		},
+		"out": function(event) {
+			console.log("out");
+			if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
+				this.isDragging = false;
+			}
+		},
+		"panning": function($event) {
+
+		},
+		"dragging": function(event) {
+			if(this.isDragging) {
+				console.log("drag");
+				var left = this.parchment.css("left") || "0px",
+					top = this.parchment.css("top") || "0px",
+					dX = this.dragX - event.pageX,
+					dY = this.dragY - event.pageY;
+				
+				left = parseInt(left.replace("px", ""));
+				left -= dX;
+				
+				top = parseInt(top.replace("px", ""));
+				top -= dY;
+				
+				this.apply({
+					"left": left,
+					"top": top
+				});
+
+				this.dragX = event.pageX;
+				this.dragY = event.pageY;
+			}
+		},
+		"pan": function(x, y) {
+			console.log("pan");
+			
+		},
+		"wheeling": function(event) {
+			console.log("wheel");
+			
+		},
+		"apply": function(applying) {
+			Vue.set(this, "parchment", this.element.find(".parchment"));
+			console.log("apply: ", applying, this.parchment);
+			if(this.parchment && this.parchment.length) {
+				applying.height = applying.height || this.image.height || 0;
+				applying.width = applying.width || this.image.width || 0;
+				applying.left = applying.left || this.image.left || 0;
+				applying.top = applying.top || this.image.left || 0;
+				
+				this.parchment.css({
+					"height": applying.height + "px",
+					"width": applying.width + "px",
+					"left": applying.left + "px",
+					"top": applying.top + "px"
+			    });
+				
+				Object.assign(this.image, applying);
+			}
+		},
+		"update": function() {
+			var buffer;
+			
+			this.actions.options.splice(0);
+			if(this.player.master) {
+				this.actions.options.push({
+					"icon": "fas fa-chevron-double-right",
+					"event": "set-crosshair",
+					"text": "Mark: Red",
+					"color": "red"
+				});
+				this.actions.options.push({
+					"icon": "fas fa-chevron-double-right",
+					"event": "set-crosshair",
+					"text": "Mark: Green",
+					"color": "green"
+				});
+				this.actions.options.push({
+					"icon": "fas fa-chevron-double-right",
+					"event": "set-crosshair",
+					"text": "Mark: Blue",
+					"color": "blue"
+				});
+				this.actions.options.push({
+					"icon": "fas fa-chevron-double-right",
+					"event": "set-crosshair",
+					"text": "Mark: Black",
+					"color": "black"
+				});
+				this.actions.options.push({
+					"icon": "fas fa-chevron-double-right",
+					"event": "set-location",
+					"text": "Set Location"
+				});
+				this.actions.options.push({
+					"icon": "fas fa-map",
+					"event": "set-map",
+					"text": "Set Map"
+				});
+			}
+			
+			if(this.location.viewed !== this.sourceImage) {
+				Vue.set(this, "ready", false);
+				Vue.set(this, "sourceImage", this.location.viewed);
+				this.getDimensions(this.location.viewed);
+			}
+		}
+	},
+	"beforeDestroy": function() {
+		this.location.$off("modified", this.update);
+	},
+	"template": Vue.templified("components/viewer.html")
+});
+
 /**
  * Contains HTML, LESS, and JavaScript to assemble the various components that are composed of base level components.
  * 
@@ -23929,15 +24174,15 @@ rsSystem.component("RSSWCharacter", {
 	"mixins": [
 		rsSystem.components.RSCore
 	],
-	"data": function() {
-		var data = {};
-		
-		return data;
-	},
 	"computed": {
 		"entity": function() {
 			return this.universe.nouns.entity[this.$route.params.oid];
 		}
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
@@ -24060,14 +24305,24 @@ rsSystem.component("RSSWHangar", {
  */
 rsSystem.component("RSSWMap", {
 	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
-	"mounted": function() {
-		rsSystem.register(this);
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"props": {
+		
+	},
+	"computed": {
+		"location": function() {
+			return this.universe.nouns.location[this.$route.params.oid] || this.universe.nouns.location["location:universe"];
+		}
 	},
 	"data": function() {
 		var data = {};
 		
 		return data;
+	},
+	"mounted": function() {
+		rsSystem.register(this);
 	},
 	"methods": {
 		
