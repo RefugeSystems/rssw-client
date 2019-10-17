@@ -18231,13 +18231,13 @@ Templify.install = function(Vue, options) {
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"value\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span class=\"value\">{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"(archetype, $index) in careers\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"(archetype, $index) in specializations\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
-			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"value\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span class=\"value\">{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"(archetype, $index) in careers\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"(archetype, $index) in specializations\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property level\">\r\n\t\t<span class=\"icon fas fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">Description:</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\" v-if=\"!state.hideNames\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"level-skill\">\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t<option value=\"\">[ Select a Skill ]</option>\r\n\t\t\t\t<option v-for=\"skill in skillStatsListing\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t</select>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<span>{{ship.name}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\">\r\n\t\t\t<span class=\"fad fa-coin rs-gray\"></span>\r\n\t\t\t<span>{{points}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table.html": return "";
-			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown.stop.prevent=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\" v-on:click.right.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pins && pointsOfInterest && pointsOfInterest.length\">\r\n\t\t\t\t\t\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in location.coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in location.coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span>\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<button class=\"control back\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pointsOfInterest.length && state.markers\">\r\n\t\t\t\t\t<button class=\"poi\" v-if=\"poiVisible(link)\" v-for=\"link in pointsOfInterest\" :data-id=\"link.id\" :style=\"'left:' + link.x + '%; top:' + link.y + '%;'\" :key=\"link.id\" v-on:click=\"poiMenu(link)\">\r\n\t\t\t\t\t\t<span class=\"labeling\" v-if=\"link.label\">{{link.label}}</span>\r\n\t\t\t\t\t\t<span :class=\"poiClass(link)\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in location.coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in location.coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span class=\"titling\">\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close alert\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option normal\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"state.alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<div class=\"search\">\r\n\t\t\t\t<input type=\"text\" v-model=\"state.search\" v-on:keyup.enter=\"searchMap(state.search)\"/>\r\n\t\t\t\t<button class=\"control\" v-on:click=\"searchMap(state.search)\">\r\n\t\t\t\t\t<span class=\"icon far fa-search\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<button class=\"control\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.markerItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.markers?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.markerItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.followItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.follow?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.followItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<select class=\"control master\" v-model=\"state.master_view\" v-if=\"player.master\">\r\n\t\t\t\t<option value=\"\">Player Character</option>\r\n\t\t\t\t<option value=\"master\">Master</option>\r\n\t\t\t\t<option v-for=\"entity in universe.indexes.entity.listing\" :value=\"entity.id\">{{entity.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
@@ -18247,6 +18247,7 @@ Templify.install = function(Vue, options) {
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/map.html": return "<div class=\"rs-page map rssw\">\r\n\r\n\t<rs-viewer :user=\"user\" :player=\"player\" :universe=\"universe\" :location=\"location\"></rs-viewer>\r\n\t\r\n</div>\r\n";
 			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n</div>\r\n";
+			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div class=\"title\">\r\n\t\tGalactic Index\r\n\t</div>\r\n\t\r\n\t<div class=\"control\">\r\n\t\t<div class=\"title\">\r\n\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t</div>\r\n\t\t<div class=\"entities\">\r\n\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universe.indexes.entity.listing\" :to=\"'/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
 			default: return null;
 		}
@@ -21592,6 +21593,7 @@ rsSystem.component("RSSWStats", {
 		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
 		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
 		data.skillStats = Object.keys(data.entityStats.skill).sort();
+		data.skillStatsListing = [];
 		data.listAllStats = data.characterStats.concat(data.shipStats).concat(data.skillStats);
 		data.skillStatsSections = {};
 		for(x=0; x<data.skillStats.length; x++) {
@@ -21601,6 +21603,7 @@ rsSystem.component("RSSWStats", {
 					data.skillStatsSections[buffer.section] = [];
 				}
 				data.skillStatsSections[buffer.section].push(data.entityStats[data.skillStats[x]]);
+				data.skillStatsListing.push(buffer);
 			} else {
 				console.error("Unaligned Skill/Stat Key: " + data.skillStats[x]);
 			}
@@ -21799,6 +21802,15 @@ class RSLocation extends RSObject {
 		super(details, universe);
 		if(!this.coordinates) {
 			this.coordinates = [];
+		}
+		if(details.showing) {
+			this.showing = details.showing;
+		}
+	}
+	
+	loadDeltaHook(details) {
+		if(details.showing) {
+			this.showing = details.showing;
 		}
 	}
 }
@@ -22955,7 +22967,7 @@ rsSystem.component("StorageManager", {
 	},
 	"methods": {
 		"loadStorage": function(key, defaults) {
-			key = key || this.storageKey;
+			key = key || this.storageKeyID || this.storageKey;
 			var data = localStorage.getItem(key);
 			if(data) {
 //				console.log("Load[" + key + "]: ", data);
@@ -22966,7 +22978,7 @@ rsSystem.component("StorageManager", {
 			}
 		},
 		"saveStorage": function(key, object) {
-			key = key || this.storageKey;
+			key = key || this.storageKeyID || this.storageKey;
 			if(!key || !object) {
 				throw new Error("Missing arguments");
 			}
@@ -22975,6 +22987,40 @@ rsSystem.component("StorageManager", {
 		}
 	}
 }); 
+
+/**
+ * 
+ * 
+ * @class RSCore
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("RSCore", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.StorageManager
+	],
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"user": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"computed": {
+		"player": function() {
+			return this.universe.nouns.player[this.user.id];
+		}
+	},
+	"watch": {
+	},
+	"methods": {
+	}
+});
+
 
 /**
  * 
@@ -23087,17 +23133,9 @@ rsSystem.component("StorageManager", {
 	rsSystem.component("systemMenu", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSCore
 		],
 		"props": {
-			"universe": {
-				"required": true,
-				"type": Object
-			},
-			"user": {
-				"required": true,
-				"type": Object
-			}
 		},
 		"mounted": function() {
 			rsSystem.register(this);
@@ -23111,21 +23149,40 @@ rsSystem.component("StorageManager", {
 				"action": "navigate",
 				"label": "Dashboard",
 				"path": "/dashboard",
-				"highlight": "/dashboard"
+				"highlight": "/dashboard",
+				"conditionals": [{
+					"master": false
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-fighter-jet",
 				"action": "navigate",
 				"label": "Hangar",
 				"path": "/hangar",
-				"highlight": "/hangar"
+				"highlight": "/hangar",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-hurricane",
+				"action": "navigate",
+				"label": "Universe",
+				"path": "/universe",
+				"highlight": "/universe",
+				"conditionals": [{
+					"master": true
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-treasure-chest",
 				"action": "navigate",
 				"label": "Nouns",
 				"path": "/nouns",
-				"highlight": "/nouns"
+				"highlight": "/nouns",
+				"conditionals": [{
+					"master": true
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-map",
@@ -23158,8 +23215,21 @@ rsSystem.component("StorageManager", {
 				}
 				return true;
 			},
-			"evaluateConditional": function() {
+			"evaluateConditional": function(condition) {
+				var keys = Object.keys(condition),
+					x;
 				
+				for(x=0; x<keys.length; x++) {
+					switch(keys[x]) {
+						case "master":
+							if(condition[keys[x]] === true) {
+								return this.player.master;
+							} else if(condition[keys[x]] === false) {
+								return !this.player.master;
+							}
+							break;
+					}
+				}
 			},
 			"getClassSettings": function() {
 				return "full standard undocked";
@@ -23276,40 +23346,6 @@ rsSystem.component("StorageManager", {
 /**
  * 
  * 
- * @class RSCore
- * @constructor
- * @module Components
- */
-rsSystem.component("RSCore", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.StorageManager
-	],
-	"props": {
-		"universe": {
-			"required": true,
-			"type": Object
-		},
-		"user": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"computed": {
-		"player": function() {
-			return this.universe.nouns.player[this.user.id];
-		}
-	},
-	"watch": {
-	},
-	"methods": {
-	}
-});
-
-
-/**
- * 
- * 
  * @class rsswCharacterBoard
  * @constructor
  * @module Components
@@ -23404,20 +23440,32 @@ rsSystem.component("rsswCharacterInfo", {
 			"type": Object
 		}
 	},
-	"mounted": function() {
-		this.character.$on("modified", this.update);
-		rsSystem.register(this);
-		this.update();
-	},
 	"data": function() {
 		var data = {};
 		data.race = null;
 		data.specializations = [];
 		data.careers = [];
+		data.experience = 0;
+		data.description = "";
+		data.calculating = false;
 		
 		return data;
 	},
+	"mounted": function() {
+		this.character.$on("modified", this.update);
+		rsSystem.register(this);
+		this.update();
+	},
 	"methods": {
+		"updateCharacter": function() {
+			if(!this.calculating) {
+				Vue.set(this, "calculating", true);
+				this.character.recalculateProperties();
+				setTimeout(() => {
+					Vue.set(this, "calculating", false);
+				}, 1000);
+			}
+		},
 		"getSex": function() {
 			if(this.character.sex) {
 				var index = this.character.sex.indexOf(":");
@@ -23428,6 +23476,11 @@ rsSystem.component("rsswCharacterInfo", {
 			}
 			return "";
 		},
+		"changed": function(property, value) {
+			var change = {};
+			change[property] = value;
+			this.character.commit(change);
+		},
 		"update": function() {
 			var buffer,
 				x;
@@ -23435,6 +23488,14 @@ rsSystem.component("rsswCharacterInfo", {
 			Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
 			this.specializations.splice(0);
 			this.careers.splice(0);
+			
+			if(this.experience !== this.character.xp) {
+				Vue.set(this, "experience", this.character.xp);
+			}
+			if(this.description !== this.character.description) {
+				Vue.set(this, "description", this.character.description);
+			}
+			
 			if(this.character.archetype) {
 				for(x=0; x<this.character.archetype.length; x++) {
 					buffer = this.universe.nouns.archetype[this.character.archetype[x]];
@@ -23555,6 +23616,7 @@ rsSystem.component("rsswCharacterInfo", {
 			
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
+			data.leveling = null;
 			data.state = this.loadStorage(data.storageKeyID, {
 				"hideNames": false,
 				"search": ""
@@ -23579,6 +23641,49 @@ rsSystem.component("rsswCharacterInfo", {
 			this.update();
 		},
 		"methods": {
+			"getXPCost": function(skill, direction) {
+				skill = this.entityStats[skill];
+				if(!skill) {
+					return "";
+				}
+				
+				var calculating = this.character[skill.propertyKey] || 0;
+				console.log("Cal: ", calculating);
+				if(calculating >= 5) {
+					return "X";
+				}
+				
+				if(direction > 0) {
+					return (this.character[skill.enhancementKey]?5:10) * (calculating + 1);
+				} else {
+					return -1 * (this.character[skill.enhancementKey]?5:10) * (calculating);
+				}
+			},
+			"levelSkill": function(skill, direction) {
+				skill = this.entityStats[skill];
+				if(!skill) {
+					return "";
+				}
+
+				var calculating = this.character[skill.propertyKey] || 0,
+					cost = this.getXPCost(skill.id, direction),
+					change = {};
+				
+				console.log("Direction: ", direction, this.character.xp, cost);
+				if(direction > 0 && cost <= this.character.xp) {
+					change[skill.propertyKey] = calculating + 1;
+					change.xp = this.character.xp - cost;
+					if(change.xp) {
+						this.character.commit(change);
+					}
+				} else if(direction < 0 && calculating > 0) {
+					change[skill.propertyKey] = calculating - 1;
+					change.xp = this.character.xp - cost;
+					if(change.xp) {
+						this.character.commit(change);
+					}
+				}
+			},
 			"getDice": function(skill) {
 				var roll = [], x;
 
@@ -23771,246 +23876,421 @@ rsSystem.component("rsswShipStats", {
  * @constructor
  * @module Components
  */
-rsSystem.component("rsViewer", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.RSCore
-	],
-	"props": {
-		"location": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"data": function() {
-		var data = {};
+(function() {
+	var storageKey = "_rs_viewerComponentKey";
 
-		data.image = {};
-		data.sourceImage = null;
-		data.parchment = null;
-		data.element = null;
-		data.ready = false;
-		
-		data.isDragging = false;
-		data.dragX = null;
-		data.dragY = null;
-		
-		data.pointsOfInterest = [];
-		data.pins = true;
-		data.alter = "";
-		
-		data.menuOpen = false;
-		data.menuItems = [{
-			"action": "back",
-			"text": "Back",
-			"icon": "fas fa-arrow-left"
-		}, {
-			"action": "reset",
-			"text": "Reset",
-			"icon": "far fa-refresh"
-		}];
-		
-
-		data.actions = {};
-		data.actions.open = false;
-		data.actions.header = "Location";
-		data.actions.options = [];
-		data.actions.menu = null;
-		
-		return data;
-	},
-	"mounted": function() {
-		Vue.set(this, "element", $(this.$el));
-		rsSystem.register(this);
-		this.location.$on("modified", this.update);
-		this.update();
-	},
-	"methods": {
-		"toggleMenu": function() {
-			Vue.set(this, "menuOpen", !this.menuOpen);
-		},
-		"processAction": function(item) {
-			console.log("Process Action: ", item);
-		},
-		"openActions": function(event) {
-			console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
-			Vue.set(this.actions, "x", event.offsetX);
-			Vue.set(this.actions, "y", event.offsetY);
-			Vue.set(this.actions, "open", true);
-		},
-		"closeActions": function() {
-			Vue.set(this.actions, "open", false);
-		},
-		"fire": function(option, event) {
-			console.log("Fire Option: ", option);
-			event.actionMenu = true;
-			if(this.player.master) {
-				
-			} else {
-				
+	rsSystem.component("rsViewer", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"location": {
+				"required": true,
+				"type": Object
 			}
-			this.closeActions();
 		},
-		"dismissCoordinate": function(coordinate) {
+		"data": function() {
+			var data = {};
+
+			data.storageKeyID = storageKey + this.location.id;
+			data.state = this.loadStorage(data.storageKeyID, {
+				"zoomStep": 1
+			});
+
+			data.state.viewed_at = data.state.viewed_at || 0;
+			data.state.search = data.state.search || "";
+			data.state.alter = data.state.alter || "";
+			if(data.state.image) {
+				data.image = data.state.image;
+			} else {
+				data.image = data.state.image = {};
+			}
+			if(data.state.markers === undefined) {
+				data.state.markers = true;
+			}
+			if(data.state.follow === undefined) {
+				data.state.follow = true;
+			}
+			if(data.state.master_view === undefined) {
+				data.state.master_view = "";
+			}
 			
-		},
-		"getViewport": function() {
+			data.original = {};
+			data.sourceImage = null;
+			data.parchment = null;
+			data.element = null;
+			data.ready = false;
+			
+			data.isDragging = false;
+			data.dragX = null;
+			data.dragY = null;
 
-		},
-		"getDimensions": function(path) {
-			console.log("Get Dimensions: " + path);
-			var img = new Image;
-
-			img.onload = () => {
-				this.image.height = img.height;
-				this.image.width = img.width;
-				this.image.ratio = img.width / img.height;
-
-				Vue.set(this, "ready", true);
-				Vue.set(this, "parchment", this.element.find(".parchment"));
-				this.apply(this.image);
+			data.pointsOfInterest = [];
+			data.coordinates = [];
+			data.pins = true;
+			data.alter = "";
+			
+			data.menuOpen = false;
+			data.menuItems = [{
+				"action": "zoomin",
+				"text": "Zoom",
+				"icon": "fas fa-plus-square"
+			}, {
+				"action": "zoomout",
+				"text": "Zoom",
+				"icon": "fas fa-minus-square"
+			}, {
+				"action": "reset",
+				"text": "Reset",
+				"icon": "far fa-refresh"
+			}];
+			
+			data.menuItems.followItem = {
+				"action": "follow",
+				"text": "Follow"
 			};
-
-			img.src = path;
+			data.menuItems.markerItem = {
+				"action": "markings",
+				"text": "Markers"
+			};
+			
+			data.actions = {};
+			data.actions.open = false;
+			data.actions.header = "Location";
+			data.actions.options = [];
+			data.actions.menu = null;
+			
+			return data;
 		},
-		"clicking": function(event) {
-//			console.log("click");
-
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					if(this.state.search !== this.state.search.toLowerCase()) {
+						Vue.set(this.state, "search", this.state.search.toLowerCase());
+					}
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
 		},
-		"down": function(event) {
-//			console.log("down:" + event.button, event);
-			switch(event.button) {
-				case 0:
-					this.isDragging = true;
+		"mounted": function() {
+			Vue.set(this, "element", $(this.$el));
+			rsSystem.register(this);
+			this.location.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"searchMap": function(search) {
+				console.log("Search Map: ", search);
+			},
+			"toggleMenu": function() {
+				Vue.set(this, "menuOpen", !this.menuOpen);
+			},
+			"processAction": function(item) {
+//				console.log("Process Action: ", item);
+				switch(item.action) {
+					case "zoomin":
+						this.image.zoom = this.image.zoom || 0;
+						this.image.zoom += this.state.zoomStep;
+						this.apply(this.image);
+						break;
+					case "zoomout":
+						this.image.zoom = this.image.zoom || 0;
+						this.image.zoom -= this.state.zoomStep;
+						this.apply(this.image);
+						break;
+					case "markings":
+						Vue.set(this.state, "markers", !this.state.markers);
+						break;
+					case "follow":
+						Vue.set(this.state, "follow", !this.state.follow);
+						break;
+					case "reset":
+						this.resetViewport();
+						break;
+				}
+			},
+			"openActions": function(event) {
+//				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
+				Vue.set(this.actions, "x", event.offsetX);
+				Vue.set(this.actions, "y", event.offsetY);
+				Vue.set(this.actions, "open", true);
+			},
+			"closeActions": function() {
+				Vue.set(this.actions, "open", false);
+			},
+			"fire": function(option, event) {
+				console.log("Fire Option: ", option);
+				var buffer;
+				
+				switch(option.event) {
+					case "set-crosshair":
+						this.coordinates.push({
+							"x": (this.actions.x/this.image.width*100),
+							"y": (this.actions.y/this.image.height*100),
+							"color": option.color
+						});
+						this.location.commit({
+							"coordinates": this.coordinates
+						});
+						break;
+					case "set-map":
+						this.location.commit({
+							"shown_at": Date.now(),
+							"showing": this.image
+						});
+						break;
+					case "set-location":
+						buffer = this.universe.nouns.location[this.state.alter];
+						if(buffer && this.player.master) {
+							buffer.commit({
+								"location": this.location.id,
+								"y": this.actions.y/this.image.height*100,
+								"x": this.actions.x/this.image.width*100
+							});
+						}
+						break;
+				}
+				
+				this.closeActions();
+			},
+			"dismissCoordinate": function(coordinate) {
+				var index = this.coordinates.indexOf(coordinate);
+				if(index !== -1) {
+					this.coordinates.splice(index, 1);
+					this.location.commit({
+						"coordinates": this.coordinates
+					});
+				}
+			},
+			"resetViewport": function() {
+				Object.assign(this.image, this.original);
+				var view = this.getViewport();
+				
+				this.image.zoom = 0;
+				this.image.left = view.width/2 - this.image.width/2;
+				this.image.top = view.height/2 - this.image.height/2;
+				this.apply(this.image);
+			},
+			"getViewport": function() {
+				return {
+					"height": this.element.outerHeight(),
+					"width": this.element.outerWidth()
+				};
+			},
+			"getDimensions": function(path) {
+				console.log("Get Dimensions: " + path);
+				var img = new Image;
+
+				img.onload = () => {
+					this.image.height = img.height;
+					this.image.width = img.width;
+					this.image.ratio = img.width / img.height;
+					Object.assign(this.original, this.image);
+
+					Vue.set(this, "ready", true);
+					Vue.set(this, "parchment", this.element.find(".parchment"));
+					this.apply(this.image);
+				};
+
+				img.src = path;
+			},
+			"clicking": function(event) {
+//				console.log("click");
+
+			},
+			"down": function(event) {
+//				console.log("down:" + event.button, event);
+				switch(event.button) {
+					case 0:
+						this.isDragging = true;
+						this.dragX = event.pageX;
+						this.dragY = event.pageY;
+						break;
+				}
+			},
+			"up": function(event) {
+//				console.log("up");
+				this.isDragging = false;
+			},
+			"out": function(event) {
+//				console.log("out");
+				if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
+					this.isDragging = false;
+				}
+			},
+			"panning": function($event) {
+
+			},
+			"dragging": function(event) {
+				if(this.isDragging) {
+					var left = this.parchment.css("left") || "0px",
+						top = this.parchment.css("top") || "0px",
+						dX = this.dragX - event.pageX,
+						dY = this.dragY - event.pageY;
+
+					left = parseInt(left.replace("px", ""));
+					top = parseInt(top.replace("px", ""));
+					
+					//console.log("drag: " + left + " x " + top + " - [" + this.dragX + ", " + this.dragY + "] d[" + dX + ", " + dY + "] @[" + event.pageX + ", " + event.pageY + "]");
+										
+					left -= dX;
+					top -= dY;
+					
+					this.apply({
+						"left": left,
+						"top": top
+					});
+
 					this.dragX = event.pageX;
 					this.dragY = event.pageY;
-					break;
-			}
-		},
-		"up": function(event) {
-//			console.log("up");
-			this.isDragging = false;
-		},
-		"out": function(event) {
-//			console.log("out");
-			if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
-				this.isDragging = false;
-			}
-		},
-		"panning": function($event) {
+				}
+			},
+			"zoom": function(level) {
+				if(10 > level && level > -10) {
+					Vue.set(this.image, "zoom", level);
+					this.apply(this.image);
+				}
+			},
+			"pan": function(x, y) {
+				console.log("pan");
+				
+			},
+			"wheeling": function(event) {
+				console.log("wheel");
+				
+			},
+			"apply": function(applying) {
+//				console.log("apply: ", applying, this.parchment);
+				if(this.parchment && this.parchment.length) {
+					applying.height = applying.height || this.image.height || 0;
+					applying.width = applying.width || this.image.width || 0;
+					applying.left = applying.left || this.image.left || 0;
+					applying.top = applying.top || this.image.left || 0;
 
-		},
-		"dragging": function(event) {
-			if(this.isDragging) {
-//				console.log("drag");
-				var left = this.parchment.css("left") || "0px",
-					top = this.parchment.css("top") || "0px",
-					dX = this.dragX - event.pageX,
-					dY = this.dragY - event.pageY;
+					if(10 > applying.zoom && applying.zoom > -10) {
+						this.image.height = this.original.height * (1 + .1 * applying.zoom);
+						this.image.width = this.original.width * (1 + .1 * applying.zoom);
+					}
+					
+					this.parchment.css({
+						"height": applying.height + "px",
+						"width": applying.width + "px",
+						"left": applying.left + "px",
+						"top": applying.top + "px"
+				    });
+					
+					Object.assign(this.image, applying);
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			},
+			"poiVisible": function(link) {
+				if(!link.knowledge && !link.obscured) {
+					return true;
+				}
 				
-				left = parseInt(left.replace("px", ""));
-				left -= dX;
+				if(this.player.master && this.state.master_view === "master") {
+					return true;
+				}
 				
-				top = parseInt(top.replace("px", ""));
-				top -= dY;
+				var entity = this.universe.nouns.entity[this.player.entity];
+				if(entity && (entity = this.universe.nouns.knowledge[entity.knowledge])) {
+					return !!entity[link.knowledge];
+				}
+			},
+			"poiClass": function(link) {
+				return link.class || link.icon;
+			},
+			"poiMenu": function(link) {
 				
-				this.apply({
-					"left": left,
-					"top": top
-				});
-
-				this.dragX = event.pageX;
-				this.dragY = event.pageY;
+			},
+			"minorUpdate": function() {
+				this.$forceUpdate();
+			},
+			"update": function() {
+				var buffer,
+					x;
+				
+				this.actions.options.splice(0);
+				if(this.player.master) {
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Red",
+						"color": "red"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Green",
+						"color": "green"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Blue",
+						"color": "blue"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: White",
+						"color": "white"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-location",
+						"text": "Set Location"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-map",
+						"event": "set-map",
+						"text": "Set Map"
+					});
+				}
+				
+				this.coordinates.splice(0);
+				if(this.location.coordinates && this.location.coordinates.length) {
+					this.coordinates.push.apply(this.coordinates, this.location.coordinates);
+				}
+				
+				while(this.pointsOfInterest.length !== 0) {
+					buffer = this.pointsOfInterest.pop();
+					if(buffer.$off) {
+						buffer.$off("modified", this.minorUpdate);
+					}
+				}
+				for(x=0; x<this.universe.indexes.location.listing.length; x++) {
+					buffer = this.universe.indexes.location.listing[x];
+					if(buffer.location === this.location.id) {
+						this.pointsOfInterest.push(buffer);
+						buffer.$on("modified", this.minorUpdate);
+					}
+				}
+				
+				if(this.location.viewed !== this.sourceImage) {
+					Vue.set(this, "ready", false);
+					Vue.set(this, "sourceImage", this.location.viewed);
+					this.getDimensions(this.location.viewed);
+				}
+				
+				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
+					console.log("View State Sync");
+					Vue.set(this.state, "viewed_at", this.location.shown_at);
+					Object.assign(this.image, this.location.showing);
+					this.apply(this.image);
+				}
+				
+				this.$forceUpdate();
 			}
 		},
-		"pan": function(x, y) {
-			console.log("pan");
-			
+		"beforeDestroy": function() {
+			this.location.$off("modified", this.update);
 		},
-		"wheeling": function(event) {
-			console.log("wheel");
-			
-		},
-		"apply": function(applying) {
-//			console.log("apply: ", applying, this.parchment);
-			if(this.parchment && this.parchment.length) {
-				applying.height = applying.height || this.image.height || 0;
-				applying.width = applying.width || this.image.width || 0;
-				applying.left = applying.left || this.image.left || 0;
-				applying.top = applying.top || this.image.left || 0;
-				
-				this.parchment.css({
-					"height": applying.height + "px",
-					"width": applying.width + "px",
-					"left": applying.left + "px",
-					"top": applying.top + "px"
-			    });
-				
-				Object.assign(this.image, applying);
-			}
-		},
-		"update": function() {
-			var buffer,
-				x;
-			
-			this.actions.options.splice(0);
-			if(this.player.master) {
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Red",
-					"color": "red"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Green",
-					"color": "green"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Blue",
-					"color": "blue"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Black",
-					"color": "black"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-location",
-					"text": "Set Location"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-map",
-					"event": "set-map",
-					"text": "Set Map"
-				});
-			}
-			
-			this.coordinates.splice(0);
-			if(this.location.coordinates && this.location.coordinates.length) {
-				this.coordinates.push.apply(this.coordinates, this.location.coordinates);
-			}
-			
-			if(this.location.viewed !== this.sourceImage) {
-				Vue.set(this, "ready", false);
-				Vue.set(this, "sourceImage", this.location.viewed);
-				this.getDimensions(this.location.viewed);
-			}
-			
-			this.$forceUpdate();
-		}
-	},
-	"beforeDestroy": function() {
-		this.location.$off("modified", this.update);
-	},
-	"template": Vue.templified("components/viewer.html")
-});
-
+		"template": Vue.templified("components/viewer.html")
+	});
+})();
 /**
  * Contains HTML, LESS, and JavaScript to assemble the various components that are composed of base level components.
  * 
@@ -24042,6 +24322,7 @@ rsSystem.component("rsViewer", {
 rsSystem.component("RSCorePage", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.StorageManager
 	],
 	"props": {
 		"universe": {
@@ -24212,11 +24493,6 @@ rsSystem.component("RSSWDashboard", {
 	"mixins": [
 		rsSystem.components.RSCore
 	],
-	"mounted": function() {
-		this.universe.$on("universe:modified", this.updateEntities);
-		this.universe.$on("model:modified", this.updateDisplay);
-		rsSystem.register(this);
-	},
 	"data": function() {
 		var data = {},
 			entities,
@@ -24239,6 +24515,11 @@ rsSystem.component("RSSWDashboard", {
 		"self": function() {
 			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
 		}
+	},
+	"mounted": function() {
+		this.universe.$on("universe:modified", this.updateEntities);
+		this.universe.$on("model:modified", this.updateDisplay);
+		rsSystem.register(this);
 	},
 	"methods": {
 		"updateDisplay": function() {
@@ -24312,7 +24593,7 @@ rsSystem.component("RSSWHangar", {
 rsSystem.component("RSSWMap", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.RSCore
+		rsSystem.components.RSCorePage
 	],
 	"props": {
 		
@@ -24367,6 +24648,73 @@ rsSystem.component("RSSWShip", {
 	},
 	"template": Vue.templified("pages/rssw/ship.html")
 });
+
+
+/**
+ * 
+ * 
+ * @class RSSWUniverse
+ * @constructor
+ * @module Pages
+ */
+(function() {
+	var storageKey = "_rssw_universeComponentKey";
+	
+	rsSystem.component("RSSWUniverse", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCorePage
+		],
+		"mounted": function() {
+			this.universe.$on("universe:modified", this.updateEntities);
+			rsSystem.register(this);
+		},
+		"data": function() {
+			var data = {},
+				entities,
+				entity,
+				x;
+			
+			data.storageKeyID = storageKey;
+			data.state = this.loadStorage(data.storageKeyID, {
+				"search": ""
+			});
+			if(data.state.search === undefined) {
+				data.state.search = "";
+			}
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					if(this.state.search !== this.state.search.toLowerCase()) {
+						Vue.set(this.state, "filter", this.state.search.toLowerCase());
+					}
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"methods": {
+			"filtered": function(entity) {
+				if(entity.template || entity.inactive) {
+					return false;
+				}
+				
+				return !this.state.search ||
+					(entity._search && entity._search.indexOf(this.state.search) !== -1) ||
+					entity.id.indexOf(this.state.search) !== -1 ||
+					entity.name.indexOf(this.state.search) !== -1 ||
+					(entity.description && entity.description.indexOf(this.state.search) !== -1);
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.updateEntities);
+		},
+		"template": Vue.templified("pages/rssw/universe.html")
+	});
+})();
 
 
 /**
@@ -24456,6 +24804,13 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWCharacter
 				}]
 			}, {
+				"path": "inventory",
+				"component": rsSystem.components.RSSWInventory,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWInventory
+				}]
+			}, {
 				"path": "hangar",
 				"component": rsSystem.components.RSSWHangar,
 				"children": [{
@@ -24476,6 +24831,9 @@ rsSystem.App = new Vue({
 					"path": ":oid",
 					"component": rsSystem.components.RSSWMap
 				}]
+			}, {
+				"path": "universe",
+				"component": rsSystem.components.RSSWUniverse
 			}, {
 				"path": "nouns",
 				"component": rsSystem.components.RSNounControls

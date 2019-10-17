@@ -439,6 +439,32 @@ form {
   width: 100%
 	height: 100%;
 }
+.rssw-page.page-dashboard .title {
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+.rssw-page.page-dashboard .navigation-button {
+  text-decoration: none;
+  color: #FF9560;
+}
+.rssw-page.page-dashboard .navigation-button:active,
+.rssw-page.page-dashboard .navigation-button:hover {
+  color: #617EB8;
+}
+.rssw-page.page-dashboard .self {
+  margin: 7px;
+  font-size: 17px;
+}
+.rssw-page.page-dashboard .control {
+  margin: 7px;
+}
+.rssw-page.page-dashboard .control .entities {
+  display: flex;
+  flex-direction: column;
+}
+.rssw-page.page-dashboard .control .entities .entity {
+  margin: 5px 0px;
+}
 .rs-component.connect-component {
   max-width: 400px;
   border: 1px solid white;
@@ -602,6 +628,10 @@ form {
 .rs-component.rssw.component-character-info .value {
   color: #6f9bf5;
   font-size: 1.1em;
+}
+.rs-component.rssw.component-character-info .description {
+  min-height: 140px;
+  min-width: 360px;
 }
 .rs-component.rssw.component-character-skills .skill-list .titling {
   border-bottom: 1px solid #EAEFF9;
@@ -796,16 +826,6 @@ form {
   width: 100%;
   height: 100%;
 }
-.rs-component.component-viewer .map .view .shadow {
-  position: absolute;
-  z-index: 4;
-  background: transparent;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  box-shadow: 0px 0px 15px inset black;
-}
 .rs-component.component-viewer .map .view .coordinates {
   position: absolute;
   background: transparent;
@@ -845,6 +865,7 @@ form {
   border-radius: 10px;
   margin-left: -5px;
   margin-top: -5px;
+  padding: 0px;
   height: 10px;
   width: 10px;
 }
@@ -882,6 +903,7 @@ form {
 .rs-component.component-viewer .map .view .parchment {
   position: absolute;
   z-index: 1;
+  transition: width 0.5s, height 0.5s;
 }
 .rs-component.component-viewer .map .view .parchment img {
   position: absolute;
@@ -890,18 +912,22 @@ form {
 }
 .rs-component.component-viewer .map .view .parchment .poi {
   position: absolute;
-  width: 20px;
-  height: 20px;
   margin-left: -10px;
-  border-radius: 10px;
+  border-radius: 40px;
+  z-index: 50;
+  padding: 3px;
+  min-height: 20px;
+  min-width: 20px;
+  cursor: pointer;
   margin-top: -10px;
-  color: #451458;
+  color: #FF9560;
   text-align: center;
   /*
 					margin-top: -10px;
 					opacity: .5;
 					background: red;
 					*/
+  background-color: #000000;
 }
 .rs-component.component-viewer .map .view .parchment .poi > * {
   color: inherit;
@@ -916,27 +942,68 @@ form {
 .rs-component.component-viewer .map .view .parchment .poi .readout {
   text-align: left;
 }
+.rs-component.component-viewer .map .view .parchment .poi .labeling {
+  position: absolute;
+  top: 0px;
+  left: calc(100% + 10px);
+  color: #EAEFF9;
+  font-weight: 900;
+  background-color: black;
+  white-space: nowrap;
+}
 .rs-component.component-viewer .map .actions {
   position: absolute;
-  border: 1px solid black;
   z-index: 20;
-  background-color: white;
+  background-color: black;
+  border: 2px solid #FF9560;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.rs-component.component-viewer .map .actions button {
+  border: 0px;
+  cursor: pointer;
+  color: #EAEFF9;
+  transition: color 0.5s, background-color 0.5s;
+}
+.rs-component.component-viewer .map .actions button.normal {
+  background-color: #000000;
+}
+.rs-component.component-viewer .map .actions button.normal:hover {
+  color: #000000;
+}
+.rs-component.component-viewer .map .actions button.alert {
+  background-color: #a91124;
+}
+.rs-component.component-viewer .map .actions button.alert:hover {
+  color: #a91124;
+}
+.rs-component.component-viewer .map .actions button:hover {
+  background-color: #EAEFF9;
+}
+.rs-component.component-viewer .map .actions input {
+  color: #000000;
+  padding: 3px;
 }
 .rs-component.component-viewer .map .actions .actions-header {
   display: flex;
   flex-direction: row;
+  color: #EAEFF9;
+  font-size: 18px;
+}
+.rs-component.component-viewer .map .actions .actions-header .titling {
+  font-size: 1.3em;
+  padding-left: 7px;
 }
 .rs-component.component-viewer .map .actions .actions-header span {
   line-height: 26px;
   flex-grow: 10;
-  color: black;
+  color: inherit;
 }
 .rs-component.component-viewer .map .actions .actions-header .heading {
   line-height: 26px;
   font-size: 18px;
 }
-.rs-component.component-viewer .map .actions .actions-header .menu-close {
-  background-color: #a91124;
+.rs-component.component-viewer .map .actions .actions-header .actions-close {
   flex-grow: 1;
   font-size: 22px;
   height: 26px;
@@ -949,7 +1016,6 @@ form {
 .rs-component.component-viewer .map .actions .actions-options button.option {
   border-bottom: 3px solid transparent;
   text-align: left;
-  color: black;
   padding: 4px 7px;
   margin: 5px;
 }
@@ -995,6 +1061,9 @@ form {
   background-color: #EAEFF9;
   color: #000000;
   cursor: pointer;
+}
+.rs-component.component-viewer .menu .search {
+  white-space: nowrap;
 }
 .rs-component.component-viewer .menu.open {
   max-height: 500px;

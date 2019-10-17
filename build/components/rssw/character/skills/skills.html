@@ -8,6 +8,21 @@
 			<span>Hide Names</span>
 			<input type="checkbox" v-model="state.hideNames" />
 		</label>
+		<div class="level-skill">
+			<select v-model="leveling">
+				<option value="">[ Select a Skill ]</option>
+				<option v-for="skill in skillStatsListing" :value="skill.id">{{skill.name}}</option>
+			</select>
+			<button class="level up" v-on:click="levelSkill(leveling, 1)" v-if="leveling">
+				<span class="fas fa-plus-square"></span>
+				<span>XP: {{getXPCost(leveling, 1)}}</span>
+			</button>
+			<button class="level down" v-on:click="levelSkill(leveling, -1)" v-if="leveling">
+				<span class="fas fa-minus-square"></span>
+				<span>XP: {{getXPCost(leveling, -1)}}</span>
+			</button>
+			
+		</div>
 	</div>
 	
 	<div class="skill-container flow-h">

@@ -27,6 +27,7 @@
 			
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
+			data.leveling = null;
 			data.state = this.loadStorage(data.storageKeyID, {
 				"hideNames": false,
 				"search": ""
@@ -51,6 +52,49 @@
 			this.update();
 		},
 		"methods": {
+			"getXPCost": function(skill, direction) {
+				skill = this.entityStats[skill];
+				if(!skill) {
+					return "";
+				}
+				
+				var calculating = this.character[skill.propertyKey] || 0;
+				console.log("Cal: ", calculating);
+				if(calculating >= 5) {
+					return "X";
+				}
+				
+				if(direction > 0) {
+					return (this.character[skill.enhancementKey]?5:10) * (calculating + 1);
+				} else {
+					return -1 * (this.character[skill.enhancementKey]?5:10) * (calculating);
+				}
+			},
+			"levelSkill": function(skill, direction) {
+				skill = this.entityStats[skill];
+				if(!skill) {
+					return "";
+				}
+
+				var calculating = this.character[skill.propertyKey] || 0,
+					cost = this.getXPCost(skill.id, direction),
+					change = {};
+				
+				console.log("Direction: ", direction, this.character.xp, cost);
+				if(direction > 0 && cost <= this.character.xp) {
+					change[skill.propertyKey] = calculating + 1;
+					change.xp = this.character.xp - cost;
+					if(change.xp) {
+						this.character.commit(change);
+					}
+				} else if(direction < 0 && calculating > 0) {
+					change[skill.propertyKey] = calculating - 1;
+					change.xp = this.character.xp - cost;
+					if(change.xp) {
+						this.character.commit(change);
+					}
+				}
+			},
 			"getDice": function(skill) {
 				var roll = [], x;
 

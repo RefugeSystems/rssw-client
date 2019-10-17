@@ -11,11 +11,6 @@ rsSystem.component("RSSWDashboard", {
 	"mixins": [
 		rsSystem.components.RSCore
 	],
-	"mounted": function() {
-		this.universe.$on("universe:modified", this.updateEntities);
-		this.universe.$on("model:modified", this.updateDisplay);
-		rsSystem.register(this);
-	},
 	"data": function() {
 		var data = {},
 			entities,
@@ -38,6 +33,11 @@ rsSystem.component("RSSWDashboard", {
 		"self": function() {
 			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
 		}
+	},
+	"mounted": function() {
+		this.universe.$on("universe:modified", this.updateEntities);
+		this.universe.$on("model:modified", this.updateDisplay);
+		rsSystem.register(this);
 	},
 	"methods": {
 		"updateDisplay": function() {

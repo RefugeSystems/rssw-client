@@ -317,6 +317,7 @@ rsSystem.component("RSSWStats", {
 		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
 		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
 		data.skillStats = Object.keys(data.entityStats.skill).sort();
+		data.skillStatsListing = [];
 		data.listAllStats = data.characterStats.concat(data.shipStats).concat(data.skillStats);
 		data.skillStatsSections = {};
 		for(x=0; x<data.skillStats.length; x++) {
@@ -326,6 +327,7 @@ rsSystem.component("RSSWStats", {
 					data.skillStatsSections[buffer.section] = [];
 				}
 				data.skillStatsSections[buffer.section].push(data.entityStats[data.skillStats[x]]);
+				data.skillStatsListing.push(buffer);
 			} else {
 				console.error("Unaligned Skill/Stat Key: " + data.skillStats[x]);
 			}

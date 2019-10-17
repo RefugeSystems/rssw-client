@@ -3,6 +3,9 @@
 		<span class="icon fas fa-user"></span>
 		<span class="value">{{character.name}}</span>
 		<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>
+		<button class="recalculate" v-on:click="updateCharacter()">
+			<span class="far fa-sync" :class="calculating?'fa-spin':''"></span>
+		</button>
 	</div>
 	<div class="property species">
 		<span class="icon fas fa-bug rot45"></span>
@@ -24,5 +27,17 @@
 			<span class="divide" v-if="$index !== 0">, </span>
 			<span class="value">{{archetype.name}}</span>
 		</span>
+	</div>
+	<div class="property level">
+		<span class="icon fas fa-user-plus"></span>
+		<span class="label">Experience:</span>
+		<input class="experience" type="number" v-model.number="experience" v-on:change="changed('xp', experience)"/>
+	</div>
+	<div class="property description">
+		<span class="icon fas fa-info-square"></span>
+		<span class="label">Description:</span>
+		<div class="text-container">
+			<textarea class="description" v-model="description" v-on:change="changed('description', description)"></textarea>
+		</div>
 	</div>
 </div>

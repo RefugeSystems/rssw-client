@@ -13,17 +13,9 @@
 	rsSystem.component("systemMenu", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSCore
 		],
 		"props": {
-			"universe": {
-				"required": true,
-				"type": Object
-			},
-			"user": {
-				"required": true,
-				"type": Object
-			}
 		},
 		"mounted": function() {
 			rsSystem.register(this);
@@ -37,21 +29,40 @@
 				"action": "navigate",
 				"label": "Dashboard",
 				"path": "/dashboard",
-				"highlight": "/dashboard"
+				"highlight": "/dashboard",
+				"conditionals": [{
+					"master": false
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-fighter-jet",
 				"action": "navigate",
 				"label": "Hangar",
 				"path": "/hangar",
-				"highlight": "/hangar"
+				"highlight": "/hangar",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-hurricane",
+				"action": "navigate",
+				"label": "Universe",
+				"path": "/universe",
+				"highlight": "/universe",
+				"conditionals": [{
+					"master": true
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-treasure-chest",
 				"action": "navigate",
 				"label": "Nouns",
 				"path": "/nouns",
-				"highlight": "/nouns"
+				"highlight": "/nouns",
+				"conditionals": [{
+					"master": true
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-map",
@@ -84,8 +95,21 @@
 				}
 				return true;
 			},
-			"evaluateConditional": function() {
+			"evaluateConditional": function(condition) {
+				var keys = Object.keys(condition),
+					x;
 				
+				for(x=0; x<keys.length; x++) {
+					switch(keys[x]) {
+						case "master":
+							if(condition[keys[x]] === true) {
+								return this.player.master;
+							} else if(condition[keys[x]] === false) {
+								return !this.player.master;
+							}
+							break;
+					}
+				}
 			},
 			"getClassSettings": function() {
 				return "full standard undocked";

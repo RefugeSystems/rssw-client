@@ -6,7 +6,7 @@
 				<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
 				{{skill.name}}
 			</span>
-			<span class="base">
+			<span class="base" v-if="!state.hideNames">
 				{{skill.base.capitalize()}}
 			</span>
 		</td>

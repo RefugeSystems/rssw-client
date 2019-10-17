@@ -35,6 +35,13 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWCharacter
 				}]
 			}, {
+				"path": "inventory",
+				"component": rsSystem.components.RSSWInventory,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWInventory
+				}]
+			}, {
 				"path": "hangar",
 				"component": rsSystem.components.RSSWHangar,
 				"children": [{
@@ -55,6 +62,9 @@ rsSystem.App = new Vue({
 					"path": ":oid",
 					"component": rsSystem.components.RSSWMap
 				}]
+			}, {
+				"path": "universe",
+				"component": rsSystem.components.RSSWUniverse
 			}, {
 				"path": "nouns",
 				"component": rsSystem.components.RSNounControls
