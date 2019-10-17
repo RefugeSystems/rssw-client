@@ -185,7 +185,8 @@ rsSystem.component("rsViewer", {
 			}
 		},
 		"update": function() {
-			var buffer;
+			var buffer,
+				x;
 			
 			this.actions.options.splice(0);
 			if(this.player.master) {
@@ -225,11 +226,18 @@ rsSystem.component("rsViewer", {
 				});
 			}
 			
+			this.coordinates.splice(0);
+			if(this.location.coordinates && this.location.coordinates.length) {
+				this.coordinates.push.apply(this.coordinates, this.location.coordinates);
+			}
+			
 			if(this.location.viewed !== this.sourceImage) {
 				Vue.set(this, "ready", false);
 				Vue.set(this, "sourceImage", this.location.viewed);
 				this.getDimensions(this.location.viewed);
 			}
+			
+			this.$forceUpdate();
 		}
 	},
 	"beforeDestroy": function() {
