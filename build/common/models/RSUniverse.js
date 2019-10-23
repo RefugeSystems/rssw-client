@@ -158,7 +158,7 @@ class RSUniverse extends RSObject {
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-					console.log("Received: ", message);
+//					console.log("Received: ", message);
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
@@ -325,7 +325,7 @@ class RSUniverse extends RSObject {
 				"event": type,
 				"data": data
 			};
-			console.log("Sending: ", data);
+//			console.log("Sending: ", data);
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {

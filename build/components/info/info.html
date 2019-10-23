@@ -1,3 +1,13 @@
-<div class="system-component system-info">
-
+<div class="system-component system-info" :class="open?'opened':'closed'">
+	<div class="main-bar">
+		<div class="titling">
+			<span v-if="viewing && viewing.icon" class="icon" :class="viewing.icon"></span>
+			<span class="text">{{viewing?viewing.name:"Information"}}</span>
+		</div>
+		<button class="control close" v-on:click="closeInfo()">
+			<span class="fas fa-times"></span>
+		</button>
+	</div>
+	
+	<rs-object-info v-if="viewing" v-on:click="processRequest($event)" :record="viewing" :universe="universe"></rs-object-info>
 </div>

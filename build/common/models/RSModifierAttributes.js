@@ -1,6 +1,5 @@
 /**
- * Modifiers represent changes to the properties of an entity and are computed and the summed result
- * is placed in a RSSheet for the corresponding entity.
+ * Modifiers represent changes to the properties of an object.
  * 
  * Attribute Modifiers are for flat information that doesn't have a computation involved, such as adding descriptions
  * or setting age.
@@ -16,7 +15,7 @@
  * 		received from the Universe.
  * @param {Object} universe
  */
-class RSModifierAttributes extends RSObject {
+class RSModifierAttributes extends RSModifier {
 	constructor(details, universe) {
 		super(details, universe);
 	}

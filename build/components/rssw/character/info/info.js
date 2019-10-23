@@ -35,6 +35,9 @@ rsSystem.component("rsswCharacterInfo", {
 		this.update();
 	},
 	"methods": {
+		"showInfo": function(view) {
+			rsSystem.EventBus.$emit("display-info", view);
+		},
 		"updateCharacter": function() {
 			if(!this.calculating) {
 				Vue.set(this, "calculating", true);

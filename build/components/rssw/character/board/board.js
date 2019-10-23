@@ -55,6 +55,11 @@
 				this.character.commit({
 					"wounds": nV
 				});
+			},
+			"strain": function(nV, oV) {
+				this.character.commit({
+					"strain": nV
+				});
 			}
 		},
 		"methods": {

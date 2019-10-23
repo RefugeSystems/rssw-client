@@ -1,0 +1,13 @@
+<div class="object-info">
+	<p>Description</p>
+	
+	<div v-if="description" v-html="description"></div>
+	
+	<div class="properties">
+		<div class="property" v-for="property in keys" v-if="visible(property)">
+			<span class="key">{{property}}</span>
+			<span class="divide">:</span>
+			<span class="value">{{record[property]}}</span>
+		</div>
+	</div>
+</div>

@@ -4,6 +4,7 @@ rsSystem.registerNoun(RSModifierStats, "modifierstats");
 rsSystem.registerNoun(RSArchetype, "archetype");
 rsSystem.registerNoun(RSInventory, "inventory");
 rsSystem.registerNoun(RSKnowledge, "knowledge");
+rsSystem.registerNoun(RSCondition, "condition");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
 rsSystem.registerNoun(RSAbility, "ability");

@@ -482,8 +482,61 @@ form {
   overflow-y: auto;
   overflow-x: hidden;
   transition: width 0.5s, right 0.5s, top 0.5s;
-  background-color: inherit;
+  background-color: #EAEFF9;
   z-index: 20;
+}
+.system-component.system-info.opened {
+  right: 0px;
+}
+.system-component.system-info .main-bar {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background-color: #928282;
+  color: #000000;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+}
+.system-component.system-info .main-bar .titling {
+  display: flex;
+  flex-grow: 10;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  font-size: 22px;
+  padding: 3px;
+}
+.system-component.system-info .main-bar .titling .icon {
+  margin-right: 3px;
+}
+.system-component.system-info .main-bar .control {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.system-component.system-info .main-bar .control.close {
+  background: #a91124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+}
+.system-component.system-info .object-info {
+  color: #000000;
+  padding: 3px;
+}
+.system-component.system-info .object-info .rendered-value {
+  -webkit-text-stroke-width: thin;
+  cursor: pointer;
+}
+.system-component.system-info .object-info a {
+  color: #0055ff;
+}
+.system-component.system-info .object-info .calculated-result {
+  color: #ec6d2e;
 }
 .system-component.system-menu {
   display: block;
@@ -632,6 +685,14 @@ form {
 .rs-component.rssw.component-character-info .description {
   min-height: 140px;
   min-width: 360px;
+}
+.rs-component.rssw.component-character-info button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
 }
 .rs-component.rssw.component-character-skills .skill-list .titling {
   border-bottom: 1px solid #EAEFF9;

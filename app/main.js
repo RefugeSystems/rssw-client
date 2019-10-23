@@ -18225,13 +18225,14 @@ Templify.install = function(Vue, options) {
 	options.name = options.name || "templified";
 	Vue[options.name] = function(name) {
 		switch(name) {
-			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<form onsubmit=\"return false;\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<span class=\"heading-icon\"></span>\r\n\t\t\t<span>Login</span>\r\n\t\t</div>\r\n\t\t<div class=\"fields\">\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t\t</label>\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t\t</label>\r\n\t\t\t<div class=\"actions\">\r\n\t\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\t\tSecure?\r\n\t\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</form>\r\n</div>";
+			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<div class=\"heading\">\r\n\t\t<span class=\"heading-icon\"></span>\r\n\t\t<span>Login</span>\r\n\t</div>\r\n\t<div class=\"fields\">\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t</label>\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t</label>\r\n\t\t<div class=\"actions\">\r\n\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\tSecure?\r\n\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/gyroscope.html": return "";
-			case "components/info.html": return "<div class=\"system-component system-info\">\r\n\r\n</div>\r\n";
+			case "components/info.html": return "<div class=\"system-component system-info\" :class=\"open?'opened':'closed'\">\r\n\t<div class=\"main-bar\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"viewing && viewing.icon\" class=\"icon\" :class=\"viewing.icon\"></span>\r\n\t\t\t<span class=\"text\">{{viewing?viewing.name:\"Information\"}}</span>\r\n\t\t</div>\r\n\t\t<button class=\"control close\" v-on:click=\"closeInfo()\">\r\n\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t\r\n\t<rs-object-info v-if=\"viewing\" v-on:click=\"processRequest($event)\" :record=\"viewing\" :universe=\"universe\"></rs-object-info>\r\n</div>\r\n";
+			case "components/info/render.html": return "<div class=\"object-info\">\r\n\t<p>Description</p>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property)\">\r\n\t\t\t<span class=\"key\">{{property}}</span>\r\n\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t<span class=\"value\">{{record[property]}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"value\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span class=\"value\">{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"(archetype, $index) in careers\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"(archetype, $index) in specializations\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property level\">\r\n\t\t<span class=\"icon fas fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">Description:</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property level\">\r\n\t\t<span class=\"icon fas fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">Description:</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\" v-if=\"!state.hideNames\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"level-skill\">\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t<option value=\"\">[ Select a Skill ]</option>\r\n\t\t\t\t<option v-for=\"skill in skillStatsListing\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t</select>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -20955,7 +20956,7 @@ class RSObject extends EventEmitter {
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
 				if(event && event.id === this.id) {
-					console.log("Object Processing Modification: ", this, event);
+//					console.log("Object Processing Modification: ", this, event);
 					this.loadDelta(event.modification);
 				}
 			});
@@ -21063,6 +21064,11 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
+		/**
+		 * 
+		 * @event modified
+		 * @param {RSObject} source The object that was modified.
+		 */
 		this.$emit("modified", this);
 	}
 
@@ -21165,87 +21171,63 @@ class RSSheet extends EventEmitter {
 		"start": "${",
 		"end": "}$"
 	};
-
-	var mdWorldLink = new RegExp(":::/", "ig");
 	
-	var formatDnDMark = function(character, mark) {
-		
-	};
-	
-	var formatMarkdown = function(character, world, sourceText) {
-		var tracking,
+	var formatMarkdown = function(sourceText, universe, character) {
+		var properties = {},
+			tracking,
 			element,
 			target,
 			value,
 			index,
 			mark,
-			keys,
 			end,
 			x;
-		
-		sourceText = sourceText.replace(mdWorldLink, location.protocol + "//" + location.host + "/#/worlds/aq/" + world.id + "/");
+
 		index = sourceText.indexOf(marking.start);
 		while(index !== -1 && (end = sourceText.indexOf(marking.end, index)) !== -1 && index + 3 < end) {
 			tracking = sourceText.substring(index, end + 2);
-			try {
-				target = sourceText.substring(index + 1, end + 1);
-				mark = JSON.parse(target);
-				
-				element = $("<span/>");
-				
-				keys = Object.keys(mark);
-				for(x=0; x<keys.length; x++) {
-					switch(keys[x]) {
-						case "class":
-							element.addClass(mark[keys[x]]);
-							break;
-						case "content":
-						case "text":
-						case "value":
-							element.html(mark[keys[x]]);
-							break;
-						case "roll":
-							if(mark.repeat) {
-								value = $("<span/>");
-								value.html(mark[keys[x]] + " ( ");
-								element.append(value);
-								
-								value = $("<span/>");
-								value.addClass(mark.repeat);
-								value.html(RSCalculator.reduceDiceRoll(mark[keys[x]], character));
-								element.append(value);
-								
-								value = $("<span> )</span>");
-								element.append(value);
-							} else {
-								element.html(RSCalculator.reduceDiceRoll(mark[keys[x]], character));
-							}
-							break;
-					}
+			target = sourceText.substring(index + 2, end);
+			
+			mark = target.indexOf(",");
+			if(mark === -1) {
+				value = target;
+			} else {
+				value = target.split(",");
+				switch(value.length) {
+					default:
+					case 3:
+						properties.id = value[2];
+					case 2:
+						properties.classes = value[1];
+					case 1:
+						value = value[0];
 				}
+			}
+			
+			if(value) {
 				
-				if(mark.pre) {
-					sourceText = sourceText.replace(tracking, element[0].innerHTML);
+				if(value[0] === "=") {
+					// Calculate
+					value = value.substring(1);
+					// TODO: Calculate Value with Calculator
+					
+					element = $("<span class=\"calculated-result rendered-value \">" + value + "</span>");
+					
 				} else {
-					sourceText = sourceText.replace(tracking, element[0].outerHTML);
+					// Linked
+					mark = universe.index.index[value];
+					if(mark) {
+						element = $("<a class=\"rendered-value\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
+					} else {
+						element = $("<span class=\"calculated-result rendered-value not-found\">No Found[" + value + "]</span>");
+					}
 				}
 				
-			} catch(ignore) { // TODO: Parse to warning later
-				target = sourceText.substring(index + 2, end);
-				value = target.indexOf(",");
-				if(value === -1) {
-					mark = RSCalculator.reduceDiceRoll(target, character);
-					if(mark !== undefined && mark !== null) {
-						sourceText = sourceText.replace(tracking, mark);
-					}
-				} else {
-					target = target.split(",");
-					mark = RSCalculator.reduceDiceRoll(target[0].trim(), character);
-					if(mark !== undefined && mark !== null) {
-						element = $("<span style=\"color:" + target[1] + "\">" + mark + "</span>");
-						sourceText = sourceText.replace(tracking, element[0].outerHTML);
-					}
+				if(properties.classes) {
+					element.css(properties.classes);
 				}
+				
+				sourceText = sourceText.replace(tracking, element[0].outerHTML);
 			}
 			
 			index = sourceText.indexOf(marking.start, index + 1);
@@ -21257,18 +21239,14 @@ class RSSheet extends EventEmitter {
 	rsSystem.component("RSShowdown", {
 		"inherit": true,
 		"props": {
-			"character": {
-				"required": true,
-				"type": Object
-			},
-			"world": {
+			"universe": {
 				"required": true,
 				"type": Object
 			}
 		},
 		"methods": {
-			"rsshowdown": function(sourceText) {
-				return converter.makeHtml(formatMarkdown(this.character, this.world, sourceText));
+			"rsshowdown": function(sourceText, entity) {
+				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity));
 			}
 		}
 	});
@@ -21582,6 +21560,7 @@ rsSystem.component("RSSWStats", {
 				}
 				data.entityStats[keys[x]].propertyKey = "skill_" + keys[x];
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
+				data.entityStats[keys[x]].bonusKey = "skill_bonuses_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
 				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
 				if(data.entityStats[keys[x]].info) {
@@ -21669,6 +21648,23 @@ class RSBook extends RSObject {
 		super(details, universe);
 	}
 }
+/**
+ * 
+ * 
+ * @class RSCondition
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSCondition extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+}
+
 /**
  * 
  * @class RSEffect
@@ -21845,8 +21841,48 @@ class RSLogLevel {
 RSLogLevel.ignore = true;
 
 /**
- * Modifiers represent changes to the properties of an entity and are computed and the summed result
- * is placed in a RSSheet for the corresponding entity.
+ * Modifiers represent changes to the properties of an Object.
+ * 
+ * @class RSModifier
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSModifier extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+	
+	/**
+	 * 
+	 * @method _evaluateConditions
+	 * @param {Object} base
+	 * @return {Boolean}
+	 */
+	_evaluateConditions(base) {
+		var result = true;
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @method _evaluateConditions
+	 * @param {Object} base
+	 * @param {Object} condition
+	 * @param {Boolean} cuurent
+	 * @return {Boolean}
+	 */
+	_evaluateCondition(base, condition, current) {
+		
+	}
+}
+
+/**
+ * Modifiers represent changes to the properties of an object.
  * 
  * Attribute Modifiers are for flat information that doesn't have a computation involved, such as adding descriptions
  * or setting age.
@@ -21862,7 +21898,7 @@ RSLogLevel.ignore = true;
  * 		received from the Universe.
  * @param {Object} universe
  */
-class RSModifierAttributes extends RSObject {
+class RSModifierAttributes extends RSModifier {
 	constructor(details, universe) {
 		super(details, universe);
 	}
@@ -21925,8 +21961,7 @@ RSModifierAttributes._skip = {
 };
 
 /**
- * Modifiers represent changes to the properties of an entity and are computed and the summed result
- * is placed in a RSSheet for the corresponding entity.
+ * Modifiers represent changes to the properties of an object.
  * 
  * Stats Modifiers are for values that need some form of computation. In this case, a String value is considered
  * a mathematical additive and then passed to the Calculator to determine the result, which is used as a number.
@@ -21941,7 +21976,7 @@ RSModifierAttributes._skip = {
  * 		received from the Universe.
  * @param {Object} universe
  */
-class RSModifierStats extends RSObject {
+class RSModifierStats extends RSModifier {
 	constructor(details, universe) {
 		super(details, universe);
 	}
@@ -22249,7 +22284,7 @@ class RSUniverse extends RSObject {
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-					console.log("Received: ", message);
+//					console.log("Received: ", message);
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
@@ -22416,7 +22451,7 @@ class RSUniverse extends RSObject {
 				"event": type,
 				"data": data
 			};
-			console.log("Sending: ", data);
+//			console.log("Sending: ", data);
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {
@@ -23051,7 +23086,6 @@ rsSystem.component("RSCore", {
 				"username": "",
 				"address": ""
 			});
-			console.log("Loaded Data[" + storageKey + "]: ", data.store);
 			
 			return data;
 		},
@@ -23067,7 +23101,6 @@ rsSystem.component("RSCore", {
 					event.address = "ws" + event.address;
 				}
 				this.$emit("connect", event);
-				console.warn("connect");
 			}
 		},
 		"template": Vue.templified("components/connect.html")
@@ -23102,22 +23135,181 @@ rsSystem.component("RSCore", {
 				"type": Object
 			}
 		},
-		"mounted": function() {
-			rsSystem.register(this);
-		},
 		"data": function() {
 			var data = {};
+			
+			/**
+			 * 
+			 * @property viewing
+			 * @type RSObject
+			 */
+			data.viewing = null;
+			/**
+			 * 
+			 * @property open
+			 * @type Boolean
+			 */
+			data.open = false;
 			
 			return data;
 		},
 		"watch": {
 		},
+		"mounted": function() {
+//			rsSystem.EventBus.$on("display-info", (object) => {
+//				this.displayRecord(object);
+//			});
+			rsSystem.EventBus.$on("display-info", this.displayRecord);
+			rsSystem.register(this);
+		},
 		"methods": {
+			/**
+			 * 
+			 * @method displayRecord
+			 * @param {RSObject | Object | String} toView Something to identify the RSObject to view or the object itself.
+			 */
+			"displayRecord": function(toView) {
+				if(toView && !(toView instanceof RSObject)) {
+					if(typeof(toView) === "string") {
+						toView = this.universe.index.index[toView];
+					} else {
+						toView = this.universe.index.index[toView.id] || this.universe.index.index[toView.name];
+					}
+				}
+				
+				if(toView) {
+					if(this.viewing) {
+						this.viewing.$off("modified", this.update);
+					}
+					
+					Vue.set(this, "viewing", toView);
+					Vue.set(this, "open", true);
+					
+					this.viewing.$on("modified", this.update);
+				}
+			},
+			
+			"processRequest": function(event) {
+				
+			},
+			/**
+			 * 
+			 * @method closeInfo
+			 */
+			"closeInfo": function() {
+				Vue.set(this, "open", false);
+			},
+			/**
+			 * 
+			 * @method update
+			 */
+			"update": function() {
+				this.$forceUpdate();
+			}
 		},
 		"template": Vue.templified("components/info.html")
 	});
 })();
 
+
+/**
+ * 
+ * 
+ * @class rsObjectInfo
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var invisibleKeys = {};
+	invisibleKeys.id = true;
+	invisibleKeys.name = true;
+	invisibleKeys.universe = true;
+	invisibleKeys.icon = true;
+	invisibleKeys.modifierstats = true;
+	invisibleKeys.modifierattrs = true;
+	invisibleKeys.invisibleProperties = true;
+	invisibleKeys.description = true;
+	
+	rsSystem.component("rsObjectInfo", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.holdDescription = null;
+			data.description = null;
+			data.keys = [];
+			data.id = null;
+			
+			return data;
+		},
+		"watch": {
+			"record": function() {
+				this.update();
+			}
+		},
+		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+					console.log("Follow: ", follow);
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			console.log("Listening");
+			this.record.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"visible": function(key) {
+				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"update": function() {
+				console.log("Check: " + this.id + " | " + this.record.id);
+				if(this.id && this.id !== this.record.id) {
+					console.log("Shifting");
+					this.universe.index.index[this.id].$off("modified", this.update);
+					this.record.$on("modified", this.update);
+					Vue.set(this, "id", this.record.id);
+				} else {
+					console.log("Setting");
+					Vue.set(this, "id", this.record.id);
+				}
+				
+				if(this.record.description) {
+					if(this.holdDescription !== this.record.description) {
+						Vue.set(this, "holdDescription", this.record.description);
+						Vue.set(this, "description", this.rsshowdown(this.holdDescription));
+					}
+				} else {
+					Vue.set(this, "holdDescription", null);
+					Vue.set(this, "description", null);
+				}
+				
+				this.keys.splice(0);
+				this.keys.push.apply(this.keys, Object.keys(this.record));
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			console.log("Finishing");
+			this.record.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/info/render.html")
+	});
+})();
 
 /**
  * 
@@ -23399,6 +23591,11 @@ rsSystem.component("RSCore", {
 				this.character.commit({
 					"wounds": nV
 				});
+			},
+			"strain": function(nV, oV) {
+				this.character.commit({
+					"strain": nV
+				});
 			}
 		},
 		"methods": {
@@ -23457,6 +23654,9 @@ rsSystem.component("rsswCharacterInfo", {
 		this.update();
 	},
 	"methods": {
+		"showInfo": function(view) {
+			rsSystem.EventBus.$emit("display-info", view);
+		},
 		"updateCharacter": function() {
 			if(!this.calculating) {
 				Vue.set(this, "calculating", true);
@@ -23564,12 +23764,15 @@ rsSystem.component("rsswCharacterInfo", {
 			"getDice": function(skill) {
 				var roll = [], x;
 
-				for (x = 0; x < this.character[skill.base]; x++) {
+				for (x = 0; x < this.character[skill.base] ||  x < this.character[skill.propertyKey]; x++) {
 					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
 						roll.push("fas fa-dice-d12 rs-yellow");
 					} else {
 						roll.push("fas fa-dice-d8 rs-green rot45");
 					}
+				}
+				for (x = 0; x < this.character[skill.bonusKey]; x++) {
+					roll.push("fas fa-dice-d6 rs-lightblue");
 				}
 				return roll;
 			},
@@ -24751,6 +24954,7 @@ rsSystem.registerNoun(RSModifierStats, "modifierstats");
 rsSystem.registerNoun(RSArchetype, "archetype");
 rsSystem.registerNoun(RSInventory, "inventory");
 rsSystem.registerNoun(RSKnowledge, "knowledge");
+rsSystem.registerNoun(RSCondition, "condition");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
 rsSystem.registerNoun(RSAbility, "ability");

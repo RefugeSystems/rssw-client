@@ -24,7 +24,7 @@ class RSObject extends EventEmitter {
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
 				if(event && event.id === this.id) {
-					console.log("Object Processing Modification: ", this, event);
+//					console.log("Object Processing Modification: ", this, event);
 					this.loadDelta(event.modification);
 				}
 			});
@@ -132,6 +132,11 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
+		/**
+		 * 
+		 * @event modified
+		 * @param {RSObject} source The object that was modified.
+		 */
 		this.$emit("modified", this);
 	}
 

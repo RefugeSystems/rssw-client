@@ -28,7 +28,6 @@
 				"username": "",
 				"address": ""
 			});
-			console.log("Loaded Data[" + storageKey + "]: ", data.store);
 			
 			return data;
 		},
@@ -44,7 +43,6 @@
 					event.address = "ws" + event.address;
 				}
 				this.$emit("connect", event);
-				console.warn("connect");
 			}
 		},
 		"template": Vue.templified("components/connect.html")

@@ -43,12 +43,15 @@
 			"getDice": function(skill) {
 				var roll = [], x;
 
-				for (x = 0; x < this.character[skill.base]; x++) {
+				for (x = 0; x < this.character[skill.base] ||  x < this.character[skill.propertyKey]; x++) {
 					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
 						roll.push("fas fa-dice-d12 rs-yellow");
 					} else {
 						roll.push("fas fa-dice-d8 rs-green rot45");
 					}
+				}
+				for (x = 0; x < this.character[skill.bonusKey]; x++) {
+					roll.push("fas fa-dice-d6 rs-lightblue");
 				}
 				return roll;
 			},
