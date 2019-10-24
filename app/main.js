@@ -24174,11 +24174,11 @@ rsSystem.component("rsswCharacterInfo", {
 					cost = this.getXPCost(skill.id, direction),
 					change = {};
 				
-				console.log("Direction: ", direction, this.character.xp, cost);
+				console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp)}));
 				if(direction > 0 && cost <= this.character.xp) {
 					change[skill.propertyKey] = calculating + 1;
 					change.xp = this.character.xp - cost;
-					if(change.xp) {
+					if(!isNaN(change.xp)) {
 						this.character.commit(change);
 					}
 				} else if(direction < 0 && calculating > 0) {
