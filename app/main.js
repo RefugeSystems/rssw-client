@@ -22483,7 +22483,7 @@ class RSUniverse extends RSObject {
 			for(t=0; t<keys.length; t++) {
 				type = keys[t];
 				Constructor = rsSystem.availableNouns[type];
-				if(Constructor) {
+				if(Constructor && state[type]) {
 					ids = Object.keys(state[type]);
 					if(!this.nouns[type]) {
 						this.indexes[type] = new SearchIndex();
