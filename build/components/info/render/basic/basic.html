@@ -1,7 +1,8 @@
-<div class="object-info">
+<div class="general-information">
 	<p>Description</p>
 	
 	<div v-if="description" v-html="description"></div>
+	
 	
 	<div class="properties">
 		<div class="property" v-for="property in keys" v-if="visible(property)">

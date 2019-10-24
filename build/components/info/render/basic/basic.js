@@ -1,12 +1,8 @@
 
 /**
- * Handles rendering the record's information display.
  * 
- * This defaults to the rs-object-info-basic component if the record doesn't specify
- * a "information_renderer" property to point to a different component to handle
- * rending its information.
  * 
- * @class rsObjectInfo
+ * @class rsObjectInfoBasic
  * @constructor
  * @module Components
  */
@@ -23,7 +19,7 @@
 	invisibleKeys.description = true;
 	invisibleKeys.echo = true;
 	
-	rsSystem.component("rsObjectInfo", {
+	rsSystem.component("rsObjectInfoBasic", {
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSShowdown
@@ -99,31 +95,6 @@
 			console.log("Finishing");
 			this.record.$off("modified", this.update);
 		},
-		"render": function(createElement) {
-			var elements = false,
-				classes = {},
-				contents,
-				widget;
-			
-			elements = [createElement(this.record.information_renderer || "rs-object-info-basic", {
-				"props": {
-					"universe": this.universe,
-					"record": this.record
-				}
-			})];
-			
-			if(!elements) {
-				elements = [createElement("div")];
-			}
-			
-			classes["object-info"] = true;
-			if(this.record.information_classes) {
-				classes[this.record.information_classes] = true;
-			}
-			
-			return createElement("div", {
-				"class": classes
-			}, elements);
-		}
+		"template": Vue.templified("components/info/render/basic.html")
 	});
 })();

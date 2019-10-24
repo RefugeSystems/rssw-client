@@ -20,6 +20,7 @@ class RSObject extends EventEmitter {
 		}
 		this.name = details.name;
 		this.id = details.id;
+		this._modifiers = [];
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
@@ -85,13 +86,24 @@ class RSObject extends EventEmitter {
 	 * 
 	 * @method recalculateProperties
 	 */
-	recalculateProperties() {
+	recalculateProperties(trigger) {
+		if(trigger) {
+//			console.warn("Trigger Sub-Recomputation from " + trigger.id + " on ", this);
+//			return;
+		}
+		
 		// Establish Base
 		var references = [],
 			base = {},
 			keys,
 			load,
 			x;
+		
+		// Stop listening for changes to known modifiers and clear
+		for(x=0; x<this._modifiers.length; x++) {
+			this._modifiers[x].$bindedOff("modified", this.recalculateProperties);
+		}
+		this._modifiers.splice(0);
 		
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
@@ -131,7 +143,30 @@ class RSObject extends EventEmitter {
 				this[keys[x]] = base[keys[x]];
 			}
 		}
+
+		// Listen for changes on direct modifiers
+		for(x=0; this.modifierattrs && x<this.modifierattrs.length; x++) {
+			load = this.universe.indexes.modifierattrs.lookup[this.modifierattrs[x]];
+			if(load) {
+//				rsSystem.log.warn("Binding Modifier[ " + this.modifierattrs[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
+				load.$bindedOn("modified", this.recalculateProperties, this);
+				this._modifiers.push(load);
+			} else {
+				rsSystem.log.warn("Unknown Attribute Modifier[" + this.modifierattrs[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierattrs));
+			}
+		}
+		for(x=0; this.modifierstats && x<this.modifierstats.length; x++) {
+			load = this.universe.indexes.modifierstats.lookup[this.modifierstats[x]];
+			if(load) {
+//				rsSystem.log.warn("Binding Modifier[ " + this.modifierstats[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
+				load.$bindedOn("modified", this.recalculateProperties, this);
+				this._modifiers.push(load);
+			} else {
+				rsSystem.log.warn("Unknown Stats Modifier[" + this.modifierstats[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierstats));
+			}
+		}
 		
+//		console.log("Recalculated: " + this.id);
 		/**
 		 * 
 		 * @event modified

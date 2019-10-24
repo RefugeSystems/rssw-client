@@ -177,7 +177,7 @@ class RSUniverse extends RSObject {
 			};
 			
 			this.$on("model:modified", (event) => {
-				console.log("Modifying: ", event);
+//				console.log("Modifying: ", event);
 				var record = this.nouns[event.type][event.id];
 				if(!record) {
 					console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
@@ -249,7 +249,6 @@ class RSUniverse extends RSObject {
 	 */
 	loadState(state) {
 		return new Promise((done, fail) => {
-			console.log("Loading State: ", state);
 			var keys = Object.keys(state),
 				Constructor,
 				noun,
@@ -258,6 +257,11 @@ class RSUniverse extends RSObject {
 				id,
 				i,
 				t;
+			
+			keys.unshift("modifierattrs");
+			keys.unshift("modifierstats");
+			keys.unshift("condition");
+//			console.warn("Load State: ", keys);
 			
 			for(t=0; t<keys.length; t++) {
 				type = keys[t];

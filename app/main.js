@@ -18228,10 +18228,12 @@ Templify.install = function(Vue, options) {
 			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<div class=\"heading\">\r\n\t\t<span class=\"heading-icon\"></span>\r\n\t\t<span>Login</span>\r\n\t</div>\r\n\t<div class=\"fields\">\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t</label>\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t</label>\r\n\t\t<div class=\"actions\">\r\n\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\tSecure?\r\n\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/gyroscope.html": return "";
 			case "components/info.html": return "<div class=\"system-component system-info\" :class=\"open?'opened':'closed'\">\r\n\t<div class=\"main-bar\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"viewing && viewing.icon\" class=\"icon\" :class=\"viewing.icon\"></span>\r\n\t\t\t<span class=\"text\">{{viewing?viewing.name:\"Information\"}}</span>\r\n\t\t</div>\r\n\t\t<button class=\"control close\" v-on:click=\"closeInfo()\">\r\n\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t\r\n\t<rs-object-info v-if=\"viewing\" v-on:click=\"processRequest($event)\" :record=\"viewing\" :universe=\"universe\"></rs-object-info>\r\n</div>\r\n";
-			case "components/info/render.html": return "<div class=\"object-info\">\r\n\t<p>Description</p>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property)\">\r\n\t\t\t<span class=\"key\">{{property}}</span>\r\n\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t<span class=\"value\">{{record[property]}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
+			case "components/info/render/basic.html": return "<div class=\"general-information\">\r\n\t<p>Description</p>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property)\">\r\n\t\t\t<span class=\"key\">{{property}}</span>\r\n\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t<span class=\"value\">{{record[property]}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/rssw/career/display.html": return "<div class=\"career-information\">\r\n\t<div class=\"\">\r\n\t\t<span>Classification:</span>\r\n\t\t<span>{{record.classification}}</span>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/display.html": return "<div class=\"character-information\">\r\n\t<div class=\"flow-h\">\r\n\t\t<div class=\"stat brawn flow-v centered\">\r\n\t\t\t<span>Brawn</span>\r\n\t\t\t<span>{{record.brawn}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"stat agility flow-v centered\">\r\n\t\t\t<span>Agility</span>\r\n\t\t\t<span>{{record.agility}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property level\">\r\n\t\t<span class=\"icon fas fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">Description:</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\" v-if=\"!state.hideNames\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"level-skill\">\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t<option value=\"\">[ Select a Skill ]</option>\r\n\t\t\t\t<option v-for=\"skill in skillStatsListing\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t</select>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -18276,6 +18278,7 @@ Vue.use(Templify);
 class EventEmitter {
 	constructor() {
 		this._listeners = {};
+		this._bindedListeners = {};
 		this._onceListeners = {};
 		this._bound = [];
 	}
@@ -18315,6 +18318,7 @@ class EventEmitter {
 	 * @param {Function} listener
 	 */
 	$on(event, listener) {
+//		console.warn("Listening[" + this.id + "] on " + event + ": " + listener._owningID);
 		if(typeof listener !== "function") {
 			rsSystem.log.error("Listener is not a function: ", listener);
 		}
@@ -18327,6 +18331,24 @@ class EventEmitter {
 		if(this._listeners[event].indexOf(listener) === -1) {
 			this._listeners[event].push(listener);
 		}
+	}
+	
+	
+	$bindedOn(event, listener, bindTo) {
+		if(typeof listener !== "function") {
+			rsSystem.log.error("Listener is not a function: ", listener);
+		}
+		
+		if(listener === undefined) {
+			listener = event;
+			event = undefined;
+		}
+		this._bindedListeners[event] = this._bindedListeners[event] || [];
+		this._bindedListeners[event].push({
+			"listener": listener,
+			"binding": bindTo
+		});
+		return this._bindedListeners[event].length - 1;
 	}
 
 	/**
@@ -18364,6 +18386,31 @@ class EventEmitter {
 			this._onceListeners[event].splice(x, 1);
 		}
 	}
+	
+	$bindedOff(event, index) {
+		if(!this._bindedListeners[event]) {
+			return false;
+		}
+		
+		switch(typeof(index)) {
+			case "function":
+				for(var x=0; x<this._bindedListeners[event].length; x++) {
+					if(this._bindedListeners[event][x].listener === index) {
+						this._bindedListeners[event].splice(x, 1);
+						return true;
+					}
+				}
+				break;
+			case "number":
+				if(index < this._bindedListeners[event].length) {
+					this._bindedListeners[event].splice(index, 1);
+					return true;
+				}
+				break;
+		}
+		
+		return false;
+	}
 
 	/**
 	 * 
@@ -18379,14 +18426,20 @@ class EventEmitter {
 		if(listeners && listeners.length) {
 			for(x=0; x<listeners.length; x++) {
 				try {
-					try {
-						listeners[x].apply(listeners[x], data);
-					} catch(generalFault) {
-						rsSystem.log.warn("General Emit Failure[" + event + "]: ", generalFault);
-						listeners[x](data[0]);
-					}
+					listeners[x](data[0]);
 				} catch(exception) {
 					console.log("Emit Failed[" + event + "]: ", listeners[x], exception);
+					rsSystem.log.warn(exception);
+				}
+			}
+		}
+		
+		listeners = this._bindedListeners[event];
+		if(listeners && listeners.length) {
+			for(x=0; x<listeners.length; x++) {
+				try {
+					listeners[x].listener.bind(listeners[x].binding)(data);
+				} catch(exception) {
 					rsSystem.log.warn(exception);
 				}
 			}
@@ -20952,6 +21005,7 @@ class RSObject extends EventEmitter {
 		}
 		this.name = details.name;
 		this.id = details.id;
+		this._modifiers = [];
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
@@ -21017,13 +21071,24 @@ class RSObject extends EventEmitter {
 	 * 
 	 * @method recalculateProperties
 	 */
-	recalculateProperties() {
+	recalculateProperties(trigger) {
+		if(trigger) {
+//			console.warn("Trigger Sub-Recomputation from " + trigger.id + " on ", this);
+//			return;
+		}
+		
 		// Establish Base
 		var references = [],
 			base = {},
 			keys,
 			load,
 			x;
+		
+		// Stop listening for changes to known modifiers and clear
+		for(x=0; x<this._modifiers.length; x++) {
+			this._modifiers[x].$bindedOff("modified", this.recalculateProperties);
+		}
+		this._modifiers.splice(0);
 		
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
@@ -21063,7 +21128,30 @@ class RSObject extends EventEmitter {
 				this[keys[x]] = base[keys[x]];
 			}
 		}
+
+		// Listen for changes on direct modifiers
+		for(x=0; this.modifierattrs && x<this.modifierattrs.length; x++) {
+			load = this.universe.indexes.modifierattrs.lookup[this.modifierattrs[x]];
+			if(load) {
+//				rsSystem.log.warn("Binding Modifier[ " + this.modifierattrs[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
+				load.$bindedOn("modified", this.recalculateProperties, this);
+				this._modifiers.push(load);
+			} else {
+				rsSystem.log.warn("Unknown Attribute Modifier[" + this.modifierattrs[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierattrs));
+			}
+		}
+		for(x=0; this.modifierstats && x<this.modifierstats.length; x++) {
+			load = this.universe.indexes.modifierstats.lookup[this.modifierstats[x]];
+			if(load) {
+//				rsSystem.log.warn("Binding Modifier[ " + this.modifierstats[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
+				load.$bindedOn("modified", this.recalculateProperties, this);
+				this._modifiers.push(load);
+			} else {
+				rsSystem.log.warn("Unknown Stats Modifier[" + this.modifierstats[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierstats));
+			}
+		}
 		
+//		console.log("Recalculated: " + this.id);
 		/**
 		 * 
 		 * @event modified
@@ -22303,7 +22391,7 @@ class RSUniverse extends RSObject {
 			};
 			
 			this.$on("model:modified", (event) => {
-				console.log("Modifying: ", event);
+//				console.log("Modifying: ", event);
 				var record = this.nouns[event.type][event.id];
 				if(!record) {
 					console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
@@ -22375,7 +22463,6 @@ class RSUniverse extends RSObject {
 	 */
 	loadState(state) {
 		return new Promise((done, fail) => {
-			console.log("Loading State: ", state);
 			var keys = Object.keys(state),
 				Constructor,
 				noun,
@@ -22384,6 +22471,11 @@ class RSUniverse extends RSObject {
 				id,
 				i,
 				t;
+			
+			keys.unshift("modifierattrs");
+			keys.unshift("modifierstats");
+			keys.unshift("condition");
+//			console.warn("Load State: ", keys);
 			
 			for(t=0; t<keys.length; t++) {
 				type = keys[t];
@@ -23215,6 +23307,110 @@ rsSystem.component("RSCore", {
 /**
  * 
  * 
+ * @class rsObjectInfoBasic
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var invisibleKeys = {};
+	invisibleKeys.id = true;
+	invisibleKeys.name = true;
+	invisibleKeys.universe = true;
+	invisibleKeys.icon = true;
+	invisibleKeys.modifierstats = true;
+	invisibleKeys.modifierattrs = true;
+	invisibleKeys.invisibleProperties = true;
+	invisibleKeys.description = true;
+	invisibleKeys.echo = true;
+	
+	rsSystem.component("rsObjectInfoBasic", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.holdDescription = null;
+			data.description = null;
+			data.keys = [];
+			data.id = null;
+			
+			return data;
+		},
+		"watch": {
+			"record": function() {
+				this.update();
+			}
+		},
+		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+					console.log("Follow: ", follow);
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			console.log("Listening");
+			this.record.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"visible": function(key) {
+				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"update": function() {
+				console.log("Check: " + this.id + " | " + this.record.id);
+				if(this.id && this.id !== this.record.id) {
+					console.log("Shifting");
+					this.universe.index.index[this.id].$off("modified", this.update);
+					this.record.$on("modified", this.update);
+					Vue.set(this, "id", this.record.id);
+				} else {
+					console.log("Setting");
+					Vue.set(this, "id", this.record.id);
+				}
+				
+				if(this.record.description) {
+					if(this.holdDescription !== this.record.description) {
+						Vue.set(this, "holdDescription", this.record.description);
+						Vue.set(this, "description", this.rsshowdown(this.holdDescription));
+					}
+				} else {
+					Vue.set(this, "holdDescription", null);
+					Vue.set(this, "description", null);
+				}
+				
+				this.keys.splice(0);
+				this.keys.push.apply(this.keys, Object.keys(this.record));
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			console.log("Finishing");
+			this.record.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/info/render/basic.html")
+	});
+})();
+
+/**
+ * Handles rendering the record's information display.
+ * 
+ * This defaults to the rs-object-info-basic component if the record doesn't specify
+ * a "information_renderer" property to point to a different component to handle
+ * rending its information.
+ * 
  * @class rsObjectInfo
  * @constructor
  * @module Components
@@ -23230,6 +23426,7 @@ rsSystem.component("RSCore", {
 	invisibleKeys.modifierattrs = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.description = true;
+	invisibleKeys.echo = true;
 	
 	rsSystem.component("rsObjectInfo", {
 		"inherit": true,
@@ -23307,7 +23504,32 @@ rsSystem.component("RSCore", {
 			console.log("Finishing");
 			this.record.$off("modified", this.update);
 		},
-		"template": Vue.templified("components/info/render.html")
+		"render": function(createElement) {
+			var elements = false,
+				classes = {},
+				contents,
+				widget;
+			
+			elements = [createElement(this.record.information_renderer || "rs-object-info-basic", {
+				"props": {
+					"universe": this.universe,
+					"record": this.record
+				}
+			})];
+			
+			if(!elements) {
+				elements = [createElement("div")];
+			}
+			
+			classes["object-info"] = true;
+			if(this.record.information_classes) {
+				classes[this.record.information_classes] = true;
+			}
+			
+			return createElement("div", {
+				"class": classes
+			}, elements);
+		}
 	});
 })();
 
@@ -23538,6 +23760,46 @@ rsSystem.component("RSCore", {
 /**
  * 
  * 
+ * @class rsswCareerRecordDisplay
+ * @constructor
+ * @module Components
+ */
+(function() {
+	rsSystem.component("rsswCareerRecordDisplay", {
+		"inherit": true,
+		"mixins": [
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			return data;
+		},
+		"mounted": function() {
+			this.record.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.record.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/career/display.html")
+	});
+})();
+
+/**
+ * 
+ * 
  * @class rsswCharacterBoard
  * @constructor
  * @module Components
@@ -23615,6 +23877,46 @@ rsSystem.component("RSCore", {
 			this.character.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/character/board.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsswCharacterRecordDisplay
+ * @constructor
+ * @module Components
+ */
+(function() {
+	rsSystem.component("rsswCharacterRecordDisplay", {
+		"inherit": true,
+		"mixins": [
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			return data;
+		},
+		"mounted": function() {
+			this.record.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.record.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/display.html")
 	});
 })();
 
