@@ -1,14 +1,11 @@
 <div class="general-information">
-	<p>Description</p>
-	
 	<div v-if="description" v-html="description"></div>
 	
-	
 	<div class="properties">
-		<div class="property" v-for="property in keys" v-if="visible(property)">
-			<span class="key">{{property}}</span>
+		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
+			<span class="key">{{prettifyPropertyName(property)}}</span>
 			<span class="divide">:</span>
-			<span class="value">{{record[property]}}</span>
+			<span class="value">{{prettifyPropertyValue(property, record[property])}}</span>
 		</div>
 	</div>
 </div>

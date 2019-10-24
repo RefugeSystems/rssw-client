@@ -105,6 +105,9 @@
 						roll.push("fas fa-dice-d8 rs-green rot45");
 					}
 				}
+				for (x = 0; this.character[skill.bonusKey] && x < this.character[skill.bonusKey]; x++) {
+					roll.push("fas fa-dice-d6 rs-lightblue");
+				}
 
 				return roll;
 			},

@@ -22,6 +22,7 @@ rsSystem.component("rsswCharacterInfo", {
 		var data = {};
 		data.race = null;
 		data.specializations = [];
+		data.abilities = [];
 		data.careers = [];
 		data.experience = 0;
 		data.description = "";
@@ -68,6 +69,7 @@ rsSystem.component("rsswCharacterInfo", {
 			
 			Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
 			this.specializations.splice(0);
+			this.abilities.splice(0);
 			this.careers.splice(0);
 			
 			if(this.experience !== this.character.xp) {
@@ -90,6 +92,13 @@ rsSystem.component("rsswCharacterInfo", {
 								break;
 						}
 					}
+				}
+			}
+			
+			if(this.character.ability) {
+				for(x=0; x<this.character.ability.length; x++) {
+					buffer = this.universe.nouns.ability[this.character.ability[x]];
+					this.abilities.push(buffer);
 				}
 			}
 		}

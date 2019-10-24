@@ -48,38 +48,31 @@ class EventEmitter {
 	 * @param {String} [event]
 	 * @param {Function} listener
 	 */
-	$on(event, listener) {
+	$on(event, listener, binding) {
+		
+		if(listener === undefined) {
+			listener = event;
+			event = undefined;
+		}
+		
+		if(typeof listener !== "function") {
+			rsSystem.log.error("Listener is not a function: ", listener);
+		}
+
 //		console.warn("Listening[" + this.id + "] on " + event + ": " + listener._owningID);
-		if(typeof listener !== "function") {
-			rsSystem.log.error("Listener is not a function: ", listener);
-		}
 		
-		if(listener === undefined) {
-			listener = event;
-			event = undefined;
+		if(typeof(binding) === "object") {
+			this._bindedListeners[event] = this._bindedListeners[event] || [];
+			this._bindedListeners[event].push({
+				"listener": listener,
+				"binding": binding
+			});
+		} else {
+			this._listeners[event] = this._listeners[event] || [];
+			if(this._listeners[event].indexOf(listener) === -1) {
+				this._listeners[event].push(listener);
+			}
 		}
-		this._listeners[event] = this._listeners[event] || [];
-		if(this._listeners[event].indexOf(listener) === -1) {
-			this._listeners[event].push(listener);
-		}
-	}
-	
-	
-	$bindedOn(event, listener, bindTo) {
-		if(typeof listener !== "function") {
-			rsSystem.log.error("Listener is not a function: ", listener);
-		}
-		
-		if(listener === undefined) {
-			listener = event;
-			event = undefined;
-		}
-		this._bindedListeners[event] = this._bindedListeners[event] || [];
-		this._bindedListeners[event].push({
-			"listener": listener,
-			"binding": bindTo
-		});
-		return this._bindedListeners[event].length - 1;
 	}
 
 	/**
@@ -105,39 +98,34 @@ class EventEmitter {
 	 * @param {String} [event]
 	 * @param {Function} listener
 	 */
-	$off(event, listener) {
+	$off(event, listener, binding) {
 		var x;
 		
 		if(listener === undefined) {
 			listener = event;
 			event = undefined;
 		}
+		
 		this._onceListeners[event] = this._onceListeners[event] || [];
-		if( (x = this._onceListeners[event].indexOf(listener)) === -1) {
+		if( (x = this._onceListeners[event].indexOf(listener)) !== -1) {
+//			console.log("Remove Once Listener: " + x);
 			this._onceListeners[event].splice(x, 1);
-		}
-	}
-	
-	$bindedOff(event, index) {
-		if(!this._bindedListeners[event]) {
-			return false;
+			return true;
 		}
 		
-		switch(typeof(index)) {
-			case "function":
-				for(var x=0; x<this._bindedListeners[event].length; x++) {
-					if(this._bindedListeners[event][x].listener === index) {
-						this._bindedListeners[event].splice(x, 1);
-						return true;
-					}
-				}
-				break;
-			case "number":
-				if(index < this._bindedListeners[event].length) {
-					this._bindedListeners[event].splice(index, 1);
-					return true;
-				}
-				break;
+		this._listeners[event] = this._listeners[event] || [];
+		if( (x = this._listeners[event].indexOf(listener)) !== -1) {
+//			console.log("Remove Normal Listener: " + x);
+			this._listeners[event].splice(x, 1);
+			return true;
+		}
+		
+		for(x=0; this._bindedListeners[event] && x<this._bindedListeners[event].length; x++) {
+			if(this._bindedListeners[event][x].listener === listener) {
+//				console.log("Remove Bound Listener: " + x);
+				this._bindedListeners[event].splice(x, 1);
+				return true;
+			}
 		}
 		
 		return false;
@@ -147,17 +135,16 @@ class EventEmitter {
 	 * 
 	 * @method $emit
 	 * @param {String} [event]
-	 * @param {Object | String | Number | Boolean} ...data
+	 * @param {Object | String | Number | Boolean} data
 	 */
-	$emit(event, ...data) {
+	$emit(event, data) {
 		var x, listeners;
 		listeners = this._listeners[event];
-		data = data || [];
-//		console.log("Emitting[" + event + "]: ", listeners, data);
+//		console.log("Emitting[" + event + " from " + this.id + "]: ", listeners, data);
 		if(listeners && listeners.length) {
 			for(x=0; x<listeners.length; x++) {
 				try {
-					listeners[x](data[0]);
+					listeners[x](data);
 				} catch(exception) {
 					console.log("Emit Failed[" + event + "]: ", listeners[x], exception);
 					rsSystem.log.warn(exception);
@@ -169,6 +156,7 @@ class EventEmitter {
 		if(listeners && listeners.length) {
 			for(x=0; x<listeners.length; x++) {
 				try {
+//					console.log("Binded Emission[" + event + "]: ", listeners[x], data);
 					listeners[x].listener.bind(listeners[x].binding)(data);
 				} catch(exception) {
 					rsSystem.log.warn(exception);
@@ -188,20 +176,22 @@ class EventEmitter {
 			listeners.splice(0, listeners.length);
 		}
 
-		data.unshift(event);
-		if(this._bound && this._bound.length) {
-			for(x=0; x<this._bound.length; x++) {
-				try {
-					this._bound[x].$emit.bind(this._bound[x]).apply(this._bound[x].$emit, data);
-				} catch(exception) {
-					rsSystem.log.warn(exception);
-					try {
-						this._bound[x].$emit(event, data[1]);
-					} catch(exception) {
-						rsSystem.log.warn(exception);
-					}
-				}
-			}
-		}
+		// Needs revised but currently unused
+//		data.unshift(event);
+//		if(this._bound && this._bound.length) {
+//			for(x=0; x<this._bound.length; x++) {
+//				try {
+//					console.log("Bounded Emission");
+//					this._bound[x].$emit.bind(this._bound[x]).apply(this._bound[x].$emit, data);
+//				} catch(exception) {
+//					rsSystem.log.warn(exception);
+//					try {
+//						this._bound[x].$emit(event, data[1]);
+//					} catch(exception) {
+//						rsSystem.log.warn(exception);
+//					}
+//				}
+//			}
+//		}
 	}
 };

@@ -19,6 +19,9 @@
 	invisibleKeys.description = true;
 	invisibleKeys.echo = true;
 	
+	var prettifyNames = {};
+	var prettifyValues = {};
+	
 	rsSystem.component("rsObjectInfoBasic", {
 		"inherit": true,
 		"mixins": [
@@ -60,8 +63,50 @@
 			this.update();
 		},
 		"methods": {
-			"visible": function(key) {
-				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			"visible": function(key, value) {
+				return key && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"prettifyPropertyName": function(property) {
+				switch(typeof(this.record._prettifyName)) {
+					case "function":
+						return this.record._prettifyName(property);
+					case "object":
+						if(this.record._prettifyName[property]) {
+							return this.record._prettifyName[property];
+						}
+				}
+				
+				if(prettifyNames[property]) {
+					switch(typeof(prettifyNames[property])) {
+						case "string":
+							return prettifyNames[property];
+						case "function":
+							return prettifyNames[property](property);
+					}
+				}
+				
+				return property;
+			},
+			"prettifyPropertyValue": function(property, value) {
+				switch(typeof(this.record._prettifyValue)) {
+					case "function":
+						return this.record._prettifyValue(property, value);
+					case "object":
+						if(this.record._prettifyValue[property]) {
+							return this.record._prettifyValue[property];
+						}
+				}
+				
+				if(prettifyValues[property]) {
+					switch(typeof(prettifyValues[property])) {
+						case "string":
+							return prettifyValues[property];
+						case "function":
+							return prettifyValues[property](property);
+					}
+				}
+				
+				return value;
 			},
 			"update": function() {
 				console.log("Check: " + this.id + " | " + this.record.id);
@@ -96,5 +141,5 @@
 			this.record.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/info/render/basic.html")
-	});
+	}, "display");
 })();

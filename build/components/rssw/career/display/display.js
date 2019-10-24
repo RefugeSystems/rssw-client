@@ -10,6 +10,7 @@
 	rsSystem.component("rsswCareerRecordDisplay", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSShowdown
 		],
 		"props": {
 			"record": {
@@ -19,6 +20,9 @@
 		},
 		"data": function() {
 			var data = {};
+
+			data.holdDescription = null;
+			data.description = null;
 			
 			return data;
 		},
@@ -29,6 +33,16 @@
 		},
 		"methods": {
 			"update": function() {
+				if(this.record.description) {
+					if(this.holdDescription !== this.record.description) {
+						Vue.set(this, "holdDescription", this.record.description);
+						Vue.set(this, "description", this.rsshowdown(this.holdDescription));
+					}
+				} else {
+					Vue.set(this, "holdDescription", null);
+					Vue.set(this, "description", null);
+				}
+				
 				this.$forceUpdate();
 			}
 		},

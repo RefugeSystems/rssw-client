@@ -261,7 +261,7 @@ class RSUniverse extends RSObject {
 			keys.unshift("modifierattrs");
 			keys.unshift("modifierstats");
 			keys.unshift("condition");
-//			console.warn("Load State: ", keys);
+//			console.warn("Load State: ", keys, state);
 			
 			for(t=0; t<keys.length; t++) {
 				type = keys[t];

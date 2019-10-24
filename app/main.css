@@ -719,7 +719,12 @@ form {
   margin: 0px;
 }
 .rs-component.rssw.component-character-info .property {
+  color: #EAEFF9;
   margin: 3px;
+}
+.rs-component.rssw.component-character-info .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
 }
 .rs-component.rssw.component-character-info .icon {
   display: inline-block;

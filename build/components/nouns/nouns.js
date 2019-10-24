@@ -34,7 +34,7 @@
 			data.rawValue = "{}";
 			data.isValid = true;
 			data.copy = null;
-			data.nouns = rsSystem.listingNouns;
+			data.nouns = rsSystem.listingNouns.sort();
 			data.state = this.loadStorage(storageKey, {
 				"current": "player",
 				"building": {}
@@ -80,8 +80,15 @@
 			},
 			"modify": function() {
 				if(this.isValid) {
-					this.state.building[this.state.current]._type = this.state.current;
-					this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
+					if(this.state.building[this.state.current] instanceof Array) {
+						for(var x=0; x<this.state.building[this.state.current].length; x++) {
+							this.state.building[this.state.current][x]._type = this.state.current;
+							this.universe.send("modify:" + this.state.current, this.state.building[this.state.current][x]);
+						}
+					} else {
+						this.state.building[this.state.current]._type = this.state.current;
+						this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
+					}
 				}
 			}
 		},

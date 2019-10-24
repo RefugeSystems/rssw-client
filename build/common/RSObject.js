@@ -12,6 +12,7 @@ class RSObject extends EventEmitter {
 		super();
 		this.universe = universe;
 		this._coreData = {};
+		this._registered = {};
 		var keys = Object.keys(details),
 			x;
 		
@@ -93,17 +94,19 @@ class RSObject extends EventEmitter {
 		}
 		
 		// Establish Base
-		var references = [],
+		var selfReference = this,
+			references = [],
 			base = {},
 			keys,
 			load,
 			x;
 		
 		// Stop listening for changes to known modifiers and clear
-		for(x=0; x<this._modifiers.length; x++) {
-			this._modifiers[x].$bindedOff("modified", this.recalculateProperties);
-		}
-		this._modifiers.splice(0);
+//		for(x=0; x<this._modifiers.length; x++) {
+//			console.warn("Remove Listener: " + this.id + " from " + this._modifiers[x].id + ": " + this._modifiers[x].$off("modified", this.recalculateProperties));
+////			this._modifiers[x].$off("modified", this.recalculateProperties);
+//		}
+//		this._modifiers.splice(0);
 		
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
@@ -149,8 +152,12 @@ class RSObject extends EventEmitter {
 			load = this.universe.indexes.modifierattrs.lookup[this.modifierattrs[x]];
 			if(load) {
 //				rsSystem.log.warn("Binding Modifier[ " + this.modifierattrs[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
-				load.$bindedOn("modified", this.recalculateProperties, this);
-				this._modifiers.push(load);
+				if(!this._registered[load.id]) {
+					this._registered[load.id] = true;
+					load.$once("modified", () => {
+						selfReference.recalculateProperties();
+					});
+				}
 			} else {
 				rsSystem.log.warn("Unknown Attribute Modifier[" + this.modifierattrs[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierattrs));
 			}
@@ -159,8 +166,12 @@ class RSObject extends EventEmitter {
 			load = this.universe.indexes.modifierstats.lookup[this.modifierstats[x]];
 			if(load) {
 //				rsSystem.log.warn("Binding Modifier[ " + this.modifierstats[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
-				load.$bindedOn("modified", this.recalculateProperties, this);
-				this._modifiers.push(load);
+				if(!this._registered[load.id]) {
+					this._registered[load.id] = true;
+					load.$once("modified", () => {
+						selfReference.recalculateProperties();
+					});
+				}
 			} else {
 				rsSystem.log.warn("Unknown Stats Modifier[" + this.modifierstats[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierstats));
 			}

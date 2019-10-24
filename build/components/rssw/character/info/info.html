@@ -30,6 +30,14 @@
 			<span class="value">{{archetype.name}}</span>
 		</button>
 	</div>
+	<div class="property ability">
+		<span class="icon fas fa-gavel"></span>
+		<span class="label">Abilities:</span>
+		<button v-for="(ability, $index) in abilities" class="ability" v-on:click="showInfo(ability)">
+			<span class="divide" v-if="$index !== 0">,</span>
+			<span class="value">{{ability.name}}</span>
+		</button>
+	</div>
 	<div class="property level">
 		<span class="icon fas fa-user-plus"></span>
 		<span class="label">Experience:</span>
