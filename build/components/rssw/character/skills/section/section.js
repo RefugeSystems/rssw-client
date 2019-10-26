@@ -40,6 +40,9 @@
 			rsSystem.register(this);
 		},
 		"methods": {
+			"isVisible": function(skill) {
+				return !this.state.search || skill._search.indexOf(this.state.search) !== -1;
+			},
 			"getDice": function(skill) {
 				var roll = [], x;
 

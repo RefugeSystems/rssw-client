@@ -32,6 +32,8 @@
 				"hideNames": false,
 				"search": ""
 			});
+			
+			data.levelSkills = [];
 
 			return data;
 		},
@@ -117,6 +119,10 @@
 			"update": function() {
 				var buffer, x;
 
+				this.levelSkills.splice(0);
+				this.levelSkills.push.apply(this.levelSkills, this.characterStatsListing);
+				this.levelSkills.push.apply(this.levelSkills, this.skillStatsListing);
+				
 				this.$forceUpdate();
 			}
 		},

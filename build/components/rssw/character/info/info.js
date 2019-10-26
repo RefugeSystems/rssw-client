@@ -27,6 +27,7 @@ rsSystem.component("rsswCharacterInfo", {
 		data.experience = 0;
 		data.description = "";
 		data.calculating = false;
+		data.credits = 0;
 		
 		return data;
 	},
@@ -77,6 +78,9 @@ rsSystem.component("rsswCharacterInfo", {
 			}
 			if(this.description !== this.character.description) {
 				Vue.set(this, "description", this.character.description);
+			}
+			if(this.credits !== this.character.credits) {
+				Vue.set(this, "credits", this.character.credits);
 			}
 			
 			if(this.character.archetype) {

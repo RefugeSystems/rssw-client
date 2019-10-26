@@ -11,7 +11,7 @@
 		<div class="level-skill">
 			<select v-model="leveling">
 				<option value="">[ Select a Skill ]</option>
-				<option v-for="skill in skillStatsListing" :value="skill.id">{{skill.name}}</option>
+				<option v-for="skill in levelSkills" :value="skill.id">{{skill.name}}</option>
 			</select>
 			<button class="level up" v-on:click="levelSkill(leveling, 1)" v-if="leveling">
 				<span class="fas fa-plus-square"></span>

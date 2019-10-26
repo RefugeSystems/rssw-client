@@ -1,6 +1,6 @@
 
 <table>
-	<tr class="skill" v-for="skill in skills" v-if="!state.search || skill._search.indexOf(state.search) !== -1">
+	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)">
 		<td class="name aligned-right flow-v">
 			<span class="naming">
 				<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>

@@ -308,14 +308,22 @@ rsSystem.component("RSSWStats", {
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
 				data.entityStats[keys[x]].bonusKey = "skill_bonuses_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
-				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
-				if(data.entityStats[keys[x]].info) {
-					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
-				}
+//				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
+//				if(data.entityStats[keys[x]].info) {
+//					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
+//					if(data.entityStats[keys[x]].base) {
+//						data.entityStats[keys[x]]._search += data.entityStats[keys[x]].base.toLowerCase();
+//					}
+//				}
 			}
 		}
 
 		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
+		data.characterStatsListing = [];
+		for(x=0; x<data.characterStats.length; x++) {
+			data.characterStatsListing.push(data.entityStats[data.characterStats[x]]);
+		}
+		
 		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
 		data.skillStats = Object.keys(data.entityStats.skill).sort();
 		data.skillStatsListing = [];
@@ -337,6 +345,23 @@ rsSystem.component("RSSWStats", {
 		data.shipStatList = [];
 		for(x=0;x<data.shipStats.length;x++) {
 			data.shipStatList.push(data.entityStats[data.shipStats[x]]);
+		}
+
+		keys = Object.keys(data.entityStats);
+		for(x=0; x<keys.length; x++) {
+			data.entityStats[keys[x]]._search = data.entityStats[keys[x]]._search || "";
+			if(data.entityStats[keys[x]].id) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].id.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].name) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].name.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].info) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].base) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].base.toLowerCase();
+			}
 		}
 		
 		return data;
