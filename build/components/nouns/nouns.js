@@ -41,6 +41,8 @@
 			});
 			console.log("Loaded Data[" + storageKey + "]: ", data.state);
 			
+			data.extra_properties = [];
+			
 			return data;
 		},
 		"watch": {

@@ -35,6 +35,13 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWCharacter
 				}]
 			}, {
+				"path": "base",
+				"component": rsSystem.components.RSSWBase,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWBase
+				}]
+			}, {
 				"path": "inventory",
 				"component": rsSystem.components.RSSWInventory,
 				"children": [{
