@@ -471,6 +471,31 @@ form {
   border-radius: 6px;
   padding: 8px;
 }
+.rs-field.rs-autocomplete {
+  position: relative;
+}
+.rs-field.rs-autocomplete .corpus {
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  z-index: 5;
+  background-color: black;
+  color: white;
+  border-color: white;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 0px;
+}
+.rs-field.rs-autocomplete .corpus.open {
+  max-height: 300px;
+}
+.rs-field.rs-autocomplete .corpus .option {
+  white-space: nowrap;
+  padding: 2px 4px;
+  border-top: 1px solid #617EB8;
+}
 .system-component.system-info {
   position: absolute;
   display: flex;

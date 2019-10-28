@@ -11,5 +11,8 @@
 class RSSkill extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		this.propertyKey = "skill_" + this.id;
+		this.enhancementKey = "skill_enhanced_" + this.id;
+		this.bonusKey = "skill_bonuses_" + this.id;
 	}
 }

@@ -308,13 +308,6 @@ rsSystem.component("RSSWStats", {
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
 				data.entityStats[keys[x]].bonusKey = "skill_bonuses_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
-//				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
-//				if(data.entityStats[keys[x]].info) {
-//					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
-//					if(data.entityStats[keys[x]].base) {
-//						data.entityStats[keys[x]]._search += data.entityStats[keys[x]].base.toLowerCase();
-//					}
-//				}
 			}
 		}
 

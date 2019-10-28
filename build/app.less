@@ -595,6 +595,39 @@ form {
 	padding: 8px;
 }
 
+.rs-field.rs-autocomplete {
+	position: relative;
+	
+	
+	
+	.corpus {
+		position: absolute;
+		top: 100%;
+		left: 0px;
+		z-index: 5;
+		background-color: black;
+		color: white;
+		border-color: white;
+		border-width: 0px 1px 1px 1px;
+		border-style: solid;
+		overflow-x: hidden;
+		overflow-y: auto;
+		max-height: 0px;
+		
+		&.open {
+			max-height: 300px;
+		}
+		
+		.option {
+			white-space: nowrap;
+			padding: 2px 4px;
+			border-top: 1px solid @rsBlue;
+		}
+	}
+
+}
+
+
 .rsc-gyroscope {
 	
 	

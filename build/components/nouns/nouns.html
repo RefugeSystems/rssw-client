@@ -22,6 +22,15 @@
 		</textarea>
 	</div>
 	
+	<div class="files">
+		<div class="property" v-for="property in extre_properties">
+			<div class="autocompletion">
+				<rs-autocomplete v-model="property.key" :corpus="propertyKeys"></rs-autocomplete>
+			</div>
+		</div>
+	</div>
+	
+	
 	<div class="actions">
 		<button class="primary-action" v-on:click="modify()" :disabled="!isValid">
 			<span class="action-icon fas fa-cloud-upload"></span>
