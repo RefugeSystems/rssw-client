@@ -92,7 +92,7 @@
 				} else if(direction < 0 && calculating > 0) {
 					change[skill.propertyKey] = calculating - 1;
 					change.xp = this.character.xp - cost;
-					if(change.xp) {
+					if(!isNaN(change.xp)) {
 						this.character.commit(change);
 					}
 				}
@@ -120,7 +120,6 @@
 				var buffer, x;
 
 				this.levelSkills.splice(0);
-				this.levelSkills.push.apply(this.levelSkills, this.characterStatsListing);
 				this.levelSkills.push.apply(this.levelSkills, this.skillStatsListing);
 				
 				this.$forceUpdate();

@@ -8,7 +8,9 @@
 @rsBlue: #617EB8;
 @rsOrange: #FF9560;
 @rsDarkOrange: #ac6530;
+@rsLightRed: #e43a3b;
 @rsRed: #a91124;
+@rsDarkRed: #841213;
 @rsLightRed: #ff8392;
 @rsGreen: #96FF99;
 @rsGray: #928282;
@@ -981,6 +983,23 @@ form {
 	}
 }
 
+.leveling {
+	margin: 3px 0px;
+
+	button {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border: 1ps solid @rsWhite;
+		transition: background-color .5s, color .5s, border;
+		cursor: pointer;
+		
+		&:disabled {
+			background-color: @rsDarkRed;
+			color: @rsWhite;
+			cursor: not-allowed;
+		}
+	}
+}
 .rs-component.rssw.component-character-skills {
 
 

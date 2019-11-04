@@ -76,6 +76,43 @@ rsSystem.component("RSSWStats", {
 				"icon": "fal fa-futbol rot45"
 			}
 		};
+		data.entityStats.flight = {
+			"manuevers": {
+				"name": "Maneuvers",
+				"section": "piloting",
+				"info": "Control of your ship",
+				"icon": "fad fa-random",
+				"base": "agility"
+			},
+			"pilotingplanetary": {
+				"name": "Planetary",
+				"section": "piloting",
+				"info": "",
+				"icon": "fas fa-fighter-jet",
+				"base": "cunning"
+			},
+			"sensors": {
+				"name": "Sensors",
+				"section": "piloting",
+				"info": "Reading and controling a ship's sensor array",
+				"icon": "fas fa-signal-stream",
+				"base": "intellect"
+			},
+			"tracking": {
+				"name": "Tracking",
+				"section": "piloting",
+				"info": "Follow a target",
+				"icon": "far fa-bullseye",
+				"base": "pressence"
+			},
+			"hacking": {
+				"name": "Hacking",
+				"section": "piloting",
+				"info": "Remotely access another ship by force",
+				"icon": "fad fa-router",
+				"base": "intellect"
+			}
+		};
 		data.entityStats.skill = {
 			"astrogation": {
 				"name": "Astrogation",
@@ -196,20 +233,6 @@ rsSystem.component("RSSWStats", {
 				"icon": "fal fa-balance-scale",
 				"base": "agility"
 			},
-			"pilotingplanetary": {
-				"name": "Piloting (Planetary)",
-				"section": "general",
-				"info": "",
-				"icon": "fas fa-fighter-jet",
-				"base": "agility"
-			},
-			"pilotingspace": {
-				"name": "Piloting (Space)",
-				"section": "general",
-				"info": "",
-				"icon": "fad fa-fighter-jet",
-				"base": "agility"
-			},
 			"stealth": {
 				"section": "general",
 				"info": "",
@@ -294,6 +317,7 @@ rsSystem.component("RSSWStats", {
 			}
 		};
 		
+		Object.assign(data.entityStats.skill, data.entityStats.flight);
 		Object.assign(data.entityStats, data.entityStats.character);
 		Object.assign(data.entityStats, data.entityStats.skill);
 		Object.assign(data.entityStats, data.entityStats.ship);

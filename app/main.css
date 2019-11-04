@@ -772,6 +772,21 @@ form {
   border: 0px;
   margin: 0px;
 }
+.leveling {
+  margin: 3px 0px;
+}
+.leveling button {
+  background-color: #000000;
+  color: #EAEFF9;
+  border: 1ps solid #EAEFF9;
+  transition: background-color 0.5s, color 0.5s, border;
+  cursor: pointer;
+}
+.leveling button:disabled {
+  background-color: #841213;
+  color: #EAEFF9;
+  cursor: not-allowed;
+}
 .rs-component.rssw.component-character-skills .skill-list .titling {
   border-bottom: 1px solid #EAEFF9;
   padding-right: 15px;

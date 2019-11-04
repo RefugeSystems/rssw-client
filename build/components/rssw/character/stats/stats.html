@@ -11,4 +11,21 @@
 			</div>
 		</div>
 	</div>
+	<div class="leveling stat">
+		<label>
+			<span>Level Stat</span>
+			<select v-model="leveling">
+				<option value="">[ Select a Stat ]</option>
+				<option v-for="stat in characterStats" :value="stat">{{entityStats[stat].name}}</option>
+			</select>
+		</label>
+		<button class="level up" v-on:click="levelStat(leveling, 1)" v-if="leveling" :disabled="getXPCost(leveling, 1) > character.xp">
+			<span class="fas fa-plus-square"></span>
+			<span>XP: {{getXPCost(leveling, 1)}}</span>
+		</button>
+		<button class="level down" v-on:click="levelStat(leveling, -1)" v-if="leveling">
+			<span class="fas fa-minus-square"></span>
+			<span>XP: {{getXPCost(leveling, -1)}}</span>
+		</button>
+	</div>
 </div>
