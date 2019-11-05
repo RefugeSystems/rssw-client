@@ -103,7 +103,7 @@ rsSystem.component("RSSWStats", {
 				"section": "piloting",
 				"info": "Follow a target",
 				"icon": "far fa-bullseye",
-				"base": "pressence"
+				"base": "willpower"
 			},
 			"hacking": {
 				"name": "Hacking",
