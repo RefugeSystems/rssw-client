@@ -1,6 +1,6 @@
 <div class="rs-component rssw component-character-info">
 	<div class="property name">
-		<span class="icon fas fa-user"></span>
+		<span class="icon fad fa-user"></span>
 		<span class="name">{{character.name}}</span>
 		<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>
 		<button class="recalculate" v-on:click="updateCharacter()">
@@ -8,7 +8,7 @@
 		</button>
 	</div>
 	<div class="property species">
-		<span class="icon fas fa-bug rot45"></span>
+		<span class="icon fad fa-bug rot45"></span>
 		<span class="label">Species:</span>
 		<button v-for="(archetype, $index) in careers" class="value" v-on:click="showInfo(race)">
 			{{race?race.name:"No Species"}}
@@ -23,7 +23,7 @@
 		</button>
 	</div>
 	<div class="property speciailization">
-		<span class="icon fas fa-gavel"></span>
+		<span class="icon fad fa-gavel"></span>
 		<span class="label">Specializations:</span>
 		<button v-for="(archetype, $index) in specializations" class="archetype" v-on:click="showInfo(archetype)">
 			<span class="divide" v-if="$index !== 0">, </span>
@@ -38,13 +38,24 @@
 			<span class="value">{{ability.name}}</span>
 		</button>
 	</div>
+	<div class="property items">
+		<span class="icon fad fa-backpack"></span>
+		<span class="label">Items:</span>
+		<button class="ability" v-on:click="showInfo(character.inventory)">
+			<span class="value">Inventory</span>
+		</button>
+		<button class="ability" v-on:click="showInfo(character.loadout)">
+			<span class="divide">,</span>
+			<span class="value">Loadout</span>
+		</button>
+	</div>
 	<div class="property credits">
-		<span class="icon fas fa-coins"></span>
+		<span class="icon fad fa-coins"></span>
 		<span class="label">Credits:</span>
 		<input class="experience" type="number" v-model.number="credits" v-on:change="changed('credits', credits)"/>
 	</div>
 	<div class="property level">
-		<span class="icon fas fa-user-plus"></span>
+		<span class="icon fad fa-user-plus"></span>
 		<span class="label">Experience:</span>
 		<input class="experience" type="number" v-model.number="experience" v-on:change="changed('xp', experience)"/>
 	</div>

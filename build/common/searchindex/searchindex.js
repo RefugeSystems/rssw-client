@@ -244,6 +244,7 @@ class SearchIndex extends EventEmitter {
 	 * @param {Boolean} options.noInstances
 	 * @param {Boolean} options.onlyInstances
 	 * @param {Boolean} options.sortKey
+	 * @param {Array} options.list Specify a list object to populate. If omitted, a new list is created and returned.
 	 * @param {Function} options.sorter Custom function that takes `sorter(recordA, recordB, order)` to sort the list
 	 * 		of objects.
 	 * @param {Boolean} options.secondarySortKey
@@ -254,9 +255,10 @@ class SearchIndex extends EventEmitter {
 	 * @param {Number} options.paging._pages This is essentially a hack for passing back the page count calculation, as
 	 * 		the list method would return only 1 page always with the current implementation.
 	 * @param {Function} options.customFilter Passed a single record to check if the record is valid to include or not.
+	 * @parma {Array} list Optionally specified list to use
 	 */
-	list(filter, order, limit, options) {
-		var x, keys, list = [];
+	list(filter, order, limit, options, list) {
+		var x, keys;
 		
 		if(filter && filter.options && typeof filter.options === "object") {
 			options = filter.options;
@@ -269,6 +271,9 @@ class SearchIndex extends EventEmitter {
 			options = options || {};
 		}
 		
+		if(list === undefined) {
+			list = options.list || [];
+		}
 		order = order===undefined?options.order:order;
 		limit = limit===undefined?options.limit:limit;
 		

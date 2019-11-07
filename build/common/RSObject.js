@@ -44,7 +44,6 @@ class RSObject extends EventEmitter {
 		this.universe.send("modify:" + this._type, change);
 	}
 
-	
 	/**
 	 * 
 	 * @method toJSON
@@ -214,10 +213,18 @@ class RSObject extends EventEmitter {
 	 * 
 	 * @method performModifications
 	 * @param {Object} base
+	 * @return {Boolean} Whether the modification was performed or not.
 	 */
 	performModifications(base) {
-//		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
-		var x;
+		var buffer,
+			x;
+		
+		for(x=0; this.condition && x < this.condition.length; x++) {
+			buffer = this.universe.index.lookup[this.condition[x]];
+			if(buffer && buffer.evaluate && !buffer.evaluate(base, this.id)) {
+				return false;
+			}
+		}
 		
 		if(this._coreData.modifierstats) {
 			for(x=0; x<this._coreData.modifierstats.length; x++) {
@@ -230,6 +237,8 @@ class RSObject extends EventEmitter {
 			}
 		}
 //		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+		
+		return true;
 	}
 
 	/**

@@ -35,11 +35,31 @@
 				}]
 			});
 			data.navigationItems.push({
-				"icon": "fas fa-fighter-jet",
+				"icon": "fas fa-street-view",
 				"action": "navigate",
-				"label": "Hangar",
-				"path": "/hangar",
-				"highlight": "/hangar",
+				"label": "Locality",
+				"path": "/locality",
+				"highlight": "/locality",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-warehouse-alt",
+				"action": "navigate",
+				"label": "Storage",
+				"path": "/storage",
+				"highlight": "/storage",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-journal-whills",
+				"action": "navigate",
+				"label": "Journal",
+				"path": "/journal",
+				"highlight": "/journal",
 				"conditionals": [{
 					"master": false
 				}]
@@ -82,6 +102,13 @@
 			return data;
 		},
 		"watch": {
+			"$route": {
+				"deep": true,
+				"handler": function() {
+					console.log("hi");
+					this.$forceUpdate();
+				}
+			}
 		},
 		"methods": {
 			"isActive": function(navItem) {

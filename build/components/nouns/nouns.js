@@ -9,6 +9,30 @@
 (function() {
 	var storageKey = "_rs_nounComponentKey";
 	
+	var spacing = / /g;
+	
+	/**
+	 * Fill out item to complete fields.
+	 * @method completeItem
+	 * @param {Object} item
+	 */
+	var completeItem = function(type, item) {
+		if(!item.id) {
+			if(!item.name) {
+				throw new Error("No ID or name");
+			} else {
+				item.id = type + ":" + item.name.toLowerCase().replace(spacing, "");
+			}
+		}
+		
+		item.id = item.id.toLowerCase().trim();
+		if(item.name) {
+			item.name = item.name.trim();
+		}
+		
+		return item;
+	};
+	
 	rsSystem.component("rsNouns", {
 		"inherit": true,
 		"mixins": [
@@ -23,9 +47,6 @@
 				"required": true,
 				"type": Object
 			}
-		},
-		"mounted": function() {
-			rsSystem.register(this);
 		},
 		"data": function() {
 			var data = {};
@@ -66,6 +87,9 @@
 				}
 			}
 		},
+		"mounted": function() {
+			rsSystem.register(this);
+		},
 		"methods": {
 			"copyNoun": function(source) {
 				var result = {},
@@ -85,11 +109,11 @@
 					if(this.state.building[this.state.current] instanceof Array) {
 						for(var x=0; x<this.state.building[this.state.current].length; x++) {
 							this.state.building[this.state.current][x]._type = this.state.current;
-							this.universe.send("modify:" + this.state.current, this.state.building[this.state.current][x]);
+							this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current][x]));
 						}
 					} else {
 						this.state.building[this.state.current]._type = this.state.current;
-						this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
+						this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
 					}
 				}
 			}

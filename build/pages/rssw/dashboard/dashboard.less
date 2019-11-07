@@ -1,4 +1,6 @@
 .rssw-page.page-dashboard {
+	position: relative;
+	display: block;
 
 	.title {
 		font-size: 20px;
@@ -31,6 +33,19 @@
 			.entity {
 				margin: 5px 0px;
 			}
+		}
+	}
+	
+	.opened {
+		position: absolute;
+		display: block;
+		transition: left .5s;
+		left: 100%;
+		z-index: 5;
+		top: 0px;
+		
+		&.loaded {
+			left: 0px;
 		}
 	}
 }

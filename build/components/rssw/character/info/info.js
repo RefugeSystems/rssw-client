@@ -23,6 +23,10 @@ rsSystem.component("rsswCharacterInfo", {
 		data.race = null;
 		data.specializations = [];
 		data.abilities = [];
+		
+		data.inventory = [];
+		data.loadout = [];
+		
 		data.careers = [];
 		data.experience = 0;
 		data.description = "";

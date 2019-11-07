@@ -408,6 +408,10 @@ form {
 .rs-page.page-noun_controls {
   display: block;
 }
+.rssw-page.page-dashboard {
+  position: relative;
+  display: block;
+}
 .rssw-page.page-dashboard .title {
   font-size: 20px;
   margin-bottom: 7px;
@@ -433,37 +437,63 @@ form {
 }
 .rssw-page.page-dashboard .control .entities .entity {
   margin: 5px 0px;
+}
+.rssw-page.page-dashboard .opened {
+  position: absolute;
+  display: block;
+  transition: left 0.5s;
+  left: 100%;
+  z-index: 5;
+  top: 0px;
+}
+.rssw-page.page-dashboard .opened.loaded {
+  left: 0px;
 }
 .rs-page.rssw.page-map {
   position: relative;
   width: 100%
 	height: 100%;
 }
-.rssw-page.page-dashboard .title {
+.rssw-page.page-universe {
+  position: relative;
+  display: block;
+}
+.rssw-page.page-universe .title {
   font-size: 20px;
   margin-bottom: 7px;
 }
-.rssw-page.page-dashboard .navigation-button {
+.rssw-page.page-universe .navigation-button {
   text-decoration: none;
   color: #FF9560;
 }
-.rssw-page.page-dashboard .navigation-button:active,
-.rssw-page.page-dashboard .navigation-button:hover {
+.rssw-page.page-universe .navigation-button:active,
+.rssw-page.page-universe .navigation-button:hover {
   color: #617EB8;
 }
-.rssw-page.page-dashboard .self {
+.rssw-page.page-universe .self {
   margin: 7px;
   font-size: 17px;
 }
-.rssw-page.page-dashboard .control {
+.rssw-page.page-universe .control {
   margin: 7px;
 }
-.rssw-page.page-dashboard .control .entities {
+.rssw-page.page-universe .control .entities {
   display: flex;
   flex-direction: column;
 }
-.rssw-page.page-dashboard .control .entities .entity {
+.rssw-page.page-universe .control .entities .entity {
   margin: 5px 0px;
+}
+.rssw-page.page-universe .opened {
+  position: absolute;
+  display: block;
+  transition: left 0.5s;
+  left: 100%;
+  z-index: 5;
+  top: 0px;
+}
+.rssw-page.page-universe .opened.loaded {
+  left: 0px;
 }
 .rs-component.connect-component {
   max-width: 400px;
@@ -618,6 +648,10 @@ form {
   text-align: left;
   text-decoration: none;
 }
+.system-component.system-menu .navigation .navigation-item.current {
+  background: #ac6530;
+  color: #EAEFF9;
+}
 .system-component.system-menu .navigation .navigation-item:hover {
   background: white;
   color: black;
@@ -626,7 +660,7 @@ form {
   display: flex;
   align-content: flex-start;
   align-items: center;
-  padding: 0px 10px;
+  padding: 0px 3px;
   height: 36px;
   width: 100%;
   background: transparent;
@@ -640,6 +674,8 @@ form {
 }
 .system-component.system-menu .navigation .navigation-item .navigation-contents .nav-icon {
   padding-right: 10px;
+  text-align: center;
+  width: 24px;
 }
 .system-component.system-menu .navigation .separator {
   flex-grow: 100;
@@ -771,6 +807,10 @@ form {
   padding: 0px;
   border: 0px;
   margin: 0px;
+}
+.rs-component.rssw.component-character-info .text-container textarea {
+  width: 510px;
+  height: 300px;
 }
 .leveling {
   margin: 3px 0px;
@@ -951,6 +991,161 @@ form {
 .rs-component.rssw.component-ship-stats .mounts .points .icon {
   color: #EAEFF9;
   font-size: 0.7em;
+}
+.system-component.table-index {
+  color: white;
+}
+.system-component.table-index .table-display {
+  overflow: hidden;
+}
+.system-component.table-index table {
+  z-index: 6;
+  position: relative;
+  color: #EAEFF9;
+}
+.system-component.table-index table.bounded {
+  overflow: hidden;
+}
+.system-component.table-index table.unbounded {
+  border-collapse: collapse;
+}
+.system-component.table-index table.unbounded tbody tr {
+  padding: 6px 0px;
+  border-bottom: 1px solid #d4d5d8;
+}
+.system-component.table-index table button.table-content {
+  background: transparent;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: block;
+  z-index: 5;
+}
+.system-component.table-index table th {
+  text-align: left;
+  background-color: #000000;
+  white-space: nowrap;
+  color: inherit;
+}
+.system-component.table-index table th * {
+  color: inherit;
+  position: relative;
+  z-index: 5;
+}
+.system-component.table-index table td {
+  position: relative;
+  color: inherit;
+}
+.system-component.table-index table td.notification {
+  color: #FF9560;
+  font-size: 20px;
+}
+.system-component.table-index table td * {
+  color: inherit;
+}
+.system-component.table-index table td tbody {
+  overflow: hidden;
+}
+.system-component.table-index table td .highlight {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+}
+.system-component.table-index table td .highlight.starting:before {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: 0px;
+  width: 500px;
+  height: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(to right, #97a5ff, transparent);
+  opacity: 0.3;
+  z-index: 3;
+}
+.system-component.table-index table td .highlight.ending:before {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: calc(-500px + 100%);
+  width: 500px;
+  height: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(to right, transparent, #97a5ff);
+  opacity: 0.3;
+  z-index: 3;
+}
+.system-component.table-index table td .crosshair {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  opacity: 0.4;
+  top: 0px;
+  left: 0px;
+}
+.system-component.table-index table td:hover .crosshair {
+  z-index: 2;
+}
+.system-component.table-index table td:hover .crosshair:before {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: -200px;
+  width: calc(100% + 400px);
+  height: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(to right, transparent, #ffc33c, transparent);
+  /*background: @tableCrosshair;*/
+  opacity: inherit;
+  z-index: 2;
+}
+.system-component.table-index table td:hover .crosshair:after {
+  position: absolute;
+  display: block;
+  top: -200px;
+  left: 0px;
+  height: calc(100% + 400px);
+  width: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(transparent, #ffc33c, transparent);
+  /*background: @tableCrosshair;*/
+  opacity: inherit;
+  z-index: 2;
+}
+.system-component.table-index table tr.record-selected .crosshair:before {
+  background-image: linear-gradient(to right, transparent, #97a5ff, transparent) !important;
+}
+.system-component.table-index table tr.record-selected .crosshair:after {
+  background-image: linear-gradient(transparent, #97a5ff, transparent) !important;
+}
+.system-component.table-index table .additional {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.system-component.table-index table .additional > * {
+  position: relative;
+  display: block;
+  z-index: 15;
+  margin-left: 7px !important;
+  padding: 5px;
+}
+.system-component.table-index table .additional > *:hover {
+  z-index: 15;
 }
 .rs-component.component-viewer {
   position: relative;

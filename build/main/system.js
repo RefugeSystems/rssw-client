@@ -24,15 +24,26 @@ rsSystem.App = new Vue({
 				"path": "dashboard",
 				"component": rsSystem.components.RSSWDashboard,
 				"children": [{
-					"path": ":oid",
-					"component": rsSystem.components.RSSWDashboard
-				}]
-			}, {
-				"path": "character",
-				"component": rsSystem.components.RSSWCharacter,
-				"children": [{
-					"path": ":oid",
-					"component": rsSystem.components.RSSWCharacter
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacter,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "ship",
+					"component": rsSystem.components.RSSWShip,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWShip
+					}]
+				}, {
+					"path": "item",
+					"component": rsSystem.components.RSSWItem,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWItem
+					}]
 				}]
 			}, {
 				"path": "base",
@@ -56,11 +67,25 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWHangar
 				}]
 			}, {
-				"path": "ship",
-				"component": rsSystem.components.RSSWShip,
+				"path": "locality",
+				"component": rsSystem.components.RSSWLocality,
 				"children": [{
 					"path": ":oid",
-					"component": rsSystem.components.RSSWShip
+					"component": rsSystem.components.RSSWLocality
+				}]
+			}, {
+				"path": "storage",
+				"component": rsSystem.components.RSSWStorage,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWStorage
+				}]
+			}, {
+				"path": "journal",
+				"component": rsSystem.components.RSSWJournal,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWJournal
 				}]
 			}, {
 				"path": "map",
@@ -71,7 +96,29 @@ rsSystem.App = new Vue({
 				}]
 			}, {
 				"path": "universe",
-				"component": rsSystem.components.RSSWUniverse
+				"component": rsSystem.components.RSSWUniverse,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacter,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "ship",
+					"component": rsSystem.components.RSSWShip,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWShip
+					}]
+				}, {
+					"path": "item",
+					"component": rsSystem.components.RSSWItem,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWItem
+					}]
+				}]
 			}, {
 				"path": "nouns",
 				"component": rsSystem.components.RSNounControls

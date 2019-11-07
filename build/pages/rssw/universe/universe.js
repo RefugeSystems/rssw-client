@@ -9,15 +9,17 @@
 (function() {
 	var storageKey = "_rssw_universeComponentKey";
 	
+	var formatters = {
+		"icon": function(icon) {
+			return "<span class='" + icon + "'></span>";
+		}
+	};
+	
 	rsSystem.component("RSSWUniverse", {
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSCorePage
 		],
-		"mounted": function() {
-			this.universe.$on("universe:modified", this.updateEntities);
-			rsSystem.register(this);
-		},
 		"data": function() {
 			var data = {},
 				entities,
@@ -30,6 +32,27 @@
 			});
 			if(data.state.search === undefined) {
 				data.state.search = "";
+			}
+			if(data.state.search === undefined) {
+				data.state.search = "";
+			}
+			if(data.state.headers === undefined) {
+				data.state.headers = [{
+					"title":"",
+					"field": "icon"
+				}, {
+					"title":"Name",
+					"field": "name"
+				}, {
+					"title":"ID",
+					"field": "id"
+				}];
+			}
+			
+			for(x=0; x<data.state.headers.length; x++) {
+				if(formatters[data.state.headers[x].field]) {
+					data.state.headers[x].formatter = formatters[data.state.headers[x].field];
+				}
 			}
 			
 			return data;
@@ -45,7 +68,29 @@
 				}
 			}
 		},
+		"mounted": function() {
+			this.universe.$on("universe:modified", this.updateEntities);
+			rsSystem.register(this);
+		},
 		"methods": {
+			"resetHeaders": function() {
+				Vue.set(this.state, "headers", [{
+					"title":"",
+					"field": "icon",
+					"formatter": (icon) => {
+						return "<span class='" + icon + "'></span>";
+					}
+				}, {
+					"title":"Name",
+					"field": "name"
+				}, {
+					"title":"ID",
+					"field": "id"
+				}]);
+			},
+			"processAction": function(action) {
+				console.warn("Table Action: ", action);
+			},
 			"filtered": function(entity) {
 				if(entity.template || entity.inactive) {
 					return false;

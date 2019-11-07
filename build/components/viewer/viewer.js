@@ -151,7 +151,7 @@
 				Vue.set(this.actions, "open", false);
 			},
 			"fire": function(option, event) {
-				console.log("Fire Option: ", option);
+//				console.log("Fire Option: ", option);
 				var buffer;
 				
 				switch(option.event) {
@@ -210,7 +210,7 @@
 				};
 			},
 			"getDimensions": function(path) {
-				console.log("Get Dimensions: " + path);
+//				console.log("Get Dimensions: " + path);
 				var img = new Image;
 
 				img.onload = () => {
@@ -406,7 +406,7 @@
 				}
 				
 				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
-					console.log("View State Sync");
+//					console.log("View State Sync");
 					Vue.set(this.state, "viewed_at", this.location.shown_at);
 					Object.assign(this.image, this.location.showing);
 					this.apply(this.image);
