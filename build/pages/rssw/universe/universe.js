@@ -30,11 +30,9 @@
 			data.state = this.loadStorage(data.storageKeyID, {
 				"search": ""
 			});
-			if(data.state.search === undefined) {
-				data.state.search = "";
-			}
-			if(data.state.search === undefined) {
-				data.state.search = "";
+			if(data.state.filter === undefined) {
+				data.state.filter = {};
+				data.state.filter.null = data.state.filter.null || "";
 			}
 			if(data.state.headers === undefined) {
 				data.state.headers = [{
@@ -46,6 +44,9 @@
 				}, {
 					"title":"ID",
 					"field": "id"
+				}, {
+					"title":"Template",
+					"field": "template"
 				}];
 			}
 			
@@ -54,6 +55,8 @@
 					data.state.headers[x].formatter = formatters[data.state.headers[x].field];
 				}
 			}
+			
+			data.state.filter.template = false;
 			
 			return data;
 		},
@@ -86,6 +89,9 @@
 				}, {
 					"title":"ID",
 					"field": "id"
+				}, {
+					"title":"Template",
+					"field": "template"
 				}]);
 			},
 			"processAction": function(action) {

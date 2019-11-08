@@ -33,13 +33,6 @@
 				"type": Object
 			}
 		},
-		"watch": {
-			"index": function(newIndex, oldIndex) {
-				console.warn("Index Updated: ", oldIndex, "\n -> \n", newIndex);
-				oldIndex.$off("indexed", this.update);
-				newIndex.$on("indexed", this.update);
-			}
-		},
 		"data": function() {
 			var data = {},
 				x;
@@ -49,12 +42,36 @@
 			
 			return data;
 		},
+		"watch": {
+			"index": function(newIndex, oldIndex) {
+				console.warn("Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("indexed", this.update);
+				newIndex.$on("indexed", this.update);
+			},
+			"state.filter": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
+			}
+		},
 		"mounted": function() {
 			rsSystem.register(this);
 			this.index.$on("indexed", this.update);
 			this.update();
 		},
 		"methods": {
+			"clearSelection": function() {
+				this.index.clearSelection();
+				this.update();
+			},
+			"allSelection": function() {
+				this.index.select(this.corpus);
+				this.update();
+			},
+			"infoSelection": function(record) {
+				rsSystem.EventBus.$emit("display-info", record);
+			},
 			"headerAction": function(header) {
 				if(typeof header.action === "function") {
 					header.action(header);
@@ -72,6 +89,7 @@
 						}
 					}
 				}
+				this.update();
 			},
 			"isArray": function(item) {
 				return (item instanceof Array) || (item && item.constructor && item.constructor.name.toLowerCase().indexOf("array") !== -1);
@@ -99,15 +117,15 @@
 					this.$forceUpdate();
 				} else if(!this.state.noEmit) {
 					this.$emit("selected", record, header);
-					this.$forceUpdate();
 				} else {
 					// Selection is suppressed
 				}
+				this.update();
 			},
 			"update": function() {
 				this.corpus.splice(0);
-				this.index.list(this.state.search, this.state.ordering, this.state.limit, this.state, this.corpus);
-				console.warn("Search: " + JSON.stringify(this.state, null, 4), this.corpus);
+				this.index.list(this.state.filter, this.state, this.corpus);
+//				console.warn("Search: " + JSON.stringify(this.state, null, 4), this.corpus);
 				this.$forceUpdate();
 			}
 		},

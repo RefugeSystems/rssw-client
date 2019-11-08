@@ -114,7 +114,7 @@ class SearchIndex extends EventEmitter {
 					if(record[x]) {
 						buffer = record[x].id || record[x];
 						if(this.lookup[buffer]) {
-							console.log("Selected", this.lookup[buffer]);
+//							console.log("Selected", this.lookup[buffer]);
 							this.selected[buffer] = this.lookup[buffer];
 						} else {
 							rsSystem.log.warn("Can not select non-indexed record: ", record[x]);
@@ -228,7 +228,7 @@ class SearchIndex extends EventEmitter {
 		return Object.keys(this.selected);
 	}
 	
-	/**
+	/*
 	 * 
 	 * @method list
 	 * @param {String | Object} filter Defines how to filter against the _search string as a string or
@@ -257,42 +257,23 @@ class SearchIndex extends EventEmitter {
 	 * @param {Function} options.customFilter Passed a single record to check if the record is valid to include or not.
 	 * @parma {Array} list Optionally specified list to use
 	 */
-	list(filter, order, limit, options, list) {
+	
+	/**
+	 * 
+	 * @method list
+	 * @param {Object} filter Defines how to filter against the _search string as a string or
+	 * 		how to compare object fields based on the properties present on the filter object where the
+	 * 		property "null" corresponds to the general _Search string property on the object.
+	 */
+	list(filter, state, list) {
 		var x, keys;
 		
-		if(filter && filter.options && typeof filter.options === "object") {
-			options = filter.options;
-			delete(filter.options);
-			keys = Object.keys(filter);
-			if(keys.length === 1 && filter.null) {
-				filter = filter.null;
-			}
-		} else {
-			options = options || {};
-		}
-		
-		if(list === undefined) {
-			list = options.list || [];
-		}
-		order = order===undefined?options.order:order;
-		limit = limit===undefined?options.limit:limit;
-		
-		if(typeof filter === "string") {
-			filter = filter.toLowerCase();
-			for(x=0; x<this.listing.length; x++) {
-				if(this.listing[x]._search.indexOf(filter) !== -1 &&
-						(!options.noInstances || !this.listing[x].instanceOf) &&
-						(!options.onlyInstances || this.listing[x].instanceOf)) {
-					list.push(this.listing[x]);
-				}
-			}
-		} else if(filter /* null is technically an object */ && typeof filter === "object") {
+		if(filter /* null is technically an object */ && typeof filter === "object") {
 			var y, result;
 			keys = keys || Object.keys(filter);
-			if(filter.null) {
-				filter.null = filter.null.toLowerCase();
+			if(filter["null"]) {
+				filter["null"] = filter["null"].toLowerCase();
 			}
-			
 			for(x=0; x<this.listing.length; x++) {
 				result = true;
 				for(y=0; result && y<keys.length; y++) {
@@ -300,26 +281,27 @@ class SearchIndex extends EventEmitter {
 						if(!this.listing[x]._search) {
 							this.listing[x]._search = this.createSearchString(this.listing[x]);
 						}
-						if(this.listing[x]._search.indexOf(filter.null) === -1) {
+						if(this.listing[x]._search.indexOf(filter["null"]) === -1) {
 							result = false;
 						}
+//						console.warn("Null Filter: " + filter["null"] + "[" + this.listing[x]._search.indexOf(filter["null"]) + "]");
 					} else {
 						switch(typeof this.listing[x][keys[y]]) {
 							case "string":
 								if(filter[keys[y]] instanceof RegExp) {
-									result = filter[keys[y]].test(this.listing[x][keys[y]]);
 //									console.log("String reg result this.listing[x][" + keys[y] + "] =?= ", filter[keys[y]], " --> " + result);
+									result = filter[keys[y]].test(this.listing[x][keys[y]]);
 								} else {
 									if(this.listing[x][keys[y]].indexOf(filter[keys[y]]) === -1) {
-										result = false;
 //										console.log("String index result this.listing[x][" + keys[y] + "] =?= ", filter[keys[y]], " --> " + result);
+										result = false;
 									}
 								}
 								break;
 							case "boolean":
 								if(!!this.listing[x][keys[y]] !== !!filter[keys[y]]) {
-									result = false;
 //									console.log("Raw Boolean this.listing[x][" + keys[y] + "](" + !!this.listing[x][keys[y]] + ") != " + !!filter[keys[y]]);
+									result = false;
 								}
 								break;
 							case "undefined":
@@ -346,7 +328,7 @@ class SearchIndex extends EventEmitter {
 						}
 					}
 				}
-				if(result && (!options.customFilter || options.customFilter(this.listing[x]))) {
+				if(result && (!state.customFilter || state.customFilter(this.listing[x]))) {
 					list.push(this.listing[x]);
 				}
 			}
@@ -354,36 +336,36 @@ class SearchIndex extends EventEmitter {
 			list.push.apply(list, this.listing);
 		}
 		
-		if(order !== undefined && options.sortKey) {
-			if(options.sorter) {
+		if(state.order !== undefined && state.sortKey) {
+			if(state.sorter) {
 //				console.log("Custom sort");
-				list.sort(options.sorter);
-				if(order) {
+				list.sort(state.sorter);
+				if(state.order) {
 					list.reverse();
 				}
 			} else {
 //				console.log("Simple sort");
 				// TODO Implement sub-sort
-				var forward = order?1:-1,
-					reverse = order?-1:1;
+				var forward = state.order?1:-1,
+					reverse = state.order?-1:1;
 				list.sort(function(a, b) {
-					a = a[options.sortKey] || "";
-					b = b[options.sortKey] || "";
+					a = a[state.sortKey] || "";
+					b = b[state.sortKey] || "";
 					return a < b?reverse:(a > b?forward:0);
 				});
 			}
 		}
 		
-		if(limit || options.limit) {
-			list.splice(0, parseInt(limit || options.limit));
+		if(state.limit) {
+			list.splice(0, parseInt(state.limit));
 		}
 		
-		if(options.paging) {
-			options.paging._pages = parseInt(Math.ceil(list.length / options.paging.per));
-			list = list.splice(options.paging.current * options.paging.per, options.paging.per);
+		if(state.paging) {
+			state.paging._pages = parseInt(Math.ceil(list.length / state.paging.per));
+			list = list.splice(state.paging.current * state.paging.per, state.paging.per);
 		}
 		
-		return list;
+		return state.paging;
 	}
 	
 	createSearchString(object) {

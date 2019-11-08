@@ -176,6 +176,21 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
+		// Reform Search String
+		this._search = this.id.toLowerCase();
+		if(this.name) {
+			this._search += this.name.toLowerCase();
+		}
+		if(this.description) {
+			this._search += this.description.toLowerCase();
+		}
+		if(this.location && typeof(this.location) === "string") {
+			this._search += this.location.toLowerCase();
+			if(this.universe.index.lookup[this.location] && this.universe.index.lookup[this.location].name) {
+				this._search += this.universe.index.lookup[this.location].name.toLowerCase();
+			}
+		}
+		
 //		console.log("Recalculated: " + this.id);
 		/**
 		 * 

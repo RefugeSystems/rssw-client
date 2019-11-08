@@ -2,13 +2,12 @@
 	<div v-if="!$route.params.oid">
 		<div class="title">
 			Galactic Index
-			<button class="fas fa-reload" v-on:click="resetHeaders()">Headers</button>
+			<button class="fas fa-sync" v-on:click="resetHeaders()">Headers</button>
 		</div>
 		
 		<div class="index">
 			<rs-table class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table>
 		</div>
-		
 		
 		<div class="control">
 			<div class="title">
