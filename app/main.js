@@ -18258,7 +18258,7 @@ Templify.install = function(Vue, options) {
 			case "pages/rssw/map.html": return "<div class=\"rs-page map rssw\">\r\n\r\n\t<rs-viewer :user=\"user\" :player=\"player\" :universe=\"universe\" :location=\"location\"></rs-viewer>\r\n\t\r\n</div>\r\n";
 			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n</div>\r\n";
 			case "pages/rssw/storage.html": return "<div class=\"rssw-page page-storage\">\r\n\r\n</div>\r\n";
-			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-universe\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\tGalactic Index\r\n\t\t\t<button class=\"fas fa-sync\" v-on:click=\"resetHeaders()\">Headers</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"index\">\r\n\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :headers=\"state.headers\" :state=\"state\" :options=\"state.indexOptions\"></rs-table>\r\n\t\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-paging>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universe.indexes.entity.listing\" :to=\"'/universe/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
+			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-universe\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\tGalactic Index\r\n\t\t\t<button class=\"fas fa-sync\" v-on:click=\"resetHeaders()\">Headers</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"index\">\r\n\t\t\t<div class=\"controls\">\r\n\t\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t\t<select v-model=\"state.activeIndex\">\r\n\t\t\t\t\t<option value>All</option>\r\n\t\t\t\t\t<option v-for=\"index in Object.keys(universe.indexes)\" :value=\"index\">{{index}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :headers=\"state.headers\" :state=\"state\" :options=\"state.indexOptions\"></rs-table>\r\n\t\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-paging>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universe.indexes.entity.listing\" :to=\"'/universe/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
 			default: return null;
 		}
@@ -23958,7 +23958,7 @@ rsSystem.component("RSCore", {
 			"$route": {
 				"deep": true,
 				"handler": function() {
-					console.log("hi");
+//					console.log("hi");
 					this.$forceUpdate();
 				}
 			}
@@ -23995,7 +23995,7 @@ rsSystem.component("RSCore", {
 				return "full standard undocked";
 			},
 			"processNavigation": function(navItem) {
-				console.log("Nav: " , navItem);
+//				console.log("Nav: " , navItem);
 				switch(navItem.action) {
 					case "navigate":
 						break;
@@ -24842,6 +24842,10 @@ rsSystem.component("rsswShipStats", {
 				"required": false,
 				"type": Array
 			},
+			"corpus": {
+				"required": true,
+				"type": Array
+			},
 			"state": {
 				"required": true,
 				"type": Object
@@ -24851,16 +24855,18 @@ rsSystem.component("rsswShipStats", {
 			var data = {},
 				x;
 
-			data.corpus = [];
 			data.start = 0;
 			
 			return data;
 		},
 		"watch": {
 			"index": function(newIndex, oldIndex) {
-				console.warn("Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				console.warn("Controls Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
 				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
 				newIndex.$on("indexed", this.update);
+				this.update();
 			},
 			"state": {
 				"deep": true,
@@ -24877,6 +24883,7 @@ rsSystem.component("rsswShipStats", {
 		},
 		"methods": {
 			"clearSelection": function() {
+				
 				this.index.clearSelection();
 				this.update();
 			},
@@ -24888,7 +24895,6 @@ rsSystem.component("rsswShipStats", {
 				rsSystem.EventBus.$emit("display-info", record);
 			},
 			"update": function() {
-				console.warn("Control Update");
 				this.$forceUpdate();
 			}
 		},
@@ -24941,6 +24947,14 @@ rsSystem.component("rsswShipStats", {
 			return data;
 		},
 		"watch": {
+			"index": function(newIndex, oldIndex) {
+				console.warn("Paging Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
+				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
+				newIndex.$on("indexed", this.update);
+				this.update();
+			},
 			"state": {
 				"deep": true,
 				"handler": function() {
@@ -24956,7 +24970,7 @@ rsSystem.component("rsswShipStats", {
 		"methods": {
 			"toPage": function(page) {
 				Vue.set(this.state.paging, "current", page);
-				console.warn("To Page: " + page);
+//				console.warn("To Page: " + page);
 			},
 			"classPage": function(page) {
 				if(page === this.state.paging.current) {
@@ -24985,7 +24999,7 @@ rsSystem.component("rsswShipStats", {
 						x = 1;
 					}
 					
-					console.log("Pages: ", x, max, _p(this.state.paging));
+//					console.log("Pages: ", x, max, _p(this.state.paging));
 					
 					for(; x<max; x++) {
 						this.pages.push(x);
@@ -25026,6 +25040,10 @@ rsSystem.component("rsswShipStats", {
 				"required": true,
 				"type": Object
 			},
+			"corpus": {
+				"required": true,
+				"type": Array
+			},
 			"headers": {
 				"required": true,
 				"type": Array
@@ -25043,16 +25061,18 @@ rsSystem.component("rsswShipStats", {
 			var data = {},
 				x;
 
-			data.corpus = [];
 			data.start = 0;
 			
 			return data;
 		},
 		"watch": {
 			"index": function(newIndex, oldIndex) {
-				console.warn("Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				console.warn("Table Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
 				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
 				newIndex.$on("indexed", this.update);
+				this.update();
 			},
 			"state": {
 				"deep": true,
@@ -25070,7 +25090,7 @@ rsSystem.component("rsswShipStats", {
 		},
 		"methods": {
 			"headerAction": function(header) {
-				console.log("Header Action: ", header);
+//				console.log("Header Action: ", header);
 				if(typeof header.action === "function") {
 					header.action(header);
 				} else if(header.action === null) {
@@ -26150,6 +26170,8 @@ rsSystem.component("RSSWStorage", {
 				data.state.paging.spread = 2;
 			}
 			data.state.paging.spread = 2;
+			
+			data.corpus = [];
 			
 			
 			for(x=0; x<data.state.headers.length; x++) {

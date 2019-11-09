@@ -24,6 +24,10 @@
 				"required": false,
 				"type": Array
 			},
+			"corpus": {
+				"required": true,
+				"type": Array
+			},
 			"state": {
 				"required": true,
 				"type": Object
@@ -33,16 +37,18 @@
 			var data = {},
 				x;
 
-			data.corpus = [];
 			data.start = 0;
 			
 			return data;
 		},
 		"watch": {
 			"index": function(newIndex, oldIndex) {
-				console.warn("Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				console.warn("Controls Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
 				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
 				newIndex.$on("indexed", this.update);
+				this.update();
 			},
 			"state": {
 				"deep": true,
@@ -59,6 +65,7 @@
 		},
 		"methods": {
 			"clearSelection": function() {
+				
 				this.index.clearSelection();
 				this.update();
 			},
@@ -70,7 +77,6 @@
 				rsSystem.EventBus.$emit("display-info", record);
 			},
 			"update": function() {
-				console.warn("Control Update");
 				this.$forceUpdate();
 			}
 		},

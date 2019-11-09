@@ -20,6 +20,10 @@
 				"required": true,
 				"type": Object
 			},
+			"corpus": {
+				"required": true,
+				"type": Array
+			},
 			"headers": {
 				"required": true,
 				"type": Array
@@ -37,16 +41,18 @@
 			var data = {},
 				x;
 
-			data.corpus = [];
 			data.start = 0;
 			
 			return data;
 		},
 		"watch": {
 			"index": function(newIndex, oldIndex) {
-				console.warn("Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				console.warn("Table Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
 				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
 				newIndex.$on("indexed", this.update);
+				this.update();
 			},
 			"state": {
 				"deep": true,
@@ -64,7 +70,7 @@
 		},
 		"methods": {
 			"headerAction": function(header) {
-				console.log("Header Action: ", header);
+//				console.log("Header Action: ", header);
 				if(typeof header.action === "function") {
 					header.action(header);
 				} else if(header.action === null) {

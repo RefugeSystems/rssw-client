@@ -6,8 +6,14 @@
 		</div>
 		
 		<div class="index">
-			<rs-table-controls class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-controls>
-			<rs-table class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions"></rs-table>
+			<div class="controls">
+				<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-controls>
+				<select v-model="state.activeIndex">
+					<option value>All</option>
+					<option v-for="index in Object.keys(universe.indexes)" :value="index">{{index}}</option>
+				</select>
+			</div>
+			<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions"></rs-table>
 			<rs-table-paging class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-paging>
 		</div>
 		

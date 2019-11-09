@@ -474,6 +474,10 @@ form {
   margin: 7px;
   font-size: 17px;
 }
+.rssw-page.page-universe .controls {
+  display: flex;
+  flex-direction: row;
+}
 .rssw-page.page-universe .control {
   margin: 7px;
 }

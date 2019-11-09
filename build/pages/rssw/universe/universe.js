@@ -58,6 +58,8 @@
 			}
 			data.state.paging.spread = 2;
 			
+			data.corpus = [];
+			
 			
 			for(x=0; x<data.state.headers.length; x++) {
 				if(formatters[data.state.headers[x].field]) {

@@ -38,6 +38,14 @@
 			return data;
 		},
 		"watch": {
+			"index": function(newIndex, oldIndex) {
+				console.warn("Paging Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
+				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
+				newIndex.$on("indexed", this.update);
+				this.update();
+			},
 			"state": {
 				"deep": true,
 				"handler": function() {
@@ -53,7 +61,7 @@
 		"methods": {
 			"toPage": function(page) {
 				Vue.set(this.state.paging, "current", page);
-				console.warn("To Page: " + page);
+//				console.warn("To Page: " + page);
 			},
 			"classPage": function(page) {
 				if(page === this.state.paging.current) {
@@ -82,7 +90,7 @@
 						x = 1;
 					}
 					
-					console.log("Pages: ", x, max, _p(this.state.paging));
+//					console.log("Pages: ", x, max, _p(this.state.paging));
 					
 					for(; x<max; x++) {
 						this.pages.push(x);

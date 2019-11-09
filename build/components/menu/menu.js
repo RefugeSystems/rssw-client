@@ -105,7 +105,7 @@
 			"$route": {
 				"deep": true,
 				"handler": function() {
-					console.log("hi");
+//					console.log("hi");
 					this.$forceUpdate();
 				}
 			}
@@ -142,7 +142,7 @@
 				return "full standard undocked";
 			},
 			"processNavigation": function(navItem) {
-				console.log("Nav: " , navItem);
+//				console.log("Nav: " , navItem);
 				switch(navItem.action) {
 					case "navigate":
 						break;
