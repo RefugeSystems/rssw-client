@@ -202,9 +202,11 @@ class SearchIndex extends EventEmitter {
 	toggleSelect(record) {
 		if(this.selected[record.id]) {
 			delete(this.selected[record.id]);
+			this.$emit("selection");
 			return false;
 		} else {
 			this.selected[record.id] = record;
+			this.$emit("selection");
 			return true;
 		}
 	}
@@ -252,8 +254,7 @@ class SearchIndex extends EventEmitter {
 	 * 		one page.
 	 * @param {Number} options.paging.current The current page number (NOT the expected offset).
 	 * @param {Number} options.paging.per The number or entries per page.
-	 * @param {Number} options.paging._pages This is essentially a hack for passing back the page count calculation, as
-	 * 		the list method would return only 1 page always with the current implementation.
+	 * @param {Number} options.paging.count The current page count.
 	 * @param {Function} options.customFilter Passed a single record to check if the record is valid to include or not.
 	 * @parma {Array} list Optionally specified list to use
 	 */
@@ -361,8 +362,12 @@ class SearchIndex extends EventEmitter {
 		}
 		
 		if(state.paging) {
-			state.paging._pages = parseInt(Math.ceil(list.length / state.paging.per));
-			list = list.splice(state.paging.current * state.paging.per, state.paging.per);
+			state.paging.count = parseInt(Math.ceil(list.length / state.paging.per));
+			list.splice(state.paging.current * state.paging.per + state.paging.per);
+			list.splice(0, state.paging.current * state.paging.per);
+			if(state.paging.current >= state.paging.count) {
+				state.paging.current = state.paging.count - 1;
+			}
 		}
 		
 		return state.paging;

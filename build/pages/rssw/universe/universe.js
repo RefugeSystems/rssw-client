@@ -49,6 +49,15 @@
 					"field": "template"
 				}];
 			}
+			if(data.state.paging === undefined) {
+				data.state.paging = {};
+				data.state.paging.per = 20;
+				data.state.paging.current = 1;
+				data.state.paging.pages = 0;
+				data.state.paging.spread = 2;
+			}
+			data.state.paging.spread = 2;
+			
 			
 			for(x=0; x<data.state.headers.length; x++) {
 				if(formatters[data.state.headers[x].field]) {

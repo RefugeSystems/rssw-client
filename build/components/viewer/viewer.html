@@ -1,8 +1,9 @@
 
-<div class="rs-component component-viewer">
+<div class="rs-component component-viewer" :class="renderState()">
 
 	<div class="map" v-if="location && sourceImage">
-		<div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" v-on:mouseleave="out($event)">
+		<!-- <div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" v-on:mouseleave="out($event)" v-pan="pan"> -->
+		<div class="view" onexit="true" v-pan="pan">
 			<!-- <div class="shadow"></div> -->
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
@@ -63,6 +64,10 @@
 			<button class="control follow" v-on:click="processAction(menuItems.followItem)">
 				<span class="icon fal" :class="state.follow?'fa-check-square':'fa-square'"></span>
 				<span class="text">{{menuItems.followItem.text}}</span>
+			</button>
+			<button class="control follow" v-on:click="processAction(menuItems.fullscreen)">
+				<span class="icon fal" :class="state.fullscreen?'fa-check-square':'fa-square'"></span>
+				<span class="text">{{menuItems.fullscreen.text}}</span>
 			</button>
 			<select class="control master" v-model="state.master_view" v-if="player.master">
 				<option value="">Player Character</option>

@@ -84,6 +84,10 @@
 				"action": "markings",
 				"text": "Markers"
 			};
+			data.menuItems.fullscreen = {
+				"action": "fullscreen",
+				"text": "Fill Page"
+			};
 			
 			data.actions = {};
 			data.actions.open = false;
@@ -138,6 +142,9 @@
 						break;
 					case "reset":
 						this.resetViewport();
+						break;
+					case "fullscreen":
+						Vue.set(this.state, "fullscreen", !this.state.fullscreen);
 						break;
 				}
 			},
@@ -283,9 +290,40 @@
 					this.apply(this.image);
 				}
 			},
-			"pan": function(x, y) {
-				console.log("pan");
+			"pan": function(panned) {
+				var left = this.parchment.css("left") || "0px",
+					top = this.parchment.css("top") || "0px",
+					dX,
+					dY;
+
+				console.log("Panning[]: ", panned.velocityX, panned.velocityY);
+				left = parseInt(left.replace("px", ""));
+				top = parseInt(top.replace("px", ""));				
+
+				console.log("Panning: ", panned);
+				if(this.isDragging) {
+					dX = this.dragX - panned.deltaX;
+					dY = this.dragY - panned.deltaY;
+				} else {
+					this.isDragging = true;
+					dX = panned.deltaX;
+					dY = panned.deltaY;
+				}
 				
+				left -= dX;
+				top -= dY;
+
+				if(panned.isFinal) {
+					this.isDragging = false;
+				} else {
+					this.dragX = panned.deltaX;
+					this.dragY = panned.deltaY;
+				}
+				
+				this.apply({
+					"left": left,
+					"top": top
+				});
 			},
 			"wheeling": function(event) {
 				console.log("wheel");
@@ -329,11 +367,18 @@
 					return !!entity[link.knowledge];
 				}
 			},
+			"renderState": function() {
+				var state = "";
+				if(this.state.fullscreen) {
+					state += " fullscreen";
+				}
+				return state;
+			},
 			"poiClass": function(link) {
 				return link.class || link.icon;
 			},
 			"poiMenu": function(link) {
-				
+				rsSystem.EventBus.$emit("display-info", link);
 			},
 			"minorUpdate": function() {
 				this.$forceUpdate();

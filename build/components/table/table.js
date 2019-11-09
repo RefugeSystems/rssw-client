@@ -48,7 +48,7 @@
 				oldIndex.$off("indexed", this.update);
 				newIndex.$on("indexed", this.update);
 			},
-			"state.filter": {
+			"state": {
 				"deep": true,
 				"handler": function() {
 					this.update();
@@ -57,29 +57,21 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+			this.universe.$on("universe:modified", this.update);
+			this.index.$on("selection", this.update);
 			this.index.$on("indexed", this.update);
 			this.update();
 		},
 		"methods": {
-			"clearSelection": function() {
-				this.index.clearSelection();
-				this.update();
-			},
-			"allSelection": function() {
-				this.index.select(this.corpus);
-				this.update();
-			},
-			"infoSelection": function(record) {
-				rsSystem.EventBus.$emit("display-info", record);
-			},
 			"headerAction": function(header) {
+				console.log("Header Action: ", header);
 				if(typeof header.action === "function") {
 					header.action(header);
 				} else if(header.action === null) {
 					/* No Action */
 				} else {
 					if(this.state.sortKey === header.field) {
-						Vue.set(this.state, "ordering", !this.state.ordering);
+						Vue.set(this.state, "order", !this.state.order);
 					} else {
 						Vue.set(this.state, "sortKey", header.field);
 						if(header.sorter) {
@@ -125,12 +117,12 @@
 			"update": function() {
 				this.corpus.splice(0);
 				this.index.list(this.state.filter, this.state, this.corpus);
-//				console.warn("Search: " + JSON.stringify(this.state, null, 4), this.corpus);
 				this.$forceUpdate();
 			}
 		},
 		"beforeDestroy": function() {
 			this.universe.$off("universe:modified", this.update);
+			this.index.$off("selection", this.update);
 			this.index.$off("indexed", this.update);
 		},
 		"template": Vue.templified("components/table.html")

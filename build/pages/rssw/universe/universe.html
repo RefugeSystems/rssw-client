@@ -6,7 +6,9 @@
 		</div>
 		
 		<div class="index">
-			<rs-table class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table>
+			<rs-table-controls class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-controls>
+			<rs-table class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions"></rs-table>
+			<rs-table-paging class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-paging>
 		</div>
 		
 		<div class="control">
