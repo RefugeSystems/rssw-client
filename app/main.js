@@ -23810,6 +23810,7 @@ rsSystem.component("rsCards", {
 			 * @method closeInfo
 			 */
 			"closeInfo": function() {
+				Vue.set(this, "viewing", null);
 				Vue.set(this, "open", false);
 				this.history.splice(0);
 			},
