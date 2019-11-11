@@ -57,21 +57,43 @@
 		}
 	}
 	
-	.object-info {
-		color: @rsBlack;
-		padding: 3px;
+}
+	
+.object-info {
+	color: @rsBlack;
+	padding: 3px;
+	
+	.reference-heading {
+		font-weight: 800;
+		font-size: 1.2em;
 		
-		.rendered-value {
-			-webkit-text-stroke-width: thin;
-			cursor: pointer;
+		span {
+			border-bottom: 1px solid @rsWhite;
 		}
-		
-		a {
-			color: #0055ff;
+	}
+	
+	.subreference {
+		padding-left: 10px;
+		border-left: 1px solid @rsOrange;
+	}
+	
+	.rendered-value {
+		-webkit-text-stroke-width: thin;
+		cursor: pointer;
+	}
+	
+	.general-information {
+	
+		p {
+			margin: 0px 0px 17px 0px;
 		}
-		
-		.calculated-result {
-			color: #ec6d2e;
-		}
+	}
+	
+	a {
+		color: #0055ff;
+	}
+	
+	.calculated-result {
+		color: #ec6d2e;
 	}
 }

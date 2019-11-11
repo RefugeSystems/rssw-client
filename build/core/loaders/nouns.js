@@ -30,6 +30,7 @@ rsSystem.listingNouns = [];
  */
 rsSystem.registerNoun = function(constructor, name) {
 	name = name || constructor.name;
+	constructor.prototype._type = name;
 	rsSystem.availableNouns[name] = constructor;
 	if(!constructor.unavailable) {
 		rsSystem.listingNouns.push(name);

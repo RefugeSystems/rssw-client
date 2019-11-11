@@ -40,17 +40,21 @@
 			 * @type Boolean
 			 */
 			data.open = false;
+			/**
+			 * Stores viewed records to go back to while the panel is open.
+			 * @property history
+			 * @type Array
+			 */
+			data.history = [];
 			
 			return data;
 		},
 		"watch": {
 		},
 		"mounted": function() {
-//			rsSystem.EventBus.$on("display-info", (object) => {
-//				this.displayRecord(object);
-//			});
-			rsSystem.EventBus.$on("display-info", this.displayRecord);
 			rsSystem.register(this);
+			rsSystem.EventBus.$on("display-info", this.displayRecord);
+			this.universe.$on("universe:modified", this.update);
 		},
 		"methods": {
 			/**
@@ -69,6 +73,12 @@
 				
 				if(toView) {
 					if(this.viewing) {
+						if(!this.history.length || (this.viewing.id !== toView.id)) {
+							console.warn("Storing: ", this.viewing.id);
+							this.history.unshift(this.viewing);
+						} else {
+							console.warn("Repeated Shift? ", this.viewing.id);
+						}
 						this.viewing.$off("modified", this.update);
 					}
 					
@@ -81,6 +91,15 @@
 			
 			"processRequest": function(event) {
 				
+				
+			},
+			"backOne": function() {
+				if(this.history.length) {
+					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
+					Vue.set(this, "viewing", this.history.shift());
+					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
+					this.update();
+				}
 			},
 			/**
 			 * 
@@ -88,6 +107,7 @@
 			 */
 			"closeInfo": function() {
 				Vue.set(this, "open", false);
+				this.history.splice(0);
 			},
 			/**
 			 * 
@@ -96,6 +116,9 @@
 			"update": function() {
 				this.$forceUpdate();
 			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
 		},
 		"template": Vue.templified("components/info.html")
 	});

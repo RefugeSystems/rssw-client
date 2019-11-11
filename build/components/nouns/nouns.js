@@ -91,6 +91,10 @@
 			rsSystem.register(this);
 		},
 		"methods": {
+			"dropObject": function() {
+				this.state.building[this.state.current]._type = this.state.current;
+				this.universe.send("delete:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
+			},
 			"copyNoun": function(source) {
 				var result = {},
 					keys = Object.keys(source),
@@ -105,13 +109,18 @@
 				return result;
 			},
 			"modify": function() {
+//				console.log("modify");
 				if(this.isValid) {
+//					console.log("valid");
 					if(this.state.building[this.state.current] instanceof Array) {
+//						console.log("array");
 						for(var x=0; x<this.state.building[this.state.current].length; x++) {
+//							console.warn("sync: ", this.state.building[this.state.current][x]);
 							this.state.building[this.state.current][x]._type = this.state.current;
 							this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current][x]));
 						}
 					} else {
+//						console.warn("sync: ", this.state.building[this.state.current]);
 						this.state.building[this.state.current]._type = this.state.current;
 						this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
 					}

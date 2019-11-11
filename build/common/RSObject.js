@@ -11,17 +11,25 @@ class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
 		this.universe = universe;
+		this._sourceData = _p(details);
 		this._coreData = {};
 		this._registered = {};
 		var keys = Object.keys(details),
 			x;
 		
+//		console.log("Key set for " + details.id + ": ", keys);
 		for(x=0; x<keys.length; x++) {
-			this._coreData[keys[x]] = details[keys[x]];
+			if(keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo") {
+				this._coreData[keys[x]] = details[keys[x]];
+			}
 		}
-		this.name = details.name;
-		this.id = details.id;
+		
+//		this.name = details.name;
+//		console.log("Final Core Set for " + details.id + ": ", _p(this._coreData), _p(details));
+		this._coreData.description = details.description;
+		this._coreData.name = details.name;
 		this._modifiers = [];
+		this.id = details.id;
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
@@ -30,6 +38,22 @@ class RSObject extends EventEmitter {
 					this.loadDelta(event.modification);
 				}
 			});
+		}
+	}
+	
+	get name() {
+		if(this.hidden) {
+			return this.hiddenName || "Unknown";
+		} else {
+			return this._coreData.name || this.id;
+		}
+	}
+	
+	get description() {
+		if(this.hidden) {
+			return this.hiddenDescription;
+		} else {
+			return this._coreData.description;
 		}
 	}
 	
@@ -110,6 +134,8 @@ class RSObject extends EventEmitter {
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_") {
+				base[keys[x]] = this._coreData[keys[x]];
+				/*
 				switch(typeof(this._coreData[keys[x]])) {
 					case "boolean":
 					case "string":
@@ -123,6 +149,7 @@ class RSObject extends EventEmitter {
 						}
 						break;
 				}
+				*/
 
 				// Isolate Reference Fields
 				if(this.universe.nouns[keys[x]]) {
@@ -141,7 +168,7 @@ class RSObject extends EventEmitter {
 		//console.log("Final: ", base);
 		keys = Object.keys(base);
 		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_" && typeof(this[keys[x]]) !== "function" ) {
+			if(keys[x][0] !== "_" && keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo" && typeof(this[keys[x]]) !== "function" ) {
 				this[keys[x]] = base[keys[x]];
 			}
 		}
@@ -189,6 +216,10 @@ class RSObject extends EventEmitter {
 			if(this.universe.index.lookup[this.location] && this.universe.index.lookup[this.location].name) {
 				this._search += this.universe.index.lookup[this.location].name.toLowerCase();
 			}
+		}
+		
+		if(this.recalculateHook) {
+			this.recalculateHook();
 		}
 		
 //		console.log("Recalculated: " + this.id);
@@ -243,12 +274,20 @@ class RSObject extends EventEmitter {
 		
 		if(this._coreData.modifierstats) {
 			for(x=0; x<this._coreData.modifierstats.length; x++) {
-				this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
+				if(this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]) {
+					this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
+				} else {
+					console.warn("Missing Stat Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]);
+				}
 			}
 		}
 		if(this._coreData.modifierattrs) {
 			for(x=0; x<this._coreData.modifierattrs.length; x++) {
-				this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+				if(this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]]) {
+					this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+				} else {
+					console.warn("Missing Attribute Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]);
+				}
 			}
 		}
 //		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
@@ -262,11 +301,13 @@ class RSObject extends EventEmitter {
 	 * @param {Object} delta
 	 */
 	loadDelta(delta) {
+		this._lastDelta = _p(delta);
+		
 		var keys = Object.keys(delta),
 			x;
 		
 		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function") {
+			if(typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
 				this._coreData[keys[x]] = delta[keys[x]];
 			}
 		}

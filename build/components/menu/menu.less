@@ -32,6 +32,18 @@
 	&.expanded {
 		width: 180px;
 	}
+		
+	&.collapsed {
+		width: 36px;
+	
+		.nav-label {
+			max-width: 0px !important;
+		}
+				
+		.nav-icon {
+			padding-right: 0px !important;
+		}
+	}
 
 	.navigation {
 		display: flex;
@@ -68,6 +80,12 @@
 			&:hover {
 				background: white;
 				color: black;
+			}
+			
+			.nav-label {
+				overflow: hidden;
+				max-width: 500px;
+				transition: max-width .5s;
 			}
 			
 			.navigation-contents {

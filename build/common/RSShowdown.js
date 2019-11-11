@@ -63,7 +63,7 @@
 					if(mark) {
 						element = $("<a class=\"rendered-value\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 					} else {
-						element = $("<span class=\"calculated-result rendered-value not-found\">No Found[" + value + "]</span>");
+						element = $("<span class=\"calculated-result rendered-value not-found\">" + value + "[Not Found]</span>");
 					}
 				}
 				

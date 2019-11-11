@@ -265,6 +265,8 @@ class SearchIndex extends EventEmitter {
 	 * @param {Object} filter Defines how to filter against the _search string as a string or
 	 * 		how to compare object fields based on the properties present on the filter object where the
 	 * 		property "null" corresponds to the general _Search string property on the object.
+	 * @param {Object} state
+	 * @param {Array} list
 	 */
 	list(filter, state, list) {
 		var x, keys;
@@ -491,10 +493,6 @@ class SearchIndex extends EventEmitter {
 			delete(this.index[this.lookup[item].name]);
 			delete(this.lookup[item]);
 			delete(this.index[item]);
-			this.lookup[item.id] = item;
-			this.named[item.name] = item;
-			this.index[item.name] = item;
-			this.index[item.id] = item;
 			this.$emit("indexed");
 		}
 	}

@@ -150,7 +150,7 @@
   border-color: #a91124 !important;
 }
 .rs-component .rsbd-light-red {
-  border-color: #ff8392 !important;
+  border-color: #e43a3b !important;
 }
 .rs-component .rsbd-purple {
   border-color: #cc00ff !important;
@@ -199,7 +199,7 @@
   background-color: #a91124 !important;
 }
 .rs-component .rsbg-light-red {
-  background-color: #ff8392 !important;
+  background-color: #e43a3b !important;
 }
 .rs-component .rsbg-purple {
   background-color: #cc00ff !important;
@@ -220,46 +220,73 @@
 .rs-component .fields .mb8 {
   margin-bottom: 8px;
 }
-.rs-component .rs-orange {
-  color: #FF9560 !important;
-}
+.system-component .rs-darkOrange,
 .rs-component .rs-darkOrange {
   color: #ac6530 !important;
 }
+.system-component .rs-orange,
+.rs-component .rs-orange {
+  color: #FF9560 !important;
+}
+.system-component .rs-lightOrange,
+.rs-component .rs-lightOrange {
+  color: #e0a65d !important;
+}
+.system-component .rs-darkblue,
+.rs-component .rs-darkblue {
+  color: #0c3a96 !important;
+}
+.system-component .rs-blue,
 .rs-component .rs-blue {
   color: #617EB8 !important;
 }
+.system-component .rs-lightBlue,
 .rs-component .rs-lightBlue {
   color: #6f9bf5 !important;
 }
+.system-component .rs-white,
 .rs-component .rs-white {
   color: #EAEFF9 !important;
 }
+.system-component .rs-black,
 .rs-component .rs-black {
   color: #000000 !important;
 }
+.system-component .rs-gray,
 .rs-component .rs-gray,
+.system-component .rs-grey,
 .rs-component .rs-grey {
   color: #928282 !important;
 }
-.rs-component .rs-blue {
-  color: #617EB8 !important;
-}
+.system-component .rs-green,
 .rs-component .rs-green {
   color: #96FF99 !important;
 }
+.system-component .rs-red,
 .rs-component .rs-red {
   color: #a91124 !important;
 }
+.system-component .rs-yellow,
 .rs-component .rs-yellow {
   color: #b3b300 !important;
 }
+.system-component .rs-light-red,
 .rs-component .rs-light-red {
-  color: #ff8392 !important;
+  color: #e43a3b !important;
 }
-.rs-component .rsbg-purple {
+.system-component .rs-darkpurple,
+.rs-component .rs-darkpurple {
+  color: #5a289e !important;
+}
+.system-component .rs-purple,
+.rs-component .rs-purple {
   color: #cc00ff !important;
 }
+.system-component .rs-lightpurple,
+.rs-component .rs-lightpurple {
+  color: #b180f3 !important;
+}
+.system-component .rs-transparent,
 .rs-component .rs-transparent {
   color: transparent !important;
 }
@@ -408,6 +435,30 @@ form {
 .rs-page.page-noun_controls {
   display: block;
 }
+.rssw-page.character-builder .stage {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+.rssw-page.character-builder .stage .heading {
+  flex-shrink: 0;
+}
+.rssw-page.character-builder .stage .details {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+.rssw-page.character-builder .stage #entity-description {
+  width: 300px;
+  height: 400px;
+}
+.rssw-page.character-builder .complete {
+  height: 50px;
+}
 .rssw-page.page-dashboard {
   position: relative;
   display: block;
@@ -499,6 +550,122 @@ form {
 .rssw-page.page-universe .opened.loaded {
   left: 0px;
 }
+.rs-page.page-home {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+.rs-page.page-home h1 {
+  color: #EAEFF9;
+}
+.rs-page.page-home .login {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.rs-page.page-home .waiting {
+  flex-direction: column;
+  text-align: center;
+  font-size: 30px;
+}
+.rs-page.page-home .system-display {
+  display: flex;
+  align-content: stretch;
+  align-items: stretch;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  margin: 0px !important;
+  border-width: 0px !important;
+  padding: 0px !important;
+  color: inherit;
+}
+.rs-page.page-home .system-view {
+  overflow: auto;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}
+.system-component.component-cards {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+.system-component.component-cards .card {
+  position: absolute;
+  background-color: white;
+  color: black;
+  border: 1px solid #FF9560;
+  width: 300px;
+  transition: left 0.5s, top 0.5s, border-color 0.5s;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  flex-direction: column;
+}
+.system-component.component-cards .card.passed {
+  top: -100% !important;
+  left: -100% !important;
+}
+.system-component.component-cards .card h1,
+.system-component.component-cards .card h2,
+.system-component.component-cards .card h3,
+.system-component.component-cards .card h4,
+.system-component.component-cards .card h5,
+.system-component.component-cards .card h6 {
+  color: #000000;
+}
+.system-component.component-cards .card .information {
+  overflow: hidden;
+  flex-grow: 100;
+  padding: 5px;
+}
+.system-component.component-cards .card.current .information {
+  overflow: auto !important;
+}
+.system-component.component-cards .card .footer {
+  bottom: 0px;
+  left: 0px;
+  height: 26px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  background-color: white;
+  color: #000000;
+  flex-shrink: 0;
+  user-select: none;
+}
+.system-component.component-cards .card .footer button {
+  background-color: white;
+  color: #000000;
+}
+.system-component.component-cards .card .footer button.goto {
+  min-width: 50%;
+}
+.system-component.component-cards .back {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  height: 30px;
+  width: 30px;
+  background: #a91124;
+}
+@media only screen and (max-height: 500px) {
+  .system-component.component-cards .card {
+    max-height: calc( 100% - 30px );
+  }
+}
+@media only screen and (min-height: 501px) {
+  .system-component.component-cards .card {
+    height: 500px;
+  }
+}
 .rs-component.connect-component {
   max-width: 400px;
   border: 1px solid white;
@@ -583,18 +750,32 @@ form {
   justify-content: center;
   border: 0px;
 }
-.system-component.system-info .object-info {
+.object-info {
   color: #000000;
   padding: 3px;
 }
-.system-component.system-info .object-info .rendered-value {
+.object-info .reference-heading {
+  font-weight: 800;
+  font-size: 1.2em;
+}
+.object-info .reference-heading span {
+  border-bottom: 1px solid #EAEFF9;
+}
+.object-info .subreference {
+  padding-left: 10px;
+  border-left: 1px solid #FF9560;
+}
+.object-info .rendered-value {
   -webkit-text-stroke-width: thin;
   cursor: pointer;
 }
-.system-component.system-info .object-info a {
+.object-info .general-information p {
+  margin: 0px 0px 17px 0px;
+}
+.object-info a {
   color: #0055ff;
 }
-.system-component.system-info .object-info .calculated-result {
+.object-info .calculated-result {
   color: #ec6d2e;
 }
 .system-component.system-menu {
@@ -625,6 +806,15 @@ form {
 }
 .system-component.system-menu.expanded {
   width: 180px;
+}
+.system-component.system-menu.collapsed {
+  width: 36px;
+}
+.system-component.system-menu.collapsed .nav-label {
+  max-width: 0px !important;
+}
+.system-component.system-menu.collapsed .nav-icon {
+  padding-right: 0px !important;
 }
 .system-component.system-menu .navigation {
   display: flex;
@@ -659,6 +849,11 @@ form {
 .system-component.system-menu .navigation .navigation-item:hover {
   background: white;
   color: black;
+}
+.system-component.system-menu .navigation .navigation-item .nav-label {
+  overflow: hidden;
+  max-width: 500px;
+  transition: max-width 0.5s;
 }
 .system-component.system-menu .navigation .navigation-item .navigation-contents {
   display: flex;

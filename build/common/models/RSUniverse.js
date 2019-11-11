@@ -176,6 +176,22 @@ class RSUniverse extends RSObject {
 				}
 			};
 			
+			this.$on("model:deleted", (event) => {
+				console.log("Deleting: ", event);
+				var record = this.nouns[event.type][event.id];
+				if(record) {
+					console.warn("Deleting Record: " + event.type + " - " + event.id + ": ", event, record);
+
+					this.index.unindexItem(record);
+					if(this.indexes[event.type]) {
+						this.indexes[event.type].unindexItem(record);
+						delete(this.nouns[event.type][event.id]);
+					}
+					
+					this.$emit("universe:modified", this);
+				}
+			});
+			
 			this.$on("model:modified", (event) => {
 //				console.log("Modifying: ", event);
 				var record = this.nouns[event.type][event.id];
@@ -185,6 +201,8 @@ class RSUniverse extends RSObject {
 						this.nouns[event.type] = {};
 					}
 					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
+					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
+					this.index.indexItem(this.nouns[event.type][event.id]);
 					this.$emit("universe:modified", this);
 				}
 			});
@@ -274,6 +292,7 @@ class RSUniverse extends RSObject {
 					}
 					for(i=0; i<ids.length; i++) {
 						id = ids[i];
+//						console.log("Loading " + id + ": ", state[type][id]);
 						if(this.nouns[type][id]) {
 							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
@@ -283,6 +302,7 @@ class RSUniverse extends RSObject {
 							this.index.indexItem(this.nouns[type][id]);
 						}
 						noun = this.nouns[type][id];
+//						console.log("Final Noun for " + id + ": ", noun);
 					}
 				} else {
 					rsSystem.log.error("Noun does not have a registered constructor: " + type);

@@ -46,6 +46,13 @@ rsSystem.App = new Vue({
 					}]
 				}]
 			}, {
+				"path": "construct",
+				"component": rsSystem.components.RSWindow,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacterBuilder
+				}]
+			}, {
 				"path": "base",
 				"component": rsSystem.components.RSSWBase,
 				"children": [{
@@ -120,7 +127,7 @@ rsSystem.App = new Vue({
 					}]
 				}]
 			}, {
-				"path": "nouns",
+				"path": "nouns/:type?/:oid?",
 				"component": rsSystem.components.RSNounControls
 			}, {
 				"path": "ship",

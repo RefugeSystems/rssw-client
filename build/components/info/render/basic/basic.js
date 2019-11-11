@@ -9,18 +9,26 @@
 (function() {
 	
 	var invisibleKeys = {};
-	invisibleKeys.id = true;
-	invisibleKeys.name = true;
-	invisibleKeys.universe = true;
-	invisibleKeys.icon = true;
+	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
-	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.description = true;
+	invisibleKeys.condition = true;
+	invisibleKeys.singleton = true;
+//	invisibleKeys.playable = true;
+	invisibleKeys.universe = true;
+	invisibleKeys.name = true;
+	invisibleKeys.icon = true;
 	invisibleKeys.echo = true;
+	invisibleKeys.id = true;
 	
 	var prettifyNames = {};
 	var prettifyValues = {};
+	
+	var prettifyPropertyPattern = /_([a-z])/ig, 
+		prettifyPropertyName = function(full, match) {
+			return " " + match.capitalize();
+		};
 	
 	rsSystem.component("rsObjectInfoBasic", {
 		"inherit": true,
@@ -57,14 +65,22 @@
 				}
 			};
 
-			console.log("Listening");
-			this.record.$on("modified", this.update);
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			} else {
+				console.warn("Record is not listenable? ", this.record);
+			}
 			rsSystem.register(this);
 			this.update();
 		},
 		"methods": {
 			"visible": function(key, value) {
 				return key && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"isArray": function(value) {
+				return value instanceof Array;
+			},
+			"prettifyKey": function(key) {
 			},
 			"prettifyPropertyName": function(property) {
 				switch(typeof(this.record._prettifyName)) {
@@ -84,8 +100,8 @@
 							return prettifyNames[property](property);
 					}
 				}
-				
-				return property;
+
+				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
 			},
 			"prettifyPropertyValue": function(property, value) {
 				switch(typeof(this.record._prettifyValue)) {
@@ -106,17 +122,33 @@
 					}
 				}
 				
+				if(value instanceof Array) {
+					
+				} else {
+					switch(typeof(value)) {
+						case "object":
+							return value.hidden_name || value.name || value.id || value.description;
+						default:
+							if(this.universe.indexes[property]) {
+								
+							}
+					}
+				}
+				
 				return value;
 			},
+			"prettifyReferenceValue": function(reference, property, value) {
+				
+			},
 			"update": function() {
-				console.log("Check: " + this.id + " | " + this.record.id);
+//				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
-					console.log("Shifting");
+//					console.log("Shifting");
 					this.universe.index.index[this.id].$off("modified", this.update);
 					this.record.$on("modified", this.update);
 					Vue.set(this, "id", this.record.id);
 				} else {
-					console.log("Setting");
+//					console.log("Setting");
 					Vue.set(this, "id", this.record.id);
 				}
 				
@@ -137,7 +169,7 @@
 			}
 		},
 		"beforeDestroy": function() {
-			console.log("Finishing");
+//			console.log("Finishing");
 			this.record.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/info/render/basic.html")

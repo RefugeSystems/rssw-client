@@ -15,4 +15,10 @@ class RSSkill extends RSObject {
 		this.enhancementKey = "skill_enhanced_" + this.id;
 		this.bonusKey = "skill_bonuses_" + this.id;
 	}
+	
+	recalculateHook() {
+		if(this.base) {
+			this._search += this.base.toLowerCase();
+		}
+	}
 }

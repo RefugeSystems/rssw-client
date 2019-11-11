@@ -80,11 +80,13 @@
 						Vue.set(this.state, "order", !this.state.order);
 					} else {
 						Vue.set(this.state, "sortKey", header.field);
-						if(header.sorter) {
+					}
+					if(header.sorter) {
+						if(this.state.sorter !== header.sorter) {
 							Vue.set(this.state, "sorter", header.sorter);
-						} else {
-							Vue.delete(this.state, "sorter");
 						}
+					} else {
+						Vue.delete(this.state, "sorter");
 					}
 				}
 				this.update();
@@ -102,7 +104,10 @@
 				html += "<ul>";
 			},
 			"select": function(record, header) {
-				if(!this.state.noSelect) {
+				console.log("Table Selection: ", record, header);
+				if(header.recordAction) {
+					header.recordAction(record, header);
+				} else if(!this.state.noSelect) {
 					if(this.index.toggleSelect(record)) {
 						if(!this.state.noEmit) {
 							this.$emit("selected", record, header);

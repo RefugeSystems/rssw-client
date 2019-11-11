@@ -58,8 +58,11 @@
 				}
 			};
 
-			console.log("Listening");
-			this.record.$on("modified", this.update);
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			} else {
+				console.warn("Record is not listenable? ", this.record);
+			}
 			rsSystem.register(this);
 			this.update();
 		},
@@ -68,14 +71,14 @@
 				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
 			},
 			"update": function() {
-				console.log("Check: " + this.id + " | " + this.record.id);
+//				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
-					console.log("Shifting");
+//					console.log("Shifting");
 					this.universe.index.index[this.id].$off("modified", this.update);
 					this.record.$on("modified", this.update);
 					Vue.set(this, "id", this.record.id);
 				} else {
-					console.log("Setting");
+//					console.log("Setting");
 					Vue.set(this, "id", this.record.id);
 				}
 				
@@ -96,7 +99,6 @@
 			}
 		},
 		"beforeDestroy": function() {
-			console.log("Finishing");
 			this.record.$off("modified", this.update);
 		},
 		"render": function(createElement) {

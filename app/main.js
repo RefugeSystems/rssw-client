@@ -18225,14 +18225,15 @@ Templify.install = function(Vue, options) {
 	options.name = options.name || "templified";
 	Vue[options.name] = function(name) {
 		switch(name) {
+			case "components/cards.html": return "<div class=\"system-component component-cards\">\r\n\t<div class=\"card\" v-for=\"(card, $index) in corpus\" :class=\"cardClass($index, card)\" :style=\"'z-index: ' + cardZIndex($index, card) + '; ' + cardOffset($index, card)\">\r\n\t\r\n\t\t<div class=\"information\" v-swipe.left.stop=\"nextCard\" v-swipe.right.stop=\"prevCard\">\r\n\t\t\t<h1>{{card.name}}</h1>\r\n\t\t\t<rs-object-info v-on:click=\"processRequest($event)\" :record=\"card\" :universe=\"universe\"></rs-object-info>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"footer\">\r\n\t\t\t<button v-on:click=\"selectCard(card)\" v-if=\"current === $index && select_label !== null\" class=\"select\">\r\n\t\t\t\t<span class=\"fas fa-check-circle\"></span>\r\n\t\t\t\t<span>{{select_label}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button v-on:click=\"toCard($index)\" class=\"goto\">\r\n\t\t\t\t<span>Species: {{card.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"back\" v-if=\"state && state.return\">\r\n\t\t\r\n\t</div>\r\n</div>";
 			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<div class=\"heading\">\r\n\t\t<span class=\"heading-icon\"></span>\r\n\t\t<span>Login</span>\r\n\t</div>\r\n\t<div class=\"fields\">\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t</label>\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t</label>\r\n\t\t<div class=\"actions\">\r\n\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\tSecure?\r\n\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/field/autocomplete.html": return "<div class=\"rs-field rs-autocomplete\">\r\n\t<input class=\"autocomplete-field\" type=\"text\" v-model=\"modeling\" />\r\n\t<div class=\"corpus\" :class=\"{'open':matched.length}\">\r\n\t\t<div class=\"option\" v-for=\"option in matched\">\r\n\t\t\t{{option}}\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/field.html": return "";
 			case "components/gyroscope.html": return "";
-			case "components/info.html": return "<div class=\"system-component system-info\" :class=\"open?'opened':'closed'\">\r\n\t<div class=\"main-bar\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"viewing && viewing.icon\" class=\"icon\" :class=\"viewing.icon\"></span>\r\n\t\t\t<span class=\"text\">{{viewing?viewing.name:\"Information\"}}</span>\r\n\t\t</div>\r\n\t\t<button class=\"control close\" v-on:click=\"closeInfo()\">\r\n\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t\r\n\t<rs-object-info v-if=\"viewing\" v-on:click=\"processRequest($event)\" :record=\"viewing\" :universe=\"universe\"></rs-object-info>\r\n</div>\r\n";
-			case "components/info/render/basic.html": return "<div class=\"general-information\">\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<span class=\"key\">{{prettifyPropertyName(property)}}</span>\r\n\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
+			case "components/info.html": return "<div class=\"system-component system-info\" :class=\"open?'opened':'closed'\">\r\n\t<div class=\"main-bar\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"viewing && viewing.icon\" class=\"icon\" :class=\"viewing.icon\"></span>\r\n\t\t\t<span class=\"text\">{{viewing?viewing.name:\"Information\"}}</span>\r\n\t\t</div>\r\n\t\t<button class=\"control back\" v-on:click=\"backOne()\" v-if=\"history.length\">\r\n\t\t\t<span class=\"fas fa-step-backward\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"control close\" v-on:click=\"closeInfo()\">\r\n\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t\r\n\t<rs-object-info v-if=\"viewing\" v-on:click=\"processRequest($event)\" :record=\"viewing\" :universe=\"universe\"></rs-object-info>\r\n</div>\r\n";
+			case "components/info/render/basic.html": return "<div class=\"general-information\">\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property]\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"direct\" v-else>\r\n\t\t\t\t<span class=\"key\">{{prettifyPropertyName(property)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\" :class=\"$router.currentRoute.path.startsWith(navItem.highlight)?'current':''\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"files\">\r\n\t\t<div class=\"property\" v-for=\"property in extra_properties\">\r\n\t\t\t<div class=\"autocompletion\">\r\n\t\t\t\t<rs-autocomplete v-model=\"property.key\" :corpus=\"propertyKeys\"></rs-autocomplete>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"files\">\r\n\t\t<div class=\"property\" v-for=\"property in extra_properties\">\r\n\t\t\t<div class=\"autocompletion\">\r\n\t\t\t\t<rs-autocomplete v-model=\"property.key\" :corpus=\"propertyKeys\"></rs-autocomplete>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"dropObject()\" v-if=\"this.state.building[state.current] && this.state.building[state.current].id\">\r\n\t\t\t<span class=\"action-icon fas fa-trash\"></span>\r\n\t\t\t<span class=\"action-text\">Drop Object</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/rssw/career/display.html": return "<div class=\"career-information\">\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t<div class=\"\">\r\n\t\t<span>Classification:</span>\r\n\t\t<span>{{record.classification}}</span>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/display.html": return "<div class=\"character-information\">\r\n\t<div class=\"flow-h\">\r\n\t\t<div class=\"stat brawn flow-v centered\">\r\n\t\t\t<span>Brawn</span>\r\n\t\t\t<span>{{record.brawn}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"stat agility flow-v centered\">\r\n\t\t\t<span>Agility</span>\r\n\t\t\t<span>{{record.agility}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -18243,13 +18244,14 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<span>{{ship.name}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\">\r\n\t\t\t<span class=\"fad fa-coin rs-gray\"></span>\r\n\t\t\t<span>{{points}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table/controls.html": return "<div class=\"system-component table-controls\">\r\n\t<div class=\"filtering\">\r\n\t\t<input type=\"text\" v-model=\"state.filter.null\" />\r\n\t\t<span class=\"search-icon fas fa-search\"></span>\r\n\t</div>\r\n\t<div class=\"controls\">\r\n\t\t<div class=\"selections\" v-if=\"index.selection.length\">\r\n\t\t\t<div v-for=\"control in controls\">\r\n\t\t\t\t{{control}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button class=\"selections clear\" v-if=\"index.selection.length\" v-on:click=\"clearSelection()\">\r\n\t\t\t<span class=\"far fa-ban\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections all\" v-if=\"index.selection.length != index.listing.length\" v-on:click=\"allSelection()\">\r\n\t\t\t<span class=\"far fa-check-square\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections info\" v-if=\"index.selection.length\" v-on:click=\"infoSelection(index.selection[index.selection.length-1])\">\r\n\t\t\t<span class=\"far fa-journal-whills\"></span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/table/paging.html": return "<div class=\"system-component table-paging\">\r\n\t<button class=\"index-page\" :class=\"classPage(0)\" v-on:click=\"toPage(0)\">\r\n\t\t1\r\n\t</button>\r\n\t<button v-for=\"page in pages\" class=\"index-page\" :class=\"classPage(page)\" v-on:click=\"toPage(page)\">\r\n\t\t{{page + 1}}\r\n\t</button>\r\n\t<button class=\"index-page\" :class=\"classPage(lastPage)\" v-if=\"lastPage > 0\" v-on:click=\"toPage(lastPage)\">\r\n\t\t{{lastPage + 1}}\r\n\t</button>\r\n</div>";
-			case "components/table.html": return "<div class=\"system-component table-index\">\r\n\t<table class=\"table-element\" :class=\"state.classes\">\r\n\t\t<thead>\r\n\t\t\t<tr>\r\n\t\t\t\t<th v-for=\"header in headers\">\r\n\t\t\t\t\t<button class=\"title actionable table-content\" v-on:click=\"headerAction(header)\" :class=\"header.thClass\">\r\n\t\t\t\t\t\t<span class=\"sort fas\" v-if=\"!header.nosort && state.sortKey === header.field\" :class=\"{'fa-sort-down':state.ordering, 'fa-sort-up':!state.ordering}\"></span>\r\n\t\t\t\t\t\t<span class=\"sort fas fa-sort\" v-if=\"!header.nosort && state.sortKey !== header.field\"></span>\r\n\t\t\t\t\t\t<span>{{header.title}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</th>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t<tr v-if=\"corpus.length === 0 && index.listing.length\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>All Items Filtered Out</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"corpus.length === 0 && index.listing.length === 0\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>No Items Available</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"index.error\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>Data Source Error</span>\r\n\t\t\t\t\t<p>{{index.error}}</p>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-for=\"record in corpus\" :key=\"record.id\" :class=\"index.isSelected([record.id])?'record-selected':''\">\r\n\t\t\t\t<td v-for=\"(header, i) in headers\" class=\"table-record\" :class=\"header.field\" v-on:click.stop=\"select(record, header)\">\r\n\t\t\t\t\t<div v-if=\"!header.noCross\" class=\"crosshair\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === 0\" class=\"highlight starting\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1\" class=\"highlight ending\"></div>\r\n\t\t\t\t\t<button class=\"table-content\">\r\n\t\t\t\t\t\t<slot name=\"table-content\">\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-if=\"header.formatter\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"header.formatter(record[header.field], record, header)\"></div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'array' || isArray(record[header.field])\">\r\n\t\t\t\t\t\t\t\t<ul>\r\n\t\t\t\t\t\t\t\t\t<li v-for=\"item in record[header.field]\">{{item.name || item}}</li>\r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'object'\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"formatObjectHeader(record[header.field])\">\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field] && typeof record[header.field] === 'object' && record[header.field] !== 'undefined'\">\r\n\t\t\t\t\t\t\t\t<pre>{{record[header.field] | JSON}}</pre>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field]\">\r\n\t\t\t\t\t\t\t\t{{record[header.field]}}\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else>\r\n\t\t\t\t\t\t\t\t<span> </span>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</slot>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t</tbody>\r\n\t</table>\r\n</div>";
+			case "components/table.html": return "<div class=\"system-component table-index\">\r\n\t<table class=\"table-element\" :class=\"state.classes\">\r\n\t\t<thead>\r\n\t\t\t<tr>\r\n\t\t\t\t<th v-for=\"header in headers\">\r\n\t\t\t\t\t<button class=\"title actionable table-content\" v-on:click=\"headerAction(header)\" :class=\"header.thClass\" v-if=\"!header.hideBlock\">\r\n\t\t\t\t\t\t<span class=\"sort fas\" v-if=\"!header.nosort && state.sortKey === header.field\" :class=\"{'fa-sort-down':state.order, 'fa-sort-up':!state.order}\"></span>\r\n\t\t\t\t\t\t<span class=\"sort fas fa-sort\" v-if=\"!header.nosort && state.sortKey !== header.field\"></span>\r\n\t\t\t\t\t\t<span>{{header.title}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</th>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t<tr v-if=\"corpus.length === 0 && index.listing.length\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>All Items Filtered Out</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"corpus.length === 0 && index.listing.length === 0\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>No Items Available</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"index.error\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>Data Source Error</span>\r\n\t\t\t\t\t<p>{{index.error}}</p>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-for=\"record in corpus\" :key=\"record.id\" :class=\"index.isSelected([record.id])?'record-selected':''\">\r\n\t\t\t\t<td v-for=\"(header, i) in headers\" class=\"table-record\" :class=\"header.field\" v-on:click.stop=\"select(record, header)\">\r\n\t\t\t\t\t<div v-if=\"!header.noCross\" class=\"crosshair\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === 0\" class=\"highlight starting\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1\" class=\"highlight ending\"></div>\r\n\t\t\t\t\t<button class=\"table-content\">\r\n\t\t\t\t\t\t<slot name=\"table-content\">\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-if=\"header.formatter\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"header.formatter(record[header.field], record, header)\"></div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'array' || isArray(record[header.field])\">\r\n\t\t\t\t\t\t\t\t<ul>\r\n\t\t\t\t\t\t\t\t\t<li v-for=\"item in record[header.field]\">{{item.name || item}}</li>\r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'object'\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"formatObjectHeader(record[header.field])\">\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field] && typeof record[header.field] === 'object' && record[header.field] !== 'undefined'\">\r\n\t\t\t\t\t\t\t\t<pre>{{record[header.field] | JSON}}</pre>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field]\">\r\n\t\t\t\t\t\t\t\t{{record[header.field]}}\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else>\r\n\t\t\t\t\t\t\t\t<span> </span>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</slot>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t</tbody>\r\n\t</table>\r\n</div>";
 			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\" :class=\"renderState()\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<!-- <div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\" v-pan=\"pan\"> -->\r\n\t\t<div class=\"view\" onexit=\"true\" v-pan=\"pan\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pointsOfInterest.length && state.markers\">\r\n\t\t\t\t\t<button class=\"poi\" v-if=\"poiVisible(link)\" v-for=\"link in pointsOfInterest\" :data-id=\"link.id\" :style=\"'left:' + link.x + '%; top:' + link.y + '%;'\" :key=\"link.id\" v-on:click=\"poiMenu(link)\">\r\n\t\t\t\t\t\t<span class=\"labeling\" v-if=\"link.label\">{{link.label}}</span>\r\n\t\t\t\t\t\t<span :class=\"poiClass(link)\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in location.coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in location.coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span class=\"titling\">\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close alert\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option normal\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"state.alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<div class=\"search\">\r\n\t\t\t\t<input type=\"text\" v-model=\"state.search\" v-on:keyup.enter=\"searchMap(state.search)\"/>\r\n\t\t\t\t<button class=\"control\" v-on:click=\"searchMap(state.search)\">\r\n\t\t\t\t\t<span class=\"icon far fa-search\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<button class=\"control\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.markerItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.markers?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.markerItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.followItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.follow?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.followItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.fullscreen)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.fullscreen?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.fullscreen.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<select class=\"control master\" v-model=\"state.master_view\" v-if=\"player.master\">\r\n\t\t\t\t<option value=\"\">Player Character</option>\r\n\t\t\t\t<option value=\"master\">Master</option>\r\n\t\t\t\t<option v-for=\"entity in universe.indexes.entity.listing\" :value=\"entity.id\">{{entity.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
 			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<h1>Nouns</h1>\r\n\t<rs-nouns :universe=\"universe\" :player=\"player\"></rs-nouns>\r\n</div>\r\n";
 			case "pages/rssw/base.html": return "<div class=\"rssw-page page-base\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n</div>\r\n";
+			case "pages/rssw/character/builder.html": return "<div class=\"rssw-page character-builder\">\r\n\t<div class=\"stage species\" v-if=\"stage === 0\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Character Details</h1>\r\n\t\t</div>\r\n\t\t<div class=\"details\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Name:</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"building.name\" />\r\n\t\t\t</label>\r\n\t\t\t<label for=\"entity-description\">\r\n\t\t\t\t<span>Description:</span>\r\n\t\t\t</label>\r\n\t\t\t<textarea v-model=\"building.description\" id=\"entity-description\"></textarea>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span>Continue</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage species\" v-if=\"stage === 1\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Species</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.species\" :state=\"state\" :universe=\"universe\" :user=\"player\"></rs-cards>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage careers\" v-else-if=\"stage === 2\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Career</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.careers\" :state=\"state\" :universe=\"universe\" :user=\"player\"></rs-cards>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage specializations\" v-else-if=\"stage === 3\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Specialization</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.specializations\" :state=\"state\" :universe=\"universe\" :user=\"player\"></rs-cards>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage review\" v-else-if=\"stage === 4\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Review Selections</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"choices\" :state=\"state\" :universe=\"universe\" :user=\"player\" :selection=\"'Confirm'\"></rs-cards>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage review\" v-else-if=\"stage === 5\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span>Creating...</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage review\" v-else-if=\"stage === 6\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span>Finalize</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rssw-character-info :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t\t\t<rssw-character-board :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\t\t<rssw-character-stats :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t\t\t<rssw-character-skills :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span>Continue</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n</div>\r\n";
 			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\t{{player.name}} Overview\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"self\" v-if=\"self\">\r\n\t\t\t<router-link class=\"navigation-button\" :to=\"'/dashboard/character/' + self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\tOthers\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/dashboard/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
@@ -18258,8 +18260,9 @@ Templify.install = function(Vue, options) {
 			case "pages/rssw/map.html": return "<div class=\"rs-page map rssw\">\r\n\r\n\t<rs-viewer :user=\"user\" :player=\"player\" :universe=\"universe\" :location=\"location\"></rs-viewer>\r\n\t\r\n</div>\r\n";
 			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n</div>\r\n";
 			case "pages/rssw/storage.html": return "<div class=\"rssw-page page-storage\">\r\n\r\n</div>\r\n";
-			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-universe\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\tGalactic Index\r\n\t\t\t<button class=\"fas fa-sync\" v-on:click=\"resetHeaders()\">Headers</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"index\">\r\n\t\t\t<div class=\"controls\">\r\n\t\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t\t<select v-model=\"state.activeIndex\">\r\n\t\t\t\t\t<option value>All</option>\r\n\t\t\t\t\t<option v-for=\"index in Object.keys(universe.indexes)\" :value=\"index\">{{index}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :headers=\"state.headers\" :state=\"state\" :options=\"state.indexOptions\"></rs-table>\r\n\t\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-paging>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universe.indexes.entity.listing\" :to=\"'/universe/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
+			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-universe\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\tGalactic Index\r\n\t\t\t<button class=\"fas fa-sync\" v-on:click=\"resetHeaders()\">Headers</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"index\">\r\n\t\t\t<div class=\"controls\">\r\n\t\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t\t<select v-model=\"state.activeIndex\">\r\n\t\t\t\t\t<option value>All</option>\r\n\t\t\t\t\t<option v-for=\"index in Object.keys(universe.indexes)\" :value=\"index\">{{index}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model.number=\"state.paging.spread\">\r\n\t\t\t\t\t<option v-for=\"spread in getSpread()\" :value=\"spread\">{{spread}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :headers=\"state.headers\" :state=\"state\" :options=\"state.indexOptions\"></rs-table>\r\n\t\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-paging>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universe.indexes.entity.listing\" :to=\"'/universe/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
+			case "pages/window.html": return "<div class=\"rs-page page-window\">\r\n\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n</div>\r\n";
 			default: return null;
 		}
 	};
@@ -18473,18 +18476,48 @@ class EventEmitter {
 	}
 };
 
+/**
+ * 
+ * @class String
+ * @constructor
+ */
 
 /**
  * 
  * @method capitalize
- * @for String
- * @return {String} .
+ * @return {String}
  */
 String.prototype.capitalize = function() {
 	if(this.length) {
 		return this[0].toUpperCase() + this.substring(1);
 	}
 	return this;
+};
+
+/**
+ * 
+ * @method pluralize
+ * @param {Boolean} capitalize
+ * @return {String}
+ */
+String.prototype.pluralize = function(capitalize) {
+	var plural;
+	
+	switch(this[this.length-1]) {
+		case "y":
+			plural = this.substring(0, this.length-1) + "ies";
+			break;
+		case "s":
+			break;
+		default:
+			plural = this + "s";
+	}
+	
+	if(capitalize) {
+		return plural[0].toUpperCase() + plural.substring(1);
+	} else {
+		return plural;
+	}
 };
 
 /**
@@ -20112,6 +20145,7 @@ rsSystem.listingNouns = [];
  */
 rsSystem.registerNoun = function(constructor, name) {
 	name = name || constructor.name;
+	constructor.prototype._type = name;
 	rsSystem.availableNouns[name] = constructor;
 	if(!constructor.unavailable) {
 		rsSystem.listingNouns.push(name);
@@ -20996,17 +21030,25 @@ class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
 		this.universe = universe;
+		this._sourceData = _p(details);
 		this._coreData = {};
 		this._registered = {};
 		var keys = Object.keys(details),
 			x;
 		
+//		console.log("Key set for " + details.id + ": ", keys);
 		for(x=0; x<keys.length; x++) {
-			this._coreData[keys[x]] = details[keys[x]];
+			if(keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo") {
+				this._coreData[keys[x]] = details[keys[x]];
+			}
 		}
-		this.name = details.name;
-		this.id = details.id;
+		
+//		this.name = details.name;
+//		console.log("Final Core Set for " + details.id + ": ", _p(this._coreData), _p(details));
+		this._coreData.description = details.description;
+		this._coreData.name = details.name;
 		this._modifiers = [];
+		this.id = details.id;
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
@@ -21015,6 +21057,22 @@ class RSObject extends EventEmitter {
 					this.loadDelta(event.modification);
 				}
 			});
+		}
+	}
+	
+	get name() {
+		if(this.hidden) {
+			return this.hiddenName || "Unknown";
+		} else {
+			return this._coreData.name || this.id;
+		}
+	}
+	
+	get description() {
+		if(this.hidden) {
+			return this.hiddenDescription;
+		} else {
+			return this._coreData.description;
 		}
 	}
 	
@@ -21095,6 +21153,8 @@ class RSObject extends EventEmitter {
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_") {
+				base[keys[x]] = this._coreData[keys[x]];
+				/*
 				switch(typeof(this._coreData[keys[x]])) {
 					case "boolean":
 					case "string":
@@ -21108,6 +21168,7 @@ class RSObject extends EventEmitter {
 						}
 						break;
 				}
+				*/
 
 				// Isolate Reference Fields
 				if(this.universe.nouns[keys[x]]) {
@@ -21126,7 +21187,7 @@ class RSObject extends EventEmitter {
 		//console.log("Final: ", base);
 		keys = Object.keys(base);
 		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_" && typeof(this[keys[x]]) !== "function" ) {
+			if(keys[x][0] !== "_" && keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo" && typeof(this[keys[x]]) !== "function" ) {
 				this[keys[x]] = base[keys[x]];
 			}
 		}
@@ -21174,6 +21235,10 @@ class RSObject extends EventEmitter {
 			if(this.universe.index.lookup[this.location] && this.universe.index.lookup[this.location].name) {
 				this._search += this.universe.index.lookup[this.location].name.toLowerCase();
 			}
+		}
+		
+		if(this.recalculateHook) {
+			this.recalculateHook();
 		}
 		
 //		console.log("Recalculated: " + this.id);
@@ -21228,12 +21293,20 @@ class RSObject extends EventEmitter {
 		
 		if(this._coreData.modifierstats) {
 			for(x=0; x<this._coreData.modifierstats.length; x++) {
-				this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
+				if(this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]) {
+					this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
+				} else {
+					console.warn("Missing Stat Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]);
+				}
 			}
 		}
 		if(this._coreData.modifierattrs) {
 			for(x=0; x<this._coreData.modifierattrs.length; x++) {
-				this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+				if(this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]]) {
+					this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+				} else {
+					console.warn("Missing Attribute Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]);
+				}
 			}
 		}
 //		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
@@ -21247,11 +21320,13 @@ class RSObject extends EventEmitter {
 	 * @param {Object} delta
 	 */
 	loadDelta(delta) {
+		this._lastDelta = _p(delta);
+		
 		var keys = Object.keys(delta),
 			x;
 		
 		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function") {
+			if(typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
 				this._coreData[keys[x]] = delta[keys[x]];
 			}
 		}
@@ -21342,7 +21417,7 @@ class RSSheet extends EventEmitter {
 					if(mark) {
 						element = $("<a class=\"rendered-value\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 					} else {
-						element = $("<span class=\"calculated-result rendered-value not-found\">No Found[" + value + "]</span>");
+						element = $("<span class=\"calculated-result rendered-value not-found\">" + value + "[Not Found]</span>");
 					}
 				}
 				
@@ -21777,11 +21852,39 @@ rsSystem.component("RSSWStats", {
  * @param {Function} handler The function to handle the pan event
  */
 Vue.directive("pan", {
-	bind: function(el, binding) {
+	"bind": function(el, binding) {
 		if (typeof binding.value === "function") {
 			var mc = new Hammer(el);
 			mc.get("pan").set({ direction: Hammer.DIRECTION_ALL });
 			mc.on("pan", binding.value);
+		}
+	}
+});
+
+/**
+ * 
+ * @class pan
+ * @module Common_Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("swipe", {
+	"bind": function(el, binding) {
+		if (typeof binding.value === "function") {
+			var mc = new Hammer(el),
+				options = {};
+			
+			if(binding.modifiers.left) {
+				options.direction = Hammer.DIRECTION_LEFT;
+			} else if(binding.modifiers.right) {
+				options.direction = Hammer.DIRECTION_RIGHT;
+			} else if(binding.modifiers.up) {
+				options.direction = Hammer.DIRECTION_UP;
+			} else if(binding.modifiers.down) {
+				options.direction = Hammer.DIRECTION_DOWN;
+			}
+			
+			mc.get("swipe").set(options);
+			mc.on("swipe", binding.value);
 		}
 	}
 });
@@ -22350,11 +22453,6 @@ class RSPlayer extends RSObject {
 		var keys = Object.keys(this._coreData),
 			x;
 		
-		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function") {
-				this[keys[x]] = this._coreData[keys[x]];
-			}
-		}
 	}
 	
 	recalculateSheet() {}
@@ -22392,6 +22490,12 @@ class RSSkill extends RSObject {
 		this.propertyKey = "skill_" + this.id;
 		this.enhancementKey = "skill_enhanced_" + this.id;
 		this.bonusKey = "skill_bonuses_" + this.id;
+	}
+	
+	recalculateHook() {
+		if(this.base) {
+			this._search += this.base.toLowerCase();
+		}
 	}
 }
 /**
@@ -22572,6 +22676,22 @@ class RSUniverse extends RSObject {
 				}
 			};
 			
+			this.$on("model:deleted", (event) => {
+				console.log("Deleting: ", event);
+				var record = this.nouns[event.type][event.id];
+				if(record) {
+					console.warn("Deleting Record: " + event.type + " - " + event.id + ": ", event, record);
+
+					this.index.unindexItem(record);
+					if(this.indexes[event.type]) {
+						this.indexes[event.type].unindexItem(record);
+						delete(this.nouns[event.type][event.id]);
+					}
+					
+					this.$emit("universe:modified", this);
+				}
+			});
+			
 			this.$on("model:modified", (event) => {
 //				console.log("Modifying: ", event);
 				var record = this.nouns[event.type][event.id];
@@ -22581,6 +22701,8 @@ class RSUniverse extends RSObject {
 						this.nouns[event.type] = {};
 					}
 					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
+					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
+					this.index.indexItem(this.nouns[event.type][event.id]);
 					this.$emit("universe:modified", this);
 				}
 			});
@@ -22670,6 +22792,7 @@ class RSUniverse extends RSObject {
 					}
 					for(i=0; i<ids.length; i++) {
 						id = ids[i];
+//						console.log("Loading " + id + ": ", state[type][id]);
 						if(this.nouns[type][id]) {
 							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
@@ -22679,6 +22802,7 @@ class RSUniverse extends RSObject {
 							this.index.indexItem(this.nouns[type][id]);
 						}
 						noun = this.nouns[type][id];
+//						console.log("Final Noun for " + id + ": ", noun);
 					}
 				} else {
 					rsSystem.log.error("Noun does not have a registered constructor: " + type);
@@ -23002,6 +23126,8 @@ class SearchIndex extends EventEmitter {
 	 * @param {Object} filter Defines how to filter against the _search string as a string or
 	 * 		how to compare object fields based on the properties present on the filter object where the
 	 * 		property "null" corresponds to the general _Search string property on the object.
+	 * @param {Object} state
+	 * @param {Array} list
 	 */
 	list(filter, state, list) {
 		var x, keys;
@@ -23228,10 +23354,6 @@ class SearchIndex extends EventEmitter {
 			delete(this.index[this.lookup[item].name]);
 			delete(this.lookup[item]);
 			delete(this.index[item]);
-			this.lookup[item.id] = item;
-			this.named[item.name] = item;
-			this.index[item.name] = item;
-			this.index[item.id] = item;
 			this.$emit("indexed");
 		}
 	}
@@ -23320,6 +23442,101 @@ rsSystem.component("RSCore", {
 	},
 	"methods": {
 	}
+});
+
+
+/**
+ * 
+ * 
+ * @class rsCards
+ * @constructor
+ * @module Components
+ * @zindex 1
+ */
+rsSystem.component("rsCards", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"selection": {
+			"required": false,
+			"type": String
+		},
+		"corpus": {
+			"required": true,
+			"type": Array
+		},
+		"state": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"data": function() {
+		var data = {},
+			x;
+		
+		data.current = 0;
+		if(this.selection === undefined) {
+			data.select_label = "Select";
+		} else {
+			data.select_label = this.selection;
+		}
+		
+		return data;
+	},
+	"watch": {
+		"state": {
+			"deep": true,
+			"handler": function() {
+				this.update();
+			}
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"methods": {
+		"cardZIndex": function(index, card) {
+			return (this.corpus.length + 10) - index;
+		},
+		"cardClass": function(index, card) {
+			if(index < this.current) {
+				return "passed";
+			} else if(index === this.current) {
+				return "current";
+			}
+		},
+		"cardOffset": function(index, card) {
+			var offset = (index - this.current) * 30 + 10;
+			return "top: " + offset + "px; left: " + offset + "px;";
+		},
+		"toCard": function(index) {
+			Vue.set(this, "current", index);
+		},
+		"nextCard": function() {
+			if(this.current < this.corpus.length - 1) {
+				Vue.set(this, "current", this.current + 1);
+			} else {
+				Vue.set(this, "current", 0);
+			}
+		},
+		"prevCard": function() {
+			if(this.current > 0) {
+				Vue.set(this, "current", this.current - 1);
+			}
+		},
+		"selectCard": function(card) {
+			this.$emit("selected", card);
+		},
+		"update": function() {
+			this.$forceUpdate();
+		}
+	},
+	"beforeDestroy": function() {
+		this.universe.$off("universe:modified", this.update);
+	},
+	"template": Vue.templified("components/cards.html")
 });
 
 
@@ -23516,17 +23733,21 @@ rsSystem.component("RSCore", {
 			 * @type Boolean
 			 */
 			data.open = false;
+			/**
+			 * Stores viewed records to go back to while the panel is open.
+			 * @property history
+			 * @type Array
+			 */
+			data.history = [];
 			
 			return data;
 		},
 		"watch": {
 		},
 		"mounted": function() {
-//			rsSystem.EventBus.$on("display-info", (object) => {
-//				this.displayRecord(object);
-//			});
-			rsSystem.EventBus.$on("display-info", this.displayRecord);
 			rsSystem.register(this);
+			rsSystem.EventBus.$on("display-info", this.displayRecord);
+			this.universe.$on("universe:modified", this.update);
 		},
 		"methods": {
 			/**
@@ -23545,6 +23766,12 @@ rsSystem.component("RSCore", {
 				
 				if(toView) {
 					if(this.viewing) {
+						if(!this.history.length || (this.viewing.id !== toView.id)) {
+							console.warn("Storing: ", this.viewing.id);
+							this.history.unshift(this.viewing);
+						} else {
+							console.warn("Repeated Shift? ", this.viewing.id);
+						}
 						this.viewing.$off("modified", this.update);
 					}
 					
@@ -23557,6 +23784,15 @@ rsSystem.component("RSCore", {
 			
 			"processRequest": function(event) {
 				
+				
+			},
+			"backOne": function() {
+				if(this.history.length) {
+					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
+					Vue.set(this, "viewing", this.history.shift());
+					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
+					this.update();
+				}
 			},
 			/**
 			 * 
@@ -23564,6 +23800,7 @@ rsSystem.component("RSCore", {
 			 */
 			"closeInfo": function() {
 				Vue.set(this, "open", false);
+				this.history.splice(0);
 			},
 			/**
 			 * 
@@ -23572,6 +23809,9 @@ rsSystem.component("RSCore", {
 			"update": function() {
 				this.$forceUpdate();
 			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
 		},
 		"template": Vue.templified("components/info.html")
 	});
@@ -23588,18 +23828,26 @@ rsSystem.component("RSCore", {
 (function() {
 	
 	var invisibleKeys = {};
-	invisibleKeys.id = true;
-	invisibleKeys.name = true;
-	invisibleKeys.universe = true;
-	invisibleKeys.icon = true;
+	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
-	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.description = true;
+	invisibleKeys.condition = true;
+	invisibleKeys.singleton = true;
+//	invisibleKeys.playable = true;
+	invisibleKeys.universe = true;
+	invisibleKeys.name = true;
+	invisibleKeys.icon = true;
 	invisibleKeys.echo = true;
+	invisibleKeys.id = true;
 	
 	var prettifyNames = {};
 	var prettifyValues = {};
+	
+	var prettifyPropertyPattern = /_([a-z])/ig, 
+		prettifyPropertyName = function(full, match) {
+			return " " + match.capitalize();
+		};
 	
 	rsSystem.component("rsObjectInfoBasic", {
 		"inherit": true,
@@ -23636,14 +23884,22 @@ rsSystem.component("RSCore", {
 				}
 			};
 
-			console.log("Listening");
-			this.record.$on("modified", this.update);
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			} else {
+				console.warn("Record is not listenable? ", this.record);
+			}
 			rsSystem.register(this);
 			this.update();
 		},
 		"methods": {
 			"visible": function(key, value) {
 				return key && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"isArray": function(value) {
+				return value instanceof Array;
+			},
+			"prettifyKey": function(key) {
 			},
 			"prettifyPropertyName": function(property) {
 				switch(typeof(this.record._prettifyName)) {
@@ -23663,8 +23919,8 @@ rsSystem.component("RSCore", {
 							return prettifyNames[property](property);
 					}
 				}
-				
-				return property;
+
+				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
 			},
 			"prettifyPropertyValue": function(property, value) {
 				switch(typeof(this.record._prettifyValue)) {
@@ -23685,17 +23941,33 @@ rsSystem.component("RSCore", {
 					}
 				}
 				
+				if(value instanceof Array) {
+					
+				} else {
+					switch(typeof(value)) {
+						case "object":
+							return value.hidden_name || value.name || value.id || value.description;
+						default:
+							if(this.universe.indexes[property]) {
+								
+							}
+					}
+				}
+				
 				return value;
 			},
+			"prettifyReferenceValue": function(reference, property, value) {
+				
+			},
 			"update": function() {
-				console.log("Check: " + this.id + " | " + this.record.id);
+//				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
-					console.log("Shifting");
+//					console.log("Shifting");
 					this.universe.index.index[this.id].$off("modified", this.update);
 					this.record.$on("modified", this.update);
 					Vue.set(this, "id", this.record.id);
 				} else {
-					console.log("Setting");
+//					console.log("Setting");
 					Vue.set(this, "id", this.record.id);
 				}
 				
@@ -23716,7 +23988,7 @@ rsSystem.component("RSCore", {
 			}
 		},
 		"beforeDestroy": function() {
-			console.log("Finishing");
+//			console.log("Finishing");
 			this.record.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/info/render/basic.html")
@@ -23782,8 +24054,11 @@ rsSystem.component("RSCore", {
 				}
 			};
 
-			console.log("Listening");
-			this.record.$on("modified", this.update);
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			} else {
+				console.warn("Record is not listenable? ", this.record);
+			}
 			rsSystem.register(this);
 			this.update();
 		},
@@ -23792,14 +24067,14 @@ rsSystem.component("RSCore", {
 				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
 			},
 			"update": function() {
-				console.log("Check: " + this.id + " | " + this.record.id);
+//				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
-					console.log("Shifting");
+//					console.log("Shifting");
 					this.universe.index.index[this.id].$off("modified", this.update);
 					this.record.$on("modified", this.update);
 					Vue.set(this, "id", this.record.id);
 				} else {
-					console.log("Setting");
+//					console.log("Setting");
 					Vue.set(this, "id", this.record.id);
 				}
 				
@@ -23820,7 +24095,6 @@ rsSystem.component("RSCore", {
 			}
 		},
 		"beforeDestroy": function() {
-			console.log("Finishing");
 			this.record.$off("modified", this.update);
 		},
 		"render": function(createElement) {
@@ -24104,6 +24378,10 @@ rsSystem.component("RSCore", {
 			rsSystem.register(this);
 		},
 		"methods": {
+			"dropObject": function() {
+				this.state.building[this.state.current]._type = this.state.current;
+				this.universe.send("delete:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
+			},
 			"copyNoun": function(source) {
 				var result = {},
 					keys = Object.keys(source),
@@ -24118,13 +24396,18 @@ rsSystem.component("RSCore", {
 				return result;
 			},
 			"modify": function() {
+//				console.log("modify");
 				if(this.isValid) {
+//					console.log("valid");
 					if(this.state.building[this.state.current] instanceof Array) {
+//						console.log("array");
 						for(var x=0; x<this.state.building[this.state.current].length; x++) {
+//							console.warn("sync: ", this.state.building[this.state.current][x]);
 							this.state.building[this.state.current][x]._type = this.state.current;
 							this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current][x]));
 						}
 					} else {
+//						console.warn("sync: ", this.state.building[this.state.current]);
 						this.state.building[this.state.current]._type = this.state.current;
 						this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
 					}
@@ -25100,11 +25383,13 @@ rsSystem.component("rsswShipStats", {
 						Vue.set(this.state, "order", !this.state.order);
 					} else {
 						Vue.set(this.state, "sortKey", header.field);
-						if(header.sorter) {
+					}
+					if(header.sorter) {
+						if(this.state.sorter !== header.sorter) {
 							Vue.set(this.state, "sorter", header.sorter);
-						} else {
-							Vue.delete(this.state, "sorter");
 						}
+					} else {
+						Vue.delete(this.state, "sorter");
 					}
 				}
 				this.update();
@@ -25122,7 +25407,10 @@ rsSystem.component("rsswShipStats", {
 				html += "<ul>";
 			},
 			"select": function(record, header) {
-				if(!this.state.noSelect) {
+				console.log("Table Selection: ", record, header);
+				if(header.recordAction) {
+					header.recordAction(record, header);
+				} else if(!this.state.noSelect) {
 					if(this.index.toggleSelect(record)) {
 						if(!this.state.noEmit) {
 							this.$emit("selected", record, header);
@@ -25810,6 +26098,187 @@ rsSystem.component("RSSWBase", {
 	"template": Vue.templified("pages/rssw/base.html")
 });
 
+/**
+ * 
+ * 
+ * @class RSSWCharacterBuilder
+ * @constructor
+ * @module Pages
+ */
+(function() {
+	var storageKey = "_rs_characterBuilderComponentKey";
+	
+	var nameSort = function(a, b) {
+		if(a.name < b.name) {
+			return -1;
+		} else if(a.name > b.name) {
+			return 1;
+		} else if(a.id < b.id) {
+			return -1;
+		} else if(a.id > b.id) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+	
+	rsSystem.component("RSSWCharacterBuilder", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCorePage
+		],
+		"data": function() {
+			var data = {};
+			
+			data.base = {};
+			data.base.species =[];
+			data.base.careers =[];
+			data.base.specializations = [];
+			
+			data.choices = [];
+	
+			data.building = {};
+			data.building.id = "character:" + this.user.id + ":" + Date.now();
+			
+			data.stage = 0;
+			
+			data.storageKeyID = storageKey;
+			if(this.cid) {
+				data.storageKeyID += ":" + this.cid;
+			}
+			data.state = this.loadStorage(data.storageKeyID, {
+			});
+			
+			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.universe.$on("universe:modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"selected": function(record) {
+				switch(this.stage) {
+					case 0:
+						this.forward();
+						break;
+					case 1:
+						Vue.set(this.building, record._type, record.id);
+						this.choices.splice(0);
+						this.choices.push(record);
+						this.forward();
+						break;
+					case 2:
+						this.building.archetype = [record.id];
+						if(!this.building[record._type]) {
+							Vue.set(this.building, record._type, []);
+						}
+						this.building[record._type].splice(0);
+						this.building[record._type].push(record.id);
+						this.choices.splice(1);
+						this.choices.push(record);
+						this.forward();
+						break;
+					case 3:
+						this.building.archetype.splice(1);
+						this.building.archetype.push(record.id);
+						this.choices.splice(2);
+						this.choices.push(record);
+						this.forward();
+						break;
+					case 4:
+						if(this.choices[0].xp_start) {
+							this.building.xp = parseInt(this.choices[0].xp_start);
+						} else {
+							this.choices[0].xp_start = 0;
+						}
+
+						if(this.choices[0].wound_start) {
+							// TODO: Switch to System Set Calculation
+							this.building.wounds_max = eval(this.choices[0].wound_start.replace("brawn", this.choices[0].brawn));
+							this.building.wounds = this.building.wounds_max;
+						} else {
+							this.choices[0].xp_start = 0;
+						}
+						if(this.choices[0].strain_start) {
+							// TODO: Switch to System Set Calculation
+							this.building.strain_max = eval(this.choices[0].strain_start.replace("willpower", this.choices[0].willpower));
+							this.building.strain = this.building.strain_max;
+						} else {
+							this.choices[0].xp_start = 0;
+						}
+
+						this.building.defense_melee = 0;
+						this.building.defense_range = 0;
+						this.building.soak = 0;
+						
+						console.warn("Create Player Entity: ", this.building);
+						this.universe.$on("universe:modified", (event) => {
+							setTimeout(() => {
+								console.warn("Checking[" + this.building.id + "]: ", this.universe.indexes.entity.lookup[this.building.id], event);
+								if(this.universe.nouns.entity[this.building.id]) {
+									this.universe.nouns.entity[this.building.id].recalculateProperties();
+									this.universe.nouns.entity[this.building.id].recalculateProperties();
+									Vue.set(this, "building", this.universe.nouns.entity[this.building.id]);
+									this.forward();
+								}
+							}, 0);
+						});
+						this.universe.send("create:self", this.building);
+						
+						this.forward();
+						break;
+				}
+			},
+			"forward": function() {
+				switch(this.stage) {
+					case 3:
+						break;
+				}
+				Vue.set(this, "stage", this.stage + 1);
+				this.update();
+			},
+			"update": function() {
+				var loading,
+					x;
+				
+				this.base.species.splice(0);
+				for(x=0; x<this.universe.indexes.race.listing.length; x++) {
+					if(this.universe.indexes.race.listing[x].playable) {
+						this.base.species.push(this.universe.indexes.race.listing[x]);
+					}
+				}
+				
+				this.base.careers.splice(0);
+				for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+					if(this.universe.indexes.archetype.listing[x].classification === "primary" && this.universe.indexes.archetype.listing[x].playable) {
+						this.base.careers.push(this.universe.indexes.archetype.listing[x]);
+					} else {
+//						console.warn("Skip Archetype: ", _p(this.universe.indexes.archetype.listing[x]));
+					}
+				}
+				
+				if(this.stage > 2 && this.stage < 5) {
+					this.base.specializations.splice(0);
+					for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+						if(this.universe.indexes.archetype.listing[x].classification === "secondary" && this.universe.indexes.archetype.listing[x].parent === this.building.archetype[0]) {
+							this.base.specializations.push(this.universe.indexes.archetype.listing[x]);
+						}
+					}
+				}
+
+				this.base.careers.sort(nameSort);
+				this.base.species.sort(nameSort);
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
+		},
+		"template": Vue.templified("pages/rssw/character/builder.html")
+	});
+})();
 
 /**
  * 
@@ -26125,6 +26594,51 @@ rsSystem.component("RSSWStorage", {
 	var formatters = {
 		"icon": function(icon) {
 			return "<span class='" + icon + "'></span>";
+		},
+		"__info": function(value, record) {
+			return "<span class=\"fas fa-info-circle\"></span>";
+		},
+		"__edit": function(value, record) {
+			return "<span class=\"fas fa-edit\"></span>";
+		},
+		"__copy": function(value, record) {
+			return "<span class=\"fas fa-copy\"></span>";
+		},
+		"__view": function(value, record) {
+			if(record.classification && record._type === "entity") {
+				return "<span class=\"fas fa-external-link\"></span>";
+			}
+		}
+	};
+
+	var recordActions = {
+		"__info": function(record) {
+			rsSystem.EventBus.$emit("display-info", record);
+		},
+		"__edit": function(record) {
+			this.$router.push("/nouns/" + record._type + "/" + record.id);
+		},
+		"__copy": function(record) {
+			this.$router.push("/nouns/" + record._type + "/" + record.id + "?copy=true");
+		},
+		"__view": function(record) {
+			if(record.classification && record._type === "entity") {
+				this.$router.push("/universe/" + record.classification + "/" + record.id);
+			}
+		}
+	};
+
+	var actions = {
+	};
+
+	var sorters = {
+		"__view": function(a, b) {
+			if(a._type === "entity" && b._type !== "entity") {
+				return 1;
+			} else if(b._type === "entity" && a._type !== "entity") {
+				return -1;
+			}
+			return 0;
 		}
 	};
 	
@@ -26167,9 +26681,8 @@ rsSystem.component("RSSWStorage", {
 				data.state.paging.per = 20;
 				data.state.paging.current = 1;
 				data.state.paging.pages = 0;
-				data.state.paging.spread = 2;
+				data.state.paging.spread = 10;
 			}
-			data.state.paging.spread = 2;
 			
 			data.corpus = [];
 			
@@ -26177,6 +26690,18 @@ rsSystem.component("RSSWStorage", {
 			for(x=0; x<data.state.headers.length; x++) {
 				if(formatters[data.state.headers[x].field]) {
 					data.state.headers[x].formatter = formatters[data.state.headers[x].field];
+				}
+				if(recordActions[data.state.headers[x].field]) {
+					data.state.headers[x].recordAction = recordActions[data.state.headers[x].field].bind(this);
+				}
+				if(actions[data.state.headers[x].field]) {
+					data.state.headers[x].action = actions[data.state.headers[x].field].bind(this);
+				}
+				if(sorters[data.state.headers[x].field]) {
+					data.state.headers[x].sorter = sorters[data.state.headers[x].field].bind(this);
+					if(data.state.sortKey === data.state.headers[x].field) {
+						data.state.sorter = data.state.headers[x].sorter;
+					}
 				}
 			}
 			
@@ -26204,9 +26729,7 @@ rsSystem.component("RSSWStorage", {
 				Vue.set(this.state, "headers", [{
 					"title":"",
 					"field": "icon",
-					"formatter": (icon) => {
-						return "<span class='" + icon + "'></span>";
-					}
+					"formatter": formatters.icon
 				}, {
 					"title":"Name",
 					"field": "name"
@@ -26214,9 +26737,54 @@ rsSystem.component("RSSWStorage", {
 					"title":"ID",
 					"field": "id"
 				}, {
-					"title":"Template",
-					"field": "template"
+					"field": "__info",
+					"formatter": formatters.__info,
+					"recordAction": recordActions.__info.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__edit",
+					"formatter": formatters.__edit,
+					"recordAction": recordActions.__edit.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__copy",
+					"formatter": formatters.__copy,
+					"recordAction": recordActions.__copy.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__view",
+					"formatter": formatters.__view,
+					"recordAction": recordActions.__view.bind(this),
+					"sorter": sorters.__view
 				}]);
+			},
+			"getSpread": function() {
+				var possibles = [],
+					start = Math.max(this.state.paging.spread-5, 2),
+					end = this.state.paging.spread+5,
+					x;
+				
+				for(x=start; x<end; x++) {
+					possibles.push(x);
+				}
+
+				if(start > 10) {
+					possibles.unshift(10);
+				}
+				if(start > 2) {
+					possibles.unshift(2);
+				}
+				if(end < 50) {
+					possibles.push(50);
+				}
+				if(end < 100) {
+					possibles.push(100);
+				}
+				
+				return possibles;
 			},
 			"processAction": function(action) {
 				console.warn("Table Action: ", action);
@@ -26239,6 +26807,22 @@ rsSystem.component("RSSWStorage", {
 		"template": Vue.templified("pages/rssw/universe.html")
 	});
 })();
+
+
+/**
+ * 
+ * 
+ * @class RSWindow
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSWindow", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCorePage
+	],
+	"template": Vue.templified("pages/window.html")
+});
 
 
 /**
@@ -26340,6 +26924,13 @@ rsSystem.App = new Vue({
 					}]
 				}]
 			}, {
+				"path": "construct",
+				"component": rsSystem.components.RSWindow,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacterBuilder
+				}]
+			}, {
 				"path": "base",
 				"component": rsSystem.components.RSSWBase,
 				"children": [{
@@ -26414,7 +27005,7 @@ rsSystem.App = new Vue({
 					}]
 				}]
 			}, {
-				"path": "nouns",
+				"path": "nouns/:type?/:oid?",
 				"component": rsSystem.components.RSNounControls
 			}, {
 				"path": "ship",

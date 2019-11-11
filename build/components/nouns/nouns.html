@@ -36,5 +36,9 @@
 			<span class="action-icon fas fa-cloud-upload"></span>
 			<span class="action-text">Upload</span>
 		</button>
+		<button class="primary-action" v-on:click="dropObject()" v-if="this.state.building[state.current] && this.state.building[state.current].id">
+			<span class="action-icon fas fa-trash"></span>
+			<span class="action-text">Drop Object</span>
+		</button>
 	</div>
 </div>

@@ -1,0 +1,75 @@
+<div class="rssw-page character-builder">
+	<div class="stage species" v-if="stage === 0">
+		<div class="heading">
+			<h1>Character Details</h1>
+		</div>
+		<div class="details">
+			<label>
+				<span>Name:</span>
+				<input type="text" v-model="building.name" />
+			</label>
+			<label for="entity-description">
+				<span>Description:</span>
+			</label>
+			<textarea v-model="building.description" id="entity-description"></textarea>
+		</div>
+		<button v-on:click="selected()" class="complete">
+			<span>Continue</span>
+		</button>
+	</div>
+	<div class="stage species" v-if="stage === 1">
+		<div class="heading">
+			<h1>Select Species</h1>
+		</div>
+		<div class="cards">
+			<rs-cards v-on:selected="selected($event)" :corpus="base.species" :state="state" :universe="universe" :user="player"></rs-cards>
+		</div>
+	</div>
+	<div class="stage careers" v-else-if="stage === 2">
+		<div class="heading">
+			<h1>Select Career</h1>
+		</div>
+		<div class="cards">
+			<rs-cards v-on:selected="selected($event)" :corpus="base.careers" :state="state" :universe="universe" :user="player"></rs-cards>
+		</div>
+	</div>
+	<div class="stage specializations" v-else-if="stage === 3">
+		<div class="heading">
+			<h1>Select Specialization</h1>
+		</div>
+		<div class="cards">
+			<rs-cards v-on:selected="selected($event)" :corpus="base.specializations" :state="state" :universe="universe" :user="player"></rs-cards>
+		</div>
+	</div>
+	<div class="stage review" v-else-if="stage === 4">
+		<div class="heading">
+			<h1>Review Selections</h1>
+		</div>
+		<div class="cards">
+			<rs-cards v-on:selected="selected($event)" :corpus="choices" :state="state" :universe="universe" :user="player" :selection="'Confirm'"></rs-cards>
+		</div>
+	</div>
+	<div class="stage review" v-else-if="stage === 5">
+		<div class="heading">
+			<h1>
+				<span>Creating...</span>
+			</h1>
+		</div>
+	</div>
+	<div class="stage review" v-else-if="stage === 6">
+		<div class="heading">
+			<h1>
+				<span>Finalize</span>
+			</h1>
+		</div>
+		<div class="cards">
+			<rssw-character-info :character="building" :user="user" :universe="universe"></rssw-character-info>
+			<rssw-character-board :character="building" :user="user" :universe="universe"></rssw-character-board>
+			<rssw-character-stats :character="building" :user="user" :universe="universe"></rssw-character-stats>
+			<rssw-character-skills :character="building" :user="user" :universe="universe"></rssw-character-skills>
+		</div>
+		<button v-on:click="selected()" class="complete">
+			<span>Continue</span>
+		</button>
+	</div>
+</div>
