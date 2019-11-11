@@ -26,7 +26,10 @@
 @rsPurple: #cc00ff;
 @rsLightPurple: #b180f3;
 
-@rsGreen: #96FF99;
+@rsDarkGreen: #166118;
+@rsGreen: #32b736;
+@rsLightGreen: #96FF99;
+
 @rsGray: #928282;
 @rsGrey: #928282;
 
@@ -545,13 +548,52 @@ form {
 			width: 100%;
 		}
 		
-		#entity-description {
+		.text-block {
+			position: relative;
 			width: 300px;
-			height: 400px;
+			display: flex;
+			flex-direction: column;
+			align-content: stretch;
+			align-items: stretch;
+			margin-bottom: 17px;
+			
+			label {
+				font-size: 1.6em;
+				font-weight: 700;
+			}
+			
+			input[type=text] {
+				padding: 3px;
+				width: 100%;
+			}
+			
+			textarea {
+				padding: 3px;
+				min-height: 150px;
+				width: 100%;
+			}
 		}
 	}
 	
+	.creating {
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+	}
+	
 	.complete {
+		background-color: @rsDarkGreen;
+		color: @rsLightGreen;
+		cont-weight: 800;
+		flex-shrink: 0;
+		height: 50px;
+	}
+	
+	.regress {
+		background-color: @rsDarkRed;
+		color: @rsLightRed;
+		cont-weight: 800;
+		flex-shrink: 0;
 		height: 50px;
 	}
 }
@@ -1229,6 +1271,7 @@ form {
 .rs-component.rssw.component-character-info {
 
 	.property {
+		max-width: 550px;
 		color: @rsWhite;
 		margin: 3px;
 	}

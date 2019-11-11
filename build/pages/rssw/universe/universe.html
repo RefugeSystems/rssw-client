@@ -8,12 +8,24 @@
 		<div class="index">
 			<div class="controls">
 				<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-controls>
+				
+				<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()">
+					<option value="">Choose Action</option>
+					<option v-for="en in universe.indexes.entity.listing" :value="'take,' + en.id">Take from {{en.name}}</option>
+					<option v-for="en in universe.indexes.entity.listing" :value="'give,' + en.id">Give to {{en.name}}</option>
+				</select>
+				
 				<select v-model="state.activeIndex">
 					<option value>All</option>
 					<option v-for="index in Object.keys(universe.indexes)" :value="index">{{index}}</option>
 				</select>
 				<select v-model.number="state.paging.spread">
 					<option v-for="spread in getSpread()" :value="spread">{{spread}}</option>
+				</select>
+				<select v-model="state.filterTemplate">
+					<option value="shown">Shown</option>
+					<option value="only">Only</option>
+					<option value="out">Out</option>
 				</select>
 			</div>
 			<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions"></rs-table>

@@ -17,6 +17,10 @@ rsSystem.component("rsCards", {
 			"required": false,
 			"type": String
 		},
+		"labeling": {
+			"required": false,
+			"type": String
+		},
 		"corpus": {
 			"required": true,
 			"type": Array
@@ -29,15 +33,20 @@ rsSystem.component("rsCards", {
 	"data": function() {
 		var data = {},
 			x;
-		
+
+//		data.select_label = "";
+//		data.card_label = "";
 		data.current = 0;
-		if(this.selection === undefined) {
-			data.select_label = "Select";
-		} else {
-			data.select_label = this.selection;
-		}
 		
 		return data;
+	},
+	"computed": {
+		"select_label": function() {
+			return this.selection || "Select";
+		},
+		"card_label": function() {
+			return this.labeling || "Card";
+		}
 	},
 	"watch": {
 		"state": {
@@ -78,6 +87,8 @@ rsSystem.component("rsCards", {
 		"prevCard": function() {
 			if(this.current > 0) {
 				Vue.set(this, "current", this.current - 1);
+			} else {
+				Vue.set(this, "current", this.corpus.length - 1);
 			}
 		},
 		"selectCard": function(card) {

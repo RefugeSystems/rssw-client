@@ -71,7 +71,7 @@
 					}
 				}
 				
-				if(toView) {
+				if(toView && (!this.viewing || toView.id !== this.viewing.id)) {
 					if(this.viewing) {
 						if(!this.history.length || (this.viewing.id !== toView.id)) {
 							console.warn("Storing: ", this.viewing.id);

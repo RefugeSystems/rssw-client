@@ -27,6 +27,12 @@
 		"mixins": [
 			rsSystem.components.RSCorePage
 		],
+		"state": {
+			"deep": true,
+			"handler": function() {
+				this.update();
+			}
+		},
 		"data": function() {
 			var data = {};
 			
@@ -51,12 +57,41 @@
 			
 			return data;
 		},
+		"watch": {
+			"building": {
+				"deep": true,
+				"handler": function() {
+					if(this.stage === 6) {
+						if(this.choices[0].wound_start) {
+							// TODO: Switch to System Set Calculation
+							Vue.set(this.building, "wounds_max", eval(this.choices[0].wound_start.replace("brawn", this.choices[0].brawn)));
+							Vue.set(this.building, "wounds", this.building.wounds);
+						} else {
+							this.choices[0].wounds = 0;
+						}
+						if(this.choices[0].strain_start) {
+							// TODO: Switch to System Set Calculation
+							Vue.set(this.building, "strain_max", eval(this.choices[0].strain_start.replace("willpower", this.choices[0].willpower)));
+							Vue.set(this.building, "strain", this.building.strain_max);
+						} else {
+							this.choices[0].strain = 0;
+						}
+					}
+				}
+			}
+		},
 		"mounted": function() {
 			rsSystem.register(this);
 			this.universe.$on("universe:modified", this.update);
 			this.update();
 		},
 		"methods": {
+			"back": function(stage) {
+				if(stage === undefined) {
+					stage = this.stage - 1;
+				}
+				Vue.set(this, "stage", stage);
+			},
 			"selected": function(record) {
 				switch(this.stage) {
 					case 0:
@@ -98,14 +133,14 @@
 							this.building.wounds_max = eval(this.choices[0].wound_start.replace("brawn", this.choices[0].brawn));
 							this.building.wounds = this.building.wounds_max;
 						} else {
-							this.choices[0].xp_start = 0;
+							this.choices[0].wounds = 0;
 						}
 						if(this.choices[0].strain_start) {
 							// TODO: Switch to System Set Calculation
 							this.building.strain_max = eval(this.choices[0].strain_start.replace("willpower", this.choices[0].willpower));
 							this.building.strain = this.building.strain_max;
 						} else {
-							this.choices[0].xp_start = 0;
+							this.choices[0].strain = 0;
 						}
 
 						this.building.defense_melee = 0;

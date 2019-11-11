@@ -141,7 +141,7 @@
   border-color: #617EB8 !important;
 }
 .rs-component .rsbd-green {
-  border-color: #96FF99 !important;
+  border-color: #32b736 !important;
 }
 .rs-component .rsbd-yellow {
   border-color: #b3b300 !important;
@@ -190,7 +190,7 @@
   background-color: #617EB8 !important;
 }
 .rs-component .rsbg-green {
-  background-color: #96FF99 !important;
+  background-color: #32b736 !important;
 }
 .rs-component .rsbg-yellow {
   background-color: #b3b300 !important;
@@ -260,7 +260,7 @@
 }
 .system-component .rs-green,
 .rs-component .rs-green {
-  color: #96FF99 !important;
+  color: #32b736 !important;
 }
 .system-component .rs-red,
 .rs-component .rs-red {
@@ -452,11 +452,45 @@ form {
   height: 100%;
   width: 100%;
 }
-.rssw-page.character-builder .stage #entity-description {
+.rssw-page.character-builder .stage .text-block {
+  position: relative;
   width: 300px;
-  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  align-items: stretch;
+  margin-bottom: 17px;
+}
+.rssw-page.character-builder .stage .text-block label {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+.rssw-page.character-builder .stage .text-block input[type=text] {
+  padding: 3px;
+  width: 100%;
+}
+.rssw-page.character-builder .stage .text-block textarea {
+  padding: 3px;
+  min-height: 150px;
+  width: 100%;
+}
+.rssw-page.character-builder .creating {
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
 .rssw-page.character-builder .complete {
+  background-color: #166118;
+  color: #96FF99;
+  cont-weight: 800;
+  flex-shrink: 0;
+  height: 50px;
+}
+.rssw-page.character-builder .regress {
+  background-color: #841213;
+  color: #e43a3b;
+  cont-weight: 800;
+  flex-shrink: 0;
   height: 50px;
 }
 .rssw-page.page-dashboard {
@@ -979,6 +1013,7 @@ form {
   margin: 0px;
 }
 .rs-component.rssw.component-character-info .property {
+  max-width: 550px;
   color: #EAEFF9;
   margin: 3px;
 }

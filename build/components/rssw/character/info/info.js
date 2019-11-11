@@ -26,6 +26,7 @@ rsSystem.component("rsswCharacterInfo", {
 		
 		data.inventory = [];
 		data.loadout = [];
+		data.items = [];
 		
 		data.careers = [];
 		data.experience = 0;
@@ -76,6 +77,7 @@ rsSystem.component("rsswCharacterInfo", {
 			this.specializations.splice(0);
 			this.abilities.splice(0);
 			this.careers.splice(0);
+			this.items.splice(0);
 			
 			if(this.experience !== this.character.xp) {
 				Vue.set(this, "experience", this.character.xp);
@@ -85,6 +87,16 @@ rsSystem.component("rsswCharacterInfo", {
 			}
 			if(this.credits !== this.character.credits) {
 				Vue.set(this, "credits", this.character.credits);
+			}
+			if(this.character.item && this.character.item.length) {
+				for(x=0; x<this.character.item.length; x++) {
+					buffer = this.universe.nouns.item[this.character.item[x]];
+					if(buffer) {
+						this.items.push(buffer);
+					} else {
+						console.warn("Item Not Found: " + this.character.item[x]);
+					}
+				}
 			}
 			
 			if(this.character.archetype) {

@@ -48,13 +48,13 @@ rsSystem.component("rsswCharacterStats", {
 			
 			console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp), calculating}));
 			if(direction > 0 && cost <= this.character.xp) {
-				change[stat] = this.character._coreData[stat] + 1;
+				change[stat] = (this.character._coreData[stat] || 0) + 1;
 				change.xp = this.character.xp - cost;
 				if(!isNaN(change.xp)) {
 					this.character.commit(change);
 				}
 			} else if(direction < 0 && calculating > 0) {
-				change[stat] = this.character._coreData[stat] - 1;
+				change[stat] = (this.character._coreData[stat] || 0)  - 1;
 				change.xp = this.character.xp - cost;
 				if(!isNaN(change.xp)) {
 					this.character.commit(change);

@@ -41,12 +41,9 @@
 	<div class="property items">
 		<span class="icon fad fa-backpack"></span>
 		<span class="label">Items:</span>
-		<button class="ability" v-on:click="showInfo(character.inventory)">
-			<span class="value">Inventory</span>
-		</button>
-		<button class="ability" v-on:click="showInfo(character.loadout)">
-			<span class="divide">,</span>
-			<span class="value">Loadout</span>
+		<button v-for="(item, $index) in items" class="item" v-on:click="showInfo(item)">
+			<span class="divide" v-if="$index !== 0">, </span>
+			<span class="value">{{item.name}}</span>
 		</button>
 	</div>
 	<div class="property credits">

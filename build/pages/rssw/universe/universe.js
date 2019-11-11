@@ -60,6 +60,13 @@
 		}
 	};
 	
+	
+	var templateValues = {
+		"shown": undefined,
+		"only": true,
+		"out": false
+	};
+	
 	rsSystem.component("RSSWUniverse", {
 		"inherit": true,
 		"mixins": [
@@ -102,6 +109,7 @@
 				data.state.paging.spread = 10;
 			}
 			
+			data.command = "";
 			data.corpus = [];
 			
 			
@@ -131,8 +139,13 @@
 			"state": {
 				"deep": true,
 				"handler": function() {
-					if(this.state.search !== this.state.search.toLowerCase()) {
-						Vue.set(this.state, "filter", this.state.search.toLowerCase());
+//					if(this.state.search !== this.state.search.toLowerCase()) {
+//						Vue.set(this.state.filter, "null", this.state.search.toLowerCase());
+//					}
+					if(templateValues[this.state.filterTemplate] !== undefined) {
+						Vue.set(this.state.filter, "template", templateValues[this.state.filterTemplate]);
+					} else {
+						Vue.delete(this.state.filter, "template");
 					}
 					this.saveStorage(this.storageKeyID, this.state);
 				}
@@ -143,6 +156,9 @@
 			rsSystem.register(this);
 		},
 		"methods": {
+			"showCommands": function() {
+				return !!(this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index).selection.length;
+			},
 			"resetHeaders": function() {
 				Vue.set(this.state, "headers", [{
 					"title":"",
@@ -204,8 +220,53 @@
 				
 				return possibles;
 			},
+			"processCommand": function(command) {
+				var index = (this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index),
+					loading,
+					sending,
+					item,
+					x;
+				
+				command = command.split(",");
+				console.warn("Table Command: ", command);
+				
+				switch(command[0]) {
+					case "give":
+						console.warn("Giving Items");
+						for(x=0; x<index.selection.length; x++) {
+							console.warn("Sending " + index.selection[x] + "...");
+							if(this.universe.nouns.item[index.selection[x]]) {
+								sending = {};
+								sending.item = index.selection[x];
+								sending.target = command[1];
+								this.universe.send("give:item", sending);
+							} else {
+								console.warn("Can not give non-item objects");
+							}
+						}
+						break;
+					case "take":
+						console.warn("Taking Items");
+						for(x=0; x<index.selection.length; x++) {
+							console.warn("Sending " + index.selection[x] + "...");
+							if(this.universe.nouns.item[index.selection[x]]) {
+								sending = {};
+								sending.item = index.selection[x];
+								sending.target = command[1];
+								this.universe.send("take:item", sending);
+							} else {
+								console.warn("Can not give non-item objects");
+							}
+						}
+						break;
+				}
+				
+				
+				Vue.set(this, "command", "");
+			},
 			"processAction": function(action) {
 				console.warn("Table Action: ", action);
+				
 			},
 			"filtered": function(entity) {
 				if(entity.template || entity.inactive) {
