@@ -89,7 +89,8 @@
 			if(data.state.headers === undefined) {
 				data.state.headers = [{
 					"title":"",
-					"field": "icon"
+					"field": "icon",
+					"formatter": formatters.icon
 				}, {
 					"title":"Name",
 					"field": "name"
@@ -97,8 +98,28 @@
 					"title":"ID",
 					"field": "id"
 				}, {
-					"title":"Template",
-					"field": "template"
+					"field": "__info",
+					"formatter": formatters.__info,
+					"recordAction": recordActions.__info.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__edit",
+					"formatter": formatters.__edit,
+					"recordAction": recordActions.__edit.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__copy",
+					"formatter": formatters.__copy,
+					"recordAction": recordActions.__copy.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__view",
+					"formatter": formatters.__view,
+					"recordAction": recordActions.__view.bind(this),
+					"sorter": sorters.__view
 				}];
 			}
 			if(data.state.paging === undefined) {
@@ -110,6 +131,7 @@
 			}
 			
 			data.command = "";
+			data.target = "";
 			data.corpus = [];
 			
 			
@@ -156,6 +178,9 @@
 			rsSystem.register(this);
 		},
 		"methods": {
+			"updateEntities": function(event) {
+				
+			},
 			"showCommands": function() {
 				return !!(this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index).selection.length;
 			},
@@ -225,20 +250,21 @@
 					loading,
 					sending,
 					item,
+					keys,
 					x;
 				
-				command = command.split(",");
-				console.warn("Table Command: ", command, index);
+//				command = command.split(",");
+//				console.warn("Table Command: ", command, index);
 				
-				switch(command[0]) {
+				switch(command) {
 					case "give":
-						console.warn("Giving Items");
+//						console.warn("Giving Items");
 						for(x=0; x<index.selection.length; x++) {
 							console.warn("Sending " + index.selection[x] + "...");
 							if(this.universe.nouns.item[index.selection[x]]) {
 								sending = {};
 								sending.item = index.selection[x];
-								sending.target = command[1];
+								sending.target = this.target;
 								this.universe.send("give:item", sending);
 							} else {
 								console.warn("Can not give non-item objects");
@@ -246,13 +272,13 @@
 						}
 						break;
 					case "take":
-						console.warn("Taking Items");
+//						console.warn("Taking Items");
 						for(x=0; x<index.selection.length; x++) {
 							console.warn("Sending " + index.selection[x] + "...");
 							if(this.universe.nouns.item[index.selection[x]]) {
 								sending = {};
 								sending.item = index.selection[x];
-								sending.target = command[1];
+								sending.target = this.target;
 								this.universe.send("take:item", sending);
 							} else {
 								console.warn("Can not give non-item objects");
@@ -260,17 +286,48 @@
 						}
 						break;
 					case "drop":
-						for(x=0; x<index.selection.length; x++) {
-							if(index.selected[index.selection[x]]._drop) {
+						loading = index.selection.concat([]);
+						for(x=0; x<loading.length; x++) {
+							if(index.selected[loading[x]]._drop) {
 								// Drop Item
 								sending = {};
-								sending._type = index.selected[index.selection[x]]._type;
-								sending.id = index.selected[index.selection[x]].id;
+								sending._type = index.selected[loading[x]]._type;
+								sending.id = index.selected[loading[x]].id;
 								sending.time = Date.now();
-								this.universe.send("delete:" + index.selected[index.selection[x]]._type, sending);
+								this.universe.send("delete:" + index.selected[loading[x]]._type, sending);
+								index.unselect(index.selected[loading[x]]);
 							} else {
 								// Flag Item
-								index.selected[index.selection[x]]._drop = true;
+								index.selected[loading[x]]._drop = true;
+							}
+						}
+						break;
+					case "spawn":
+						for(x=0; x<index.selection.length; x++) {
+							loading = index.selected[index.selection[x]];
+							if(loading.template && loading._type === "entity") {
+								keys = Object.keys(loading);
+								sending = {};
+								
+								for(x=0; x<keys.length; x++) {
+									if(keys[x] && keys[x][0] !== "_") {
+										sending[keys[x]] = loading[keys[x]];
+									}
+								}
+								
+								sending.parent = loading.id;
+								sending.name = loading.name + " (New)";
+								sending.description = loading.description;
+								sending.id += ":" + Date.now();
+								sending.template = false;
+								sending._type = "entity";
+								if(this.target) {
+									sending.owners = [this.target];
+								}
+	
+								this.universe.send("modify:entity", sending);
+							} else {
+								console.warn("Skipping Selection: ", loading);
 							}
 						}
 						break;

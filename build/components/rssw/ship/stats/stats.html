@@ -13,7 +13,7 @@
 				<span v-if="pilot">{{pilot.name}}</span>
 			</div>
 			<div class="name">
-				<span>{{ship.name}}</span>
+				<input type="text" v-model="properties.name" v-on:change="updated('name')" />
 			</div>
 		</div>
 		<div class="alliance">
@@ -50,7 +50,7 @@
 				{{mount}}
 			</div>
 		</div>
-		<div class="points">
+		<div class="points" v-if="false">
 			<span class="fad fa-coin rs-gray"></span>
 			<span>{{points}}</span>
 		</div>

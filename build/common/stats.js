@@ -57,9 +57,9 @@ rsSystem.component("RSSWStats", {
 				"class": "rs-red",
 				"icon": "fas fa-flame rot315"
 			},
-			"maneuverability": {
-				"name": "Maneuverability",
-				"info": "Similar to strength",
+			"evasion": {
+				"name": "Evasion",
+				"info": "Nimbleness of the ship. Allows it to dodge incoming fire.",
 				"class": "rs-green",
 				"icon": "fad fa-chevron-double-right"
 			},
@@ -341,7 +341,7 @@ rsSystem.component("RSSWStats", {
 			data.characterStatsListing.push(data.entityStats[data.characterStats[x]]);
 		}
 		
-		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
+		data.shipStats = ["attack", "evasion", "hull", "shield"];
 		data.skillStats = Object.keys(data.entityStats.skill).sort();
 		data.skillStatsListing = [];
 		data.listAllStats = data.characterStats.concat(data.shipStats).concat(data.skillStats);

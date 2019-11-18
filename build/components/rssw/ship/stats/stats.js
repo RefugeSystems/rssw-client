@@ -21,6 +21,9 @@ rsSystem.component("rsswShipStats", {
 	"data": function() {
 		var data = {};
 
+		data.properties = {};
+		data.properties.name = this.ship.name;
+		
 		data.points = 0;
 		data.mounted = {};
 		data.abilities = [];
@@ -35,6 +38,12 @@ rsSystem.component("rsswShipStats", {
 		this.update();
 	},
 	"methods": {
+		"updated": function(field) {
+			var committing = {};
+			committing[field] = this.properties[field];
+			this.ship.commit(committing);
+			console.log("Commit: ", committing);
+		},
 		"update": function() {
 			var points = this.ship.points || 0,
 				buffer,
@@ -91,6 +100,11 @@ rsSystem.component("rsswShipStats", {
 					Vue.set(this.mounted, this.ship.slot[x], buffer);
 				}
 			}
+			
+//			buffer = Object.keys(this.properties);
+//			for(x=0; x<buffer.length; x++) {
+//				Vue.set(this.properties, buffer[x], this.ship[buffer[x]]);
+//			}
 			
 			this.$forceUpdate();
 		}

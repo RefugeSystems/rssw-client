@@ -151,8 +151,11 @@ class RSObject extends EventEmitter {
 				}
 				*/
 
+				if(!this.universe.nouns) {
+					console.trace("Noun Failure: ", this);
+				}
 				// Isolate Reference Fields
-				if(this.universe.nouns[keys[x]]) {
+				if(this.universe.nouns && this.universe.nouns[keys[x]]) {
 					references.push(keys[x]);
 				}
 			}

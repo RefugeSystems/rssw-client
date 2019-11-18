@@ -60,7 +60,7 @@
 				"current": "player",
 				"building": {}
 			});
-			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+//			console.log("Loaded Data[" + storageKey + "]: ", data.state);
 			
 			data.extra_properties = [];
 			

@@ -59,7 +59,7 @@
 					
 				} else {
 					// Linked
-					mark = universe.index.index[value];
+					mark = universe.index.index[properties.id || value];
 					if(mark) {
 						element = $("<a class=\"rendered-value\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 					} else {

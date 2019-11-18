@@ -11,9 +11,16 @@
 				
 				<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()">
 					<option value="">Choose Action</option>
-					<option value="drop">Drop Object</option>
-					<option v-for="en in universe.indexes.entity.listing" :value="'take,' + en.id">Take from {{en.name}}</option>
-					<option v-for="en in universe.indexes.entity.listing" :value="'give,' + en.id">Give to {{en.name}}</option>
+					<option value="spawn">Spawn Template Entities</option>
+					<option value="give">Give Items</option>
+					<option value="take">Take Items</option>
+					<option value="drop">Delete Objects</option>
+				</select>
+				<select v-model="target">
+					<option value="">No Target</option>
+					<option v-for="en in universe.indexes.entity.listing" :value="en.id">{{en.name}}</option>
+					<option value="">-- Player Divide --</option>
+					<option v-for="pl in universe.indexes.player.listing" :value="pl.id">{{pl.name}}</option>
 				</select>
 				
 				<select v-model="state.activeIndex">

@@ -67,7 +67,6 @@
 				
 			},
 			"update": function() {
-				console.warn("Character Board Update: ", this.character.name);
 				var buffer,
 					x;
 				

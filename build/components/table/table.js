@@ -104,7 +104,7 @@
 				html += "<ul>";
 			},
 			"select": function(record, header) {
-				console.log("Table Selection: ", record, header);
+//				console.log("Table Selection: ", record, header);
 				if(header.recordAction) {
 					header.recordAction(record, header);
 				} else if(!this.state.noSelect) {

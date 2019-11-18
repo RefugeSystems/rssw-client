@@ -44,6 +44,7 @@ rsSystem.component("RSSWDashboard", {
 			this.$forceUpdate();
 		},
 		"updateEntities": function() {
+			console.warn("Update Entities");
 			var entities,
 				entity,
 				owned,
