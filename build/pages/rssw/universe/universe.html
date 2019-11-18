@@ -11,6 +11,7 @@
 				
 				<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()">
 					<option value="">Choose Action</option>
+					<option value="drop">Drop Object</option>
 					<option v-for="en in universe.indexes.entity.listing" :value="'take,' + en.id">Take from {{en.name}}</option>
 					<option v-for="en in universe.indexes.entity.listing" :value="'give,' + en.id">Give to {{en.name}}</option>
 				</select>

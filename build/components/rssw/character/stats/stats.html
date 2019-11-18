@@ -23,7 +23,7 @@
 			<span class="fas fa-plus-square"></span>
 			<span>XP: {{getXPCost(leveling, 1)}}</span>
 		</button>
-		<button class="level down" v-on:click="levelStat(leveling, -1)" v-if="leveling">
+		<button class="level down" v-on:click="levelStat(leveling, -1)" v-if="leveling" :disabled="canDecrease(leveling)">
 			<span class="fas fa-minus-square"></span>
 			<span>XP: {{getXPCost(leveling, -1)}}</span>
 		</button>

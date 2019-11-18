@@ -108,8 +108,19 @@
 				
 				return result;
 			},
+			"saveEvent": function(event) {
+				console.warn("Save?", event);
+				if(event.code === "KeyS" && event.ctrlKey) {
+					console.warn("Save");
+					this.modify();
+					event.stopPropagation();
+					event.preventDefault();
+					return false;
+				}
+			},
 			"modify": function() {
-//				console.log("modify");
+//				console.warn("modify: ", event);
+				
 				if(this.isValid) {
 //					console.log("valid");
 					if(this.state.building[this.state.current] instanceof Array) {

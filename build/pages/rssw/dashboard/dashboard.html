@@ -4,10 +4,14 @@
 			{{player.name}} Overview
 		</div>
 		
-		<div class="self" v-if="self">
-			<router-link class="navigation-button" :to="'/dashboard/character/' + self.id">
+		<div class="self">
+			<router-link class="navigation-button" v-if="self" :to="'/dashboard/character/' + self.id">
 				<span class="link-icon" :class="self.icon || 'fas fa-user-circle'"></span>
 				<span class="link-label">{{self.name}}</span>
+			</router-link>
+			<router-link class="navigation-button" v-if="!self" to="/construct/character">
+				<span class="link-icon fas fa-user-plus"></span>
+				<span class="link-label">Make Yourself</span>
 			</router-link>
 		</div>
 		

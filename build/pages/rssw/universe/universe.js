@@ -228,7 +228,7 @@
 					x;
 				
 				command = command.split(",");
-				console.warn("Table Command: ", command);
+				console.warn("Table Command: ", command, index);
 				
 				switch(command[0]) {
 					case "give":
@@ -256,6 +256,21 @@
 								this.universe.send("take:item", sending);
 							} else {
 								console.warn("Can not give non-item objects");
+							}
+						}
+						break;
+					case "drop":
+						for(x=0; x<index.selection.length; x++) {
+							if(index.selected[index.selection[x]]._drop) {
+								// Drop Item
+								sending = {};
+								sending._type = index.selected[index.selection[x]]._type;
+								sending.id = index.selected[index.selection[x]].id;
+								sending.time = Date.now();
+								this.universe.send("delete:" + index.selected[index.selection[x]]._type, sending);
+							} else {
+								// Flag Item
+								index.selected[index.selection[x]]._drop = true;
 							}
 						}
 						break;

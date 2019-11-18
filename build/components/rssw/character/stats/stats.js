@@ -34,6 +34,9 @@ rsSystem.component("rsswCharacterStats", {
 		"update": function() {
 			this.$forceUpdate();
 		},
+		"canDecrease": function(stat) {
+			return this.character._coreData[stat] === undefined || this.character._coreData[stat] <= 0;
+		},
 		"getXPCost": function(stat, dir) {
 			if(dir > 0) {
 				return (parseInt(this.character[stat]) + dir) * 10;

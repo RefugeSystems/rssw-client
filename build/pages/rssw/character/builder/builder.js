@@ -61,21 +61,40 @@
 			"building": {
 				"deep": true,
 				"handler": function() {
+					var modifier = {},
+						push = false,
+						buffer;
+					
 					if(this.stage === 6) {
+						console.warn("Stage 6 Re-Calc: ", this.choices[0]);
 						if(this.choices[0].wound_start) {
 							// TODO: Switch to System Set Calculation
-							Vue.set(this.building, "wounds_max", eval(this.choices[0].wound_start.replace("brawn", this.choices[0].brawn)));
-							Vue.set(this.building, "wounds", this.building.wounds);
+							console.warn("Wound Calc[" + this.building.brawn + "]: ", this.choices[0].wound_start);
+							buffer = eval(this.choices[0].wound_start.replace("brawn", this.building.brawn));
+							if(this.building.wounds_max !== buffer) {
+								modifier.wounds_max = buffer;
+								modifier.wounds = buffer;
+								push = true;
+							}
 						} else {
 							this.choices[0].wounds = 0;
 						}
 						if(this.choices[0].strain_start) {
 							// TODO: Switch to System Set Calculation
-							Vue.set(this.building, "strain_max", eval(this.choices[0].strain_start.replace("willpower", this.choices[0].willpower)));
-							Vue.set(this.building, "strain", this.building.strain_max);
+							console.warn("Strain Calc[" + this.building.willpower + "]: ", this.choices[0].strain_start);
+							buffer = eval(this.choices[0].strain_start.replace("willpower", this.building.willpower));
+							if(this.building.strain_max !== buffer) {
+								modifier.strain_max = buffer;
+								modifier.strain = buffer;
+								push = true;
+							}
 						} else {
 							this.choices[0].strain = 0;
 						}
+					}
+					
+					if(push) {
+						this.building.commit(modifier);
 					}
 				}
 			}
@@ -162,6 +181,9 @@
 						this.universe.send("create:self", this.building);
 						
 						this.forward();
+						break;
+					case 6:
+						this.$router.push("/dashboard/character/" + this.building.id);
 						break;
 				}
 			},
