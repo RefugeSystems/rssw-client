@@ -18,7 +18,7 @@
 	</div>
 	
 	<div class="building">
-		<textarea v-model="rawValue" v-save="modify">
+		<textarea v-model="rawValue" v-save="modify" v-tab>
 		</textarea>
 	</div>
 	
@@ -32,6 +32,10 @@
 	
 	
 	<div class="actions">
+		<button class="primary-action" v-on:click="newObject()">
+			<span class="action-icon fas fa-file-plus"></span>
+			<span class="action-text">New Object</span>
+		</button>
 		<button class="primary-action" v-on:click="modify()" :disabled="!isValid">
 			<span class="action-icon fas fa-cloud-upload"></span>
 			<span class="action-text">Upload</span>

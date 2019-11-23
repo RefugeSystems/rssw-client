@@ -46,6 +46,9 @@
 			"player": {
 				"required": true,
 				"type": Object
+			},
+			"built": {
+				"type": Object
 			}
 		},
 		"data": function() {
@@ -76,11 +79,26 @@
 			},
 			"rawValue": function(value) {
 				try {
-					var parsed = JSON.parse(value);
+					var parsed = JSON.parse(value),
+						keys,
+						x;
+					
 					Vue.set(this.state.building, this.state.current, parsed);
 					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
 					Vue.set(this, "isValid", true);
+					
+					if(this.built) {
+						keys = Object.keys(this.built);
+						for(x=0; x<keys.length; x++) {
+							Vue.set(this.built, keys[x], null);
+						}
+						keys = Object.keys(parsed);
+						for(x=0; x<keys.length; x++) {
+							Vue.set(this.built, keys[x], parsed[keys[x]]);
+						}
+					}
+					
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
 					Vue.set(this, "isValid", false);
@@ -89,8 +107,28 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+			if(this.state.building[this.state.current]) {
+				Vue.set(this, "rawValue", JSON.stringify(this.state.building[this.state.current], null, "\t"));
+			}
 		},
 		"methods": {
+			"newObject": function() {
+				var keys = this.state.building[this.state.current],
+					x;
+
+				if(this.built) {
+					for(x=0; x<keys.length; x++) {
+						Vue.delete(this.state.building[this.state.current], keys[x]);
+						Vue.set(this.built, keys[x], null);
+					}
+				} else {
+					for(x=0; x<keys.length; x++) {
+						Vue.delete(this.state.building[this.state.current], keys[x]);
+					}
+				}
+				
+				Vue.set(this, "rawValue", "{}");
+			},
 			"dropObject": function() {
 				this.state.building[this.state.current]._type = this.state.current;
 				this.universe.send("delete:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));

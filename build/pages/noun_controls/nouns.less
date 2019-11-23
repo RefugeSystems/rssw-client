@@ -1,3 +1,33 @@
 .rs-page.page-noun_controls {
 	display: block;
+	
+	.construction {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		height: ~"calc(100% - 50px)";
+		margin-left: 10px;
+		
+		.building {
+			min-width: 440px;
+		}
+		
+		.output {
+			background-color: @rsWhite;
+			min-width: 400px;
+			max-width: 400px;
+			width: 400px;
+			padding: 5px;
+			max-height: 100%;
+			overflow: auto;
+			
+			h1, h2, h3, h4 {
+				color: @rsBlack;
+			}
+		}
+		
+		.description {
+			color: @rsBlack;
+		}
+	}
 }

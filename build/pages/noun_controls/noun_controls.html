@@ -1,4 +1,15 @@
 <div class="rs-page page-noun_controls">
 	<h1>Nouns</h1>
-	<rs-nouns :universe="universe" :player="player"></rs-nouns>
+	<div class="construction">
+		<div class="building">
+			<rs-nouns :universe="universe" :player="player" :built="built"></rs-nouns>
+		</div>
+		<div class="output rs-component">
+			<h2>
+				<span :class="built.icon"></span>
+				<span>{{built.name}}</span>
+			</h2>
+			<rs-object-info v-on:click="processRequest($event)" :record="built" :universe="universe"></rs-object-info>
+		</div>
+	</div>
 </div>

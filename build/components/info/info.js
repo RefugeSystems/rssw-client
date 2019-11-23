@@ -50,6 +50,12 @@
 			return data;
 		},
 		"watch": {
+			"record": {
+				"deep": true,
+				"handler": function() {
+					console.warn("hold");
+				}
+			}
 		},
 		"mounted": function() {
 			rsSystem.register(this);
@@ -79,13 +85,17 @@
 						} else {
 							console.warn("Repeated Shift? ", this.viewing.id);
 						}
-						this.viewing.$off("modified", this.update);
+						if(this.viewing.$off) {
+							this.viewing.$off("modified", this.update);
+						}
 					}
 					
 					Vue.set(this, "viewing", toView);
 					Vue.set(this, "open", true);
-					
-					this.viewing.$on("modified", this.update);
+
+					if(this.viewing.$on) {
+						this.viewing.$on("modified", this.update);
+					}
 				}
 			},
 			

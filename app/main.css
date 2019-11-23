@@ -302,6 +302,9 @@ h6 {
   /* -------------- */
   /* -------------- */
 }
+.rs-component .ra {
+  display: inline-block;
+}
 .rs-component .rot45 {
   transform: rotate(45deg);
 }
@@ -434,6 +437,34 @@ form {
 }
 .rs-page.page-noun_controls {
   display: block;
+}
+.rs-page.page-noun_controls .construction {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: calc(100% - 50px);
+  margin-left: 10px;
+}
+.rs-page.page-noun_controls .construction .building {
+  min-width: 440px;
+}
+.rs-page.page-noun_controls .construction .output {
+  background-color: #EAEFF9;
+  min-width: 400px;
+  max-width: 400px;
+  width: 400px;
+  padding: 5px;
+  max-height: 100%;
+  overflow: auto;
+}
+.rs-page.page-noun_controls .construction .output h1,
+.rs-page.page-noun_controls .construction .output h2,
+.rs-page.page-noun_controls .construction .output h3,
+.rs-page.page-noun_controls .construction .output h4 {
+  color: #000000;
+}
+.rs-page.page-noun_controls .construction .description {
+  color: #000000;
 }
 .rssw-page.character-builder .stage {
   display: flex;
@@ -742,6 +773,7 @@ form {
   overflow-y: auto;
   overflow-x: hidden;
   transition: width 0.5s, right 0.5s, top 0.5s;
+  border-left: 1px solid black;
   background-color: #EAEFF9;
   z-index: 20;
 }
@@ -749,7 +781,7 @@ form {
   right: 0px;
 }
 .system-component.system-info .main-bar {
-  position: relative;
+  position: sticky;
   width: 100%;
   height: 40px;
   background-color: #928282;
@@ -757,6 +789,7 @@ form {
   padding: 0px;
   display: flex;
   flex-direction: row;
+  top: 0px;
 }
 .system-component.system-info .main-bar .titling {
   display: flex;
@@ -914,8 +947,11 @@ form {
   flex-grow: 100;
 }
 .rs-component.component-nouns textarea {
-  min-width: 500px;
   min-height: 350px;
+  min-width: 100%;
+  max-width: 100%;
+  width: 100%;
+  tab-size: 4;
 }
 .rs-component.rssw.component-character-info .property {
   margin: 3px;

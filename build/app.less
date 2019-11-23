@@ -364,6 +364,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .rs-component {
+	.ra {
+		display: inline-block;
+	}
+
 	.rot45 {
 		transform: rotate(45deg);
 	}
@@ -520,6 +524,36 @@ form {
 
 .rs-page.page-noun_controls {
 	display: block;
+	
+	.construction {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		height: ~"calc(100% - 50px)";
+		margin-left: 10px;
+		
+		.building {
+			min-width: 440px;
+		}
+		
+		.output {
+			background-color: @rsWhite;
+			min-width: 400px;
+			max-width: 400px;
+			width: 400px;
+			padding: 5px;
+			max-height: 100%;
+			overflow: auto;
+			
+			h1, h2, h3, h4 {
+				color: @rsBlack;
+			}
+		}
+		
+		.description {
+			color: @rsBlack;
+		}
+	}
 }
 
 .rssw-page.page-base {
@@ -924,6 +958,7 @@ form {
 	overflow-y: auto;
 	overflow-x: hidden;
 	transition: width .5s, right .5s, top .5s;
+	border-left: 1px solid black;
 	background-color: @rsWhite;
 	z-index: 20;
 	
@@ -932,7 +967,7 @@ form {
 	}
 
 	.main-bar {
-		position: relative;
+		position: sticky;
 		width: 100%;
 		height: 40px;
 		background-color: @rsGray;
@@ -940,6 +975,7 @@ form {
 		padding: 0px;
 		display: flex;
 		flex-direction: row;
+		top: 0px;
 		
 		.titling {
 			display: flex;
@@ -1139,8 +1175,11 @@ form {
 
 
 	textarea {
-		min-width: 500px;
 		min-height: 350px;
+		min-width: 100%;
+		max-width: 100%;
+		width: 100%;
+		tab-size: 4;
 	}
 
 }
