@@ -45,15 +45,22 @@
 			return data;
 		},
 		"watch": {
-			"record": function() {
-				this.update();
+			/*
+			"record": {
+				"deep": true,
+				"handler": function() {
+					console.warn("Record Shift: ", this.record);
+					this.update();
+				}
 			}
+			*/
 		},
 		"mounted": function() {
+			/*
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value])) {
-					console.log("Follow: ", follow);
+					console.log("2Follow: ", follow);
 					rsSystem.EventBus.$emit("display-info", follow);
 				}
 			};
@@ -65,23 +72,31 @@
 			}
 			rsSystem.register(this);
 			this.update();
+			*/
 		},
 		"methods": {
 			"visible": function(key) {
 				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
 			},
 			"update": function() {
+				/*
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
 //					console.log("Shifting");
-					this.universe.index.index[this.id].$off("modified", this.update);
-					this.record.$on("modified", this.update);
+					if(this.universe.index.index[this.id].$off) {
+						this.universe.index.index[this.id].$off("modified", this.update);
+					}
+					if(this.record.$on) {
+						this.record.$on("modified", this.update);
+					} else {
+						console.warn("Record is not listenable? ", this.record);
+					}
 					Vue.set(this, "id", this.record.id);
 				} else {
 //					console.log("Setting");
 					Vue.set(this, "id", this.record.id);
 				}
-				
+
 				if(this.record.description) {
 					if(this.holdDescription !== this.record.description) {
 						Vue.set(this, "holdDescription", this.record.description);
@@ -96,6 +111,7 @@
 				this.keys.push.apply(this.keys, Object.keys(this.record));
 				
 				this.$forceUpdate();
+				*/
 			}
 		},
 		"beforeDestroy": function() {

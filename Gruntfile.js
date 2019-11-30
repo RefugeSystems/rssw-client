@@ -120,6 +120,7 @@ var config = {
 				"RSEffect",
 				"RSEntity",
 				"RSPlanet",
+				"RSImage",
 				"RSParty",
 				"RSSkill",
 				"RSNote",
@@ -145,7 +146,7 @@ var config = {
 				"middleware": function(connect, options, middlewares) {
 					middlewares.unshift(function(req, res, next) {
 						res.setHeader("Access-Control-Allow-Origin", "*");
-						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval';");
+						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: blob: https:;");
 						next();
 					});
 					return middlewares;

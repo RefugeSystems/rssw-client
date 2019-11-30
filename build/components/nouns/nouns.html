@@ -18,8 +18,12 @@
 	</div>
 	
 	<div class="building">
-		<textarea v-model="rawValue" v-save="modify" v-tab>
+		<textarea v-model="rawValue" v-save="modify" v-tab v-filedrop="fileAttach">
 		</textarea>
+		<label v-if="state.current === 'image'">
+			<span>Select Image File:</span>
+			<input type="file" id="attacher" accept="image/*" v-on:change="selectImage($event)" />
+		</label>
 	</div>
 	
 	<div class="files">

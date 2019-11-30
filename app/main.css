@@ -762,6 +762,15 @@ form {
   padding: 2px 4px;
   border-top: 1px solid #617EB8;
 }
+.rs-component.rs-image.general {
+  width: 100%;
+}
+.rs-component.rs-image.general img {
+  max-width: 100%;
+}
+.rs-component.rs-image.linked {
+  cursor: pointer;
+}
 .system-component.system-info {
   position: absolute;
   display: flex;
@@ -838,6 +847,12 @@ form {
 }
 .object-info .general-information p {
   margin: 0px 0px 17px 0px;
+}
+.object-info .general-information .general-image {
+  width: 100%;
+}
+.object-info .general-information .general-image img {
+  max-width: 100%;
 }
 .object-info a {
   color: #0055ff;
@@ -952,6 +967,9 @@ form {
   max-width: 100%;
   width: 100%;
   tab-size: 4;
+}
+.rs-component.component-nouns textarea.overlay {
+  color: rgba(0, 0, 0, 0.4);
 }
 .rs-component.rssw.component-character-info .property {
   margin: 3px;

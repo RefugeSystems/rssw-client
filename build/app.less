@@ -947,6 +947,20 @@ form {
 	
 	
 }
+.rs-component.rs-image {
+	
+	&.general {
+		width: 100%;
+		
+		img {
+			max-width: 100%;
+		}
+	}
+	
+	&.linked {
+		cursor: pointer;
+	}
+}
 .system-component.system-info {
 	position: absolute;
 	display: flex;
@@ -1037,6 +1051,14 @@ form {
 	
 		p {
 			margin: 0px 0px 17px 0px;
+		}
+		
+		.general-image {
+			width: 100%;
+			
+			img {
+				max-width: 100%;
+			}
 		}
 	}
 	
@@ -1173,15 +1195,17 @@ form {
 
 .rs-component.component-nouns {
 
-
 	textarea {
 		min-height: 350px;
 		min-width: 100%;
 		max-width: 100%;
 		width: 100%;
 		tab-size: 4;
+		
+		&.overlay {
+			color: rgba(0,0,0,.4);
+		}
 	}
-
 }
 
 .rs-component.rssw.component-character-info {

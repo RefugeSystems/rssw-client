@@ -106,6 +106,12 @@
 					}
 					this.saveStorage(this.storageKeyID, this.state);
 				}
+			},
+			"$route": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
 			}
 		},
 		"mounted": function() {
@@ -444,7 +450,11 @@
 					}
 				}
 				
-				if(this.location.viewed !== this.sourceImage) {
+				if(this.location.image && this.universe.nouns.image[this.location.image]) {
+					Vue.set(this, "ready", false);
+					Vue.set(this, "sourceImage", this.universe.nouns.image[this.location.image].data);
+					this.getDimensions(this.universe.nouns.image[this.location.image].data);
+				} else if(this.location.viewed !== this.sourceImage) {
 					Vue.set(this, "ready", false);
 					Vue.set(this, "sourceImage", this.location.viewed);
 					this.getDimensions(this.location.viewed);

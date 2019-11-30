@@ -36,7 +36,8 @@
 	rsSystem.component("rsNouns", {
 		"inherit": true,
 		"mixins": [
-			rsSystem.components.StorageManager
+			rsSystem.components.StorageManager,
+			rsSystem.components.DataManager
 		],
 		"props": {
 			"universe": {
@@ -53,9 +54,10 @@
 		},
 		"data": function() {
 			var data = {};
-			
-			data.message = null;
+
+			data.attaching = null;
 			data.rawValue = "{}";
+			data.message = null;
 			data.isValid = true;
 			data.copy = null;
 			data.nouns = rsSystem.listingNouns.sort();
@@ -132,6 +134,50 @@
 			"dropObject": function() {
 				this.state.building[this.state.current]._type = this.state.current;
 				this.universe.send("delete:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
+			},
+			"fileAttach": function(event) {
+				console.warn("Noun File Attach: ", event);
+				try {
+					var file = event.items[0].getAsFile();
+					console.warn("File: ", file);
+				} catch(exception) {
+					console.error("Ex: ", exception);
+				}
+			},
+			"selectImage": function(event) {
+				var input = $(this.$el).find("#attacher"),
+					value,
+					keys,
+					x;
+				
+				if(this.state.current === "image" && input && input.length && input[0].files.length) {
+					console.warn("Set Image");
+					if(this.state.building[this.state.current]) {
+						keys = Object.keys(this.state.building[this.state.current]);
+						if(this.built) {
+							for(x=0; x<keys.length; x++) {
+								Vue.delete(this.state.building[this.state.current], keys[x]);
+								Vue.set(this.built, keys[x], null);
+							}
+						} else {
+							for(x=0; x<keys.length; x++) {
+								Vue.delete(this.state.building[this.state.current], keys[x]);
+							}
+						}
+					}
+					
+					value = {};
+					this.encodeFile(input[0].files[0])
+					.then((result) => {
+						value.data = result.data;
+						result.name = result.name.substring(0, result.name.lastIndexOf("."));
+						value.id = "image:" + result.name.replace(/\./g, ":");
+						value.name = result.name;
+						Vue.set(this, "rawValue", JSON.stringify(value, null, 4));
+						input[0].value = null;
+						console.warn("New Value: ", value);
+					});
+				}
 			},
 			"copyNoun": function(source) {
 				var result = {},

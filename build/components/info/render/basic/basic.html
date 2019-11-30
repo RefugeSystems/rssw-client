@@ -1,4 +1,10 @@
 <div class="general-information">
+
+	<rs-render-image v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
+	<div v-if="record.data" class="general-image">
+		<img :src="record.data" />
+	</div>
+	
 	<div v-if="description" v-html="description"></div>
 	
 	<div class="properties">
