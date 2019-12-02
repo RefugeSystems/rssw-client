@@ -9,7 +9,7 @@
 				<span :class="built.icon"></span>
 				<span>{{built.name}}</span>
 			</h2>
-			<rs-object-info v-on:click="processRequest($event)" :record="built" :universe="universe"></rs-object-info>
+			<rs-object-info v-on:click="processRequest($event)" :record="built" :universe="universe" :player="player"></rs-object-info>
 		</div>
 	</div>
 </div>

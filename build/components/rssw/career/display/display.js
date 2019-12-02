@@ -27,7 +27,9 @@
 			return data;
 		},
 		"mounted": function() {
-			this.record.$on("modified", this.update);
+			if(this.record && this.record.$on) {
+				this.record.$on("modified", this.update);
+			}
 			rsSystem.register(this);
 			this.update();
 		},
@@ -47,7 +49,9 @@
 			}
 		},
 		"beforeDestroy": function() {
-			this.record.$off("modified", this.update);
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
 		},
 		"template": Vue.templified("components/rssw/career/display.html")
 	});

@@ -32,4 +32,9 @@
 			</div>
 		</div>
 	</div>
+	
+	<div v-if="note && player && player.master">
+		<h3>Master Note</h3>
+		 <div v-html="note"></div>
+	</div>
 </div>

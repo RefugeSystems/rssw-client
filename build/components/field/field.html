@@ -1,0 +1,96 @@
+
+<div class="rs-component rs-field" :class="'property-' + field.property">
+	<label :for="fid">
+		<span>{{field.label}}</span>
+	</label>
+	<span v-if="field.error">
+		<h3>
+			<span class="fas fa-exclamation-triangle"></span>
+			<span>Error</span>
+		</h3>
+		<p>
+			{{field.error | JSON}}
+		</p>
+	</span>
+	
+	<span v-if="field.type === 'label'">
+		<!-- Do Nothing Here -->
+	</span>
+	
+	<select :id="fid" v-if="field.type === 'select' && field.options && field.options.length" v-model="root[field.property]" v-on:change.stop="emitChanged()">
+		<option v-if="root[field.property] === 'undefined' && !field.persistUnset" :value="root[field.property]">{{field.unset}}</option>
+		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
+		
+		<option v-if="field.raw" v-for="option in field.options" :value="option">{{option}}</option>
+		<option v-if="!field.raw && !field.optionValue && !field.optionLabel" v-for="option in field.options" :value="option.value" :title="option[field.optionDescription] || option.description || ''">{{option.label}}</option>
+		<option v-if="!field.raw && field.optionValue && field.optionLabel" v-for="option in field.options" :value="option[field.optionValue]" :title="option[field.optionDescription] || option.description || ''">{{option[field.optionLabel]}}</option>
+	</select>
+	
+	<span v-if="field.type === 'select' && (!field.options || !field.options.length)">
+		<span class="fas fa-spinner fa-pulse"></span>
+		<span>Loading...</span>
+	</span>
+	
+	<button :id="fid" v-if="field.type === 'checkbox'" :disabled="field.disable?field.disable():false" v-on:click="set(!root[field.property])" class="flat">
+		<span class="far" :class="root[field.property]?'fa-check-square':'fa-square'"></span>
+	</button>
+	
+	<input :id="fid" :type="field.type" v-if="field.type === 'number'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
+	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
+	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
+	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="root[field.property]" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
+	
+	<span v-if="field.suffix" class="suffix">{{field.suffix}}</span>
+	
+	<span v-if="field.computed" class="computed" :class="field.computed.class?field.computed.class():{}">{{field.computed.method()}}</span>
+	<span v-if="field.computed && field.computed.suffix" class="computed-suffix">{{field.computed.suffix}}</span>
+	<button v-if="field.info" class="info fas fa-info-circle" v-on:click.stop="field.info(root[field.property])"></button>
+	<button v-if="field.validation" class="validation fas" :class="{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}" v-on:click.stop="field.validation.feedback(field, root[field.property], checkField())"></button>
+
+	<slot name="info">
+	</slot>
+	
+	<table :id="fid" v-if="field.type === 'grid-select'" class="grid-select">
+		<tr>
+			<td></td>
+			<td class="col label" v-for="col in field.columns">
+				{{col.label}}
+			</td>
+		</tr>
+		<tr v-for="row in field.rows">
+			<td class="row label">{{row.label}}</td>
+			<td v-for="col in field.columns">
+				<!-- button class="far option" :class="{'fa-square': row.value !== _row || col.value !== _col, 'fa-square-check': row.value === _row && col.value === _col}" v-on:click.stop="set((field.compose || compose)(col.value, row.value))"></button -->
+				<button class="far option" :class="{'fa-square': !tracking[row.value][col.value], 'fa-check-square': tracking[row.value][col.value]}" v-on:click.stop="set(compose(row.value, col.value))"></button>
+			</td>
+		</tr>
+	</table>
+	
+	<div v-if="field.type === 'textarea'" class="textarea">
+		<textarea :id="fid" v-model="root[field.property]" :placeholder="field.placeholder" v-on:input="emitChanged()">
+		</textarea>
+	</div>
+	
+	<div v-if="field.type === 'multireference'" class="multireference">
+		<div v-if="!field.source_index">
+			<span class="fas fa-exclamation-triangle"></span>
+			<span>No Source Index</span>
+		</div>
+		<div class="referenced" v-for="(reference, $index) in root[field.property]">
+			<span class="reference-display">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:"Missing:" + reference}}</span>
+			<button class="info fas fa-info-circle" v-on:click="openReference(reference)"></button>
+			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
+		</div>
+		<div class="referenced">
+			<select v-model="reference_value" v-on:change="addReference(reference_value)">
+				<option value="">Select To Add</option>
+				<option v-for="option in field.source_index.listing" :id="option.id" :value="option.id">{{option.name}}</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="error" v-if="field.error">
+		<span>Error:</span>
+		<p>{{field.error.message || field.error.text || field.error}}</p>
+	</div>
+</div>

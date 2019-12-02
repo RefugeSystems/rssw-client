@@ -37,7 +37,12 @@
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.StorageManager,
-			rsSystem.components.DataManager
+			rsSystem.components.DataManager,
+
+			rsSystem.components.NounFieldsModifierStats,
+			rsSystem.components.NounFieldsKnowledge,
+			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsItem
 		],
 		"props": {
 			"universe": {
@@ -79,6 +84,12 @@
 					Vue.set(this, "copy", null);
 				}
 			},
+			"state.current": function(n, p) {
+				console.warn("Noun: ", n, p);
+				if(this.state.building[n]) {
+					Vue.set(this, "rawValue", JSON.stringify(this.state.building[n], null, "\t"));
+				}
+			},
 			"rawValue": function(value) {
 				try {
 					var parsed = JSON.parse(value),
@@ -114,6 +125,25 @@
 			}
 		},
 		"methods": {
+			"clearField": function(field) {
+				Vue.set(this.state.building[this.state.current], field.property, null);
+				if(this.built) {
+					Vue.set(this.built, field.property, null);
+				}
+			},
+			"openKnowledge": function(id) {
+				if(this.universe.index.index[id]) {
+					rsSystem.EventBus.$emit("display-info", this.universe.index.index[id]);
+				} else {
+					console.warn("ID Not Found for Knowledge: ", id);
+				}
+			},
+			"sync": function(event) {
+				console.warn("Sync: ", event);
+				if(this.built) {
+					Vue.set(this.built, event.property, event.value);
+				}
+			},
 			"newObject": function() {
 				var keys = this.state.building[this.state.current],
 					x;
@@ -177,6 +207,33 @@
 						input[0].value = null;
 						console.warn("New Value: ", value);
 					});
+				}
+			},
+			"toggleEditMode": function() {
+				var parsed,
+					keys,
+					x;
+				
+				if(this.state.advanced_editor) {
+					try {
+						parsed = JSON.parse(this.rawValue);
+						keys = Object.keys(this.state.building[this.state.current]);
+						for(x=0; x<keys.length; x++) {
+							Vue.delete(this.state.building[this.state.current], keys[x]);
+						}
+						
+						keys = Object.keys(parsed);
+						for(x=0; x<keys.length; x++) {
+							Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
+						}
+					} catch(ex) {
+						Vue.set(this, "error", ex.getMessage());
+						console.error("Parse Failed: ", ex);
+					}
+					Vue.set(this.state, "advanced_editor", false);
+				} else {
+					Vue.set(this, "rawValue", JSON.stringify(this.state.building[this.state.current], null, 4));
+					Vue.set(this.state, "advanced_editor", true);
 				}
 			},
 			"copyNoun": function(source) {

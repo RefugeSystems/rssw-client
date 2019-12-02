@@ -320,5 +320,7 @@ class RSObject extends EventEmitter {
 		}
 		
 		this.recalculateProperties();
+		// Array properties not recalculating with one pass?
+		this.recalculateProperties();
 	}
 }

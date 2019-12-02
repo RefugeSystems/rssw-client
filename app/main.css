@@ -362,6 +362,12 @@ h6 {
 .rs-component .rotY60 {
   transform: rotateY(60deg);
 }
+button.flat {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  font-size: 1em;
+}
 #game .maTop10 {
   margin-top: 10px;
 }
@@ -446,7 +452,7 @@ form {
   margin-left: 10px;
 }
 .rs-page.page-noun_controls .construction .building {
-  min-width: 440px;
+  width: 440px;
 }
 .rs-page.page-noun_controls .construction .output {
   background-color: #EAEFF9;
@@ -762,6 +768,89 @@ form {
   padding: 2px 4px;
   border-top: 1px solid #617EB8;
 }
+.rs-component.rs-field {
+  color: inherit;
+  margin: 3px 0px !important;
+}
+.rs-component.rs-field input,
+.rs-component.rs-field button,
+.rs-component.rs-field label,
+.rs-component.rs-field table {
+  color: inherit;
+  background-color: inherit;
+}
+.rs-component.rs-field label {
+  display: inline-block;
+  text-align: right;
+  min-width: 100px;
+}
+.rs-component.rs-field select,
+.rs-component.rs-field input {
+  font-size: 13px;
+  padding: 3px;
+}
+.rs-component.rs-field textarea,
+.rs-component.rs-field input {
+  user-select: all;
+}
+.rs-component.rs-field select {
+  max-width: 160px;
+}
+.rs-component.rs-field textarea {
+  width: 90%;
+  min-height: 160px;
+}
+.rs-component.rs-field .checkbox-field {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  font-size: 1.2em;
+}
+.rs-component.rs-field .multireference {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 3px;
+  border: 1px solid #928282;
+  background: #EAEFF9;
+  width: calc(100% - 10px);
+}
+.rs-component.rs-field .multireference .referenced {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #928282;
+  background: #000000;
+  border-radius: 5px;
+  color: #EAEFF9;
+  padding: 3px;
+  margin: 3px;
+}
+.rs-component.rs-field .multireference .referenced .reference-display {
+  max-width: 160px;
+  padding: 0px 7px;
+  overflow: hidden;
+}
+.rs-component.rs-field .multireference .referenced .info {
+  color: #6f9bf5;
+  line-height: 24px;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  padding: 0px;
+  border: 0px;
+  margin: 0px 8px 0px 0px;
+}
+.rs-component.rs-field .multireference .referenced .remove {
+  color: #EAEFF9;
+  line-height: 26px;
+  font-size: 26px;
+  height: 26px;
+  width: 26px;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
 .rs-component.rs-image.general {
   width: 100%;
 }
@@ -961,14 +1050,44 @@ form {
 .system-component.system-menu .navigation .separator {
   flex-grow: 100;
 }
-.rs-component.component-nouns textarea {
+.rs-component.component-nouns .selection,
+.rs-component.component-nouns .sourcing {
+  margin: 4px 0px;
+}
+.rs-component.component-nouns .selection span,
+.rs-component.component-nouns .sourcing span {
+  display: inline-block;
+  text-align: right;
+  width: 50px;
+}
+.rs-component.component-nouns .selection select,
+.rs-component.component-nouns .sourcing select {
+  width: 360px;
+}
+.rs-component.component-nouns .building {
+  border-top: 1px solid white;
+  padding-top: 9px;
+  margin-top: 9px;
+}
+.rs-component.component-nouns .building .simplified-editor {
+  max-height: calc(100% - 100px);
+  overflow: auto;
+}
+.rs-component.component-nouns .info-link {
+  line-height: 16px;
+  font-size: 16px;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+.rs-component.component-nouns .advanced-editor textarea {
   min-height: 350px;
   min-width: 100%;
   max-width: 100%;
   width: 100%;
   tab-size: 4;
 }
-.rs-component.component-nouns textarea.overlay {
+.rs-component.component-nouns .advanced-editor textarea.overlay {
   color: rgba(0, 0, 0, 0.4);
 }
 .rs-component.rssw.component-character-info .property {

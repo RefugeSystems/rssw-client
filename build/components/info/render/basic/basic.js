@@ -13,6 +13,7 @@
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
 	invisibleKeys.description = true;
+	invisibleKeys.master_note = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
 //	invisibleKeys.playable = true;
@@ -24,6 +25,14 @@
 	invisibleKeys.echo = true;
 	invisibleKeys.url = true;
 	invisibleKeys.id = true;
+
+	invisibleKeys.coordinates = true;
+	invisibleKeys.shown_at = true;
+	invisibleKeys.profile = true;
+	invisibleKeys.showing = true;
+	invisibleKeys.viewed = true;
+	invisibleKeys.map = true;
+	
 	
 	var prettifyNames = {};
 	var prettifyValues = {};
@@ -42,6 +51,9 @@
 			"record": {
 				"required": true,
 				"type": Object
+			},
+			"player": {
+				"type": Object
 			}
 		},
 		"data": function() {
@@ -49,6 +61,8 @@
 			
 			data.holdDescription = null;
 			data.description = null;
+			data.holdNote = null;
+			data.note = null;
 			data.image = null;
 			data.keys = [];
 			data.id = null;
@@ -165,16 +179,23 @@
 				}
 				
 				if(this.record.description) {
-					console.warn("Description Found: ", this.description);
 					if(this.holdDescription !== this.record.description) {
 						Vue.set(this, "holdDescription", this.record.description);
 						Vue.set(this, "description", this.rsshowdown(this.record.description));
-					} else {
-						console.warn("Description Skipped");
 					}
 				} else {
 					Vue.set(this, "holdDescription", null);
 					Vue.set(this, "description", null);
+				}
+				
+				if(this.record.master_note) {
+					if(this.holdNote !== this.record.master_note) {
+						Vue.set(this, "holdNote", this.record.master_note);
+						Vue.set(this, "note", this.rsshowdown(this.record.master_note));
+					}
+				} else {
+					Vue.set(this, "holdNote", null);
+					Vue.set(this, "note", null);
 				}
 				
 				if(this.record.image && this.universe.nouns.image[this.record.image]) {

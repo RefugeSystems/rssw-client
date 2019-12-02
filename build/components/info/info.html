@@ -12,5 +12,5 @@
 		</button>
 	</div>
 	
-	<rs-object-info v-if="viewing" v-on:click="processRequest($event)" :record="viewing" :universe="universe"></rs-object-info>
+	<rs-object-info v-if="viewing" v-on:click="processRequest($event)" :record="viewing" :universe="universe" :player="user"></rs-object-info>
 </div>

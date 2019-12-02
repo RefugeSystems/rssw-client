@@ -220,3 +220,23 @@ if(!Array.prototype.union) {
 		return result;
 	};
 }
+
+(function() {
+	var sortBySorters = {};
+	
+	Array.prototype.sortBy = function(field) {
+		if(!sortBySorters[field]) {
+			sortBySorters[field] = function(a, b) {
+				if(a[field] < b[field]) {
+					return -1;
+				} else if(a[field] > b[field]) {
+					return 1;
+				} else {
+					return 0;
+				}
+			};
+		}
+		
+		this.sort(sortBySorters[field]);
+	};
+})();

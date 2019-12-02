@@ -32,6 +32,9 @@
 			"record": {
 				"required": true,
 				"type": Object
+			},
+			"player": {
+				"type": Object
 			}
 		},
 		"data": function() {
@@ -115,7 +118,9 @@
 			}
 		},
 		"beforeDestroy": function() {
-			this.record.$off("modified", this.update);
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
 		},
 		"render": function(createElement) {
 			var elements = false,
@@ -126,6 +131,7 @@
 			elements = [createElement(this.record.information_renderer || "rs-object-info-basic", {
 				"props": {
 					"universe": this.universe,
+					"player": this.player,
 					"record": this.record
 				}
 			})];

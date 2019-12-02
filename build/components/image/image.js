@@ -29,6 +29,8 @@
 			data.uri = null;
 			if(this.linked) {
 				data.link = "/" + this.linked.linked + "/" + this.linked.id;
+			} else {
+				data.link = false;
 			}
 			
 			return data;
