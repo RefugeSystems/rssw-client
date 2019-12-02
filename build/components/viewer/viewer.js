@@ -117,6 +117,7 @@
 		"mounted": function() {
 			Vue.set(this, "element", $(this.$el));
 			rsSystem.register(this);
+			this.universe.$on("universe:modified", this.update);
 			this.location.$on("modified", this.update);
 			this.update();
 		},
@@ -360,11 +361,15 @@
 				}
 			},
 			"poiVisible": function(link) {
-				if(!link.knowledge && !link.obscured) {
+				if(this.player.master && this.state.master_view === "master") {
 					return true;
 				}
 				
-				if(this.player.master && this.state.master_view === "master") {
+				if(link.hidden) {
+					return false;
+				}
+				
+				if(!link.required_knowledge) {
 					return true;
 				}
 				
@@ -372,6 +377,8 @@
 				if(entity && (entity = this.universe.nouns.knowledge[entity.knowledge])) {
 					return !!entity[link.knowledge];
 				}
+				
+				return false;
 			},
 			"renderState": function() {
 				var state = "";
@@ -471,6 +478,7 @@
 			}
 		},
 		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
 			this.location.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/viewer.html")

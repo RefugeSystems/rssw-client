@@ -1,7 +1,55 @@
 
 (function() {
 	
-	var dataSource;
+	var dataSource,
+		profiles,
+		attrs,
+		stats,
+		items,
+		notes;
+
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	items = {
+		"label": "Items",
+		"property": "item",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"filter": {
+			"template": true
+		}
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 	
 	dataSource = [{
 		"label": "ID",
@@ -17,12 +65,34 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "State",
+		"property": "state",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"undiscovered",
+			"pending",
+			"active",
+			"completed"
+		]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	},
+	profiles,
+	attrs,
+	stats,
+	items,
+	{
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
-	}, {
-		"label": "Note",
-		"property": "note",
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
 		"type": "textarea"
 	}];
 	
@@ -43,7 +113,13 @@
 			return data;
 		},
 		"mounted": function() {
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
 
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+			items.source_index = this.universe.indexes.item;
 		},
 		"methods": {
 			"update": function() {

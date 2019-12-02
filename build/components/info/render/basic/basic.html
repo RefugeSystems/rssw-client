@@ -1,23 +1,28 @@
 <div class="general-information">
 
-	<rs-render-image v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
+	<rs-render-image class="profile-image" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
+	
+	<div v-if="description" v-html="description"></div>
+	
+	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
 	<div v-if="record.data" class="general-image">
 		<img :src="record.data" />
 	</div>
-	
-	<div v-if="description" v-html="description"></div>
 	
 	<div class="properties">
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 			<div class="reference" v-if="universe.indexes[property]">
 				<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
 					<div class="reference-heading">{{property.pluralize(true)}}</div>
-					<div class="subreference" v-for="subrecord in record[property]">
-						<div class="reference-heading">{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</div>
+					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden">
+						<div class="reference-heading">
+							<span :class="universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''"></span>
+							<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>
+						</div>
 						<rs-object-info :record="universe.indexes[property].lookup[subrecord]" :universe="universe"></rs-object-info>
 					</div>
 				</div>
-				<div class="reference-values" v-if="!isArray(record[property]) && record[property]">
+				<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
 					<div class="reference-heading">{{property.capitalize()}}</div>
 					<div class="subreference">
 						<div class="reference-heading">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>

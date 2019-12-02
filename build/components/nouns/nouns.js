@@ -42,7 +42,8 @@
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsLocation,
-			rsSystem.components.NounFieldsItem
+			rsSystem.components.NounFieldsItem,
+			rsSystem.components.NounFieldsNote
 		],
 		"props": {
 			"universe": {
@@ -227,8 +228,8 @@
 							Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
 						}
 					} catch(ex) {
-						Vue.set(this, "error", ex.getMessage());
 						console.error("Parse Failed: ", ex);
+						Vue.set(this, "error", ex.message);
 					}
 					Vue.set(this.state, "advanced_editor", false);
 				} else {

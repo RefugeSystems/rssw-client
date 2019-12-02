@@ -63,6 +63,7 @@
 			data.description = null;
 			data.holdNote = null;
 			data.note = null;
+			data.profile = null;
 			data.image = null;
 			data.keys = [];
 			data.id = null;
@@ -202,6 +203,12 @@
 					Vue.set(this, "image", this.universe.nouns.image[this.record.image]);
 				} else {
 					Vue.set(this, "image", null);
+				}
+				
+				if(this.record.profile && this.universe.nouns.image[this.record.profile]) {
+					Vue.set(this, "profile", this.universe.nouns.image[this.record.profile]);
+				} else {
+					Vue.set(this, "profile", null);
 				}
 				
 				this.keys.splice(0);

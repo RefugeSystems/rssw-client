@@ -3,10 +3,11 @@
 	
 	var dataSource,
 		abilities,
-		images,
+		profiles,
 		skill,
 		attrs,
-		stats;
+		stats,
+		notes;
 	
 	abilities = {
 		"label": "Abilities",
@@ -16,9 +17,9 @@
 		"optionLabel": "name"
 	};
 	
-	images = {
-		"label": "Image",
-		"property": "image",
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -40,17 +41,17 @@
 		"optionLabel": "name"
 	};
 	
-	attrs = {
-		"label": "Attributes",
-		"property": "modifierattrs",
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
 	
-	stats = {
-		"label": "Stats",
-		"property": "modifierstats",
+	notes = {
+		"label": "Notes",
+		"property": "note",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -82,7 +83,7 @@
 		"property": "rarity",
 		"type": "number"
 	}, 
-	images,
+	profiles,
 	skill,
 	abilities,
 	attrs,
@@ -91,11 +92,15 @@
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"
-	}, {
+	},
+	notes,
+	{
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
-	}, {
+	},
+	notes,
+	{
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"
@@ -118,14 +123,15 @@
 			return data;
 		},
 		"mounted": function() {
-			images.options = this.universe.indexes.image.listing;
-			images.options.sortBy("name");
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
 			skill.options = this.universe.indexes.skill.listing;
 			skill.options.sortBy("name");
 			
-			abilities.source_index = this.universe.indexes.ability;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
+			abilities.source_index = this.universe.indexes.ability;
+			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {
 			"update": function() {

@@ -13,7 +13,7 @@ rsSystem.registerNoun(RSLoadout, "loadout");
 rsSystem.registerNoun(RSPlayer, "player");
 rsSystem.registerNoun(RSEntity, "entity");
 rsSystem.registerNoun(RSEffect, "effect");
-rsSystem.registerNoun(RSPlanet, "planet");
+//rsSystem.registerNoun(RSPlanet, "planet"); // Just a location type
 rsSystem.registerNoun(RSImage, "image");
 rsSystem.registerNoun(RSParty, "party");
 rsSystem.registerNoun(RSSkill, "skill");

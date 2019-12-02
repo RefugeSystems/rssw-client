@@ -84,7 +84,7 @@
 		<div class="referenced">
 			<select v-model="reference_value" v-on:change="addReference(reference_value)">
 				<option value="">Select To Add</option>
-				<option v-for="option in field.source_index.listing" :id="option.id" :value="option.id">{{option.name}}</option>
+				<option v-for="option in field.source_index.listing" v-if="optionAvailable(option)" :id="option.id" :value="option.id">{{option.name}}</option>
 			</select>
 		</div>
 	</div>

@@ -853,6 +853,7 @@ form {
 }
 .rs-component.rs-image.general {
   width: 100%;
+  margin-bottom: 10px !important;
 }
 .rs-component.rs-image.general img {
   max-width: 100%;

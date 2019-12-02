@@ -32,6 +32,11 @@
 			}
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
+			
+			if(this.field.filter) {
+				data.filterKeys = Object.keys(this.field.filter);
+			}
+			
 			return data;
 		},
 		"watch": {
@@ -40,11 +45,20 @@
 			rsSystem.register(this);
 		},
 		"methods": {
-			"showSlot": function() {
+			"optionAvailable": function(option) {
+				if(this.filterKeys) {
+					for(var x=0; x<this.filterKeys.length; x++) {
+						if(option[this.filterKeys[x]] != this.field.filter[this.filterKeys[x]]) {
+							return false;
+						}
+					}
+				}
 				
+				return true;
 			},
 			"dismissReference": function(index, record) {
 				this.root[this.field.property].splice(index, 1);
+				this.emitChanged();
 			},
 			"addReference": function(reference) {
 				if(!(this.root[this.field.property] instanceof Array)) {
@@ -52,6 +66,7 @@
 				}
 				this.root[this.field.property].push(reference);
 				Vue.set(this, "reference_value", "");
+				this.emitChanged();
 			},
 			"openReference": function(reference) {
 				rsSystem.EventBus.$emit("display-info", reference);
