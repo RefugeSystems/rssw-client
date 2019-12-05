@@ -24787,6 +24787,239 @@ rsSystem.component("rsCards", {
 (function() {
 	
 	var dataSource,
+		dependency,
+		attrs,
+		stats,
+		notes;
+
+	dependency = {
+		"label": "Dependency",
+		"property": "dependency",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Activation",
+		"property": "activation",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"automatic",
+			"passive",
+			"active"
+		]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	},
+	dependency,
+	{
+		"label": "Dependency Type",
+		"property": "dependency_type",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"any",
+			"all"
+		]
+	},
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsAbility", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.ability = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			dependency.options = this.universe.indexes.ability.listing;
+			dependency.options.sortBy("name");
+
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		attrs,
+		stats,
+		notes;
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Activation",
+		"property": "activation",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"automatic",
+			"passive",
+			"active"
+		]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	},
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsEffect", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.effect = dataSource;
+			return data;
+		},
+		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
 		abilities,
 		profiles,
 		skill,
@@ -25290,6 +25523,100 @@ rsSystem.component("rsCards", {
 
 (function() {
 	
+	var dataSource,
+		attrs,
+		stats,
+		notes;
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Playable",
+		"property": "playable",
+		"type": "checkbox"
+	},
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsRace", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.race = dataSource;
+			return data;
+		},
+		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
 	var commonSource,
 		listSource,
 		dataSource,
@@ -25554,6 +25881,9 @@ class FieldDescriptor {
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsAbility,
+			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsRace,
 			rsSystem.components.NounFieldsItem,
 			rsSystem.components.NounFieldsNote
 		],
@@ -25571,7 +25901,8 @@ class FieldDescriptor {
 			}
 		},
 		"data": function() {
-			var data = {};
+			var data = {},
+				x;
 
 			data.attaching = null;
 			data.rawValue = "{}";
@@ -25585,6 +25916,12 @@ class FieldDescriptor {
 			});
 //			console.log("Loaded Data[" + storageKey + "]: ", data.state);
 			
+			for(x=0; x<data.nouns.length; x++) {
+				if(!data.state.building[data.nouns[x]]) {
+					data.state.building[data.nouns[x]] = {};
+				}
+			}
+			
 			data.extra_properties = [];
 			
 			return data;
@@ -25593,7 +25930,7 @@ class FieldDescriptor {
 			"copy": function(value) {
 				if(value) {
 //					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4));
+					Vue.set(this, "rawValue", this.universe.nouns[this.state.current][value]?JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4):"{}");
 					Vue.set(this, "copy", null);
 				}
 			},
@@ -25601,6 +25938,8 @@ class FieldDescriptor {
 				console.warn("Noun: ", n, p);
 				if(this.state.building[n]) {
 					Vue.set(this, "rawValue", JSON.stringify(this.state.building[n], null, "\t"));
+				} else {
+					Vue.set(this, "rawValue", {});
 				}
 			},
 			"rawValue": function(value) {
@@ -25615,6 +25954,7 @@ class FieldDescriptor {
 					Vue.set(this, "isValid", true);
 					
 					if(this.built) {
+						console.warn("Sync Built: ", this.built);
 						keys = Object.keys(this.built);
 						for(x=0; x<keys.length; x++) {
 							Vue.set(this.built, keys[x], null);
@@ -25635,6 +25975,8 @@ class FieldDescriptor {
 			rsSystem.register(this);
 			if(this.state.building[this.state.current]) {
 				Vue.set(this, "rawValue", JSON.stringify(this.state.building[this.state.current], null, "\t"));
+			} else {
+				Vue.set(this, "rawValue", "{}");
 			}
 		},
 		"methods": {

@@ -42,6 +42,9 @@
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsAbility,
+			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsRace,
 			rsSystem.components.NounFieldsItem,
 			rsSystem.components.NounFieldsNote
 		],
@@ -59,7 +62,8 @@
 			}
 		},
 		"data": function() {
-			var data = {};
+			var data = {},
+				x;
 
 			data.attaching = null;
 			data.rawValue = "{}";
@@ -73,6 +77,12 @@
 			});
 //			console.log("Loaded Data[" + storageKey + "]: ", data.state);
 			
+			for(x=0; x<data.nouns.length; x++) {
+				if(!data.state.building[data.nouns[x]]) {
+					data.state.building[data.nouns[x]] = {};
+				}
+			}
+			
 			data.extra_properties = [];
 			
 			return data;
@@ -81,7 +91,7 @@
 			"copy": function(value) {
 				if(value) {
 //					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4));
+					Vue.set(this, "rawValue", this.universe.nouns[this.state.current][value]?JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4):"{}");
 					Vue.set(this, "copy", null);
 				}
 			},
@@ -89,6 +99,8 @@
 				console.warn("Noun: ", n, p);
 				if(this.state.building[n]) {
 					Vue.set(this, "rawValue", JSON.stringify(this.state.building[n], null, "\t"));
+				} else {
+					Vue.set(this, "rawValue", {});
 				}
 			},
 			"rawValue": function(value) {
@@ -103,6 +115,7 @@
 					Vue.set(this, "isValid", true);
 					
 					if(this.built) {
+						console.warn("Sync Built: ", this.built);
 						keys = Object.keys(this.built);
 						for(x=0; x<keys.length; x++) {
 							Vue.set(this.built, keys[x], null);
@@ -123,6 +136,8 @@
 			rsSystem.register(this);
 			if(this.state.building[this.state.current]) {
 				Vue.set(this, "rawValue", JSON.stringify(this.state.building[this.state.current], null, "\t"));
+			} else {
+				Vue.set(this, "rawValue", "{}");
 			}
 		},
 		"methods": {
