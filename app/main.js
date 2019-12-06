@@ -27501,11 +27501,11 @@ rsSystem.component("rsswShipStats", {
 					dX,
 					dY;
 
-				console.log("Panning[]: ", panned.velocityX, panned.velocityY);
+//				console.log("Panning[]: ", panned.velocityX, panned.velocityY);
 				left = parseInt(left.replace("px", ""));
 				top = parseInt(top.replace("px", ""));				
 
-				console.log("Panning: ", panned);
+//				console.log("Panning: ", panned);
 				if(this.isDragging) {
 					dX = this.dragX - panned.deltaX;
 					dY = this.dragY - panned.deltaY;
@@ -27514,7 +27514,8 @@ rsSystem.component("rsswShipStats", {
 					dX = panned.deltaX;
 					dY = panned.deltaY;
 				}
-				
+
+				console.warn("Pan[" + dX + ", " + dY + "]: " + left + ", " + top + " --> " + (left-dX) + ", " + (top-dY));
 				left -= dX;
 				top -= dY;
 
@@ -27537,10 +27538,23 @@ rsSystem.component("rsswShipStats", {
 			"apply": function(applying) {
 //				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
-					applying.height = applying.height || this.image.height || 0;
-					applying.width = applying.width || this.image.width || 0;
-					applying.left = applying.left || this.image.left || 0;
-					applying.top = applying.top || this.image.left || 0;
+					if(applying.height === undefined) {
+						applying.height = this.image.height;
+					}
+					if(applying.width === undefined) {
+						applying.width = this.image.width;
+					}
+					if(applying.left === undefined) {
+						applying.left = this.image.left;
+					}
+					if(applying.top === undefined) {
+						applying.top = this.image.top;
+					}
+					
+//					applying.height = applying.height || this.image.height || 0;
+//					applying.width = applying.width || this.image.width || 0;
+//					applying.left = applying.left || this.image.left || 0;
+//					applying.top = applying.top || this.image.left || 0;
 
 					if(10 > applying.zoom && applying.zoom > -10) {
 						this.image.height = this.original.height * (1 + .1 * applying.zoom);
