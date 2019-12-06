@@ -21,6 +21,7 @@ class RSUniverse extends RSObject {
 		 */
 		this.loggedOut = false;
 		this.initialized = false;
+		this.debugConnection = true;
 		this.index = new SearchIndex();
 		this.indexes = {};
 		this.nouns = {};
@@ -158,7 +159,9 @@ class RSUniverse extends RSObject {
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-//					console.log("Received: ", message);
+					if(this.debugConnection) {
+						console.log("Connection - Received: ", message);
+					}
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
@@ -207,10 +210,46 @@ class RSUniverse extends RSObject {
 				}
 			});
 			
+			this.$on("control", (event) => {
+				console.warn("Control Event: ", event);
+				switch(event.data.control) {
+					case "page":
+						if(this.checkEventCondition(event.data.condition)) {
+							window.location = "#" + event.data.url;
+						}
+						break;
+				}
+			});
+			
 			this.connection.socket = socket;
 			this.user = userInformation;
 			done();
 		});
+	}
+	
+	checkEventCondition(condition) {
+		if(!condition) {
+			return true;
+		}
+		
+		var keys = Object.keys(condition),
+			result = true,
+			buffer,
+			x;
+		
+		for(x=0; result && x<keys.length; x++) {
+			switch(keys[x]) {
+				case "hash":
+					buffer = new RegExp(condition[keys[x]]);
+					result = buffer.test(location.hash);
+					console.log("Cond: " + result, buffer);
+					break;
+				default:
+					console.warn("Unknown Event Conditional[" + keys[x] + "]: ", condition);
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -349,7 +388,9 @@ class RSUniverse extends RSObject {
 				"event": type,
 				"data": data
 			};
-//			console.log("Sending: ", data);
+			if(this.debugConnection) {
+				console.log("Connection - Sending: ", data);
+			}
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {

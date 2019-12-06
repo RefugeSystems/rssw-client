@@ -18246,7 +18246,7 @@ Templify.install = function(Vue, options) {
 			case "components/table/controls.html": return "<div class=\"system-component table-controls\">\r\n\t<div class=\"filtering\">\r\n\t\t<input type=\"text\" v-model=\"state.filter.null\" />\r\n\t\t<span class=\"search-icon fas fa-search\"></span>\r\n\t</div>\r\n\t<div class=\"controls\">\r\n\t\t<div class=\"selections\" v-if=\"index.selection.length\">\r\n\t\t\t<div v-for=\"control in controls\">\r\n\t\t\t\t{{control}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button class=\"selections clear\" v-if=\"index.selection.length\" v-on:click=\"clearSelection()\">\r\n\t\t\t<span class=\"far fa-ban\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections all\" v-if=\"index.selection.length != index.listing.length\" v-on:click=\"allSelection()\">\r\n\t\t\t<span class=\"far fa-check-square\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections info\" v-if=\"index.selection.length\" v-on:click=\"infoSelection(index.selection[index.selection.length-1])\">\r\n\t\t\t<span class=\"far fa-journal-whills\"></span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/table/paging.html": return "<div class=\"system-component table-paging\">\r\n\t<button class=\"index-page\" :class=\"classPage(0)\" v-on:click=\"toPage(0)\">\r\n\t\t1\r\n\t</button>\r\n\t<button v-for=\"page in pages\" class=\"index-page\" :class=\"classPage(page)\" v-on:click=\"toPage(page)\">\r\n\t\t{{page + 1}}\r\n\t</button>\r\n\t<button class=\"index-page\" :class=\"classPage(lastPage)\" v-if=\"lastPage > 0\" v-on:click=\"toPage(lastPage)\">\r\n\t\t{{lastPage + 1}}\r\n\t</button>\r\n</div>";
 			case "components/table.html": return "<div class=\"system-component table-index\">\r\n\t<table class=\"table-element\" :class=\"state.classes\">\r\n\t\t<thead>\r\n\t\t\t<tr>\r\n\t\t\t\t<th v-for=\"header in headers\">\r\n\t\t\t\t\t<button class=\"title actionable table-content\" v-on:click=\"headerAction(header)\" :class=\"header.thClass\" v-if=\"!header.hideBlock\">\r\n\t\t\t\t\t\t<span class=\"sort fas\" v-if=\"!header.nosort && state.sortKey === header.field\" :class=\"{'fa-sort-down':state.order, 'fa-sort-up':!state.order}\"></span>\r\n\t\t\t\t\t\t<span class=\"sort fas fa-sort\" v-if=\"!header.nosort && state.sortKey !== header.field\"></span>\r\n\t\t\t\t\t\t<span>{{header.title}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</th>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t<tr v-if=\"corpus.length === 0 && index.listing.length\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>All Items Filtered Out</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"corpus.length === 0 && index.listing.length === 0\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>No Items Available</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"index.error\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>Data Source Error</span>\r\n\t\t\t\t\t<p>{{index.error}}</p>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-for=\"record in corpus\" :key=\"record.id\" :class=\"index.isSelected([record.id])?'record-selected':''\">\r\n\t\t\t\t<td v-for=\"(header, i) in headers\" class=\"table-record\" :class=\"header.field\" v-on:click.stop=\"select(record, header)\">\r\n\t\t\t\t\t<div v-if=\"!header.noCross\" class=\"crosshair\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === 0\" class=\"highlight starting\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1\" class=\"highlight ending\"></div>\r\n\t\t\t\t\t<button class=\"table-content\">\r\n\t\t\t\t\t\t<slot name=\"table-content\">\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-if=\"header.formatter\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"header.formatter(record[header.field], record, header)\"></div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'array' || isArray(record[header.field])\">\r\n\t\t\t\t\t\t\t\t<ul>\r\n\t\t\t\t\t\t\t\t\t<li v-for=\"item in record[header.field]\">{{item.name || item}}</li>\r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'object'\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"formatObjectHeader(record[header.field])\">\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field] && typeof record[header.field] === 'object' && record[header.field] !== 'undefined'\">\r\n\t\t\t\t\t\t\t\t<pre>{{record[header.field] | JSON}}</pre>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field]\">\r\n\t\t\t\t\t\t\t\t{{record[header.field]}}\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else>\r\n\t\t\t\t\t\t\t\t<span> </span>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</slot>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t</tbody>\r\n\t</table>\r\n</div>";
-			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\" :class=\"renderState()\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<!-- <div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\" v-pan=\"pan\"> -->\r\n\t\t<div class=\"view\" onexit=\"true\" v-pan=\"pan\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pointsOfInterest.length && state.markers\">\r\n\t\t\t\t\t<button class=\"poi\" v-if=\"poiVisible(link)\" v-for=\"link in pointsOfInterest\" :data-id=\"link.id\" :style=\"'left:' + link.x + '%; top:' + link.y + '%;'\" :key=\"link.id\" v-on:click=\"poiMenu(link)\">\r\n\t\t\t\t\t\t<span class=\"labeling\" v-if=\"link.label\">{{link.label}}</span>\r\n\t\t\t\t\t\t<span :class=\"poiClass(link)\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in location.coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in location.coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span class=\"titling\">\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close alert\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option normal\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"state.alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<div class=\"search\">\r\n\t\t\t\t<input type=\"text\" v-model=\"state.search\" v-on:keyup.enter=\"searchMap(state.search)\"/>\r\n\t\t\t\t<button class=\"control\" v-on:click=\"searchMap(state.search)\">\r\n\t\t\t\t\t<span class=\"icon far fa-search\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<button class=\"control\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.markerItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.markers?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.markerItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.followItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.follow?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.followItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.fullscreen)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.fullscreen?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.fullscreen.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<select class=\"control master\" v-model=\"state.master_view\" v-if=\"player.master\">\r\n\t\t\t\t<option value=\"\">Player Character</option>\r\n\t\t\t\t<option value=\"master\">Master</option>\r\n\t\t\t\t<option v-for=\"entity in universe.indexes.entity.listing\" :value=\"entity.id\">{{entity.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\" :class=\"renderState()\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<!-- <div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\" v-pan=\"pan\"> -->\r\n\t\t<div class=\"view\" onexit=\"true\" v-pan=\"pan\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pointsOfInterest.length && state.markers\">\r\n\t\t\t\t\t<button class=\"poi\" v-if=\"poiVisible(link)\" v-for=\"link in pointsOfInterest\" :data-id=\"link.id\" :style=\"'left:' + link.x + '%; top:' + link.y + '%;'\" :key=\"link.id\" v-on:click=\"poiMenu(link)\">\r\n\t\t\t\t\t\t<span class=\"labeling\" v-if=\"link.label\">{{link.label}}</span>\r\n\t\t\t\t\t\t<span :class=\"poiClass(link)\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span class=\"titling\">\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close alert\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option normal\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"state.alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<div class=\"search\">\r\n\t\t\t\t<input type=\"text\" v-model=\"state.search\" v-on:keyup.enter=\"searchMap(state.search)\"/>\r\n\t\t\t\t<button class=\"control\" v-on:click=\"searchMap(state.search)\">\r\n\t\t\t\t\t<span class=\"icon far fa-search\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<button class=\"control\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.markerItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.markers?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.markerItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.followItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.follow?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.followItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.fullscreen)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.fullscreen?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.fullscreen.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<select class=\"control master\" v-model=\"state.master_view\" v-if=\"player.master\">\r\n\t\t\t\t<option value=\"\">Player Character</option>\r\n\t\t\t\t<option value=\"master\">Master</option>\r\n\t\t\t\t<option v-for=\"entity in universe.indexes.entity.listing\" :value=\"entity.id\">{{entity.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
@@ -22724,6 +22724,7 @@ class RSUniverse extends RSObject {
 		 */
 		this.loggedOut = false;
 		this.initialized = false;
+		this.debugConnection = true;
 		this.index = new SearchIndex();
 		this.indexes = {};
 		this.nouns = {};
@@ -22861,7 +22862,9 @@ class RSUniverse extends RSObject {
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-//					console.log("Received: ", message);
+					if(this.debugConnection) {
+						console.log("Connection - Received: ", message);
+					}
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
@@ -22910,10 +22913,46 @@ class RSUniverse extends RSObject {
 				}
 			});
 			
+			this.$on("control", (event) => {
+				console.warn("Control Event: ", event);
+				switch(event.data.control) {
+					case "page":
+						if(this.checkEventCondition(event.data.condition)) {
+							window.location = "#" + event.data.url;
+						}
+						break;
+				}
+			});
+			
 			this.connection.socket = socket;
 			this.user = userInformation;
 			done();
 		});
+	}
+	
+	checkEventCondition(condition) {
+		if(!condition) {
+			return true;
+		}
+		
+		var keys = Object.keys(condition),
+			result = true,
+			buffer,
+			x;
+		
+		for(x=0; result && x<keys.length; x++) {
+			switch(keys[x]) {
+				case "hash":
+					buffer = new RegExp(condition[keys[x]]);
+					result = buffer.test(location.hash);
+					console.log("Cond: " + result, buffer);
+					break;
+				default:
+					console.warn("Unknown Event Conditional[" + keys[x] + "]: ", condition);
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -23052,7 +23091,9 @@ class RSUniverse extends RSObject {
 				"event": type,
 				"data": data
 			};
-//			console.log("Sending: ", data);
+			if(this.debugConnection) {
+				console.log("Connection - Sending: ", data);
+			}
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {
@@ -27363,7 +27404,7 @@ rsSystem.component("rsswShipStats", {
 				Vue.set(this.actions, "open", false);
 			},
 			"fire": function(option, event) {
-//				console.log("Fire Option: ", option);
+				console.log("Fire Option: ", option);
 				var buffer;
 				
 				switch(option.event) {
@@ -27393,12 +27434,24 @@ rsSystem.component("rsswShipStats", {
 							});
 						}
 						break;
+					case "set-current":
+						if(this.player.master) {
+							this.universe.send("control", {
+								"control": "page",
+								"url": "/map/" + this.location.id,
+								"condition": {
+									"hash": "^#/map"
+								}
+							});
+						}
+						break;
 				}
 				
 				this.closeActions();
 			},
 			"dismissCoordinate": function(coordinate) {
 				var index = this.coordinates.indexOf(coordinate);
+				console.log("Dismiss[" + index + "]: ", coordinate, this.coordinates);
 				if(index !== -1) {
 					this.coordinates.splice(index, 1);
 					this.location.commit({
@@ -27515,7 +27568,7 @@ rsSystem.component("rsswShipStats", {
 					dY = panned.deltaY;
 				}
 
-				console.warn("Pan[" + dX + ", " + dY + "]: " + left + ", " + top + " --> " + (left-dX) + ", " + (top-dY));
+//				console.warn("Pan[" + dX + ", " + dY + "]: " + left + ", " + top + " --> " + (left-dX) + ", " + (top-dY));
 				left -= dX;
 				top -= dY;
 
@@ -27536,7 +27589,7 @@ rsSystem.component("rsswShipStats", {
 				
 			},
 			"apply": function(applying) {
-//				console.log("apply: ", applying, this.parchment);
+				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
@@ -27646,7 +27699,12 @@ rsSystem.component("rsswShipStats", {
 					this.actions.options.push({
 						"icon": "fas fa-map",
 						"event": "set-map",
-						"text": "Set Map"
+						"text": "Set Location View"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-map-marked",
+						"event": "set-current",
+						"text": "Show Map"
 					});
 				}
 				
