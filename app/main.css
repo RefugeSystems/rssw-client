@@ -601,7 +601,12 @@ form {
   flex-direction: row;
 }
 .rssw-page.page-universe .control {
+  display: inline-block;
   margin: 7px;
+  min-width: 240px;
+}
+.rssw-page.page-universe .control .title .filter {
+  width: 100%;
 }
 .rssw-page.page-universe .control .entities {
   display: flex;
@@ -620,6 +625,11 @@ form {
 }
 .rssw-page.page-universe .opened.loaded {
   left: 0px;
+}
+.rssw-page.page-universe .create-npc {
+  border-top: 2px solid #FF9560;
+  padding-top: 5px !important;
+  margin-top: 5px !important;
 }
 .rs-page.page-home {
   display: flex;

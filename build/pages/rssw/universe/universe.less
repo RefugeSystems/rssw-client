@@ -28,8 +28,15 @@
 	}
 	
 	.control {
+		display: inline-block;
 		margin: 7px;
+		min-width: 240px;
 		
+		.title {
+			.filter {
+				width: 100%;
+			}
+		}
 		
 		.entities {
 			display: flex;
@@ -52,5 +59,11 @@
 		&.loaded {
 			left: 0px;
 		}
+	}
+	
+	.create-npc {
+		border-top: 2px solid @rsOrange;
+		padding-top: 5px !important;
+		margin-top: 5px !important;
 	}
 }

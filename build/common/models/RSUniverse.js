@@ -21,7 +21,7 @@ class RSUniverse extends RSObject {
 		 */
 		this.loggedOut = false;
 		this.initialized = false;
-		this.debugConnection = true;
+		this.debugConnection = false;
 		this.index = new SearchIndex();
 		this.indexes = {};
 		this.nouns = {};
@@ -211,7 +211,9 @@ class RSUniverse extends RSObject {
 			});
 			
 			this.$on("control", (event) => {
-				console.warn("Control Event: ", event);
+				if(this.debugConnection) {
+					console.warn("Control Event: ", event);
+				}
 				switch(event.data.control) {
 					case "page":
 						if(this.checkEventCondition(event.data.condition)) {
@@ -242,7 +244,6 @@ class RSUniverse extends RSObject {
 				case "hash":
 					buffer = new RegExp(condition[keys[x]]);
 					result = buffer.test(location.hash);
-					console.log("Cond: " + result, buffer);
 					break;
 				default:
 					console.warn("Unknown Event Conditional[" + keys[x] + "]: ", condition);
