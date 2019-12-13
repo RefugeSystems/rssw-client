@@ -65,7 +65,7 @@
 				}]
 			});
 			data.navigationItems.push({
-				"icon": "fas fa-hurricane",
+				"icon": "fad fa-galaxy",
 				"action": "navigate",
 				"label": "Universe",
 				"path": "/universe",
