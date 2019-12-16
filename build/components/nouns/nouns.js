@@ -156,10 +156,22 @@
 				}
 			},
 			"sync": function(event) {
-				console.warn("Sync: ", event);
+//				console.warn("Sync: ", event);
 				if(this.built) {
 					Vue.set(this.built, event.property, event.value);
 				}
+			},
+			"labelNoun": function(noun) {
+				if(noun.name) {
+					if(noun.template) {
+						return noun.name + " (Template)";
+					}
+					if(noun.source_template) {
+						return noun.name + " (..." + noun.id.replace(noun.source_template, "") + ")";
+					}
+					return noun.name + " (..." + noun.id.substring(noun.id.length - 15) + ")";
+				}
+				return noun.id;
 			},
 			"newObject": function() {
 				var keys = this.state.building[this.state.current],
@@ -183,10 +195,10 @@
 				this.universe.send("delete:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
 			},
 			"fileAttach": function(event) {
-				console.warn("Noun File Attach: ", event);
+//				console.warn("Noun File Attach: ", event);
 				try {
 					var file = event.items[0].getAsFile();
-					console.warn("File: ", file);
+//					console.warn("File: ", file);
 				} catch(exception) {
 					console.error("Ex: ", exception);
 				}
@@ -198,7 +210,7 @@
 					x;
 				
 				if(this.state.current === "image" && input && input.length && input[0].files.length) {
-					console.warn("Set Image");
+//					console.warn("Set Image");
 					if(this.state.building[this.state.current]) {
 						keys = Object.keys(this.state.building[this.state.current]);
 						if(this.built) {
@@ -222,7 +234,7 @@
 						value.name = result.name;
 						Vue.set(this, "rawValue", JSON.stringify(value, null, 4));
 						input[0].value = null;
-						console.warn("New Value: ", value);
+//						console.warn("New Value: ", value);
 					});
 				}
 			},
@@ -267,9 +279,9 @@
 				return result;
 			},
 			"saveEvent": function(event) {
-				console.warn("Save?", event);
+//				console.warn("Save?", event);
 				if(event.code === "KeyS" && event.ctrlKey) {
-					console.warn("Save");
+//					console.warn("Save");
 					this.modify();
 					event.stopPropagation();
 					event.preventDefault();

@@ -12,7 +12,7 @@
 		<label class="">
 			<span>Copy:</span>
 			<select v-model="copy">
-				<option v-for="(object, id) in universe.nouns[state.current]" :value="id">{{id}}</option>
+				<option v-for="(object, id) in universe.nouns[state.current]" :value="id">{{labelNoun(object)}}</option>
 			</select>
 		</label>
 	</div>
