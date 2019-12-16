@@ -7,7 +7,7 @@
 			<span class="far fa-sync" :class="calculating?'fa-spin':''"></span>
 		</button>
 	</div>
-	<div class="property species">
+	<div class="property species" v-if="character.classification != 'base'">
 		<span class="icon fad fa-bug rot45"></span>
 		<span class="label">Species:</span>
 		<button v-for="(archetype, $index) in careers" class="value" v-on:click="showInfo(race)">
@@ -73,7 +73,7 @@
 		<span class="label">Credits:</span>
 		<input class="experience" type="number" v-model.number="credits" v-on:change="changed('credits', credits)"/>
 	</div>
-	<div class="property level">
+	<div class="property level" v-if="character.classification != 'base'">
 		<span class="icon fad fa-user-plus"></span>
 		<span class="label">Experience:</span>
 		<input class="experience" type="number" v-model.number="experience" v-on:change="changed('xp', experience)"/>

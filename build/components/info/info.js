@@ -80,7 +80,7 @@
 				if(toView && (!this.viewing || toView.id !== this.viewing.id)) {
 					if(this.viewing) {
 						if(!this.history.length || (this.viewing.id !== toView.id)) {
-							console.warn("Storing: ", this.viewing.id);
+//							console.warn("Storing: ", this.viewing.id);
 							this.history.unshift(this.viewing);
 						} else {
 							console.warn("Repeated Shift? ", this.viewing.id);

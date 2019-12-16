@@ -97,7 +97,7 @@
 				}
 			},
 			"state.current": function(n, p) {
-				console.warn("Noun: ", n, p);
+//				console.warn("Noun: ", n, p);
 				if(this.state.building[n]) {
 					Vue.set(this, "rawValue", JSON.stringify(this.state.building[n], null, "\t"));
 				} else {
@@ -116,7 +116,7 @@
 					Vue.set(this, "isValid", true);
 					
 					if(this.built) {
-						console.warn("Sync Built: ", this.built);
+//						console.warn("Sync Built: ", this.built);
 						keys = Object.keys(this.built);
 						for(x=0; x<keys.length; x++) {
 							Vue.set(this.built, keys[x], null);

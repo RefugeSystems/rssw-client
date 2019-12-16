@@ -19,7 +19,7 @@
 	
 	<div class="building">
 		<div class="simplified-editor" v-if="!state.advanced_editor">
-			<rs-field v-for="field in fields[state.current]" :root="state.building[state.current]" :field="field" v-on:changed="sync($event)">
+			<rs-field v-for="field in fields[state.current]" :root="state.building[state.current]" :field="field" v-on:changed="sync($event)" :key="field.property">
 				<span slot="info">
 					<span v-if="field.property === 'icon'" :class="state.building[state.current].icon"></span>
 					<button class="info-link fas fa-info-circle" v-if="field.knowledge" v-on:click="openKnowledge(field.knowledge)">
