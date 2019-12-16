@@ -20,7 +20,11 @@
 		</div>
 		
 		<div class="stat wounds flow-v inline">
-			<div class="label">
+			<div class="label" v-if="character.classification == 'base'">
+				<span class="ra ra-cracked-shield"></span>
+				<span>Damage</span>
+			</div>
+			<div class="label" v-else>
 				<span class="fas fa-heartbeat"></span>
 				<span>Wounds</span>
 			</div>
@@ -41,7 +45,11 @@
 		</div>
 		
 		<div class="stat wounds flow-v inline">
-			<div class="label">
+			<div class="label" v-if="character.classification == 'base'">
+				<span class="ra ra-reactor"></span>
+				<span>Strain</span>
+			</div>
+			<div class="label" v-else>
 				<span class="fas fa-brain"></span>
 				<span>Strain</span>
 			</div>

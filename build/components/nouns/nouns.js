@@ -44,9 +44,10 @@
 			rsSystem.components.NounFieldsLocation,
 			rsSystem.components.NounFieldsAbility,
 			rsSystem.components.NounFieldsEffect,
-			rsSystem.components.NounFieldsRace,
 			rsSystem.components.NounFieldsItem,
-			rsSystem.components.NounFieldsNote
+			rsSystem.components.NounFieldsNote,
+			rsSystem.components.NounFieldsRace,
+			rsSystem.components.NounFieldsRoom
 		],
 		"props": {
 			"universe": {

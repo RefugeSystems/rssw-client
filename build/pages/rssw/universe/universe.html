@@ -21,6 +21,8 @@
 					<option v-for="en in universe.indexes.entity.listing" :value="en.id">{{en.name}}</option>
 					<option value="">-- Player Divide --</option>
 					<option v-for="pl in universe.indexes.player.listing" :value="pl.id">{{pl.name}}</option>
+					<option value="">-- Item Divide --</option>
+					<option v-for="it in universe.indexes.item.listing" :value="it.id" v-if="!it.template">{{it.name}}</option>
 				</select>
 				
 				<select v-model="state.activeIndex">

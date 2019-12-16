@@ -102,7 +102,7 @@ rsSystem.component("RSSWStats", {
 				"name": "Tracking",
 				"section": "piloting",
 				"info": "Follow a target",
-				"icon": "far fa-bullseye",
+				"icon": "ra ra-targeted",
 				"base": "willpower"
 			},
 			"hacking": {
@@ -162,7 +162,7 @@ rsSystem.component("RSSWStats", {
 				"name": "Outer Rim",
 				"section": "knowledge",
 				"info": "",
-				"icon": "far fa-circle",
+				"icon": "fal fa-planet-ringed",
 				"base": "intellect"
 			},
 			"underworld": {
@@ -174,7 +174,7 @@ rsSystem.component("RSSWStats", {
 			"xenology": {
 				"section": "knowledge",
 				"info": "",
-				"icon": "fab fa-reddit-alien",
+				"icon": "fas fa-user-alien",
 				"base": "intellect"
 			},
 			"athletics": {
@@ -312,7 +312,7 @@ rsSystem.component("RSSWStats", {
 				"section": "knowledge",
 				"info": "General knowledge of planets. Can not be leveled manually.",
 				"controlled": true,
-				"icon": "fas fa-globe-stand",
+				"icon": "fad fa-planet-ringed",
 				"base": "intellect"
 			}
 		};

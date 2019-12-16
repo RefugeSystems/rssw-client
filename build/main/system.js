@@ -102,6 +102,38 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWMap
 				}]
 			}, {
+				"path": "galaxy",
+				"component": rsSystem.components.RSSWUniverse,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacter,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "base",
+					"component": rsSystem.components.RSSWBase,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWBase
+					}]
+				}, {
+					"path": "ship",
+					"component": rsSystem.components.RSSWShip,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWShip
+					}]
+				}, {
+					"path": "item",
+					"component": rsSystem.components.RSSWItem,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWItem
+					}]
+				}]
+			}, {
 				"path": "universe",
 				"component": rsSystem.components.RSSWUniverse,
 				"children": [{
@@ -110,6 +142,13 @@ rsSystem.App = new Vue({
 					"children": [{
 						"path": ":oid",
 						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "base",
+					"component": rsSystem.components.RSSWBase,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWBase
 					}]
 				}, {
 					"path": "ship",

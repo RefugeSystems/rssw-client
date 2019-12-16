@@ -127,6 +127,7 @@ var config = {
 				"RSBook",
 				"RSItem",
 				"RSRace",
+				"RSRoom",
 				"RSLog"
 			]
 		},

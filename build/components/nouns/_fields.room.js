@@ -2,22 +2,12 @@
 (function() {
 	
 	var dataSource,
-		abilities,
 		profiles,
-		items,
-		skill,
+		effects,
 		attrs,
 		stats,
 		notes;
-	
-	abilities = {
-		"label": "Abilities",
-		"property": "ability",
-		"type": "multireference",
-		"optionValue": "id",
-		"optionLabel": "name"
-	};
-	
+
 	profiles = {
 		"label": "Profile",
 		"property": "profile",
@@ -25,19 +15,11 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
-	items = {
-		"label": "Attachments",
-		"property": "item",
+
+	effects = {
+		"label": "Effects",
+		"property": "effect",
 		"type": "multireference",
-		"optionValue": "id",
-		"optionLabel": "name"
-	};
-	
-	skill = {
-		"label": "Skill",
-		"property": "skill_check",
-		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -79,36 +61,16 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
-		"label": "Price",
-		"property": "price",
-		"type": "number"
-	}, {
-		"label": "Encumberance",
-		"property": "encumberance",
-		"type": "number"
-	}, {
-		"label": "Rarity",
-		"property": "rarity",
-		"type": "number"
-	}, 
-	profiles,
-	skill,
-	{
-		"label": "Is Attachment",
-		"property": "is_attachment",
-		"type": "checkbox"
 	},
+	profiles,
 	{
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"
 	},
-	abilities,
-	items,
+	effects,
 	attrs,
 	stats,
-	notes,
 	{
 		"label": "Description",
 		"property": "description",
@@ -121,7 +83,7 @@
 		"type": "textarea"
 	}];
 	
-	rsSystem.component("NounFieldsItem", {
+	rsSystem.component("NounFieldsRoom", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -132,21 +94,16 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.item = dataSource;
-			
-
+			data.fields.room = dataSource;
 			return data;
 		},
 		"mounted": function() {
 			profiles.options = this.universe.indexes.image.listing;
 			profiles.options.sortBy("name");
-			skill.options = this.universe.indexes.skill.listing;
-			skill.options.sortBy("name");
 			
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
-			abilities.source_index = this.universe.indexes.ability;
-			items.source_index = this.universe.indexes.item;
+			effects.source_index = this.universe.indexes.effect;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {

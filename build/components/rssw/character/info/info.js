@@ -21,18 +21,25 @@ rsSystem.component("rsswCharacterInfo", {
 	"data": function() {
 		var data = {};
 		data.race = null;
+		data.energy_consumption = 0;
+		data.energy_output = 0;
+		data.encumberance_max = 0;
+		data.encumberance = 0;
+		data.experience = 0;
+		data.credits = 0;
+
+		data.description = "";
+		
 		data.specializations = [];
 		data.abilities = [];
-		
 		data.inventory = [];
 		data.loadout = [];
 		data.items = [];
+		data.rooms = [];
 		
 		data.careers = [];
-		data.experience = 0;
-		data.description = "";
+		
 		data.calculating = false;
-		data.credits = 0;
 		
 		return data;
 	},
@@ -64,6 +71,26 @@ rsSystem.component("rsswCharacterInfo", {
 			}
 			return "";
 		},
+		"getEnergyIcon": function() {
+			if(this.energy_consumption > this.energy_output) {
+				return "far fa-battery-empty rs-red";
+			} else if(this.energy_consumption == this.energy_output || this.energy_consumption > this.energy_output - (this.energy_output * .15)) {
+				return "far fa-battery-quarter rs-orange";
+			} else if(this.energy_consumption && this.energy_output) {
+				return "far fa-battery-three-quarters rs-green";
+			} else {
+				return "far fa-battery-full rs-green";
+			}
+		},
+		"getEncumberanceIcon": function() {
+			if(this.encumberance > this.encumberance_max) {
+				return "fas fa-person-carry rs-red";
+			} else if(this.encumberance == this.encumberance_max || this.encumberance > this.encumberance_max - (this.encumberance_max * .15)) {
+				return "fas fa-person-carry rs-orange";
+			} else {
+				return "fas fa-person-carry rs-green";
+			}
+		},
 		"changed": function(property, value) {
 			var change = {};
 			change[property] = value;
@@ -78,6 +105,7 @@ rsSystem.component("rsswCharacterInfo", {
 			this.abilities.splice(0);
 			this.careers.splice(0);
 			this.items.splice(0);
+			this.rooms.splice(0);
 			
 			if(this.experience !== this.character.xp) {
 				Vue.set(this, "experience", this.character.xp);
@@ -88,13 +116,26 @@ rsSystem.component("rsswCharacterInfo", {
 			if(this.credits !== this.character.credits) {
 				Vue.set(this, "credits", this.character.credits);
 			}
+			this.encumberance_max = 5 + this.character.brawn;
+			this.encumberance = 0;
 			if(this.character.item && this.character.item.length) {
 				for(x=0; x<this.character.item.length; x++) {
 					buffer = this.universe.nouns.item[this.character.item[x]];
 					if(buffer) {
+						this.encumberance += buffer.encumberance;
 						this.items.push(buffer);
 					} else {
 						console.warn("Item Not Found: " + this.character.item[x]);
+					}
+				}
+			}
+			if(this.character.room && this.character.room.length) {
+				for(x=0; x<this.character.room.length; x++) {
+					buffer = this.universe.nouns.room[this.character.room[x]];
+					if(buffer) {
+						this.rooms.push(buffer);
+					} else {
+						console.warn("Room Not Found: " + this.character.room[x]);
 					}
 				}
 			}
@@ -114,6 +155,9 @@ rsSystem.component("rsswCharacterInfo", {
 					}
 				}
 			}
+
+			this.energy_consumption = this.character.energy_consume || 0;
+			this.energy_output = this.character.energy_out || 0;
 			
 			if(this.character.ability) {
 				for(x=0; x<this.character.ability.length; x++) {

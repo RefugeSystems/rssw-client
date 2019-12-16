@@ -11,15 +11,15 @@ rsSystem.component("RSSWCharacter", {
 	"mixins": [
 		rsSystem.components.RSCore
 	],
-	"computed": {
-		"entity": function() {
-			return this.universe.nouns.entity[this.$route.params.oid];
-		}
-	},
 	"data": function() {
 		var data = {};
 		
 		return data;
+	},
+	"computed": {
+		"entity": function() {
+			return this.universe.nouns.entity[this.$route.params.oid];
+		}
 	},
 	"mounted": function() {
 		rsSystem.register(this);

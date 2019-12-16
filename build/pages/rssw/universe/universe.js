@@ -266,8 +266,13 @@
 								sending.item = index.selection[x];
 								sending.target = this.target;
 								this.universe.send("give:item", sending);
+							} else if(this.universe.nouns.room[index.selection[x]]) {
+								sending = {};
+								sending.room = index.selection[x];
+								sending.target = this.target;
+								this.universe.send("give:room", sending);
 							} else {
-								console.warn("Can not give non-item objects");
+								console.warn("Can only give item & room objects");
 							}
 						}
 						break;
@@ -280,8 +285,13 @@
 								sending.item = index.selection[x];
 								sending.target = this.target;
 								this.universe.send("take:item", sending);
+							} else if(this.universe.nouns.room[index.selection[x]]) {
+								sending = {};
+								sending.room = index.selection[x];
+								sending.target = this.target;
+								this.universe.send("take:room", sending);
 							} else {
-								console.warn("Can not give non-item objects");
+								console.warn("Can only take item & room objects");
 							}
 						}
 						break;

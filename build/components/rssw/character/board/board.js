@@ -71,7 +71,7 @@
 					x;
 				
 				for(x=0; x<keys.length; x++) {
-					Vue.set(this, keys[x], this.character[keys[x]]);
+					Vue.set(this, keys[x], this.character[keys[x]] || 0);
 				}
 			}
 		},

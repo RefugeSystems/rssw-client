@@ -26,12 +26,8 @@
 		"data": function() {
 			var data = {};
 			
+			data.link = null;
 			data.uri = null;
-			if(this.linked) {
-				data.link = "/" + this.linked.linked + "/" + this.linked.id;
-			} else {
-				data.link = false;
-			}
 			
 			return data;
 		},
@@ -42,6 +38,10 @@
 					console.warn("Re-Render Image: ", this.image);
 					this.update();
 				}
+			},
+			"linked": function() {
+				console.warn("Re-Link Image: ", this.linked);
+				this.update();
 			}
 		},
 		"mounted": function() {
@@ -51,6 +51,12 @@
 		"methods": {
 			"update": function() {
 				Vue.set(this, "uri", this.image.data || this.image.url);
+				if(this.linked) {
+					this.link = "/" + this.linked.linked + "/" + this.linked.id;
+				} else {
+					this.link = false;
+				}
+				
 				this.$forceUpdate();
 			},
 			"classes": function() {

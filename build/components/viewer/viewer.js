@@ -165,7 +165,7 @@
 				Vue.set(this.actions, "open", false);
 			},
 			"fire": function(option, event) {
-				console.log("Fire Option: ", option);
+//				console.log("Fire Option: ", option);
 				var buffer;
 				
 				switch(option.event) {
@@ -212,7 +212,7 @@
 			},
 			"dismissCoordinate": function(coordinate) {
 				var index = this.coordinates.indexOf(coordinate);
-				console.log("Dismiss[" + index + "]: ", coordinate, this.coordinates);
+//				console.log("Dismiss[" + index + "]: ", coordinate, this.coordinates);
 				if(index !== -1) {
 					this.coordinates.splice(index, 1);
 					this.location.commit({
@@ -350,7 +350,7 @@
 				
 			},
 			"apply": function(applying) {
-				console.log("apply: ", applying, this.parchment);
+//				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
 					if(applying.height === undefined) {
 						applying.height = this.image.height;

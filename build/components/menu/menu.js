@@ -67,9 +67,9 @@
 			data.navigationItems.push({
 				"icon": "fad fa-galaxy",
 				"action": "navigate",
-				"label": "Universe",
-				"path": "/universe",
-				"highlight": "/universe",
+				"label": "Galaxy",
+				"path": "/galaxy",
+				"highlight": "/galaxy",
 				"conditionals": [{
 					"master": true
 				}]

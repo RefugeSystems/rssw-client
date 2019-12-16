@@ -67,6 +67,18 @@
 		"label": "Ship Hull",
 		"property": "hull",
 		"type": "number"
+	}, {
+		"label": "Energy Output",
+		"property": "energy_out",
+		"type": "number"
+	}, {
+		"label": "Energy Consumption",
+		"property": "energy_consume",
+		"type": "number"
+	}, {
+		"label": "Energy Potential",
+		"property": "energy_potential",
+		"type": "number"
 	}];
 	
 	listSource = [

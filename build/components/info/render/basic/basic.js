@@ -36,6 +36,25 @@
 	
 	var prettifyNames = {};
 	var prettifyValues = {};
+	var knowledgeLink = {};
+	
+	knowledgeLink.range = "knowledge:combat:rangebands";
+	
+	prettifyValues.range = function(record, value) {
+		if(record.is_attachment) {
+			return value;
+		}
+		
+		switch(value) {
+			case 1: return "Engaged (1)";
+			case 2: return "Short (2)";
+			case 3: return "Medium (3)";
+			case 4: return "Long (4)";
+			case 5: return "Extreme (5)";
+		}
+		
+		return value;
+	};
 	
 	var prettifyPropertyPattern = /_([a-z])/ig, 
 		prettifyPropertyName = function(full, match) {
@@ -59,6 +78,7 @@
 		"data": function() {
 			var data = {};
 			
+			data.knowledgeLink = knowledgeLink;
 			data.holdDescription = null;
 			data.description = null;
 			data.holdNote = null;
@@ -141,7 +161,7 @@
 						case "string":
 							return prettifyValues[property];
 						case "function":
-							return prettifyValues[property](property);
+							return prettifyValues[property](this.record, value);
 					}
 				}
 				

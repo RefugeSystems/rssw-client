@@ -31,7 +31,10 @@
 				</div>
 			</div>
 			<div class="direct" v-else>
-				<span class="key">{{prettifyPropertyName(property)}}</span>
+				<span class="key" v-if="knowledgeLink[property]">
+					<a class="rendered-value" :data-id="knowledgeLink[property]">{{prettifyPropertyName(property)}}</a>
+				</span>
+				<span class="key" v-else>{{prettifyPropertyName(property)}}</span>
 				<span class="divide">:</span>
 				<span class="value">{{prettifyPropertyValue(property, record[property])}}</span>
 			</div>

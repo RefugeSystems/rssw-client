@@ -21,3 +21,4 @@ rsSystem.registerNoun(RSNote, "note");
 rsSystem.registerNoun(RSBook, "book");
 rsSystem.registerNoun(RSItem, "item");
 rsSystem.registerNoun(RSRace, "race");
+rsSystem.registerNoun(RSRoom, "room");

@@ -8,7 +8,9 @@
  */
 rsSystem.component("RSSWBase", {
 	"inherit": true,
-	"mixins": [rsSystem.components.RSCore],
+	"mixins": [
+		rsSystem.components.RSCore
+	],
 	"data": function() {
 		var data = {};
 		
