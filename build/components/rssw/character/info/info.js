@@ -122,7 +122,7 @@ rsSystem.component("rsswCharacterInfo", {
 				for(x=0; x<this.character.item.length; x++) {
 					buffer = this.universe.nouns.item[this.character.item[x]];
 					if(buffer) {
-						this.encumberance += buffer.encumberance;
+						this.encumberance += (buffer.encumberance || 0);
 						this.items.push(buffer);
 					} else {
 						console.warn("Item Not Found: " + this.character.item[x]);
