@@ -43,6 +43,9 @@
 					event.address = "ws" + event.address;
 				}
 				this.$emit("connect", event);
+			},
+			"test": function(e) {
+				console.warn("Test: ", e);
 			}
 		},
 		"template": Vue.templified("components/connect.html")

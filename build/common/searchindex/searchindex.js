@@ -32,7 +32,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = dataSet[x].id.toLowerCase();
 						this.index[buffer.id] = dataSet[x];
 						this.index[buffer.name] = dataSet[x];
-						dataSet[x]._search = this.createSearchString(dataSet[x]);
+//						dataSet[x]._search = this.createSearchString(dataSet[x]);
 					}
 				}
 			} else if(dataSet instanceof Object) {
@@ -46,7 +46,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
 						this.index[buffer.name] = this.lookup[buffer[x]];
-						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
+//						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
 					}
 				}
 			}
@@ -76,7 +76,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = dataSet[x].id.toLowerCase();
 						this.index[buffer.id] = dataSet[x];
 						this.index[buffer.name] = dataSet[x];
-						dataSet[x]._search = this.createSearchString(dataSet[x]);
+//						dataSet[x]._search = this.createSearchString(dataSet[x]);
 					}
 				}
 			} else if(dataSet instanceof Object) {
@@ -90,7 +90,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
 						this.index[buffer.name] = this.lookup[buffer[x]];
-						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
+//						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
 					}
 				}
 			}
@@ -436,7 +436,7 @@ class SearchIndex extends EventEmitter {
 					} else {
 						Object.assign(this.lookup[item[x].id], item[x]);
 					}
-					this.lookup[item[x].id]._search = this.createSearchString(this.lookup[item[x].id]);
+//					this.lookup[item[x].id]._search = this.createSearchString(this.lookup[item[x].id]);
 				} else {
 					console.warn("Unidentified Search Index Update[Array]: ", item[x]);
 				}
@@ -472,7 +472,7 @@ class SearchIndex extends EventEmitter {
 				} else {
 					Object.assign(this.lookup[item.id], item);
 				}
-				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
+//				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
 				this.$emit("indexed");
 			} else {
 				console.warn("Unidentified Search Index Update: ", item);

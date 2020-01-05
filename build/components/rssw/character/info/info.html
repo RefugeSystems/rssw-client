@@ -80,9 +80,16 @@
 	</div>
 	<div class="property description">
 		<span class="icon fas fa-info-square"></span>
-		<span class="label">Description:</span>
+		<span class="label">
+			<span>Description:</span>
+			<button class="action" v-on:click="toggleDescription()">
+				<span v-if="!state.viewing" class="fas fa-file-alt"></span>
+				<span v-if="state.viewing" class="fas fa-edit"></span>
+			</button>
+		</span>
 		<div class="text-container">
-			<textarea class="description" v-model="description" v-on:change="changed('description', description)"></textarea>
+			<textarea class="description" v-if="!state.viewing" v-model="description" v-on:change="changed('description', description)"></textarea>
+			<div class="description" v-if="state.viewing" v-html="mdDescription"></div>
 		</div>
 	</div>
 </div>

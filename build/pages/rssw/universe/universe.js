@@ -119,7 +119,8 @@
 					"field": "__view",
 					"formatter": formatters.__view,
 					"recordAction": recordActions.__view.bind(this),
-					"sorter": sorters.__view
+					"hideBlock": true,
+					"nosort": true
 				}];
 			}
 			if(data.state.paging === undefined) {

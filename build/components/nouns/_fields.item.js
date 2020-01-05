@@ -108,7 +108,6 @@
 	items,
 	attrs,
 	stats,
-	notes,
 	{
 		"label": "Description",
 		"property": "description",

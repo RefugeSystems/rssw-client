@@ -55,18 +55,18 @@
 					value = value.substring(1);
 					// TODO: Calculate Value with Calculator
 					
-					element = $("<span class=\"calculated-result rendered-value \">" + value + "</span>");
+					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
 					
 				} else {
 					// Linked
 					mark = universe.index.index[properties.id || value];
 					if(mark) {
-						element = $("<a class=\"rendered-value\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
+						element = $("<a class=\"rendered-value " + properties.classes + "\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 					} else {
-						element = $("<span class=\"calculated-result rendered-value not-found\">" + value + "[Not Found]</span>");
+						element = $("<span class=\"calculated-result rendered-value " + properties.classes + " not-found\">" + value + "[Not Found]</span>");
 					}
 				}
-				
+				console.warn("Properties: ", properties);
 				if(properties.classes) {
 					element.css(properties.classes);
 				}

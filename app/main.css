@@ -298,6 +298,24 @@ h5,
 h6 {
   margin: 0px;
 }
+.rendered-value.red {
+  color: #a91124;
+}
+.rendered-value.orange {
+  color: #FF9560;
+}
+.rendered-value.yellow {
+  color: #b3b300;
+}
+.rendered-value.green {
+  color: #32b736;
+}
+.rendered-value.blue {
+  color: #617EB8;
+}
+.rendered-value.purple {
+  color: #cc00ff;
+}
 .rs-component {
   /* -------------- */
   /* -------------- */
@@ -752,6 +770,14 @@ form {
   border: 1px solid white;
   border-radius: 6px;
   padding: 8px;
+}
+.rs-component.rs-container {
+  padding: 0px;
+  margin: 0px;
+  max-width: 550px;
+  /*border: 1px solid white;*/
+  border-radius: 6px;
+  /*padding: 8px;*/
 }
 .rs-field.rs-autocomplete {
   position: relative;
@@ -1226,9 +1252,19 @@ form {
   border: 0px;
   margin: 0px;
 }
+.rs-component.rssw.component-character-info button.action {
+  color: white;
+}
+.rs-component.rssw.component-character-info .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
 .rs-component.rssw.component-character-info .text-container textarea {
   width: 510px;
   height: 300px;
+  max-height: 550px;
+  max-width: inherit;
 }
 .leveling {
   margin: 3px 0px;
