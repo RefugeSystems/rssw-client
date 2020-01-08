@@ -38,12 +38,13 @@
 		"mixins": [
 			rsSystem.components.StorageManager,
 			rsSystem.components.DataManager,
-
 			rsSystem.components.NounFieldsModifierStats,
+			rsSystem.components.NounFieldsModifierAttrs,
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsLocation,
 			rsSystem.components.NounFieldsAbility,
 			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsSkill,
 			rsSystem.components.NounFieldsItem,
 			rsSystem.components.NounFieldsNote,
 			rsSystem.components.NounFieldsRace,
@@ -72,7 +73,8 @@
 			data.isValid = true;
 			data.copy = null;
 			data.nouns = rsSystem.listingNouns.sort();
-			data.state = this.loadStorage(storageKey, {
+			data.storageKeyID = storageKey;
+			data.state = this.loadStorage(data.storageKeyID, {
 				"current": "player",
 				"building": {}
 			});
@@ -104,6 +106,14 @@
 					Vue.set(this, "rawValue", {});
 				}
 			},
+			"state": {
+				"deep": true,
+				"handler": function() {
+					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+					this.saveStorage(this.storageKeyID, this.state);
+					this.$forceUpdate();
+				}
+			},
 			"rawValue": function(value) {
 				try {
 					var parsed = JSON.parse(value),
@@ -111,7 +121,7 @@
 						x;
 					
 					Vue.set(this.state.building, this.state.current, parsed);
-					this.saveStorage(storageKey, this.state);
+//					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
 					Vue.set(this, "isValid", true);
 					

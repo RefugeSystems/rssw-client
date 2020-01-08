@@ -88,6 +88,14 @@
 		"property": "encumberance",
 		"type": "number"
 	}, {
+		"label": "Max Contents",
+		"property": "contents_max",
+		"type": "number"
+	}, {
+		"label": "Contents Type",
+		"property": "contents_type",
+		"type": "text"
+	}, {
 		"label": "Rarity",
 		"property": "rarity",
 		"type": "number"
@@ -95,11 +103,23 @@
 	profiles,
 	skill,
 	{
+		"label": "Info Render",
+		"property": "information_renderer",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Basic",
+			"id": undefined
+		}, {
+			"name": "Bag",
+			"id": "rssw-bag-render"
+		}]
+	}, {
 		"label": "Is Attachment",
 		"property": "is_attachment",
 		"type": "checkbox"
-	},
-	{
+	}, {
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"

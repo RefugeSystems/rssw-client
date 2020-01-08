@@ -95,9 +95,7 @@
 			var data = {};
 			data.fields = this.fields || {};
 			data.fields.room = dataSource;
-			return data;
-		},
-		"mounted": function() {
+
 			profiles.options = this.universe.indexes.image.listing;
 			profiles.options.sortBy("name");
 			
@@ -105,6 +103,10 @@
 			stats.source_index = this.universe.indexes.modifierstats;
 			effects.source_index = this.universe.indexes.effect;
 			notes.source_index = this.universe.indexes.note;
+			
+			return data;
+		},
+		"mounted": function() {
 		},
 		"methods": {
 			"update": function() {

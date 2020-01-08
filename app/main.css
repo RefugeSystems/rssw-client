@@ -820,6 +820,10 @@ form {
   text-align: right;
   min-width: 100px;
 }
+.rs-component.rs-field.label label span {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
 .rs-component.rs-field select,
 .rs-component.rs-field input {
   font-size: 13px;

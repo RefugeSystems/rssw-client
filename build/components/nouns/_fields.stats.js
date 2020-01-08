@@ -79,6 +79,22 @@
 		"label": "Energy Potential",
 		"property": "energy_potential",
 		"type": "number"
+	}, {
+		"label": "Encumberance",
+		"property": "encumberance",
+		"type": "number"
+	}, {
+		"label": "Encumberance Bonus",
+		"property": "encumberance_bonus",
+		"type": "number"
+	}, {
+		"label": "Max Contents",
+		"property": "contents_max",
+		"type": "number"
+	}, {
+		"label": "Encumberance Bonus",
+		"property": "encumberance_bonus",
+		"type": "number"
 	}];
 	
 	listSource = [
@@ -117,7 +133,7 @@
 			// TODO: Build Fields for Skills and Stats Dynamically
 			data.fields.modifierstats.push({
 				"label": "Attributes",
-				"property": "",
+				"property": "__attr",
 				"type": "label"
 			});
 			data.fields.modifierstats.push({
@@ -153,7 +169,7 @@
 			
 			data.fields.modifierstats.push({
 				"label": "Skills",
-				"property": "",
+				"property": "__skills",
 				"type": "label"
 			});
 			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
@@ -167,10 +183,11 @@
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, listSource);
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
 
+			abilities.source_index = this.universe.indexes.ability;
+			
 			return data;
 		},
 		"mounted": function() {
-			abilities.source_index = this.universe.indexes.ability;
 		},
 		"methods": {
 			"update": function() {

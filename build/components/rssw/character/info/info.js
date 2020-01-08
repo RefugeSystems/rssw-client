@@ -146,7 +146,7 @@
 				if(this.character.description) {
 					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description));
 				}
-				this.encumberance_max = 5 + this.character.brawn;
+				this.encumberance_max = 5 + this.character.brawn + (this.character.encumberance_bonus || 0);
 				this.encumberance = 0;
 				if(this.character.item && this.character.item.length) {
 					for(x=0; x<this.character.item.length; x++) {

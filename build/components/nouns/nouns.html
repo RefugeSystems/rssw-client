@@ -24,7 +24,7 @@
 					<span v-if="field.property === 'icon'" :class="state.building[state.current].icon"></span>
 					<button class="info-link fas fa-info-circle" v-if="field.knowledge" v-on:click="openKnowledge(field.knowledge)">
 					</button>
-					<button class="clear-link flat fas fa-ban" v-on:click="clearField(field)">
+					<button class="clear-link flat fas fa-ban" v-on:click="clearField(field)" v-if="field.type !== 'label'">
 					</button>
 				</span>
 			</rs-field>
