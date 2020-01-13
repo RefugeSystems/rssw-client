@@ -8,6 +8,8 @@
 (function() {
 	var storageKey = "_rs_characterBuilderComponentKey";
 	
+	var spaces = /\\s/g;
+	
 	var nameSort = function(a, b) {
 		if(a.name < b.name) {
 			return -1;
@@ -189,11 +191,19 @@
 			},
 			"forward": function() {
 				switch(this.stage) {
+					case 2:
+						if(this.user.master) {
+							this.building.id = "entity:npc:" + this.reduceName(this.building.name) + ":" + Date.now();
+						}
+						break;
 					case 3:
 						break;
 				}
 				Vue.set(this, "stage", this.stage + 1);
 				this.update();
+			},
+			"reduceName": function(name) {
+				return name.toLowerCase().replace(spaces, "");
 			},
 			"update": function() {
 				var loading,

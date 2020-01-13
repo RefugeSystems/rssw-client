@@ -20,6 +20,7 @@
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
 	invisibleKeys.linked = true;
+	invisibleKeys.owners = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
@@ -79,6 +80,7 @@
 		"data": function() {
 			var data = {};
 			
+			data.collapsed = true;
 			data.knowledgeLink = knowledgeLink;
 			data.holdDescription = null;
 			data.description = null;
@@ -182,6 +184,9 @@
 				return value;
 			},
 			"prettifyReferenceValue": function(reference, property, value) {
+				
+			},
+			"displayInfo": function(record) {
 				
 			},
 			"update": function() {

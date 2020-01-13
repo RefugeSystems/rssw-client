@@ -15,18 +15,20 @@
 				<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
 					<div class="reference-heading">{{property.pluralize(true)}}</div>
 					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden">
-						<div class="reference-heading">
+						<div class="reference-heading" v-if="!collapsed">
 							<span :class="universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''"></span>
 							<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>
 						</div>
-						<rs-object-info :record="universe.indexes[property].lookup[subrecord]" :universe="universe"></rs-object-info>
+						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed" class="rendered-value" :data-id="universe.indexes[property].lookup[record[property]].id">{{universe.indexes[property].lookup[record[property]].name}}</a>
 					</div>
 				</div>
 				<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
 					<div class="reference-heading">{{property.capitalize()}}</div>
 					<div class="subreference">
-						<div class="reference-heading">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>
-						<rs-object-info :record="universe.indexes[property].lookup[record[property]]" :universe="universe"></rs-object-info>
+						<div class="reference-heading" v-if="!collapsed">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>
+						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[record[property]]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed" class="rendered-value" :data-id="universe.indexes[property].lookup[record[property]].id">{{universe.indexes[property].lookup[record[property]].name}}</a>
 					</div>
 				</div>
 			</div>
