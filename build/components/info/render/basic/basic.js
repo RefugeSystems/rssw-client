@@ -10,6 +10,7 @@
 	
 	var invisibleKeys = {};
 	invisibleKeys.invisibleProperties = true;
+	invisibleKeys.source_template = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
 	invisibleKeys.description = true;

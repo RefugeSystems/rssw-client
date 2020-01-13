@@ -1,11 +1,11 @@
 /**
  * 
- * @class swipe
+ * @class pinchin
  * @module Common
  * @submodule Directives
  * @param {Function} handler The function to handle the pan event
  */
-Vue.directive("swipe", {
+Vue.directive("pinchin", {
 	"bind": function(el, binding) {
 		if (typeof binding.value === "function") {
 			var mc = new Hammer(el),
@@ -21,8 +21,13 @@ Vue.directive("swipe", {
 				options.direction = Hammer.DIRECTION_DOWN;
 			}
 			
-			mc.get("swipe").set(options);
-			mc.on("swipe", binding.value);
+			mc.get("pinch").set(options);
+			if(binding.modifiers.in) {
+				mc.on("pinchin", binding.value);
+			}
+			if(binding.modifiers.out) {
+				mc.on("pinchout", binding.value);
+			}
 		}
 	}
 });

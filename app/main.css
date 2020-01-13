@@ -8,6 +8,15 @@
 .rs-component .actions {
   margin-top: 7px;
 }
+.rs-component .interactability {
+  min-width: 30px;
+  min-height: 30px;
+  font-size: 24px;
+  line-height: 30px;
+}
+.rs-component .visibility {
+  padding: 4px;
+}
 .rs-component .flow-h {
   display: flex;
   flex-direction: row;
@@ -687,6 +696,25 @@ form {
   color: inherit;
   width: 100%;
   height: 100%;
+}
+.system-component.message-panel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  bottom: 0px;
+  right: 0px;
+  background-color: black;
+  border-left: 1px solid white;
+  border-top: 1px solid white;
+  border-top-left-radius: 10px;
+  z-index: 50;
+}
+.system-component.message-panel .message-container {
+  padding: 5px;
+  border-bottom: 1px solid white;
+}
+.system-component.message-panel .message-container p {
+  margin: 5px 0px;
 }
 .system-component.component-cards {
   display: block;

@@ -1,7 +1,8 @@
 /**
  * 
  * @class filedrop
- * @module Common_Directives
+ * @module Common
+ * @submodule Directives
  * @param {Function} handler The function to handle the file event
  */
 Vue.directive("filedrop", {

@@ -1,7 +1,8 @@
 /**
  * 
  * @class tab
- * @module Common_Directives
+ * @module Common
+ * @submodule Directives
  * @param {Function} handler The function to handle the pan event
  */
 Vue.directive("tab", {

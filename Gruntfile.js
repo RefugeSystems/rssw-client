@@ -2,7 +2,7 @@
 var fs = require("fs");
 var pkg = JSON.parse(fs.readFileSync("./package.json"));
 
-var seek = /^.*build[\/\\](components|pages)[\/\\]/;
+var seek = /^.*build[\/\\](components|pages|common)[\/\\]/;
 
 var config = {
 	"pkg": pkg,
@@ -236,6 +236,7 @@ var config = {
 				"build/styles/*.less",
 				"build/styles/*/**/*.less",
 				"build/pages/**/*.less",
+				"build/common/**/*.less",
 				"build/components/**/*.less"
 			],
 			"dest": "build/app.less"

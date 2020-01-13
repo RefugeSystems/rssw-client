@@ -25,7 +25,6 @@
 		"data": function() {
 			var data = {};
 			
-			data.knowledgeLink = knowledgeLink;
 			data.holdDescription = null;
 			data.description = null;
 			data.holdNote = null;
@@ -69,9 +68,6 @@
 			this.update();
 		},
 		"methods": {
-			"visible": function(key, value) {
-				return key && key !== "image" && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
-			},
 			"update": function() {
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
