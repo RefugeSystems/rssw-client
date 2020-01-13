@@ -91,10 +91,6 @@
 		"label": "Max Contents",
 		"property": "contents_max",
 		"type": "number"
-	}, {
-		"label": "Encumberance Bonus",
-		"property": "encumberance_bonus",
-		"type": "number"
 	}];
 	
 	listSource = [

@@ -80,6 +80,10 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Item Type",
+		"property": "type",
+		"type": "text"
+	}, {
 		"label": "Price",
 		"property": "price",
 		"type": "number"
