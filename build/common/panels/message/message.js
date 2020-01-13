@@ -51,7 +51,7 @@
 			"receiveMessage": function(event) {
 				event._display_time = new Date(event.time);
 				if(!event._display_time.getTime()) {
-					event._display_time = null;
+					event._display_time = new Date();
 				}
 				
 				if(!event.message) {

@@ -23265,7 +23265,7 @@ class RSUniverse extends RSObject {
 			"receiveMessage": function(event) {
 				event._display_time = new Date(event.time);
 				if(!event._display_time.getTime()) {
-					event._display_time = null;
+					event._display_time = new Date();
 				}
 				
 				if(!event.message) {
@@ -27274,6 +27274,13 @@ class FieldDescriptor {
 			}
 		},
 		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+			
 			this.character.$on("modified", this.update);
 			rsSystem.register(this);
 			this.update();
