@@ -91,6 +91,10 @@
 		"label": "Max Contents",
 		"property": "contents_max",
 		"type": "number"
+	}, {
+		"label": "Hardpoints",
+		"property": "hardpoints",
+		"type": "number"
 	}];
 	
 	listSource = [
