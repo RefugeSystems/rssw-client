@@ -26,75 +26,79 @@
 	}, {
 		"label": "Soak",
 		"property": "soak",
-		"type": "number"
+		"type": "text"
+	}, {
+		"label": "Critical",
+		"property": "critical",
+		"type": "text"
 	}, {
 		"label": "Max Wound",
 		"property": "wounds_max",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Max Strain",
 		"property": "strain_max",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Range",
 		"property": "range",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Damage",
 		"property": "damage",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Melee Defense",
 		"property": "defense_melee",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Range Defense",
 		"property": "defense_range",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Ship Shield",
 		"property": "shield",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Ship Attack",
 		"property": "attack",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Ship Evasion",
 		"property": "evasion",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Ship Hull",
 		"property": "hull",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Energy Output",
 		"property": "energy_out",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Energy Consumption",
 		"property": "energy_consume",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Energy Potential",
 		"property": "energy_potential",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Encumberance",
 		"property": "encumberance",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Encumberance Bonus",
 		"property": "encumberance_bonus",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Max Contents",
 		"property": "contents_max",
-		"type": "number"
+		"type": "text"
 	}, {
 		"label": "Hardpoints",
 		"property": "hardpoints",
-		"type": "number"
+		"type": "text"
 	}];
 	
 	listSource = [
@@ -139,32 +143,32 @@
 			data.fields.modifierstats.push({
 				"property": "brawn",
 				"label": "Brawn",
-				"type": "number"
+				"type": "text"
 			});
 			data.fields.modifierstats.push({
 				"property": "agility",
 				"label": "Agility",
-				"type": "number"
+				"type": "text"
 			});
 			data.fields.modifierstats.push({
 				"property": "intellect",
 				"label": "Intellect",
-				"type": "number"
+				"type": "text"
 			});
 			data.fields.modifierstats.push({
 				"property": "cunning",
 				"label": "Cunning",
-				"type": "number"
+				"type": "text"
 			});
 			data.fields.modifierstats.push({
 				"property": "willpower",
 				"label": "Willpower",
-				"type": "number"
+				"type": "text"
 			});
 			data.fields.modifierstats.push({
 				"property": "pressence",
 				"label": "Pressence",
-				"type": "number"
+				"type": "text"
 			});
 			
 			data.fields.modifierstats.push({
@@ -176,7 +180,7 @@
 				data.fields.modifierstats.push({
 					"label": this.universe.indexes.skill.listing[x].name,
 					"property": this.universe.indexes.skill.listing[x].property_key,
-					"type": "number"
+					"type": "text"
 				});
 			}
 			

@@ -896,6 +896,11 @@ form {
 			
 		}
 	}
+	
+	.spacing {
+		display: block;
+		width: 10px;
+	}
 }
 
 .system-component.component-cards {
@@ -1265,6 +1270,89 @@ form {
 	
 	.calculated-result {
 		color: #ec6d2e;
+	}
+}
+
+.master-controls {
+
+
+	.control {
+	
+		button.action {
+			cursor: pointer;
+			background: transparent;
+			border: 0px;
+			margin: 0px;
+			
+			&:active,
+			&focus {
+				color: @rsOrange;
+			}
+			
+			&:hover {
+				color: @rsBlue;
+			}
+		}
+	}
+}
+
+.rs-component.rssw.component-character-info {
+
+	a {
+		cursor: pointer;
+	}
+
+	.property {
+		max-width: 550px;
+		color: @rsWhite;
+		margin: 3px;
+	}
+	
+	.divide {
+		color: @rsWhite;
+		margin: 0px 0px 0px 2px;
+	}
+	
+	.icon {
+		display: inline-block;
+		width: 20px;
+		text-align: center;
+	}
+	
+	.value {
+		color: @rsLightBlue;
+		font-size: 1.1em;
+	}
+	
+	.description {
+		min-height: 140px;
+		min-width: 360px;
+	}
+	
+	button {
+		background: transparent;
+		font-family: inherit;
+		font-size: inherit;
+		padding: 0px;
+		border: 0px;
+		margin: 0px;
+	}
+	
+	button.action {
+		color: white;
+	}
+	
+	.text-container {
+		max-height: 550px;
+		max-width: inherit;
+		overflow: auto;
+		
+		textarea {
+			width: 510px;
+			height: 300px;
+			max-height: 550px;
+			max-width: inherit;
+		}
 	}
 }
 

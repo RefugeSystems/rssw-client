@@ -35,11 +35,25 @@
 	invisibleKeys.viewed = true;
 	invisibleKeys.map = true;
 	
-	
-	var prettifyNames = {};
 	var prettifyValues = {};
+	var prettifyNames = {};
 	var knowledgeLink = {};
+	var displayRaw = {};
 	
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+
+	knowledgeLink.encumberance = "knowledge:item:encumberance";
+	knowledgeLink.critical = "knowledge:combat:critical";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 	
 	prettifyValues.range = function(record, value) {
@@ -73,7 +87,19 @@
 				"required": true,
 				"type": Object
 			},
+			"source": {
+				"type": Object
+			},
+			"target": {
+				"type": Object
+			},
 			"player": {
+				"type": Object
+			},
+			"user": {
+				"type": Object
+			},
+			"base": {
 				"type": Object
 			}
 		},
@@ -82,7 +108,10 @@
 			
 			data.collapsed = true;
 			data.knowledgeLink = knowledgeLink;
+			data.displayRaw = displayRaw;
 			data.holdDescription = null;
+			data.transfer_targets = [];
+			data.transfer_target = "";
 			data.description = null;
 			data.holdNote = null;
 			data.note = null;
@@ -126,6 +155,25 @@
 			"isArray": function(value) {
 				return value instanceof Array;
 			},
+			"canTransfer": function() {
+				return this.source && ((this.source.item && this.source.item.indexOf(this.record.id) !== -1) || (this.source.inventory && this.source.inventory.indexOf(this.record.id) !== -1));
+			},
+			"transferObject": function() {
+				if(this.transfer_target && this.transfer_target !== "cancel") {
+					this.universe.send("give:item", {
+						"source": this.source.id,
+						"target": this.transfer_target,
+						"item": this.record.id
+					});
+				}
+				
+				Vue.set(this, "transfer_target", "");
+			},
+			"obscureRecord": function() {
+				this.record.commit({
+					"obscured": this.record.obscured?null:true
+				});
+			},
 			"prettifyKey": function(key) {
 			},
 			"prettifyPropertyName": function(property) {
@@ -150,6 +198,15 @@
 				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
 			},
 			"prettifyPropertyValue": function(property, value) {
+				if(this.record._calculated && this.record._calculated[property]) {
+					property = this.universe.calculateExpression(value, this.source, this.base, this.target);
+					if(property == value) {
+						return this.universe.calculateExpression(value, this.source, this.base, this.target);
+					} else {
+						return this.universe.calculateExpression(value, this.source, this.base, this.target) + " [ " + value + " ]";
+					}
+				}
+				
 				switch(typeof(this.record._prettifyValue)) {
 					case "function":
 						return this.record._prettifyValue(property, value);
@@ -190,6 +247,8 @@
 				
 			},
 			"update": function() {
+				var x;
+				
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
 //					console.log("Shifting");
@@ -239,6 +298,14 @@
 				
 				this.keys.splice(0);
 				this.keys.push.apply(this.keys, Object.keys(this.record));
+				
+				this.transfer_targets.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					if(this.source && !this.universe.indexes.entity.listing[x].obscured && !this.universe.indexes.entity.listing[x].mob && !this.universe.indexes.entity.listing[x].template && this.universe.indexes.entity.listing[x].id !== this.source.id) {
+						this.transfer_targets.push(this.universe.indexes.entity.listing[x]);
+					}
+				}
+				this.transfer_targets.sort(byName);
 				
 				this.$forceUpdate();
 			}

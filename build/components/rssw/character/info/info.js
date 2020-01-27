@@ -76,7 +76,10 @@
 		},
 		"methods": {
 			"showInfo": function(view) {
-				rsSystem.EventBus.$emit("display-info", view);
+				rsSystem.EventBus.$emit("display-info", {
+					"source": this.character,
+					"record": view
+				});
 			},
 			"updateCharacter": function() {
 				if(!this.calculating) {
@@ -121,7 +124,7 @@
 				if(this.state.viewing) {
 					Vue.set(this.state, "viewing", false);
 				} else {
-					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description));
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
 					Vue.set(this.state, "viewing", true);
 				}
 			},
@@ -151,7 +154,7 @@
 					Vue.set(this, "credits", this.character.credits);
 				}
 				if(this.character.description) {
-					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description));
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
 				}
 				this.encumberance_max = 5 + this.character.brawn + (this.character.encumberance_bonus || 0);
 				this.encumberance = 0;

@@ -15,9 +15,9 @@
 		</div>
 	</div>
 	<div class="system-display active" v-if="state === 10">
-		<system-menu :universe="universe" :user="player"></system-menu>
-		<router-view class="system-view" :universe="universe" :user="player"></router-view>
-		<system-info :universe="universe" :user="player"></system-info>
-		<message-panel :universe="universe" :user="player"></message-panel>
+		<system-menu :universe="universe" :user="user"></system-menu>
+		<router-view class="system-view" :universe="universe" :user="user"></router-view>
+		<system-info :universe="universe" :user="user"></system-info>
+		<message-panel :universe="universe" :user="user"></message-panel>
 	</div>
 </div>

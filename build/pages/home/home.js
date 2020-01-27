@@ -21,7 +21,7 @@ rsSystem.component("RSHome", {
 		
 		// Track Connection Information
 		data.universe = null;
-		data.player = null;
+		data.user = null;
 		
 		return data;
 	},
@@ -33,7 +33,7 @@ rsSystem.component("RSHome", {
 			} else {
 				Vue.set(this, "state", 1);
 				Vue.set(this, "universe", new RSUniverse({}));
-				Vue.set(this, "player", event.user);
+				Vue.set(this, "user", event.user);
 				
 				this.universe.$on("disconnected", () => {
 					Vue.set(this, "message", "Disconnected");

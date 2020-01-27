@@ -123,6 +123,8 @@ class RSObject extends EventEmitter {
 			keys,
 			load,
 			x;
+
+		base._calculated = [];
 		
 		// Stop listening for changes to known modifiers and clear
 //		for(x=0; x<this._modifiers.length; x++) {
@@ -221,11 +223,26 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
+		if(this.universe.calculator) {
+			load = {};
+			for(x=0; x<base._calculated.length; x++) {
+				if(!load[base._calculated[x]]) {
+//					console.warn("Calculator Processing[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+					base[base._calculated[x]] = this.universe.calculator.process(base[base._calculated[x]]);
+					load[base._calculated[x]] = true;
+//					console.warn(" > Result[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+				}
+			}
+		}
+		
 		if(this.recalculateHook) {
 			this.recalculateHook();
 		}
 		
-//		console.log("Recalculated: " + this.id);
+		if(this._debugging) {
+			console.log("Recalculated: " + this.id, base);
+		}
+		
 		/**
 		 * 
 		 * @event modified
@@ -293,7 +310,16 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
-//		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+		
+		this._calculated = {};
+		for(x=0; x<base._calculated.length; x++) {
+			if(!this._calculated[base._calculated[x]]) {
+				this._calculated[base._calculated[x]] = true;
+			}
+		}
+		if(this._debugging) {
+			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+		}
 		
 		return true;
 	}

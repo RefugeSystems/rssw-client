@@ -16,7 +16,7 @@
 		"end": "}$"
 	};
 	
-	var formatMarkdown = function(sourceText, universe, character) {
+	var formatMarkdown = function(sourceText, universe, entity, base, target) {
 		var properties = {},
 			tracking,
 			element,
@@ -49,14 +49,12 @@
 			}
 			
 			if(value) {
-				
 				if(value[0] === "=") {
-					// Calculate
-					value = value.substring(1);
+					console.warn("Calculating Expression: " + value, universe, entity);
 					// TODO: Calculate Value with Calculator
+					value = universe.calculateExpression(value.substring(1), entity, base, target);
 					
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
-					
 				} else {
 					// Linked
 					mark = universe.index.index[properties.id || value];
@@ -89,8 +87,9 @@
 			}
 		},
 		"methods": {
-			"rsshowdown": function(sourceText, entity) {
-				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity));
+			"rsshowdown": function(sourceText, entity, base, target) {
+				console.warn("RS Showdown: ", entity, base, target);
+				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, base, target));
 			}
 		}
 	});

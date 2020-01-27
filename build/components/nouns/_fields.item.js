@@ -88,8 +88,16 @@
 		"property": "price",
 		"type": "number"
 	}, {
+		"label": "Damage",
+		"property": "damage",
+		"type": "text"
+	}, {
 		"label": "Encumberance",
 		"property": "encumberance",
+		"type": "number"
+	}, {
+		"label": "Critical",
+		"property": "critical",
 		"type": "number"
 	}, {
 		"label": "Max Contents",
@@ -103,7 +111,7 @@
 		"label": "Rarity",
 		"property": "rarity",
 		"type": "number"
-	}, 
+	},
 	profiles,
 	skill,
 	{

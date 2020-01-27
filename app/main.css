@@ -716,6 +716,10 @@ form {
 .system-component.message-panel .message-container p {
   margin: 5px 0px;
 }
+.system-component.message-panel .spacing {
+  display: block;
+  width: 10px;
+}
 .system-component.component-cards {
   display: block;
   position: relative;
@@ -1017,6 +1021,66 @@ form {
 }
 .object-info .calculated-result {
   color: #ec6d2e;
+}
+.master-controls .control button.action {
+  cursor: pointer;
+  background: transparent;
+  border: 0px;
+  margin: 0px;
+}
+.master-controls .control button.action:active,
+.master-controls .control button.actionfocus {
+  color: #FF9560;
+}
+.master-controls .control button.action:hover {
+  color: #617EB8;
+}
+.rs-component.rssw.component-character-info a {
+  cursor: pointer;
+}
+.rs-component.rssw.component-character-info .property {
+  max-width: 550px;
+  color: #EAEFF9;
+  margin: 3px;
+}
+.rs-component.rssw.component-character-info .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
+}
+.rs-component.rssw.component-character-info .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-character-info .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-character-info .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-character-info button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-character-info button.action {
+  color: white;
+}
+.rs-component.rssw.component-character-info .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
+.rs-component.rssw.component-character-info .text-container textarea {
+  width: 510px;
+  height: 300px;
+  max-height: 550px;
+  max-width: inherit;
 }
 .system-component.system-menu {
   display: block;

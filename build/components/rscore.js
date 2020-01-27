@@ -29,5 +29,8 @@ rsSystem.component("RSCore", {
 	"watch": {
 	},
 	"methods": {
+		"getPlayer": function() {
+			return this.universe.nouns.player[this.user.id];
+		}
 	}
 });

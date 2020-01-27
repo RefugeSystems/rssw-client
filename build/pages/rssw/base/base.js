@@ -18,6 +18,7 @@ rsSystem.component("RSSWBase", {
 	},
 	"computed": {
 		"entity": function() {
+			console.warn("Entity: ", this.universe.nouns.entity[this.$route.params.oid]);
 			return this.universe.nouns.entity[this.$route.params.oid];
 		}
 	},

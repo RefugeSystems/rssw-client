@@ -90,6 +90,9 @@
 		<div class="text-container">
 			<textarea class="description" v-if="!state.viewing" v-model="description" v-on:change="changed('description', description)"></textarea>
 			<div class="description" v-if="state.viewing" v-html="mdDescription"></div>
+			<!--
+			<rs-rendered-text :text="description" :universe="universe" :entity="character"></rs-rendered-text>
+			-->
 		</div>
 	</div>
 </div>

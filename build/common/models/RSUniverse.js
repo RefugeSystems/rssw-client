@@ -49,6 +49,11 @@ class RSUniverse extends RSObject {
 			}
 		};
 		
+		
+		if(!details.calculator) {
+			this.calculator = new RSCalculator(this);
+		}
+		
 		/**
 		 * Logging point for this universe.
 		 * @property log
@@ -227,6 +232,40 @@ class RSUniverse extends RSObject {
 			this.user = userInformation;
 			done();
 		});
+	}
+
+	/**
+	 * 
+	 * @method calculateExpression
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} base 
+	 * @param {RSObject} target 
+	 * @return {String} 
+	 */
+	calculateExpression(expression, source, base, target) {
+		if(this.calculator) {
+			return this.calculator.process(expression, source, base, target).toString();
+		} else {
+			return expression.toString();
+		}
+	}
+	
+	/**
+	 * 
+	 * @method displayExpression
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} base 
+	 * @param {RSObject} target  
+	 * @return {String} 
+	 */
+	displayExpression(expression, source, base, target) {
+		if(this.calculator) {
+			return this.calculator.display(expression, source, base, target).toString();
+		} else {
+			return expression.toString();
+		}
 	}
 	
 	checkEventCondition(condition) {

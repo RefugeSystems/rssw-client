@@ -13,7 +13,7 @@
 	rsSystem.component("systemInfo", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSCore
 		],
 		"props": {
 			"universe": {
@@ -46,6 +46,24 @@
 			 * @type Array
 			 */
 			data.history = [];
+			/**
+			 * Used for calculations.
+			 * @property source
+			 * @type Object
+			 */
+			data.source = null;
+			/**
+			 * Used for calculations.
+			 * @property target
+			 * @type Object
+			 */
+			data.target = null;
+			/**
+			 * Used for calculations.
+			 * @property base
+			 * @type Object
+			 */
+			data.base = null;
 			
 			return data;
 		},
@@ -70,17 +88,31 @@
 			 */
 			"displayRecord": function(toView) {
 				if(toView && !(toView instanceof RSObject)) {
-					if(typeof(toView) === "string") {
-						toView = this.universe.index.index[toView];
+					if(toView.record) {
+						console.warn("Received View Record: ", toView);
+						Vue.set(this, "target", toView.target);
+						Vue.set(this, "source", toView.source);
+						Vue.set(this, "base", toView.source);
+						if(typeof(toView.record) === "string") {
+							toView = this.universe.index.index[toView.record];
+						} else {
+							toView = toView.record;
+						}
 					} else {
-						toView = this.universe.index.index[toView.id] || this.universe.index.index[toView.name];
+						if(typeof(toView) === "string") {
+							toView = this.universe.index.index[toView];
+						} else {
+							toView = this.universe.index.index[toView.id] || this.universe.index.index[toView.name];
+						}
+						Vue.set(this, "target", undefined);
+						Vue.set(this, "source", undefined);
+						Vue.set(this, "base", undefined);
 					}
 				}
 				
 				if(toView && (!this.viewing || toView.id !== this.viewing.id)) {
 					if(this.viewing) {
 						if(!this.history.length || (this.viewing.id !== toView.id)) {
-//							console.warn("Storing: ", this.viewing.id);
 							this.history.unshift(this.viewing);
 						} else {
 							console.warn("Repeated Shift? ", this.viewing.id);
