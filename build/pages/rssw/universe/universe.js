@@ -296,6 +296,26 @@
 							}
 						}
 						break;
+					case "obscure":
+//						console.warn("Taking Items");
+						for(x=0; x<index.selection.length; x++) {
+							if(this.universe.index.index[index.selection[x]]) {
+								this.universe.index.index[index.selection[x]].commit({
+									"obscured": true
+								});
+							}
+						}
+						break;
+					case "unobscure":
+//						console.warn("Taking Items");
+						for(x=0; x<index.selection.length; x++) {
+							if(this.universe.index.index[index.selection[x]]) {
+								this.universe.index.index[index.selection[x]].commit({
+									"obscured": false
+								});
+							}
+						}
+						break;
 					case "drop":
 						loading = index.selection.concat([]);
 						for(x=0; x<loading.length; x++) {
