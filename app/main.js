@@ -21437,7 +21437,7 @@ class RSObject extends EventEmitter {
 				if(this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]]) {
 					this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
 				} else {
-					console.warn("Missing Attribute Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]);
+					console.warn("Missing Attribute Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierattrs[x]]);
 				}
 			}
 		}
