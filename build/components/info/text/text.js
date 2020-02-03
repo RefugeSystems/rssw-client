@@ -33,6 +33,12 @@
 			},
 			"base": {
 				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
 			}
 		},
 		"data": function() {

@@ -47,6 +47,12 @@
 			},
 			"base": {
 				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
 			}
 		},
 		"data": function() {
@@ -86,6 +92,7 @@
 			elements = [createElement(this.record.information_renderer || "rs-object-info-basic", {
 				"props": {
 					"universe": this.universe,
+					"options": this.options,
 					"player": this.player,
 					"record": this.record,
 					"source": this.source,

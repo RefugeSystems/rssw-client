@@ -9,14 +9,20 @@
 (function() {
 	
 	var invisibleKeys = {};
+	invisibleKeys.information_renderer = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.source_template = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
+	invisibleKeys.restock_base = true;
+	invisibleKeys.restock_max = true;
 	invisibleKeys.description = true;
 	invisibleKeys.master_note = true;
+	invisibleKeys.rarity_min = true;
+	invisibleKeys.rarity_max = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
+	invisibleKeys.obscured = true;
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
 	invisibleKeys.linked = true;
@@ -27,6 +33,7 @@
 	invisibleKeys.echo = true;
 	invisibleKeys.url = true;
 	invisibleKeys.id = true;
+	
 
 	invisibleKeys.coordinates = true;
 	invisibleKeys.shown_at = true;
@@ -101,6 +108,12 @@
 			},
 			"base": {
 				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
 			}
 		},
 		"data": function() {
@@ -112,6 +125,7 @@
 			data.holdDescription = null;
 			data.transfer_targets = [];
 			data.transfer_target = "";
+			data.restocking = false;
 			data.description = null;
 			data.holdNote = null;
 			data.note = null;
@@ -245,6 +259,19 @@
 			},
 			"displayInfo": function(record) {
 				
+			},
+			"restockLocation": function() {
+				if(!this.restocking) {
+					Vue.set(this, "restocking", true);
+					
+					this.universe.send("location:restock", {
+						"id": this.record.id
+					});
+					
+					setTimeout(() => {
+						Vue.set(this, "restocking", false);
+					}, 1000);
+				}
 			},
 			"update": function() {
 				var x;

@@ -1022,17 +1022,26 @@ form {
 .object-info .calculated-result {
   color: #ec6d2e;
 }
+.master-controls .control .icon {
+  display: inline-block;
+  margin: 0px 6px 0px 0px;
+  text-align: center;
+  width: 20px;
+}
 .master-controls .control button.action {
   cursor: pointer;
   background: transparent;
+  border-radius: 5px;
+  padding: 4px;
+  margin: 4px;
   border: 0px;
-  margin: 0px;
 }
 .master-controls .control button.action:active,
 .master-controls .control button.actionfocus {
   color: #FF9560;
 }
 .master-controls .control button.action:hover {
+  background-color: #e0aef7;
   color: #617EB8;
 }
 .rs-component.rssw.component-character-info a {
@@ -1922,7 +1931,7 @@ form {
 }
 .rs-component.component-viewer .map .actions {
   position: absolute;
-  z-index: 20;
+  z-index: 100;
   background-color: black;
   border: 2px solid #FF9560;
   border-bottom-right-radius: 5px;
@@ -2009,7 +2018,7 @@ form {
   max-height: 40px;
   transition: width 0.5s, max-height 0.5s;
   overflow: hidden;
-  z-index: 50;
+  z-index: 100;
   border: 1px solid #EAEFF9;
   border-radius: 5px;
   background: #000000;

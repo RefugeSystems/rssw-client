@@ -38,6 +38,8 @@
 		"mixins": [
 			rsSystem.components.StorageManager,
 			rsSystem.components.DataManager,
+
+			rsSystem.components.NounFieldsClassification,
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsModifierAttrs,
 			rsSystem.components.NounFieldsKnowledge,

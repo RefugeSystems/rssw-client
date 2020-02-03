@@ -12,7 +12,7 @@
 						<span :class="poiClass(link)"></span>
 					</button>
 				</div>
-				<div class="coordinates" v-for="coordinate in coordinates">
+				<div class="coordinates" v-for="coordinate in coordinates" v-if="!coordinate.standalone">
 					<span class="coordinate top left" :style="'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
 					<span class="coordinate bottom right" :style="'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
 				</div>

@@ -1,5 +1,6 @@
 
 rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");
+rsSystem.registerNoun(RSClassification, "classification");
 rsSystem.registerNoun(RSModifierStats, "modifierstats");
 rsSystem.registerNoun(RSArchetype, "archetype");
 rsSystem.registerNoun(RSInventory, "inventory");

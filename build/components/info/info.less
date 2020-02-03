@@ -115,11 +115,20 @@
 
 	.control {
 	
+		.icon {
+			display: inline-block;
+			margin: 0px 6px 0px 0px;
+			text-align: center;
+			width: 20px;
+		}
+	
 		button.action {
 			cursor: pointer;
 			background: transparent;
+			border-radius: 5px;
+			padding: 4px;
+			margin: 4px;
 			border: 0px;
-			margin: 0px;
 			
 			&:active,
 			&focus {
@@ -127,6 +136,7 @@
 			}
 			
 			&:hover {
+				background-color: #e0aef7;
 				color: @rsBlue;
 			}
 		}

@@ -31,7 +31,7 @@
 							<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>
 						</div>
 						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord]" :universe="universe"></rs-object-info>
-						<a v-if="collapsed && universe.indexes[property].lookup[subrecord]" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord].id">{{universe.indexes[property].lookup[subrecord].name}}</a>
+						<a v-if="collapsed && universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord].id">{{universe.indexes[property].lookup[subrecord].name}}</a>
 						<a v-if="collapsed && !universe.indexes[property].lookup[subrecord]" class="rendered-value unknown">{{subrecord}}[Unknown]</a>
 					</div>
 				</div>
@@ -39,8 +39,8 @@
 					<div class="reference-heading">{{property.capitalize()}}</div>
 					<div class="subreference">
 						<div class="reference-heading" v-if="!collapsed">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>
-						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[record[property]]" :universe="universe"></rs-object-info>
-						<a v-if="collapsed && universe.indexes[property].lookup[record[property]]" class="rendered-value" :data-id="universe.indexes[property].lookup[record[property]].id">{{universe.indexes[property].lookup[record[property]].name}}</a>
+						<rs-object-info v-if="!collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured" :record="universe.indexes[property].lookup[record[property]]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[record[property]].id">{{universe.indexes[property].lookup[record[property]].name}}</a>
 						<a v-if="collapsed && !universe.indexes[property].lookup[record[property]]" class="rendered-value unknown" >{{record[property]}}[Unknown]</a>
 					</div>
 				</div>
@@ -65,12 +65,18 @@
 		 <div v-html="note"></div>
 	</div>
 	
-	<div v-if="player.master" class="master-controls">
+	<div v-if="player.master && !options.noMaster" class="master-controls">
 		<h3>Master Controls</h3>
 		<div class="control">
 			<button class="action" v-on:click="obscureRecord()">
+				<span class="icon" :class="record.obscured?'far fa-check-square':'far fa-square'"></span>
 				<span>Obscured?</span>
-				<span :class="record.obscured?'far fa-check-square':'far fa-square'"></span>
+			</button>
+		</div>
+		<div class="control">
+			<button class="action" v-if="record.restock_base" v-on:click="restockLocation()">
+				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>
+				<span>Restock Items</span>
 			</button>
 		</div>
 	</div>

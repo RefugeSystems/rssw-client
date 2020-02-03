@@ -27,6 +27,15 @@
 			data.state = this.loadStorage(data.storageKeyID, {
 				"zoomStep": 1
 			});
+			
+			if(!data.state.crosshairing) {
+				data.state.crosshairing = {
+					"icon": "fal fa-crosshairs",
+					"event": "toggle-crosshair",
+					"text": "Crosshairs On",
+					"state": false
+				};
+			}
 
 			data.state.viewed_at = data.state.viewed_at || 0;
 			data.state.search = data.state.search || "";
@@ -107,6 +116,12 @@
 					this.saveStorage(this.storageKeyID, this.state);
 				}
 			},
+			"location": {
+				"handler": function(newValue, oldValue) {
+					oldValue.$off("modified", this.update);
+					newValue.$on("modified", this.update);
+				}
+			},
 			"$route": {
 				"deep": true,
 				"handler": function() {
@@ -173,11 +188,23 @@
 						this.coordinates.push({
 							"x": (this.actions.x/this.image.width*100),
 							"y": (this.actions.y/this.image.height*100),
+							"standalone": this.state.crosshairing.state,
 							"color": option.color
 						});
 						this.location.commit({
 							"coordinates": this.coordinates
 						});
+						break;
+					case "toggle-crosshair":
+						if(this.state.crosshairing.state) {
+							Vue.set(this.state.crosshairing, "icon", "fal fa-crosshairs");
+							Vue.set(this.state.crosshairing, "text", "Crosshairs On");
+							Vue.set(this.state.crosshairing, "state", false);
+						} else {
+							Vue.set(this.state.crosshairing, "icon", "fal fa-slash");
+							Vue.set(this.state.crosshairing, "text", "Crosshairs Off");
+							Vue.set(this.state.crosshairing, "state", true);
+						}
 						break;
 					case "set-map":
 						this.location.commit({
@@ -350,7 +377,7 @@
 				
 			},
 			"apply": function(applying) {
-//				console.log("apply: ", applying, this.parchment);
+				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
@@ -391,7 +418,7 @@
 					return true;
 				}
 				
-				if(link.hidden) {
+				if(link.hidden || link.obscured) {
 					return false;
 				}
 				
@@ -452,6 +479,9 @@
 						"text": "Mark: White",
 						"color": "white"
 					});
+					
+					this.actions.options.push(this.state.crosshairing);
+					
 					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",
 						"event": "set-location",
@@ -499,7 +529,7 @@
 				}
 				
 				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
-//					console.log("View State Sync");
+					console.log("View State Sync: ", this.location, this.state);
 					Vue.set(this.state, "viewed_at", this.location.shown_at);
 					Object.assign(this.image, this.location.showing);
 					this.apply(this.image);

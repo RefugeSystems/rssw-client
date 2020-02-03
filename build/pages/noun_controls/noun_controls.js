@@ -15,6 +15,9 @@ rsSystem.component("RSNounControls", {
 	"data": function() {
 		var data = {};
 		
+		data.infoOptions = {};
+		data.infoOptions.noMaster = true;
+		
 		data.description = "";
 		data.built = {};
 		

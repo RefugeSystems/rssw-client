@@ -101,6 +101,7 @@ var config = {
 				"_p",
 
 				"RSModifierAttributes",
+				"RSClassification",
 				"UserInformation",
 				"RSModifierStats",
 				"RSCalculator",

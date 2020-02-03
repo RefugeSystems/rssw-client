@@ -1,14 +1,23 @@
 
 (function() {
 	
-	var dataSource,
+	var classifications,
+		dataSource,
 		abilities,
 		profiles,
-		items,
-		skill,
 		attrs,
-		stats,
-		notes;
+		items,
+		notes,
+		skill,
+		stats;
+	
+	classifications = {
+		"label": "Classifications",
+		"property": "classification",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 	
 	abilities = {
 		"label": "Abilities",
@@ -80,10 +89,6 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
-		"label": "Item Type",
-		"property": "type",
-		"type": "text"
-	}, {
 		"label": "Price",
 		"property": "price",
 		"type": "number"
@@ -136,6 +141,7 @@
 		"property": "template",
 		"type": "checkbox"
 	},
+	classifications,
 	abilities,
 	items,
 	attrs,
@@ -173,7 +179,8 @@
 			profiles.options.sortBy("name");
 			skill.options = this.universe.indexes.skill.listing;
 			skill.options.sortBy("name");
-			
+
+			classifications.source_index = this.universe.indexes.classification;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			abilities.source_index = this.universe.indexes.ability;

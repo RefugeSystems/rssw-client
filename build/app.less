@@ -1278,11 +1278,20 @@ form {
 
 	.control {
 	
+		.icon {
+			display: inline-block;
+			margin: 0px 6px 0px 0px;
+			text-align: center;
+			width: 20px;
+		}
+	
 		button.action {
 			cursor: pointer;
 			background: transparent;
+			border-radius: 5px;
+			padding: 4px;
+			margin: 4px;
 			border: 0px;
-			margin: 0px;
 			
 			&:active,
 			&focus {
@@ -1290,6 +1299,7 @@ form {
 			}
 			
 			&:hover {
+				background-color: #e0aef7;
 				color: @rsBlue;
 			}
 		}
@@ -2417,7 +2427,7 @@ form {
 		
 		.actions {
 			position: absolute;
-			z-index: 20;
+			z-index: 100;
 			background-color: black;
 			border: 2px solid @rsOrange;
 			border-bottom-right-radius: 5px;
@@ -2525,7 +2535,7 @@ form {
 		max-height: 40px;
 		transition: width .5s, max-height .5s;
 		overflow: hidden;
-		z-index: 50;
+		z-index: 100;
 		
 		border: 1px solid @rsWhite;
 		border-radius: 5px;

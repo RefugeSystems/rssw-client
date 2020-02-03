@@ -1,7 +1,8 @@
 
 (function() {
 	
-	var dataSource,
+	var classifications,
+		dataSource,
 		knowledges,
 		location,
 		profiles,
@@ -28,6 +29,14 @@
 		"label": "Image",
 		"property": "image",
 		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	classifications = {
+		"label": "Available Item Classifications",
+		"property": "classification",
+		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -71,11 +80,12 @@
 		"type": "select",
 		"raw": true,
 		"options": [
-			"station",
-			"planet",
-			"moon",
+			"building",
 			"city",
-			"marker"
+			"marker",
+			"moon",
+			"planet",
+			"station"
 		]
 	}, {
 		"label": "Hidden",
@@ -90,6 +100,10 @@
 		"property": "y",
 		"type": "number"
 	}, {
+		"label": "Size",
+		"property": "size",
+		"type": "number"
+	}, {
 		"label": "Link",
 		"property": "linked",
 		"type": "select",
@@ -101,6 +115,24 @@
 	location,
 	profiles,
 	images,
+	classifications,
+	{
+		"label": "Restock Base",
+		"property": "restock_base",
+		"type": "number"
+	}, {
+		"label": "Restock Max",
+		"property": "restock_max",
+		"type": "number"
+	}, {
+		"label": "Rarity Min",
+		"property": "rarity_min",
+		"type": "number"
+	}, {
+		"label": "Rarity Max",
+		"property": "rarity_max",
+		"type": "number"
+	},
 	knowledges,
 	{
 		"label": "Description",
@@ -138,6 +170,7 @@
 			images.options = this.universe.indexes.image.listing;
 			images.options.sortBy("name");
 
+			classifications.source_index = this.universe.indexes.classification;
 			knowledges.source_index = this.universe.indexes.knowledge;
 			notes.source_index = this.universe.indexes.note;
 		},
