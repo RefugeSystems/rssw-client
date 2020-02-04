@@ -2,6 +2,11 @@
 
 	<rs-render-image class="profile-image" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
 	
+	<div v-if="record.is_shop">
+		<span class="fas fa-warehouse"></span>
+		<span>A Shop</span>
+	</div>
+	
 	<div v-if="description" v-html="description"></div>
 	
 	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>

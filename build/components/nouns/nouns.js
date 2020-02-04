@@ -184,13 +184,19 @@
 				return (this.state.building[this.state.current].race && this.universe.indexes.race.index[this.state.building[this.state.current].race] && this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset)
 					|| (!this.state.building[this.state.current].race && this.universe.defaultDataset);
 			},
-			"randomizeName": function() {
-				var name = this.generateRandomName();
-				if(name) {
-					Vue.set(this.state.building[this.state.current], "name", name);
+			"pullRandomName": function() {
+				var generator = this.getGenerator();
+				if(generator) {
+					Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
 				}
 			},
-			"generateRandomName": function() {
+			"randomizeName": function() {
+				var generator = this.getGenerator();
+				if(generator) {
+					Vue.set(this.state.building[this.state.current], "name", generator.create().capitalize() + " " + generator.create().capitalize());
+				}
+			},
+			"getGenerator": function() {
 				var generator,
 					data,
 					x;
@@ -205,14 +211,14 @@
 						generator = new NameGenerator(data);
 						Vue.set(this.nameGenerators, this.state.building[this.state.current].race, generator);
 					}
-					return this.nameGenerators[this.state.building[this.state.current].race].create().capitalize() + " " + this.nameGenerators[this.state.building[this.state.current].race].create().capitalize();
+					return this.nameGenerators[this.state.building[this.state.current].race];
 				} else if(this.universe.defaultDataset) {
 					if(!this.nameGenerators._default) {
 						Vue.set(this.nameGenerators, "_default", new NameGenerator(this.universe.defaultDataset.set));
 					}
-					return this.nameGenerators._default.create().capitalize() + " " + this.nameGenerators._default.create().capitalize();
+					return this.nameGenerators._default;
 				}
-
+	
 				return null;
 			},
 			"broadcastModel": function() {
