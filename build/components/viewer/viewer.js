@@ -213,7 +213,7 @@
 						});
 						break;
 					case "set-location":
-						buffer = this.universe.nouns.location[this.state.alter];
+						buffer = this.universe.index.index[this.state.alter];
 						if(buffer && this.player.master) {
 							buffer.commit({
 								"location": this.location.id,
@@ -377,7 +377,7 @@
 				
 			},
 			"apply": function(applying) {
-				console.log("apply: ", applying, this.parchment);
+//				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
@@ -414,6 +414,10 @@
 				}
 			},
 			"poiVisible": function(link) {
+				if(link.x === undefined || link.y === undefined) {
+					return false;
+				}
+				
 				if(this.player.master && this.state.master_view === "master") {
 					return true;
 				}
@@ -517,6 +521,20 @@
 						buffer.$on("modified", this.minorUpdate);
 					}
 				}
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.location === this.location.id) {
+						this.pointsOfInterest.push(buffer);
+						buffer.$on("modified", this.minorUpdate);
+					}
+				}
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					buffer = this.universe.indexes.party.listing[x];
+					if(buffer.location === this.location.id) {
+						this.pointsOfInterest.push(buffer);
+						buffer.$on("modified", this.minorUpdate);
+					}
+				}
 				
 				if(this.location.image && this.universe.nouns.image[this.location.image]) {
 					Vue.set(this, "ready", false);
@@ -529,7 +547,7 @@
 				}
 				
 				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
-					console.log("View State Sync: ", this.location, this.state);
+//					console.log("View State Sync: ", this.location, this.state);
 					Vue.set(this.state, "viewed_at", this.location.shown_at);
 					Object.assign(this.image, this.location.showing);
 					this.apply(this.image);

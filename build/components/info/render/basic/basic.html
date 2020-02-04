@@ -12,8 +12,8 @@
 	<div class="properties">
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 			<div class="direct" v-if="!universe.indexes[property]">
-				<span class="key" v-if="knowledgeLink[property]">
-					<a class="rendered-value" :data-id="knowledgeLink[property]">{{prettifyPropertyName(property)}}</a>
+				<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']">
+					<a class="rendered-value" :data-id="knowledgeLink[property] || (property + '_quicklink')">{{prettifyPropertyName(property)}}</a>
 				</span>
 				<span class="key" v-if="!knowledgeLink[property]">{{prettifyPropertyName(property)}}</span>
 				<span class="divide">:</span>
@@ -24,7 +24,7 @@
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 			<div class="reference" v-if="universe.indexes[property]">
 				<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
-					<div class="reference-heading">{{property.pluralize(true)}}</div>
+					<div class="reference-heading">{{prettifyPropertyName(property).pluralize(true)}}</div>
 					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden">
 						<div class="reference-heading" v-if="!collapsed">
 							<span :class="universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''"></span>

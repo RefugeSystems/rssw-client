@@ -18,6 +18,7 @@ rsSystem.component("RSNounControls", {
 		data.infoOptions = {};
 		data.infoOptions.noMaster = true;
 		
+		data.modeling = null;
 		data.description = "";
 		data.built = {};
 		
@@ -42,7 +43,9 @@ rsSystem.component("RSNounControls", {
 		rsSystem.register(this);
 	},
 	"methods": {
-		
+		"changeModel": function(modeling) {
+			Vue.set(this, "modeling", modeling);
+		}
 	},
 	"template": Vue.templified("pages/noun/controls.html")
 });

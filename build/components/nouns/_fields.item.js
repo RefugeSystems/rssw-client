@@ -1,9 +1,9 @@
 
 (function() {
 	
-	var classifications,
-		dataSource,
+	var dataSource,
 		abilities,
+		itemtypes,
 		profiles,
 		attrs,
 		items,
@@ -11,9 +11,9 @@
 		skill,
 		stats;
 	
-	classifications = {
-		"label": "Classifications",
-		"property": "classification",
+	itemtypes = {
+		"label": "Item Types",
+		"property": "itemtype",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -89,6 +89,10 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Needs Slot",
+		"property": "needs_slot",
+		"type": "checkbox"
+	}, {
 		"label": "Price",
 		"property": "price",
 		"type": "number"
@@ -141,7 +145,7 @@
 		"property": "template",
 		"type": "checkbox"
 	},
-	classifications,
+	itemtypes,
 	abilities,
 	items,
 	attrs,
@@ -180,7 +184,7 @@
 			skill.options = this.universe.indexes.skill.listing;
 			skill.options.sortBy("name");
 
-			classifications.source_index = this.universe.indexes.classification;
+			itemtypes.source_index = this.universe.indexes.itemtype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			abilities.source_index = this.universe.indexes.ability;

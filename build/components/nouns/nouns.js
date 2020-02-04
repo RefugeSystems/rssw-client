@@ -39,18 +39,22 @@
 			rsSystem.components.StorageManager,
 			rsSystem.components.DataManager,
 
-			rsSystem.components.NounFieldsClassification,
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsModifierAttrs,
 			rsSystem.components.NounFieldsKnowledge,
+			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsAbility,
+			rsSystem.components.NounFieldsEntity,
 			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsParty,
 			rsSystem.components.NounFieldsSkill,
 			rsSystem.components.NounFieldsItem,
 			rsSystem.components.NounFieldsNote,
 			rsSystem.components.NounFieldsRace,
-			rsSystem.components.NounFieldsRoom
+			rsSystem.components.NounFieldsRoom,
+			rsSystem.components.NounFieldsSlot
 		],
 		"props": {
 			"universe": {
@@ -73,6 +77,7 @@
 			data.rawValue = "{}";
 			data.message = null;
 			data.isValid = true;
+			data.models = {};
 			data.copy = null;
 			data.nouns = rsSystem.listingNouns.sort();
 			data.storageKeyID = storageKey;
@@ -86,6 +91,8 @@
 				if(!data.state.building[data.nouns[x]]) {
 					data.state.building[data.nouns[x]] = {};
 				}
+				data.models[data.nouns[x]] = new rsSystem.availableNouns[data.nouns[x]](data.state.building[data.nouns[x]], this.universe);
+				data.models[data.nouns[x]]._coreData = data.state.building[data.nouns[x]];
 			}
 			
 			data.extra_properties = [];
@@ -112,6 +119,7 @@
 				"deep": true,
 				"handler": function() {
 					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+					this.models[this.state.current].recalculateProperties(true);
 					this.saveStorage(this.storageKeyID, this.state);
 					this.$forceUpdate();
 				}
@@ -122,7 +130,16 @@
 						keys,
 						x;
 					
-					Vue.set(this.state.building, this.state.current, parsed);
+//					Vue.set(this.state.building, this.state.current, parsed);
+					keys = Object.keys(this.state.building[this.state.current]);
+					for(x=0; x<keys.length; x++) {
+						Vue.delete(this.state.building[this.state.current], keys[x]);
+					}
+					keys = Object.keys(parsed);
+					for(x=0; x<keys.length; x++) {
+						Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
+					}
+					
 //					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
 					Vue.set(this, "isValid", true);
@@ -152,6 +169,8 @@
 			} else {
 				Vue.set(this, "rawValue", "{}");
 			}
+			this.models[this.state.current].recalculateProperties();
+			this.$emit("model", this.models[this.state.current]);
 		},
 		"methods": {
 			"clearField": function(field) {
@@ -159,6 +178,10 @@
 				if(this.built) {
 					Vue.set(this.built, field.property, null);
 				}
+			},
+			"broadcastModel": function() {
+				console.warn("New Model: ", this.state.current, this.models[this.state.current]);
+				this.$emit("model", this.models[this.state.current]);
 			},
 			"openKnowledge": function(id) {
 				if(this.universe.index.index[id]) {

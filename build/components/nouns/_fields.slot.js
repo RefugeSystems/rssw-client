@@ -2,13 +2,21 @@
 (function() {
 	
 	var dataSource,
-		bases;
+		itemtypes,
+		notes;
 	
+	itemtypes = {
+		"label": "Item Types",
+		"property": "itemtype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 	
-	bases = {
-		"label": "Base",
-		"property": "base",
-		"type": "select",
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -27,16 +35,23 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
-		"label": "Description",
-		"property": "description",
-		"type": "textarea"
+		"label": "Price",
+		"property": "price",
+		"type": "number"
 	}, {
+		"label": "Encumberance",
+		"property": "encumberance",
+		"type": "number"
+	},
+	itemtypes,
+	notes,
+	{
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"
 	}];
 	
-	rsSystem.component("NounFieldsItemType", {
+	rsSystem.component("NounFieldsSlot", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -47,11 +62,12 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.itemtype = dataSource;
-
+			data.fields.slot = dataSource;
+			
 			return data;
 		},
 		"mounted": function() {
+			itemtypes.source_index = this.universe.indexes.itemtype;
 		},
 		"methods": {
 			"update": function() {

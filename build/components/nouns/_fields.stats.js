@@ -48,6 +48,10 @@
 		"property": "damage",
 		"type": "text"
 	}, {
+		"label": "Pierce",
+		"property": "pierce_damage",
+		"type": "text"
+	}, {
 		"label": "Melee Defense",
 		"property": "defense_melee",
 		"type": "text"

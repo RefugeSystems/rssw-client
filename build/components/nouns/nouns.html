@@ -2,7 +2,7 @@
 	<div class="selection">
 		<label class="">
 			<span>Noun:</span>
-			<select v-model="state.current">
+			<select v-model="state.current" v-on:change="broadcastModel()">
 				<option v-for="type in nouns" :value="type">{{type}}</option>
 			</select>
 		</label>

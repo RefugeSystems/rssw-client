@@ -101,13 +101,13 @@ var config = {
 				"_p",
 
 				"RSModifierAttributes",
-				"RSClassification",
 				"UserInformation",
 				"RSModifierStats",
 				"RSCalculator",
 				"RSCondition",
 				"RSArchetype",
 				"RSInventory",
+				"RSItemType",
 				"RSKnowledge",
 				"RSPlaylist",
 				"RSLogLevel",
@@ -116,6 +116,7 @@ var config = {
 				"RSModifier",
 				"RSAbility",
 				"RSHistory",
+				"RSDataset",
 				"RSLoadout",
 				"RSPlayer",
 				"RSObject",
@@ -130,6 +131,7 @@ var config = {
 				"RSItem",
 				"RSRace",
 				"RSRoom",
+				"RSSlot",
 				"RSLog"
 			]
 		},

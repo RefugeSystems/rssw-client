@@ -26,6 +26,7 @@
 	invisibleKeys.obscured = true;
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
+	invisibleKeys.playable = true;
 	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
@@ -51,6 +52,8 @@
 	var prettifyNames = {};
 	var knowledgeLink = {};
 	var displayRaw = {};
+	
+	prettifyNames.itemtype = "Item Types";
 	
 	var byName = function(a, b) {
 		a = (a.name || "").toLowerCase();

@@ -1,8 +1,7 @@
 
 (function() {
 	
-	var classifications,
-		dataSource,
+	var dataSource,
 		knowledges,
 		playlists,
 		location,
@@ -30,14 +29,6 @@
 		"label": "Image",
 		"property": "image",
 		"type": "select",
-		"optionValue": "id",
-		"optionLabel": "name"
-	};
-
-	classifications = {
-		"label": "Available Item Classifications",
-		"property": "classification",
-		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -115,7 +106,20 @@
 	}, {
 		"label": "Size",
 		"property": "size",
-		"type": "number"
+		"type": "select",
+		"raw": true,
+		"options": [
+			"tiny",
+			"small",
+			"medium",
+			"large",
+			"huge",
+			"gigantic",
+			"mountainous",
+			"enormouos",
+			"planetary",
+			"galactic"
+		]
 	}, {
 		"label": "Link",
 		"property": "linked",
@@ -128,29 +132,6 @@
 	location,
 	profiles,
 	images,
-	{
-		"label": "Is Shop",
-		"property": "is_shop",
-		"type": "checkbox"
-	},
-	classifications,
-	{
-		"label": "Restock Base",
-		"property": "restock_base",
-		"type": "number"
-	}, {
-		"label": "Restock Max",
-		"property": "restock_max",
-		"type": "number"
-	}, {
-		"label": "Rarity Min",
-		"property": "rarity_min",
-		"type": "number"
-	}, {
-		"label": "Rarity Max",
-		"property": "rarity_max",
-		"type": "number"
-	},
 	playlists,
 	knowledges,
 	{
@@ -189,7 +170,6 @@
 			images.options = this.universe.indexes.image.listing;
 			images.options.sortBy("name");
 
-			classifications.source_index = this.universe.indexes.classification;
 			knowledges.source_index = this.universe.indexes.knowledge;
 			playlists.source_index = this.universe.indexes.playlist;
 			notes.source_index = this.universe.indexes.note;

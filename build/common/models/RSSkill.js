@@ -12,7 +12,9 @@ class RSSkill extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 		
-		this.property = this.id.replace("skill:", "");
+		if(this.id) {
+			this.property = this.id.replace("skill:", "");
+		}
 		this.propertyKey = "skill_" + this.property;
 		this.enhancementKey = "skill_enhanced_" + this.property;
 		this.bonusKey = "skill_bonuses_" + this.property;
@@ -22,5 +24,12 @@ class RSSkill extends RSObject {
 		if(this.base) {
 			this._search += this.base.toLowerCase();
 		}
+		
+		if(this.id) {
+			this.property = this.id.replace("skill:", "");
+		}
+		this.propertyKey = "skill_" + this.property;
+		this.enhancementKey = "skill_enhanced_" + this.property;
+		this.bonusKey = "skill_bonuses_" + this.property;
 	}
 }

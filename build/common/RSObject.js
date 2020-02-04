@@ -106,11 +106,24 @@ class RSObject extends EventEmitter {
 		return json;
 	}
 	
+	cleanCurrentData() {
+		var keys = Object.keys(this);
+		for(var x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "universe" && keys[x] !== "description" && keys[x] !== "name" && typeof(this[keys[x]]) !== "function") {
+				delete(this[keys[x]]);
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * @method recalculateProperties
 	 */
-	recalculateProperties(trigger) {
+	recalculateProperties(debug, skip, trigger) {
+		if(!this.id) {
+			return false;
+		}
+		
 		if(trigger) {
 //			console.warn("Trigger Sub-Recomputation from " + trigger.id + " on ", this);
 //			return;
@@ -169,13 +182,22 @@ class RSObject extends EventEmitter {
 				this.loadNounReferenceModifications(references[x], base);
 			}
 		}
-		
+
 		//console.log("Final: ", base);
+		keys = Object.keys(this);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "universe" && keys[x] !== "description" && keys[x] !== "name" && typeof(this[keys[x]]) !== "function") {
+				delete(this[keys[x]]);
+			}
+		}
 		keys = Object.keys(base);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_" && keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo" && typeof(this[keys[x]]) !== "function" ) {
 				this[keys[x]] = base[keys[x]];
 			}
+		}
+		if(debug) {
+			console.log("Assembled: ", _p(this), _p(base));
 		}
 
 		// Listen for changes on direct modifiers
@@ -239,7 +261,7 @@ class RSObject extends EventEmitter {
 			this.recalculateHook();
 		}
 		
-		if(this._debugging) {
+		if(debug || this._debugging) {
 			console.log("Recalculated: " + this.id, base);
 		}
 		

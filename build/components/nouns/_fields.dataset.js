@@ -1,17 +1,7 @@
 
 (function() {
 	
-	var dataSource,
-		bases;
-	
-	
-	bases = {
-		"label": "Base",
-		"property": "base",
-		"type": "select",
-		"optionValue": "id",
-		"optionLabel": "name"
-	};
+	var dataSource;
 	
 	dataSource = [{
 		"label": "ID",
@@ -27,6 +17,14 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Default Set",
+		"property": "default_set",
+		"type": "checkbox"
+	}, {
+		"label": "Data",
+		"property": "data",
+		"type": "textarea"
+	}, {
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
@@ -36,7 +34,7 @@
 		"type": "textarea"
 	}];
 	
-	rsSystem.component("NounFieldsItemType", {
+	rsSystem.component("NounFieldsDataset", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -47,11 +45,12 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.itemtype = dataSource;
-
+			data.fields.dataset = dataSource;
+			
 			return data;
 		},
 		"mounted": function() {
+
 		},
 		"methods": {
 			"update": function() {

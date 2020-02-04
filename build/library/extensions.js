@@ -30,6 +30,7 @@ String.prototype.pluralize = function(capitalize) {
 			plural = this.substring(0, this.length-1) + "ies";
 			break;
 		case "s":
+			plural = this;
 			break;
 		default:
 			plural = this + "s";
