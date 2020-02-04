@@ -27,6 +27,7 @@
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
 	invisibleKeys.playable = true;
+	invisibleKeys.dataset = true;
 	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;

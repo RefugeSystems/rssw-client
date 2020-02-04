@@ -2,9 +2,18 @@
 (function() {
 	
 	var dataSource,
+		datasets,
 		attrs,
 		stats,
 		notes;
+	
+	datasets = {
+		"label": "Name Generation Dataset",
+		"property": "dataset",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 	
 	attrs = {
 		"label": "Attributes",
@@ -48,6 +57,7 @@
 		"property": "playable",
 		"type": "checkbox"
 	},
+	datasets,
 	attrs,
 	stats,
 	{
@@ -79,6 +89,7 @@
 		"mounted": function() {
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
+			datasets.source_index = this.universe.indexes.dataset;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {

@@ -21,8 +21,8 @@
 		"property": "default_set",
 		"type": "checkbox"
 	}, {
-		"label": "Data",
-		"property": "data",
+		"label": "Data Set",
+		"property": "set",
 		"type": "textarea"
 	}, {
 		"label": "Description",

@@ -73,6 +73,7 @@
 			var data = {},
 				x;
 
+			data.nameGenerators = {};
 			data.attaching = null;
 			data.rawValue = "{}";
 			data.message = null;
@@ -119,7 +120,7 @@
 				"deep": true,
 				"handler": function() {
 					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
-					this.models[this.state.current].recalculateProperties(true);
+					this.models[this.state.current].recalculateProperties();
 					this.saveStorage(this.storageKeyID, this.state);
 					this.$forceUpdate();
 				}
@@ -178,6 +179,41 @@
 				if(this.built) {
 					Vue.set(this.built, field.property, null);
 				}
+			},
+			"hasGenerator": function() {
+				return (this.state.building[this.state.current].race && this.universe.indexes.race.index[this.state.building[this.state.current].race] && this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset)
+					|| (!this.state.building[this.state.current].race && this.universe.defaultDataset);
+			},
+			"randomizeName": function() {
+				var name = this.generateRandomName();
+				if(name) {
+					Vue.set(this.state.building[this.state.current], "name", name);
+				}
+			},
+			"generateRandomName": function() {
+				var generator,
+					data,
+					x;
+				if(this.state.building[this.state.current].race && this.universe.indexes.race.index[this.state.building[this.state.current].race] && this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset) {
+					if(!this.nameGenerators[this.state.building[this.state.current].race]) {
+						data = "";
+						for(x=0; x<this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset.length; x++) {
+							if(this.universe.indexes.dataset.index[this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset[x]]) {
+								data += " " + this.universe.indexes.dataset.index[this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset[x]].set;
+							}
+						}
+						generator = new NameGenerator(data);
+						Vue.set(this.nameGenerators, this.state.building[this.state.current].race, generator);
+					}
+					return this.nameGenerators[this.state.building[this.state.current].race].create().capitalize() + " " + this.nameGenerators[this.state.building[this.state.current].race].create().capitalize();
+				} else if(this.universe.defaultDataset) {
+					if(!this.nameGenerators._default) {
+						Vue.set(this.nameGenerators, "_default", new NameGenerator(this.universe.defaultDataset.set));
+					}
+					return this.nameGenerators._default.create().capitalize() + " " + this.nameGenerators._default.create().capitalize();
+				}
+
+				return null;
 			},
 			"broadcastModel": function() {
 				console.warn("New Model: ", this.state.current, this.models[this.state.current]);

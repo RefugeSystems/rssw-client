@@ -2,19 +2,21 @@
 //name_generator.js
 //written and released to the public domain by drow <drow@bin.sh>
 //http://creativecommons.org/publicdomain/zero/1.0/
-//Modified for class based handling here by aetherwalker (aetherwalker@refugesystems.net)
+//Modified for class based handling by aetherwalker (aetherwalker@refugesystems.net)
 
 /**
  * 
  * @class NameGenerator
  * @constructor
  * @see http://creativecommons.org/publicdomain/zero/1.0/
- * @author 
- * @param {Array | String | RSDataset} corpus Array of string data to generate the underlying information.
+ * @param {Array | String} corpus Array of string data to generate the underlying information.
  */
 class NameGenerator {
 	constructor(corpus) {
-		this.consumeCorpus(corpus.data || corpus);
+		if(typeof(corpus) === "string") {
+			corpus = corpus.split(/[\s,]/);
+		}
+		this.consumeCorpus(corpus);
 	}
 	
 	/**
@@ -34,7 +36,7 @@ class NameGenerator {
 
 		for(x=0; x<corpus.length; x++) {
 			corpus[x] = corpus[x].toLowerCase();
-			names = corpus[x].split(/[\s,]+/);
+			names = corpus[x].split(/\s+/);
 			this.nextChain("parts", names.length);
 			for(y=0; y<names.length; y++) {
 				name = names[y];
