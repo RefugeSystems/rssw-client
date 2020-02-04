@@ -22885,6 +22885,22 @@ class RSPlayer extends RSObject {
 
 /**
  * 
+ * RSPlaylist
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSPlaylist extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}
+}
+
+/**
+ * 
  * 
  * @class RSRace
  * @extends RSObject
@@ -24971,19 +24987,24 @@ rsSystem.component("rsCards", {
 	invisibleKeys.master_note = true;
 	invisibleKeys.rarity_min = true;
 	invisibleKeys.rarity_max = true;
+	invisibleKeys.properties = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
 	invisibleKeys.obscured = true;
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
+	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
+	invisibleKeys.hidden = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
 	invisibleKeys.echo = true;
 	invisibleKeys.url = true;
 	invisibleKeys.id = true;
+	invisibleKeys.x = true;
+	invisibleKeys.y = true;
 	
 
 	invisibleKeys.coordinates = true;
@@ -26317,6 +26338,7 @@ rsSystem.component("rsCards", {
 	var classifications,
 		dataSource,
 		knowledges,
+		playlists,
 		location,
 		profiles,
 		images,
@@ -26357,6 +26379,14 @@ rsSystem.component("rsCards", {
 	knowledges = {
 		"label": "Knowledge",
 		"property": "knowledge",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	playlists = {
+		"label": "Playlists",
+		"property": "playlist",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -26405,6 +26435,10 @@ rsSystem.component("rsCards", {
 		"property": "hidden",
 		"type": "checkbox"
 	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
 		"label": "X Coordinate",
 		"property": "x",
 		"type": "number"
@@ -26428,6 +26462,11 @@ rsSystem.component("rsCards", {
 	location,
 	profiles,
 	images,
+	{
+		"label": "Is Shop",
+		"property": "is_shop",
+		"type": "checkbox"
+	},
 	classifications,
 	{
 		"label": "Restock Base",
@@ -26446,6 +26485,7 @@ rsSystem.component("rsCards", {
 		"property": "rarity_max",
 		"type": "number"
 	},
+	playlists,
 	knowledges,
 	{
 		"label": "Description",
@@ -26485,6 +26525,7 @@ rsSystem.component("rsCards", {
 
 			classifications.source_index = this.universe.indexes.classification;
 			knowledges.source_index = this.universe.indexes.knowledge;
+			playlists.source_index = this.universe.indexes.playlist;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {
@@ -30412,6 +30453,7 @@ rsSystem.registerNoun(RSKnowledge, "knowledge");
 rsSystem.registerNoun(RSCondition, "condition");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
+rsSystem.registerNoun(RSPlaylist, "playlist");
 rsSystem.registerNoun(RSAbility, "ability");
 rsSystem.registerNoun(RSHistory, "history");
 rsSystem.registerNoun(RSLoadout, "loadout");

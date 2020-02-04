@@ -4,6 +4,7 @@
 	var classifications,
 		dataSource,
 		knowledges,
+		playlists,
 		location,
 		profiles,
 		images,
@@ -44,6 +45,14 @@
 	knowledges = {
 		"label": "Knowledge",
 		"property": "knowledge",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	playlists = {
+		"label": "Playlists",
+		"property": "playlist",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -92,6 +101,10 @@
 		"property": "hidden",
 		"type": "checkbox"
 	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
 		"label": "X Coordinate",
 		"property": "x",
 		"type": "number"
@@ -115,6 +128,11 @@
 	location,
 	profiles,
 	images,
+	{
+		"label": "Is Shop",
+		"property": "is_shop",
+		"type": "checkbox"
+	},
 	classifications,
 	{
 		"label": "Restock Base",
@@ -133,6 +151,7 @@
 		"property": "rarity_max",
 		"type": "number"
 	},
+	playlists,
 	knowledges,
 	{
 		"label": "Description",
@@ -172,6 +191,7 @@
 
 			classifications.source_index = this.universe.indexes.classification;
 			knowledges.source_index = this.universe.indexes.knowledge;
+			playlists.source_index = this.universe.indexes.playlist;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {

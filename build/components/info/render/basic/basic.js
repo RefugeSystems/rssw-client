@@ -20,19 +20,24 @@
 	invisibleKeys.master_note = true;
 	invisibleKeys.rarity_min = true;
 	invisibleKeys.rarity_max = true;
+	invisibleKeys.properties = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
 	invisibleKeys.obscured = true;
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
+	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
+	invisibleKeys.hidden = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
 	invisibleKeys.echo = true;
 	invisibleKeys.url = true;
 	invisibleKeys.id = true;
+	invisibleKeys.x = true;
+	invisibleKeys.y = true;
 	
 
 	invisibleKeys.coordinates = true;

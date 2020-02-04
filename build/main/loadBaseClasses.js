@@ -8,6 +8,7 @@ rsSystem.registerNoun(RSKnowledge, "knowledge");
 rsSystem.registerNoun(RSCondition, "condition");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
+rsSystem.registerNoun(RSPlaylist, "playlist");
 rsSystem.registerNoun(RSAbility, "ability");
 rsSystem.registerNoun(RSHistory, "history");
 rsSystem.registerNoun(RSLoadout, "loadout");

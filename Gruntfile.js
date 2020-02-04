@@ -109,6 +109,7 @@ var config = {
 				"RSArchetype",
 				"RSInventory",
 				"RSKnowledge",
+				"RSPlaylist",
 				"RSLogLevel",
 				"RSLocation",
 				"RSUniverse",
