@@ -197,9 +197,10 @@
 				}
 			},
 			"getGenerator": function() {
-				var generator,
+				var generator = null,
 					data,
 					x;
+				
 				if(this.state.building[this.state.current].race && this.universe.indexes.race.index[this.state.building[this.state.current].race] && this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset) {
 					if(!this.nameGenerators[this.state.building[this.state.current].race]) {
 						data = "";
@@ -210,16 +211,24 @@
 						}
 						generator = new NameGenerator(data);
 						Vue.set(this.nameGenerators, this.state.building[this.state.current].race, generator);
+					} else {
+						generator = this.nameGenerators[this.state.building[this.state.current].race];
 					}
-					return this.nameGenerators[this.state.building[this.state.current].race];
+//					return this.nameGenerators[this.state.building[this.state.current].race];
 				} else if(this.universe.defaultDataset) {
 					if(!this.nameGenerators._default) {
-						Vue.set(this.nameGenerators, "_default", new NameGenerator(this.universe.defaultDataset.set));
+						if(!this.universe.defaultDataset.set) {
+							console.warn("UI[pdate: ", this.universe.defaultDataset);
+							this.universe.defaultDataset.recalculateProperties();
+						}
+						generator = new NameGenerator(this.universe.defaultDataset.set);
+						Vue.set(this.nameGenerators, "_default", generator);
+					} else {
+						generator = this.nameGenerators._default;
 					}
-					return this.nameGenerators._default;
 				}
-	
-				return null;
+				
+				return generator;
 			},
 			"broadcastModel": function() {
 				console.warn("New Model: ", this.state.current, this.models[this.state.current]);

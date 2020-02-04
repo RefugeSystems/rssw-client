@@ -192,6 +192,11 @@
 				
 				Vue.set(this, "transfer_target", "");
 			},
+			"hideRecord": function() {
+				this.record.commit({
+					"hidden": this.record.hidden?null:true
+				});
+			},
 			"obscureRecord": function() {
 				this.record.commit({
 					"obscured": this.record.obscured?null:true

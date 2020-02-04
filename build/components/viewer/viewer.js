@@ -133,6 +133,7 @@
 			Vue.set(this, "element", $(this.$el));
 			rsSystem.register(this);
 			this.universe.$on("universe:modified", this.update);
+			this.universe.$on("model:modified", this.update);
 			this.location.$on("modified", this.update);
 			this.update();
 		},
@@ -414,7 +415,7 @@
 				}
 			},
 			"poiVisible": function(link) {
-				if(link.x === undefined || link.y === undefined) {
+				if(link.template || link.x === undefined || link.y === undefined) {
 					return false;
 				}
 				
@@ -422,7 +423,7 @@
 					return true;
 				}
 				
-				if(link.hidden || link.obscured) {
+				if(link.hidden || (link.obscured && !this.player.master)) {
 					return false;
 				}
 				
@@ -454,6 +455,7 @@
 				this.$forceUpdate();
 			},
 			"update": function() {
+//				console.warn("Update");
 				var buffer,
 					x;
 				
@@ -558,6 +560,7 @@
 		},
 		"beforeDestroy": function() {
 			this.universe.$off("universe:modified", this.update);
+			this.universe.$off("model:modified", this.update);
 			this.location.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/viewer.html")

@@ -73,9 +73,15 @@
 	<div v-if="player.master && !options.noMaster" class="master-controls">
 		<h3>Master Controls</h3>
 		<div class="control">
+			<button class="action" v-on:click="hideRecord()">
+				<span class="icon" :class="record.hidden?'far fa-check-square':'far fa-square'"></span>
+				<span>Hidden</span>
+			</button>
+		</div>
+		<div class="control">
 			<button class="action" v-on:click="obscureRecord()">
 				<span class="icon" :class="record.obscured?'far fa-check-square':'far fa-square'"></span>
-				<span>Obscured?</span>
+				<span>Obscured</span>
 			</button>
 		</div>
 		<div class="control">

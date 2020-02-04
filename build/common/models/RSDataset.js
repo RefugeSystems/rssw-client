@@ -10,9 +10,13 @@
 class RSDataset extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+	}
+	
+	recalculateHook() {
+		console.warn("Dataset Updated: ", this.id);
 		
-		if(details.default_set) {
-			universe.defaultDataset = this;
+		if(this.default_set) {
+			this.universe.defaultDataset = this;
 		}
 	}
 }
