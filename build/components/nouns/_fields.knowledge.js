@@ -75,12 +75,17 @@
 			"active",
 			"completed"
 		]
-	}, {
+	},
+	profiles,
+	{
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
 	},
-	profiles,
 	attrs,
 	stats,
 	items,

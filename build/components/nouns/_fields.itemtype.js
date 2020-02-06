@@ -2,21 +2,13 @@
 (function() {
 	
 	var dataSource,
-		itemtypes,
-		notes;
+		bases;
 	
-	itemtypes = {
-		"label": "Item Types",
-		"property": "itemtype",
-		"type": "multireference",
-		"optionValue": "id",
-		"optionLabel": "name"
-	};
 	
-	notes = {
-		"label": "Notes",
-		"property": "note",
-		"type": "multireference",
+	bases = {
+		"label": "Base",
+		"property": "base",
+		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -35,14 +27,6 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
-		"label": "Price",
-		"property": "price",
-		"type": "number"
-	}, {
-		"label": "Encumberance",
-		"property": "encumberance",
-		"type": "number"
-	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -50,16 +34,17 @@
 		"label": "Obscured",
 		"property": "obscured",
 		"type": "checkbox"
-	},
-	itemtypes,
-	notes,
-	{
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"
 	}];
 	
-	rsSystem.component("NounFieldsSlot", {
+	rsSystem.component("NounFieldsItemType", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -70,12 +55,11 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.slot = dataSource;
-			
+			data.fields.itemtype = dataSource;
+
 			return data;
 		},
 		"mounted": function() {
-			itemtypes.source_index = this.universe.indexes.itemtype;
 		},
 		"methods": {
 			"update": function() {

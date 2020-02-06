@@ -2,13 +2,30 @@
 (function() {
 	
 	var dataSource,
-		bases;
+		attrs,
+		notes,
+		stats;
 	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 	
-	bases = {
-		"label": "Base",
-		"property": "base",
-		"type": "select",
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -27,16 +44,29 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	attrs,
+	stats,
+	{
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
-	}, {
+	},
+	notes,
+	{
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"
 	}];
 	
-	rsSystem.component("NounFieldsItemType", {
+	rsSystem.component("NounFieldsSex", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -47,11 +77,14 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.itemtype = dataSource;
-
+			data.fields.sex = dataSource;
+			
 			return data;
 		},
 		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {
 			"update": function() {

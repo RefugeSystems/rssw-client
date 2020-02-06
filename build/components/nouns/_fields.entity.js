@@ -3,17 +3,22 @@
 	
 	var dataSource,
 		knowledges,
+		archetypes,
 		itemtypes,
+		abilities,
 		location,
 		profiles,
 		entity,
 		images,
 		owners,
+		items,
 		attrs,
 		notes,
 		races,
+		rooms,
 		slots,
-		stats;
+		stats,
+		sexes;
 	
 	location = {
 		"label": "Location",
@@ -48,6 +53,58 @@
 		"condition": {
 			"classification": "character"
 		}
+	};
+	
+	sexes = {
+		"label": "Sex",
+		"property": "sex",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	archetypes = {
+		"label": "Archetypes",
+		"property": "archetype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	rooms = {
+		"label": "Rooms",
+		"property": "room",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["building", "ship", "station", "base"]
+			}
+		}
+	};
+	
+	items = {
+		"label": "Items",
+		"property": "item",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	abilities = {
+		"label": "Abilities",
+		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	owners = {
@@ -122,6 +179,10 @@
 		"property": "id",
 		"type": "text"
 	}, {
+		"label": "Parent",
+		"property": "parent",
+		"type": "text"
+	}, {
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -131,11 +192,32 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Age",
+		"property": "age",
+		"type": "number"
+	}, {
+		"label": "Height",
+		"property": "height",
+		"type": "number"
+	}, {
+		"label": "Weight",
+		"property": "weight",
+		"type": "number"
+	}, {
+		"label": "Experience",
+		"property": "xp",
+		"type": "number"
+	}, {
+		"label": "Credits",
+		"property": "credits",
+		"type": "number"
+	}, {
 		"label": "Classification",
 		"property": "classification",
 		"type": "select",
 		"raw": true,
 		"options": [
+			"base",
 			"building",
 			"character",
 			"ship",
@@ -143,14 +225,11 @@
 		]
 	},
 	races,
+	sexes,
 	{
-		"label": "Link",
-		"property": "linked",
-		"type": "select",
-		"raw": true,
-		"options": [
-			"map"
-		]
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
 	}, {
 		"label": "Hidden",
 		"property": "hidden",
@@ -239,6 +318,10 @@
 	attrs,
 	stats,
 	knowledges,
+	archetypes,
+	abilities,
+	items,
+	rooms,
 	owners,
 	{
 		"label": "Description",
@@ -287,14 +370,20 @@
 			entity.options.sortBy("name");
 			races.options = this.universe.indexes.race.listing;
 			races.options.sortBy("name");
+			sexes.options = this.universe.indexes.sex.listing;
+			sexes.options.sortBy("name");
 
 			knowledges.source_index = this.universe.indexes.knowledge;
+			archetypes.source_index = this.universe.indexes.archetype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
+			abilities.source_index = this.universe.indexes.ability;
 			owners.source_index = this.universe.indexes.player;
 			notes.source_index = this.universe.indexes.note;
+			rooms.source_index = this.universe.indexes.room;
 			slots.source_index = this.universe.indexes.slot;
+			items.source_index = this.universe.indexes.item;
 		},
 		"methods": {
 			"update": function() {

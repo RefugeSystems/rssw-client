@@ -20,6 +20,7 @@
 	invisibleKeys.master_note = true;
 	invisibleKeys.rarity_min = true;
 	invisibleKeys.rarity_max = true;
+	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
@@ -28,9 +29,11 @@
 	invisibleKeys.universe = true;
 	invisibleKeys.playable = true;
 	invisibleKeys.dataset = true;
+	invisibleKeys.history = true;
 	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
+	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;

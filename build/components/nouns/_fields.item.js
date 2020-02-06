@@ -2,9 +2,11 @@
 (function() {
 	
 	var dataSource,
+		cancontain,
 		abilities,
 		itemtypes,
 		profiles,
+		entities,
 		attrs,
 		items,
 		notes,
@@ -19,10 +21,26 @@
 		"optionLabel": "name"
 	};
 	
+	cancontain = {
+		"label": "Limited To Holding These Types",
+		"property": "cancontain",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
 		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	entities = {
+		"label": "Attunee",
+		"property": "attuned_to",
+		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -80,6 +98,10 @@
 		"property": "id",
 		"type": "text"
 	}, {
+		"label": "Parent",
+		"property": "parent",
+		"type": "text"
+	}, {
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -88,10 +110,6 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
-		"label": "Needs Slot",
-		"property": "needs_slot",
-		"type": "checkbox"
 	}, {
 		"label": "Price",
 		"property": "price",
@@ -112,10 +130,10 @@
 		"label": "Max Contents",
 		"property": "contents_max",
 		"type": "number"
-	}, {
-		"label": "Contents Type",
-		"property": "contents_type",
-		"type": "text"
+//	}, {
+//		"label": "Contents Type",
+//		"property": "contents_type",
+//		"type": "text"
 	}, {
 		"label": "Rarity",
 		"property": "rarity",
@@ -137,6 +155,25 @@
 			"id": "rssw-bag-render"
 		}]
 	}, {
+		"label": "Attunement",
+		"property": "attunement",
+		"type": "checkbox"
+	}, {
+		"label": "No Modifiers",
+		"property": "no_modifiers",
+		"type": "checkbox"
+	}, {
+		"label": "Add Encumberance",
+		"property": "adds_encumberance",
+		"type": "checkbox",
+		"condition": {
+			"no_modifiers": true
+		}
+	}, {
+		"label": "Needs Slot",
+		"property": "needs_slot",
+		"type": "checkbox"
+	}, {
 		"label": "Is Attachment",
 		"property": "is_attachment",
 		"type": "checkbox"
@@ -144,7 +181,20 @@
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Only Accepts Attachments",
+		"property": "attachable",
+		"type": "checkbox"
 	},
+	cancontain,
 	itemtypes,
 	abilities,
 	items,
@@ -183,7 +233,10 @@
 			profiles.options.sortBy("name");
 			skill.options = this.universe.indexes.skill.listing;
 			skill.options.sortBy("name");
+			entities.options = this.universe.indexes.entity.listing;
+			entities.options.sortBy("name");
 
+			cancontain.source_index = this.universe.indexes.itemtype;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;

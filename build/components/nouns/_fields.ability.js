@@ -8,7 +8,7 @@
 		notes;
 
 	dependency = {
-		"label": "Dependency",
+		"label": "Dependencies",
 		"property": "dependency",
 		"type": "multireference",
 		"optionValue": "id",
@@ -53,6 +53,28 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Type",
+		"property": "type",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Character Ability",
+			"id": undefined
+		}, {
+			"name": "Piloting Ability",
+			"id": "pilot"
+		}, {
+			"name": "Planet Ability",
+			"id": "planet"
+		}, {
+			"name": "Ship Ability",
+			"id": "ship"
+		}, {
+			"name": "Station Ability",
+			"id": "station"
+		}]
+	}, {
 		"label": "Activation",
 		"property": "activation",
 		"type": "select",
@@ -66,18 +88,25 @@
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
-	},
-	dependency,
-	{
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
 		"label": "Dependency Type",
 		"property": "dependency_type",
 		"type": "select",
-		"raw": true,
-		"options": [
-			"any",
-			"all"
-		]
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Any",
+			"id": undefined
+		}, {
+			"name": "All",
+			"id": "all"
+		}]
 	},
+	dependency,
 	attrs,
 	stats,
 	{
@@ -109,9 +138,7 @@
 			return data;
 		},
 		"mounted": function() {
-			dependency.options = this.universe.indexes.ability.listing;
-			dependency.options.sortBy("name");
-
+			dependency.source_index = this.universe.indexes.ability;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			notes.source_index = this.universe.indexes.note;

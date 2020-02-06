@@ -54,7 +54,8 @@
 			rsSystem.components.NounFieldsNote,
 			rsSystem.components.NounFieldsRace,
 			rsSystem.components.NounFieldsRoom,
-			rsSystem.components.NounFieldsSlot
+			rsSystem.components.NounFieldsSlot,
+			rsSystem.components.NounFieldsSex
 		],
 		"props": {
 			"universe": {
@@ -103,9 +104,32 @@
 		"watch": {
 			"copy": function(value) {
 				if(value) {
-//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", this.universe.nouns[this.state.current][value]?JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4):"{}");
+					var copy = this.universe.nouns[this.state.current][value];
+					value = copy?JSON.stringify(copy, null, 4):"{}";
+					if(copy.template && this.state.building[this.state.current].parent !== copy.id) {
+						value = JSON.parse(value);
+						value.parent = value.id;
+						value.id += ":" + Date.now();
+						delete(value.template);
+						value = JSON.stringify(value, null, 4);
+					}
+					Vue.set(this, "rawValue", value);
 					Vue.set(this, "copy", null);
+					
+//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
+//					if(copy) {
+//						copy.name = value.name;
+//						copy.description = value.description;
+//						if(copy.template && this.state.building[this.state.current].parent !== copy.id) {
+//							copy.parent = copy.id;
+//							copy.id += ":" + Date.now();
+//							delete(copy.template);
+//						}
+//						value = this.universe.nouns[this.state.current][value]?JSON.stringify(copy, null, 4):"{}";
+//						Vue.set(this, "rawValue", JSON.stringify(copy, null, 4));
+//					}
+					Vue.set(this, "copy", null);
+					
 				}
 			},
 			"state.current": function(n, p) {
@@ -120,6 +144,7 @@
 				"deep": true,
 				"handler": function() {
 					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+					this.models[this.state.current].id = this.state.building[this.state.current].id;
 					this.models[this.state.current].recalculateProperties();
 					this.saveStorage(this.storageKeyID, this.state);
 					this.$forceUpdate();

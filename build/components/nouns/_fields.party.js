@@ -43,6 +43,14 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
 	},
 	entities,
 	location,

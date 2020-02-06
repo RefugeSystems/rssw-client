@@ -10,7 +10,18 @@
 class RSItem extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
 	}
 	
+
+	/**
+	 * 
+	 * @method performModifications
+	 */
+	performModifications(base) {
+		if(this.no_modifiers) {
+			return false;
+		} else {
+			return super.performModifications(base);
+		}
+	}
 }

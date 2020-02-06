@@ -22578,11 +22578,100 @@ class RSEffect extends RSObject {
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		this._tracking = {};
+		if(!this.history) {
+			this.history = [];
+		}
 		
+		this._tracked = [
+			"location",
+			"credits",
+			"brawn",
+			"agility",
+			"intellect",
+			"cunning",
+			"willpower",
+			"pressence",
+			"xp"
+		];
+		
+		this._trackedDiff = [
+			"archetype",
+			"knowledge",
+			"ability",
+			"item"
+		];
+	}
+	
+	addHistory(event, delay) {
+		this.history.unshift(event);
+		if(this.history.length > 300) {
+			this.history.pop();
+		}
+		if(!delay) {
+			this.commit({
+				"history": this.history
+			});
+		}
 	}
 	
 	loadDeltaHook(event) {
-		
+		if(this._trackHistory) {
+			var commit = false,
+				diffNew,
+				diffOld,
+				tests,
+				x,
+				y;
+			
+			for(x=0; x<this._tracked.length; x++) {
+				if(this._tracking[this._tracked[x]] === undefined || this._tracking[this._tracked[x]] === null) {
+					this._tracking[this._tracked[x]] = this[this._tracked[x]];
+				} else if(this._tracking[this._tracked[x]] !== this[this._tracked[x]]) {
+					commit = true;
+					this.addHistory({
+						"type": this._tracked[x],
+						"previous": this._tracking[this._tracked[x]],
+						"current": this[this._tracked[x]],
+						"time": Date.now()
+						// TODO: Session & Universe Time support
+					}, true);
+				}
+			}
+			
+			for(x=0; x<this._trackedDiff.length; x++) {
+				if(this._tracking[this._trackedDiff[x]] === undefined || this._tracking[this._trackedDiff[x]] === null) {
+					this._tracking[this._trackedDiff[x]] = this[this._trackedDiff[x]];
+				} else if(this._tracking[this._trackedDiff[x]] && this[this._trackedDiff[x]] && this._tracking[this._trackedDiff[x]].length !== this[this._trackedDiff[x]].length) {
+					diffNew = {};
+					diffOld = {};
+					// TODO: Finish adding up IDs and then computing difference
+					
+					for(y=0; y<this._trackedDiff[this._tracked].length; y++) {
+						if(!diffOld[this._trackedDiff[this._tracked][y]]) {
+							diffOld[this._trackedDiff[this._tracked][y]] = 1;
+						} else {
+							diffOld[this._trackedDiff[this._tracked][y]]++;
+						}
+					}
+					
+					commit = true;
+					this.addHistory({
+						"type": this._tracked,
+						"previous": this._tracking[this._tracked],
+						"current": this[this._tracked],
+						"time": Date.now()
+						// TODO: Session & Universe Time support
+					}, true);
+				}
+			}
+			
+			if(commit) {
+				this.commit({
+					"history": this.history
+				});
+			}
+		}
 	}
 }
 
@@ -22723,9 +22812,20 @@ class RSInventory extends RSObject {
 class RSItem extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
 	}
 	
+
+	/**
+	 * 
+	 * @method performModifications
+	 */
+	performModifications(base) {
+		if(this.no_modifiers) {
+			return false;
+		} else {
+			return super.performModifications(base);
+		}
+	}
 }
 
 /**
@@ -23125,6 +23225,22 @@ class RSRace extends RSObject {
  * 		received from the Universe.
  */
 class RSRoom extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}	
+}
+
+/**
+ * 
+ * @class RSSex
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSSex extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 		
@@ -25285,6 +25401,7 @@ rsSystem.component("rsCards", {
 	invisibleKeys.master_note = true;
 	invisibleKeys.rarity_min = true;
 	invisibleKeys.rarity_max = true;
+	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
@@ -25293,9 +25410,11 @@ rsSystem.component("rsCards", {
 	invisibleKeys.universe = true;
 	invisibleKeys.playable = true;
 	invisibleKeys.dataset = true;
+	invisibleKeys.history = true;
 	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
+	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
@@ -25996,7 +26115,7 @@ rsSystem.component("rsCards", {
 		notes;
 
 	dependency = {
-		"label": "Dependency",
+		"label": "Dependencies",
 		"property": "dependency",
 		"type": "multireference",
 		"optionValue": "id",
@@ -26041,6 +26160,28 @@ rsSystem.component("rsCards", {
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Type",
+		"property": "type",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Character Ability",
+			"id": undefined
+		}, {
+			"name": "Piloting Ability",
+			"id": "pilot"
+		}, {
+			"name": "Planet Ability",
+			"id": "planet"
+		}, {
+			"name": "Ship Ability",
+			"id": "ship"
+		}, {
+			"name": "Station Ability",
+			"id": "station"
+		}]
+	}, {
 		"label": "Activation",
 		"property": "activation",
 		"type": "select",
@@ -26054,18 +26195,25 @@ rsSystem.component("rsCards", {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
-	},
-	dependency,
-	{
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
 		"label": "Dependency Type",
 		"property": "dependency_type",
 		"type": "select",
-		"raw": true,
-		"options": [
-			"any",
-			"all"
-		]
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Any",
+			"id": undefined
+		}, {
+			"name": "All",
+			"id": "all"
+		}]
 	},
+	dependency,
 	attrs,
 	stats,
 	{
@@ -26097,9 +26245,7 @@ rsSystem.component("rsCards", {
 			return data;
 		},
 		"mounted": function() {
-			dependency.options = this.universe.indexes.ability.listing;
-			dependency.options.sortBy("name");
-
+			dependency.source_index = this.universe.indexes.ability;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			notes.source_index = this.universe.indexes.note;
@@ -26325,6 +26471,10 @@ rsSystem.component("rsCards", {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
 	},
 	attrs,
 	stats,
@@ -26375,17 +26525,22 @@ rsSystem.component("rsCards", {
 	
 	var dataSource,
 		knowledges,
+		archetypes,
 		itemtypes,
+		abilities,
 		location,
 		profiles,
 		entity,
 		images,
 		owners,
+		items,
 		attrs,
 		notes,
 		races,
+		rooms,
 		slots,
-		stats;
+		stats,
+		sexes;
 	
 	location = {
 		"label": "Location",
@@ -26420,6 +26575,58 @@ rsSystem.component("rsCards", {
 		"condition": {
 			"classification": "character"
 		}
+	};
+	
+	sexes = {
+		"label": "Sex",
+		"property": "sex",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	archetypes = {
+		"label": "Archetypes",
+		"property": "archetype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	rooms = {
+		"label": "Rooms",
+		"property": "room",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["building", "ship", "station", "base"]
+			}
+		}
+	};
+	
+	items = {
+		"label": "Items",
+		"property": "item",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	abilities = {
+		"label": "Abilities",
+		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	owners = {
@@ -26494,6 +26701,10 @@ rsSystem.component("rsCards", {
 		"property": "id",
 		"type": "text"
 	}, {
+		"label": "Parent",
+		"property": "parent",
+		"type": "text"
+	}, {
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -26503,11 +26714,32 @@ rsSystem.component("rsCards", {
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Age",
+		"property": "age",
+		"type": "number"
+	}, {
+		"label": "Height",
+		"property": "height",
+		"type": "number"
+	}, {
+		"label": "Weight",
+		"property": "weight",
+		"type": "number"
+	}, {
+		"label": "Experience",
+		"property": "xp",
+		"type": "number"
+	}, {
+		"label": "Credits",
+		"property": "credits",
+		"type": "number"
+	}, {
 		"label": "Classification",
 		"property": "classification",
 		"type": "select",
 		"raw": true,
 		"options": [
+			"base",
 			"building",
 			"character",
 			"ship",
@@ -26515,14 +26747,11 @@ rsSystem.component("rsCards", {
 		]
 	},
 	races,
+	sexes,
 	{
-		"label": "Link",
-		"property": "linked",
-		"type": "select",
-		"raw": true,
-		"options": [
-			"map"
-		]
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
 	}, {
 		"label": "Hidden",
 		"property": "hidden",
@@ -26611,6 +26840,10 @@ rsSystem.component("rsCards", {
 	attrs,
 	stats,
 	knowledges,
+	archetypes,
+	abilities,
+	items,
+	rooms,
 	owners,
 	{
 		"label": "Description",
@@ -26659,14 +26892,20 @@ rsSystem.component("rsCards", {
 			entity.options.sortBy("name");
 			races.options = this.universe.indexes.race.listing;
 			races.options.sortBy("name");
+			sexes.options = this.universe.indexes.sex.listing;
+			sexes.options.sortBy("name");
 
 			knowledges.source_index = this.universe.indexes.knowledge;
+			archetypes.source_index = this.universe.indexes.archetype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
+			abilities.source_index = this.universe.indexes.ability;
 			owners.source_index = this.universe.indexes.player;
 			notes.source_index = this.universe.indexes.note;
+			rooms.source_index = this.universe.indexes.room;
 			slots.source_index = this.universe.indexes.slot;
+			items.source_index = this.universe.indexes.item;
 		},
 		"methods": {
 			"update": function() {
@@ -26683,9 +26922,11 @@ rsSystem.component("rsCards", {
 (function() {
 	
 	var dataSource,
+		cancontain,
 		abilities,
 		itemtypes,
 		profiles,
+		entities,
 		attrs,
 		items,
 		notes,
@@ -26700,10 +26941,26 @@ rsSystem.component("rsCards", {
 		"optionLabel": "name"
 	};
 	
+	cancontain = {
+		"label": "Limited To Holding These Types",
+		"property": "cancontain",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
 		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	entities = {
+		"label": "Attunee",
+		"property": "attuned_to",
+		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -26761,6 +27018,10 @@ rsSystem.component("rsCards", {
 		"property": "id",
 		"type": "text"
 	}, {
+		"label": "Parent",
+		"property": "parent",
+		"type": "text"
+	}, {
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -26769,10 +27030,6 @@ rsSystem.component("rsCards", {
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
-		"label": "Needs Slot",
-		"property": "needs_slot",
-		"type": "checkbox"
 	}, {
 		"label": "Price",
 		"property": "price",
@@ -26793,10 +27050,10 @@ rsSystem.component("rsCards", {
 		"label": "Max Contents",
 		"property": "contents_max",
 		"type": "number"
-	}, {
-		"label": "Contents Type",
-		"property": "contents_type",
-		"type": "text"
+//	}, {
+//		"label": "Contents Type",
+//		"property": "contents_type",
+//		"type": "text"
 	}, {
 		"label": "Rarity",
 		"property": "rarity",
@@ -26818,6 +27075,25 @@ rsSystem.component("rsCards", {
 			"id": "rssw-bag-render"
 		}]
 	}, {
+		"label": "Attunement",
+		"property": "attunement",
+		"type": "checkbox"
+	}, {
+		"label": "No Modifiers",
+		"property": "no_modifiers",
+		"type": "checkbox"
+	}, {
+		"label": "Add Encumberance",
+		"property": "adds_encumberance",
+		"type": "checkbox",
+		"condition": {
+			"no_modifiers": true
+		}
+	}, {
+		"label": "Needs Slot",
+		"property": "needs_slot",
+		"type": "checkbox"
+	}, {
 		"label": "Is Attachment",
 		"property": "is_attachment",
 		"type": "checkbox"
@@ -26825,7 +27101,20 @@ rsSystem.component("rsCards", {
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Only Accepts Attachments",
+		"property": "attachable",
+		"type": "checkbox"
 	},
+	cancontain,
 	itemtypes,
 	abilities,
 	items,
@@ -26864,13 +27153,90 @@ rsSystem.component("rsCards", {
 			profiles.options.sortBy("name");
 			skill.options = this.universe.indexes.skill.listing;
 			skill.options.sortBy("name");
+			entities.options = this.universe.indexes.entity.listing;
+			entities.options.sortBy("name");
 
+			cancontain.source_index = this.universe.indexes.itemtype;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			abilities.source_index = this.universe.indexes.ability;
 			items.source_index = this.universe.indexes.item;
 			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		bases;
+	
+	
+	bases = {
+		"label": "Base",
+		"property": "base",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsItemType", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.itemtype = dataSource;
+
+			return data;
+		},
+		"mounted": function() {
 		},
 		"methods": {
 			"update": function() {
@@ -26960,12 +27326,17 @@ rsSystem.component("rsCards", {
 			"active",
 			"completed"
 		]
-	}, {
+	},
+	profiles,
+	{
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
 	},
-	profiles,
 	attrs,
 	stats,
 	items,
@@ -27319,6 +27690,14 @@ rsSystem.component("rsCards", {
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
 	},
 	entities,
 	location,
@@ -27610,8 +27989,125 @@ rsSystem.component("rsCards", {
 (function() {
 	
 	var dataSource,
-		bases;
+		attrs,
+		notes,
+		stats;
 	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsSex", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.sex = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		bases,
+		sort;
+	
+	sort = function(a, b) {
+		if(a && a.name) {
+			a = a.name;
+		}
+		if(b && b.name) {
+			b = b.name;
+		}
+		a = a || "";
+		b = b || "";
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
 	
 	bases = {
 		"label": "Base",
@@ -27640,15 +28136,23 @@ rsSystem.component("rsCards", {
 		"type": "select",
 		"raw": true,
 		"options": [
-			"general",
 			"combat",
-			"piloting",
+			"custom",
+			"general",
 			"knowledge",
-			"custom"
+			"piloting"
 		]
 	},
 	bases,
 	{
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
@@ -27675,6 +28179,7 @@ rsSystem.component("rsCards", {
 		},
 		"mounted": function() {
 			bases.options = this.characterStatsListing;
+			bases.options.sort(sort);
 		},
 		"methods": {
 			"update": function() {
@@ -27731,6 +28236,14 @@ rsSystem.component("rsCards", {
 		"label": "Encumberance",
 		"property": "encumberance",
 		"type": "number"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
 	},
 	itemtypes,
 	notes,
@@ -27980,72 +28493,6 @@ rsSystem.component("rsCards", {
 })();
 
 
-(function() {
-	
-	var dataSource,
-		bases;
-	
-	
-	bases = {
-		"label": "Base",
-		"property": "base",
-		"type": "select",
-		"optionValue": "id",
-		"optionLabel": "name"
-	};
-	
-	dataSource = [{
-		"label": "ID",
-		"property": "id",
-		"type": "text"
-	}, {
-		"label": "Name",
-		"property": "name",
-		"type": "text"
-	}, {
-		"label": "Icon",
-		"property": "icon",
-		"knowledge": "knowledge:system:icons",
-		"type": "text"
-	}, {
-		"label": "Description",
-		"property": "description",
-		"type": "textarea"
-	}, {
-		"label": "Master Note",
-		"property": "master_note",
-		"type": "textarea"
-	}];
-	
-	rsSystem.component("NounFieldsItemType", {
-		"inherit": true,
-		"props": {
-			"universe": {
-				"required": true,
-				"type": Object
-			}
-		},
-		"data": function() {
-			var data = {};
-			data.fields = this.fields || {};
-			data.fields.itemtype = dataSource;
-
-			return data;
-		},
-		"mounted": function() {
-		},
-		"methods": {
-			"update": function() {
-				
-			}
-		},
-		"beforeDestroy": function() {
-			
-		}
-	});
-})();
-
-
 
 /**
  * 
@@ -28151,7 +28598,8 @@ class FieldDescriptor {
 			rsSystem.components.NounFieldsNote,
 			rsSystem.components.NounFieldsRace,
 			rsSystem.components.NounFieldsRoom,
-			rsSystem.components.NounFieldsSlot
+			rsSystem.components.NounFieldsSlot,
+			rsSystem.components.NounFieldsSex
 		],
 		"props": {
 			"universe": {
@@ -28200,9 +28648,32 @@ class FieldDescriptor {
 		"watch": {
 			"copy": function(value) {
 				if(value) {
-//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", this.universe.nouns[this.state.current][value]?JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4):"{}");
+					var copy = this.universe.nouns[this.state.current][value];
+					value = copy?JSON.stringify(copy, null, 4):"{}";
+					if(copy.template && this.state.building[this.state.current].parent !== copy.id) {
+						value = JSON.parse(value);
+						value.parent = value.id;
+						value.id += ":" + Date.now();
+						delete(value.template);
+						value = JSON.stringify(value, null, 4);
+					}
+					Vue.set(this, "rawValue", value);
 					Vue.set(this, "copy", null);
+					
+//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
+//					if(copy) {
+//						copy.name = value.name;
+//						copy.description = value.description;
+//						if(copy.template && this.state.building[this.state.current].parent !== copy.id) {
+//							copy.parent = copy.id;
+//							copy.id += ":" + Date.now();
+//							delete(copy.template);
+//						}
+//						value = this.universe.nouns[this.state.current][value]?JSON.stringify(copy, null, 4):"{}";
+//						Vue.set(this, "rawValue", JSON.stringify(copy, null, 4));
+//					}
+					Vue.set(this, "copy", null);
+					
 				}
 			},
 			"state.current": function(n, p) {
@@ -28217,6 +28688,7 @@ class FieldDescriptor {
 				"deep": true,
 				"handler": function() {
 					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+					this.models[this.state.current].id = this.state.building[this.state.current].id;
 					this.models[this.state.current].recalculateProperties();
 					this.saveStorage(this.storageKeyID, this.state);
 					this.$forceUpdate();
@@ -31437,6 +31909,7 @@ rsSystem.registerNoun(RSItem, "item");
 rsSystem.registerNoun(RSRace, "race");
 rsSystem.registerNoun(RSRoom, "room");
 rsSystem.registerNoun(RSSlot, "slot");
+rsSystem.registerNoun(RSSex, "sex");
 
 // Assist function for Reactive Component Printing
 var _p = function(x) {return JSON.parse(JSON.stringify(x));};

@@ -26,3 +26,4 @@ rsSystem.registerNoun(RSItem, "item");
 rsSystem.registerNoun(RSRace, "race");
 rsSystem.registerNoun(RSRoom, "room");
 rsSystem.registerNoun(RSSlot, "slot");
+rsSystem.registerNoun(RSSex, "sex");

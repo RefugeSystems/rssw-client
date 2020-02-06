@@ -2,8 +2,26 @@
 (function() {
 	
 	var dataSource,
-		bases;
+		bases,
+		sort;
 	
+	sort = function(a, b) {
+		if(a && a.name) {
+			a = a.name;
+		}
+		if(b && b.name) {
+			b = b.name;
+		}
+		a = a || "";
+		b = b || "";
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
 	
 	bases = {
 		"label": "Base",
@@ -32,15 +50,23 @@
 		"type": "select",
 		"raw": true,
 		"options": [
-			"general",
 			"combat",
-			"piloting",
+			"custom",
+			"general",
 			"knowledge",
-			"custom"
+			"piloting"
 		]
 	},
 	bases,
 	{
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
@@ -67,6 +93,7 @@
 		},
 		"mounted": function() {
 			bases.options = this.characterStatsListing;
+			bases.options.sort(sort);
 		},
 		"methods": {
 			"update": function() {
