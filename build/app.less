@@ -374,6 +374,11 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0px;
 }
 
+	
+.calculated-result {
+	color: #ec6d2e;
+}
+
 .rendered-value.red {
 	color: @rsRed;
 }
@@ -554,6 +559,7 @@ form {
 		border-width: 0px !important;
 		padding: 0px !important;
 		color: inherit;
+		overflow: hidden;
 	}
 	
 	.system-view {
@@ -571,8 +577,9 @@ form {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		height: ~"calc(100% - 50px)";
+		height: 100%;
 		margin-left: 10px;
+		overflow: hidden;
 		
 		.building {
 			width: 440px;
@@ -594,6 +601,22 @@ form {
 		
 		.description {
 			color: @rsBlack;
+		}
+		
+		.primary-action {
+			background: transparent;
+			transition: color .5s, border .5s;
+			border: 1px solid @rsOrange;
+			color: @rsOrange;
+			cursor: pointer;
+			margin: 0px 5px 0px 0px;
+			padding: 5px;
+			
+			&:active,
+			&:hover {
+				border-color: @rsWhite;
+				color: @rsWhite;
+			}
 		}
 	}
 }
@@ -996,14 +1019,34 @@ form {
 	padding: 8px;
 }
 
-.rs-component.rs-container {
+.rs-component.rs-widget {
+	position: relative;
 	padding: 0px;
 	margin: 0px;
 	max-width: 550px;
 	/*border: 1px solid white;*/
 	border-radius: 6px;
 	/*padding: 8px;*/
+	min-height: 30px;
+	
+	.rs-containment {
+		overflow: hidden;
+		max-height: 2000px;
+		transition: max-height .5s;
+	}
+		
+	&.collapsed {
+	
+		.rs-containment {
+			max-height: 0px;
+		}
+	}
 }
+
+.rs-container {
+	position: relative;
+}
+
 
 .rs-field.rs-autocomplete {
 	position: relative;
@@ -1244,6 +1287,9 @@ form {
 	
 	.rendered-value {
 		-webkit-text-stroke-width: thin;
+	}
+	
+	.linked-value {
 		cursor: pointer;
 	}
 	
@@ -1268,14 +1314,17 @@ form {
 		color: #0055ff;
 	}
 	
-	.calculated-result {
-		color: #ec6d2e;
+	.record-id {
+		width: 100%;
+		overflow: hidden;
+		white-space: nowrap;
+		
+		.displayed-id {
+			transition: background-color .5s;
+			max-width: 80%;
+		}
 	}
-}
-
-.master-controls {
-
-
+	
 	.control {
 	
 		.icon {
@@ -1663,6 +1712,37 @@ form {
 		padding: 0px;
 		border: 0px;
 		margin: 0px;
+	}
+}
+
+.rs-component.rssw.component-entity-history {
+	
+	.history {
+		display: block;
+		position: relative;
+		max-height: 300px;
+		overflow: auto;
+		padding: 7px;
+		
+		.flow {
+			display: inline-flex;
+			flex-direction: column;
+		}
+	}
+	
+	.entry {
+		position: relative;
+		display: inline-block;
+		border-top: 1px solid @rsWhite;
+		
+		a {
+			color: @rsLightBlue;
+			cursor: pointer;
+		}
+		
+		.time {
+			color: @rsOrange;
+		}
 	}
 }
 
@@ -2571,3 +2651,34 @@ form {
 		}
 	}
 }
+.rs-component.widget-controls {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	
+	.controls {
+		
+	}
+	
+	.toggle {
+		color: @rsOrange;
+		display: block;
+		height: 30px;
+		width: 30px;
+		background: @rsBlack;
+		border: 1px solid @rsOrange;
+		color: @rsOrange;
+		transition: border .5s, color .5s;
+		
+		&:active,
+		&:hover {
+			border: 1px solid @rsWhite;
+			color: @rsWhite;
+		}
+		
+		span {
+			transition: transform .5s;
+		}
+	}
+}
+

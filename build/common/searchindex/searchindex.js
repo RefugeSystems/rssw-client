@@ -496,4 +496,25 @@ class SearchIndex extends EventEmitter {
 			this.$emit("indexed");
 		}
 	}
+	
+	/**
+	 * Lookup the elements in the passed array and receive a new array containing the elements
+	 * that are part of this index.
+	 * @method translate
+	 * @param {Array} source Array of IDs to search.
+	 * @return {Array} A new array that is the referenced data within this index. Elements
+	 * 		of the array that do not belong are skipped by default.
+	 */
+	translate(source) {
+		var result = [],
+			x;
+		
+		for(x=0; x<source.length; x++) {
+			if(this.lookup[source[x]]) {
+				result.push(this.lookup[source[x]]);
+			}
+		}
+		
+		return result;
+	}
 }

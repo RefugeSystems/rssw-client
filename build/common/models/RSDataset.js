@@ -13,7 +13,7 @@ class RSDataset extends RSObject {
 	}
 	
 	recalculateHook() {
-		console.warn("Dataset Updated: ", this.id);
+		// console.warn("Dataset Updated: ", this.id);
 		
 		if(this.default_set) {
 			this.universe.defaultDataset = this;

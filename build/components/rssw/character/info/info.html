@@ -46,6 +46,20 @@
 			<span class="value">{{item.name}}</span>
 		</button>
 	</div>
+	<div class="property location" v-if="location">
+		<span class="icon fad fa-globe-africa"></span>
+		<span class="label">Location:</span>
+		<button class="location" v-on:click="showInfo(location)">
+			<span class="value">{{location.name}}</span>
+		</button>
+	</div>
+	<div class="property inside" v-if="inside">
+		<span class="icon fad fa-starship-freighter"></span>
+		<span class="label">Inside:</span>
+		<button class="inside" v-on:click="showInfo(inside)">
+			<span class="value">{{inside.name}}</span>
+		</button>
+	</div>
 	<div class="property encumberance" v-if="character.classification != 'base'">
 		<span class="icon" :class="getEncumberanceIcon()"></span>
 		<span class="label">Encumberance:</span>

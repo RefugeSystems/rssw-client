@@ -41,6 +41,9 @@
 				"viewing": false
 			});
 			
+			data.location = null;
+			data.inside = null;
+			
 			data.specializations = [];
 			data.abilities = [];
 			data.inventory = [];
@@ -152,6 +155,12 @@
 				}
 				if(this.credits !== this.character.credits) {
 					Vue.set(this, "credits", this.character.credits);
+				}
+				if((!this.location && this.character.location) || (this.location && this.location.id !== this.character.location)) {
+					Vue.set(this, "location", this.universe.indexes.location.index[this.character.location]);
+				}
+				if((!this.inside && this.character.inside) || (this.inside && this.inside.id !== this.character.inside)) {
+					Vue.set(this, "inside", this.universe.indexes.entity.index[this.character.inside]);
 				}
 				if(this.character.description) {
 					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));

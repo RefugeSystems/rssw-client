@@ -12,11 +12,14 @@
 	invisibleKeys.information_renderer = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.source_template = true;
+	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
 	invisibleKeys.restock_base = true;
 	invisibleKeys.restock_max = true;
+	invisibleKeys.declaration = true;
 	invisibleKeys.description = true;
+	invisibleKeys.for_players = true;
 	invisibleKeys.master_note = true;
 	invisibleKeys.rarity_min = true;
 	invisibleKeys.rarity_max = true;
@@ -30,6 +33,7 @@
 	invisibleKeys.playable = true;
 	invisibleKeys.dataset = true;
 	invisibleKeys.history = true;
+	invisibleKeys.widgets = true;
 	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
@@ -40,6 +44,7 @@
 	invisibleKeys.data = true;
 	invisibleKeys.echo = true;
 	invisibleKeys.url = true;
+	invisibleKeys.sid = true;
 	invisibleKeys.id = true;
 	invisibleKeys.x = true;
 	invisibleKeys.y = true;
@@ -132,19 +137,36 @@
 			var data = {};
 			
 			data.collapsed = true;
+			data.calculatedEncumberance = 0;
 			data.knowledgeLink = knowledgeLink;
 			data.displayRaw = displayRaw;
 			data.holdDescription = null;
-			data.transfer_targets = [];
-			data.transfer_target = "";
 			data.restocking = false;
 			data.description = null;
 			data.holdNote = null;
 			data.note = null;
 			data.profile = null;
 			data.image = null;
-			data.keys = [];
 			data.id = null;
+
+			data.availableTemplates = {};
+			data.availableTemplates.entity = [];
+			data.copyToHere = "";
+			
+			data.transfer_targets = [];
+			data.transfer_target = "";
+			
+			data.attach_targets = [];
+			data.attach_target = "";
+			
+			data.locations = [];
+			
+			data.entities = [];
+			
+			data.parties = [];
+			data.partyToMove = "";
+			
+			data.keys = [];
 			
 			return data;
 		},
@@ -166,6 +188,7 @@
 				}
 			};
 
+			this.universe.$on("model:modified", this.update);
 			if(this.record.$on) {
 				this.record.$on("modified", this.update);
 			} else {
@@ -175,6 +198,24 @@
 			this.update();
 		},
 		"methods": {
+			"highlight": function() {
+				var el = $(this.$el).find(".displayed-id");
+				if(el[0]) {
+					el[0].select();
+					document.execCommand("copy");
+					el.css({"background-color": "#63b35d"});
+					if (window.getSelection) {
+						this.$emit("copying", window.getSelection().toString());
+						window.getSelection().removeAllRanges();
+					} else if (document.selection) {
+						this.$emit("copying", document.selection.toString());
+						document.selection.empty();
+					}
+					setTimeout(function() {
+						el.css({"background-color": "transparent"});
+					}, 5000);
+				}
+			},
 			"visible": function(key, value) {
 				return key && key !== "image" && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
 			},
@@ -182,7 +223,25 @@
 				return value instanceof Array;
 			},
 			"canTransfer": function() {
-				return this.source && ((this.source.item && this.source.item.indexOf(this.record.id) !== -1) || (this.source.inventory && this.source.inventory.indexOf(this.record.id) !== -1));
+				var hold,
+					x;
+				
+				for(x=0; this.source && this.source.item && x<this.source.item.length; x++) {
+					hold = this.universe.indexes.item.index[this.source.item[x]];
+					if(hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
+						return true;
+					}
+				}
+				
+				return this.source && ((this.source.item && this.source.item.indexOf(this.record.id) !== -1)
+						|| (this.source.inventory && this.source.inventory.indexOf(this.record.id) !== -1));
+			},
+			"canTransferToSelf": function() {
+				return this.source && !((this.source.item && this.source.item.indexOf(this.record.id) !== -1)
+						|| (this.source.inventory && this.source.inventory.indexOf(this.record.id) !== -1));
+			},
+			"canAttach": function() {
+				return this.source && (this.record.hardpoints || this.record.contents_max);
 			},
 			"transferObject": function() {
 				if(this.transfer_target && this.transfer_target !== "cancel") {
@@ -192,8 +251,17 @@
 						"item": this.record.id
 					});
 				}
-				
 				Vue.set(this, "transfer_target", "");
+			},
+			"attachObject": function() {
+				if(this.attach_target && this.attach_target !== "cancel") {
+					this.universe.send("give:item", {
+						"source": this.source.id,
+						"target": this.record.id,
+						"item": this.attach_target
+					});
+				}
+				Vue.set(this, "attach_target", "");
 			},
 			"hideRecord": function() {
 				this.record.commit({
@@ -271,11 +339,48 @@
 				
 				return value;
 			},
+			"copyEntityHere": function(id) {
+				window.open("/#/nouns/entity/" + id + "?copy=true&values={\"location\":\"" + this.record.id + "\"}", "building");
+				Vue.set(this, "copyToHere", "");
+			},
+			"editRecord": function() {
+				window.open("/#/nouns/" + this.record._type + "/" + this.record.id, "building");
+			},
 			"prettifyReferenceValue": function(reference, property, value) {
 				
 			},
 			"displayInfo": function(record) {
 				
+			},
+			"canTravelTo": function(id) {
+				id = id || this.player.entity;
+				if(id && this.universe.indexes.entity.index[id]) {
+					return true;
+				}
+				return false;
+			},
+			"travelToHere": function(id) {
+				id = id || this.player.entity;
+				if(this.universe.indexes.entity.index[id]) {
+					this.universe.indexes.entity.index[id].commit({
+						"location": this.record.id
+					});
+				}
+			},
+			"movePartyHere": function(party) {
+				var hold,
+					x;
+				
+				if(party && party.entity && party.entity.length) {
+					hold = this.universe.indexes.entity.index[party.entity[x]];
+					if(hold) {
+						hold.commit({
+							"location": this.record.id
+						});
+					}
+				}
+				
+				Vue.set(this, "partyToMove", "");
 			},
 			"restockLocation": function() {
 				if(!this.restocking) {
@@ -291,7 +396,10 @@
 				}
 			},
 			"update": function() {
-				var x;
+				var buffer,
+					hold,
+					x,
+					y;
 				
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
@@ -351,11 +459,68 @@
 				}
 				this.transfer_targets.sort(byName);
 				
+				this.attach_targets.splice(0);
+				if(this.source && (this.record.hardpoints || this.record.contents_max)) {
+					for(x=0; this.source.item && x<this.source.item.length; x++) {
+						buffer = this.universe.indexes.item.lookup[this.source.item[x]];
+						if(this.record.cancontain && this.record.cancontain.length) {
+							if(buffer.itemtype && buffer.itemtype.length) {
+								hold = true;
+								for(y=0; hold && y<buffer.itemtype.length; y++) {
+									if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
+										this.attach_targets.push(buffer);
+										hold = false;
+									}
+								}
+							}
+						} else {
+							this.attach_targets.push(buffer);
+						}
+					}
+				}
+				this.attach_targets.sort(byName);
+				
+				this.availableTemplates.entity.splice(0);
+				this.entities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
+						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
+					}
+					if(this.universe.indexes.entity.listing[x].location === this.record.id || this.universe.indexes.entity.listing[x].inside === this.record.id) {
+						this.entities.push(this.universe.indexes.entity.listing[x]);
+					}
+				}
+				
+				hold = 0;
+				if(this.record.item && this.record.item.length) {
+					for(x=0; x<this.record.item.length; x++) {
+						buffer = this.universe.indexes.item.lookup[this.record.item[x]];
+						if(buffer) {
+							hold += parseInt(buffer.encumberance) || 0;
+						} else {
+							console.warn({
+								"message": "Invalid item in record",
+								"record": this.record,
+								"item": this.record.item[x]
+							});
+						}
+					}
+					Vue.set(this, "calculatedEncumberance", hold);
+				}
+				
+				this.parties.splice(0);
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					if(this.universe.indexes.party.listing[x].active) {
+						this.parties.push(this.universe.indexes.party.listing[x]);
+					}
+				}
+				
 				this.$forceUpdate();
 			}
 		},
 		"beforeDestroy": function() {
 //			console.log("Finishing");
+			this.universe.$off("model:modified", this.update);
 			if(this.record && this.record.$off) {
 				this.record.$off("modified", this.update);
 			}

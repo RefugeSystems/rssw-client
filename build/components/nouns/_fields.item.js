@@ -174,10 +174,6 @@
 		"property": "needs_slot",
 		"type": "checkbox"
 	}, {
-		"label": "Is Attachment",
-		"property": "is_attachment",
-		"type": "checkbox"
-	}, {
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"
@@ -188,10 +184,6 @@
 	}, {
 		"label": "Obscured",
 		"property": "obscured",
-		"type": "checkbox"
-	}, {
-		"label": "Only Accepts Attachments",
-		"property": "attachable",
 		"type": "checkbox"
 	},
 	cancontain,

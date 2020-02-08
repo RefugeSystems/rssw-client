@@ -44,10 +44,11 @@
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,
-			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsAbility,
+			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsEntity,
 			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsWidget,
 			rsSystem.components.NounFieldsParty,
 			rsSystem.components.NounFieldsSkill,
 			rsSystem.components.NounFieldsItem,
@@ -88,6 +89,9 @@
 				"building": {}
 			});
 //			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+			if(this.$route.params.type) {
+				data.state.current = this.$route.params.type;
+			}
 			
 			for(x=0; x<data.nouns.length; x++) {
 				if(!data.state.building[data.nouns[x]]) {
@@ -104,32 +108,39 @@
 		"watch": {
 			"copy": function(value) {
 				if(value) {
-					var copy = this.universe.nouns[this.state.current][value];
+					var copy = this.universe.nouns[this.state.current][value],
+						x;
+					
 					value = copy?JSON.stringify(copy, null, 4):"{}";
-					if(copy.template && this.state.building[this.state.current].parent !== copy.id) {
-						value = JSON.parse(value);
+					value = JSON.parse(value);
+					if(copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
 						value.parent = value.id;
 						value.id += ":" + Date.now();
+						if(value.randomize_name) {
+							copy = this.getGenerator(value.race);
+							if(copy) {
+								value.name = copy.corpus[Random.integer(copy.corpus.length)].capitalize();
+								for(x=1; x<value.randomize_name; x++) {
+									value.name += " " + copy.corpus[Random.integer(copy.corpus.length)].capitalize();
+								}
+							}
+						}
+						delete(value.randomize_name);
 						delete(value.template);
-						value = JSON.stringify(value, null, 4);
+					} if(!copy.template && this.$route.query.copy === "true") {
+						value.id += ":" + Date.now();
 					}
+					if(this.$route.query.values) {
+						try {
+							copy = JSON.parse(this.$route.query.values);
+							Object.assign(value, copy);
+						} catch(exception) {
+							console.warn("Failed to load values due to parse exception: ", exception);
+						}
+					}
+					value = JSON.stringify(value, null, 4);
 					Vue.set(this, "rawValue", value);
 					Vue.set(this, "copy", null);
-					
-//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-//					if(copy) {
-//						copy.name = value.name;
-//						copy.description = value.description;
-//						if(copy.template && this.state.building[this.state.current].parent !== copy.id) {
-//							copy.parent = copy.id;
-//							copy.id += ":" + Date.now();
-//							delete(copy.template);
-//						}
-//						value = this.universe.nouns[this.state.current][value]?JSON.stringify(copy, null, 4):"{}";
-//						Vue.set(this, "rawValue", JSON.stringify(copy, null, 4));
-//					}
-					Vue.set(this, "copy", null);
-					
 				}
 			},
 			"state.current": function(n, p) {
@@ -143,12 +154,16 @@
 			"state": {
 				"deep": true,
 				"handler": function() {
-					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+//					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
 					this.models[this.state.current].id = this.state.building[this.state.current].id;
 					this.models[this.state.current].recalculateProperties();
 					this.saveStorage(this.storageKeyID, this.state);
 					this.$forceUpdate();
 				}
+			},
+			"$route.params.oid": function(oid) {
+				console.warn("New OID: ", oid);
+				Vue.set(this, "copy", oid);
 			},
 			"rawValue": function(value) {
 				try {
@@ -195,6 +210,10 @@
 			} else {
 				Vue.set(this, "rawValue", "{}");
 			}
+			if(this.$route.params.oid) {
+				Vue.set(this, "copy", this.$route.params.oid);
+			}
+			
 			this.models[this.state.current].recalculateProperties();
 			this.$emit("model", this.models[this.state.current]);
 		},
@@ -205,41 +224,42 @@
 					Vue.set(this.built, field.property, null);
 				}
 			},
-			"hasGenerator": function() {
-				return (this.state.building[this.state.current].race && this.universe.indexes.race.index[this.state.building[this.state.current].race] && this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset)
-					|| (!this.state.building[this.state.current].race && this.universe.defaultDataset);
+			"hasGenerator": function(race) {
+				race = race || this.state.building[this.state.current].race;
+				return (race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset)
+					|| (!race && this.universe.defaultDataset);
 			},
-			"pullRandomName": function() {
-				var generator = this.getGenerator();
+			"pullRandomName": function(generator) {
+				generator = generator || this.getGenerator(this.state.building[this.state.current].race);
 				if(generator) {
 					Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
 				}
 			},
-			"randomizeName": function() {
-				var generator = this.getGenerator();
+			"randomizeName": function(generator) {
+				generator = generator || this.getGenerator(this.state.building[this.state.current].race);
 				if(generator) {
 					Vue.set(this.state.building[this.state.current], "name", generator.create().capitalize() + " " + generator.create().capitalize());
 				}
 			},
-			"getGenerator": function() {
+			"getGenerator": function(race) {
 				var generator = null,
 					data,
 					x;
 				
-				if(this.state.building[this.state.current].race && this.universe.indexes.race.index[this.state.building[this.state.current].race] && this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset) {
-					if(!this.nameGenerators[this.state.building[this.state.current].race]) {
+				if(race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset) {
+					if(!this.nameGenerators[race]) {
 						data = "";
-						for(x=0; x<this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset.length; x++) {
-							if(this.universe.indexes.dataset.index[this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset[x]]) {
-								data += " " + this.universe.indexes.dataset.index[this.universe.indexes.race.index[this.state.building[this.state.current].race].dataset[x]].set;
+						for(x=0; x<this.universe.indexes.race.index[race].dataset.length; x++) {
+							if(this.universe.indexes.dataset.index[this.universe.indexes.race.index[race].dataset[x]]) {
+								data += " " + this.universe.indexes.dataset.index[this.universe.indexes.race.index[race].dataset[x]].set;
 							}
 						}
 						generator = new NameGenerator(data);
-						Vue.set(this.nameGenerators, this.state.building[this.state.current].race, generator);
+						Vue.set(this.nameGenerators, race, generator);
 					} else {
-						generator = this.nameGenerators[this.state.building[this.state.current].race];
+						generator = this.nameGenerators[race];
 					}
-//					return this.nameGenerators[this.state.building[this.state.current].race];
+//					return this.nameGenerators[race];
 				} else if(this.universe.defaultDataset) {
 					if(!this.nameGenerators._default) {
 						if(!this.universe.defaultDataset.set) {
@@ -299,7 +319,11 @@
 					}
 				}
 				
-				Vue.set(this, "rawValue", "{}");
+				if(this.$route.query.values) {
+					Vue.set(this, "rawValue", this.$route.query.values);
+				} else {
+					Vue.set(this, "rawValue", "{}");
+				}
 			},
 			"dropObject": function() {
 				this.state.building[this.state.current]._type = this.state.current;

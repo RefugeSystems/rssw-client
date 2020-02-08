@@ -1,0 +1,30 @@
+.rs-component.rssw.component-entity-history {
+	
+	.history {
+		display: block;
+		position: relative;
+		max-height: 300px;
+		overflow: auto;
+		padding: 7px;
+		
+		.flow {
+			display: inline-flex;
+			flex-direction: column;
+		}
+	}
+	
+	.entry {
+		position: relative;
+		display: inline-block;
+		border-top: 1px solid @rsWhite;
+		
+		a {
+			color: @rsLightBlue;
+			cursor: pointer;
+		}
+		
+		.time {
+			color: @rsOrange;
+		}
+	}
+}

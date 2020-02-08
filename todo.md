@@ -1,7 +1,23 @@
+# Current
++ Location & Entity (Ship,Base,Station,Building) Info window give  "Set Party Location" or "Set Entity Residence" options for master
++ List nested entities at location
++ Add location & Resides In to character view
++ Add location to ship view
++ Info link items in history where modified is a object key
++ History
++ Attachments
++ Widgets
+	+ Control?
+
 # Properties
-+ Flag to nullify item stat inheritance (For Bags)  
+√ Flag to nullify item stat inheritance (For Bags)  
         + This should remove the need for inventory types and they'll simply be items
-+ History / Log  
++ [STARTED] History / Log  
+		+ Solve when to update history as all will trigger from other clients in "auto" mode
+				! Create new serverside class for entities
+				+ New class handles checking for tracked keys during updates and adding history
+				+ History gets updated and synced back with the modify response as needed
+		+ For list differences, finish counting by ID to determine new
         + Use current time
         + Location Changes
         + XP Changes

@@ -81,6 +81,9 @@
 	
 	.rendered-value {
 		-webkit-text-stroke-width: thin;
+	}
+	
+	.linked-value {
 		cursor: pointer;
 	}
 	
@@ -105,14 +108,17 @@
 		color: #0055ff;
 	}
 	
-	.calculated-result {
-		color: #ec6d2e;
+	.record-id {
+		width: 100%;
+		overflow: hidden;
+		white-space: nowrap;
+		
+		.displayed-id {
+			transition: background-color .5s;
+			max-width: 80%;
+		}
 	}
-}
-
-.master-controls {
-
-
+	
 	.control {
 	
 		.icon {

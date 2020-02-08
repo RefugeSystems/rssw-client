@@ -12,6 +12,19 @@ class RSItem extends RSObject {
 		super(details, universe);
 	}
 	
+	recalculateHook() {
+		var buffer,
+			x;
+		
+		if(this.adds_encumberance && this.item && this.item.length) {
+			for(x=0; x<this.item.length; x++) {
+				buffer = this.universe.indexes.item.lookup[this.item[x]];
+				if(buffer) {
+					this.encumberance += parseInt(buffer.encumberance) || 0;
+				}
+			}
+		}
+	}
 
 	/**
 	 * 

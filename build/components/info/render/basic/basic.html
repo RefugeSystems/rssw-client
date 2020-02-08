@@ -1,5 +1,4 @@
 <div class="general-information">
-
 	<rs-render-image class="profile-image" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
 	
 	<div v-if="record.is_shop">
@@ -59,10 +58,36 @@
 			<option value="">Choose Target...</option>
 			<option value="cancel">Cancel</option>
 			<option disabled>--------------</option>
+			<option v-if="canTransferToSelf()" :value="source.id">{{source.name}}</option>
 			<option v-for="target in transfer_targets" :value="target.id">{{target.name}}</option>
 			<option disabled>--------------</option>
 			<option value="drop">Drop</option>
 		</select>
+	</div>
+	
+	<div v-if="canAttach()">
+		<h3>Pass To Item</h3>
+		<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} attachments of {{record.hardpoints}}</span>
+		<span v-if="record.contents_max">Currently encumbers {{calculatedEncumberance}} of {{record.contents_max}}</span>
+		<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
+			<option value=""></option>
+			<option value="cancel">Cancel</option>
+			<option disabled>--------------</option>
+			<option v-for="target in attach_targets" :value="target.id">{{target.name}}</option>
+		</select>
+		<div v-if="attach_targets.length === 0">
+			<span class="fas fa-exclamation-triangle"></span>
+			<span>No Viable Items</span>
+		</div>
+	</div>
+	
+	<div v-if="canTravelTo()">
+		<div class="control">
+			<button class="action" v-on:click="travelToHere()">
+				<span class="fad fa-globe-africa"></span>
+				<span>Travel Here</span>
+			</button>
+		</div>
 	</div>
 	
 	<div v-if="note && player && player.master">
@@ -72,6 +97,12 @@
 	
 	<div v-if="player.master && !options.noMaster" class="master-controls">
 		<h3>Master Controls</h3>
+	
+		<div class="record-id" v-on:click="highlight($event)">
+			<span>ID:</span>
+			<input class="displayed-id" :value="record.id" />
+		</div>
+		
 		<div class="control">
 			<button class="action" v-on:click="hideRecord()">
 				<span class="icon" :class="record.hidden?'far fa-check-square':'far fa-square'"></span>
@@ -84,11 +115,41 @@
 				<span>Obscured</span>
 			</button>
 		</div>
+		
+		<div class="control">
+			<button class="action" v-on:click="editRecord()">
+				<span class="fas fa-edit"></span>
+				<span>Edit</span>
+			</button>
+		</div>
+		
 		<div class="control">
 			<button class="action" v-if="record.restock_base" v-on:click="restockLocation()">
 				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>
 				<span>Restock Items</span>
 			</button>
 		</div>
+		<div class="control" v-if="record._type === 'location'">
+			<div>
+				<label>
+					<span>Copy Entity to Here</span>
+					<select v-model="copyToHere" v-on:change="copyEntityHere(copyToHere)">
+						<option value="">Select Template...</option>
+						<option v-for="e in availableTemplates.entity" v-if="e.template" :value="e.id">{{e.name}}</option>
+					</select>
+				</label>
+			</div>
+			<div>
+				<label>
+					<span>Move Party Here</span>
+					<select v-model="partyToMove" v-on:change="movePartyHere(partyToMove)">
+						<option value=""></option>
+						<option v-for="p in parties" v-if="p.active" :value="p.id">{{p.name}}</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		
+		
 	</div>
 </div>

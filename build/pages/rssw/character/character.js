@@ -14,6 +14,8 @@ rsSystem.component("RSSWCharacter", {
 	"data": function() {
 		var data = {};
 		
+		data.widgets = [];
+		
 		return data;
 	},
 	"computed": {
@@ -22,10 +24,23 @@ rsSystem.component("RSSWCharacter", {
 		}
 	},
 	"mounted": function() {
+		this.entity.$on("modified", this.update);
 		rsSystem.register(this);
+		this.update();
 	},
 	"methods": {
-		
+		"update": function() {
+			this.widgets.splice(0);
+			this.widgets.push.apply(this.widgets, this.entity.widgets);
+			this.widgets.push({
+	            "declaration": "rsswEntityHistory",
+	            "sid": "ihoihou",
+	            "enabled": true
+			});
+		}
+	},
+	"beforeDestroy": function() {
+		this.entity.$off("modified", this.update);
 	},
 	"template": Vue.templified("pages/rssw/character.html")
 });

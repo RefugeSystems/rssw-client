@@ -4,5 +4,5 @@
 	<rssw-character-stats :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-stats>
 	<rssw-character-skills :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-skills>
 	
-	<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="widget in entity.widgets" v-if="entity && entity.widgets" :key="widget.id"></rs-container>
+	<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="widget in widgets" v-if="entity && entity.widget" :key="widget.id"></rs-container>
 </div>

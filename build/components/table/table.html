@@ -32,7 +32,7 @@
 				</td>
 			</tr>
 			<tr v-for="record in corpus" :key="record.id" :class="index.isSelected([record.id])?'record-selected':''">
-				<td v-for="(header, i) in headers" class="table-record" :class="header.field" v-on:click.stop="select(record, header)">
+				<td v-for="(header, i) in headers" class="table-record" :class="header.field" v-on:click.stop="select(record, header)" :title="header.tag?record[header.tag]:''">
 					<div v-if="!header.noCross" class="crosshair"></div>
 					<div v-if="!header.noHighlight && index.isSelected([record.id]) && i === 0" class="highlight starting"></div>
 					<div v-if="!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1" class="highlight ending"></div>

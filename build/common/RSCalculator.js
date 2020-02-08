@@ -73,7 +73,7 @@ class RSCalculator {
 
 		if(expression && expression.length < 150 && this.securityExpression.test(expression)) {
 			try {
-				console.warn("Calculated: " + expression, variables);
+//				console.warn("Calculated: " + expression, variables);
 				return eval(expression);
 			} catch(ignored) {
 				console.error("Exception: ", ignored);

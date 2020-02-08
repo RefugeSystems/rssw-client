@@ -1,0 +1,27 @@
+<div class="rs-component rssw component-entity-history">
+	<h2>History</h2>
+	<div class="history">
+		<div class="flow flow-v">
+			<div class="entry" v-for="entry in history">
+				<div v-if="entry.type === 'record_keeping' && universe.indexes[entry.modified]" class="message">
+					<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>
+					<a v-on:click="showInfo(entry.previous)">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:"Unknown"}}</a>
+					<span>to</span>
+					<a v-on:click="showInfo(entry.current)">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:"Unknown"}}</a>
+				</div>
+				<div v-if="entry.type === 'record_keeping' && !universe.indexes[entry.modified]" class="message">
+					<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>
+				</div>
+				<div v-if="entry.type === 'item_gain'" class="message">
+					<span>Gained Item</span>
+					<a v-on:click="showInfo(entry.item)">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:"Unknown Item"}}</a>
+				</div>
+				<div v-if="entry.type === 'item_loss'" class="message">
+					<span>Lost Item</span>
+					<a v-on:click="showInfo(entry.item)">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:"Unknown Item"}}</a>
+				</div>
+				<div class="time" :title="entry._timeString">{{entry._dateString}}</div>
+			</div>
+		</div>
+	</div>
+</div>

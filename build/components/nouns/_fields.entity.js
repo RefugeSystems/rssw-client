@@ -8,6 +8,7 @@
 		abilities,
 		location,
 		profiles,
+		widgets,
 		entity,
 		images,
 		owners,
@@ -75,6 +76,14 @@
 		"condition": {
 			"classification": "character"
 		}
+	};
+	
+	widgets = {
+		"label": "Widgets",
+		"property": "widget",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	rooms = {
@@ -231,6 +240,15 @@
 		"property": "template",
 		"type": "checkbox"
 	}, {
+		"label": "Random Name",
+		"property": "randomize_name",
+		"type": "select",
+		"raw": true,
+		"condition": {
+			"template": true
+		},
+		"options": [0,1,2,3,4,5,6]
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -259,7 +277,9 @@
 				"operation": "exists"
 			}
 		}
-	}, {
+	},
+	entity,
+	{
 		"label": "Size",
 		"property": "size",
 		"type": "select",
@@ -277,7 +297,6 @@
 			"galactic"
 		]
 	},
-	entity,
 	profiles,
 	images,
 	{
@@ -321,6 +340,7 @@
 	archetypes,
 	abilities,
 	items,
+	widgets,
 	rooms,
 	owners,
 	{
@@ -379,6 +399,7 @@
 			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			abilities.source_index = this.universe.indexes.ability;
+			widgets.source_index = this.universe.indexes.widget;
 			owners.source_index = this.universe.indexes.player;
 			notes.source_index = this.universe.indexes.note;
 			rooms.source_index = this.universe.indexes.room;

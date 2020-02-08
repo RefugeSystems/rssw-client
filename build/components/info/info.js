@@ -87,6 +87,10 @@
 			this.universe.$on("universe:modified", this.update);
 		},
 		"methods": {
+			
+			"getTabIndex": function() {
+				return this.open?5:-1;
+			},
 			/**
 			 * 
 			 * @method displayRecord
@@ -95,7 +99,7 @@
 			"displayRecord": function(toView) {
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
-						console.warn("Received View Record: ", toView);
+						//console.warn("Received View Record: ", toView);
 						Vue.set(this, "target", toView.target);
 						Vue.set(this, "source", toView.source);
 						Vue.set(this, "base", toView.source);

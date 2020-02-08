@@ -13,6 +13,12 @@
 		"icon": function(icon) {
 			return "<span class='" + icon + "'></span>";
 		},
+		"template": function(state) {
+			if(state) {
+				return "<span class='fas fa-check'></span>";
+			}
+			return "";
+		},
 		"__info": function(value, record) {
 			return "<span class=\"fas fa-info-circle\"></span>";
 		},
@@ -131,6 +137,9 @@
 				data.state.paging.spread = 10;
 			}
 			
+			data.availableIndexes = Object.keys(this.universe.indexes);
+			data.availableIndexes.sort();
+			
 			data.command = "";
 			data.target = "";
 			data.corpus = [];
@@ -192,10 +201,15 @@
 					"formatter": formatters.icon
 				}, {
 					"title":"Name",
-					"field": "name"
+					"field": "name",
+					"tag": "id"
 				}, {
-					"title":"ID",
-					"field": "id"
+					"title":"Location",
+					"field": "location"
+				}, {
+					"title":"T",
+					"field": "template",
+					"formatter": formatters.template
 				}, {
 					"field": "__info",
 					"formatter": formatters.__info,

@@ -1,8 +1,28 @@
-.rs-component.rs-container {
+.rs-component.rs-widget {
+	position: relative;
 	padding: 0px;
 	margin: 0px;
 	max-width: 550px;
 	/*border: 1px solid white;*/
 	border-radius: 6px;
 	/*padding: 8px;*/
+	min-height: 30px;
+	
+	.rs-containment {
+		overflow: hidden;
+		max-height: 2000px;
+		transition: max-height .5s;
+	}
+		
+	&.collapsed {
+	
+		.rs-containment {
+			max-height: 0px;
+		}
+	}
 }
+
+.rs-container {
+	position: relative;
+}
+

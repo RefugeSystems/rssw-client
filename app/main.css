@@ -307,6 +307,9 @@ h5,
 h6 {
   margin: 0px;
 }
+.calculated-result {
+  color: #ec6d2e;
+}
 .rendered-value.red {
   color: #a91124;
 }
@@ -461,6 +464,7 @@ form {
   border-width: 0px !important;
   padding: 0px !important;
   color: inherit;
+  overflow: hidden;
 }
 .rs-page.page-home .system-view {
   overflow: auto;
@@ -475,8 +479,9 @@ form {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: calc(100% - 50px);
+  height: 100%;
   margin-left: 10px;
+  overflow: hidden;
 }
 .rs-page.page-noun_controls .construction .building {
   width: 440px;
@@ -498,6 +503,20 @@ form {
 }
 .rs-page.page-noun_controls .construction .description {
   color: #000000;
+}
+.rs-page.page-noun_controls .construction .primary-action {
+  background: transparent;
+  transition: color 0.5s, border 0.5s;
+  border: 1px solid #FF9560;
+  color: #FF9560;
+  cursor: pointer;
+  margin: 0px 5px 0px 0px;
+  padding: 5px;
+}
+.rs-page.page-noun_controls .construction .primary-action:active,
+.rs-page.page-noun_controls .construction .primary-action:hover {
+  border-color: #EAEFF9;
+  color: #EAEFF9;
 }
 .rssw-page.character-builder .stage {
   display: flex;
@@ -803,13 +822,26 @@ form {
   border-radius: 6px;
   padding: 8px;
 }
-.rs-component.rs-container {
+.rs-component.rs-widget {
+  position: relative;
   padding: 0px;
   margin: 0px;
   max-width: 550px;
   /*border: 1px solid white;*/
   border-radius: 6px;
   /*padding: 8px;*/
+  min-height: 30px;
+}
+.rs-component.rs-widget .rs-containment {
+  overflow: hidden;
+  max-height: 2000px;
+  transition: max-height 0.5s;
+}
+.rs-component.rs-widget.collapsed .rs-containment {
+  max-height: 0px;
+}
+.rs-container {
+  position: relative;
 }
 .rs-field.rs-autocomplete {
   position: relative;
@@ -1005,6 +1037,8 @@ form {
 }
 .object-info .rendered-value {
   -webkit-text-stroke-width: thin;
+}
+.object-info .linked-value {
   cursor: pointer;
 }
 .object-info .general-information p {
@@ -1019,16 +1053,22 @@ form {
 .object-info a {
   color: #0055ff;
 }
-.object-info .calculated-result {
-  color: #ec6d2e;
+.object-info .record-id {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
 }
-.master-controls .control .icon {
+.object-info .record-id .displayed-id {
+  transition: background-color 0.5s;
+  max-width: 80%;
+}
+.object-info .control .icon {
   display: inline-block;
   margin: 0px 6px 0px 0px;
   text-align: center;
   width: 20px;
 }
-.master-controls .control button.action {
+.object-info .control button.action {
   cursor: pointer;
   background: transparent;
   border-radius: 5px;
@@ -1036,11 +1076,11 @@ form {
   margin: 4px;
   border: 0px;
 }
-.master-controls .control button.action:active,
-.master-controls .control button.actionfocus {
+.object-info .control button.action:active,
+.object-info .control button.actionfocus {
   color: #FF9560;
 }
-.master-controls .control button.action:hover {
+.object-info .control button.action:hover {
   background-color: #e0aef7;
   color: #617EB8;
 }
@@ -1326,6 +1366,29 @@ form {
   padding: 0px;
   border: 0px;
   margin: 0px;
+}
+.rs-component.rssw.component-entity-history .history {
+  display: block;
+  position: relative;
+  max-height: 300px;
+  overflow: auto;
+  padding: 7px;
+}
+.rs-component.rssw.component-entity-history .history .flow {
+  display: inline-flex;
+  flex-direction: column;
+}
+.rs-component.rssw.component-entity-history .entry {
+  position: relative;
+  display: inline-block;
+  border-top: 1px solid #EAEFF9;
+}
+.rs-component.rssw.component-entity-history .entry a {
+  color: #6f9bf5;
+  cursor: pointer;
+}
+.rs-component.rssw.component-entity-history .entry .time {
+  color: #FF9560;
 }
 .rs-component.rssw.component-character-info a {
   cursor: pointer;
@@ -2047,4 +2110,26 @@ form {
 .rs-component.component-viewer .menu.open {
   max-height: 500px;
   width: 200px;
+}
+.rs-component.widget-controls {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+.rs-component.widget-controls .toggle {
+  display: block;
+  height: 30px;
+  width: 30px;
+  background: #000000;
+  border: 1px solid #FF9560;
+  color: #FF9560;
+  transition: border 0.5s, color 0.5s;
+}
+.rs-component.widget-controls .toggle:active,
+.rs-component.widget-controls .toggle:hover {
+  border: 1px solid #EAEFF9;
+  color: #EAEFF9;
+}
+.rs-component.widget-controls .toggle span {
+  transition: transform 0.5s;
 }
