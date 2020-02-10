@@ -1,0 +1,32 @@
+<div class="rs-component rssw component-entity-inside">
+	<h2>Entities Inside</h2>
+	<div class="entitites">
+		<div class="flow flow-v">
+			<div class="entry flow-h" v-for="entry in entities">
+				<button class="entity flow-h" v-on:click="showInfo(entry)" v-if="isOwner(entry)">
+					<span :class="entry.icon"></span>
+					<span>{{entry.name}}</span>
+				</button>
+				<span class="entity" v-else>
+					<span :class="entry.icon"></span>
+					<span>{{entry.name}}</span>
+				</span>
+				<button class="exit-ship flow-h" v-on:click="moveEntity(entry.id, null)" v-if="isOwner(entry)">
+					<span class="fas fa-sign-out-alt"></span>
+					<span>Exit Ship</span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="board">
+		<div class="label">
+			Bring Entity on Board
+		</div>
+		<div>
+			<select v-model="moving" v-on:change="moveEntity(moving, entity.id)">
+				<option value="">Select Entity...</option>
+				<option v-for="e in availableEntities" :value="e.id">{{e.name}}</option>
+			</select>
+		</div>
+	</div>
+</div>
