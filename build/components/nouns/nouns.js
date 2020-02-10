@@ -351,7 +351,7 @@
 				return noun.id;
 			},
 			"newObject": function() {
-				var keys = this.state.building[this.state.current],
+				var keys = Object.keys(this.state.building[this.state.current]),
 					x;
 
 				if(this.built) {
