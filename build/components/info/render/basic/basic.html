@@ -52,6 +52,25 @@
 		</div>
 	</div>
 	
+	<div class="section" v-if="(record._type === 'location' || record._type === 'entity') && entities.length">
+		<h3>Entities Here</h3>
+		<div class="general-list" v-if="player && player.master">
+			<ul class="general-list">
+				<li v-for="entity in entities">
+					<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="general-list" v-if="!player || !player.master">
+			<ul class="general-list">
+				<li v-for="entity in entities">
+					<a class="rendered-value" v-if="isOwner(entity)" :data-id="entity.id">{{entity.name}}</a>
+					<span class="data-value" v-else>{{entity.name}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
 	<div v-if="record._type && canTransfer()">
 		<h3>Transfer {{record._type.capitalize()}}</h3>
 		<select v-model="transfer_target" v-on:change="transferObject()">
@@ -91,6 +110,15 @@
 	</div>
 	
 	<div v-if="note && player && player.master">
+		<div class="info-section" v-if="(record._type === 'location' || record._type === 'entity') && hiddenEntities.length">
+			<h3>Hidden or Obscured Here</h3>
+			<ul class="general-list">
+				<li v-for="entity in hiddenEntities">
+					<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
+				</li>
+			</ul>
+		</div>
+	
 		<h3>Master Note</h3>
 		 <div v-html="note"></div>
 	</div>
@@ -130,15 +158,15 @@
 			</button>
 		</div>
 		<div class="control" v-if="record._type === 'location'">
-			<div>
-				<label>
-					<span>Copy Entity to Here</span>
-					<select v-model="copyToHere" v-on:change="copyEntityHere(copyToHere)">
-						<option value="">Select Template...</option>
-						<option v-for="e in availableTemplates.entity" v-if="e.template" :value="e.id">{{e.name}}</option>
-					</select>
-				</label>
-			</div>
+			<label>
+				<span>Copy Entity to Here</span>
+				<select v-model="copyToHere" v-on:change="copyEntityHere(copyToHere)">
+					<option value="">Select Template...</option>
+					<option v-for="e in availableTemplates.entity" v-if="e.template" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="record._type === 'location' || record._type === 'entity'">
 			<div>
 				<label>
 					<span>Move Party Here</span>
@@ -148,8 +176,25 @@
 					</select>
 				</label>
 			</div>
+			<div>
+				<label>
+					<span>Move Entity Here</span>
+					<select v-model="entityToMove" v-on:change="moveEntityHere(entityToMove)">
+						<option value=""></option>
+						<option v-for="e in universe.indexes.entity.listing" v-if="!e.template && !e.inactive" :value="e.id">{{e.name}}</option>
+					</select>
+				</label>
+			</div>
 		</div>
 		
+		<div class="info-section" v-if="partiesPresent.length">
+			<h3>Parties Located Here</h3>
+			<ul class="general-list">
+				<li v-for="party in partiesPresent">
+					<a class="rendered-value" :data-id="party.id">{{party.name}}</a>
+				</li>
+			</ul>
+		</div>
 		
 	</div>
 </div>

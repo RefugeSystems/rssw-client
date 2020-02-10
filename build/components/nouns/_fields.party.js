@@ -4,10 +4,11 @@
 	var dataSource,
 		location,
 		entities,
+		inside,
 		notes;
 	
 	entities = {
-		"label": "Entities",
+		"label": "Members",
 		"property": "entity",
 		"type": "multireference",
 		"optionValue": "id",
@@ -17,6 +18,14 @@
 	location = {
 		"label": "Location",
 		"property": "location",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	inside = {
+		"label": "Inside",
+		"property": "inside",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -43,7 +52,10 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
+	},
+	location,
+	inside,
+	{
 		"label": "Active",
 		"property": "active",
 		"type": "checkbox"
@@ -57,7 +69,6 @@
 		"type": "checkbox"
 	},
 	entities,
-	location,
 	{
 		"label": "X Coordinate",
 		"property": "x",
@@ -100,8 +111,17 @@
 			return data;
 		},
 		"mounted": function() {
+			var x;
+			
 			location.options = this.universe.indexes.location.listing;
 			location.options.sortBy("name");
+			inside.options = [];
+			for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+				if(!this.universe.indexes.entity.listing[x].template) {
+					inside.options.push(this.universe.indexes.entity.listing[x]);
+				}
+			}
+			inside.options.sortBy("name");
 			
 			entities.source_index = this.universe.indexes.entity;
 		},

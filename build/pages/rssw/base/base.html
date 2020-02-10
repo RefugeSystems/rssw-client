@@ -1,4 +1,6 @@
-<div class="rssw-page page-base">
+<div class="rssw-page page-base" v-if="entity">
 	<rssw-character-info :character="entity" :user="user" :universe="universe"></rssw-character-info>
 	<rssw-character-board :character="entity" :user="user" :universe="universe"></rssw-character-board>
+	
+	<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="widget in widgets" :key="widget.id"></rs-container>
 </div>

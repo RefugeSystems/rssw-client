@@ -162,8 +162,11 @@
 			data.locations = [];
 			
 			data.entities = [];
+			data.hiddenEntities = [];
 			
+			data.partiesPresent = [];
 			data.parties = [];
+			data.entityToMove = "";
 			data.partyToMove = "";
 			
 			data.keys = [];
@@ -181,7 +184,7 @@
 		},
 		"mounted": function() {
 			prettifyValues.skill_check = (record, value) => {
-				console.warn("Recording: ", record, value);
+//				console.warn("Recording: ", record, value);
 				var buffer = this.universe.indexes.skill.lookup[record.skill_check];
 				if(buffer) {
 					return buffer.name;
@@ -230,6 +233,17 @@
 			},
 			"isArray": function(value) {
 				return value instanceof Array;
+			},
+			"isOwner": function(record) {
+				if(record.owner === this.player.id) {
+					return true;
+				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
+					return true;
+				} else if(!record.owner && !(record.owners || record.owners.length === 0)) {
+					return true;
+				} else {
+					return false;
+				}
 			},
 			"canTransfer": function() {
 				var hold,
@@ -377,19 +391,51 @@
 				}
 			},
 			"movePartyHere": function(party) {
-				var hold,
+				var update = {},
+					hold,
 					x;
 				
-				if(party && party.entity && party.entity.length) {
-					hold = this.universe.indexes.entity.index[party.entity[x]];
-					if(hold) {
-						hold.commit({
-							"location": this.record.id
-						});
+				switch(this.record._type) {
+					case "entity":
+						update.inside = this.record.id;
+						break;
+					default:
+						update[this.record._type] = this.record.id;
+				}
+				
+				party = this.universe.indexes.party.index[party];
+				if(party) {
+					party.commit(update);
+					for(x=0; party.entity && x < party.entity.length; x++) {
+						hold = this.universe.indexes.entity.index[party.entity[x]];
+						if(hold) {
+							hold.commit(update);
+						}
 					}
 				}
 				
 				Vue.set(this, "partyToMove", "");
+			},
+			"moveEntityHere": function(entity) {
+				var update = {},
+					hold,
+					x;
+				
+				switch(this.record._type) {
+					case "entity":
+						update.inside = this.record.id;
+						break;
+					default:
+						update[this.record._type] = this.record.id;
+				}
+
+				
+				entity = this.universe.indexes.entity.index[entity];
+				if(entity) {
+					entity.commit(update);
+				}
+
+				Vue.set(this, "entityToMove", "");
 			},
 			"restockLocation": function() {
 				if(!this.restocking) {
@@ -407,6 +453,7 @@
 			"update": function() {
 				var buffer,
 					hold,
+					map,
 					x,
 					y;
 				
@@ -428,7 +475,7 @@
 				if(this.record.description) {
 					if(this.holdDescription !== this.record.description) {
 						Vue.set(this, "holdDescription", this.record.description);
-						Vue.set(this, "description", this.rsshowdown(this.record.description));
+						Vue.set(this, "description", this.rsshowdown(this.record.description, this.source, this.base, this.target));
 					}
 				} else {
 					Vue.set(this, "holdDescription", null);
@@ -460,43 +507,68 @@
 				this.keys.splice(0);
 				this.keys.push.apply(this.keys, Object.keys(this.record));
 				
-				this.transfer_targets.splice(0);
-				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
-					if(this.source && !this.universe.indexes.entity.listing[x].obscured && !this.universe.indexes.entity.listing[x].mob && !this.universe.indexes.entity.listing[x].template && this.universe.indexes.entity.listing[x].id !== this.source.id) {
-						this.transfer_targets.push(this.universe.indexes.entity.listing[x]);
+				this.partiesPresent.splice(0);
+				map = {};
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					buffer = this.universe.indexes.party.listing[x];
+					if(buffer.location === this.record.id) {
+						this.partiesPresent.push(buffer);
 					}
-				}
-				this.transfer_targets.sort(byName);
-				
-				this.attach_targets.splice(0);
-				if(this.source && (this.record.hardpoints || this.record.contents_max)) {
-					for(x=0; this.source.item && x<this.source.item.length; x++) {
-						buffer = this.universe.indexes.item.lookup[this.source.item[x]];
-						if(this.record.cancontain && this.record.cancontain.length) {
-							if(buffer.itemtype && buffer.itemtype.length) {
-								hold = true;
-								for(y=0; hold && y<buffer.itemtype.length; y++) {
-									if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
-										this.attach_targets.push(buffer);
-										hold = false;
-									}
-								}
+					if(this.source && buffer.entity && buffer.entity.indexOf(this.source.id) !== -1) {
+						for(y=0; y<buffer.entity.length; y++) {
+							if(!map[buffer.entity[y]]) {
+								map[buffer.entity[y]] = true;
 							}
-						} else {
-							this.attach_targets.push(buffer);
 						}
 					}
 				}
-				this.attach_targets.sort(byName);
+
+				this.transfer_targets.splice(0);
+				this.attach_targets.splice(0);
+				if(this.source) {
+					
+					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+						buffer = this.universe.indexes.entity.listing[x];
+						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.source.id && ((buffer.location && buffer.location === this.source.location) || (buffer.inside && buffer.inside === this.source.inside) || map[buffer.id])) {
+							this.transfer_targets.push(buffer);
+						}
+					}
+					this.transfer_targets.sort(byName);
+					
+					if(this.record.hardpoints || this.record.contents_max) {
+						for(x=0; this.source.item && x<this.source.item.length; x++) {
+							buffer = this.universe.indexes.item.lookup[this.source.item[x]];
+							if(this.record.cancontain && this.record.cancontain.length) {
+								if(buffer.itemtype && buffer.itemtype.length) {
+									hold = true;
+									for(y=0; hold && y<buffer.itemtype.length; y++) {
+										if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
+											this.attach_targets.push(buffer);
+											hold = false;
+										}
+									}
+								}
+							} else {
+								this.attach_targets.push(buffer);
+							}
+						}
+					}
+					this.attach_targets.sort(byName);
+				}
 				
 				this.availableTemplates.entity.splice(0);
+				this.hiddenEntities.splice(0);
 				this.entities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
 						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
 					}
 					if(this.universe.indexes.entity.listing[x].location === this.record.id || this.universe.indexes.entity.listing[x].inside === this.record.id) {
-						this.entities.push(this.universe.indexes.entity.listing[x]);
+						if(this.universe.indexes.entity.listing[x].hidden || this.universe.indexes.entity.listing[x].obscured) {
+							this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
+						} else {
+							this.entities.push(this.universe.indexes.entity.listing[x]);
+						}
 					}
 				}
 				

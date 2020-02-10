@@ -2,6 +2,7 @@
 (function() {
 	
 	var dataSource,
+		shipAbilities,
 		knowledges,
 		archetypes,
 		itemtypes,
@@ -12,9 +13,10 @@
 		entity,
 		images,
 		owners,
-		items,
 		attrs,
+		items,
 		notes,
+		pilot,
 		races,
 		rooms,
 		slots,
@@ -35,6 +37,28 @@
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
+	};
+	
+	shipAbilities = {
+		"label": "Active Piloting Abilities",
+		"property": "ship_active_abilities",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
+	};
+	
+	pilot = {
+		"label": "Pilot",
+		"property": "pilot",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
 	};
 	
 	profiles = {
@@ -201,6 +225,11 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Allegiance",
+		"property": "allegiance",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
 		"label": "Age",
 		"property": "age",
 		"type": "number"
@@ -232,7 +261,16 @@
 			"ship",
 			"station"
 		]
+	}, {
+		"label": "Pilot Skill",
+		"property": "pilot_skill",
+		"type": "number",
+		"condition": {
+			"classification": "character"
+		}
 	},
+	shipAbilities,
+	pilot,
 	races,
 	sexes,
 	{
@@ -301,6 +339,11 @@
 	},
 	profiles,
 	images,
+	{
+		"label": "Inactivated",
+		"property": "inactive",
+		"type": "checkbox"
+	},
 	{
 		"label": "Is Shop",
 		"property": "is_shop",
@@ -390,11 +433,14 @@
 			images.options.sortBy("name");
 			entity.options = this.universe.indexes.entity.listing;
 			entity.options.sortBy("name");
+			pilot.options = this.universe.indexes.entity.listing;
+			pilot.options.sortBy("name");
 			races.options = this.universe.indexes.race.listing;
 			races.options.sortBy("name");
 			sexes.options = this.universe.indexes.sex.listing;
 			sexes.options.sortBy("name");
 
+			shipAbilities.source_index = this.universe.indexes.ability;
 			knowledges.source_index = this.universe.indexes.knowledge;
 			archetypes.source_index = this.universe.indexes.archetype;
 			attrs.source_index = this.universe.indexes.modifierattrs;

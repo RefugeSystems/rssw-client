@@ -99,10 +99,10 @@
 			"displayRecord": function(toView) {
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
-						//console.warn("Received View Record: ", toView);
+//						console.warn("Received View Record: ", toView);
 						Vue.set(this, "target", toView.target);
 						Vue.set(this, "source", toView.source);
-						Vue.set(this, "base", toView.source);
+						Vue.set(this, "base", toView.base);
 						if(typeof(toView.record) === "string") {
 							toView = this.universe.index.index[toView.record];
 						} else {
@@ -139,6 +139,8 @@
 						this.viewing.$on("modified", this.update);
 					}
 				}
+				
+//				console.warn("Info View Updated: ", this);
 			},
 			
 			"processRequest": function(event) {

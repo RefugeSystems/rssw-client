@@ -18234,19 +18234,20 @@ Templify.install = function(Vue, options) {
 			case "components/image.html": return "<div class=\"rs-component rs-image\" :class=\"classes()\">\r\n\t<router-link v-if=\"link\" :to=\"link\">\r\n\t\t<img class=\"image\" :src=\"uri\"/>\r\n\t</router-link>\r\n\t<img v-else class=\"image\" :src=\"uri\"/>\r\n</div>\r\n";
 			case "components/info.html": return "<div class=\"system-component system-info\" :class=\"open?'opened':'closed'\">\r\n\t<div class=\"main-bar\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"viewing && viewing.icon\" class=\"icon\" :class=\"viewing.icon\"></span>\r\n\t\t\t<span class=\"text\">{{viewing?viewing.name:\"Information\"}}</span>\r\n\t\t</div>\r\n\t\t<button class=\"control back\" v-on:click=\"backOne()\" v-if=\"history.length\">\r\n\t\t\t<span class=\"fas fa-step-backward\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"control close\" v-on:click=\"closeInfo()\" :tabindex=\"getTabIndex()\">\r\n\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t\r\n\t<rs-object-info v-if=\"viewing\" v-on:click=\"processRequest($event)\" :record=\"viewing\" :universe=\"universe\" :user=\"user\" :player=\"player\" :source=\"source\" :target=\"target\" :base=\"base\" :options=\"options\"></rs-object-info>\r\n</div>\r\n";
 			case "components/info/render/bag.html": return "<div class=\"general-information\">\r\n\r\n\t<rs-render-image class=\"profile-image\" v-if=\"profile\" :image=\"profile\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<rs-render-image class=\"record-image\" v-if=\"image\" :image=\"image\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t<div v-if=\"record.data\" class=\"general-image\">\r\n\t\t<img :src=\"record.data\" />\r\n\t</div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\" v-if=\"universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">\r\n\t\t\t\t\t\t\t<span :class=\"universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''\"></span>\r\n\t\t\t\t\t\t\t<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property] && record[property] && !record[property].hidden\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"direct\" v-else>\r\n\t\t\t\t<span class=\"key\" v-if=\"knowledgeLink[property]\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"knowledgeLink[property]\">{{prettifyPropertyName(property)}}</a>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"key\" v-else>{{prettifyPropertyName(property)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<h3>Contents</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"note && player && player.master\">\r\n\t\t<h3>Master Note</h3>\r\n\t\t <div v-html=\"note\"></div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/info/render/basic.html": return "<div class=\"general-information\">\r\n\t<rs-render-image class=\"profile-image\" v-if=\"profile\" :image=\"profile\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t\r\n\t<div v-if=\"record.is_shop\">\r\n\t\t<span class=\"fas fa-warehouse\"></span>\r\n\t\t<span>A Shop</span>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<rs-render-image class=\"record-image\" v-if=\"image\" :image=\"image\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t<div v-if=\"record.data\" class=\"general-image\">\r\n\t\t<img :src=\"record.data\" />\r\n\t</div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"direct\" v-if=\"!universe.indexes[property]\">\r\n\t\t\t\t<span class=\"key\" v-if=\"knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"knowledgeLink[property] || (property + '_quicklink')\">{{prettifyPropertyName(property)}}</a>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"key\" v-if=\"!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']\">{{prettifyPropertyName(property)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t\t\t<span class=\"raw\" v-if=\"displayRaw[property]\">{{value}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{prettifyPropertyName(property).pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\" v-if=\"universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\" v-if=\"!collapsed\">\r\n\t\t\t\t\t\t\t<span :class=\"universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''\"></span>\r\n\t\t\t\t\t\t\t<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<rs-object-info v-if=\"!collapsed\" :record=\"universe.indexes[property].lookup[subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].obscured\" class=\"rendered-value\" :data-id=\"universe.indexes[property].lookup[subrecord].id\">{{universe.indexes[property].lookup[subrecord].name}}</a>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && !universe.indexes[property].lookup[subrecord]\" class=\"rendered-value unknown\">{{subrecord}}[Unknown]</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property] && record[property] && !record[property].hidden\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\" v-if=\"!collapsed\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info v-if=\"!collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured\" :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured\" class=\"rendered-value\" :data-id=\"universe.indexes[property].lookup[record[property]].id\">{{universe.indexes[property].lookup[record[property]].name}}</a>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && !universe.indexes[property].lookup[record[property]]\" class=\"rendered-value unknown\" >{{record[property]}}[Unknown]</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"record._type && canTransfer()\">\r\n\t\t<h3>Transfer {{record._type.capitalize()}}</h3>\r\n\t\t<select v-model=\"transfer_target\" v-on:change=\"transferObject()\">\r\n\t\t\t<option value=\"\">Choose Target...</option>\r\n\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option v-if=\"canTransferToSelf()\" :value=\"source.id\">{{source.name}}</option>\r\n\t\t\t<option v-for=\"target in transfer_targets\" :value=\"target.id\">{{target.name}}</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option value=\"drop\">Drop</option>\r\n\t\t</select>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canAttach()\">\r\n\t\t<h3>Pass To Item</h3>\r\n\t\t<span v-if=\"record.hardpoints\">Currently has {{record.item?record.item.length:0}} attachments of {{record.hardpoints}}</span>\r\n\t\t<span v-if=\"record.contents_max\">Currently encumbers {{calculatedEncumberance}} of {{record.contents_max}}</span>\r\n\t\t<select v-model=\"attach_target\" v-on:change=\"attachObject()\" v-if=\"attach_targets.length\">\r\n\t\t\t<option value=\"\"></option>\r\n\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option v-for=\"target in attach_targets\" :value=\"target.id\">{{target.name}}</option>\r\n\t\t</select>\r\n\t\t<div v-if=\"attach_targets.length === 0\">\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>No Viable Items</span>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canTravelTo()\">\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"travelToHere()\">\r\n\t\t\t\t<span class=\"fad fa-globe-africa\"></span>\r\n\t\t\t\t<span>Travel Here</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"note && player && player.master\">\r\n\t\t<h3>Master Note</h3>\r\n\t\t <div v-html=\"note\"></div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"player.master && !options.noMaster\" class=\"master-controls\">\r\n\t\t<h3>Master Controls</h3>\r\n\t\r\n\t\t<div class=\"record-id\" v-on:click=\"highlight($event)\">\r\n\t\t\t<span>ID:</span>\r\n\t\t\t<input class=\"displayed-id\" :value=\"record.id\" />\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"hideRecord()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"record.hidden?'far fa-check-square':'far fa-square'\"></span>\r\n\t\t\t\t<span>Hidden</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"obscureRecord()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"record.obscured?'far fa-check-square':'far fa-square'\"></span>\r\n\t\t\t\t<span>Obscured</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"editRecord()\">\r\n\t\t\t\t<span class=\"fas fa-edit\"></span>\r\n\t\t\t\t<span>Edit</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-if=\"record.restock_base\" v-on:click=\"restockLocation()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"restocking?'far fa-sync fa-spin':'far fa-inventory'\"></span>\r\n\t\t\t\t<span>Restock Items</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\" v-if=\"record._type === 'location'\">\r\n\t\t\t<div>\r\n\t\t\t\t<label>\r\n\t\t\t\t\t<span>Copy Entity to Here</span>\r\n\t\t\t\t\t<select v-model=\"copyToHere\" v-on:change=\"copyEntityHere(copyToHere)\">\r\n\t\t\t\t\t\t<option value=\"\">Select Template...</option>\r\n\t\t\t\t\t\t<option v-for=\"e in availableTemplates.entity\" v-if=\"e.template\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</label>\r\n\t\t\t</div>\r\n\t\t\t<div>\r\n\t\t\t\t<label>\r\n\t\t\t\t\t<span>Move Party Here</span>\r\n\t\t\t\t\t<select v-model=\"partyToMove\" v-on:change=\"movePartyHere(partyToMove)\">\r\n\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t<option v-for=\"p in parties\" v-if=\"p.active\" :value=\"p.id\">{{p.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</label>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t\r\n\t</div>\r\n</div>\r\n";
+			case "components/info/render/basic.html": return "<div class=\"general-information\">\r\n\t<rs-render-image class=\"profile-image\" v-if=\"profile\" :image=\"profile\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t\r\n\t<div v-if=\"record.is_shop\">\r\n\t\t<span class=\"fas fa-warehouse\"></span>\r\n\t\t<span>A Shop</span>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<rs-render-image class=\"record-image\" v-if=\"image\" :image=\"image\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t<div v-if=\"record.data\" class=\"general-image\">\r\n\t\t<img :src=\"record.data\" />\r\n\t</div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"direct\" v-if=\"!universe.indexes[property]\">\r\n\t\t\t\t<span class=\"key\" v-if=\"knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"knowledgeLink[property] || (property + '_quicklink')\">{{prettifyPropertyName(property)}}</a>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"key\" v-if=\"!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']\">{{prettifyPropertyName(property)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t\t\t<span class=\"raw\" v-if=\"displayRaw[property]\">{{value}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{prettifyPropertyName(property).pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\" v-if=\"universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\" v-if=\"!collapsed\">\r\n\t\t\t\t\t\t\t<span :class=\"universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''\"></span>\r\n\t\t\t\t\t\t\t<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<rs-object-info v-if=\"!collapsed\" :record=\"universe.indexes[property].lookup[subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].obscured\" class=\"rendered-value\" :data-id=\"universe.indexes[property].lookup[subrecord].id\">{{universe.indexes[property].lookup[subrecord].name}}</a>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && !universe.indexes[property].lookup[subrecord]\" class=\"rendered-value unknown\">{{subrecord}}[Unknown]</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property] && record[property] && !record[property].hidden\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\" v-if=\"!collapsed\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info v-if=\"!collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured\" :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured\" class=\"rendered-value\" :data-id=\"universe.indexes[property].lookup[record[property]].id\">{{universe.indexes[property].lookup[record[property]].name}}</a>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && !universe.indexes[property].lookup[record[property]]\" class=\"rendered-value unknown\" >{{record[property]}}[Unknown]</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"section\" v-if=\"(record._type === 'location' || record._type === 'entity') && entities.length\">\r\n\t\t<h3>Entities Here</h3>\r\n\t\t<div class=\"general-list\" v-if=\"player && player.master\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"entity in entities\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"entity.id\">{{entity.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t\t<div class=\"general-list\" v-if=\"!player || !player.master\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"entity in entities\">\r\n\t\t\t\t\t<a class=\"rendered-value\" v-if=\"isOwner(entity)\" :data-id=\"entity.id\">{{entity.name}}</a>\r\n\t\t\t\t\t<span class=\"data-value\" v-else>{{entity.name}}</span>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"record._type && canTransfer()\">\r\n\t\t<h3>Transfer {{record._type.capitalize()}}</h3>\r\n\t\t<select v-model=\"transfer_target\" v-on:change=\"transferObject()\">\r\n\t\t\t<option value=\"\">Choose Target...</option>\r\n\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option v-if=\"canTransferToSelf()\" :value=\"source.id\">{{source.name}}</option>\r\n\t\t\t<option v-for=\"target in transfer_targets\" :value=\"target.id\">{{target.name}}</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option value=\"drop\">Drop</option>\r\n\t\t</select>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canAttach()\">\r\n\t\t<h3>Pass To Item</h3>\r\n\t\t<span v-if=\"record.hardpoints\">Currently has {{record.item?record.item.length:0}} attachments of {{record.hardpoints}}</span>\r\n\t\t<span v-if=\"record.contents_max\">Currently encumbers {{calculatedEncumberance}} of {{record.contents_max}}</span>\r\n\t\t<select v-model=\"attach_target\" v-on:change=\"attachObject()\" v-if=\"attach_targets.length\">\r\n\t\t\t<option value=\"\"></option>\r\n\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option v-for=\"target in attach_targets\" :value=\"target.id\">{{target.name}}</option>\r\n\t\t</select>\r\n\t\t<div v-if=\"attach_targets.length === 0\">\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>No Viable Items</span>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canTravelTo()\">\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"travelToHere()\">\r\n\t\t\t\t<span class=\"fad fa-globe-africa\"></span>\r\n\t\t\t\t<span>Travel Here</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"note && player && player.master\">\r\n\t\t<div class=\"info-section\" v-if=\"(record._type === 'location' || record._type === 'entity') && hiddenEntities.length\">\r\n\t\t\t<h3>Hidden or Obscured Here</h3>\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"entity in hiddenEntities\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"entity.id\">{{entity.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t\r\n\t\t<h3>Master Note</h3>\r\n\t\t <div v-html=\"note\"></div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"player.master && !options.noMaster\" class=\"master-controls\">\r\n\t\t<h3>Master Controls</h3>\r\n\t\r\n\t\t<div class=\"record-id\" v-on:click=\"highlight($event)\">\r\n\t\t\t<span>ID:</span>\r\n\t\t\t<input class=\"displayed-id\" :value=\"record.id\" />\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"hideRecord()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"record.hidden?'far fa-check-square':'far fa-square'\"></span>\r\n\t\t\t\t<span>Hidden</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"obscureRecord()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"record.obscured?'far fa-check-square':'far fa-square'\"></span>\r\n\t\t\t\t<span>Obscured</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"editRecord()\">\r\n\t\t\t\t<span class=\"fas fa-edit\"></span>\r\n\t\t\t\t<span>Edit</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-if=\"record.restock_base\" v-on:click=\"restockLocation()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"restocking?'far fa-sync fa-spin':'far fa-inventory'\"></span>\r\n\t\t\t\t<span>Restock Items</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\" v-if=\"record._type === 'location'\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Copy Entity to Here</span>\r\n\t\t\t\t<select v-model=\"copyToHere\" v-on:change=\"copyEntityHere(copyToHere)\">\r\n\t\t\t\t\t<option value=\"\">Select Template...</option>\r\n\t\t\t\t\t<option v-for=\"e in availableTemplates.entity\" v-if=\"e.template\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t\t<div class=\"control\" v-if=\"record._type === 'location' || record._type === 'entity'\">\r\n\t\t\t<div>\r\n\t\t\t\t<label>\r\n\t\t\t\t\t<span>Move Party Here</span>\r\n\t\t\t\t\t<select v-model=\"partyToMove\" v-on:change=\"movePartyHere(partyToMove)\">\r\n\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t<option v-for=\"p in parties\" v-if=\"p.active\" :value=\"p.id\">{{p.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</label>\r\n\t\t\t</div>\r\n\t\t\t<div>\r\n\t\t\t\t<label>\r\n\t\t\t\t\t<span>Move Entity Here</span>\r\n\t\t\t\t\t<select v-model=\"entityToMove\" v-on:change=\"moveEntityHere(entityToMove)\">\r\n\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t<option v-for=\"e in universe.indexes.entity.listing\" v-if=\"!e.template && !e.inactive\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</label>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"info-section\" v-if=\"partiesPresent.length\">\r\n\t\t\t<h3>Parties Located Here</h3>\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"party in partiesPresent\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"party.id\">{{party.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t\t\r\n\t</div>\r\n</div>\r\n";
 			case "components/info/text.html": return "<div class=\"rs-component info-text\">\r\n\r\n</div>\r\n";
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\" :class=\"$router.currentRoute.path.startsWith(navItem.highlight)?'current':''\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\t<span>Noun:</span>\r\n\t\t\t<select v-model=\"state.current\" v-on:change=\"broadcastModel()\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\t<span>Copy:</span>\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"object in availableToCopy\" :value=\"object.id\">{{labelNoun(object)}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<div class=\"simplified-editor\" v-if=\"!state.advanced_editor\">\r\n\t\t\t<rs-field v-for=\"field in fields[state.current]\" :root=\"state.building[state.current]\" :field=\"field\" v-on:changed=\"sync($event)\" :key=\"field.property\">\r\n\t\t\t\t<span slot=\"info\">\r\n\t\t\t\t\t<span v-if=\"field.property === 'icon'\" :class=\"state.building[state.current].icon\"></span>\r\n\t\t\t\t\t<button class=\"info-link random-name fas fa-random\" v-if=\"field.property === 'name' && hasGenerator()\" v-on:click=\"randomizeName()\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"info-link random-name fas fa-sync\" v-if=\"field.property === 'name' && hasGenerator()\" v-on:click=\"pullRandomName()\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"info-link fas fa-info-circle\" v-if=\"field.knowledge\" v-on:click=\"openKnowledge(field.knowledge)\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"clear-link flat fas fa-ban\" v-on:click=\"clearField(field)\" v-if=\"field.type !== 'label'\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</span>\r\n\t\t\t</rs-field>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"advanced-editor\" v-if=\"state.advanced_editor\">\r\n\t\t\t<textarea v-model=\"rawValue\" v-save=\"modify\" v-tab v-filedrop=\"fileAttach\">\r\n\t\t\t</textarea>\r\n\t\t\t<label v-if=\"state.current === 'image'\">\r\n\t\t\t\t<span>Select Image File:</span>\r\n\t\t\t\t<input type=\"file\" id=\"attacher\" accept=\"image/*\" v-on:change=\"selectImage($event)\" />\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"newObject()\">\r\n\t\t\t<span class=\"action-icon fas fa-file-plus\"></span>\r\n\t\t\t<span class=\"action-text\">New Object</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"dropObject()\" v-if=\"this.state.building[state.current] && this.state.building[state.current].id\">\r\n\t\t\t<span class=\"action-icon fas fa-trash\"></span>\r\n\t\t\t<span class=\"action-text\">Drop Object</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"toggleEditMode()\">\r\n\t\t\t<span class=\"action-icon far\" :class=\"state.advanced_editor?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t<span class=\"action-text\">Advanced Editor</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/rssw/career/display.html": return "<div class=\"career-information\">\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t<div class=\"\">\r\n\t\t<span>Classification:</span>\r\n\t\t<span>{{record.classification}}</span>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\">\r\n\t\t\t\t<span class=\"ra ra-cracked-shield\"></span>\r\n\t\t\t\t<span>Damage</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else>\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\">\r\n\t\t\t\t<span class=\"ra ra-reactor\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else>\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/display.html": return "<div class=\"character-information\">\r\n\t<div class=\"flow-h\">\r\n\t\t<div class=\"stat brawn flow-v centered\">\r\n\t\t\t<span>Brawn</span>\r\n\t\t\t<span>{{record.brawn}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"stat agility flow-v centered\">\r\n\t\t\t<span>Agility</span>\r\n\t\t\t<span>{{record.agility}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/history.html": return "<div class=\"rs-component rssw component-entity-history\">\r\n\t<h2>History</h2>\r\n\t<div class=\"history\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry\" v-for=\"entry in history\">\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && universe.indexes[entry.modified]\" class=\"message\">\r\n\t\t\t\t\t<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<span>to</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && !universe.indexes[entry.modified]\" class=\"message\">\r\n\t\t\t\t\t<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_gain'\" class=\"message\">\r\n\t\t\t\t\t<span>Gained Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_loss'\" class=\"message\">\r\n\t\t\t\t\t<span>Lost Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"time\" :title=\"entry._timeString\">{{entry._dateString}}</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/history.html": return "<div class=\"rs-component rssw component-entity-history\">\r\n\t<h2>History</h2>\r\n\t<div class=\"history\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry\" v-for=\"entry in history\">\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && (universe.indexes[entry.modified] || entry.modified === 'inside')\" class=\"message\">\r\n\t\t\t\t\t<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.previous]?universe.indexes.entity.index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<span>to</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.current]?universe.indexes.entity.index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && !universe.indexes[entry.modified] && entry.modified !== 'inside'\" class=\"message\">\r\n\t\t\t\t\t<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_gain'\" class=\"message\">\r\n\t\t\t\t\t<span>Gained Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_loss'\" class=\"message\">\r\n\t\t\t\t\t<span>Lost Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"time\" :title=\"entry._timeString\">{{entry._dateString}}</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"exitEntity(inside)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"isVisible(skill)\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"naming base\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">[ Select a Skill ]</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.piloting\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"leveling = stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t<option value=\"\">[ Select a Stat ]</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<input type=\"text\" v-model=\"properties.name\" v-on:change=\"updated('name')\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\" v-if=\"false\">\r\n\t\t\t<span class=\"fad fa-coin rs-gray\"></span>\r\n\t\t\t<span>{{points}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship/inside.html": return "<div class=\"rs-component rssw component-entity-inside\">\r\n\t<h2>Entities Inside</h2>\r\n\t<div class=\"entitites\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry flow-h\" v-for=\"entry in entities\">\r\n\t\t\t\t<button class=\"entity flow-h\" v-on:click=\"showInfo(entry)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<span class=\"entity\" v-else>\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<button class=\"exit-ship flow-h\" v-on:click=\"moveEntity(entry.id, null)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t\t\t<span>Exit Ship</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"board\">\r\n\t\t<div class=\"label\">\r\n\t\t\tBring Entity on Board\r\n\t\t</div>\r\n\t\t<div>\r\n\t\t\t<select v-model=\"moving\" v-on:change=\"moveEntity(moving, entity.id)\">\r\n\t\t\t\t<option value=\"\">Select Entity...</option>\r\n\t\t\t\t<option v-for=\"e in availableEntities\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"icon fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"icon\">{{skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"pilot-info flow-v\">\r\n\t\t\t<div class=\"pilot pilot-name flow-h centered\">\r\n\t\t\t\t<div v-if=\"editingPilot\">\r\n\t\t\t\t\t<select v-model=\"setPilot\" v-on:change=\"setNewPilot(setPilot)\">\r\n\t\t\t\t\t\t<option value=\"\">Select Pilot...</option>\r\n\t\t\t\t\t\t<option v-for=\"p in availablePilots\" :value=\"p.id\">{{p.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"!editingPilot && pilot\" class=\"name-display flow-h\">\r\n\t\t\t\t\t<span>{{pilot.name}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"!editingPilot && !pilot\" class=\"name-display flow-h\">\r\n\t\t\t\t\t<span>No Pilot</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<button v-on:click=\"editPilot()\" class=\"flow-h\">\r\n\t\t\t\t\t<span :class=\"editingPilot?'fas fa-check':'fas fa-edit'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<input type=\"text\" v-model=\"properties.name\" v-on:change=\"updated('name')\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance flow-v\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"icon fab fa-android\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"icon\" :class=\"pilot.allegiance || pilot.icon\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\" v-if=\"stat\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"pilot-ability object-info\">\r\n\t\t\t\t<div class=\"pilot-ability-text\" v-html=\"abilityDescription\" v-if=\"!editingPilotAbility\">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"editingPilotAbility\">\r\n\t\t\t\t\t<div class=\"rs-white\">\r\n\t\t\t\t\t\tSelect Pilot Ability\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div>\r\n\t\t\t\t\t\t<select v-model=\"setPilotAbility\" v-on:change=\"setNewPilotAbility(setPilotAbility)\">\r\n\t\t\t\t\t\t\t<option value=\"\">No Ability</option>\r\n\t\t\t\t\t\t\t<option v-for=\"a in pilotAbilities\" :value=\"a.id\">{{a.name}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<button class=\"edit-pilot-ability\" v-on:click=\"editPilotAbility()\">\r\n\t\t\t\t\t<span :class=\"editingPilotAbility?'fas fa-check':'fas fa-pencil'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities flow-h centered wrapped\">\r\n\t\t\t\t<button class=\"ability\" v-for=\"ability in abilities\" v-if=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t\t\t<span :class=\"ability.icon\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data-list status\">\r\n\t\t<div class=\"property\" v-if=\"properties.location\">\r\n\t\t\t<span>Location: </span>\r\n\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(properties.location)\">\r\n\t\t\t\t<span :class=\"properties.location.icon\"></span>\r\n\t\t\t\t<span>{{properties.location.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"property\" v-if=\"properties.inside\">\r\n\t\t\t<span>Inside: </span>\r\n\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(properties.inside)\">\r\n\t\t\t\t<span :class=\"properties.inside.icon\"></span>\r\n\t\t\t\t<span>{{properties.inside.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data-list items\" v-if=\"items.length\">\r\n\t\t<div class=\"readout\">\r\n\t\t\t<span>Encumberance:</span>\r\n\t\t\t<span>{{encumberance}}</span>\r\n\t\t\t<span v-if=\"ship.contents_max\">/ {{ship.contents_max}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"property\" v-for=\"item in items\">\r\n\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t\t<span>{{item.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div v-for=\"slot in availableSlots\">\r\n\t\t\t{{slot.name}}\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/table/controls.html": return "<div class=\"system-component table-controls\">\r\n\t<div class=\"filtering\">\r\n\t\t<input type=\"text\" v-model=\"state.filter.null\" />\r\n\t\t<span class=\"search-icon fas fa-search\"></span>\r\n\t</div>\r\n\t<div class=\"controls\">\r\n\t\t<div class=\"selections\" v-if=\"index.selection.length\">\r\n\t\t\t<div v-for=\"control in controls\">\r\n\t\t\t\t{{control}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button class=\"selections clear\" v-if=\"index.selection.length\" v-on:click=\"clearSelection()\">\r\n\t\t\t<span class=\"far fa-ban\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections all\" v-if=\"index.selection.length != index.listing.length\" v-on:click=\"allSelection()\">\r\n\t\t\t<span class=\"far fa-check-square\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections info\" v-if=\"index.selection.length\" v-on:click=\"infoSelection(index.selection[index.selection.length-1])\">\r\n\t\t\t<span class=\"far fa-journal-whills\"></span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/table/paging.html": return "<div class=\"system-component table-paging\">\r\n\t<button class=\"index-page\" :class=\"classPage(0)\" v-on:click=\"toPage(0)\">\r\n\t\t1\r\n\t</button>\r\n\t<button v-for=\"page in pages\" class=\"index-page\" :class=\"classPage(page)\" v-on:click=\"toPage(page)\">\r\n\t\t{{page + 1}}\r\n\t</button>\r\n\t<button class=\"index-page\" :class=\"classPage(lastPage)\" v-if=\"lastPage > 0\" v-on:click=\"toPage(lastPage)\">\r\n\t\t{{lastPage + 1}}\r\n\t</button>\r\n</div>";
 			case "components/table.html": return "<div class=\"system-component table-index\">\r\n\t<table class=\"table-element\" :class=\"state.classes\">\r\n\t\t<thead>\r\n\t\t\t<tr>\r\n\t\t\t\t<th v-for=\"header in headers\">\r\n\t\t\t\t\t<button class=\"title actionable table-content\" v-on:click=\"headerAction(header)\" :class=\"header.thClass\" v-if=\"!header.hideBlock\">\r\n\t\t\t\t\t\t<span class=\"sort fas\" v-if=\"!header.nosort && state.sortKey === header.field\" :class=\"{'fa-sort-down':state.order, 'fa-sort-up':!state.order}\"></span>\r\n\t\t\t\t\t\t<span class=\"sort fas fa-sort\" v-if=\"!header.nosort && state.sortKey !== header.field\"></span>\r\n\t\t\t\t\t\t<span>{{header.title}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</th>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t<tr v-if=\"corpus.length === 0 && index.listing.length\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>All Items Filtered Out</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"corpus.length === 0 && index.listing.length === 0\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>No Items Available</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"index.error\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>Data Source Error</span>\r\n\t\t\t\t\t<p>{{index.error}}</p>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-for=\"record in corpus\" :key=\"record.id\" :class=\"index.isSelected([record.id])?'record-selected':''\">\r\n\t\t\t\t<td v-for=\"(header, i) in headers\" class=\"table-record\" :class=\"header.field\" v-on:click.stop=\"select(record, header)\" :title=\"header.tag?record[header.tag]:''\">\r\n\t\t\t\t\t<div v-if=\"!header.noCross\" class=\"crosshair\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === 0\" class=\"highlight starting\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1\" class=\"highlight ending\"></div>\r\n\t\t\t\t\t<button class=\"table-content\">\r\n\t\t\t\t\t\t<slot name=\"table-content\">\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-if=\"header.formatter\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"header.formatter(record[header.field], record, header)\"></div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'array' || isArray(record[header.field])\">\r\n\t\t\t\t\t\t\t\t<ul>\r\n\t\t\t\t\t\t\t\t\t<li v-for=\"item in record[header.field]\">{{item.name || item}}</li>\r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'object'\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"formatObjectHeader(record[header.field])\">\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field] && typeof record[header.field] === 'object' && record[header.field] !== 'undefined'\">\r\n\t\t\t\t\t\t\t\t<pre>{{record[header.field] | JSON}}</pre>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field]\">\r\n\t\t\t\t\t\t\t\t{{record[header.field]}}\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else>\r\n\t\t\t\t\t\t\t\t<span> </span>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</slot>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t</tbody>\r\n\t</table>\r\n</div>";
@@ -18256,15 +18257,15 @@ Templify.install = function(Vue, options) {
 			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"user\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"user\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"user\"></system-info>\r\n\t\t<message-panel :universe=\"universe\" :user=\"user\"></message-panel>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
 			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<div class=\"construction\">\r\n\t\t<div class=\"building\">\r\n\t\t\t<rs-nouns :universe=\"universe\" :player=\"player\" :built=\"built\" v-on:model=\"changeModel($event)\"></rs-nouns>\r\n\t\t</div>\r\n\t\t<div class=\"output rs-component\" v-if=\"modeling\">\r\n\t\t\t<h2>\r\n\t\t\t\t<span :class=\"modeling.icon\"></span>\r\n\t\t\t\t<span>{{modeling.name}}</span>\r\n\t\t\t</h2>\r\n\t\t\t<rs-object-info v-on:click=\"processRequest($event)\" :record=\"modeling\" :universe=\"universe\" :player=\"player\" :options=\"infoOptions\"></rs-object-info>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "pages/rssw/base.html": return "<div class=\"rssw-page page-base\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n</div>\r\n";
+			case "pages/rssw/base.html": return "<div class=\"rssw-page page-base\" v-if=\"entity\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
 			case "pages/rssw/character/builder.html": return "<div class=\"rssw-page character-builder\">\r\n\t<div class=\"stage species\" v-if=\"stage === 0\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Character Details</h1>\r\n\t\t</div>\r\n\t\t<div class=\"details\">\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-name\">\r\n\t\t\t\t\t<span>Name:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<input type=\"text\" v-model=\"building.name\" id=\"entity-name\"/>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-description\">\r\n\t\t\t\t\t<span>Description:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.description\" id=\"entity-description\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-obligations\">\r\n\t\t\t\t\t<span>Obligations:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.obligations\" id=\"entity-obligations\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-motivations\">\r\n\t\t\t\t\t<span>Motivations:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.motivations\" id=\"entity-motivations\"></textarea>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span>Continue</span>\r\n\t\t\t<span class=\"fas fa-chevron-circle-right\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage species\" v-if=\"stage === 1\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Species</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.species\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Species\"></rs-cards>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage careers\" v-else-if=\"stage === 2\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Career</h1>\r\n\t\t</div>\r\n\t\t<rs-cards class=\"cards\" v-on:selected=\"selected($event)\" :corpus=\"base.careers\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Career\"></rs-cards>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage specializations\" v-else-if=\"stage === 3\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Specialization</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.specializations\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Specialization\"></rs-cards>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage review\" v-else-if=\"stage === 4\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Review Selections</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"choices\" :state=\"state\" :universe=\"universe\" :user=\"player\" selection=\"Confirm\"></rs-cards>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage creating\" v-else-if=\"stage === 5\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span class=\"fas fa-spinner fa-pulse\"></span>\r\n\t\t\t\t<span>Creating</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage finalize\" v-else-if=\"stage === 6\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span>Finalize</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rssw-character-info :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t\t\t<rssw-character-board :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\t\t<rssw-character-stats :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t\t\t<rssw-character-skills :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span class=\"fas fa-check-circle\"></span>\r\n\t\t\t<span>Complete</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
-			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-character-info :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" v-if=\"entity && entity.widget\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
+			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\" v-if=\"entity\">\r\n\t<rssw-character-info :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
 			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\t{{player.name}} Overview\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"self\">\r\n\t\t\t<router-link class=\"navigation-button\" v-if=\"self\" :to=\"'/dashboard/character/' + self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t\t<router-link class=\"navigation-button\" v-if=\"!self\" to=\"/construct/character\">\r\n\t\t\t\t<span class=\"link-icon fas fa-user-plus\"></span>\r\n\t\t\t\t<span class=\"link-label\">Make Yourself</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\tOthers\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/dashboard/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/journal.html": return "<div class=\"rssw-page page-journal\">\r\n\t\r\n</div>\r\n";
 			case "pages/rssw/locality.html": return "<div class=\"rssw-page page-locality\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/map.html": return "<div class=\"rs-page map rssw\">\r\n\r\n\t<rs-viewer :user=\"user\" :player=\"player\" :universe=\"universe\" :location=\"location\"></rs-viewer>\r\n\t\r\n</div>\r\n";
-			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n\t\r\n</div>\r\n";
+			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n\t<rssw-entity-inside :entity=\"entity\" :user=\"user\" :universe=\"universe\" :player=\"player\"></rssw-entity-inside>\r\n</div>\r\n";
 			case "pages/rssw/storage.html": return "<div class=\"rssw-page page-storage\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-universe\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\tGalactic Index\r\n\t\t\t<button class=\"fas fa-sync\" v-on:click=\"resetHeaders()\">Headers</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"index\">\r\n\t\t\t<div class=\"controls\">\r\n\t\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t\t\r\n\t\t\t\t<select v-model=\"command\" v-on:change=\"processCommand(command)\" v-if=\"showCommands()\">\r\n\t\t\t\t\t<option value=\"\">Choose Action</option>\r\n\t\t\t\t\t<option value=\"spawn\">Spawn Template Entities</option>\r\n\t\t\t\t\t<option value=\"give\">Give Items</option>\r\n\t\t\t\t\t<option value=\"take\">Take Items</option>\r\n\t\t\t\t\t<option value=\"obscure\">Obscure Record</option>\r\n\t\t\t\t\t<option value=\"unobscure\">Unobscure Record</option>\r\n\t\t\t\t\t<option value=\"drop\">Delete Objects</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model=\"target\">\r\n\t\t\t\t\t<option value=\"\">No Target</option>\r\n\t\t\t\t\t<option v-for=\"en in universe.indexes.entity.listing\" :value=\"en.id\">{{en.name}}</option>\r\n\t\t\t\t\t<option value=\"\">-- Player Divide --</option>\r\n\t\t\t\t\t<option v-for=\"pl in universe.indexes.player.listing\" :value=\"pl.id\">{{pl.name}}</option>\r\n\t\t\t\t\t<option value=\"\">-- Item Divide --</option>\r\n\t\t\t\t\t<option v-for=\"it in universe.indexes.item.listing\" :value=\"it.id\" v-if=\"!it.template\">{{it.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t\r\n\t\t\t\t<select v-model=\"state.activeIndex\">\r\n\t\t\t\t\t<option value>All</option>\r\n\t\t\t\t\t<option v-for=\"index in availableIndexes\" :value=\"index\">{{index}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model.number=\"state.paging.spread\">\r\n\t\t\t\t\t<option v-for=\"spread in getSpread()\" :value=\"spread\">{{spread}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model=\"state.filterTemplate\">\r\n\t\t\t\t\t<option value=\"shown\">Shown</option>\r\n\t\t\t\t\t<option value=\"only\">Only</option>\r\n\t\t\t\t\t<option value=\"out\">Out</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :headers=\"state.headers\" :state=\"state\" :options=\"state.indexOptions\"></rs-table>\r\n\t\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" :options=\"state.indexOptions\" v-on:action=\"processAction\"></rs-table-paging>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universe.indexes.entity.listing\" :to=\"'/universe/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t\t<router-link class=\"entity navigation-button create-npc\" to=\"/construct/character\">\r\n\t\t\t\t\t<span class=\"link-icon fas fa-user-plus\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">Construct NPC</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
@@ -21098,11 +21099,11 @@ class RSCalculator {
 	 * @return {Number} 
 	 */
 	process(expression, source, base, target) {
-//		console.log("Received Expression: ", expression);
+//		console.log("Received Expression: ", expression, source, base, target);
 		if(!source) {
 			return expression;
 		} else if(!expression) {
-			console.trace("Expressionless Calculation? ", expression, source, base, target);
+//			console.trace("Expressionless Calculation? ", expression, source, base, target);
 			return expression;
 		}
 		
@@ -21700,7 +21701,8 @@ class RSSheet extends EventEmitter {
 		"end": "}$"
 	};
 	
-	var formatMarkdown = function(sourceText, universe, entity, base, target) {
+	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
+//		console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
 		var properties,
 			tracking,
 			element,
@@ -21724,6 +21726,8 @@ class RSSheet extends EventEmitter {
 				value = target.split(",");
 				switch(value.length) {
 					default:
+					case 4:
+						base = universe.index.lookup(value[3]);
 					case 3:
 						properties.id = value[2];
 					case 2:
@@ -21735,9 +21739,9 @@ class RSSheet extends EventEmitter {
 			
 			if(value) {
 				if(value[0] === "=") {
-//					console.warn("Calculating Expression: " + value, universe, entity);
+//					console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 					// TODO: Calculate Value with Calculator
-					value = universe.calculateExpression(value.substring(1), entity, base, target);
+					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
 					
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
 				} else {
@@ -22612,6 +22616,27 @@ class RSEntity extends RSObject {
 //			"ability",
 //			"item"
 //		];
+	}
+	
+	recalculateHook() {
+		var pilot,
+			stats,
+			x;
+		
+		if(this.pilot && (pilot = this.universe.indexes.entity.index[this.pilot])) {
+			stats = [
+				"evasion",
+				"attack",
+				"shield",
+				"hull"
+			];
+			
+			for(x=0; x<stats.length; x++) {
+				if(pilot["bonus_" + stats[x]]) {
+					this[stats[x]] += pilot["bonus_" + stats[x]];
+				}
+			}
+		}
 	}
 	
 //	addHistory(event, delay) {
@@ -25275,10 +25300,10 @@ rsSystem.component("rsCards", {
 			"displayRecord": function(toView) {
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
-						//console.warn("Received View Record: ", toView);
+//						console.warn("Received View Record: ", toView);
 						Vue.set(this, "target", toView.target);
 						Vue.set(this, "source", toView.source);
-						Vue.set(this, "base", toView.source);
+						Vue.set(this, "base", toView.base);
 						if(typeof(toView.record) === "string") {
 							toView = this.universe.index.index[toView.record];
 						} else {
@@ -25315,6 +25340,8 @@ rsSystem.component("rsCards", {
 						this.viewing.$on("modified", this.update);
 					}
 				}
+				
+//				console.warn("Info View Updated: ", this);
 			},
 			
 			"processRequest": function(event) {
@@ -25655,8 +25682,11 @@ rsSystem.component("rsCards", {
 			data.locations = [];
 			
 			data.entities = [];
+			data.hiddenEntities = [];
 			
+			data.partiesPresent = [];
 			data.parties = [];
+			data.entityToMove = "";
 			data.partyToMove = "";
 			
 			data.keys = [];
@@ -25674,7 +25704,7 @@ rsSystem.component("rsCards", {
 		},
 		"mounted": function() {
 			prettifyValues.skill_check = (record, value) => {
-				console.warn("Recording: ", record, value);
+//				console.warn("Recording: ", record, value);
 				var buffer = this.universe.indexes.skill.lookup[record.skill_check];
 				if(buffer) {
 					return buffer.name;
@@ -25723,6 +25753,17 @@ rsSystem.component("rsCards", {
 			},
 			"isArray": function(value) {
 				return value instanceof Array;
+			},
+			"isOwner": function(record) {
+				if(record.owner === this.player.id) {
+					return true;
+				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
+					return true;
+				} else if(!record.owner && !(record.owners || record.owners.length === 0)) {
+					return true;
+				} else {
+					return false;
+				}
 			},
 			"canTransfer": function() {
 				var hold,
@@ -25870,19 +25911,51 @@ rsSystem.component("rsCards", {
 				}
 			},
 			"movePartyHere": function(party) {
-				var hold,
+				var update = {},
+					hold,
 					x;
 				
-				if(party && party.entity && party.entity.length) {
-					hold = this.universe.indexes.entity.index[party.entity[x]];
-					if(hold) {
-						hold.commit({
-							"location": this.record.id
-						});
+				switch(this.record._type) {
+					case "entity":
+						update.inside = this.record.id;
+						break;
+					default:
+						update[this.record._type] = this.record.id;
+				}
+				
+				party = this.universe.indexes.party.index[party];
+				if(party) {
+					party.commit(update);
+					for(x=0; party.entity && x < party.entity.length; x++) {
+						hold = this.universe.indexes.entity.index[party.entity[x]];
+						if(hold) {
+							hold.commit(update);
+						}
 					}
 				}
 				
 				Vue.set(this, "partyToMove", "");
+			},
+			"moveEntityHere": function(entity) {
+				var update = {},
+					hold,
+					x;
+				
+				switch(this.record._type) {
+					case "entity":
+						update.inside = this.record.id;
+						break;
+					default:
+						update[this.record._type] = this.record.id;
+				}
+
+				
+				entity = this.universe.indexes.entity.index[entity];
+				if(entity) {
+					entity.commit(update);
+				}
+
+				Vue.set(this, "entityToMove", "");
 			},
 			"restockLocation": function() {
 				if(!this.restocking) {
@@ -25900,6 +25973,7 @@ rsSystem.component("rsCards", {
 			"update": function() {
 				var buffer,
 					hold,
+					map,
 					x,
 					y;
 				
@@ -25921,7 +25995,7 @@ rsSystem.component("rsCards", {
 				if(this.record.description) {
 					if(this.holdDescription !== this.record.description) {
 						Vue.set(this, "holdDescription", this.record.description);
-						Vue.set(this, "description", this.rsshowdown(this.record.description));
+						Vue.set(this, "description", this.rsshowdown(this.record.description, this.source, this.base, this.target));
 					}
 				} else {
 					Vue.set(this, "holdDescription", null);
@@ -25953,43 +26027,68 @@ rsSystem.component("rsCards", {
 				this.keys.splice(0);
 				this.keys.push.apply(this.keys, Object.keys(this.record));
 				
-				this.transfer_targets.splice(0);
-				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
-					if(this.source && !this.universe.indexes.entity.listing[x].obscured && !this.universe.indexes.entity.listing[x].mob && !this.universe.indexes.entity.listing[x].template && this.universe.indexes.entity.listing[x].id !== this.source.id) {
-						this.transfer_targets.push(this.universe.indexes.entity.listing[x]);
+				this.partiesPresent.splice(0);
+				map = {};
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					buffer = this.universe.indexes.party.listing[x];
+					if(buffer.location === this.record.id) {
+						this.partiesPresent.push(buffer);
 					}
-				}
-				this.transfer_targets.sort(byName);
-				
-				this.attach_targets.splice(0);
-				if(this.source && (this.record.hardpoints || this.record.contents_max)) {
-					for(x=0; this.source.item && x<this.source.item.length; x++) {
-						buffer = this.universe.indexes.item.lookup[this.source.item[x]];
-						if(this.record.cancontain && this.record.cancontain.length) {
-							if(buffer.itemtype && buffer.itemtype.length) {
-								hold = true;
-								for(y=0; hold && y<buffer.itemtype.length; y++) {
-									if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
-										this.attach_targets.push(buffer);
-										hold = false;
-									}
-								}
+					if(this.source && buffer.entity && buffer.entity.indexOf(this.source.id) !== -1) {
+						for(y=0; y<buffer.entity.length; y++) {
+							if(!map[buffer.entity[y]]) {
+								map[buffer.entity[y]] = true;
 							}
-						} else {
-							this.attach_targets.push(buffer);
 						}
 					}
 				}
-				this.attach_targets.sort(byName);
+
+				this.transfer_targets.splice(0);
+				this.attach_targets.splice(0);
+				if(this.source) {
+					
+					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+						buffer = this.universe.indexes.entity.listing[x];
+						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.source.id && ((buffer.location && buffer.location === this.source.location) || (buffer.inside && buffer.inside === this.source.inside) || map[buffer.id])) {
+							this.transfer_targets.push(buffer);
+						}
+					}
+					this.transfer_targets.sort(byName);
+					
+					if(this.record.hardpoints || this.record.contents_max) {
+						for(x=0; this.source.item && x<this.source.item.length; x++) {
+							buffer = this.universe.indexes.item.lookup[this.source.item[x]];
+							if(this.record.cancontain && this.record.cancontain.length) {
+								if(buffer.itemtype && buffer.itemtype.length) {
+									hold = true;
+									for(y=0; hold && y<buffer.itemtype.length; y++) {
+										if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
+											this.attach_targets.push(buffer);
+											hold = false;
+										}
+									}
+								}
+							} else {
+								this.attach_targets.push(buffer);
+							}
+						}
+					}
+					this.attach_targets.sort(byName);
+				}
 				
 				this.availableTemplates.entity.splice(0);
+				this.hiddenEntities.splice(0);
 				this.entities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
 						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
 					}
 					if(this.universe.indexes.entity.listing[x].location === this.record.id || this.universe.indexes.entity.listing[x].inside === this.record.id) {
-						this.entities.push(this.universe.indexes.entity.listing[x]);
+						if(this.universe.indexes.entity.listing[x].hidden || this.universe.indexes.entity.listing[x].obscured) {
+							this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
+						} else {
+							this.entities.push(this.universe.indexes.entity.listing[x]);
+						}
 					}
 				}
 				
@@ -26810,6 +26909,7 @@ rsSystem.component("rsCards", {
 (function() {
 	
 	var dataSource,
+		shipAbilities,
 		knowledges,
 		archetypes,
 		itemtypes,
@@ -26820,9 +26920,10 @@ rsSystem.component("rsCards", {
 		entity,
 		images,
 		owners,
-		items,
 		attrs,
+		items,
 		notes,
+		pilot,
 		races,
 		rooms,
 		slots,
@@ -26843,6 +26944,28 @@ rsSystem.component("rsCards", {
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
+	};
+	
+	shipAbilities = {
+		"label": "Active Piloting Abilities",
+		"property": "ship_active_abilities",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
+	};
+	
+	pilot = {
+		"label": "Pilot",
+		"property": "pilot",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
 	};
 	
 	profiles = {
@@ -27009,6 +27132,11 @@ rsSystem.component("rsCards", {
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Allegiance",
+		"property": "allegiance",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
 		"label": "Age",
 		"property": "age",
 		"type": "number"
@@ -27040,7 +27168,16 @@ rsSystem.component("rsCards", {
 			"ship",
 			"station"
 		]
+	}, {
+		"label": "Pilot Skill",
+		"property": "pilot_skill",
+		"type": "number",
+		"condition": {
+			"classification": "character"
+		}
 	},
+	shipAbilities,
+	pilot,
 	races,
 	sexes,
 	{
@@ -27109,6 +27246,11 @@ rsSystem.component("rsCards", {
 	},
 	profiles,
 	images,
+	{
+		"label": "Inactivated",
+		"property": "inactive",
+		"type": "checkbox"
+	},
 	{
 		"label": "Is Shop",
 		"property": "is_shop",
@@ -27198,11 +27340,14 @@ rsSystem.component("rsCards", {
 			images.options.sortBy("name");
 			entity.options = this.universe.indexes.entity.listing;
 			entity.options.sortBy("name");
+			pilot.options = this.universe.indexes.entity.listing;
+			pilot.options.sortBy("name");
 			races.options = this.universe.indexes.race.listing;
 			races.options.sortBy("name");
 			sexes.options = this.universe.indexes.sex.listing;
 			sexes.options.sortBy("name");
 
+			shipAbilities.source_index = this.universe.indexes.ability;
 			knowledges.source_index = this.universe.indexes.knowledge;
 			archetypes.source_index = this.universe.indexes.archetype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
@@ -28016,10 +28161,11 @@ rsSystem.component("rsCards", {
 	var dataSource,
 		location,
 		entities,
+		inside,
 		notes;
 	
 	entities = {
-		"label": "Entities",
+		"label": "Members",
 		"property": "entity",
 		"type": "multireference",
 		"optionValue": "id",
@@ -28029,6 +28175,14 @@ rsSystem.component("rsCards", {
 	location = {
 		"label": "Location",
 		"property": "location",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	inside = {
+		"label": "Inside",
+		"property": "inside",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -28055,7 +28209,10 @@ rsSystem.component("rsCards", {
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
+	},
+	location,
+	inside,
+	{
 		"label": "Active",
 		"property": "active",
 		"type": "checkbox"
@@ -28069,7 +28226,6 @@ rsSystem.component("rsCards", {
 		"type": "checkbox"
 	},
 	entities,
-	location,
 	{
 		"label": "X Coordinate",
 		"property": "x",
@@ -28112,8 +28268,17 @@ rsSystem.component("rsCards", {
 			return data;
 		},
 		"mounted": function() {
+			var x;
+			
 			location.options = this.universe.indexes.location.listing;
 			location.options.sortBy("name");
+			inside.options = [];
+			for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+				if(!this.universe.indexes.entity.listing[x].template) {
+					inside.options.push(this.universe.indexes.entity.listing[x]);
+				}
+			}
+			inside.options.sortBy("name");
 			
 			entities.source_index = this.universe.indexes.entity;
 		},
@@ -28719,6 +28884,14 @@ rsSystem.component("rsCards", {
 	}, {
 		"label": "Range Defense",
 		"property": "defense_range",
+		"type": "text"
+	}, {
+		"label": "Pilot Skill",
+		"property": "pilot_skill",
+		"type": "text"
+	}, {
+		"label": "Bonus: Boost",
+		"property": "bonus_boost",
 		"type": "text"
 	}, {
 		"label": "Ship Shield",
@@ -29758,7 +29931,7 @@ class FieldDescriptor {
 				
 				if(this.entity.history && this.entity.history.length !== this.history.length) {
 					this.history.splice(0);
-					for(x=0; x<this.entity.history.length; x++) {
+					for(x=0; x<this.entity.history.length && x < 50; x++) {
 						this.entity.history[x]._date = new Date(this.entity.history[x].time);
 						this.entity.history[x]._dateString = this.entity.history[x]._date.toLocaleDateString();
 						this.entity.history[x]._timeString = this.entity.history[x]._date.toLocaleTimeString();
@@ -29857,6 +30030,11 @@ class FieldDescriptor {
 				rsSystem.EventBus.$emit("display-info", {
 					"source": this.character,
 					"record": view
+				});
+			},
+			"exitEntity": function() {
+				this.character.commit({
+					"inside": null
 				});
 			},
 			"updateCharacter": function() {
@@ -30284,122 +30462,353 @@ rsSystem.component("rsswCharacterStats", {
 /**
  * 
  * 
+ * @class rsswEntityInside
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+
+	rsSystem.component("rsswEntityInside", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+
+			data.availableEntities = [];
+			data.entities = [];
+			data.moving = "";
+			
+			return data;
+		},
+		"mounted": function() {
+			this.universe.$on("model:modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"watch": {
+			
+		},
+		"methods": {
+			"isOwner": function(record) {
+				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
+			},
+			"moveEntity": function(entity, destination) {
+				entity = this.universe.indexes.entity.index[entity];
+				if(entity && this.isOwner(entity)) {
+					entity.commit({
+						"inside": destination
+					});
+				}
+				Vue.set(this, "moving", null);
+			},
+			"showInfo": function(view) {
+				if(this.isOwner(view)) {
+					rsSystem.EventBus.$emit("display-info", {
+						"source": this.entity,
+						"record": view
+					});
+				}
+			},
+			"update": function() {
+				var buffer,
+					x;
+
+				this.entities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.inside === this.entity.id) {
+						this.entities.push(buffer);
+					}
+				}
+				this.entities.sort(byName);
+				
+				this.availableEntities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(this.isOwner(buffer) && this.entities.indexOf(buffer.id) === -1 && buffer.id !== this.entity.id) {
+						this.availableEntities.push(buffer);
+					}
+				}
+				this.availableEntities.sort(byName);
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("model:modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/ship/inside.html")
+	});
+})();
+
+/**
+ * 
+ * 
  * @class rsswShipStats
  * @constructor
  * @module Components
  */
-rsSystem.component("rsswShipStats", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.RSSWStats,
-		rsSystem.components.RSCore
-	],
-	"props": {
-		"ship": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"data": function() {
-		var data = {};
 
-		data.properties = {};
-		data.properties.name = this.ship.name;
-		
-		data.points = 0;
-		data.mounted = {};
-		data.abilities = [];
-		data.ability = null;
-		data.pilot = null;
-		
-		return data;
-	},
-	"mounted": function() {
-		this.ship.$on("modified", this.update);
-		rsSystem.register(this);
-		this.update();
-	},
-	"methods": {
-		"updated": function(field) {
-			var committing = {};
-			committing[field] = this.properties[field];
-			this.ship.commit(committing);
-			console.log("Commit: ", committing);
-		},
-		"update": function() {
-			var points = this.ship.points || 0,
-				buffer,
-				x;
-			
-			buffer = Object.keys(this.mounted);
-			for(x=0; x< buffer.length; x++) {
-				Vue.delete(this.mounted, buffer[x]);
+(function() {
+
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+	
+	rsSystem.component("rsswShipStats", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"ship": {
+				"required": true,
+				"type": Object
 			}
+		},
+		"data": function() {
+			var data = {};
+
+			data.encumberance = 0;
+			data.properties = {};
+			data.items = [];
 			
-			buffer = this.universe.nouns.entity[this.ship.pilot];
-			if(buffer) {
-				if(this.pilot) {
-					if(this.pilot.id !== buffer.id) {
-						this.pilot.$off("modified", this.update);
+			data.availablePilots = [];
+			data.editingPilot = false;
+			data.setPilot = null;
+			data.pilot = null;
+			data.skill = 0;
+
+			data.editingPilotAbility = false;
+			data.abilityDescription = "";
+			data.setPilotAbility = "";
+			data.pilotAbilities = [];
+			data.pilotAbility = null;
+			data.abilities = [];
+			data.ability = null;
+
+			data.availableSlots = [];
+			data.mounted = [];
+			data.points = 0;
+			
+			return data;
+		},
+		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+//					console.log("1Follow: ", follow);
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+			
+			this.ship.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"isOwner": function(record) {
+				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
+			},
+			"editPilot": function() {
+				Vue.set(this, "editingPilot", !this.editingPilot);
+			},
+			"editPilotAbility": function() {
+				Vue.set(this, "editingPilotAbility", !this.editingPilotAbility);
+			},
+			"showInfo": function(view) {
+				rsSystem.EventBus.$emit("display-info", {
+					"source": this.ship,
+					"base": this.pilot,
+					"record": view
+				});
+			},
+			"setNewPilot": function(setPilot) {
+				Vue.set(this, "editingPilot", false);
+				
+				if(setPilot === "") {
+					setPilot = null;
+				}
+				
+				this.ship.commit({
+					"pilot": setPilot
+				});
+			},
+			"setNewPilotAbility": function(setPilotAbility) {
+				Vue.set(this, "editingPilotAbility", false);
+				
+				if(setPilotAbility === "") {
+					setPilotAbility = null;
+				}
+				
+				this.ship.commit({
+					"ship_active_abilities": [setPilotAbility]
+				});
+				
+			},
+			"updated": function(field) {
+				var committing = {};
+				committing[field] = this.properties[field];
+				this.ship.commit(committing);
+				console.log("Commit: ", committing);
+			},
+			"update": function() {
+				var points = this.ship.points || 0,
+					buffer,
+					hold,
+					x;
+
+				this.availablePilots.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.classification === "character" && this.isOwner(buffer) && buffer.inside === this.ship.id) {
+						this.availablePilots.push(buffer);
+					}
+				}
+				this.availablePilots.sort(byName);
+				
+				buffer = this.universe.nouns.entity[this.ship.pilot];
+				if(buffer) {
+					if(this.pilot) {
+						if(this.pilot.id !== buffer.id) {
+							this.pilot.$off("modified", this.update);
+							buffer.$on("modified", this.update);
+							Vue.set(this, "pilot", buffer);
+						}
+					} else {
 						buffer.$on("modified", this.update);
 						Vue.set(this, "pilot", buffer);
 					}
-				} else {
-					buffer.$on("modified", this.update);
-					Vue.set(this, "pilot", buffer);
+				} else if(this.pilot) {
+					this.pilot.$off("modified", this.update);
 				}
-			} else if(this.pilot) {
+
+				this.pilotAbilities.splice(0);
+				this.abilities.splice(0);
+				
+				for(x=0; this.ship.ability && x<this.ship.ability.length; x++) {
+					buffer = this.universe.nouns.ability[this.ship.ability[x]];
+					if(buffer && buffer.type === "ship") {
+						this.abilities.push(buffer);
+					}
+				}
+				
+				if(this.pilot) {
+					Vue.set(this, "skill", this.pilot.pilot_skill || 0);
+					
+					for(x=0; this.pilot.ability && x<this.pilot.ability.length; x++) {
+						buffer = this.universe.nouns.ability[this.pilot.ability[x]];
+						if(buffer) {
+							switch(buffer.type) {
+								case "ship":
+									this.abilities.push(buffer);
+									break;
+								case "pilot":
+									this.pilotAbilities.push(buffer);
+									break;
+							}
+						} else {
+							console.warn("Unidentified Ability: " + this.pilot.ability[x]);
+						}
+					}
+				}
+				
+				if(this.pilot && this.ship.ship_active_abilities && this.ship.ship_active_abilities.length && this.pilot.ability.indexOf(this.ship.ship_active_abilities[0]) !== -1 && (buffer = this.universe.indexes.ability.index[this.ship.ship_active_abilities[0]])) {
+					Vue.set(this, "abilityDescription", this.rsshowdown(buffer.description, this.ship, this.pilot));
+					Vue.set(this, "pilotAbility", buffer);
+				} else {
+					Vue.set(this, "abilityDescription", this.rsshowdown(this.ship.description, this.ship));
+					Vue.set(this, "pilotAbility", null);
+				}
+				
+				this.availableSlots.splice(0);
+				for(x=0; this.ship.slot && x<this.ship.slot.length; x++) {
+					buffer = this.universe.indexes.slot.index[this.ship.slot[x]];
+					if(buffer) {
+						this.availableSlots.push(buffer);
+					}
+				}
+				
+				this.mounted.splice(0);
+				for(x=0; this.ship.item && x<this.ship.item.length; x++) {
+					buffer = this.universe.indexes.item.index[this.ship.item[x]];
+					if(buffer && buffer.needs_slot) {
+						this.mounted.push(buffer);
+					}
+				}
+
+				if(this.ship.item) {
+					if(this.items.length !== this.ship.item.length) {
+						this.items.splice(0);
+						hold = 0;
+						for(x=0; x<this.ship.item.length; x++) {
+							buffer = this.universe.indexes.item.index[this.ship.item[x]];
+							if(buffer) {
+								hold += buffer.encumberance;
+								this.items.push(buffer);
+							}
+						}
+						Vue.set(this, "encumberance", hold);
+					}
+				} else {
+					this.items.splice(0);
+				}
+				
+				
+				if(this.ship.name) {
+					Vue.set(this.properties, "name", this.ship.name);
+				}
+				if(this.ship.location) {
+					Vue.set(this.properties, "location", this.universe.indexes.location.index[this.ship.location]);
+				} else {
+					Vue.set(this.properties, "location", null);
+				}
+				if(this.ship.inside) {
+					Vue.set(this.properties, "inside", this.universe.indexes.entity.index[this.ship.inside]);
+				} else {
+					Vue.set(this.properties, "inside", null);
+				}
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.pilot) {
 				this.pilot.$off("modified", this.update);
 			}
-			
-			if(this.pilot) {
-				Vue.set(this, "ability", this.universe.nouns.ability[this.pilot.active_ship_ability]);
-			} else if(this.ability) {
-				Vue.set(this, "ability", null);
-			}
-			
-			this.abilities.splice(0);
-			for(x=0; this.ship.ability && x<this.ship.ability.length; x++) {
-				buffer = this.universe.nouns.ability[this.ship.ability[x]];
-				if(buffer) {
-					this.abilities.push(buffer);
-				} else {
-					console.warn("Unidentified Ability: " + this.ship.ability[x]);
-				}
-			}
-			for(x=0; this.pilot && this.pilot.ship_abilities && x<this.pilot.ship_abilities.length; x++) {
-				buffer = this.universe.nouns.ability[this.pilot.ship_abilities[x]];
-				if(buffer) {
-					this.abilities.push(buffer);
-				} else {
-					console.warn("Unidentified Ability: " + this.pilot.ship_abilities[x]);
-				}
-			}
-			
-			for(x=0; this.ship.slot && x<this.ship.slot.length; x++) {
-				buffer = this.ship["slot_" + this.ship.slot[x]];
-				if(buffer) {
-					Vue.set(this.mounted, this.ship.slot[x], buffer);
-				}
-			}
-			
-//			buffer = Object.keys(this.properties);
-//			for(x=0; x<buffer.length; x++) {
-//				Vue.set(this.properties, buffer[x], this.ship[buffer[x]]);
-//			}
-			
-			this.$forceUpdate();
-		}
-	},
-	"beforeDestroy": function() {
-		if(this.pilot) {
-			this.pilot.$off("modified", this.update);
-		}
-		this.ship.$off("modified", this.update);
-	},
-	"template": Vue.templified("components/rssw/ship/stats.html")
-});
-
+			this.ship.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/ship/stats.html")
+	});	
+})();
 
 /**
  * 
@@ -31556,20 +31965,60 @@ rsSystem.component("RSSWBase", {
 	],
 	"data": function() {
 		var data = {};
+
+		data.entity = null;
+		data.widgets = [];
 		
 		return data;
 	},
-	"computed": {
-		"entity": function() {
-			console.warn("Entity: ", this.universe.nouns.entity[this.$route.params.oid]);
-			return this.universe.nouns.entity[this.$route.params.oid];
+	"watch": {
+		"$route.params.oid": function(oid) {
+			this.entity.$off("modified", this.update);
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+			this.update();
 		}
 	},
 	"mounted": function() {
+		if(this.$route.params.oid) {
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+		}
 		rsSystem.register(this);
+		this.update();
 	},
 	"methods": {
-		
+		"update": function() {
+			console.warn("Base Update: ", this.entity, this.widgets);
+			this.widgets.splice(0);
+			if(this.entity) {
+				if(this.entity.widgets) {
+					this.widgets.push.apply(this.widgets, this.entity.widgets);
+				}
+
+				switch(this.entity.classification) {
+					case "base":
+					case "building":
+					case "ship":
+						this.widgets.push({
+				            "declaration": "rsswEntityInside",
+				            "sid": "entity:inside:" + this.entity.id,
+				            "enabled": true
+						});
+						break;
+				}
+				
+				this.widgets.push({
+		            "declaration": "rsswEntityHistory",
+		            "sid": "entity:history:" + this.entity.id,
+		            "enabled": true
+				});
+			}
+			console.warn("Updated: ", this.entity, this.widgets);
+		}
+	},
+	"beforeDestroy": function() {
+		this.entity.$off("modified", this.update);
 	},
 	"template": Vue.templified("pages/rssw/base.html")
 });
@@ -31838,31 +32287,52 @@ rsSystem.component("RSSWCharacter", {
 	"data": function() {
 		var data = {};
 		
+		data.entity = null;
 		data.widgets = [];
 		
 		return data;
 	},
-	"computed": {
-		"entity": function() {
-			return this.universe.nouns.entity[this.$route.params.oid];
+	"watch": {
+		"$route.params.oid": function(oid) {
+			this.entity.$off("modified", this.update);
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
 		}
 	},
 	"mounted": function() {
-		this.entity.$on("modified", this.update);
+		if(this.$route.params.oid) {
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+		}
 		rsSystem.register(this);
 		this.update();
 	},
 	"methods": {
 		"update": function() {
 			this.widgets.splice(0);
-			if(this.entity.widgets) {
-				this.widgets.push.apply(this.widgets, this.entity.widgets);
+			if(this.entity) {
+				if(this.entity.widgets) {
+					this.widgets.push.apply(this.widgets, this.entity.widgets);
+				}
+
+				switch(this.entity.classification) {
+					case "base":
+					case "building":
+					case "ship":
+						this.widgets.push({
+				            "declaration": "rsswEntityInside",
+				            "sid": "entity:inside:" + this.entity.id,
+				            "enabled": true
+						});
+						break;
+				}
+				
+				this.widgets.push({
+		            "declaration": "rsswEntityHistory",
+		            "sid": "entity:history:" + this.entity.id,
+		            "enabled": true
+				});
 			}
-			this.widgets.push({
-	            "declaration": "rsswEntityHistory",
-	            "sid": "ihoihou",
-	            "enabled": true
-			});
 		}
 	},
 	"beforeDestroy": function() {

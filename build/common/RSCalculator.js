@@ -42,11 +42,11 @@ class RSCalculator {
 	 * @return {Number} 
 	 */
 	process(expression, source, base, target) {
-//		console.log("Received Expression: ", expression);
+//		console.log("Received Expression: ", expression, source, base, target);
 		if(!source) {
 			return expression;
 		} else if(!expression) {
-			console.trace("Expressionless Calculation? ", expression, source, base, target);
+//			console.trace("Expressionless Calculation? ", expression, source, base, target);
 			return expression;
 		}
 		

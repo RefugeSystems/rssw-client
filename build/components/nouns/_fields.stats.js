@@ -68,6 +68,14 @@
 		"property": "defense_range",
 		"type": "text"
 	}, {
+		"label": "Pilot Skill",
+		"property": "pilot_skill",
+		"type": "text"
+	}, {
+		"label": "Bonus: Boost",
+		"property": "bonus_boost",
+		"type": "text"
+	}, {
 		"label": "Ship Shield",
 		"property": "shield",
 		"type": "text"

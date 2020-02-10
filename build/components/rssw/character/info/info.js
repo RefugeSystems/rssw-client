@@ -84,6 +84,11 @@
 					"record": view
 				});
 			},
+			"exitEntity": function() {
+				this.character.commit({
+					"inside": null
+				});
+			},
 			"updateCharacter": function() {
 				if(!this.calculating) {
 					Vue.set(this, "calculating", true);

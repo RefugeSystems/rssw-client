@@ -59,6 +59,10 @@
 		<button class="inside" v-on:click="showInfo(inside)">
 			<span class="value">{{inside.name}}</span>
 		</button>
+		<button class="property-action" v-on:click="exitEntity(inside)">
+			<span class="fas fa-sign-out-alt"></span>
+			<span class="">Exit</span>
+		</button>
 	</div>
 	<div class="property encumberance" v-if="character.classification != 'base'">
 		<span class="icon" :class="getEncumberanceIcon()"></span>

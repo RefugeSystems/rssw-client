@@ -16,7 +16,8 @@
 		"end": "}$"
 	};
 	
-	var formatMarkdown = function(sourceText, universe, entity, base, target) {
+	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
+//		console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
 		var properties,
 			tracking,
 			element,
@@ -40,6 +41,8 @@
 				value = target.split(",");
 				switch(value.length) {
 					default:
+					case 4:
+						base = universe.index.lookup(value[3]);
 					case 3:
 						properties.id = value[2];
 					case 2:
@@ -51,9 +54,9 @@
 			
 			if(value) {
 				if(value[0] === "=") {
-//					console.warn("Calculating Expression: " + value, universe, entity);
+//					console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 					// TODO: Calculate Value with Calculator
-					value = universe.calculateExpression(value.substring(1), entity, base, target);
+					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
 					
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
 				} else {

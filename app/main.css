@@ -37,6 +37,7 @@
   justify-content: flex-end;
 }
 .rs-component .flow-h.centered {
+  justify-content: center;
   align-items: center;
 }
 .rs-component .flow-h.middled {
@@ -1050,6 +1051,9 @@ form {
 .object-info .general-information .general-image img {
   max-width: 100%;
 }
+.object-info .general-list {
+  margin: 0px;
+}
 .object-info a {
   color: #0055ff;
 }
@@ -1411,6 +1415,10 @@ form {
   color: #6f9bf5;
   font-size: 1.1em;
 }
+.rs-component.rssw.component-character-info .property-action {
+  color: #FF9560;
+  font-size: 0.9em;
+}
 .rs-component.rssw.component-character-info .description {
   min-height: 140px;
   min-width: 360px;
@@ -1544,6 +1552,20 @@ form {
   color: #000000;
   font-size: 20px;
 }
+.rs-component.rssw.component-entity-inside .entities {
+  border-top: 1px solid #EAEFF9;
+  padding: 7px;
+}
+.rs-component.rssw.component-entity-inside .entity {
+  background: transparent;
+  color: #617EB8;
+  margin: 3px 0px;
+  padding: 3px;
+  border: 0px;
+}
+.rs-component.rssw.component-entity-inside .exit-ship {
+  margin-left: 10px;
+}
 .rs-component.rssw.component-ship-stats {
   display: inline-flex;
   flex-direction: column;
@@ -1566,6 +1588,34 @@ form {
 .rs-component.rssw.component-ship-stats .picture img {
   width: 300px;
 }
+.rs-component.rssw.component-ship-stats .information .skill {
+  border: 1px solid #928282;
+  border-radius: 30px;
+  padding: 4px;
+  margin: 0px 4px 0px 0px;
+}
+.rs-component.rssw.component-ship-stats .information .pilot-info {
+  text-align: center;
+  flex-grow: 10;
+}
+.rs-component.rssw.component-ship-stats .information .name-display {
+  margin-right: 4px;
+}
+.rs-component.rssw.component-ship-stats .information .alliance {
+  justify-content: center;
+  padding: 0px 5px;
+}
+.rs-component.rssw.component-ship-stats .information .icon {
+  display: block;
+  line-height: 30px;
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-ship-stats .information input {
+  text-align: center;
+  width: 100%;
+}
 .rs-component.rssw.component-ship-stats .data .stats .stat {
   font-size: 28px;
   align-items: center;
@@ -1581,6 +1631,69 @@ form {
 }
 .rs-component.rssw.component-ship-stats .data .stats .stat .value {
   margin-left: 5px;
+}
+.rs-component.rssw.component-ship-stats .data .details {
+  padding: 0px 0px 0px 5px;
+  flex-grow: 10;
+}
+.rs-component.rssw.component-ship-stats .data .details .pilot-name {
+  white-space: nowrap;
+  margin-right: 8px;
+}
+.rs-component.rssw.component-ship-stats .data .details .pilot {
+  justify-content: flex-end;
+}
+.rs-component.rssw.component-ship-stats .data .details .pilot-ability {
+  position: relative;
+  flex-grow: 5;
+  margin: 5px 0px;
+}
+.rs-component.rssw.component-ship-stats .data .details .pilot-ability p {
+  margin: 0px 0px 8px 0px;
+}
+.rs-component.rssw.component-ship-stats .data .details .pilot-ability .pilot-ability-text {
+  padding-bottom: 26px;
+  padding: 3px;
+  border: 2px solid #928282;
+  background: #EAEFF9;
+  border-radius: 5px;
+}
+.rs-component.rssw.component-ship-stats .data .details .pilot-ability .edit-pilot-ability {
+  position: absolute;
+  background-color: transparent;
+  padding: 2px;
+  border: 0px;
+  margin: 0px;
+  bottom: 0px;
+  right: 0px;
+  line-height: 16px;
+  font-size: 16px;
+  height: 20px;
+  width: 20px;
+  color: #FF9560;
+}
+.rs-component.rssw.component-ship-stats .data .details .abilities {
+  border: 2px solid #928282;
+  border-radius: 15px;
+}
+.rs-component.rssw.component-ship-stats .data .details .abilities .ability {
+  color: #6f9bf5;
+  background: transparent;
+  font-size: 24px;
+  padding: 4px;
+  border: 0px;
+  margin: 4px;
+}
+.rs-component.rssw.component-ship-stats .data-list {
+  margin: 7px 0px;
+}
+.rs-component.rssw.component-ship-stats .data-list .property-link {
+  color: #6f9bf5;
+  background: transparent;
+  font-size: 0.8em;
+  padding: 4px;
+  margin: 4px;
+  border: 0px;
 }
 .rs-component.rssw.component-ship-stats .mounts {
   justify-content: space-between;

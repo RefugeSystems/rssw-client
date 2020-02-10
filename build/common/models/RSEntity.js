@@ -35,6 +35,27 @@ class RSEntity extends RSObject {
 //		];
 	}
 	
+	recalculateHook() {
+		var pilot,
+			stats,
+			x;
+		
+		if(this.pilot && (pilot = this.universe.indexes.entity.index[this.pilot])) {
+			stats = [
+				"evasion",
+				"attack",
+				"shield",
+				"hull"
+			];
+			
+			for(x=0; x<stats.length; x++) {
+				if(pilot["bonus_" + stats[x]]) {
+					this[stats[x]] += pilot["bonus_" + stats[x]];
+				}
+			}
+		}
+	}
+	
 //	addHistory(event, delay) {
 //		this.history.unshift(event);
 //		if(this.history.length > 300) {

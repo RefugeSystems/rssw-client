@@ -3,13 +3,15 @@
 	<div class="history">
 		<div class="flow flow-v">
 			<div class="entry" v-for="entry in history">
-				<div v-if="entry.type === 'record_keeping' && universe.indexes[entry.modified]" class="message">
+				<div v-if="entry.type === 'record_keeping' && (universe.indexes[entry.modified] || entry.modified === 'inside')" class="message">
 					<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>
-					<a v-on:click="showInfo(entry.previous)">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:"Unknown"}}</a>
+					<a v-on:click="showInfo(entry.previous)" v-if="entry.modified !== 'inside'">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:"Unknown"}}</a>
+					<a v-on:click="showInfo(entry.previous)" v-if="entry.modified === 'inside'">{{universe.indexes.entity.index[entry.previous]?universe.indexes.entity.index[entry.previous].name:"Unknown"}}</a>
 					<span>to</span>
-					<a v-on:click="showInfo(entry.current)">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:"Unknown"}}</a>
+					<a v-on:click="showInfo(entry.current)" v-if="entry.modified !== 'inside'">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:"Unknown"}}</a>
+					<a v-on:click="showInfo(entry.current)" v-if="entry.modified === 'inside'">{{universe.indexes.entity.index[entry.current]?universe.indexes.entity.index[entry.current].name:"Unknown"}}</a>
 				</div>
-				<div v-if="entry.type === 'record_keeping' && !universe.indexes[entry.modified]" class="message">
+				<div v-if="entry.type === 'record_keeping' && !universe.indexes[entry.modified] && entry.modified !== 'inside'" class="message">
 					<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>
 				</div>
 				<div v-if="entry.type === 'item_gain'" class="message">

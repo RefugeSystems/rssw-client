@@ -65,7 +65,7 @@
 				
 				if(this.entity.history && this.entity.history.length !== this.history.length) {
 					this.history.splice(0);
-					for(x=0; x<this.entity.history.length; x++) {
+					for(x=0; x<this.entity.history.length && x < 50; x++) {
 						this.entity.history[x]._date = new Date(this.entity.history[x].time);
 						this.entity.history[x]._dateString = this.entity.history[x]._date.toLocaleDateString();
 						this.entity.history[x]._timeString = this.entity.history[x]._date.toLocaleTimeString();
