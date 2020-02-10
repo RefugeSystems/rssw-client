@@ -183,23 +183,6 @@ class RSObject extends EventEmitter {
 			}
 		}
 
-		//console.log("Final: ", base);
-		keys = Object.keys(this);
-		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_" && keys[x] !== "universe" && keys[x] !== "description" && keys[x] !== "name" && typeof(this[keys[x]]) !== "function") {
-				delete(this[keys[x]]);
-			}
-		}
-		keys = Object.keys(base);
-		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_" && keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo" && typeof(this[keys[x]]) !== "function" ) {
-				this[keys[x]] = base[keys[x]];
-			}
-		}
-		if(debug) {
-			console.log("Assembled: ", _p(this), _p(base));
-		}
-
 		// Listen for changes on direct modifiers
 		for(x=0; this.modifierattrs && x<this.modifierattrs.length; x++) {
 			load = this.universe.indexes.modifierattrs.lookup[this.modifierattrs[x]];
@@ -248,13 +231,35 @@ class RSObject extends EventEmitter {
 		if(this.universe.calculator) {
 			load = {};
 			for(x=0; x<base._calculated.length; x++) {
-				if(!load[base._calculated[x]]) {
-//					console.warn("Calculator Processing[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
-					base[base._calculated[x]] = this.universe.calculator.process(base[base._calculated[x]]);
+				if(typeof(base[base._calculated[x]]) === "string" && base._calculated[x] !== "undefined" && !load[base._calculated[x]]) {
+					if(debug || this._debugging) {
+						console.warn("Calculator Processing[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+					}
+					base[base._calculated[x]] = this.universe.calculator.process(base[base._calculated[x]], this);
 					load[base._calculated[x]] = true;
-//					console.warn(" > Result[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+					if(debug || this._debugging) {
+						console.warn(" > Result[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+					}
 				}
 			}
+		}
+		
+		//console.log("Final: ", base);
+		keys = Object.keys(this);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "universe" && keys[x] !== "description" && keys[x] !== "name" && typeof(this[keys[x]]) !== "function") {
+				delete(this[keys[x]]);
+			}
+		}
+		keys = Object.keys(base);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo" && typeof(this[keys[x]]) !== "function" ) {
+				this[keys[x]] = base[keys[x]];
+			}
+		}
+		
+		if(debug) {
+			console.log("Assembled: ", _p(this), _p(base));
 		}
 		
 		if(this.recalculateHook) {

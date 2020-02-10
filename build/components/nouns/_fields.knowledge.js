@@ -2,11 +2,56 @@
 (function() {
 	
 	var dataSource,
+		categories,
 		profiles,
+		related,
 		attrs,
 		stats,
-		items,
 		notes;
+
+	var categories = [
+		"quest",
+		"quest:task",
+		"quest:main",
+		"quest:seconary",
+		
+		"ideas",
+		"ideas:force",
+		"ideas:electronics",
+		"ideas:skill",
+		"ideas:ability",
+		"ideas:job",
+		
+		"things",
+		"things:army",
+		"things:ship",
+		"things:fleet",
+		"things:item",
+		"things:market",
+		"things:temple",
+		
+		"peoples",
+		"peoples:ancestry",
+		"peoples:character",
+		"peoples:clan",
+		"peoples:creature",
+		"peoples:culture",
+		"peoples:language",
+		"peoples:empire",
+		"peoples:race",
+		"peoples:ruler",
+		
+		"locations",
+		"locations:starsystem",
+		"locations:planet",
+		"locations:city",
+		"locations:continent",
+		"locations:expedition",
+		"locations:forest",
+		"locations:mountain",
+		"locations:temple",
+		"locations:sector"
+	].sort();
 
 	profiles = {
 		"label": "Profile",
@@ -16,9 +61,9 @@
 		"optionLabel": "name"
 	};
 	
-	items = {
-		"label": "Items",
-		"property": "item",
+	related = {
+		"label": "Related",
+		"property": "related",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name",
@@ -65,6 +110,12 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Category",
+		"property": "category",
+		"type": "select",
+		"raw": true,
+		"options": categories
+	}, {
 		"label": "State",
 		"property": "state",
 		"type": "select",
@@ -77,6 +128,7 @@
 		]
 	},
 	profiles,
+	related,
 	{
 		"label": "Hidden",
 		"property": "hidden",
@@ -88,7 +140,6 @@
 	},
 	attrs,
 	stats,
-	items,
 	{
 		"label": "Description",
 		"property": "description",
@@ -124,7 +175,7 @@
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			notes.source_index = this.universe.indexes.note;
-			items.source_index = this.universe.indexes.item;
+			related.source_index = this.universe.index;
 		},
 		"methods": {
 			"update": function() {

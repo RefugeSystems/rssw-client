@@ -31,7 +31,9 @@ rsSystem.component("RSSWCharacter", {
 	"methods": {
 		"update": function() {
 			this.widgets.splice(0);
-			this.widgets.push.apply(this.widgets, this.entity.widgets);
+			if(this.entity.widgets) {
+				this.widgets.push.apply(this.widgets, this.entity.widgets);
+			}
 			this.widgets.push({
 	            "declaration": "rsswEntityHistory",
 	            "sid": "ihoihou",

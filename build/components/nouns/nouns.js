@@ -11,6 +11,18 @@
 	
 	var spacing = / /g;
 	
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+	
 	/**
 	 * Fill out item to complete fields.
 	 * @method completeItem
@@ -75,6 +87,7 @@
 			var data = {},
 				x;
 
+			data.availableToCopy = [];
 			data.nameGenerators = {};
 			data.attaching = null;
 			data.rawValue = "{}";
@@ -111,9 +124,15 @@
 					var copy = this.universe.nouns[this.state.current][value],
 						x;
 					
+//					if(!copy) {
+//						console.warn("Unable to find copy source[" + this.state.current + "]? " + value, copy);
+//					} else {
+//						console.warn("Copying source[" + this.state.current + "]? " + value, copy);
+//					}
+					
 					value = copy?JSON.stringify(copy, null, 4):"{}";
 					value = JSON.parse(value);
-					if(copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
+					if(copy && copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
 						value.parent = value.id;
 						value.id += ":" + Date.now();
 						if(value.randomize_name) {
@@ -127,7 +146,8 @@
 						}
 						delete(value.randomize_name);
 						delete(value.template);
-					} if(!copy.template && this.$route.query.copy === "true") {
+					}
+					if((!copy || (copy && !copy.template)) && this.$route.query.copy === "true") {
 						value.id += ":" + Date.now();
 					}
 					if(this.$route.query.values) {
@@ -139,17 +159,20 @@
 						}
 					}
 					value = JSON.stringify(value, null, 4);
+//					console.warn("Setting Raw Value: ", value);
 					Vue.set(this, "rawValue", value);
 					Vue.set(this, "copy", null);
 				}
 			},
 			"state.current": function(n, p) {
-//				console.warn("Noun: ", n, p);
+//				console.warn("Current Shift: ", n, p);
 				if(this.state.building[n]) {
 					Vue.set(this, "rawValue", JSON.stringify(this.state.building[n], null, "\t"));
 				} else {
 					Vue.set(this, "rawValue", {});
 				}
+				
+				this.buildAvailableCopies();
 			},
 			"state": {
 				"deep": true,
@@ -161,15 +184,29 @@
 					this.$forceUpdate();
 				}
 			},
-			"$route.params.oid": function(oid) {
-				console.warn("New OID: ", oid);
-				Vue.set(this, "copy", oid);
+			"$route.params": {
+				"deep": true,
+				"handler": function(params) {
+//					console.warn("New Parameters: ", params);
+					if(this.$route.params.type) {
+						Vue.set(this.state, "current", params.type);
+						this.broadcastModel();
+					}
+					if(this.$route.params.oid) {
+						setTimeout(() => {
+							Vue.set(this, "copy", params.oid);
+						},0);
+					}
+				}
 			},
 			"rawValue": function(value) {
 				try {
+//					console.warn("Processing Raw Value Change[" + this.state.current + "]: ", value);
 					var parsed = JSON.parse(value),
 						keys,
 						x;
+
+//					console.warn(" -- Parsed Raw Value Change[" + this.state.current + "]: ", parsed);
 					
 //					Vue.set(this.state.building, this.state.current, parsed);
 					keys = Object.keys(this.state.building[this.state.current]);
@@ -196,6 +233,7 @@
 							Vue.set(this.built, keys[x], parsed[keys[x]]);
 						}
 					}
+//					console.warn(" -- Raw Value Changed");
 					
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
@@ -214,10 +252,17 @@
 				Vue.set(this, "copy", this.$route.params.oid);
 			}
 			
+			this.universe.$on("universe:modified", this.universeUpdate);
 			this.models[this.state.current].recalculateProperties();
 			this.$emit("model", this.models[this.state.current]);
+			this.universeUpdate();
 		},
 		"methods": {
+			"buildAvailableCopies": function() {
+				this.availableToCopy.splice(0);
+				this.availableToCopy.push.apply(this.availableToCopy, this.universe.indexes[this.state.current].listing);
+				this.availableToCopy.sort(byName);
+			},
 			"clearField": function(field) {
 				Vue.set(this.state.building[this.state.current], field.property, null);
 				if(this.built) {
@@ -278,6 +323,7 @@
 			"broadcastModel": function() {
 				console.warn("New Model: ", this.state.current, this.models[this.state.current]);
 				this.$emit("model", this.models[this.state.current]);
+				this.models[this.state.current].recalculateProperties();
 			},
 			"openKnowledge": function(id) {
 				if(this.universe.index.index[id]) {
@@ -423,6 +469,9 @@
 					return false;
 				}
 			},
+			"universeUpdate": function() {
+				this.buildAvailableCopies();
+			},
 			"modify": function() {
 //				console.warn("modify: ", event);
 				
@@ -442,6 +491,9 @@
 					}
 				}
 			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.universeUpdate);
 		},
 		"template": Vue.templified("components/nouns.html")
 	});

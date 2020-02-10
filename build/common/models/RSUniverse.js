@@ -403,6 +403,8 @@ class RSUniverse extends RSObject {
 			if(!this.initialized) {
 				this.$emit("initialized", this);
 			}
+			
+			this.$emit("universe:modified", this);
 		});
 	}
 	

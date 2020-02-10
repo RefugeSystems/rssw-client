@@ -4,12 +4,20 @@
 	var commonSource,
 		listSource,
 		dataSource,
-		
-		abilities;
+		abilities,
+		effects;
 	
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	effects = {
+		"label": "Effects",
+		"property": "effect",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -100,13 +108,22 @@
 		"property": "contents_max",
 		"type": "text"
 	}, {
+		"label": "Scaled Encumberance",
+		"property": "scaled_encumberance",
+		"type": "text"
+	}, {
+		"label": "Rarity",
+		"property": "rarity",
+		"type": "text"
+	}, {
 		"label": "Hardpoints",
 		"property": "hardpoints",
 		"type": "text"
 	}];
 	
 	listSource = [
-		abilities
+		abilities,
+		effects
 	];
 	
 	commonSource = [{
@@ -183,7 +200,7 @@
 			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 				data.fields.modifierstats.push({
 					"label": this.universe.indexes.skill.listing[x].name,
-					"property": this.universe.indexes.skill.listing[x].property_key,
+					"property": this.universe.indexes.skill.listing[x].propertyKey,
 					"type": "text"
 				});
 			}
@@ -192,6 +209,7 @@
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
 
 			abilities.source_index = this.universe.indexes.ability;
+			effects.source_index = this.universe.indexes.effect;
 			
 			return data;
 		},

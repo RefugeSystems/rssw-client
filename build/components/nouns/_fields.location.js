@@ -115,9 +115,11 @@
 			"large",
 			"huge",
 			"gigantic",
+			"city",
 			"mountainous",
 			"enormouos",
 			"planetary",
+			"star_system",
 			"galactic"
 		]
 	}, {

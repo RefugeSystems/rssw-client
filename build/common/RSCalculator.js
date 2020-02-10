@@ -42,7 +42,11 @@ class RSCalculator {
 	 * @return {Number} 
 	 */
 	process(expression, source, base, target) {
+//		console.log("Received Expression: ", expression);
 		if(!source) {
+			return expression;
+		} else if(!expression) {
+			console.trace("Expressionless Calculation? ", expression, source, base, target);
 			return expression;
 		}
 		
@@ -50,7 +54,7 @@ class RSCalculator {
 		
 		while(variables = this.variableExpression.exec(expression)) {
 			if(variables.length === 3 && variables[2] !== undefined && variables[2] !== null) {
-				console.log("Var Calculation: ", variables);
+//				console.log("Var Calculation: ", expression, variables);
 				switch(variables[1]) {
 					case "character":
 					case "entity":
@@ -59,12 +63,12 @@ class RSCalculator {
 						break;
 					case "target":
 						expression = expression.replace(variables[0], parseInt(target[variables[2]]) || 0);
-						break;;
+						break;
 					case "base":
 						expression = expression.replace(variables[0], parseInt(base[variables[2]]) || 0);
 						break;
 					default:
-						console.warn("Calculator - Unknown variable root", variables);
+						console.warn("Calculator - Unknown variable root", expression, variables);
 				}
 			} else {
 				expression = expression.replace(variables[0], parseInt(source[variables[1]]) || 0);

@@ -19,7 +19,7 @@
 				<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']">
 					<a class="rendered-value" :data-id="knowledgeLink[property] || (property + '_quicklink')">{{prettifyPropertyName(property)}}</a>
 				</span>
-				<span class="key" v-if="!knowledgeLink[property]">{{prettifyPropertyName(property)}}</span>
+				<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property)}}</span>
 				<span class="divide">:</span>
 				<span class="value">{{prettifyPropertyValue(property, record[property])}}</span>
 				<span class="raw" v-if="displayRaw[property]">{{value}}</span>

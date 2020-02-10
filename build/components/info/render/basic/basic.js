@@ -180,6 +180,15 @@
 			}
 		},
 		"mounted": function() {
+			prettifyValues.skill_check = (record, value) => {
+				console.warn("Recording: ", record, value);
+				var buffer = this.universe.indexes.skill.lookup[record.skill_check];
+				if(buffer) {
+					return buffer.name;
+				}
+				return value;
+			};
+			
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value])) {
@@ -354,7 +363,7 @@
 			},
 			"canTravelTo": function(id) {
 				id = id || this.player.entity;
-				if(id && this.universe.indexes.entity.index[id]) {
+				if(this.record._type === "location" && id && this.universe.indexes.entity.index[id] && this.universe.indexes.entity.index[id].location !== this.record.id) {
 					return true;
 				}
 				return false;

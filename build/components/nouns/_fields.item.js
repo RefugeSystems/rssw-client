@@ -170,6 +170,17 @@
 			"no_modifiers": true
 		}
 	}, {
+		"label": "Scaled Encumberance",
+		"property": "scaled_encumberance",
+		"type": "number",
+		"condition": {
+			"adds_encumberance": true,
+			"no_modifiers": true,
+			"contents_max": {
+				"operation": "exists"
+			}
+		}
+	}, {
 		"label": "Needs Slot",
 		"property": "needs_slot",
 		"type": "checkbox"
