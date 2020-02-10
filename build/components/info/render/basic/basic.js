@@ -367,7 +367,7 @@
 				Vue.set(this, "copyToHere", "");
 			},
 			"editRecord": function() {
-				window.open("/#/nouns/" + this.record._type + "/" + this.record.id, "building");
+				window.open(location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id, "building");
 			},
 			"prettifyReferenceValue": function(reference, property, value) {
 				
