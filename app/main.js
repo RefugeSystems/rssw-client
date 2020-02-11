@@ -25771,8 +25771,10 @@ rsSystem.component("rsCards", {
 				
 				for(x=0; this.source && this.source.item && x<this.source.item.length; x++) {
 					hold = this.universe.indexes.item.index[this.source.item[x]];
-					if(hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
+					if(hold && hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
 						return true;
+					} else if(!hold) {
+						console.warn("Invalid Item? " + this.source.item[x], hold);
 					}
 				}
 				
@@ -25887,7 +25889,7 @@ rsSystem.component("rsCards", {
 				Vue.set(this, "copyToHere", "");
 			},
 			"editRecord": function() {
-				window.open("/#/nouns/" + this.record._type + "/" + this.record.id, "building");
+				window.open(location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id, "building");
 			},
 			"prettifyReferenceValue": function(reference, property, value) {
 				

@@ -251,8 +251,10 @@
 				
 				for(x=0; this.source && this.source.item && x<this.source.item.length; x++) {
 					hold = this.universe.indexes.item.index[this.source.item[x]];
-					if(hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
+					if(hold && hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
 						return true;
+					} else if(!hold) {
+						console.warn("Invalid Item? " + this.source.item[x], hold);
 					}
 				}
 				
