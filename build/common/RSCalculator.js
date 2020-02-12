@@ -50,31 +50,32 @@ class RSCalculator {
 			return expression;
 		}
 		
-		var variables;
+		var processed = expression,
+			variables;
 		
 		while(variables = this.variableExpression.exec(expression)) {
+//			console.log("Var Calculation: ", expression, variables);
 			if(variables.length === 3 && variables[2] !== undefined && variables[2] !== null) {
-//				console.log("Var Calculation: ", expression, variables);
 				switch(variables[1]) {
 					case "character":
 					case "entity":
 					case "source":
 						if(source) {
-							expression = expression.replace(variables[0], parseInt(source[variables[2]]) || 0);
+							processed = processed.replace(variables[0], parseInt(source[variables[2]]) || 0);
 						} else {
 							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
 						}
 						break;
 					case "target":
 						if(target) {
-							expression = expression.replace(variables[0], parseInt(target[variables[2]]) || 0);
+							processed = processed.replace(variables[0], parseInt(target[variables[2]]) || 0);
 						} else {
 							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
 						}
 						break;
 					case "base":
 						if(base) {
-							expression = expression.replace(variables[0], parseInt(base[variables[2]]) || 0);
+							processed = processed.replace(variables[0], parseInt(base[variables[2]]) || 0);
 						} else {
 							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
 						}
@@ -83,16 +84,18 @@ class RSCalculator {
 						console.warn("Calculator - Unknown variable root", expression, variables);
 				}
 			} else {
-				expression = expression.replace(variables[0], parseInt(source[variables[1]]) || 0);
+				processed = processed.replace(variables[0], parseInt(source[variables[1]]) || 0);
 			}
 		}
+		
+		expression = processed;
 
 		if(expression && expression.length < 150 && this.securityExpression.test(expression)) {
 			try {
 //				console.warn("Calculated: " + expression, variables);
 				return eval(expression);
 			} catch(ignored) {
-				console.error("Exception: ", ignored);
+				console.error("Exception[" + source.id + "]: " + expression + "\n", ignored);
 				return expression;
 			}
 		} else {

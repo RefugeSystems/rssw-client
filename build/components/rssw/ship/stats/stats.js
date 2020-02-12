@@ -91,8 +91,8 @@
 			},
 			"showInfo": function(view) {
 				rsSystem.EventBus.$emit("display-info", {
-					"source": this.ship,
-					"base": this.pilot,
+					"base": this.ship,
+					"target": this.pilot,
 					"record": view
 				});
 			},

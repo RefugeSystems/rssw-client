@@ -35,12 +35,12 @@
 			"image": {
 				"deep": true,
 				"handler": function() {
-					console.warn("Re-Render Image: ", this.image);
+//					console.warn("Re-Render Image: ", this.image);
 					this.update();
 				}
 			},
 			"linked": function() {
-				console.warn("Re-Link Image: ", this.linked);
+//				console.warn("Re-Link Image: ", this.linked);
 				this.update();
 			}
 		},

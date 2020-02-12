@@ -67,7 +67,7 @@
 	</table>
 	
 	<div v-if="field.type === 'textarea'" class="textarea">
-		<textarea :id="fid" v-model="root[field.property]" :placeholder="field.placeholder" v-on:input="emitChanged()">
+		<textarea :id="fid" v-model="root[field.property]" v-tab :placeholder="field.placeholder" v-on:input="emitChanged()">
 		</textarea>
 	</div>
 	

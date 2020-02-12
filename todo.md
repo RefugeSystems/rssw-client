@@ -4,6 +4,21 @@
 	+ Note that slot with "entity" will need the noted entity to be "inside" the requesting entity
 + Equip widget shouold list information from the `entity._equipErrors` information if the item's ID is present
 + Generic enugh to work for ships or characters
++ Make ship "info" box shrinkable
++ Add "Token" trackers
+	+ Including a target lock indicator matching the letter variants ("AA", "VV", etc)
+	+ Tokens always list
+	+ Add a "round reset" to clear as needed
+		+ Target locks stay
+	+ Click to manually dismiss?
+	+ Right side of car descending along the side?
+	+ Sorted by type
+	+ Add at bottom of column by dropdown
++ Restrict ship information to column
++ Ship dashboard to general
+	+ Use query string to pull in multiple ships
+	+ Ship scroll
+	+ Helper flip to align?
 
 # Properties
 √ Flag to nullify item stat inheritance (For Bags)  
@@ -26,6 +41,7 @@
         + Doesn't properly follow current filter at load
         + When changing data sources and beyond the highest page, doesn't backtrack well
         + Changing data source seems problematic in general with regard to page
++ Info "Back" button needs to rewind base and target as well as record
 
 # Data
 + Archetype Field Set

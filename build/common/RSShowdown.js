@@ -42,7 +42,7 @@
 				switch(value.length) {
 					default:
 					case 4:
-						base = universe.index.lookup(value[3]);
+						base = universe.index.lookup[value[3]];
 					case 3:
 						properties.id = value[2];
 					case 2:
@@ -53,12 +53,29 @@
 			}
 			
 			if(value) {
+//				console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 				if(value[0] === "=") {
-//					console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
-					// TODO: Calculate Value with Calculator
 					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
 					
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
+				} else if(value[0] === "~") {
+					value = value.substring(1).split(".");
+					if(value.length === 2) {
+						switch(value[0]) {
+							case "base":
+								value = base[value[1]] || "";
+								break;
+							case "target":
+								value = targetObject[value[1]] || "";
+								break;
+							default:
+								value = entity[value[1]] || "";
+								break;
+						}
+					} else {
+						value = entity[value[0]] || "";
+					}
+					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
 				} else {
 					// Linked
 					mark = universe.index.index[properties.id || value];

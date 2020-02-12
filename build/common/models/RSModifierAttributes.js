@@ -20,12 +20,27 @@ class RSModifierAttributes extends RSModifier {
 		super(details, universe);
 	}
 	
-	performModifications(base) {
+	performModifications(base, origin, debug) {
 		var keys = Object.keys(this._coreData),
 			x;
+		
+		if(debug) {
+			console.warn("Perform Mod[" + origin + "]: " + this.id);
+		}
 
 		for(x=0; x<keys.length; x++) {
-			if(!RSModifierAttributes._skip[keys[x]]) {
+			if(!RSModifierAttributes._skip[keys[x]] && keys[x][0] !== "_" && keys[x] !== "history" && keys[x] !== "created" && keys[x] !== "updated") {
+				if(base._contributions) {
+					if(!base._contributions[keys[x]]) {
+						base._contributions[keys[x]] = {};
+					}
+					if(base._contributions) {
+						if(!base._contributions[keys[x]]) {
+							base._contributions[keys[x]] = {};
+						}
+						base._contributions[keys[x]][origin] = true;
+					}
+				}
 				if(base[keys[x]]) {
 					switch(typeof(this._coreData[keys[x]])) {
 						case "boolean":

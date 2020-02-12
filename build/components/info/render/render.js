@@ -36,9 +36,6 @@
 			"player": {
 				"type": Object
 			},
-			"source": {
-				"type": Object
-			},
 			"target": {
 				"type": Object
 			},
@@ -95,7 +92,6 @@
 					"options": this.options,
 					"player": this.player,
 					"record": this.record,
-					"source": this.source,
 					"target": this.target,
 					"base": this.base,
 					"user": this.user

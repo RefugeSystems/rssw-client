@@ -10,6 +10,11 @@
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		if(this._coreData.equipped) {
+			this._equipBuffer = JSON.parse(JSON.stringify(this._coreData.equipped));
+		} else {
+			this._equipBuffer = {};
+		}
 		if(!details.location) {
 			details.location = "location:universe";
 		}
@@ -56,6 +61,79 @@ class RSEntity extends RSObject {
 					this[stats[x]] += pilot["bonus_" + stats[x]];
 				}
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @method setPilot
+	 * @param {RSEntity} pilot
+	 */
+	setPilot(pilot) {
+		
+	}
+	
+	/**
+	 * 
+	 * @method equipSlot
+	 * @param {RSSlot} slot
+	 * @param {RSEntity | RSItem | RSRoom} equip
+	 */
+	equipSlot(slot, equip) {
+		if(typeof(slot) === "string") {
+			slot = this.universe.index.lookup[slot];
+		}
+
+		if(typeof(equip) === "string") {
+			equip = this.universe.index.lookup[equip];
+		}
+		
+		if(slot.accepts && equip._type === slot.accepts) {
+			if(!this._equipBuffer[slot.accepts]) {
+				this._equipBuffer[slot.accepts] = {};
+			}
+			if(!this._equipBuffer[slot.accepts][slot.id]) {
+				this._equipBuffer[slot.accepts][slot.id] = [];
+			}
+			this._equipBuffer[slot.accepts][slot.id].push(equip.id);
+			
+			this.commit({
+				"equipped": this._equipBuffer
+			});
+		} else if(!slot.accepts) {
+			console.warn("Slot[" + slot.id + "] accepts no records");
+		} else if(slot.accepts !== equip._type) {
+			console.warn("Slot[" + slot.id + "] does not accept that equipment type[" + equip._type + "@" + equip.id + "]");
+		}
+	}
+	
+	/**
+	 * 
+	 * @method unequipSlot
+	 * @param {RSSlot} slot
+	 * @param {RSEntity | RSItem | RSRoom} equip
+	 */
+	unequipSlot(slot, equip) {
+		var index;
+		
+		if(typeof(slot) === "string") {
+			slot = this.universe.index.lookup[slot];
+		}
+
+		if(typeof(equip) === "string") {
+			equip = this.universe.index.lookup[equip];
+		}
+		
+		if(slot.accepts && this._equipBuffer[slot.accepts] && this._equipBuffer[slot.accepts][slot.id] && (index = this._equipBuffer[slot.accepts][slot.id].indexOf(equip.id)) !== -1) {
+			this._equipBuffer[slot.accepts][slot.id].splice(index, 1);
+			
+			this.commit({
+				"equipped": this._equipBuffer
+			});
+		} else if(!slot.accepts) {
+			console.warn("Slot[" + slot.id + "] accepts no records");
+		} else if(index === -1) {
+			console.warn("Slot[" + slot.id + "] does not have that equipment[" + equip.id + "] equipped");
 		}
 	}
 	

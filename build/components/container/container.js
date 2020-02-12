@@ -94,6 +94,7 @@
 				widget.props["character"] = this.entity;
 				widget.props["entity"] = this.entity;
 				widget.props["sid"] = this.storageID;
+				widget.props["state"] = this.state;
 				widget.props["user"] = this.user;
 				widget.class = {};
 				widget.class["rs-containment"] = true;

@@ -91,6 +91,14 @@
 	knowledgeLink.critical = "knowledge:combat:critical";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 	
+	prettifyValues.category = function(property, value, record, universe) {
+		var index;
+		if(value && (index = value.indexOf(":")) !== -1) {
+			value = value.substring(0, index).trim().capitalize() + " (" + value.substring(index + 1).trim().capitalize() + ")";
+		}
+		return value;
+	};
+	
 	prettifyValues.range = function(property, value, record, universe) {
 		if(record.is_attachment) {
 			return value;
@@ -139,9 +147,6 @@
 		"props": {
 			"record": {
 				"required": true,
-				"type": Object
-			},
-			"source": {
 				"type": Object
 			},
 			"target": {
@@ -279,29 +284,29 @@
 				var hold,
 					x;
 				
-				for(x=0; this.source && this.source.item && x<this.source.item.length; x++) {
-					hold = this.universe.indexes.item.index[this.source.item[x]];
+				for(x=0; this.base && this.base.item && x<this.base.item.length; x++) {
+					hold = this.universe.indexes.item.index[this.base.item[x]];
 					if(hold && hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
 						return true;
 					} else if(!hold) {
-						console.warn("Invalid Item? " + this.source.item[x], hold);
+						console.warn("Invalid Item? " + this.base.item[x], hold);
 					}
 				}
 				
-				return this.source && ((this.source.item && this.source.item.indexOf(this.record.id) !== -1)
-						|| (this.source.inventory && this.source.inventory.indexOf(this.record.id) !== -1));
+				return this.base && ((this.base.item && this.base.item.indexOf(this.record.id) !== -1)
+						|| (this.base.inventory && this.base.inventory.indexOf(this.record.id) !== -1));
 			},
 			"canTransferToSelf": function() {
-				return this.source && !((this.source.item && this.source.item.indexOf(this.record.id) !== -1)
-						|| (this.source.inventory && this.source.inventory.indexOf(this.record.id) !== -1));
+				return this.base && !((this.base.item && this.base.item.indexOf(this.record.id) !== -1)
+						|| (this.base.inventory && this.base.inventory.indexOf(this.record.id) !== -1));
 			},
 			"canAttach": function() {
-				return this.source && (this.record.hardpoints || this.record.contents_max);
+				return this.base && (this.record.hardpoints || this.record.contents_max);
 			},
 			"transferObject": function() {
 				if(this.transfer_target && this.transfer_target !== "cancel") {
 					this.universe.send("give:item", {
-						"source": this.source.id,
+						"source": this.base.id,
 						"target": this.transfer_target,
 						"item": this.record.id
 					});
@@ -311,7 +316,7 @@
 			"attachObject": function() {
 				if(this.attach_target && this.attach_target !== "cancel") {
 					this.universe.send("give:item", {
-						"source": this.source.id,
+						"source": this.base.id,
 						"target": this.record.id,
 						"item": this.attach_target
 					});
@@ -353,11 +358,11 @@
 			},
 			"prettifyPropertyValue": function(property, value, record, universe) {
 				if(this.record._calculated && this.record._calculated[property]) {
-					property = this.universe.calculateExpression(value, this.source, this.base, this.target);
+					property = this.universe.calculateExpression(value, this.record, this.base, this.target);
 					if(property == value) {
-						return this.universe.calculateExpression(value, this.source, this.base, this.target);
+						return this.universe.calculateExpression(value, this.record, this.base, this.target);
 					} else {
-						return this.universe.calculateExpression(value, this.source, this.base, this.target) + " [ " + value + " ]";
+						return this.universe.calculateExpression(value, this.record, this.base, this.target) + " [ " + value + " ]";
 					}
 				}
 				
@@ -409,14 +414,14 @@
 			},
 			"canTravelTo": function(id) {
 				id = id || this.player.entity;
-				if(this.record._type === "location" && id && this.universe.indexes.entity.index[id] && this.universe.indexes.entity.index[id].location !== this.record.id) {
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id && this.universe.indexes.entity.index[id] && this.universe.indexes.entity.index[id].location !== this.record.id && this.universe.indexes.entity.index[id].inside !== this.record.id) {
 					return true;
 				}
 				return false;
 			},
 			"travelToHere": function(id) {
 				id = id || this.player.entity;
-				if(this.universe.indexes.entity.index[id]) {
+				if(this.canTravelTo(id)) {
 					this.universe.indexes.entity.index[id].commit({
 						"location": this.record.id
 					});
@@ -505,10 +510,11 @@
 				}
 				
 				if(this.record.description) {
-					if(this.holdDescription !== this.record.description) {
-						Vue.set(this, "holdDescription", this.record.description);
-						Vue.set(this, "description", this.rsshowdown(this.record.description, this.source, this.base, this.target));
-					}
+					Vue.set(this, "description", this.rsshowdown(this.record.description, this.record, this.base, this.target));
+//					if(this.holdDescription !== this.record.description) {
+//						Vue.set(this, "holdDescription", this.record.description);
+//						Vue.set(this, "description", this.rsshowdown(this.record.description, this.record, this.base, this.target));
+//					}
 				} else {
 					Vue.set(this, "holdDescription", null);
 					Vue.set(this, "description", null);
@@ -517,7 +523,7 @@
 				if(this.record.master_note) {
 					if(this.holdNote !== this.record.master_note) {
 						Vue.set(this, "holdNote", this.record.master_note);
-						Vue.set(this, "note", this.rsshowdown(this.record.master_note));
+						Vue.set(this, "note", this.rsshowdown(this.record.master_note, this.record, this.base));
 					}
 				} else {
 					Vue.set(this, "holdNote", null);
@@ -546,7 +552,7 @@
 					if(buffer.location === this.record.id) {
 						this.partiesPresent.push(buffer);
 					}
-					if(this.source && buffer.entity && buffer.entity.indexOf(this.source.id) !== -1) {
+					if(this.base && buffer.entity && buffer.entity.indexOf(this.base.id) !== -1) {
 						for(y=0; y<buffer.entity.length; y++) {
 							if(!map[buffer.entity[y]]) {
 								map[buffer.entity[y]] = true;
@@ -557,24 +563,21 @@
 
 				this.transfer_targets.splice(0);
 				this.attach_targets.splice(0);
-				if(this.source) {
-					if(this.source.inside) {
-						map[this.source.inside] = true;
+				if(this.base) {
+					if(this.base.inside) {
+						map[this.base.inside] = true;
 					}
 					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 						buffer = this.universe.indexes.entity.listing[x];
-						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.source.id && (buffer.location === this.source.location || buffer.inside === this.source.inside || buffer.id === this.source.inside || buffer.inside === this.source.id || buffer.entity === this.source.id || buffer.id === this.source.entity || map[buffer.id])) {
+						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.base.id && (buffer.location === this.base.location || buffer.inside === this.base.inside || buffer.id === this.base.inside || buffer.inside === this.base.id || buffer.entity === this.base.id || buffer.id === this.base.entity || map[buffer.id])) {
 							this.transfer_targets.push(buffer);
-							console.log("Added[" + buffer.id + ", " + this.source.inside + ", " + buffer.entity + "]: ", buffer);
-						} else {
-							console.log("Skipped[" + buffer.id + ", " + this.source.inside + ", " + buffer.entity + "]: ", buffer);
 						}
 					}
 					this.transfer_targets.sort(byName);
 					
 					if(this.record.hardpoints || this.record.contents_max) {
-						for(x=0; this.source.item && x<this.source.item.length; x++) {
-							buffer = this.universe.indexes.item.lookup[this.source.item[x]];
+						for(x=0; this.base.item && x<this.base.item.length; x++) {
+							buffer = this.universe.indexes.item.lookup[this.base.item[x]];
 							if(buffer.id !== this.record.id) {
 								if(this.record.cancontain && this.record.cancontain.length) {
 									if(buffer.itemtype && buffer.itemtype.length) {

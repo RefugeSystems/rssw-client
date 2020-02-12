@@ -80,6 +80,10 @@
 		"label": "Points",
 		"property": "points",
 		"type": "number"
+	}, {
+		"label": "Order",
+		"property": "order",
+		"type": "number"
 	},
 	accepts,
 	itemtypes,
