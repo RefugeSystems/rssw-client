@@ -39,7 +39,9 @@
 
 			data.encumberance = 0;
 			data.properties = {};
+			data.image = null;
 			data.items = [];
+			data.points = 0;
 			
 			data.availablePilots = [];
 			data.editingPilot = false;
@@ -62,6 +64,8 @@
 			return data;
 		},
 		"mounted": function() {
+			rsSystem.register(this);
+			
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value])) {
@@ -69,9 +73,10 @@
 					rsSystem.EventBus.$emit("display-info", follow);
 				}
 			};
-			
+
+			this.universe.$on("model:modified", this.updateFromUniverse);
 			this.ship.$on("modified", this.update);
-			rsSystem.register(this);
+			this.updateFromUniverse();
 			this.update();
 		},
 		"methods": {
@@ -99,7 +104,7 @@
 				}
 				
 				this.ship.commit({
-					"pilot": setPilot
+					"entity": setPilot
 				});
 			},
 			"setNewPilotAbility": function(setPilotAbility) {
@@ -114,15 +119,17 @@
 				});
 				
 			},
+			"recalculate": function() {
+				this.ship.recalculateProperties();
+			},
 			"updated": function(field) {
 				var committing = {};
 				committing[field] = this.properties[field];
 				this.ship.commit(committing);
 				console.log("Commit: ", committing);
 			},
-			"update": function() {
-				var points = this.ship.points || 0,
-					buffer,
+			"updateFromUniverse": function() {
+				var buffer,
 					hold,
 					x;
 
@@ -134,8 +141,20 @@
 					}
 				}
 				this.availablePilots.sort(byName);
-				
-				buffer = this.universe.nouns.entity[this.ship.pilot];
+			},
+			"update": function() {
+				var points = this.ship.points || 0,
+					buffer,
+					hold,
+					x;
+
+				if(this.ship.profile && this.universe.nouns.image[this.ship.profile]) {
+					Vue.set(this, "image", this.universe.nouns.image[this.ship.profile]);
+				} else {
+					Vue.set(this, "image", null);
+				}
+
+				buffer = this.universe.nouns.entity[this.ship.entity];
 				if(buffer) {
 					if(this.pilot) {
 						if(this.pilot.id !== buffer.id) {
@@ -149,6 +168,7 @@
 					}
 				} else if(this.pilot) {
 					this.pilot.$off("modified", this.update);
+					Vue.set(this, "pilot", null);
 				}
 
 				this.pilotAbilities.splice(0);
@@ -181,7 +201,7 @@
 					}
 				}
 				
-				if(this.pilot && this.ship.ship_active_abilities && this.ship.ship_active_abilities.length && this.pilot.ability.indexOf(this.ship.ship_active_abilities[0]) !== -1 && (buffer = this.universe.indexes.ability.index[this.ship.ship_active_abilities[0]])) {
+				if(this.pilot && this.pilot.ability && this.ship.ship_active_abilities && this.ship.ship_active_abilities.length && this.pilot.ability.indexOf(this.ship.ship_active_abilities[0]) !== -1 && (buffer = this.universe.indexes.ability.index[this.ship.ship_active_abilities[0]])) {
 					Vue.set(this, "abilityDescription", this.rsshowdown(buffer.description, this.ship, this.pilot));
 					Vue.set(this, "pilotAbility", buffer);
 				} else {
@@ -222,7 +242,6 @@
 					this.items.splice(0);
 				}
 				
-				
 				if(this.ship.name) {
 					Vue.set(this.properties, "name", this.ship.name);
 				}
@@ -237,14 +256,17 @@
 					Vue.set(this.properties, "inside", null);
 				}
 				
+				Vue.set(this, "points", this.ship.point_cost || 0);
+				
 				this.$forceUpdate();
 			}
 		},
 		"beforeDestroy": function() {
+			this.universe.$off("model:modified", this.updateFromUniverse);
+			this.ship.$off("modified", this.update);
 			if(this.pilot) {
 				this.pilot.$off("modified", this.update);
 			}
-			this.ship.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/ship/stats.html")
 	});	

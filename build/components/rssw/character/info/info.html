@@ -38,6 +38,13 @@
 			<span class="value">{{ability.name}}</span>
 		</button>
 	</div>
+	<div class="property encumberance" v-if="character.classification != 'base'">
+		<span class="icon" :class="getEncumberanceIcon()"></span>
+		<span class="label">Encumberance:</span>
+		<span class="value">{{encumberance}}</span>
+		<span class="divide">/</span>
+		<span class="value">{{encumberance_max}}</span>
+	</div>
 	<div class="property items">
 		<span class="icon fad fa-backpack"></span>
 		<span class="label">Items:</span>
@@ -64,12 +71,16 @@
 			<span class="">Exit</span>
 		</button>
 	</div>
-	<div class="property encumberance" v-if="character.classification != 'base'">
-		<span class="icon" :class="getEncumberanceIcon()"></span>
-		<span class="label">Encumberance:</span>
-		<span class="value">{{encumberance}}</span>
-		<span class="divide">/</span>
-		<span class="value">{{encumberance_max}}</span>
+	<div class="property inside" v-if="piloting">
+		<span class="icon fad fa-starship-freighter"></span>
+		<span class="label">Piloting:</span>
+		<button class="inside" v-on:click="showInfo(piloting)">
+			<span class="value">{{piloting.name}}</span>
+		</button>
+		<button class="property-action" v-on:click="stopPiloting(piloting)">
+			<span class="fas fa-sign-out-alt"></span>
+			<span class="">Exit</span>
+		</button>
 	</div>
 	<div class="property rooms" v-if="character.classification == 'base'">
 		<span class="icon fad fa-kaaba"></span>
@@ -107,7 +118,7 @@
 		</span>
 		<div class="text-container">
 			<textarea class="description" v-if="!state.viewing" v-model="description" v-on:change="changed('description', description)"></textarea>
-			<div class="description" v-if="state.viewing" v-html="mdDescription"></div>
+			<div class="description rs-white object-info" v-if="state.viewing" v-html="mdDescription"></div>
 			<!--
 			<rs-rendered-text :text="description" :universe="universe" :entity="character"></rs-rendered-text>
 			-->

@@ -1,5 +1,7 @@
 .rs-component {
-	.flow-h {
+	.flow-h,
+	.flow.h,
+	.flex.h {
 		display: flex;
 		flex-direction: row;
 	
@@ -37,7 +39,9 @@
 		}
 	}
 	
-	.flow-v {
+	.flow-v,
+	.flow-v,
+	.flex.v {
 		display: flex;
 		flex-direction: column;
 	
@@ -74,6 +78,12 @@
 		}
 	}
 	
+	.flex {
+		.spacer {
+			flex-grow: 10;
+		}
+	}
+	
 	.grow-0 {
 		flex-grow: 0;
 	}
@@ -106,13 +116,16 @@
 		transform: scaleY(-1);
 	}
 	
-	.aligned-left {
+	.aligned-left,
+	.align-left {
 		text-align: left;
 	}
-	.aligned-right {
+	.aligned-right,
+	.align-right {
 		text-align: right;
 	}
-	.aligned-center {
+	.aligned-center,
+	.align-center {
 		text-align: center;
 	}
 }

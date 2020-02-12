@@ -11,7 +11,9 @@ class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
 		this.universe = universe;
+		this._replacedReferences = {};
 		this._sourceData = _p(details);
+		this._equipErrors = {};
 		this._coreData = {};
 		this._registered = {};
 		var keys = Object.keys(details),
@@ -118,26 +120,75 @@ class RSObject extends EventEmitter {
 	/**
 	 * 
 	 * @method recalculateProperties
+	 * @param {Object} [replacedProperties] Defaults to this._replacedProperties.
 	 */
-	recalculateProperties(debug, skip, trigger) {
-		if(!this.id) {
-			return false;
+	recalculateProperties(replacedReferences, debug) {
+		if(this.recalculatePrefetch) {
+			this.recalculatePrefetch();
 		}
 		
-		if(trigger) {
-//			console.warn("Trigger Sub-Recomputation from " + trigger.id + " on ", this);
-//			return;
+		replacedReferences = replacedReferences || this._replacedReferences;
+		if(debug) {
+			console.warn("replacedReferences: ",replacedReferences);
+		}
+		if(!this.id) {
+			return false;
 		}
 		
 		// Establish Base
 		var selfReference = this,
 			references = [],
 			base = {},
+			tracking,
+			loading,
+			buffer,
+			index,
+			hold,
 			keys,
 			load,
-			x;
+			x,
+			y,
+			z;
+		
+		
 
-		base._calculated = [];
+		base._replacedReferences = replacedReferences; // Skip & reference modifications
+		base._contributions = {}; // TODO: Track what item/entity/room contributed to the property
+		base._calculated = []; // Track calculated fields
+		base._overrides = {}; // Tracks slot like modifications where certain types should be overriden in modifier application
+		
+		keys = Object.keys(this._equipErrors);
+		for(x=0; x<keys.length; x++) {
+			delete(this._equipErrors[keys[x]]);
+		}
+		if(this.equipped && this.slot) {
+			keys = Object.keys(this.equipped);
+			tracking = [].concat(this.slot);
+			for(x=0; x<keys.length; x++) { // "Accepts" of slot
+				buffer = Object.keys(this.equipped[keys[x]]);
+				if(buffer.length) {
+					base._overrides[keys[x]] = [];
+					for(y=0; y<buffer.length; y++) { // ID of Slot
+						hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
+						for(z=0; z<hold.length; z++) {
+							index = tracking.indexOf(buffer[y]);
+							if(index !== -1) {
+								base._overrides[keys[x]].push(hold[z]);
+								tracking.splice(index, 1);
+							} else {
+								this._equipErrors[hold[z]] = {
+									"type": "error",
+									"message": "No more slots left",
+									"calculated": Date.now(),
+									"contents": hold[z],
+									"slot": buffer[y]
+								};
+							}
+						}
+					}
+				}
+			}
+		}
 		
 		// Stop listening for changes to known modifiers and clear
 //		for(x=0; x<this._modifiers.length; x++) {
@@ -177,7 +228,7 @@ class RSObject extends EventEmitter {
 		}
 		
 //		console.log("References: ", references, _p(base));
-		if(references && references.length) {
+		if(references  && references.length) {
 			for(x=0; x<references.length; x++) {
 				this.loadNounReferenceModifications(references[x], base);
 			}
@@ -285,7 +336,7 @@ class RSObject extends EventEmitter {
 	 * @param {Object} base
 	 */
 	loadNounReferenceModifications(noun, base) {
-		var reference = this[noun],
+		var reference = base._overrides[noun] || base._replacedReferences[noun] || this[noun],
 			x;
 		
 //		console.log("Load Noun[" + noun + "]: ", reference);

@@ -65,7 +65,9 @@
 	}
 }
 .rs-component {
-	.flow-h {
+	.flow-h,
+	.flow.h,
+	.flex.h {
 		display: flex;
 		flex-direction: row;
 	
@@ -103,7 +105,9 @@
 		}
 	}
 	
-	.flow-v {
+	.flow-v,
+	.flow-v,
+	.flex.v {
 		display: flex;
 		flex-direction: column;
 	
@@ -140,6 +144,12 @@
 		}
 	}
 	
+	.flex {
+		.spacer {
+			flex-grow: 10;
+		}
+	}
+	
 	.grow-0 {
 		flex-grow: 0;
 	}
@@ -172,13 +182,16 @@
 		transform: scaleY(-1);
 	}
 	
-	.aligned-left {
+	.aligned-left,
+	.align-left {
 		text-align: left;
 	}
-	.aligned-right {
+	.aligned-right,
+	.align-right {
 		text-align: right;
 	}
-	.aligned-center {
+	.aligned-center,
+	.align-center {
 		text-align: center;
 	}
 }
@@ -1983,6 +1996,27 @@ form {
 	}
 }
 
+.rs-component.rssw.component-entity-inside {
+	
+	.entities {
+		border-top: 1px solid @rsWhite;
+		padding: 7px;
+	}
+	
+	.entity {
+		background: transparent;
+		color: @rsBlue;
+		
+		margin: 3px 0px;
+		padding: 3px;
+		border: 0px;
+	}
+	
+	.exit-ship {
+		margin-left: 10px;
+	}
+}
+
 .rs-component.rssw.component-ship-stats {
 	display: inline-flex;
 	flex-direction: column;
@@ -2070,6 +2104,18 @@ form {
 					margin-left: 5px;
 				}
 			}
+			
+			.point-bubble {
+				display: block;
+				height: 40px;
+				width: 40px;
+				line-height: 40px;
+				text-align: center;
+				border: 2px solid @rsGray;
+				border-radius: 15px;
+				vertical-align: middle;
+				font-size: 20px;
+			}
 		}
 		
 		.details {
@@ -2137,7 +2183,6 @@ form {
 	}
 	
 	.data-list {
-		margin: 7px 0px;
 		
 		.property-link {
 			color: @rsLightBlue;

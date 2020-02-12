@@ -59,13 +59,25 @@ class RSCalculator {
 					case "character":
 					case "entity":
 					case "source":
-						expression = expression.replace(variables[0], parseInt(source[variables[2]]) || 0);
+						if(source) {
+							expression = expression.replace(variables[0], parseInt(source[variables[2]]) || 0);
+						} else {
+							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
+						}
 						break;
 					case "target":
-						expression = expression.replace(variables[0], parseInt(target[variables[2]]) || 0);
+						if(target) {
+							expression = expression.replace(variables[0], parseInt(target[variables[2]]) || 0);
+						} else {
+							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
+						}
 						break;
 					case "base":
-						expression = expression.replace(variables[0], parseInt(base[variables[2]]) || 0);
+						if(base) {
+							expression = expression.replace(variables[0], parseInt(base[variables[2]]) || 0);
+						} else {
+							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
+						}
 						break;
 					default:
 						console.warn("Calculator - Unknown variable root", expression, variables);

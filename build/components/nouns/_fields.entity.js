@@ -52,7 +52,7 @@
 	
 	pilot = {
 		"label": "Pilot",
-		"property": "pilot",
+		"property": "entity",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name",
@@ -338,7 +338,7 @@
 		]
 	},
 	profiles,
-	images,
+//	images,
 	{
 		"label": "Inactivated",
 		"property": "inactive",

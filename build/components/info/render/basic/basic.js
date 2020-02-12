@@ -15,6 +15,7 @@
 	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
+	invisibleKeys.no_modifiers = true;
 	invisibleKeys.restock_base = true;
 	invisibleKeys.restock_max = true;
 	invisibleKeys.declaration = true;
@@ -27,12 +28,15 @@
 	invisibleKeys.properties = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
+	invisibleKeys.equipped = true;
 	invisibleKeys.obscured = true;
 //	invisibleKeys.playable = true;
 	invisibleKeys.universe = true;
 	invisibleKeys.playable = true;
+	invisibleKeys.created = true;
 	invisibleKeys.dataset = true;
 	invisibleKeys.history = true;
+	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
 	invisibleKeys.is_shop = true;
 	invisibleKeys.linked = true;
@@ -63,6 +67,13 @@
 	var displayRaw = {};
 	
 	prettifyNames.itemtype = "Item Types";
+	prettifyNames.entity = function(value, record) {
+		if(record._type === "entity") {
+			return "Pilot";
+		} else {
+			return value;
+		}
+	};
 	
 	var byName = function(a, b) {
 		a = (a.name || "").toLowerCase();
@@ -80,7 +91,7 @@
 	knowledgeLink.critical = "knowledge:combat:critical";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 	
-	prettifyValues.range = function(record, value) {
+	prettifyValues.range = function(property, value, record, universe) {
 		if(record.is_attachment) {
 			return value;
 		}
@@ -93,6 +104,25 @@
 			case 5: return "Extreme (5)";
 		}
 		
+		return value;
+	};
+	
+	prettifyValues.piloting = function(property, value, record, universe) {
+		if(universe.indexes.entity[value]) {
+			return universe.indexes.entity[value].name;
+		}
+		return value;
+	};
+	
+	prettifyValues.accepts = function(property, value, record, universe) {
+		if(value) {
+			switch(value) {
+				case "entity":
+					return "Character or Ship";
+				default:
+					return value.capitalize();
+			}
+		}
 		return value;
 	};
 	
@@ -239,7 +269,7 @@
 					return true;
 				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
 					return true;
-				} else if(!record.owner && !(record.owners || record.owners.length === 0)) {
+				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
 					return true;
 				} else {
 					return false;
@@ -300,7 +330,7 @@
 			},
 			"prettifyKey": function(key) {
 			},
-			"prettifyPropertyName": function(property) {
+			"prettifyPropertyName": function(property, record) {
 				switch(typeof(this.record._prettifyName)) {
 					case "function":
 						return this.record._prettifyName(property);
@@ -315,13 +345,13 @@
 						case "string":
 							return prettifyNames[property];
 						case "function":
-							return prettifyNames[property](property);
+							return prettifyNames[property](property, record, this.universe);
 					}
 				}
 
 				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
 			},
-			"prettifyPropertyValue": function(property, value) {
+			"prettifyPropertyValue": function(property, value, record, universe) {
 				if(this.record._calculated && this.record._calculated[property]) {
 					property = this.universe.calculateExpression(value, this.source, this.base, this.target);
 					if(property == value) {
@@ -333,7 +363,7 @@
 				
 				switch(typeof(this.record._prettifyValue)) {
 					case "function":
-						return this.record._prettifyValue(property, value);
+						return this.record._prettifyValue(property, value, record, universe);
 					case "object":
 						if(this.record._prettifyValue[property]) {
 							return this.record._prettifyValue[property];
@@ -345,7 +375,7 @@
 						case "string":
 							return prettifyValues[property];
 						case "function":
-							return prettifyValues[property](this.record, value);
+							return prettifyValues[property](property, value, record, universe);
 					}
 				}
 				
@@ -528,11 +558,16 @@
 				this.transfer_targets.splice(0);
 				this.attach_targets.splice(0);
 				if(this.source) {
-					
+					if(this.source.inside) {
+						map[this.source.inside] = true;
+					}
 					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 						buffer = this.universe.indexes.entity.listing[x];
-						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.source.id && ((buffer.location && buffer.location === this.source.location) || (buffer.inside && buffer.inside === this.source.inside) || map[buffer.id])) {
+						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.source.id && (buffer.location === this.source.location || buffer.inside === this.source.inside || buffer.id === this.source.inside || buffer.inside === this.source.id || buffer.entity === this.source.id || buffer.id === this.source.entity || map[buffer.id])) {
 							this.transfer_targets.push(buffer);
+							console.log("Added[" + buffer.id + ", " + this.source.inside + ", " + buffer.entity + "]: ", buffer);
+						} else {
+							console.log("Skipped[" + buffer.id + ", " + this.source.inside + ", " + buffer.entity + "]: ", buffer);
 						}
 					}
 					this.transfer_targets.sort(byName);
@@ -540,18 +575,20 @@
 					if(this.record.hardpoints || this.record.contents_max) {
 						for(x=0; this.source.item && x<this.source.item.length; x++) {
 							buffer = this.universe.indexes.item.lookup[this.source.item[x]];
-							if(this.record.cancontain && this.record.cancontain.length) {
-								if(buffer.itemtype && buffer.itemtype.length) {
-									hold = true;
-									for(y=0; hold && y<buffer.itemtype.length; y++) {
-										if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
-											this.attach_targets.push(buffer);
-											hold = false;
+							if(buffer.id !== this.record.id) {
+								if(this.record.cancontain && this.record.cancontain.length) {
+									if(buffer.itemtype && buffer.itemtype.length) {
+										hold = true;
+										for(y=0; hold && y<buffer.itemtype.length; y++) {
+											if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
+												this.attach_targets.push(buffer);
+												hold = false;
+											}
 										}
 									}
+								} else {
+									this.attach_targets.push(buffer);
 								}
-							} else {
-								this.attach_targets.push(buffer);
 							}
 						}
 					}

@@ -59,8 +59,11 @@
 		"optionValue": "id",
 		"optionLabel": "name",
 		"options": [{
+			"name": "Building Ability",
+			"id": "building"
+		}, {
 			"name": "Character Ability",
-			"id": undefined
+			"id": "character"
 		}, {
 			"name": "Piloting Ability",
 			"id": "pilot"
@@ -68,8 +71,14 @@
 			"name": "Planet Ability",
 			"id": "planet"
 		}, {
+			"name": "Room Ability",
+			"id": "room"
+		}, {
 			"name": "Ship Ability",
 			"id": "ship"
+		}, {
+			"name": "Star System Ability",
+			"id": "system"
 		}, {
 			"name": "Station Ability",
 			"id": "station"

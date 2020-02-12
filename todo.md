@@ -1,13 +1,9 @@
 # Current
-+ Location & Entity (Ship,Base,Station,Building) Info window give  "Set Party Location" or "Set Entity Residence" options for master
-+ List nested entities at location
-+ Add location & Resides In to character view
-+ Add location to ship view
-+ Info link items in history where modified is a object key
-+ History
-+ Attachments
-+ Widgets
-	+ Control?
++ Widget for equipment control
++ Update object for slot consideration requiring the entity to have the information
+	+ Note that slot with "entity" will need the noted entity to be "inside" the requesting entity
++ Equip widget shouold list information from the `entity._equipErrors` information if the item's ID is present
++ Generic enugh to work for ships or characters
 
 # Properties
 √ Flag to nullify item stat inheritance (For Bags)  

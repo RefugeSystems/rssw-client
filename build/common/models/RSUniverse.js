@@ -401,6 +401,7 @@ class RSUniverse extends RSObject {
 			}
 			
 			if(!this.initialized) {
+				this.initialized = true;
 				this.$emit("initialized", this);
 			}
 			

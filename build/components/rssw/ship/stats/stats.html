@@ -1,6 +1,6 @@
 <div class="rs-component rssw component-ship-stats">
-	<div class="picture">
-		<img :src="'/images/rssw/ships/' + ship.profile" />
+	<div class="picture" v-on:click="recalculate()">
+		<rs-render-image class="record-image" v-if="image" :image="image"></rs-render-image>
 	</div>
 	<div class="information flow-h">
 		<div class="skill">
@@ -34,13 +34,17 @@
 			<span v-if="pilot" class="icon" :class="pilot.allegiance || pilot.icon"></span>
 		</div>
 	</div>
-	<div class="data flow-h">
-		<div class="stats flow-v">
-			<div class="stat flow-h" v-for="stat in shipStatList" :key="stat.id" :class="stat.class" v-if="stat">
+	<div class="data flex h">
+		<div class="stats flex v">
+			<div class="stat flex h" v-for="stat in shipStatList" :key="stat.id" :class="stat.class" v-if="stat">
 				<span class="icon-bubble">
 					<span class="icon" :class="stat.icon"></span>
 				</span>
 				<span class="value">{{ship[stat.id]}}</span>
+			</div>
+			<div class="spacer"></div>
+			<div class="point-bubble">
+				<span>{{points}}</span>
 			</div>
 		</div>
 		<div class="details flow-v">
@@ -53,7 +57,8 @@
 					</div>
 					<div>
 						<select v-model="setPilotAbility" v-on:change="setNewPilotAbility(setPilotAbility)">
-							<option value="">No Ability</option>
+							<option value=""></option>
+							<option value>No Ability</option>
 							<option v-for="a in pilotAbilities" :value="a.id">{{a.name}}</option>
 						</select>
 					</div>
@@ -62,27 +67,27 @@
 					<span :class="editingPilotAbility?'fas fa-check':'fas fa-pencil'"></span>
 				</button>
 			</div>
+			<div class="data-list status flow-v aligned-right">
+				<div class="property" v-if="properties.location">
+					<span>Location: </span>
+					<button class="property-link" v-on:click="showInfo(properties.location)">
+						<span :class="properties.location.icon"></span>
+						<span>{{properties.location.name}}</span>
+					</button>
+				</div>
+				<div class="property" v-if="properties.inside">
+					<span>Inside: </span>
+					<button class="property-link" v-on:click="showInfo(properties.inside)">
+						<span :class="properties.inside.icon"></span>
+						<span>{{properties.inside.name}}</span>
+					</button>
+				</div>
+			</div>
 			<div class="abilities flow-h centered wrapped">
 				<button class="ability" v-for="ability in abilities" v-if="ability" v-on:click="showInfo(ability)">
 					<span :class="ability.icon"></span>
 				</button>
 			</div>
-		</div>
-	</div>
-	<div class="data-list status">
-		<div class="property" v-if="properties.location">
-			<span>Location: </span>
-			<button class="property-link" v-on:click="showInfo(properties.location)">
-				<span :class="properties.location.icon"></span>
-				<span>{{properties.location.name}}</span>
-			</button>
-		</div>
-		<div class="property" v-if="properties.inside">
-			<span>Inside: </span>
-			<button class="property-link" v-on:click="showInfo(properties.inside)">
-				<span :class="properties.inside.icon"></span>
-				<span>{{properties.inside.name}}</span>
-			</button>
 		</div>
 	</div>
 	<div class="data-list items" v-if="items.length">
@@ -96,11 +101,6 @@
 				<span :class="item.icon"></span>
 				<span>{{item.name}}</span>
 			</button>
-		</div>
-	</div>
-	<div class="mounts flow-h">
-		<div v-for="slot in availableSlots">
-			{{slot.name}}
 		</div>
 	</div>
 </div>

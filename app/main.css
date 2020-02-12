@@ -17,62 +17,101 @@
 .rs-component .visibility {
   padding: 4px;
 }
-.rs-component .flow-h {
+.rs-component .flow-h,
+.rs-component .flow.h,
+.rs-component .flex.h {
   display: flex;
   flex-direction: row;
 }
-.rs-component .flow-h.wrap {
+.rs-component .flow-h.wrap,
+.rs-component .flow.h.wrap,
+.rs-component .flex.h.wrap {
   flex-wrap: wrap;
 }
-.rs-component .flow-h.reversed {
+.rs-component .flow-h.reversed,
+.rs-component .flow.h.reversed,
+.rs-component .flex.h.reversed {
   flex-direction: row-reversed;
 }
-.rs-component .flow-h.lefted {
+.rs-component .flow-h.lefted,
+.rs-component .flow.h.lefted,
+.rs-component .flex.h.lefted {
   justify-content: flex-start;
 }
-.rs-component .flow-h.justified {
+.rs-component .flow-h.justified,
+.rs-component .flow.h.justified,
+.rs-component .flex.h.justified {
   justify-content: space-between;
 }
-.rs-component .flow-h.righted {
+.rs-component .flow-h.righted,
+.rs-component .flow.h.righted,
+.rs-component .flex.h.righted {
   justify-content: flex-end;
 }
-.rs-component .flow-h.centered {
+.rs-component .flow-h.centered,
+.rs-component .flow.h.centered,
+.rs-component .flex.h.centered {
   justify-content: center;
   align-items: center;
 }
-.rs-component .flow-h.middled {
+.rs-component .flow-h.middled,
+.rs-component .flow.h.middled,
+.rs-component .flex.h.middled {
   align-content: center;
 }
-.rs-component .flow-h.inline {
+.rs-component .flow-h.inline,
+.rs-component .flow.h.inline,
+.rs-component .flex.h.inline {
   display: inline-flex;
 }
-.rs-component .flow-v {
+.rs-component .flow-v,
+.rs-component .flow-v,
+.rs-component .flex.v {
   display: flex;
   flex-direction: column;
 }
-.rs-component .flow-v.wrap {
+.rs-component .flow-v.wrap,
+.rs-component .flow-v.wrap,
+.rs-component .flex.v.wrap {
   flex-wrap: wrap;
 }
-.rs-component .flow-v.reversed {
+.rs-component .flow-v.reversed,
+.rs-component .flow-v.reversed,
+.rs-component .flex.v.reversed {
   flex-direction: column-reversed;
 }
-.rs-component .flow-v.lefted {
+.rs-component .flow-v.lefted,
+.rs-component .flow-v.lefted,
+.rs-component .flex.v.lefted {
   justify-content: flex-start;
 }
-.rs-component .flow-v.justified {
+.rs-component .flow-v.justified,
+.rs-component .flow-v.justified,
+.rs-component .flex.v.justified {
   justify-content: space-between;
 }
-.rs-component .flow-v.righted {
+.rs-component .flow-v.righted,
+.rs-component .flow-v.righted,
+.rs-component .flex.v.righted {
   justify-content: flex-end;
 }
-.rs-component .flow-v.centered {
+.rs-component .flow-v.centered,
+.rs-component .flow-v.centered,
+.rs-component .flex.v.centered {
   align-items: center;
 }
-.rs-component .flow-v.middled {
+.rs-component .flow-v.middled,
+.rs-component .flow-v.middled,
+.rs-component .flex.v.middled {
   align-content: center;
 }
-.rs-component .flow-v.inline {
+.rs-component .flow-v.inline,
+.rs-component .flow-v.inline,
+.rs-component .flex.v.inline {
   display: inline-flex;
+}
+.rs-component .flex .spacer {
+  flex-grow: 10;
 }
 .rs-component .grow-0 {
   flex-grow: 0;
@@ -98,13 +137,16 @@
 .rs-component .flipped-v {
   transform: scaleY(-1);
 }
-.rs-component .aligned-left {
+.rs-component .aligned-left,
+.rs-component .align-left {
   text-align: left;
 }
-.rs-component .aligned-right {
+.rs-component .aligned-right,
+.rs-component .align-right {
   text-align: right;
 }
-.rs-component .aligned-center {
+.rs-component .aligned-center,
+.rs-component .align-center {
   text-align: center;
 }
 .rs-component .rs-border {
@@ -1566,6 +1608,20 @@ form {
 .rs-component.rssw.component-entity-inside .exit-ship {
   margin-left: 10px;
 }
+.rs-component.rssw.component-entity-inside .entities {
+  border-top: 1px solid #EAEFF9;
+  padding: 7px;
+}
+.rs-component.rssw.component-entity-inside .entity {
+  background: transparent;
+  color: #617EB8;
+  margin: 3px 0px;
+  padding: 3px;
+  border: 0px;
+}
+.rs-component.rssw.component-entity-inside .exit-ship {
+  margin-left: 10px;
+}
 .rs-component.rssw.component-ship-stats {
   display: inline-flex;
   flex-direction: column;
@@ -1632,6 +1688,17 @@ form {
 .rs-component.rssw.component-ship-stats .data .stats .stat .value {
   margin-left: 5px;
 }
+.rs-component.rssw.component-ship-stats .data .stats .point-bubble {
+  display: block;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  text-align: center;
+  border: 2px solid #928282;
+  border-radius: 15px;
+  vertical-align: middle;
+  font-size: 20px;
+}
 .rs-component.rssw.component-ship-stats .data .details {
   padding: 0px 0px 0px 5px;
   flex-grow: 10;
@@ -1683,9 +1750,6 @@ form {
   padding: 4px;
   border: 0px;
   margin: 4px;
-}
-.rs-component.rssw.component-ship-stats .data-list {
-  margin: 7px 0px;
 }
 .rs-component.rssw.component-ship-stats .data-list .property-link {
   color: #6f9bf5;

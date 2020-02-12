@@ -12,6 +12,14 @@ class RSItem extends RSObject {
 		super(details, universe);
 	}
 	
+	recalculatePrefetch() {
+		if(this._coreData.no_modifiers) {
+			this._replacedReferences.item = [];
+		} else {
+			this._replacedReferences.item = false;
+		}
+	}
+	
 	recalculateHook() {
 		var sum = 0,
 			buffer,

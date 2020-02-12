@@ -72,6 +72,10 @@
 		"property": "pilot_skill",
 		"type": "text"
 	}, {
+		"label": "Point Cost",
+		"property": "point_cost",
+		"type": "text"
+	}, {
 		"label": "Bonus: Boost",
 		"property": "bonus_boost",
 		"type": "text"

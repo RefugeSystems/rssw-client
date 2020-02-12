@@ -10,6 +10,9 @@
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		if(!details.location) {
+			details.location = "location:universe";
+		}
 //		this._tracking = {};
 //		if(!this.history) {
 //			this.history = [];

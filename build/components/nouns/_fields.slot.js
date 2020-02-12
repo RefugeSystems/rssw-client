@@ -3,11 +3,45 @@
 	
 	var dataSource,
 		itemtypes,
+		accepts,
+		attrs,
+		stats,
 		notes;
+	
+	accepts = {
+		"label": "Accepts",
+		"property": "accepts",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"item",
+			"room",
+			"entity"
+		]
+	};
 	
 	itemtypes = {
 		"label": "Item Types",
 		"property": "itemtype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"accepts": "item"
+		}
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -43,6 +77,15 @@
 		"property": "encumberance",
 		"type": "number"
 	}, {
+		"label": "Points",
+		"property": "points",
+		"type": "number"
+	},
+	accepts,
+	itemtypes,
+	attrs,
+	stats,
+	{
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -51,7 +94,6 @@
 		"property": "obscured",
 		"type": "checkbox"
 	},
-	itemtypes,
 	notes,
 	{
 		"label": "Master Note",
@@ -75,7 +117,10 @@
 			return data;
 		},
 		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
+			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {
 			"update": function() {
