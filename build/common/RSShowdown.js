@@ -76,6 +76,17 @@
 						value = entity[value[0]] || "";
 					}
 					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
+				} else if(value[0] === "#") {
+					value = value.substring(1).trim();
+					if(value && (value = universe.index.index[value])) {
+						value = value.icon;
+					} else if(entity) {
+						value = entity.icon;
+					}
+					if(!value) {
+						value = "";
+					}
+					element = $("<span class=\"" + value + "\"></span>");
 				} else {
 					// Linked
 					mark = universe.index.index[properties.id || value];

@@ -53,6 +53,10 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "XP Cost",
+		"property": "xp_cost",
+		"type": "text"
+	}, {
 		"label": "Type",
 		"property": "type",
 		"type": "select",

@@ -24,6 +24,7 @@
 	rsSystem.component("rsswShipStats", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSShowdown,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
@@ -57,22 +58,39 @@
 			data.abilities = [];
 			data.ability = null;
 
+			data.trackEffectTimeout = null;
+			data.showEffectInfo = null;
+			data.effectIndicators = {};
+			data.effectDismissTimer = {};
+			data.effectDismissCount = {};
+			data.effectSelector = null;
+			data.availableEffects = {};
+			data.effectsOpen = false;
+			data.activeEffects = [];
+			data.shipEffects = [];
+
 			data.availableSlots = [];
 			data.mounted = [];
 			data.points = 0;
 			
 			return data;
 		},
+		"watch": {
+			"ship": function() {
+				this.update();
+			}
+		},
 		"mounted": function() {
 			rsSystem.register(this);
 			
-			this.$el.onclick = (event) => {
-				var follow = event.srcElement.attributes.getNamedItem("data-id");
-				if(follow && (follow = this.universe.index.index[follow.value])) {
-//					console.log("1Follow: ", follow);
-					rsSystem.EventBus.$emit("display-info", follow);
-				}
-			};
+//			this.$el.onclick = (event) => {
+//				var follow = event.srcElement.attributes.getNamedItem("data-id");
+//				if(follow && (follow = this.universe.index.index[follow.value])) {
+//					rsSystem.EventBus.$emit("display-info", follow);
+//				}
+//			};
+
+			Vue.set(this, "effectSelector", $(this.$el).find(".effect-selector"));
 
 			this.universe.$on("model:modified", this.updateFromUniverse);
 			this.ship.$on("modified", this.update);
@@ -80,8 +98,71 @@
 			this.update();
 		},
 		"methods": {
-			"isOwner": function(record) {
-				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
+//			"isOwner": function(record) {
+//				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
+//			},
+			"toggleEffectMenu": function(state) {
+				if(state === undefined) {
+					Vue.set(this, "effectsOpen", !this.effectsOpen);
+				} else {
+					Vue.set(this, "effectsOpen", !!state);
+				}
+				
+				if(this.effectsOpen) {
+					this.effectSelector.css({"max-height": (100 + 50 * this.shipEffects.length) + "px"});
+				} else {
+					this.effectSelector.css({"max-height": ""});
+				}
+			},
+			"focusEffect": function(effect) {
+				setTimeout(() => {
+					if(this.trackEffectTimeout) {
+						clearTimeout(this.trackEffectTimeout);
+						this.trackEffectTimeout = null;
+					}
+					Vue.set(this, "showEffectInfo", effect.id);
+				}, 1);
+			},
+			"blurEffect": function(effect) {
+				this.trackEffectTimeout = setTimeout(() => {
+					Vue.set(this, "showEffectInfo", null);
+					this.trackEffectTimeout = null;
+				}, 500);
+			},
+			"getEffectIcon": function(effect) {
+				if(effect) {
+					if(effect.icon) {
+						return effect.icon;
+					}
+					if(this.availableEffects[effect._sourced]) {
+						return this.availableEffects[effect._sourced].icon;
+					}
+				}
+				return "ra ra-doubled";
+			},
+			"assignEffect": function(effect) {
+				this.ship.assignEffect(effect);
+				this.toggleEffectMenu(false);
+			},
+			"hasEffectHasIndicators": function(effect) {
+				return this.availableEffects[effect._sourced] && this.availableEffects[effect._sourced].indicators;
+			},
+			"alterIndicator": function(effect, indicator) {
+				if(effect.indicator !== indicator) {
+					this.ship.assignEffectIndicator(effect, indicator);
+				}
+			},
+			"dismissEffect": function(effect) {
+				console.log("Dismiss: " + effect.id);
+				if(this.effectDismissTimer[effect.id] && (Date.now() - this.effectDismissTimer[effect.id]) < 1000) {
+					this.effectDismissCount[effect.id] += 1;
+					if(this.effectDismissCount[effect.id] === 3) {
+						this.ship.dismissEffect(effect);
+					}
+				} else {
+					this.effectDismissTimer[effect.id] = Date.now();
+					this.effectDismissCount[effect.id] = 1;
+				}
 			},
 			"editPilot": function() {
 				Vue.set(this, "editingPilot", !this.editingPilot);
@@ -90,11 +171,23 @@
 				Vue.set(this, "editingPilotAbility", !this.editingPilotAbility);
 			},
 			"showInfo": function(view) {
+				console.log("Info: ", view);
 				rsSystem.EventBus.$emit("display-info", {
 					"base": this.ship,
 					"target": this.pilot,
 					"record": view
 				});
+			},
+			"getPilotClass": function() {
+				if(!this.pilot) {
+					return "rs-light-red";
+				}
+				
+				if(this.pilot && this.pilot.inside !== this.ship.id) {
+					return "rs-light-orange";
+				}
+				
+				return "rs-white";
 			},
 			"setNewPilot": function(setPilot) {
 				Vue.set(this, "editingPilot", false);
@@ -141,6 +234,21 @@
 					}
 				}
 				this.availablePilots.sort(byName);
+
+				for(x=0; x<this.shipEffects.length; x++) {
+					Vue.delete(this.availableEffects, this.shipEffects[x].id);
+				}
+				this.shipEffects.splice(0);
+				for(x=0; x<this.universe.indexes.effect.listing.length; x++) {
+					buffer = this.universe.indexes.effect.listing[x];
+					if(buffer.alters && buffer.alters.indexOf("ship") !== -1) {
+						Vue.set(this.availableEffects, buffer.id, buffer);
+						if(!buffer.obscured || this.player.master) {
+							this.shipEffects.push(buffer);
+						}
+					}
+				}
+				this.shipEffects.sort(this.sortData);
 			},
 			"update": function() {
 				var points = this.ship.points || 0,
@@ -205,7 +313,7 @@
 					Vue.set(this, "abilityDescription", this.rsshowdown(buffer.description, this.ship, this.pilot));
 					Vue.set(this, "pilotAbility", buffer);
 				} else {
-					Vue.set(this, "abilityDescription", this.rsshowdown(this.ship.description, this.ship));
+					Vue.set(this, "abilityDescription", this.rsshowdown(this.ship.description || "", this.ship));
 					Vue.set(this, "pilotAbility", null);
 				}
 				
@@ -240,6 +348,15 @@
 					}
 				} else {
 					this.items.splice(0);
+				}
+				
+				if(this.ship.effect && this.ship.effect.length !== this.activeEffects.length) {
+					this.activeEffects.splice(0);
+					for(x=0; x<this.ship.effect.length; x++) {
+						this.activeEffects.push(this.ship.effect[x]);
+						Vue.set(this.effectIndicators, this.ship.effect[x].id, this.ship.effect[x].indicator || "");
+					}
+					this.activeEffects.sort(this.sortData);
 				}
 				
 				if(this.ship.name) {

@@ -17,6 +17,8 @@ rsSystem.component("RSSWDashboard", {
 			entity,
 			x;
 		
+		data.selectedEntities = [];
+		
 		entities = Object.keys(this.universe.nouns.entity);
 		data.owned = [];
 		for(x=0; x<entities.length; x++) {
@@ -40,6 +42,47 @@ rsSystem.component("RSSWDashboard", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"canOpenDashboard": function() {
+			return !!this.selectedEntities.length;
+		},
+		"toggleSelect": function(record) {
+			var index = this.selectedEntities.indexOf(record);
+			if(index === -1) {
+				this.selectedEntities.push(record);
+			} else {
+				this.selectedEntities.splice(index, 1);
+			}
+		},
+		"isSelected": function(record) {
+			return this.selectedEntities.indexOf(record) !== -1;
+		},
+		"openDashboard": function(type) {
+			var primary = null,
+				eids = [].concat(this.selectedEntities),
+				x;
+			
+			switch(type) {
+				case "ship":
+					for(x=0; !primary && x<this.selectedEntities.length; x++) {
+						if(this.selectedEntities[x].entity === this.self.id) {
+							primary = this.selectedEntities[x].id;
+							eids.splice(x, 1);
+						}
+					}
+					
+					if(!primary) {
+						primary = this.selectedEntities[0].id;
+						eids.splice(0, 1);
+					}
+
+					for(x=0; x<eids.length; x++) {
+						eids[x] = eids[x].id;
+					}
+					
+					window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(","), "dashboard");
+					break;
+			}
+		},
 		"updateDisplay": function() {
 			this.$forceUpdate();
 		},

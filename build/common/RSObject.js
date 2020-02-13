@@ -179,7 +179,7 @@ class RSObject extends EventEmitter {
 							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
 							for(z=0; z<hold.length; z++) {
 								index = tracking.indexOf(buffer[y]);
-								if(index !== -1) {
+								if(index !== -1 && ((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))) {
 									switch(keys[x]) {
 										case "item":
 										case "room":
@@ -368,6 +368,7 @@ class RSObject extends EventEmitter {
 	loadNounReferenceModifications(noun, base, debug) {
 		if(this.universe.nouns) {
 			var reference,
+				buffer,
 				x;
 			
 			if(base && base._overrides && base._overrides[noun]) {
@@ -384,13 +385,13 @@ class RSObject extends EventEmitter {
 			
 			if(reference instanceof Array) {
 				for(x=0; x<reference.length; x++) {
-					if(this.universe.nouns[noun][reference[x]] && this.universe.nouns[noun][reference[x]].performModifications) {
-						this.universe.nouns[noun][reference[x]].performModifications(base, this.id, debug);
+					if(reference[x] && (buffer = this.universe.nouns[noun][reference[x]._sourced || reference[x]])) {
+						buffer.performModifications(base, this.id, debug);
 					}
 				}
 			} else {
-				if(this.universe.nouns[noun][reference] && this.universe.nouns[noun][reference].performModifications) {
-					this.universe.nouns[noun][reference].performModifications(base, this.id, debug);
+				if(reference && (buffer = this.universe.nouns[noun][reference._sourced || reference])) {
+					buffer.performModifications(base, this.id, debug);
 				}
 			}
 		}
@@ -469,37 +470,39 @@ class RSObject extends EventEmitter {
 					}
 					if(this._coreData[rsSystem.listingNouns[x]] instanceof Array) {
 						for(y=0; y<this._coreData[rsSystem.listingNouns[x]].length; y++) {
-							buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]][y]];
-							if(buffer) {
-								if(debug) {
-									console.log("Perform Cross Check Array Buffer: " + buffer.id, buffer);
-								}
-								if(buffer.modifierstats && buffer.modifierstats.length) {
-									for(m=0; m<buffer.modifierstats.length; m++) {
-										mod = this.universe.indexes.modifierstats.lookup[buffer.modifierstats[m]];
-										if(mod) {
-											mod.performModifications(base, this.id, debug);
-										} else {
-											console.warn("Missing Modifier[" + buffer.modifierstats[m] + "] for object[" + this.id + "]");
+							if(this._coreData[rsSystem.listingNouns[x]][y]) {
+								buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]][y]._sourced || this._coreData[rsSystem.listingNouns[x]][y]];
+								if(buffer) {
+									if(debug) {
+										console.log("Perform Cross Check Array Buffer: " + buffer.id, buffer);
+									}
+									if(buffer.modifierstats && buffer.modifierstats.length) {
+										for(m=0; m<buffer.modifierstats.length; m++) {
+											mod = this.universe.indexes.modifierstats.lookup[buffer.modifierstats[m]];
+											if(mod) {
+												mod.performModifications(base, this.id, debug);
+											} else {
+												console.warn("Missing Modifier[" + buffer.modifierstats[m] + "] for object[" + this.id + "]");
+											}
 										}
 									}
-								}
-								if(buffer.modifierattrs && buffer.modifierattrs.length) {
-									for(m=0; m<buffer.modifierattrs.length; m++) {
-										mod = this.universe.indexes.modifierattrs.lookup[buffer.modifierattrs[m]];
-										if(mod) {
-											mod.performModifications(base, this.id, debug);
-										} else {
-											console.warn("Missing Modifier[" + buffer.modifierattrs[m] + "] for object[" + this.id + "]");
+									if(buffer.modifierattrs && buffer.modifierattrs.length) {
+										for(m=0; m<buffer.modifierattrs.length; m++) {
+											mod = this.universe.indexes.modifierattrs.lookup[buffer.modifierattrs[m]];
+											if(mod) {
+												mod.performModifications(base, this.id, debug);
+											} else {
+												console.warn("Missing Modifier[" + buffer.modifierattrs[m] + "] for object[" + this.id + "]");
+											}
 										}
 									}
+								} else {
+									console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 								}
-							} else {
-								console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 							}
 						}
-					} else {
-						buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]]];
+					} else if(this._coreData[rsSystem.listingNouns[x]]) {
+						buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]]._sourced || this._coreData[rsSystem.listingNouns[x]]];
 						if(buffer) {
 							if(debug) {
 								console.log("Perform Cross Check Array Buffer: " + buffer.id);

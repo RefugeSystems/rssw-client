@@ -17,10 +17,10 @@
 								<option v-for="p in availablePilots" :value="p.id">{{p.name}}</option>
 							</select>
 						</div>
-						<div v-if="!editingPilot && pilot" class="name-display flow-h">
+						<div v-if="!editingPilot && pilot" class="name-display flow-h" :class="getPilotClass()">
 							<span>{{pilot.name}}</span>
 						</div>
-						<div v-if="!editingPilot && !pilot" class="name-display flow-h">
+						<div v-if="!editingPilot && !pilot" class="name-display flow-h" :class="getPilotClass()">
 							<span>No Pilot</span>
 						</div>
 						<button v-on:click="editPilot()" class="flow-h">
@@ -85,7 +85,7 @@
 							</button>
 						</div>
 					</div>
-					<div class="abilities flow-h centered wrapped">
+					<div class="abilities flow-h centered wrap">
 						<button class="ability" v-for="ability in abilities" v-if="ability" v-on:click="showInfo(ability)">
 							<span :class="ability.icon"></span>
 						</button>
@@ -107,7 +107,29 @@
 			</div>
 		</div>
 		<div class="ship-effects">
-			
+			<div class="effect-selector" :class="effectsOpen?'select-effect':'closed'">
+				<button class="effect-button effect-token effect-toggle" v-on:click="toggleEffectMenu()">
+					<span class="fas fa-arrow-circle-up" :class="effectsOpen?'rot0 rs-light-blue':'rot180 rs-white'"></span>
+				</button>
+				<button v-for="effect in shipEffects" class="effect-button effect-token rs-gray" v-on:click="assignEffect(effect)">
+					<span :class="effect.icon"></span>
+				</button>
+				<button class="effect-button effect-token" v-on:click="showInfo('knowledge:effects:ships')">
+					<span class="fas fa-info-circle rs-light-blue"></span>
+				</button>
+			</div>
+			<div class="effect-token-container" v-for="effect in activeEffects">
+				<button class="effect-button effect-token rs-light-blue" v-on:click="dismissEffect(effect)" v-on:focus="focusEffect(effect)" v-on:blur="blurEffect(effect)">
+					<span :class="getEffectIcon(effect)"></span>
+				</button>
+				<button v-if="showEffectInfo === effect.id" class="effect-button effect-info rs-light-blue" v-on:click="showInfo(effect._sourced)" v-on:focus="focusEffect(effect)" v-on:blur="blurEffect(effect)">
+					<span class="fas fa-info-circle"></span>
+				</button>
+				<select v-if="hasEffectHasIndicators(effect)" v-model="effectIndicators[effect.id]" v-on:change="alterIndicator(effect, effectIndicators[effect.id])">
+					<option v-if="!effect.indicator" value=""></option>
+					<option v-for="opt in availableEffects[effect._sourced].indicators" :value="opt">{{opt}}</option>
+				</select>
+			</div>
 		</div>
 	</div>
 </div>

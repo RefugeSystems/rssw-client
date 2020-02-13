@@ -71,9 +71,9 @@ rsSystem.component("RSSWStats", {
 			},
 			"shield": {
 				"name": "Shield",
-				"info": "Similar to strength",
+				"info": "A ship's ability to absorb incoming damage before its hull begins to take damage",
 				"class": "rs-blue",
-				"icon": "fal fa-futbol rot45"
+				"icon": "fal fa-futbol"
 			}
 		};
 		data.entityStats.flight = {

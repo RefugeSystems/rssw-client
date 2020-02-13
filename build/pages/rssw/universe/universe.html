@@ -11,19 +11,24 @@
 				
 				<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()">
 					<option value="">Choose Action</option>
+					<option disabled value="div">-- Dashboards --</option>
+					<option value="dashboard-ships">Dashboard: Ships</option>
+					<option disabled value="div">-- Items --</option>
 					<option value="spawn">Spawn Template Entities</option>
 					<option value="give">Give Items</option>
 					<option value="take">Take Items</option>
+					<option disabled value="div">-- Records --</option>
 					<option value="obscure">Obscure Record</option>
 					<option value="unobscure">Unobscure Record</option>
+					<option disabled value="div">-- Clean --</option>
 					<option value="drop">Delete Objects</option>
 				</select>
 				<select v-model="target">
 					<option value="">No Target</option>
 					<option v-for="en in universe.indexes.entity.listing" :value="en.id">{{en.name}}</option>
-					<option value="">-- Player Divide --</option>
+					<option disabled value="div">-- Player Divide --</option>
 					<option v-for="pl in universe.indexes.player.listing" :value="pl.id">{{pl.name}}</option>
-					<option value="">-- Item Divide --</option>
+					<option disabled value="div">-- Item Divide --</option>
 					<option v-for="it in universe.indexes.item.listing" :value="it.id" v-if="!it.template">{{it.name}}</option>
 				</select>
 				

@@ -32,12 +32,12 @@
 		"property": "name",
 		"type": "text"
 	}, {
-		"label": "Soak",
-		"property": "soak",
-		"type": "text"
-	}, {
 		"label": "Critical",
 		"property": "critical",
+		"type": "text"
+	}, {
+		"label": "Soak",
+		"property": "soak",
 		"type": "text"
 	}, {
 		"label": "Max Wound",
@@ -76,6 +76,14 @@
 		"property": "point_cost",
 		"type": "text"
 	}, {
+		"label": "XP Cost",
+		"property": "xp_cost",
+		"type": "text"
+	}, {
+		"label": "Required Crew",
+		"property": "required_crew",
+		"type": "text"
+	}, {
 		"label": "Bonus: Boost",
 		"property": "bonus_boost",
 		"type": "text"
@@ -106,6 +114,10 @@
 	}, {
 		"label": "Energy Potential",
 		"property": "energy_potential",
+		"type": "text"
+	}, {
+		"label": "Mass",
+		"property": "mass",
 		"type": "text"
 	}, {
 		"label": "Encumberance",

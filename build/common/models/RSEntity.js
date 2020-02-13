@@ -15,6 +15,11 @@ class RSEntity extends RSObject {
 		} else {
 			this._equipBuffer = {};
 		}
+		if(this._coreData.effect) {
+			this._effectBuffer = JSON.parse(JSON.stringify(this._coreData.effect));
+		} else {
+			this._effectBuffer = [];
+		}
 		if(!details.location) {
 			details.location = "location:universe";
 		}
@@ -43,25 +48,122 @@ class RSEntity extends RSObject {
 //		];
 	}
 	
-	recalculateHook() {
-		var pilot,
-			stats,
-			x;
+	/**
+	 * 
+	 * @method assignEffect
+	 * @param {RSEffect} effect
+	 * @param {Object} [details]
+	 */
+	assignEffect(effect, details) {
+		effect = effect.id || effect;
+		details = details || {};
+		details.id = effect + ":" + this._effectBuffer.length + ":" + Date.now();
+		details._sourced = effect;
+		details.time = this.universe.time_game || this.universe.time || Date.now();
+		this._effectBuffer.push(details);
+		this.commit({
+			"effect": this._effectBuffer
+		});
+	}
+	
+	
+	assignEffectIndicator(detail_id, indicator) {
+		detail_id = detail_id.id || detail_id;
 		
-		if(this.pilot && (pilot = this.universe.indexes.entity.index[this.pilot])) {
-			stats = [
-				"evasion",
-				"attack",
-				"shield",
-				"hull"
-			];
+		if(detail_id && this._effectBuffer.length) {
+			var index = -1,
+				x;
 			
-			for(x=0; x<stats.length; x++) {
-				if(pilot["bonus_" + stats[x]]) {
-					this[stats[x]] += pilot["bonus_" + stats[x]];
+			if(!indicator) {
+				indicator = null;
+			}
+			
+			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
+				if(this._effectBuffer[x].id === detail_id) {
+					index = x;
 				}
 			}
+			
+			if(index !== -1) {
+				this._effectBuffer[index].indicator = indicator;
+				this.commit({
+					"effect": this._effectBuffer
+				});
+				return true;
+			}
 		}
+		
+		return false;
+	}
+	
+	
+	editEffect(detail_id, details) {
+		detail_id = detail_id.id || detail_id;
+		
+		if(detail_id && this._effectBuffer.length && details) {
+			var index = -1,
+				x;
+			
+			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
+				if(this._effectBuffer[x].id === detail_id) {
+					index = x;
+				}
+			}
+			
+			if(index !== -1) {
+				Object.assign(this._effectBuffer[index],  details);
+				this.commit({
+					"effect": this._effectBuffer
+				});
+				return true;
+			}
+		}
+	}
+
+	dismissEffect(detail_id) {
+		detail_id = detail_id.id || detail_id;
+		
+		if(detail_id && this._effectBuffer.length) {
+			var index = -1,
+				x;
+			
+			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
+				if(this._effectBuffer[x].id === detail_id) {
+					index = x;
+				}
+			}
+			
+			if(index !== -1) {
+				this._effectBuffer.splice(index, 1);
+				this.commit({
+					"effect": this._effectBuffer
+				});
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	recalculateHook() {
+//		var pilot,
+//			stats,
+//			x;
+//		
+//		if(this.pilot && (pilot = this.universe.indexes.entity.index[this.pilot])) {
+//			stats = [
+//				"evasion",
+//				"attack",
+//				"shield",
+//				"hull"
+//			];
+//			
+//			for(x=0; x<stats.length; x++) {
+//				if(pilot["bonus_" + stats[x]]) {
+//					this[stats[x]] += pilot["bonus_" + stats[x]];
+//				}
+//			}
+//		}
 	}
 	
 	/**
@@ -76,8 +178,8 @@ class RSEntity extends RSObject {
 	/**
 	 * 
 	 * @method equipSlot
-	 * @param {RSSlot} slot
-	 * @param {RSEntity | RSItem | RSRoom} equip
+	 * @param {String | RSSlot} slot
+	 * @param {String | RSEntity | RSItem | RSRoom} equip
 	 */
 	equipSlot(slot, equip) {
 		if(typeof(slot) === "string") {
@@ -110,8 +212,8 @@ class RSEntity extends RSObject {
 	/**
 	 * 
 	 * @method unequipSlot
-	 * @param {RSSlot} slot
-	 * @param {RSEntity | RSItem | RSRoom} equip
+	 * @param {String | RSSlot} slot
+	 * @param {String | RSEntity | RSItem | RSRoom} equip
 	 */
 	unequipSlot(slot, equip) {
 		var index;

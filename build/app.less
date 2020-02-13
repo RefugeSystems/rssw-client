@@ -95,6 +95,10 @@
 			justify-content: center;
 		}
 		
+		&.center {
+			align-items: center;
+		}
+		
 		&.middled {
 			align-content: center;
 		}
@@ -131,6 +135,10 @@
 		}
 		
 		&.centered {
+			align-items: center;
+		}
+		
+		&.center {
 			align-items: center;
 		}
 		
@@ -339,54 +347,71 @@
 
 .system-component,
 .rs-component {
-	.rs-darkOrange {
-		color: @rsDarkOrange !important;
-	}
-	.rs-orange {
-		color: @rsOrange !important;
-	}
-	.rs-lightOrange {
-		color: @rsLightOrange !important;
-	}
-	.rs-darkblue {
-		color: @rsDarkBlue !important;
-	}
-	.rs-blue {
-		color: @rsBlue !important;
-	}
-	.rs-lightBlue {
-		color: @rsLightBlue !important;
-	}
-	.rs-white {
-		color: @rsWhite !important;
-	}
-	.rs-black {
-		color: @rsBlack !important;
-	}
-	.rs-gray, .rs-grey {
-		color: @rsGray !important;
-	}
-	.rs-green {
-		color: @rsGreen !important;
+	.rs-lightred, .rs-light-red {
+		color: @rsLightRed !important;
 	}
 	.rs-red {
 		color: @rsRed !important;
 	}
+	.rs-darkred, .rs-dark-red {
+		color: @rsDarkRed !important;
+	}
+	.rs-lightOrange, .rs-lightorange, .rs-light-orange {
+		color: @rsLightOrange !important;
+	}
+	.rs-orange {
+		color: @rsOrange !important;
+	}
+	.rs-darkOrange, .rs-darkorange, .rs-dark-orange {
+		color: @rsDarkOrange !important;
+	}
+	.rs-lightyellow, .rs-light-yellow {
+		color: @rsLightYellow !important;
+	}
 	.rs-yellow {
 		color: @rsYellow !important;
 	}
-	.rs-light-red {
-		color: @rsLightRed !important;
+	.rs-darkyellow, .rs-dark-yellow {
+		color: @rsDarkYellow !important;
 	}
-	.rs-darkpurple {
-		color: @rsDarkPurple !important;
+	.rs-lightgreen, .rs-light-green {
+		color: @rsLightGreen !important;
+	}
+	.rs-green {
+		color: @rsGreen !important;
+	}
+	.rs-darkgreen, .rs-dark-green {
+		color: @rsDarkGreen !important;
+	}
+	.rs-lightBlue, .rs-lightblue, .rs-light-blue {
+		color: @rsLightBlue !important;
+	}
+	.rs-blue {
+		color: @rsBlue !important;
+	}
+	.rs-darkblue, .rs-dark-blue {
+		color: @rsDarkBlue !important;
+	}
+	.rs-lightpurple, .rs-light-purple {
+		color: @rsLightPurple !important;
 	}
 	.rs-purple {
 		color: @rsPurple !important;
 	}
-	.rs-lightpurple {
-		color: @rsLightPurple !important;
+	.rs-darkpurple,.rs-dark-purple {
+		color: @rsDarkPurple !important;
 	}
+	
+	.rs-white {
+		color: @rsWhite !important;
+	}
+	.rs-gray, .rs-grey {
+		color: @rsGray !important;
+	}
+	.rs-black {
+		color: @rsBlack !important;
+	}
+	
 	.rs-transparent {
 		color: transparent !important;
 	}
@@ -740,6 +765,31 @@ form {
 			color: @rsBlue;
 		}
 	}
+	
+	button.ctrl {
+		background: transparent;
+		padding: 2px;
+		margin: 2px;
+		border: 0px;
+		cursor: pointer;
+	}
+	
+	.ctrl-icon {
+		display: inline-block;
+		line-height: 20px;
+		font-size: 18px;
+		width: 20px;
+	}
+	
+	.dashboards {
+		margin-left: 30px;
+	}
+	
+	.dashboard {
+		font-size: 18px;
+		padding: 4px;
+		margin: 4px;
+	}
 
 	.self {
 		margin: 7px;
@@ -793,9 +843,13 @@ form {
 
 }
 
-.rssw-page.page-dashboard {
+.rssw-page.page-dashboard.page-ships {
+	display: flex;
+	flex-direction: row;
+
 	.ship-column {
 		max-width: 350px;
+		margin: 0px 10px;
 	}
 }
 
@@ -2040,6 +2094,17 @@ form {
 		border: 0px;
 	}
 	
+	.title-info {
+		& > * {
+			vertical-align: middle;
+			display: inline-block;
+		}
+	}
+	
+	.title-readout {
+		font-size: .7em;
+	}
+	
 	.exit-ship {
 		margin-left: 10px;
 	}
@@ -2138,9 +2203,9 @@ form {
 				
 				.point-bubble {
 					display: block;
-					height: 40px;
-					width: 40px;
-					line-height: 40px;
+					height: 38px;
+					width: 38px;
+					line-height: 38px;
 					text-align: center;
 					border: 2px solid @rsGray;
 					border-radius: 15px;
@@ -2205,7 +2270,7 @@ form {
 						background: transparent;
 						font-size: 24px;
 						
-						padding: 4px;
+						padding: 3px;
 						border: 0px;
 						margin: 4px;
 					}
@@ -2266,12 +2331,83 @@ form {
 				}
 			}
 		}
+		
+		.data-list.items {
+			margin-top: 8px;
+		}
 	}
 	
 	.ship-effects {
 		width: 50px;
 		min-height: 50px;
-		background: @rsDarkBlue;
+		padding-top: 50px;
+		z-index: 10;
+		
+		.effect-selector {
+			position: absolute;
+			z-index: 20;
+			top: 0px;
+			
+			background: @rsBlack;
+			transition: max-height .5s;
+			overflow: hidden;
+			max-height: 50px;
+		}
+		
+		.effect-toggle {
+			
+			
+			span {
+				transition: transform .5s, color .5s;
+			}
+		}
+		
+		.effect-token-container {
+			position: relative;
+		}
+		
+		button.effect-token {
+			height: 42px;
+			width: 42px;
+		}
+		
+		div.effect-token {
+			height: 32px;
+			width: 32px;
+		}
+		
+		.effect-token {
+			position: relative;
+		}
+		
+		.effect-button {
+			display: block;
+			padding: 4px;
+			margin: 4px;
+			border: 1px solid @rsGray;
+			border-radius: 15px;
+			background: transparent;
+			outline: none !important;
+			
+			span {
+				line-height: 32px;
+				font-size: 30px;
+			}
+		}
+		
+		button.effect-info {
+			position: absolute;
+			right: -40px;
+			top: 0px;
+			z-index: 30;
+			margin: 0px;
+			background: @rsBlack;
+		}
+		
+		select {
+			margin: -4px 4px 4px 4px;
+		    width: 42px;
+		}
 	}
 }
 

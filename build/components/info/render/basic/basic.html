@@ -29,14 +29,14 @@
 			<div class="reference" v-if="universe.indexes[property]">
 				<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
 					<div class="reference-heading">{{prettifyPropertyName(property, record).pluralize(true)}}</div>
-					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden">
+					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].hidden">
 						<div class="reference-heading" v-if="!collapsed">
-							<span :class="universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''"></span>
-							<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>
+							<span :class="universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].icon:''"></span>
+							<span>{{universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>
 						</div>
-						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord]" :universe="universe"></rs-object-info>
-						<a v-if="collapsed && universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord].id">{{universe.indexes[property].lookup[subrecord].name}}</a>
-						<a v-if="collapsed && !universe.indexes[property].lookup[subrecord]" class="rendered-value unknown">{{subrecord}}[Unknown]</a>
+						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord._sourced || subrecord]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed && universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord._sourced || subrecord].id">{{universe.indexes[property].lookup[subrecord._sourced || subrecord].name}}</a>
+						<a v-if="collapsed && !universe.indexes[property].lookup[subrecord._sourced || subrecord]" class="rendered-value unknown">{{subrecord._sourced || subrecord}}[Unknown]</a>
 					</div>
 				</div>
 				<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
@@ -101,11 +101,35 @@
 	</div>
 	
 	<div v-if="base && canTravelTo(base.id)">
+		<h3>Travel To</h3>
 		<div class="control">
 			<button class="action" v-on:click="travelToHere(base.id)">
 				<span class="fad fa-globe-africa"></span>
 				<span>Travel Here</span>
 			</button>
+		</div>
+	</div>
+	
+	<div v-if="canUnequip()">
+		<div class="control">
+			<button class="action" v-on:click="unequip()">
+				<span class="fas fa-unlink"></span>
+				<span>Unequip from {{base.name}}</span>
+			</button>
+		</div>
+	</div>
+	
+	<div v-if="canEquip() && !canUnequip()">
+		<h3>Equip To</h3>
+		<div class="control">
+			<label>
+				<select v-model="equipToSlot" v-on:change="equip(equipToSlot)">
+					<option value="">Choose Slot</option>
+					<option value="cancel">Cancel</option>
+					<option disabled value="disabled">----------</option>
+					<option v-for="slot in availableSlots" :value="slot.id">{{slot.name}}</option>
+				</select>
+			</label>
 		</div>
 	</div>
 	

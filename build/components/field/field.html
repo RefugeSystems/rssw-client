@@ -78,7 +78,7 @@
 		</div>
 		<div class="referenced" v-for="(reference, $index) in root[field.property]">
 			<span class="reference-display">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:"Missing:" + reference}}</span>
-			<button class="info fas fa-info-circle" v-on:click="openReference(reference)"></button>
+			<button class="info fas fa-info-circle" v-if="!field.noinfo" v-on:click="openReference(reference)"></button>
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 		</div>
 		<div class="referenced">

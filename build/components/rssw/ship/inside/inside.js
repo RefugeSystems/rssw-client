@@ -37,16 +37,19 @@
 			data.availableEntities = [];
 			data.entities = [];
 			data.moving = "";
+			data.crew = 0;
 			
 			return data;
 		},
 		"mounted": function() {
-			this.universe.$on("model:modified", this.update);
+			this.universe.$on("model:modified:complete", this.update);
 			rsSystem.register(this);
 			this.update();
 		},
 		"watch": {
-			
+			"entity": function() {
+				this.update();
+			}
 		},
 		"methods": {
 			"isOwner": function(record) {
@@ -69,8 +72,28 @@
 					});
 				}
 			},
+			"getCountClass": function() {
+				if(this.entity.required_crew) {
+					var p;
+					
+					p = this.crew / this.entity.required_crew;
+					
+					if(0 <= p && p < .6) {
+						return "rs-light-red";
+					} else if(.6 <= p && p < 1) {
+						return "rs-light-orange";
+					}
+				}
+				if(this.entity.maximum_crew) {
+					if(this.entity.maximum_crew < this.crew) {
+						return "rs-red";
+					}
+				}
+				return "rs-green";
+			},
 			"update": function() {
-				var buffer,
+				var crew = 0,
+					buffer,
 					x;
 
 				this.entities.splice(0);
@@ -78,8 +101,12 @@
 					buffer = this.universe.indexes.entity.listing[x];
 					if(buffer.inside === this.entity.id) {
 						this.entities.push(buffer);
+						if(buffer.classification === "character" && !buffer.mob) {
+							crew++;
+						}
 					}
 				}
+				Vue.set(this, "crew", crew);
 				this.entities.sort(byName);
 				
 				this.availableEntities.splice(0);
@@ -93,7 +120,7 @@
 			}
 		},
 		"beforeDestroy": function() {
-			this.universe.$off("model:modified", this.update);
+			this.universe.$off("model:modified:complete", this.update);
 		},
 		"template": Vue.templified("components/rssw/ship/inside.html")
 	});

@@ -26,6 +26,7 @@
 	invisibleKeys.rarity_max = true;
 	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
+//	invisibleKeys.indicators = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.singleton = true;
 	invisibleKeys.equipped = true;
@@ -39,6 +40,7 @@
 	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
 	invisibleKeys.is_shop = true;
+	invisibleKeys.alters = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
 	invisibleKeys.parent = true;
@@ -134,6 +136,19 @@
 		return value;
 	};
 	
+	prettifyValues.indicators = function(property, value, record, universe) {
+		if(value && value.length) {
+			if(value.length < 10) {
+				return value.join(", ");
+			} else {
+				value = [].concat(value).splice(0, 10);
+				value.push("...");
+				return value.join(", ");
+			}
+		}
+		return "";
+	};
+	
 	var prettifyPropertyPattern = /_([a-z])/ig, 
 		prettifyPropertyName = function(full, match) {
 			return " " + match.capitalize();
@@ -142,6 +157,7 @@
 	rsSystem.component("rsObjectInfoBasic", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSShowdown
 		],
 		"props": {
@@ -198,6 +214,9 @@
 			
 			data.entities = [];
 			data.hiddenEntities = [];
+			
+			data.availableSlots = [];
+			data.equipToSlot = "";
 			
 			data.partiesPresent = [];
 			data.parties = [];
@@ -302,6 +321,62 @@
 			},
 			"canAttach": function() {
 				return this.base && (this.record.hardpoints || this.record.contents_max);
+			},
+			"canUnequip": function() {
+				if(this.target) {
+					if(this.base
+							&& this.target._type === "slot"
+							&& this.base.equipped
+							&& this.base.equipped[this.target.accepts]
+							&& this.base.equipped[this.target.accepts][this.target.id]
+							&& this.base.equipped[this.target.accepts][this.target.id].indexOf(this.record.id) !== -1) {
+						return this.target;
+					}
+				} else {
+					if(this.base
+							&& this.base.slot
+							&& this.base.slot.length
+							&& this.base.item
+							&& this.base.item.indexOf(this.record.id) !== -1
+							&& this.availableSlots.length) {
+						for(var x=0; x<this.availableSlots.length; x++) {
+							if(this.base.equipped && this.base.equipped[this.availableSlots[x].accepts] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id].indexOf(this.record.id) !== -1) {
+								return this.availableSlots[x];
+							}
+						}
+					}
+				}
+
+				return false;
+			},
+			"unequip": function() {
+				var slot = this.canUnequip();
+				if(slot && this.base) {
+					this.base.unequipSlot(slot, this.record);
+				}
+			},
+			"canEquip": function() {
+				if(this.base
+						&& this.base.slot
+						&& this.base.slot.length
+						&& this.base.item
+						&& this.base.item.indexOf(this.record.id) !== -1
+						&& this.availableSlots.length) {
+					for(var x=0; x<this.availableSlots.length; x++) {
+						if(this.base.equipped && this.base.equipped[this.availableSlots[x].accepts] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id].indexOf(this.record.id) !== -1) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+			},
+			"equip": function(slot) {
+				if(slot && slot !== "cancel") {
+					this.base.equipSlot(slot, this.record);
+				}
+				Vue.set(this, "equipToSlot", "");
 			},
 			"transferObject": function() {
 				if(this.transfer_target && this.transfer_target !== "cancel") {
@@ -610,6 +685,16 @@
 							this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
 						} else {
 							this.entities.push(this.universe.indexes.entity.listing[x]);
+						}
+					}
+				}
+				
+				this.availableSlots.splice(0);
+				if(this.base && this.base.slot && this.base.slot.length) {
+					for(x=0; x<this.base.slot.length; x++) {
+						hold = this.universe.indexes.slot.lookup[this.base.slot[x]];
+						if(hold && hold.accepts === this.record._type && this.availableSlots.indexOf(hold) === -1 && ((!hold.itemtype) || (this.record.itemtype && this.sharesOne(hold.itemtype, this.record.itemtype)))) {
+							this.availableSlots.push(hold);
 						}
 					}
 				}

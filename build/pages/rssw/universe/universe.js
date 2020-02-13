@@ -376,6 +376,12 @@
 							}
 						}
 						break;
+					case "dashboard-ships":
+						var primary = index.selection[0],
+							ships = index.selection.slice(1);
+						
+						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + ships.join(","), "dashboard");
+						break;
 				}
 				
 				
