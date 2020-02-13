@@ -81,7 +81,6 @@
 				}
 				
 				if( (this.entity[slot.accepts] && this.entity[slot.accepts].indexOf(equipment.id) === -1)
-						|| (this.slotCounts[slot.id] <= index)
 						|| !(slot.itemtype && slot.itemtype.length && equipment.itemtype && equipment.itemtype.length && this.sharesOne(slot.itemtype, equipment.itemtype))
 						|| (slot.accepts !== equipment._type)) {
 					return "rs-light-red";
