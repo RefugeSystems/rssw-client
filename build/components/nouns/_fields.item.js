@@ -138,6 +138,10 @@
 		"label": "Rarity",
 		"property": "rarity",
 		"type": "number"
+	}, {
+		"label": "Slots Used",
+		"property": "slots_used",
+		"type": "number"
 	},
 	profiles,
 	skill,

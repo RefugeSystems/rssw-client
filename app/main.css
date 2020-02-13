@@ -53,6 +53,11 @@
 .rs-component .flex.h.centered {
   justify-content: center;
 }
+.rs-component .flow-h.center,
+.rs-component .flow.h.center,
+.rs-component .flex.h.center {
+  align-items: center;
+}
 .rs-component .flow-h.middled,
 .rs-component .flow.h.middled,
 .rs-component .flex.h.middled {
@@ -97,6 +102,11 @@
 .rs-component .flow-v.centered,
 .rs-component .flow-v.centered,
 .rs-component .flex.v.centered {
+  align-items: center;
+}
+.rs-component .flow-v.center,
+.rs-component .flow-v.center,
+.rs-component .flex.v.center {
   align-items: center;
 }
 .rs-component .flow-v.middled,
@@ -277,37 +287,111 @@
 .rs-component .fields .mb8 {
   margin-bottom: 8px;
 }
-.system-component .rs-darkOrange,
-.rs-component .rs-darkOrange {
-  color: #ac6530 !important;
+.system-component .rs-lightred,
+.rs-component .rs-lightred,
+.system-component .rs-light-red,
+.rs-component .rs-light-red {
+  color: #e43a3b !important;
+}
+.system-component .rs-red,
+.rs-component .rs-red {
+  color: #a91124 !important;
+}
+.system-component .rs-darkred,
+.rs-component .rs-darkred,
+.system-component .rs-dark-red,
+.rs-component .rs-dark-red {
+  color: #841213 !important;
+}
+.system-component .rs-lightOrange,
+.rs-component .rs-lightOrange,
+.system-component .rs-lightorange,
+.rs-component .rs-lightorange,
+.system-component .rs-light-orange,
+.rs-component .rs-light-orange {
+  color: #e0a65d !important;
 }
 .system-component .rs-orange,
 .rs-component .rs-orange {
   color: #FF9560 !important;
 }
-.system-component .rs-lightOrange,
-.rs-component .rs-lightOrange {
-  color: #e0a65d !important;
+.system-component .rs-darkOrange,
+.rs-component .rs-darkOrange,
+.system-component .rs-darkorange,
+.rs-component .rs-darkorange,
+.system-component .rs-dark-orange,
+.rs-component .rs-dark-orange {
+  color: #ac6530 !important;
 }
-.system-component .rs-darkblue,
-.rs-component .rs-darkblue {
-  color: #0c3a96 !important;
+.system-component .rs-lightyellow,
+.rs-component .rs-lightyellow,
+.system-component .rs-light-yellow,
+.rs-component .rs-light-yellow {
+  color: #e6df85 !important;
+}
+.system-component .rs-yellow,
+.rs-component .rs-yellow {
+  color: #b3b300 !important;
+}
+.system-component .rs-darkyellow,
+.rs-component .rs-darkyellow,
+.system-component .rs-dark-yellow,
+.rs-component .rs-dark-yellow {
+  color: #776f08 !important;
+}
+.system-component .rs-lightgreen,
+.rs-component .rs-lightgreen,
+.system-component .rs-light-green,
+.rs-component .rs-light-green {
+  color: #96FF99 !important;
+}
+.system-component .rs-green,
+.rs-component .rs-green {
+  color: #32b736 !important;
+}
+.system-component .rs-darkgreen,
+.rs-component .rs-darkgreen,
+.system-component .rs-dark-green,
+.rs-component .rs-dark-green {
+  color: #166118 !important;
+}
+.system-component .rs-lightBlue,
+.rs-component .rs-lightBlue,
+.system-component .rs-lightblue,
+.rs-component .rs-lightblue,
+.system-component .rs-light-blue,
+.rs-component .rs-light-blue {
+  color: #6f9bf5 !important;
 }
 .system-component .rs-blue,
 .rs-component .rs-blue {
   color: #617EB8 !important;
 }
-.system-component .rs-lightBlue,
-.rs-component .rs-lightBlue {
-  color: #6f9bf5 !important;
+.system-component .rs-darkblue,
+.rs-component .rs-darkblue,
+.system-component .rs-dark-blue,
+.rs-component .rs-dark-blue {
+  color: #0c3a96 !important;
+}
+.system-component .rs-lightpurple,
+.rs-component .rs-lightpurple,
+.system-component .rs-light-purple,
+.rs-component .rs-light-purple {
+  color: #b180f3 !important;
+}
+.system-component .rs-purple,
+.rs-component .rs-purple {
+  color: #cc00ff !important;
+}
+.system-component .rs-darkpurple,
+.rs-component .rs-darkpurple,
+.system-component .rs-dark-purple,
+.rs-component .rs-dark-purple {
+  color: #5a289e !important;
 }
 .system-component .rs-white,
 .rs-component .rs-white {
   color: #EAEFF9 !important;
-}
-.system-component .rs-black,
-.rs-component .rs-black {
-  color: #000000 !important;
 }
 .system-component .rs-gray,
 .rs-component .rs-gray,
@@ -315,33 +399,9 @@
 .rs-component .rs-grey {
   color: #928282 !important;
 }
-.system-component .rs-green,
-.rs-component .rs-green {
-  color: #32b736 !important;
-}
-.system-component .rs-red,
-.rs-component .rs-red {
-  color: #a91124 !important;
-}
-.system-component .rs-yellow,
-.rs-component .rs-yellow {
-  color: #b3b300 !important;
-}
-.system-component .rs-light-red,
-.rs-component .rs-light-red {
-  color: #e43a3b !important;
-}
-.system-component .rs-darkpurple,
-.rs-component .rs-darkpurple {
-  color: #5a289e !important;
-}
-.system-component .rs-purple,
-.rs-component .rs-purple {
-  color: #cc00ff !important;
-}
-.system-component .rs-lightpurple,
-.rs-component .rs-lightpurple {
-  color: #b180f3 !important;
+.system-component .rs-black,
+.rs-component .rs-black {
+  color: #000000 !important;
 }
 .system-component .rs-transparent,
 .rs-component .rs-transparent {
@@ -640,6 +700,27 @@ form {
 .rssw-page.page-dashboard .navigation-button:hover {
   color: #617EB8;
 }
+.rssw-page.page-dashboard button.ctrl {
+  background: transparent;
+  padding: 2px;
+  margin: 2px;
+  border: 0px;
+  cursor: pointer;
+}
+.rssw-page.page-dashboard .ctrl-icon {
+  display: inline-block;
+  line-height: 20px;
+  font-size: 18px;
+  width: 20px;
+}
+.rssw-page.page-dashboard .dashboards {
+  margin-left: 30px;
+}
+.rssw-page.page-dashboard .dashboard {
+  font-size: 18px;
+  padding: 4px;
+  margin: 4px;
+}
 .rssw-page.page-dashboard .self {
   margin: 7px;
   font-size: 17px;
@@ -670,8 +751,13 @@ form {
   width: 100%
 	height: 100%;
 }
-.rssw-page.page-dashboard .ship-column {
+.rssw-page.page-dashboard.page-ships {
+  display: flex;
+  flex-direction: row;
+}
+.rssw-page.page-dashboard.page-ships .ship-column {
   max-width: 350px;
+  margin: 0px 10px;
 }
 .rssw-page.page-universe {
   position: relative;
@@ -1635,6 +1721,13 @@ form {
   padding: 3px;
   border: 0px;
 }
+.rs-component.rssw.component-entity-inside .title-info > * {
+  vertical-align: middle;
+  display: inline-block;
+}
+.rs-component.rssw.component-entity-inside .title-readout {
+  font-size: 0.7em;
+}
 .rs-component.rssw.component-entity-inside .exit-ship {
   margin-left: 10px;
 }
@@ -1706,9 +1799,9 @@ form {
 }
 .rs-component.rssw.component-ship-stats .ship-card .data .stats .point-bubble {
   display: block;
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
+  height: 38px;
+  width: 38px;
+  line-height: 38px;
   text-align: center;
   border: 2px solid #928282;
   border-radius: 15px;
@@ -1763,7 +1856,7 @@ form {
   color: #6f9bf5;
   background: transparent;
   font-size: 24px;
-  padding: 4px;
+  padding: 3px;
   border: 0px;
   margin: 4px;
 }
@@ -1810,10 +1903,65 @@ form {
   color: #EAEFF9;
   font-size: 0.7em;
 }
+.rs-component.rssw.component-ship-stats .ship-card .data-list.items {
+  margin-top: 8px;
+}
 .rs-component.rssw.component-ship-stats .ship-effects {
   width: 50px;
   min-height: 50px;
-  background: #0c3a96;
+  padding-top: 50px;
+  z-index: 10;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-selector {
+  position: absolute;
+  z-index: 20;
+  top: 0px;
+  background: #000000;
+  transition: max-height 0.5s;
+  overflow: hidden;
+  max-height: 50px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-toggle span {
+  transition: transform 0.5s, color 0.5s;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-token-container {
+  position: relative;
+}
+.rs-component.rssw.component-ship-stats .ship-effects button.effect-token {
+  height: 42px;
+  width: 42px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects div.effect-token {
+  height: 32px;
+  width: 32px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-token {
+  position: relative;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-button {
+  display: block;
+  padding: 4px;
+  margin: 4px;
+  border: 1px solid #928282;
+  border-radius: 15px;
+  background: transparent;
+  outline: none !important;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-button span {
+  line-height: 32px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects button.effect-info {
+  position: absolute;
+  right: -40px;
+  top: 0px;
+  z-index: 30;
+  margin: 0px;
+  background: #000000;
+}
+.rs-component.rssw.component-ship-stats .ship-effects select {
+  margin: -4px 4px 4px 4px;
+  width: 42px;
 }
 .system-component.table-controls {
   display: flex;

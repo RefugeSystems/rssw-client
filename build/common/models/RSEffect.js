@@ -33,7 +33,11 @@ class RSEffect extends RSObject {
 		}
 		
 		if(this.indicators) {
-			this.indicators = this.indicators.split(/[\s,]+/);
+			if(this.indicators.split) {
+				this.indicators = this.indicators.split(/[\s,]+/);
+			} else {
+				console.warn("Effect[" + this.id + "] has an unsplittable indicator specified: ", this.indicators);
+			}
 		}
 	}
 }

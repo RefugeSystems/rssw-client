@@ -64,6 +64,30 @@ rsSystem.component("RSComponentUtility", {
 			
 			return null;
 		},
+		/**
+		 * 
+		 * @method uniqueByID
+		 * @param {Array} corpus The array to clean.
+		 * @return {Array} The passed array that is now cleaned.
+		 */
+		"uniqueByID": function(corpus) {
+			if(!corpus) {
+				return corpus;
+			}
+			
+			var track = {},
+				x;
+			
+			for(x=corpus.length-1; 0<=x; x--) {
+				if(track[corpus[x].id]) {
+					corpus.splice(x, 1);
+				} else {
+					track[corpus[x].id] = true;
+				}
+			}
+			
+			return corpus;
+		},
 		"sortData": function(a, b) {
 			if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
 				if(a.order < b.order) {

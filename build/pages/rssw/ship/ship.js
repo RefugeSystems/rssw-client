@@ -35,7 +35,6 @@ rsSystem.component("RSSWShip", {
 	},
 	"methods": {
 		"update": function() {
-			console.log("Dashboarding...", this.entity?this.entity.id:"none", this.$route.params, this.$route.query);
 			var data = {},
 				prep = [],
 				ships,
@@ -46,7 +45,6 @@ rsSystem.component("RSSWShip", {
 					|| (!this.entity && this.$route.params.oid)) {
 				ship = this.universe.nouns.entity[this.$route.params.oid];
 				if(ship && this.isOwner(ship)) {
-					console.warn("√");
 					Vue.set(this, "entity", ship);
 				} else {
 					console.warn("? ", this.isOwner(ship), ship);

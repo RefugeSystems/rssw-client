@@ -80,6 +80,10 @@
 		"property": "xp_cost",
 		"type": "text"
 	}, {
+		"label": "Slots Used",
+		"property": "slots_used",
+		"type": "number"
+	}, {
 		"label": "Required Crew",
 		"property": "required_crew",
 		"type": "text"

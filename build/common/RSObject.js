@@ -220,7 +220,19 @@ class RSObject extends EventEmitter {
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_") {
-				base[keys[x]] = this._coreData[keys[x]];
+//				base[keys[x]] = this._coreData[keys[x]];
+				if(typeof(this._coreData[keys[x]]) === "object") {
+					if(this._coreData[keys[x]] === null) {
+						base[keys[x]] = null;
+					} else if(this._coreData[keys[x]] instanceof Array) {
+						base[keys[x]] = [];
+						base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+					} else {
+						base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+					}
+				} else {
+					base[keys[x]] = this._coreData[keys[x]];
+				}
 				/*
 				switch(typeof(this._coreData[keys[x]])) {
 					case "boolean":
@@ -248,6 +260,8 @@ class RSObject extends EventEmitter {
 		}
 
 		if(debug) {
+			console.log("Core Data: ", _p(this._coreData));
+			console.log("Base: ", _p(base));
 			console.log("Base Overrides: ", base._overrides);
 			console.log("References: ", references);
 		}
@@ -380,12 +394,18 @@ class RSObject extends EventEmitter {
 			}
 			
 			if(debug) {
-				console.log("Perform Noun Load[" + noun + " -> " + this.id + "]: ");
+				console.log("Check Noun Load[" + noun + " -> " + this.id + "]: ", reference);
 			}
 			
 			if(reference instanceof Array) {
 				for(x=0; x<reference.length; x++) {
+					if(debug) {
+						console.log("Perform Noun Load[" + noun + " -> " + this.id + "]: ", reference[x]);
+					}
 					if(reference[x] && (buffer = this.universe.nouns[noun][reference[x]._sourced || reference[x]])) {
+						if(debug) {
+							console.log("Buffered Noun Load[" + noun + " -> " + this.id + "]: ", buffer);
+						}
 						buffer.performModifications(base, this.id, debug);
 					}
 				}
@@ -412,7 +432,7 @@ class RSObject extends EventEmitter {
 			y;
 		
 		if(debug) {
-			console.log("Perform Mod[" + origin + "]: " + this.id);
+			console.error("Perform Mod[" + origin + "]: " + this.id);
 		}
 		
 		for(x=0; this.condition && x < this.condition.length; x++) {
@@ -480,6 +500,9 @@ class RSObject extends EventEmitter {
 										for(m=0; m<buffer.modifierstats.length; m++) {
 											mod = this.universe.indexes.modifierstats.lookup[buffer.modifierstats[m]];
 											if(mod) {
+												if(debug) {
+													console.log("Perform Modification: " + mod.id);
+												}
 												mod.performModifications(base, this.id, debug);
 											} else {
 												console.warn("Missing Modifier[" + buffer.modifierstats[m] + "] for object[" + this.id + "]");
@@ -490,6 +513,9 @@ class RSObject extends EventEmitter {
 										for(m=0; m<buffer.modifierattrs.length; m++) {
 											mod = this.universe.indexes.modifierattrs.lookup[buffer.modifierattrs[m]];
 											if(mod) {
+												if(debug) {
+													console.log("Perform Modification: " + mod.id);
+												}
 												mod.performModifications(base, this.id, debug);
 											} else {
 												console.warn("Missing Modifier[" + buffer.modifierattrs[m] + "] for object[" + this.id + "]");

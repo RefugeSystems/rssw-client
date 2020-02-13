@@ -56,6 +56,7 @@
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsPlaylist,
 			rsSystem.components.NounFieldsAbility,
 			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsEntity,

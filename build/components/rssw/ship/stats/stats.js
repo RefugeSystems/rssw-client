@@ -288,6 +288,7 @@
 						this.abilities.push(buffer);
 					}
 				}
+				this.uniqueByID(this.abilities);
 				
 				if(this.pilot) {
 					Vue.set(this, "skill", this.pilot.pilot_skill || 0);

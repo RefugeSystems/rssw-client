@@ -23,6 +23,7 @@
 	rsSystem.component("rsswEntityInside", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSCore
 		],
 		"props": {
@@ -52,9 +53,6 @@
 			}
 		},
 		"methods": {
-			"isOwner": function(record) {
-				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
-			},
 			"moveEntity": function(entity, destination) {
 				entity = this.universe.indexes.entity.index[entity];
 				if(entity && this.isOwner(entity)) {

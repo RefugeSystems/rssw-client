@@ -1,24 +1,10 @@
 # Current
-+ Widget for equipment control
-+ Update object for slot consideration requiring the entity to have the information
-	+ Note that slot with "entity" will need the noted entity to be "inside" the requesting entity
-+ Equip widget shouold list information from the `entity._equipErrors` information if the item's ID is present
-+ Generic enugh to work for ships or characters
-+ Make ship "info" box shrinkable
-+ Add "Token" trackers
-	+ Including a target lock indicator matching the letter variants ("AA", "VV", etc)
-	+ Tokens always list
-	+ Add a "round reset" to clear as needed
-		+ Target locks stay
-	+ Click to manually dismiss?
-	+ Right side of car descending along the side?
-	+ Sorted by type
-	+ Add at bottom of column by dropdown
-+ Restrict ship information to column
-+ Ship dashboard to general
-	+ Use query string to pull in multiple ships
-	+ Ship scroll
-	+ Helper flip to align?
++ Entity Slot control
++ Multi-Slot usage from items
++ Ability list not inheriting from performModification
+	+ Likely a general issue
++ Refine History List
++ Knowledge Index Widget for Entities
 
 # Properties
 √ Flag to nullify item stat inheritance (For Bags)  
@@ -48,26 +34,26 @@
 
 # UIs
 + Shop Interface
-+ Bag Info Display
+√ Bag Info Display
 + Ship Display  
         + Passenger Manifest  
                 + Entities with "Inside" that entity set
                 + May need a helper function to index this changing for speed purposes, but not likely
-+ Update Location output with contained entities  
+√ Update Location output with contained entities  
         + Including Sublocations and Entities in those locations
         + Entities sitting in entities can be skipped
-+ History Display  
+√ History Display  
         + Widget for entity
-+ Master set location control  
+√ Master set location control  
         + Under location - Set location for a party
         + From the galaxy, add locations to target list and allow entities to have location set
-+ Galaxy add location column (For location name)  
+√ Galaxy add location column (For location name)  
         + Possibly limited to entity & location types
 + Knowledge table widget for entities to list knowledge
 		+ Only updates when the entity updates and the length of knowledge differs from the current cache
 		+ Should cache a translation of the knowledge array for the table to index and sort nicely
 		+ Self contained description display to allow multiple knowledges to be viewed at once
-+ Infor comparison state to "store" the current record for comparison that can be closed from a side-by-side view
++ Info comparison state to "store" the current record for comparison that can be closed from a side-by-side view
 		+ Give a "DIFF" for any calculated fields?
 + Clicking on a skill in character view sets it up for leveling
 		+ This will involve $emit & v-on
