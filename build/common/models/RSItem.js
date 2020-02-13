@@ -52,8 +52,7 @@ class RSItem extends RSObject {
 	performModifications(base, origin, debug) {
 		if(this.no_modifiers) {
 			return false;
-		} else {
-			return super.performModifications(base, origin, debug);
 		}
+		return super.performModifications(base, origin, debug);
 	}
 }

@@ -14,9 +14,10 @@ class RSObject extends EventEmitter {
 		this._replacedReferences = {};
 		this._sourceData = _p(details);
 		this._statContributions = {};
-		this._equipErrors = {};
+		this._relatedErrors = {};
 		this._coreData = {};
 		this._registered = {};
+		this._registered._marked = Date.now();
 		var keys = Object.keys(details),
 			x;
 		
@@ -118,6 +119,98 @@ class RSObject extends EventEmitter {
 		}
 	}
 	
+	inSlot(equipment) {
+		if(this.universe.debug) {
+			console.debug("Check Slot[" + this.id + "]: ", equipment);
+		}
+		
+		if(!equipment || !equipment.item) {
+			if(this.universe.debug) {
+				console.debug("No Equipment Slot[" + this.id + "]");
+			}
+			return false;
+		}
+		
+		var keys = Object.keys(equipment.item),
+			x;
+		
+		for(x=0; x<keys.length; x++) {
+			if(this.universe.debug) {
+				console.debug("Check Slot[" + keys[x] + " for " + this.id + "]");
+			}
+			if(equipment.item[keys[x]] && equipment.item[keys[x]].length && equipment.item[keys[x]].indexOf(this.id) !== -1) {
+				return true;
+			}
+		}
+		
+		if(this.universe.debug) {
+			console.debug("Failed Slot Check[" + this.id + "]");
+		}
+		
+		return false;
+	}
+	
+	unregisterListeners() {
+		rsSystem.log.debug("RSObject[" + this.id + "] Cleaning Reference Listeners");
+		var keys,
+			x;
+
+		keys = Object.keys(this._registered);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_") {
+				if(this._registered[keys[x]].$off) {
+					this._registered[keys[x]].$off("modified", this.dependencyFired);
+				} else {
+					console.warn("RSObject[" + this.id + "] unable To Remove Listener? ", this._registered[keys[x]]);
+				}
+				delete(this._registered[keys[x]]);
+			}
+		}
+	}
+	
+	dependencyFired(event) {
+		this.recalculateProperties();
+	}
+	
+	/**
+	 * 
+	 * @method consumeSlotsFor
+	 * @param {RSObject} record The record to check.
+	 * @param {String} id The ID of the slot that is to be used.
+	 * @param {Array} slots Strings indicating the remaining slots
+	 */
+	consumeSlotsFor(record, id, slots) {
+		return RSObject.consumeSlotsFor(record, id, slots);
+		/*
+		if(!record || !id || !slots || !slots.length) {
+			return false;
+		}
+		
+		var indexes = [],
+			index = -2,
+			need;
+		
+		if(record.slots_used > 1) {
+			need = record.slots_used;
+		} else {
+			need = 1;
+		}
+		
+		while(index !== -1 && indexes.length < need) {
+			index = slots.indexOf(id, index);
+			if(index !== -1) {
+				indexes.push(index);
+			}
+		}
+		
+		if(indexes.length === need) {
+			for()
+		} else {
+			return false;
+		}
+		*/
+	}
+	
 	/**
 	 * 
 	 * @method recalculateProperties
@@ -137,6 +230,10 @@ class RSObject extends EventEmitter {
 			console.warn("replacedReferences: ",replacedReferences);
 		}
 		
+		if(60000 < Date.now() - this._registered._marked) {
+			this.unregisterListeners();
+		}
+		
 		// Establish Base
 		var selfReference = this,
 			references = [],
@@ -152,20 +249,20 @@ class RSObject extends EventEmitter {
 			y,
 			z;
 		
-
 		keys = Object.keys(this._statContributions);
 		for(x=0; x<keys.length; x++) {
 			delete(this._statContributions[keys[x]]);
 		}
 
+		base._equipped = this.equipped;
 		base._replacedReferences = replacedReferences; // Skip & reference modifications
 		base._contributions = this._statContributions; // TODO: Track what item/entity/room contributed to the property
 		base._calculated = []; // Track calculated fields
 		base._overrides = {}; // Tracks slot like modifications where certain types should be overriden in modifier application
 		
-		keys = Object.keys(this._equipErrors);
+		keys = Object.keys(this._relatedErrors);
 		for(x=0; x<keys.length; x++) {
-			delete(this._equipErrors[keys[x]]);
+			delete(this._relatedErrors[keys[x]]);
 		}
 		if(this.slot) {
 			tracking = [].concat(this.slot);
@@ -178,19 +275,26 @@ class RSObject extends EventEmitter {
 						for(y=0; y<buffer.length; y++) { // ID of Slot
 							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
 							for(z=0; z<hold.length; z++) {
-								index = tracking.indexOf(buffer[y]);
-								if(index !== -1 && ((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))) {
+								// If you have it (Item/Room) or it is inside you (Entity)
+								if(((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))
+										// And you have slots for it
+										&& this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
+									if(debug) {
+										console.log(" > Record is slot valid: " + hold[z]);
+									}
 									switch(keys[x]) {
 										case "item":
 										case "room":
 											base._overrides[keys[x]].push(hold[z]);
 											break;
 									}
-									tracking.splice(index, 1);
 								} else {
-									this._equipErrors[hold[z]] = {
+									if(debug) {
+										console.log(" > Record is not slot valid: " + hold[z]);
+									}
+									this._relatedErrors[hold[z]] = {
 										"type": "error",
-										"message": "No more slots left",
+										"message": "Not enough slots left",
 										"calculated": Date.now(),
 										"contents": hold[z],
 										"slot": buffer[y]
@@ -276,37 +380,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 
-		// Listen for changes on direct modifiers
-//		for(x=0; this.modifierattrs && x<this.modifierattrs.length; x++) {
-//			load = this.universe.indexes.modifierattrs.lookup[this.modifierattrs[x]];
-//			if(load) {
-////				rsSystem.log.warn("Binding Modifier[ " + this.modifierattrs[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
-//				if(!this._registered[load.id]) {
-//					this._registered[load.id] = true;
-//					load.$once("modified", () => {
-//						this._registered[load.id] = false;
-//						selfReference.recalculateProperties();
-//					});
-//				}
-//			} else {
-//				rsSystem.log.warn("Unknown Attribute Modifier[" + this.modifierattrs[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierattrs));
-//			}
-//		}
-//		for(x=0; this.modifierstats && x<this.modifierstats.length; x++) {
-//			load = this.universe.indexes.modifierstats.lookup[this.modifierstats[x]];
-//			if(load) {
-////				rsSystem.log.warn("Binding Modifier[ " + this.modifierstats[x] + " | " + load.id + " ] to object[ " + this.id + " ]");
-//				if(!this._registered[load.id]) {
-//					this._registered[load.id] = true;
-//					load.$once("modified", () => {
-//						this._registered[load.id] = false;
-//						selfReference.recalculateProperties();
-//					});
-//				}
-//			} else {
-//				rsSystem.log.warn("Unknown Stats Modifier[" + this.modifierstats[x] + "] for object[" + this.id + "]: " + Object.keys(this.universe.indexes.modifierstats));
-//			}
-//		}
+		// TODO: Listen for changes on references
 		
 		// Reform Search String
 		this._search = this.id.toLowerCase();
@@ -406,12 +480,20 @@ class RSObject extends EventEmitter {
 						if(debug) {
 							console.log("Buffered Noun Load[" + noun + " -> " + this.id + "]: ", buffer);
 						}
+						if(!this._registered[buffer.id]) {
+							buffer.$on("modified", this.dependencyFired, this);
+							this._registered[buffer.id] = buffer;
+						}
 						buffer.performModifications(base, this.id, debug);
 					}
 				}
 			} else {
 				if(reference && (buffer = this.universe.nouns[noun][reference._sourced || reference])) {
 					buffer.performModifications(base, this.id, debug);
+					if(!this._registered[buffer.id]) {
+						buffer.$on("modified", this.dependencyFired, this);
+						this._registered[buffer.id] = buffer;
+					}
 				}
 			}
 		}
@@ -424,6 +506,13 @@ class RSObject extends EventEmitter {
 	 * @return {Boolean} Whether the modification was performed or not.
 	 */
 	performModifications(base, origin, debug) {
+		if(this.needs_slot && !this.inSlot(base._equipped)) {
+			if(debug) {
+				console.error(" ! Mod Aborted for Slot[" + origin + "]: " + this.id);
+			}
+			return false;
+		}
+		
 		var buffer,
 			keys,
 			mod,
@@ -442,86 +531,18 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-//		if(this._calculated) {
-//			keys = Object.keys(this._calculated);
-//		}
-//		
-//		if(origin !== this.id && keys) {
-//			for(x=0; x<keys.length; x++) {
-//				if(this[keys[x]]) {
-//					if(!base._contributions[keys[x]]) {
-//						base._contributions[keys[x]] = {};
-//					}
-//					base._contributions[keys[x]][this.id] = true;
-//					if(debug) {
-//						console.log("Perform Calc Addition[" + origin + " -> " + this.id + "]: " + keys[x] + " == " + this[keys[x]]);
-//					}
-//					if(base[keys[x]]) {
-//						switch(typeof(this[keys[x]])) {
-//							case "string":
-//								base[keys[x]] = this[keys[x]] + " + " + base[keys[x]];
-//								base._calculated.push(keys[x]);
-//								break;
-//							case "boolean":
-//								base[keys[x]] = this[keys[x]] || base[keys[x]];
-//								break;
-//							case "number":
-//								if(typeof(base[keys[x]]) === "number") {
-//									base[keys[x]] = base[keys[x]] + this[keys[x]];
-//								} else {
-//									base[keys[x]] = base[keys[x]].toString() + " + " + this[keys[x]];
-//									base._calculated.push(keys[x]);
-//								}
-//								break;
-//						}
-//					} else {
-//						base[keys[x]] = this[keys[x]];
-//						base._calculated.push(keys[x]);
-//					}
-//				}
-//			}
-//		}
-		
 		if(this.universe.index) {
 			for(x=0; x<rsSystem.listingNouns.length; x++) {
 				if(this._coreData[rsSystem.listingNouns[x]]) {
 					if(debug) {
-						console.warn("Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
+						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
 					}
 					if(this._coreData[rsSystem.listingNouns[x]] instanceof Array) {
 						for(y=0; y<this._coreData[rsSystem.listingNouns[x]].length; y++) {
 							if(this._coreData[rsSystem.listingNouns[x]][y]) {
 								buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]][y]._sourced || this._coreData[rsSystem.listingNouns[x]][y]];
 								if(buffer) {
-									if(debug) {
-										console.log("Perform Cross Check Array Buffer: " + buffer.id, buffer);
-									}
-									if(buffer.modifierstats && buffer.modifierstats.length) {
-										for(m=0; m<buffer.modifierstats.length; m++) {
-											mod = this.universe.indexes.modifierstats.lookup[buffer.modifierstats[m]];
-											if(mod) {
-												if(debug) {
-													console.log("Perform Modification: " + mod.id);
-												}
-												mod.performModifications(base, this.id, debug);
-											} else {
-												console.warn("Missing Modifier[" + buffer.modifierstats[m] + "] for object[" + this.id + "]");
-											}
-										}
-									}
-									if(buffer.modifierattrs && buffer.modifierattrs.length) {
-										for(m=0; m<buffer.modifierattrs.length; m++) {
-											mod = this.universe.indexes.modifierattrs.lookup[buffer.modifierattrs[m]];
-											if(mod) {
-												if(debug) {
-													console.log("Perform Modification: " + mod.id);
-												}
-												mod.performModifications(base, this.id, debug);
-											} else {
-												console.warn("Missing Modifier[" + buffer.modifierattrs[m] + "] for object[" + this.id + "]");
-											}
-										}
-									}
+									buffer.performModifications(base, this.id, debug);
 								} else {
 									console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 								}
@@ -530,52 +551,11 @@ class RSObject extends EventEmitter {
 					} else if(this._coreData[rsSystem.listingNouns[x]]) {
 						buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]]._sourced || this._coreData[rsSystem.listingNouns[x]]];
 						if(buffer) {
-							if(debug) {
-								console.log("Perform Cross Check Array Buffer: " + buffer.id);
-							}
-							if(buffer.modifierstats && buffer.modifierstats.length && buffer.modifierstats[0]) {
-								for(m=0; m<buffer.modifierstats.length; m++) {
-									mod = this.universe.indexes.modifierstats.lookup[buffer.modifierstats[m]];
-									if(mod) {
-										mod.performModifications(base, this.id, debug);
-									} else {
-										console.warn("Missing Modifier[" + buffer.modifierstats[m] + "] for object[" + this.id + "]");
-									}
-								}
-							}
-							if(buffer.modifierattrs && buffer.modifierattrs.length) {
-								for(m=0; m<buffer.modifierattrs.length; m++) {
-									mod = this.universe.indexes.modifierattrs.lookup[buffer.modifierattrs[m]];
-									if(mod) {
-										mod.performModifications(base, this.id, debug);
-									} else {
-										console.warn("Missing Modifier[" + buffer.modifierattrs[m] + "] for object[" + this.id + "]");
-									}
-								}
-							}
+							buffer.performModifications(base, this.id, debug);
 						} else {
 							console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 						}
 					}
-				}
-			}
-		}
-		
-		if(this._coreData.modifierstats) {
-			for(x=0; x<this._coreData.modifierstats.length; x++) {
-				if(this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]) {
-					this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base, this.id, debug);
-				} else {
-					console.warn("Missing Stat Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierstats[x]]);
-				}
-			}
-		}
-		if(this._coreData.modifierattrs) {
-			for(x=0; x<this._coreData.modifierattrs.length; x++) {
-				if(this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]]) {
-					this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base, this.id, debug);
-				} else {
-					console.warn("Missing Attribute Modifier: " + this.universe.nouns.modifierstats[this._coreData.modifierattrs[x]]);
 				}
 			}
 		}
@@ -589,7 +569,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(this._debugging) {
+		if(debug) {
 			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 		}
 		
@@ -622,3 +602,45 @@ class RSObject extends EventEmitter {
 		this.recalculateProperties();
 	}
 }
+
+/**
+ * 
+ * @method consumeSlotsFor
+ * @param {RSObject} record The record to check.
+ * @param {String} id The ID of the slot that is to be used.
+ * @param {Array} slots Strings indicating the remaining slots
+ */
+RSObject.consumeSlotsFor = function(record, id, slots) {
+	if(!record || !id || !slots || !slots.length) {
+		return false;
+	}
+
+//	console.warn("Start Slot Check: " + record.id, record, id, slots);
+	
+	var indexes = [],
+		index = -1,
+		need;
+	
+	if(record.slots_used > 1) {
+		need = record.slots_used;
+	} else {
+		need = 1;
+	}
+	
+	while((index = slots.indexOf(id, index + 1)) !== -1 && indexes.length < need) {
+		if(index !== -1) {
+			indexes.push(index);
+		}
+	}
+	
+//	console.warn("Check Slots[" + need + "]: ", record, id, slots, indexes);
+	
+	if(indexes.length === need) {
+		for(index=indexes.length-1; 0 <= index; index--) {
+			slots.splice(indexes[index], 1);
+		}
+		return true;
+	} else {
+		return false;
+	}
+};

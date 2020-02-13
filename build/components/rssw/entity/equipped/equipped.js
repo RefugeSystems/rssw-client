@@ -8,16 +8,25 @@
  */
 (function() {
 	
-	
-	var emptySlotIndicator = {
-		"id": "__emptyslot",
-		"_type": "empty_slot",
-		"name": "Empty Slot",
-		"icon": "far fa-square",
-		"description": "An empty ${~target.name,rs-blue}$ slot on ${~base.name,rs-blue}$"
-	};
 
-	var emptyRef = {};
+	var emptyRef = {},
+		emptySlotIndicator = {
+			"id": "__emptyslot",
+			"_type": "empty_slot",
+			"name": "Empty Slot",
+			"icon": "far fa-square",
+			"description": "An empty ${~target.name,rs-blue}$ slot on ${~base.name,rs-blue}$"
+		};
+
+	var consumedRef = {},
+		consumedSlotIndicator = {
+			"id": "__consumedslot",
+			"_type": "consumed_slot",
+			"name": "Consumed Slot",
+			"icon": "fas fa-square",
+			"description": "This ${~target.name,rs-blue}$ slot on ${~base.name,rs-blue}$ is being used as space for another component"
+		};
+
 
 	rsSystem.component("rsswEntityEquipment", {
 		"inherit": true,
@@ -61,8 +70,14 @@
 		"methods": {
 			
 			"getSlotClass": function(slot, equipment, index) {
+				if(this.entity._relatedErrors[equipment.id]) {
+					return "rs-red";
+				}
 				if(equipment._type === emptySlotIndicator._type) {
 					return "rs-green";
+				}
+				if(equipment._type === consumedSlotIndicator._type) {
+					return "rs-orange";
 				}
 				
 				if( (this.entity[slot.accepts] && this.entity[slot.accepts].indexOf(equipment.id) === -1)
@@ -129,6 +144,14 @@
 				}
 				return emptyRef[slot];
 			},
+			
+			"getConsumedIndicator": function(slot) {
+				if(!consumedRef[slot]) {
+					consumedRef[slot] = Object.assign({}, consumedSlotIndicator);
+					consumedRef[slot].id += slot;
+				}
+				return consumedRef[slot];
+			},
 			"updateFromUniverse": function() {
 				this.recalculateSlots();
 			},
@@ -138,6 +161,7 @@
 					hold,
 					keys,
 					sub,
+					i,
 					x,
 					y,
 					z;
@@ -159,7 +183,13 @@
 									Vue.set(this.slotMapping, sub[y], []);
 								}
 								for(z=0; z<this.entity.equipped[keys[x]][sub[y]].length; z++) {
-									this.slotMapping[sub[y]].push(this.universe.index.lookup[this.entity.equipped[keys[x]][sub[y]][z]]);
+									buffer = this.universe.index.lookup[this.entity.equipped[keys[x]][sub[y]][z]];
+									this.slotMapping[sub[y]].push(buffer);
+									if(1 < buffer.slots_used) {
+										for(i=1; i<buffer.slots_used; i++) {
+											this.slotMapping[sub[y]].push(this.getConsumedIndicator(keys[x]));
+										}
+									}
 								}
 							}
 						}

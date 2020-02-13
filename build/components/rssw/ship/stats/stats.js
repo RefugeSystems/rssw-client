@@ -92,7 +92,7 @@
 
 			Vue.set(this, "effectSelector", $(this.$el).find(".effect-selector"));
 
-			this.universe.$on("model:modified", this.updateFromUniverse);
+			this.universe.$on("model:modified:complete", this.updateFromUniverse);
 			this.ship.$on("modified", this.update);
 			this.updateFromUniverse();
 			this.update();
@@ -171,7 +171,6 @@
 				Vue.set(this, "editingPilotAbility", !this.editingPilotAbility);
 			},
 			"showInfo": function(view) {
-				console.log("Info: ", view);
 				rsSystem.EventBus.$emit("display-info", {
 					"base": this.ship,
 					"target": this.pilot,
@@ -288,7 +287,6 @@
 						this.abilities.push(buffer);
 					}
 				}
-				this.uniqueByID(this.abilities);
 				
 				if(this.pilot) {
 					Vue.set(this, "skill", this.pilot.pilot_skill || 0);
@@ -375,6 +373,7 @@
 				}
 				
 				Vue.set(this, "points", this.ship.point_cost || 0);
+				this.uniqueByID(this.abilities);
 				
 				this.$forceUpdate();
 			}

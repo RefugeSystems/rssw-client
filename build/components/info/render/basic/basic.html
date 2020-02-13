@@ -8,6 +8,14 @@
 	
 	<div v-if="description" v-html="description"></div>
 	
+	<div v-if="relatedError" class="related-error">
+		<h3>
+			<span class="fas fa-exclamation-triangle rs-light-red"></span>
+			<span>Related Error</span>
+		</h3>
+		<div class="rs-light-red" v-html="relatedError"></div>
+	</div>
+	
 	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
 	<div v-if="record.data" class="general-image">
 		<img :src="record.data" />

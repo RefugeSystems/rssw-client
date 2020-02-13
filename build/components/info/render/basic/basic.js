@@ -188,6 +188,7 @@
 			var data = {};
 			
 			data.collapsed = true;
+			data.relatedError = null;
 			data.calculatedEncumberance = 0;
 			data.knowledgeLink = knowledgeLink;
 			data.displayRaw = displayRaw;
@@ -721,6 +722,12 @@
 					if(this.universe.indexes.party.listing[x].active) {
 						this.parties.push(this.universe.indexes.party.listing[x]);
 					}
+				}
+				
+				if(this.base && this.base._relatedErrors && this.base._relatedErrors[this.record.id]) {
+					Vue.set(this, "relatedError", this.rsshowdown(this.base._relatedErrors[this.record.id].message || this.base._relatedErrors[this.record.id], this.record, this.base, this.target));
+				} else {
+					Vue.set(this, "relatedError", null);
 				}
 				
 				this.$forceUpdate();

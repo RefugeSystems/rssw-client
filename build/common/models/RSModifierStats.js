@@ -65,13 +65,7 @@ class RSModifierStats extends RSModifier {
 							}
 							break;
 						case "object":
-							if(debug) {
-								console.log("Object Key");
-							}
 							if(base[keys[x]] instanceof Array) {
-								if(debug) {
-									console.log("Array Application");
-								}
 								for(y=0; y<this._coreData[keys[x]].length; y++) {
 									base[keys[x]].push(this._coreData[keys[x]][y]);
 								}
@@ -96,7 +90,7 @@ class RSModifierStats extends RSModifier {
 				}
 			}
 			if(debug) {
-				console.warn("Result of Key Mod[" + this.id + "]: " + keys[x], _p(base[keys[x]]));
+				console.log(" > Result of Key Mod[" + this.id + "]: " + keys[x], _p(base[keys[x]]));
 			}
 		}
 	}
