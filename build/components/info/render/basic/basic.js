@@ -136,6 +136,19 @@
 		return value;
 	};
 	
+	prettifyValues.skill_check = function(property, value, record, universe) {
+		if(!value || !universe.indexes.skill || !universe.indexes.skill.lookup) {
+			return value;
+		}
+		
+		var buffer = universe.indexes.skill.lookup[value] || universe.indexes.skill.lookup["skill:" + value];
+		if(!buffer) {
+			return value;
+		}
+		
+		return buffer.name;
+	};
+	
 	prettifyValues.indicators = function(property, value, record, universe) {
 		if(value && value.length) {
 			if(value.length < 10) {
@@ -238,15 +251,6 @@
 			}
 		},
 		"mounted": function() {
-			prettifyValues.skill_check = (record, value) => {
-//				console.warn("Recording: ", record, value);
-				var buffer = this.universe.indexes.skill.lookup[record.skill_check];
-				if(buffer) {
-					return buffer.name;
-				}
-				return value;
-			};
-			
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value])) {

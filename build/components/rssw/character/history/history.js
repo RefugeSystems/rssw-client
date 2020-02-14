@@ -11,6 +11,7 @@
 	rsSystem.component("rsswEntityHistory", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSCore
 		],
 		"props": {
@@ -35,29 +36,42 @@
 			this.update();
 		},
 		"watch": {
-			"wounds": function(nV, oV) {
-				this.character.commit({
-					"wounds": nV
-				});
-			},
-			"strain": function(nV, oV) {
-				this.character.commit({
-					"strain": nV
-				});
-			}
+
 		},
 		"methods": {
-			"showInfo": function(view) {
-				rsSystem.EventBus.$emit("display-info", {
-					"source": this.entity,
-					"record": view
-				});
-			},
 			"setStat": function() {
 				
 			},
 			"filter": function(text) {
 				
+			},
+			"getRelated": function(entry) {
+				var records,
+					x;
+				
+				if(!entry || !entry.difference) {
+					return false;
+				}
+
+				Vue.set(entry, "report", {
+					"gained": [],
+					"loss": []
+				});
+				
+				records = Object.keys(entry.difference);
+				if(records.length === 0) {
+					return false;
+				}
+				
+				for(x=0; x<records.length; x++) {
+					if(entry.difference[records[x]] > 0) {
+						entry.report.gained.push(this.universe.index.lookup[records[x]]);
+					} else {
+						entry.report.loss.push(this.universe.index.lookup[records[x]]);
+					}
+				}
+				
+				return true;
 			},
 			"update": function() {
 				var buffer,
@@ -69,6 +83,9 @@
 						this.entity.history[x]._date = new Date(this.entity.history[x].time);
 						this.entity.history[x]._dateString = this.entity.history[x]._date.toLocaleDateString();
 						this.entity.history[x]._timeString = this.entity.history[x]._date.toLocaleTimeString();
+						if(this.entity.history[x].type === "record_acquired_or_loss") {
+							this.getRelated(this.entity.history[x]);
+						}
 						this.history.push(this.entity.history[x]);
 					}
 				}

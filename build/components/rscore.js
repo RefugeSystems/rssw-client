@@ -13,6 +13,9 @@ rsSystem.component("RSCore", {
 		rsSystem.components.StorageManager
 	],
 	"props": {
+		"storage_id": {
+			"type": String
+		},
 		"universe": {
 			"required": true,
 			"type": Object

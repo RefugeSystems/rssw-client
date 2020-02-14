@@ -365,11 +365,14 @@ class SearchIndex extends EventEmitter {
 		
 		if(state.paging) {
 			state.paging.count = parseInt(Math.ceil(list.length / state.paging.per));
-			list.splice(state.paging.current * state.paging.per + state.paging.per);
-			list.splice(0, state.paging.current * state.paging.per);
 			if(state.paging.current >= state.paging.count) {
 				state.paging.current = state.paging.count - 1;
 			}
+			if(state.paging.current < 0) {
+				state.paging.current = 0;
+			}
+			list.splice(state.paging.current * state.paging.per + state.paging.per);
+			list.splice(0, state.paging.current * state.paging.per);
 		}
 		
 		return state.paging;
@@ -378,31 +381,31 @@ class SearchIndex extends EventEmitter {
 	createSearchString(object) {
 		var string = "";
 		if(object.name && object.name.toLowerCase) {
-			string += object.name.toLowerCase(); 
+			string += object.name.toLowerCase();
 		}
 		if(object.id) {
-			string += object.id; 
+			string += object.id;
 		}
 		if(object.location) {
-			string += object.location; 
+			string += object.location;
 		}
 		if(object.origin) {
-			string += object.origin; 
+			string += object.origin;
 		}
 		if(object.owner) {
-			string += object.owner; 
+			string += object.owner;
 		}
 		if(object.backstory) {
-			string += object.backstory.toLowerCase(); 
+			string += object.backstory.toLowerCase();
 		}
 		if(object.description) {
-			string += object.description.toLowerCase(); 
+			string += object.description.toLowerCase();
 		}
 		if(object.note) {
-			string += object.note.toLowerCase(); 
+			string += object.note.toLowerCase();
 		}
 		if(object.hiddenState) {
-			string += "?"; 
+			string += "?";
 		}
 		return string;
 	}

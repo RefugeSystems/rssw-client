@@ -22,6 +22,22 @@
 					<span>Lost Item</span>
 					<a v-on:click="showInfo(entry.item)">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:"Unknown Item"}}</a>
 				</div>
+				<div v-if="entry.type === 'record_acquired_or_loss'" class="message">
+					<div>{{entry.modified.capitalize()}} Changed.</div>
+					<div class="gained" v-if="entry.report.gained.length">
+						<span>Gained:</span> 
+						<a v-for="(related, $index) in entry.report.gained" v-if="related" v-on:click="showInfo(related)">
+							<span v-if="$index !== 0">, </span><span>{{related.name}}</span>
+						</a>
+					</div>
+					<div class="loss" v-if="entry.report.loss.length">
+						<span>Loss:</span> 
+						<a v-for="(related, $index) in entry.report.loss" v-if="related" v-on:click="showInfo(related)">
+							<span v-if="$index !== 0">, </span><span>{{related.name}}</span>
+						</a>
+					</div>
+				</div>
+				
 				<div class="time" :title="entry._timeString">{{entry._dateString}}</div>
 			</div>
 		</div>

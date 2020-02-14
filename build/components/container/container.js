@@ -35,7 +35,7 @@
 		"data": function() {
 			var data = {};
 			
-			data.storageID = storageKey + this.contents.id; 
+			data.storageID = storageKey + (this.contents.sid || this.contents.id || this.contents._sourced); 
 			data.state = this.loadStorage(data.storageID, {
 				"closed": false
 			});
@@ -89,7 +89,7 @@
 			if(this.contents.enabled && this.contents.declaration && rsSystem.components[this.contents.declaration]) {
 				widget = {};
 				widget.props = {};
-				widget.props["storage-id"] = this.storageID;
+				widget.props["storage_id"] = this.storageID;
 				widget.props["universe"] = this.universe;
 				widget.props["character"] = this.entity;
 				widget.props["entity"] = this.entity;

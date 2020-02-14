@@ -53,7 +53,12 @@ rsSystem.component("RSSWCharacter", {
 						});
 						break;
 				}
-				
+
+				this.widgets.push({
+		            "declaration": "rsswEntityKnowledge",
+		            "sid": "entity:knowledge:" + this.entity.id,
+		            "enabled": true
+				});
 				this.widgets.push({
 		            "declaration": "rsswEntityHistory",
 		            "sid": "entity:history:" + this.entity.id,

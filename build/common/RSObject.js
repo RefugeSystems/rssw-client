@@ -17,6 +17,8 @@ class RSObject extends EventEmitter {
 		this._relatedErrors = {};
 		this._coreData = {};
 		this._registered = {};
+		this._shadow = JSON.parse(JSON.stringify(details));
+		
 		this._registered._marked = Date.now();
 		var keys = Object.keys(details),
 			x;
@@ -70,6 +72,69 @@ class RSObject extends EventEmitter {
 		change._type = this._type;
 		change.id = this.id;
 		this.universe.send("modify:" + this._type, change);
+	}
+	
+	/**
+	 * Set the learned property and add the knowledge entities.
+	 * @method learnKnowledge
+	 * @param {Array} knowledge Of ID Strings.
+	 */
+	learnKnowledge(knowledge) {
+		console.log("Learning...", knowledge);
+		var updates,
+			x;
+
+		if(!this._shadow.learned) {
+			this._shadow.learned = {};
+		}
+		if(!this._shadow.knowledge) {
+			this._shadow.knowledge = [];
+		}
+		
+		for(x=0; x<knowledge.length; x++) {
+			if(!this._shadow.learned[knowledge[x]]) {
+				this._shadow.learned[knowledge[x]] = Date.now();
+				this._shadow.knowledge.push(knowledge[x]);
+				updates = true;
+			}
+		}
+		
+		if(updates) {
+			console.log("...");
+			this.commit({
+				"knowledge": this._shadow.knowledge,
+				"learned": this._shadow.learned
+			});
+		}
+	}
+	
+	/**
+	 * Clears the learned property and removes the knowledge entities.
+	 * @method forgetKnowledge
+	 * @param {Array} knowledge Of ID Strings.
+	 */
+	forgetKnowledge(knowledge) {
+		if(!this.learned || !this.knowledge) {
+			return false;
+		}
+		
+		var updates,
+			x;
+		
+		for(x=0; x<knowledge.length; x++) {
+			if(this._shadow.learned[knowledge[x]]) {
+				delete(this._shadow.learned[knowledge[x]]);
+				updates = this._shadow.knowledge.indexOf(knowledge[x]);
+				this._shadow.knowledge.splice(updates, 1);
+			}
+		}
+		
+		if(updates) {
+			this.commit({
+				"knowledge": this._shadow.knowledge,
+				"learned": this._shadow.learned
+			});
+		}
 	}
 
 	/**

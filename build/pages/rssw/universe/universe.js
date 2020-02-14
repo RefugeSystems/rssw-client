@@ -76,6 +76,7 @@
 	rsSystem.component("RSSWUniverse", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSCorePage
 		],
 		"data": function() {
@@ -140,6 +141,13 @@
 			data.availableIndexes = Object.keys(this.universe.indexes);
 			data.availableIndexes.sort();
 			
+			data.listing = {};
+			data.listing.entity = [];
+			data.listing.player = [];
+			data.listing.item = [];
+			data.listing.room = [];
+			data.listingKeys = Object.keys(data.listing);
+			
 			data.command = "";
 			data.target = "";
 			data.corpus = [];
@@ -184,12 +192,22 @@
 			}
 		},
 		"mounted": function() {
-			this.universe.$on("universe:modified", this.updateEntities);
 			rsSystem.register(this);
+			
+			this.universe.$on("universe:modified", this.updateListings);
+			this.updateListings();
 		},
 		"methods": {
-			"updateEntities": function(event) {
+			"updateListings": function(event) {
+				var x, y;
 				
+				for(x=0; x<this.listingKeys.length; x++) {
+					this.listing[this.listingKeys[x]].splice(0);
+					for(y=0; y<this.universe.indexes[this.listingKeys[x]].listing.length; y++) {
+						this.listing[this.listingKeys[x]].push(this.universe.indexes[this.listingKeys[x]].listing[y]);
+					}
+					this.listing[this.listingKeys[x]].sort(this.sortData);
+				}
 			},
 			"showCommands": function() {
 				return !!(this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index).selection.length;
@@ -262,6 +280,7 @@
 			},
 			"processCommand": function(command) {
 				var index = (this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index),
+					target = this.universe.index.lookup[this.target],
 					loading,
 					sending,
 					item,
@@ -381,6 +400,28 @@
 							ships = index.selection.slice(1);
 						
 						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + ships.join(","), "dashboard");
+						break;
+					case "grant-knowledge":
+						if(target) {
+							sending = [];
+							for(x=0; x<index.selection.length; x++) {
+								if(this.universe.indexes.knowledge.lookup[index.selection[x]]) {
+									sending.push(index.selection[x]);
+								}
+							}
+							target.learnKnowledge(sending);
+						}
+						break;
+					case "forget-knowledge":
+						if(target) {
+							sending = [];
+							for(x=0; x<index.selection.length; x++) {
+								if(this.universe.indexes.knowledge.lookup[index.selection[x]]) {
+									sending.push(index.selection[x]);
+								}
+							}
+							target.forgetKnowledge(sending);
+						}
 						break;
 				}
 				
