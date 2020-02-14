@@ -1092,12 +1092,27 @@ form {
   border: 0px;
   margin: 0px;
 }
-.rs-component.rs-image.general {
+.rs-component.rs-image {
   width: 100%;
+  text-align: center;
+}
+.rs-component.rs-image.general {
   margin-bottom: 10px !important;
 }
 .rs-component.rs-image.general img {
   max-width: 100%;
+}
+.rs-component.rs-image.wide img {
+  width: 100% !important;
+}
+.rs-component.rs-image.high img {
+  height: 100% !important;
+}
+.rs-component.rs-image.left {
+  text-align: left;
+}
+.rs-component.rs-image.right {
+  text-align: right;
 }
 .rs-component.rs-image.linked {
   cursor: pointer;
@@ -1709,6 +1724,9 @@ form {
   width: 22px;
   font-size: 18px;
   text-align: center;
+}
+.rs-component.rssw.component-entity-knowledge .table-record.name .table-content {
+  text-align: left;
 }
 .rs-component.rssw.component-entity-inside .entities {
   border-top: 1px solid #EAEFF9;

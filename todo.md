@@ -1,10 +1,5 @@
 # Current
-+ Entity Slot control
-+ Multi-Slot usage from items
-+ Ability list not inheriting from performModification
-	+ Likely a general issue
-+ Refine History List
-+ Knowledge Index Widget for Entities
++ Refine History List with a sortable/searchable table
 
 # Properties
 √ Flag to nullify item stat inheritance (For Bags)  
@@ -35,7 +30,7 @@
 # UIs
 + Shop Interface
 √ Bag Info Display
-+ Ship Display  
+√ Ship Display  
         + Passenger Manifest  
                 + Entities with "Inside" that entity set
                 + May need a helper function to index this changing for speed purposes, but not likely
@@ -49,7 +44,7 @@
         + From the galaxy, add locations to target list and allow entities to have location set
 √ Galaxy add location column (For location name)  
         + Possibly limited to entity & location types
-+ Knowledge table widget for entities to list knowledge
+√ Knowledge table widget for entities to list knowledge
 		+ Only updates when the entity updates and the length of knowledge differs from the current cache
 		+ Should cache a translation of the knowledge array for the table to index and sort nicely
 		+ Self contained description display to allow multiple knowledges to be viewed at once
@@ -75,16 +70,16 @@
 # Functions
 + Restock Shop
 + Self check-out from shop view once created
-+ Equip item to an item  
+√ Equip item to an item  
 		+ This should always require the item to be send takes a slot
 		+ Additionally the receiving item should have a free slot, but this should be a report on the display for now
 + Give room to entity
 + Universe Time
-+ Limit "Give" list of entities to current party AND entities that also have "inside" the same as the current source entity
+√ Limit "Give" list of entities to current party AND entities that also have "inside" the same as the current source entity
 + Display calculated "Dice" results more standardly through the calculator class
 
 # Tweaks	
-+ Galaxy
+√ Galaxy
         + Sort Targets by name ignoring case
         + Sort types by name
-+ In basic info, clean up "Skill Check" display
+√ In basic info, clean up "Skill Check" display

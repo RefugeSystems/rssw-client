@@ -97,7 +97,7 @@
 							} else if(this.field.condition[keys[x]].oneof) {
 								test = true;
 								for(v=0; test && v<this.field.condition[keys[x]].oneof.length; v++) {
-									if(this.root[keys[x]].indexOf(this.field.condition[keys[x]].oneof[v]) !== -1) {
+									if(this.root[keys[x]] && this.root[keys[x]].indexOf(this.field.condition[keys[x]].oneof[v]) !== -1) {
 										test = false;
 									}
 								}

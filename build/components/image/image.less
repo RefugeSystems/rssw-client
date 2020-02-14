@@ -1,12 +1,33 @@
 .rs-component.rs-image {
+	width: 100%;
+	text-align: center;
 	
 	&.general {
-		width: 100%;
 		margin-bottom: 10px !important;
 		
 		img {
 			max-width: 100%;
 		}
+	}
+	
+	&.wide {
+		img {
+			width: 100% !important;
+		}
+	}
+	
+	&.high {
+		img {
+			height: 100% !important;
+		}
+	}
+	
+	&.left {
+		text-align: left;
+	}
+	
+	&.right {
+		text-align: right;
 	}
 	
 	&.linked {

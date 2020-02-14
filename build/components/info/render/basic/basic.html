@@ -1,5 +1,5 @@
 <div class="general-information">
-	<rs-render-image class="profile-image" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
+	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
 	
 	<div v-if="record.is_shop">
 		<span class="fas fa-warehouse"></span>

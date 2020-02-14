@@ -19,6 +19,10 @@
 				"required": true,
 				"type": Object
 			},
+			"modes": {
+				"default": "general",
+				"type": String
+			},
 			"linked": {
 				"type": Object
 			}
@@ -60,9 +64,14 @@
 				this.$forceUpdate();
 			},
 			"classes": function() {
-				var classes = "";
+				var classes;
 				
-				classes += "general";
+				if(this.modes) {
+					classes = this.modes;
+				} else {
+					classes = "general";
+				}
+				
 				if(this.linked) {
 					classes += " linked";
 				}
