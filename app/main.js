@@ -21105,7 +21105,7 @@ class RSCalculator {
 //		console.log("Received Expression: ", expression, source, base, target);
 		if(!source) {
 			return expression;
-		} else if(!expression) {
+		} else if(!expression || typeof(expression) === "number") {
 //			console.trace("Expressionless Calculation? ", expression, source, base, target);
 			return expression;
 		}
@@ -21144,13 +21144,15 @@ class RSCalculator {
 						console.warn("Calculator - Unknown variable root", expression, variables);
 				}
 			} else {
-				processed = processed.replace(variables[0], parseInt(source[variables[1]]) || 0);
+				if(typeof(processed) === "string") {
+					processed = processed.replace(variables[0], parseInt(source[variables[1]]) || 0);
+				}
 			}
 		}
 		
 		expression = processed;
 
-		if(expression && expression.length < 150 && this.securityExpression.test(expression)) {
+		if(expression && typeof(expression) === "string" && expression.length < 150 && this.securityExpression.test(expression)) {
 			try {
 //				console.warn("Calculated: " + expression, variables);
 				return eval(expression);

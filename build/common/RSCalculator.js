@@ -45,7 +45,7 @@ class RSCalculator {
 //		console.log("Received Expression: ", expression, source, base, target);
 		if(!source) {
 			return expression;
-		} else if(!expression) {
+		} else if(!expression || typeof(expression) === "number") {
 //			console.trace("Expressionless Calculation? ", expression, source, base, target);
 			return expression;
 		}
