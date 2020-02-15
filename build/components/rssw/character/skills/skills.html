@@ -12,10 +12,14 @@
 			<label>
 				<span>Level Skill</span>
 				<select v-model="leveling">
-					<option value="">[ Select a Skill ]</option>
+					<option value="">{{leveling === ""?"[ Select a Skill ]":"Clear"}}</option>
+					<option value="_" disabled>----------</option>
 					<option v-for="skill in levelSkills" :value="skill.id">{{skill.name}}</option>
 				</select>
 			</label>
+			<button v-if="leveling" v-on:click="viewSkill(leveling)">
+				<span class="fas fa-info-circle rs-light-blue"></span>
+			</button>
 			<button class="level up" v-on:click="levelSkill(leveling, 1)" v-if="leveling" :disabled="getXPCost(leveling, 1) > character.xp">
 				<span class="fas fa-plus-square"></span>
 				<span>XP: {{getXPCost(leveling, 1)}}</span>
@@ -34,7 +38,7 @@
 					<span class="fas fa-tools"></span>
 					<span>General Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.general" :state="state" :user="user"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="general" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
 			</div>
 		</div>
 		
@@ -44,7 +48,7 @@
 					<span class="fas fa-swords"></span>
 					<span>Combat Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.combat" :state="state" :user="user"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="combat" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list ship flow-v">
@@ -52,7 +56,7 @@
 					<span class="fad fa-location-arrow"></span>
 					<span>Piloting Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.piloting" :state="state" :user="user"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="piloting" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list knowledge flow-v">
@@ -60,7 +64,15 @@
 					<span class="fas fa-brain"></span>
 					<span>Knowledge Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" :skills="skillStatsSections.knowledge" :state="state" :user="user"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="knowledge" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+			</div>
+			
+			<div class="skill-list custom flow-v">
+				<h3 class="titling">
+					<span class="fas cogs"></span>
+					<span>Custom Skills</span>
+				</h3>
+				<rssw-skill-section :universe="universe" :character="character" named="custom" :existing="character.skill" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
 			</div>
 		</div>
 	</div>

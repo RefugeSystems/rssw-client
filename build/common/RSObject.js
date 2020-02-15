@@ -80,7 +80,6 @@ class RSObject extends EventEmitter {
 	 * @param {Array} knowledge Of ID Strings.
 	 */
 	learnKnowledge(knowledge) {
-		console.log("Learning...", knowledge);
 		var updates,
 			x;
 
@@ -216,7 +215,7 @@ class RSObject extends EventEmitter {
 	}
 	
 	unregisterListeners() {
-		rsSystem.log.debug("RSObject[" + this.id + "] Cleaning Reference Listeners");
+//		rsSystem.log.debug("RSObject[" + this.id + "] Cleaning Reference Listeners");
 		var keys,
 			x;
 

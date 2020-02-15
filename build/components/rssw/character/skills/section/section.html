@@ -1,13 +1,13 @@
 
 <table>
-	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)">
+	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)" v-on:click="skillTouched(skill)">
 		<td class="name aligned-right flow-v">
 			<span class="naming">
 				<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
 				{{skill.name}}
 			</span>
 			<span class="naming base">
-				{{skill.base.capitalize()}}
+				{{(skill.base?skill.base:"ERR").capitalize()}}
 			</span>
 		</td>
 		<td class="icon">

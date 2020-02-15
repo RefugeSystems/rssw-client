@@ -141,9 +141,9 @@
 			},
 			"backOne": function() {
 				if(this.history.length) {
-					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
+//					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
 					Vue.set(this, "viewing", this.history.shift());
-					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
+//					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
 					this.update();
 				}
 			},

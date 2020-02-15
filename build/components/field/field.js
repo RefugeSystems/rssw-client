@@ -12,7 +12,7 @@
 	rsSystem.component("rsField", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSComponentUtility
 		],
 		"props": {
 			"root": {
@@ -40,9 +40,13 @@
 			return data;
 		},
 		"watch": {
+			
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+			if(this.field.source_index.listing) {
+				this.field.source_index.listing.sort(this.sortData);
+			}
 		},
 		"methods": {
 			"isVisible": function() {

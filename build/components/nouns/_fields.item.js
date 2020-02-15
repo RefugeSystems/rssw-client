@@ -163,6 +163,14 @@
 		"property": "attunement",
 		"type": "checkbox"
 	}, {
+		"label": "Untradable",
+		"property": "untradable",
+		"type": "checkbox"
+	}, {
+		"label": "Locked Attunement",
+		"property": "locked_attunement",
+		"type": "checkbox"
+	}, {
 		"label": "No Modifiers",
 		"property": "no_modifiers",
 		"type": "checkbox"

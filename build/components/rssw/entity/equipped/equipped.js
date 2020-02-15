@@ -183,11 +183,15 @@
 								}
 								for(z=0; z<this.entity.equipped[keys[x]][sub[y]].length; z++) {
 									buffer = this.universe.index.lookup[this.entity.equipped[keys[x]][sub[y]][z]];
-									this.slotMapping[sub[y]].push(buffer);
-									if(1 < buffer.slots_used) {
-										for(i=1; i<buffer.slots_used; i++) {
-											this.slotMapping[sub[y]].push(this.getConsumedIndicator(keys[x]));
+									if(buffer) {
+										this.slotMapping[sub[y]].push(buffer);
+										if(1 < buffer.slots_used) {
+											for(i=1; i<buffer.slots_used; i++) {
+												this.slotMapping[sub[y]].push(this.getConsumedIndicator(keys[x]));
+											}
 										}
+									} else {
+										console.warn("Unable to find equipped record[" + this.entity.equipped[keys[x]][sub[y]][z] + "] for entity[" + this.id + "]");
 									}
 								}
 							}

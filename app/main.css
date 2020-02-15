@@ -1193,6 +1193,14 @@ form {
 .object-info .linked-value {
   cursor: pointer;
 }
+.object-info .general-information h1,
+.object-info .general-information h2,
+.object-info .general-information h3,
+.object-info .general-information h4,
+.object-info .general-information h5,
+.object-info .general-information h6 {
+  color: black;
+}
 .object-info .general-information p {
   margin: 0px 0px 17px 0px;
 }

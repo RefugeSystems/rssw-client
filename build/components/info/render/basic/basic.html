@@ -60,6 +60,41 @@
 		</div>
 	</div>
 	
+	<div class="section" v-if="equipped.length">
+		<h3>Equipped Equipment</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="equipped_equipment in equipped">
+					<a class="rendered-value" v-on:click="showInfo(equipped_equipment[1], base)">{{equipped_equipment[1].name}}</a>
+					<span>On</span>
+					<a class="rendered-value" v-on:click="showInfo(equipped_equipment[0], base)">{{equipped_equipment[0].name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="section" v-if="base && relatedKnowledge.length">
+		<h3>{{base.name}}'s Related Knowledge</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="knowledge in relatedKnowledge">
+					<a class="rendered-value" v-on:click="showInfo(knowledge, base)">{{knowledge.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="section" v-if="record.related && record.related.length">
+		<h3>Related Data</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="data in record.related" v-if="universe.index.lookup[data]">
+					<a class="rendered-value" v-on:click="showInfo(universe.index.lookup[data], base)">{{universe.index.lookup[data].name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
 	<div class="section" v-if="(record._type === 'location' || record._type === 'entity') && entities.length">
 		<h3>Entities Here</h3>
 		<div class="general-list" v-if="player && player.master">

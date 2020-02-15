@@ -9,8 +9,15 @@
 (function() {
 	
 	var invisibleKeys = {};
+
+	invisibleKeys.property = true;
+	invisibleKeys.enhancementKey= true;
+	invisibleKeys.propertyKey = true;
+	invisibleKeys.bonusKey= true;
+	
 	invisibleKeys.information_renderer = true;
 	invisibleKeys.invisibleProperties = true;
+	invisibleKeys.locked_attunement = true;
 	invisibleKeys.source_template = true;
 	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
@@ -31,7 +38,7 @@
 	invisibleKeys.singleton = true;
 	invisibleKeys.equipped = true;
 	invisibleKeys.obscured = true;
-//	invisibleKeys.playable = true;
+	invisibleKeys.property = true;
 	invisibleKeys.universe = true;
 	invisibleKeys.playable = true;
 	invisibleKeys.created = true;
@@ -45,6 +52,7 @@
 	invisibleKeys.owners = true;
 	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
+	invisibleKeys.class = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
@@ -99,6 +107,10 @@
 			value = value.substring(0, index).trim().capitalize() + " (" + value.substring(index + 1).trim().capitalize() + ")";
 		}
 		return value;
+	};
+	
+	prettifyValues.related = function(property, value, record, universe) {
+		return "to " + (value?value.length:0) + " records";
 	};
 	
 	prettifyValues.range = function(property, value, record, universe) {
@@ -237,6 +249,9 @@
 			data.entityToMove = "";
 			data.partyToMove = "";
 			
+			data.equipped = [];
+			
+			data.relatedKnowledge = [];
 			data.keys = [];
 			
 			return data;
@@ -307,6 +322,10 @@
 			"canTransfer": function() {
 				var hold,
 					x;
+				
+				if(this.record.untradable) {
+					return false;
+				}
 				
 				for(x=0; this.base && this.base.item && x<this.base.item.length; x++) {
 					hold = this.universe.indexes.item.index[this.base.item[x]];
@@ -570,9 +589,11 @@
 			"update": function() {
 				var buffer,
 					hold,
+					slot,
 					map,
 					x,
-					y;
+					y,
+					z;
 				
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
@@ -658,7 +679,7 @@
 					if(this.record.hardpoints || this.record.contents_max) {
 						for(x=0; this.base.item && x<this.base.item.length; x++) {
 							buffer = this.universe.indexes.item.lookup[this.base.item[x]];
-							if(buffer.id !== this.record.id) {
+							if(buffer.id !== this.record.id && !buffer.untradable) {
 								if(this.record.cancontain && this.record.cancontain.length) {
 									if(buffer.itemtype && buffer.itemtype.length) {
 										hold = true;
@@ -725,6 +746,33 @@
 				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
 					if(this.universe.indexes.party.listing[x].active) {
 						this.parties.push(this.universe.indexes.party.listing[x]);
+					}
+				}
+				
+				this.relatedKnowledge.splice(0);
+				if(this.base && this.base.knowledge) {
+					for(x=0; x<this.base.knowledge.length; x++) {
+						if((buffer = this.universe.indexes.knowledge.lookup[this.base.knowledge[x]]) && buffer.related && buffer.related.indexOf(this.record.id) !== -1) {
+							this.relatedKnowledge.push(buffer);
+						}
+					}
+				}
+				
+				this.equipped.splice(0);
+				if(this.record.equipped) {
+					buffer = Object.keys(this.record.equipped);
+					for(x=0; x<buffer.length; x++) {
+						map = Object.keys(this.record.equipped[buffer[x]]);
+						for(y=0; y<map.length; y++) {
+							slot = this.universe.indexes.slot.lookup[map[y]];
+							if(slot && this.record.equipped[buffer[x]][slot.id] && this.record.equipped[buffer[x]][slot.id].length) {
+								for(z=0; z<this.record.equipped[buffer[x]][slot.id].length; z++) {
+									if(hold = this.universe.index.lookup[this.record.equipped[buffer[x]][slot.id][z]]) {
+										this.equipped.push([slot,hold]);
+									}
+								}
+							}
+						}
 					}
 				}
 				

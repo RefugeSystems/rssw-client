@@ -11,6 +11,7 @@
 	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
 		],
@@ -19,9 +20,11 @@
 				"required": true,
 				"type": Object
 			},
-			"skills": {
-				"required": true,
+			"existing": {
 				"type": Array
+			},
+			"named": {
+				"type": String
 			},
 			"state": {
 				"required": true,
@@ -32,14 +35,19 @@
 			var data = {};
 			
 			data.levelBars = levelBars;
+			data.skills = [];
 
 			return data;
 		},
 		"mounted": function() {
 			this.character.$on("modified", this.update);
 			rsSystem.register(this);
+			this.update();
 		},
 		"methods": {
+			"skillTouched": function(skill) {
+				this.$emit("touched", skill);
+			},
 			"isVisible": function(skill) {
 				return !this.state.search || skill._search.indexOf(this.state.search) !== -1;
 			},
@@ -62,6 +70,28 @@
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
+				var buffer,
+					x;
+				
+				if(this.named) {
+					this.skills.splice(0);
+					if(this.existing) {
+						for(x=0; x<this.existing.length; x++) {
+							buffer = this.universe.indexes.skill.lookup[this.existing[x]];
+							if(buffer) {
+								this.skills.push(buffer);
+							}
+						}
+					}
+					for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+						if(!this.universe.indexes.skill.listing[x].hidden && !this.universe.indexes.skill.listing[x].obscured && this.universe.indexes.skill.listing[x].section === this.named) {
+							this.skills.push(this.universe.indexes.skill.listing[x]);
+						}
+					}
+					this.uniqueByID(this.skills);
+					this.skills.sort(this.sortData);
+				}
+				
 				this.$forceUpdate();
 			}
 		},

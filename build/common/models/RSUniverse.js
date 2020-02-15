@@ -153,11 +153,11 @@ class RSUniverse extends RSObject {
 			};
 			
 			socket.onmessage = (message) => {
+				this.connection.entry(message, "Message Received");
+				this.connection.syncMark = message.time;
+				this.connection.last = Date.now();
+				
 				try {
-					this.connection.entry(message, "Message Received");
-					this.connection.syncMark = message.time;
-					this.connection.last = Date.now();
-					
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);

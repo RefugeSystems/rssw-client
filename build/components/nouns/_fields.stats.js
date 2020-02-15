@@ -5,7 +5,8 @@
 		listSource,
 		dataSource,
 		abilities,
-		effects;
+		effects,
+		skills;
 	
 	abilities = {
 		"label": "Abilities",
@@ -18,6 +19,14 @@
 	effects = {
 		"label": "Effects",
 		"property": "effect",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	skills = {
+		"label": "Skills",
+		"property": "skill",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -151,7 +160,8 @@
 	
 	listSource = [
 		abilities,
-		effects
+		effects,
+		skills
 	];
 	
 	commonSource = [{
@@ -238,6 +248,7 @@
 
 			abilities.source_index = this.universe.indexes.ability;
 			effects.source_index = this.universe.indexes.effect;
+			skills.source_index = this.universe.indexes.skill;
 			
 			return data;
 		},

@@ -478,7 +478,7 @@ class SearchIndex extends EventEmitter {
 //				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
 				this.$emit("indexed");
 			} else {
-				console.warn("Unidentified Search Index Update: ", item);
+				console.warn("Search Index unable to index item due to lack of identifier: ", item);
 			}
 		}
 	}
