@@ -20,6 +20,9 @@
 			<button v-if="leveling" v-on:click="viewSkill(leveling)">
 				<span class="fas fa-info-circle rs-light-blue"></span>
 			</button>
+			<button v-if="leveling" v-on:click="leveling = ''">
+				<span class="fas fa-ban rs-light-red"></span>
+			</button>
 			<button class="level up" v-on:click="levelSkill(leveling, 1)" v-if="leveling" :disabled="getXPCost(leveling, 1) > character.xp">
 				<span class="fas fa-plus-square"></span>
 				<span>XP: {{getXPCost(leveling, 1)}}</span>
