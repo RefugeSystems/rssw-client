@@ -10,7 +10,7 @@ Vue.directive("save", {
 		if(typeof(binding.value) === "function") {
 			var save = function(event) {
 				if(event.ctrlKey && event.code === "KeyS") {
-					console.warn("Saving");
+//					console.warn("Saving");
 					binding.value();
 					event.preventDefault();
 					return false;
@@ -19,7 +19,7 @@ Vue.directive("save", {
 			
 			var skip = function(event) {
 				if(event.ctrlKey && event.code === "KeyS") {
-					console.warn("Skipped");
+//					console.warn("Skipped");
 					event.preventDefault();
 					return false;
 				}

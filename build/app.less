@@ -65,7 +65,9 @@
 	}
 }
 .rs-component {
-	.flow-h {
+	.flow-h,
+	.flow.h,
+	.flex.h {
 		display: flex;
 		flex-direction: row;
 	
@@ -91,6 +93,9 @@
 		
 		&.centered {
 			justify-content: center;
+		}
+		
+		&.center {
 			align-items: center;
 		}
 		
@@ -103,7 +108,9 @@
 		}
 	}
 	
-	.flow-v {
+	.flow-v,
+	.flow-v,
+	.flex.v {
 		display: flex;
 		flex-direction: column;
 	
@@ -131,12 +138,30 @@
 			align-items: center;
 		}
 		
+		&.center {
+			align-items: center;
+		}
+		
 		&.middled {
 			align-content: center;
 		}
 		
 		&.inline {
 			display: inline-flex;
+		}
+	}
+	
+	.flex {
+		.spacer {
+			flex-grow: 10;
+		}
+		
+		.start {
+			align-items: flex-start;
+		}
+		
+		.end {
+			align-items: flex-end;
 		}
 	}
 	
@@ -172,13 +197,16 @@
 		transform: scaleY(-1);
 	}
 	
-	.aligned-left {
+	.aligned-left,
+	.align-left {
 		text-align: left;
 	}
-	.aligned-right {
+	.aligned-right,
+	.align-right {
 		text-align: right;
 	}
-	.aligned-center {
+	.aligned-center,
+	.align-center {
 		text-align: center;
 	}
 }
@@ -319,54 +347,71 @@
 
 .system-component,
 .rs-component {
-	.rs-darkOrange {
-		color: @rsDarkOrange !important;
-	}
-	.rs-orange {
-		color: @rsOrange !important;
-	}
-	.rs-lightOrange {
-		color: @rsLightOrange !important;
-	}
-	.rs-darkblue {
-		color: @rsDarkBlue !important;
-	}
-	.rs-blue {
-		color: @rsBlue !important;
-	}
-	.rs-lightBlue {
-		color: @rsLightBlue !important;
-	}
-	.rs-white {
-		color: @rsWhite !important;
-	}
-	.rs-black {
-		color: @rsBlack !important;
-	}
-	.rs-gray, .rs-grey {
-		color: @rsGray !important;
-	}
-	.rs-green {
-		color: @rsGreen !important;
+	.rs-lightred, .rs-light-red {
+		color: @rsLightRed !important;
 	}
 	.rs-red {
 		color: @rsRed !important;
 	}
+	.rs-darkred, .rs-dark-red {
+		color: @rsDarkRed !important;
+	}
+	.rs-lightOrange, .rs-lightorange, .rs-light-orange {
+		color: @rsLightOrange !important;
+	}
+	.rs-orange {
+		color: @rsOrange !important;
+	}
+	.rs-darkOrange, .rs-darkorange, .rs-dark-orange {
+		color: @rsDarkOrange !important;
+	}
+	.rs-lightyellow, .rs-light-yellow {
+		color: @rsLightYellow !important;
+	}
 	.rs-yellow {
 		color: @rsYellow !important;
 	}
-	.rs-light-red {
-		color: @rsLightRed !important;
+	.rs-darkyellow, .rs-dark-yellow {
+		color: @rsDarkYellow !important;
 	}
-	.rs-darkpurple {
-		color: @rsDarkPurple !important;
+	.rs-lightgreen, .rs-light-green {
+		color: @rsLightGreen !important;
+	}
+	.rs-green {
+		color: @rsGreen !important;
+	}
+	.rs-darkgreen, .rs-dark-green {
+		color: @rsDarkGreen !important;
+	}
+	.rs-lightBlue, .rs-lightblue, .rs-light-blue {
+		color: @rsLightBlue !important;
+	}
+	.rs-blue {
+		color: @rsBlue !important;
+	}
+	.rs-darkblue, .rs-dark-blue {
+		color: @rsDarkBlue !important;
+	}
+	.rs-lightpurple, .rs-light-purple {
+		color: @rsLightPurple !important;
 	}
 	.rs-purple {
 		color: @rsPurple !important;
 	}
-	.rs-lightpurple {
-		color: @rsLightPurple !important;
+	.rs-darkpurple,.rs-dark-purple {
+		color: @rsDarkPurple !important;
 	}
+	
+	.rs-white {
+		color: @rsWhite !important;
+	}
+	.rs-gray, .rs-grey {
+		color: @rsGray !important;
+	}
+	.rs-black {
+		color: @rsBlack !important;
+	}
+	
 	.rs-transparent {
 		color: transparent !important;
 	}
@@ -720,6 +765,31 @@ form {
 			color: @rsBlue;
 		}
 	}
+	
+	button.ctrl {
+		background: transparent;
+		padding: 2px;
+		margin: 2px;
+		border: 0px;
+		cursor: pointer;
+	}
+	
+	.ctrl-icon {
+		display: inline-block;
+		line-height: 20px;
+		font-size: 18px;
+		width: 20px;
+	}
+	
+	.dashboards {
+		margin-left: 30px;
+	}
+	
+	.dashboard {
+		font-size: 18px;
+		padding: 4px;
+		margin: 4px;
+	}
 
 	.self {
 		margin: 7px;
@@ -773,8 +843,14 @@ form {
 
 }
 
-.rssw-page.page-dashboard {
+.rssw-page.page-dashboard.page-ships {
+	display: flex;
+	flex-direction: row;
 
+	.ship-column {
+		max-width: 350px;
+		margin: 0px 10px;
+	}
 }
 
 .rssw-page.page-storage {
@@ -1191,14 +1267,35 @@ form {
 	
 }
 .rs-component.rs-image {
+	width: 100%;
+	text-align: center;
 	
 	&.general {
-		width: 100%;
 		margin-bottom: 10px !important;
 		
 		img {
 			max-width: 100%;
 		}
+	}
+	
+	&.wide {
+		img {
+			width: 100% !important;
+		}
+	}
+	
+	&.high {
+		img {
+			height: 100% !important;
+		}
+	}
+	
+	&.left {
+		text-align: left;
+	}
+	
+	&.right {
+		text-align: right;
 	}
 	
 	&.linked {
@@ -1295,6 +1392,10 @@ form {
 	}
 	
 	.general-information {
+	
+		h1, h2, h3, h4, h5, h6 {
+			color: black;
+		}
 	
 		p {
 			margin: 0px 0px 17px 0px;
@@ -1962,6 +2063,58 @@ form {
 	}
 }
 
+.rs-component.rssw.component-entity-equipment {
+	
+	&.short {
+		width: 300px;
+		overflow-x: auto;
+		
+		.slots {
+			
+		}
+	}
+	
+	&.long {
+	}
+	
+	.slots {
+		
+		.slot {
+			margin: 0px;
+		}
+		
+		.icon {
+			display: block;
+			border: 1px solid @rsGray;
+			border-radius: 4px;
+			padding: 2px;
+			
+			background: transparent;
+			margin: 4px;
+		
+			span {
+				display: block;
+				line-height: 22px;
+				width: 22px;
+				font-size: 18px;
+				text-align: center;
+			}
+		}
+	}
+}
+
+.rs-component.rssw.component-entity-knowledge {
+	
+	
+	.table-record.name {
+	
+	
+		.table-content {
+			text-align: left;
+		}
+	}
+}
+
 .rs-component.rssw.component-entity-inside {
 	
 	.entities {
@@ -1978,216 +2131,319 @@ form {
 		border: 0px;
 	}
 	
+	.title-info {
+		& > * {
+			vertical-align: middle;
+			display: inline-block;
+		}
+	}
+	
+	.title-readout {
+		font-size: .7em;
+	}
+	
 	.exit-ship {
 		margin-left: 10px;
 	}
 }
 
 .rs-component.rssw.component-ship-stats {
-	display: inline-flex;
-	flex-direction: column;
-	width: 300px;
-						
-	.icon {
-		display: inline-block;
-		vertical-align: middle;
-		text-align: center;
-		
-		* {
-			vertical-align: middle;
-		}
-	}
 	
-	.icon-bubble {
-		display: inline-flex;
-		justify-content: center;
-		align-content: center;
-		align-items: center;
-	}
 
-	.picture {
-		
-		
-		img {
-			width: 300px;
-		}
-	}
-	
-	.information {
-		
-		.skill {
-			border: 1px solid @rsGray;
-			border-radius: 30px;
-			padding: 4px;
-			margin: 0px 4px 0px 0px;
-		}
-		
-		.pilot-info {
-			text-align: center;
-			flex-grow: 10;
-		}
-		
-		.name-display {
-			margin-right: 4px;
-		}
-		
-		.alliance {
-			justify-content: center;
-			padding: 0px 5px;
-		}
-		
+	.ship-card {
+		display: inline-flex;
+		flex-direction: column;
+		width: 300px;
+							
 		.icon {
-			display: block;
-			line-height: 30px;
-			height: 30px;
-			width: 30px;
-			font-size: 30px;
-		}
-		
-		input {
+			display: inline-block;
+			vertical-align: middle;
 			text-align: center;
-			width: 100%;
-		}
-	}
-	
-	.data {
-		.stats {
-			.stat {
-				font-size: 28px;
-				align-items: center;
-				margin: 3px 0px;
-				
-				.icon-bubble {
-					height: 30px;
-					width: 30px;
-					border: 1px solid @rsGray;
-					border-radius: 17px;
-					font-size: 20px;
-					vertical-align: middle;
-				}
-				
-				.value {
-					margin-left: 5px;
-				}
-			}
-		}
-		
-		.details {
-			padding: 0px 0px 0px 5px;
-			flex-grow: 10;
 			
-			.pilot-name {
-				white-space: nowrap;
-				margin-right: 8px;
-			}
-			
-			.pilot {
-				justify-content: flex-end;
-			}
-			
-			.pilot-ability {
-				position: relative;
-				flex-grow: 5;
-				margin: 5px 0px;
-					
-				p {
-					margin: 0px 0px 8px 0px;
-				}
-				
-				.pilot-ability-text {
-					padding-bottom: 26px;
-					padding: 3px;
-					border: 2px solid @rsGray;
-					background: @rsWhite;
-					border-radius: 5px;
-				}
-				
-				.edit-pilot-ability {
-					position: absolute;
-					background-color: transparent;
-					padding: 2px;
-					border: 0px;
-					margin: 0px;
-					bottom: 0px;
-					right: 0px;
-					
-					line-height: 16px;
-					font-size: 16px;
-					height: 20px;
-					width: 20px;
-					color: @rsOrange;
-				}
-			}
-		
-			.abilities {
-				border: 2px solid @rsGray;
-				border-radius: 15px;
-			
-				.ability {
-					color: @rsLightBlue;
-					background: transparent;
-					font-size: 24px;
-					
-					padding: 4px;
-					border: 0px;
-					margin: 4px;
-				}
-			}
-		}
-	}
-	
-	.data-list {
-		margin: 7px 0px;
-		
-		.property-link {
-			color: @rsLightBlue;
-			background: transparent;
-			font-size: .8em;
-			padding: 4px;
-			margin: 4px;
-			border: 0px;
-		}
-	}
-	
-	.mounts {
-		justify-content: space-between;
-		
-		.icon-bubble {
-			border: 1px solid @rsGray;
-			border-radius: 14px;
-			height: 26px;
-			line-height: 26px;
-			width: 26px;
-			flex-shrink: 0;
-			
-			.ship-icon {
-				color: @rsWhite;
-			}
-		}
-		
-		.slots {
-			justify-content: center;
-			flex-grow: 9;
-			
-			.slot {
-				line-height: 26px;
+			* {
 				vertical-align: middle;
 			}
 		}
 		
-		.points {
-			line-height: 18px;
-			border: 1px solid @rsWhite;
-			padding: 3px 6px;
-			border-radius: 16px;
-			text-align: left;
-			position: relative;
-			flex-shrink: 0;
+		.icon-bubble {
+			display: inline-flex;
+			justify-content: center;
+			align-content: center;
+			align-items: center;
+		}
+	
+		.picture {
+			
+			
+			img {
+				width: 300px;
+			}
+		}
+		
+		.information {
+			
+			.skill {
+				border: 1px solid @rsGray;
+				border-radius: 30px;
+				padding: 4px;
+				margin: 0px 4px 0px 0px;
+			}
+			
+			.pilot-info {
+				text-align: center;
+				flex-grow: 10;
+			}
+			
+			.name-display {
+				margin-right: 4px;
+			}
+			
+			.alliance {
+				justify-content: center;
+				padding: 0px 5px;
+			}
 			
 			.icon {
-				color: @rsWhite;
-				font-size: .7em;
+				display: block;
+				line-height: 30px;
+				height: 30px;
+				width: 30px;
+				font-size: 30px;
 			}
+			
+			input {
+				text-align: center;
+				width: 100%;
+			}
+		}
+		
+		.data {
+			.stats {
+				.stat {
+					font-size: 28px;
+					align-items: center;
+					margin: 3px 0px;
+					
+					.icon-bubble {
+						height: 30px;
+						width: 30px;
+						border: 1px solid @rsGray;
+						border-radius: 17px;
+						font-size: 20px;
+						vertical-align: middle;
+					}
+					
+					.value {
+						margin-left: 5px;
+					}
+				}
+				
+				.point-bubble {
+					display: block;
+					height: 38px;
+					width: 38px;
+					line-height: 38px;
+					text-align: center;
+					border: 2px solid @rsGray;
+					border-radius: 15px;
+					vertical-align: middle;
+					font-size: 20px;
+				}
+			}
+			
+			.details {
+				padding: 0px 0px 0px 5px;
+				flex-grow: 10;
+				
+				.pilot-name {
+					white-space: nowrap;
+					margin-right: 8px;
+				}
+				
+				.pilot {
+					justify-content: flex-end;
+				}
+				
+				.pilot-ability {
+					position: relative;
+					flex-grow: 5;
+					margin: 5px 0px;
+						
+					p {
+						margin: 0px 0px 8px 0px;
+					}
+					
+					.pilot-ability-text {
+						padding-bottom: 26px;
+						padding: 3px;
+						border: 2px solid @rsGray;
+						background: @rsWhite;
+						border-radius: 5px;
+					}
+					
+					.edit-pilot-ability {
+						position: absolute;
+						background-color: transparent;
+						padding: 2px;
+						border: 0px;
+						margin: 0px;
+						bottom: 0px;
+						right: 0px;
+						
+						line-height: 16px;
+						font-size: 16px;
+						height: 20px;
+						width: 20px;
+						color: @rsOrange;
+					}
+				}
+			
+				.abilities {
+					border: 2px solid @rsGray;
+					border-radius: 15px;
+				
+					.ability {
+						color: @rsLightBlue;
+						background: transparent;
+						font-size: 24px;
+						
+						padding: 3px;
+						border: 0px;
+						margin: 4px;
+					}
+				}
+			}
+		}
+		
+		.data-list {
+			
+			.property-link {
+				color: @rsLightBlue;
+				background: transparent;
+				font-size: .8em;
+				padding: 4px;
+				margin: 4px;
+				border: 0px;
+			}
+		}
+		
+		.mounts {
+			justify-content: space-between;
+			
+			.icon-bubble {
+				border: 1px solid @rsGray;
+				border-radius: 14px;
+				height: 26px;
+				line-height: 26px;
+				width: 26px;
+				flex-shrink: 0;
+				
+				.ship-icon {
+					color: @rsWhite;
+				}
+			}
+			
+			.slots {
+				justify-content: center;
+				flex-grow: 9;
+				
+				.slot {
+					line-height: 26px;
+					vertical-align: middle;
+				}
+			}
+			
+			.points {
+				line-height: 18px;
+				border: 1px solid @rsWhite;
+				padding: 3px 6px;
+				border-radius: 16px;
+				text-align: left;
+				position: relative;
+				flex-shrink: 0;
+				
+				.icon {
+					color: @rsWhite;
+					font-size: .7em;
+				}
+			}
+		}
+		
+		.data-list.items {
+			margin-top: 8px;
+		}
+	}
+	
+	.ship-effects {
+		width: 50px;
+		min-height: 50px;
+		padding-top: 50px;
+		z-index: 10;
+		
+		.effect-selector {
+			position: absolute;
+			z-index: 20;
+			top: 0px;
+			
+			background: @rsBlack;
+			transition: max-height .5s;
+			overflow: hidden;
+			max-height: 50px;
+		}
+		
+		.effect-toggle {
+			
+			
+			span {
+				transition: transform .5s, color .5s;
+			}
+		}
+		
+		.effect-token-container {
+			position: relative;
+		}
+		
+		button.effect-token {
+			height: 42px;
+			width: 42px;
+		}
+		
+		div.effect-token {
+			height: 32px;
+			width: 32px;
+		}
+		
+		.effect-token {
+			position: relative;
+		}
+		
+		.effect-button {
+			display: block;
+			padding: 4px;
+			margin: 4px;
+			border: 1px solid @rsGray;
+			border-radius: 15px;
+			background: transparent;
+			outline: none !important;
+			
+			span {
+				line-height: 32px;
+				font-size: 30px;
+			}
+		}
+		
+		button.effect-info {
+			position: absolute;
+			right: -40px;
+			top: 0px;
+			z-index: 30;
+			margin: 0px;
+			background: @rsBlack;
+		}
+		
+		select {
+			margin: -4px 4px 4px 4px;
+		    width: 42px;
 		}
 	}
 }

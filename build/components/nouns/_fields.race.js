@@ -3,9 +3,18 @@
 	
 	var dataSource,
 		datasets,
+		profiles,
 		attrs,
 		stats,
 		notes;
+	
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 	
 	datasets = {
 		"label": "Name Generation Dataset",
@@ -52,7 +61,9 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
+	},
+	profiles,
+	{
 		"label": "Playable",
 		"property": "playable",
 		"type": "checkbox"
@@ -87,6 +98,9 @@
 			return data;
 		},
 		"mounted": function() {
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+			
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			datasets.source_index = this.universe.indexes.dataset;

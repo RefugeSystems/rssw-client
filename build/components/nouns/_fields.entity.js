@@ -52,7 +52,7 @@
 	
 	pilot = {
 		"label": "Pilot",
-		"property": "pilot",
+		"property": "entity",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name",
@@ -238,9 +238,9 @@
 		"property": "height",
 		"type": "number"
 	}, {
-		"label": "Weight",
-		"property": "weight",
-		"type": "number"
+		"label": "Mass",
+		"property": "mass",
+		"type": "text"
 	}, {
 		"label": "Experience",
 		"property": "xp",
@@ -267,6 +267,26 @@
 		"type": "number",
 		"condition": {
 			"classification": "character"
+		}
+	}, {
+		"label": "Required Crew",
+		"property": "required_crew",
+		"type": "number",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["station", "ship", "building", "base"]
+			}
+		}
+	}, {
+		"label": "Maximum Crew",
+		"property": "maximum_crew",
+		"type": "number",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["station", "ship", "building", "base"]
+			}
 		}
 	},
 	shipAbilities,
@@ -338,7 +358,7 @@
 		]
 	},
 	profiles,
-	images,
+//	images,
 	{
 		"label": "Inactivated",
 		"property": "inactive",

@@ -1,106 +1,135 @@
 <div class="rs-component rssw component-ship-stats">
-	<div class="picture">
-		<img :src="'/images/rssw/ships/' + ship.profile" />
-	</div>
-	<div class="information flow-h">
-		<div class="skill">
-			<span v-if="!pilot" class="icon fas fa-ban"></span>
-			<span v-if="pilot" class="icon">{{skill}}</span>
-		</div>
-		<div class="pilot-info flow-v">
-			<div class="pilot pilot-name flow-h centered">
-				<div v-if="editingPilot">
-					<select v-model="setPilot" v-on:change="setNewPilot(setPilot)">
-						<option value="">Select Pilot...</option>
-						<option v-for="p in availablePilots" :value="p.id">{{p.name}}</option>
-					</select>
-				</div>
-				<div v-if="!editingPilot && pilot" class="name-display flow-h">
-					<span>{{pilot.name}}</span>
-				</div>
-				<div v-if="!editingPilot && !pilot" class="name-display flow-h">
-					<span>No Pilot</span>
-				</div>
-				<button v-on:click="editPilot()" class="flow-h">
-					<span :class="editingPilot?'fas fa-check':'fas fa-edit'"></span>
-				</button>
+	<div class="ship-info flex h">
+		<div class="ship-card">
+			<div class="picture" v-on:click="recalculate()">
+				<rs-render-image class="record-image" v-if="image" mode="wide" :image="image"></rs-render-image>
 			</div>
-			<div class="name">
-				<input type="text" v-model="properties.name" v-on:change="updated('name')" />
-			</div>
-		</div>
-		<div class="alliance flow-v">
-			<span v-if="!pilot" class="icon fab fa-android"></span>
-			<span v-if="pilot" class="icon" :class="pilot.allegiance || pilot.icon"></span>
-		</div>
-	</div>
-	<div class="data flow-h">
-		<div class="stats flow-v">
-			<div class="stat flow-h" v-for="stat in shipStatList" :key="stat.id" :class="stat.class" v-if="stat">
-				<span class="icon-bubble">
-					<span class="icon" :class="stat.icon"></span>
-				</span>
-				<span class="value">{{ship[stat.id]}}</span>
-			</div>
-		</div>
-		<div class="details flow-v">
-			<div class="pilot-ability object-info">
-				<div class="pilot-ability-text" v-html="abilityDescription" v-if="!editingPilotAbility">
+			<div class="information flow-h">
+				<div class="skill">
+					<span v-if="!pilot" class="icon fas fa-ban"></span>
+					<span v-if="pilot" class="icon">{{skill}}</span>
 				</div>
-				<div v-if="editingPilotAbility">
-					<div class="rs-white">
-						Select Pilot Ability
+				<div class="pilot-info flow-v">
+					<div class="pilot pilot-name flow-h centered">
+						<div v-if="editingPilot">
+							<select v-model="setPilot" v-on:change="setNewPilot(setPilot)">
+								<option value="">No Pilot</option>
+								<option v-for="p in availablePilots" :value="p.id">{{p.name}}</option>
+							</select>
+						</div>
+						<div v-if="!editingPilot && pilot" class="name-display flow-h" :class="getPilotClass()">
+							<span>{{pilot.name}}</span>
+						</div>
+						<div v-if="!editingPilot && !pilot" class="name-display flow-h" :class="getPilotClass()">
+							<span>No Pilot</span>
+						</div>
+						<button v-on:click="editPilot()" class="flow-h">
+							<span :class="editingPilot?'fas fa-check':'fas fa-edit'"></span>
+						</button>
 					</div>
-					<div>
-						<select v-model="setPilotAbility" v-on:change="setNewPilotAbility(setPilotAbility)">
-							<option value="">No Ability</option>
-							<option v-for="a in pilotAbilities" :value="a.id">{{a.name}}</option>
-						</select>
+					<div class="name">
+						<input type="text" v-model="properties.name" v-on:change="updated('name')" />
 					</div>
 				</div>
-				<button class="edit-pilot-ability" v-on:click="editPilotAbility()">
-					<span :class="editingPilotAbility?'fas fa-check':'fas fa-pencil'"></span>
+				<div class="alliance flow-v">
+					<span v-if="!pilot" class="icon fab fa-android"></span>
+					<span v-if="pilot" class="icon" :class="pilot.allegiance || pilot.icon"></span>
+				</div>
+			</div>
+			<div class="data flex h">
+				<div class="stats flex v">
+					<div class="stat flex h" v-for="stat in shipStatList" :key="stat.id" :class="stat.class" v-if="stat">
+						<span class="icon-bubble">
+							<span class="icon" :class="stat.icon"></span>
+						</span>
+						<span class="value">{{ship[stat.id]}}</span>
+					</div>
+					<div class="spacer"></div>
+					<div class="point-bubble">
+						<span>{{points}}</span>
+					</div>
+				</div>
+				<div class="details flow-v">
+					<div class="pilot-ability object-info">
+						<div class="pilot-ability-text" v-html="abilityDescription" v-if="!editingPilotAbility">
+						</div>
+						<div v-if="editingPilotAbility">
+							<div class="rs-white">
+								Select Pilot Ability
+							</div>
+							<div>
+								<select v-model="setPilotAbility" v-on:change="setNewPilotAbility(setPilotAbility)">
+									<option value=""></option>
+									<option value>No Ability</option>
+									<option v-for="a in pilotAbilities" :value="a.id">{{a.name}}</option>
+								</select>
+							</div>
+						</div>
+						<button class="edit-pilot-ability" v-on:click="editPilotAbility()">
+							<span :class="editingPilotAbility?'fas fa-check':'fas fa-pencil'"></span>
+						</button>
+					</div>
+					<div class="data-list status flow-v aligned-right">
+						<div class="property" v-if="properties.location">
+							<span>Location: </span>
+							<button class="property-link" v-on:click="showInfo(properties.location)">
+								<span :class="properties.location.icon"></span>
+								<span>{{properties.location.name}}</span>
+							</button>
+						</div>
+						<div class="property" v-if="properties.inside">
+							<span>Inside: </span>
+							<button class="property-link" v-on:click="showInfo(properties.inside)">
+								<span :class="properties.inside.icon"></span>
+								<span>{{properties.inside.name}}</span>
+							</button>
+						</div>
+					</div>
+					<div class="abilities flow-h centered wrap">
+						<button class="ability" v-for="ability in abilities" v-if="ability" v-on:click="showInfo(ability)">
+							<span :class="ability.icon"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="data-list items" v-if="items.length">
+				<div class="readout">
+					<span>Encumberance:</span>
+					<span>{{encumberance}}</span>
+					<span v-if="ship.contents_max">/ {{ship.contents_max}}</span>
+				</div>
+				<div class="property" v-for="item in items">
+					<button class="property-link" v-on:click="showInfo(item)">
+						<span :class="item.icon"></span>
+						<span>{{item.name}}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="ship-effects">
+			<div class="effect-selector" :class="effectsOpen?'select-effect':'closed'">
+				<button class="effect-button effect-token effect-toggle" v-on:click="toggleEffectMenu()">
+					<span class="fas fa-arrow-circle-up" :class="effectsOpen?'rot0 rs-light-blue':'rot180 rs-white'"></span>
+				</button>
+				<button v-for="effect in shipEffects" class="effect-button effect-token rs-gray" v-on:click="assignEffect(effect)">
+					<span :class="effect.icon"></span>
+				</button>
+				<button class="effect-button effect-token" v-on:click="showInfo('knowledge:effects:ships')">
+					<span class="fas fa-info-circle rs-light-blue"></span>
 				</button>
 			</div>
-			<div class="abilities flow-h centered wrapped">
-				<button class="ability" v-for="ability in abilities" v-if="ability" v-on:click="showInfo(ability)">
-					<span :class="ability.icon"></span>
+			<div class="effect-token-container" v-for="effect in activeEffects">
+				<button class="effect-button effect-token rs-light-blue" v-on:click="dismissEffect(effect)" v-on:focus="focusEffect(effect)" v-on:blur="blurEffect(effect)">
+					<span :class="getEffectIcon(effect)"></span>
 				</button>
+				<button v-if="showEffectInfo === effect.id" class="effect-button effect-info rs-light-blue" v-on:click="showInfo(effect._sourced)" v-on:focus="focusEffect(effect)" v-on:blur="blurEffect(effect)">
+					<span class="fas fa-info-circle"></span>
+				</button>
+				<select v-if="hasEffectHasIndicators(effect)" v-model="effectIndicators[effect.id]" v-on:change="alterIndicator(effect, effectIndicators[effect.id])">
+					<option v-if="!effect.indicator" value=""></option>
+					<option v-for="opt in availableEffects[effect._sourced].indicators" :value="opt">{{opt}}</option>
+				</select>
 			</div>
-		</div>
-	</div>
-	<div class="data-list status">
-		<div class="property" v-if="properties.location">
-			<span>Location: </span>
-			<button class="property-link" v-on:click="showInfo(properties.location)">
-				<span :class="properties.location.icon"></span>
-				<span>{{properties.location.name}}</span>
-			</button>
-		</div>
-		<div class="property" v-if="properties.inside">
-			<span>Inside: </span>
-			<button class="property-link" v-on:click="showInfo(properties.inside)">
-				<span :class="properties.inside.icon"></span>
-				<span>{{properties.inside.name}}</span>
-			</button>
-		</div>
-	</div>
-	<div class="data-list items" v-if="items.length">
-		<div class="readout">
-			<span>Encumberance:</span>
-			<span>{{encumberance}}</span>
-			<span v-if="ship.contents_max">/ {{ship.contents_max}}</span>
-		</div>
-		<div class="property" v-for="item in items">
-			<button class="property-link" v-on:click="showInfo(item)">
-				<span :class="item.icon"></span>
-				<span>{{item.name}}</span>
-			</button>
-		</div>
-	</div>
-	<div class="mounts flow-h">
-		<div v-for="slot in availableSlots">
-			{{slot.name}}
 		</div>
 	</div>
 </div>

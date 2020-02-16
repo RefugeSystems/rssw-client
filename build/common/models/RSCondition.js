@@ -22,13 +22,17 @@ class RSCondition extends RSObject {
 	 * @return {Boolean} If the condition passes or not. 
 	 */
 	evaluate(base, target) {
+		if(!this.type || !base[this.type]) {
+			return false;
+		}
+		
 		var count = 0,
 			index,
 			limit,
 			load,
 			x;
 	
-//		console.log("Checking Condition[" + target + "]: " + this.id, base[this.type], this);
+//		console.log("Checking Condition[" + target + "]: " + this.id + "\n > " + this.type + "\n > Base: ", base, "\n > Condition: ", this);
 		if(this.singleton && this.singleton.length) {
 			index = base[this.type].indexOf(target);
 			limit = this.limited || 1;

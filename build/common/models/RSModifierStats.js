@@ -20,17 +20,36 @@ class RSModifierStats extends RSModifier {
 		super(details, universe);
 	}
 	
-	performModifications(base) {
+	performModifications(base, origin, debug) {
 		var keys = Object.keys(this._coreData),
-			x;
+			x,
+			y;
+		
+		if(debug) {
+			console.warn("Perform Mod[" + origin + "]: " + this.id);
+		}
 		
 		for(x=0; x<keys.length; x++) {
-			if(!RSModifierStats._skip[keys[x]] && keys[x] && keys[x][0] !== "_") {
+			if(debug) {
+				console.warn("Check Key Mod[" + this.id + "]: " + keys[x] + " oftype " + typeof(this[keys[x]]), _p(base[keys[x]]), _p(this._coreData[keys[x]]));
+			}
+			if(!RSModifierStats._skip[keys[x]] && keys[x] && keys[x][0] !== "_" && keys[x] !== "history" && keys[x] !== "created" && keys[x] !== "updated") {
+				if(origin === "undefined") {
+					console.warn("???: ", this, base);
+				}
+				if(base._contributions) {
+					if(!base._contributions[keys[x]]) {
+						base._contributions[keys[x]] = {};
+					}
+					base._contributions[keys[x]][origin] = true;
+				}
 				if(base[keys[x]]) {
 					switch(typeof(this[keys[x]])) {
 						case "string":
 							base[keys[x]] = this._coreData[keys[x]] + " + " + base[keys[x]];
-							base._calculated.push(keys[x]);
+							if(base._calculated) {
+								base._calculated.push(keys[x]);
+							}
 							break;
 						case "boolean":
 							base[keys[x]] = this._coreData[keys[x]] || base[keys[x]];
@@ -40,14 +59,38 @@ class RSModifierStats extends RSModifier {
 								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
 							} else {
 								base[keys[x]] = base[keys[x]].toString() + " + " + this._coreData[keys[x]];
-								base._calculated.push(keys[x]);
+								if(base._calculated) {
+									base._calculated.push(keys[x]);
+								}
 							}
 							break;
+						case "object":
+							if(base[keys[x]] instanceof Array) {
+								for(y=0; y<this._coreData[keys[x]].length; y++) {
+									base[keys[x]].push(this._coreData[keys[x]][y]);
+								}
+							} else {
+								Object.assign(base[keys[x]], this._coreData[keys[x]]);
+							}
 					}
 				} else {
-					base[keys[x]] = this._coreData[keys[x]];
-					base._calculated.push(keys[x]);
+					if(typeof(this._coreData[keys[x]]) === "object") {
+						if(this._coreData[keys[x]] instanceof Array) {
+							base[keys[x]] = [];
+							base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+						} else {
+							base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+						}
+					} else {
+						base[keys[x]] = this._coreData[keys[x]];
+					}
+					if(base._calculated) {
+						base._calculated.push(keys[x]);
+					}
 				}
+			}
+			if(debug) {
+				console.log(" > Result of Key Mod[" + this.id + "]: " + keys[x], _p(base[keys[x]]));
 			}
 		}
 	}

@@ -56,6 +56,7 @@
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsPlaylist,
 			rsSystem.components.NounFieldsAbility,
 			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsEntity,
@@ -216,6 +217,9 @@
 					keys = Object.keys(parsed);
 					for(x=0; x<keys.length; x++) {
 						Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
+					}
+					if(parsed instanceof Array) {
+						Vue.set(this.state.building[this.state.current], "length", parsed.length);
 					}
 					
 //					this.saveStorage(storageKey, this.state);
@@ -477,7 +481,7 @@
 				
 				if(this.isValid) {
 //					console.log("valid");
-					if(this.state.building[this.state.current] instanceof Array) {
+					if(this.state.building[this.state.current] instanceof Array || (this.state.building[this.state.current]["0"] && this.state.building[this.state.current].length)) {
 //						console.log("array");
 						for(var x=0; x<this.state.building[this.state.current].length; x++) {
 //							console.warn("sync: ", this.state.building[this.state.current][x]);

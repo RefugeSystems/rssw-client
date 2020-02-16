@@ -41,6 +41,7 @@
 				"viewing": false
 			});
 			
+			data.piloting = null;
 			data.location = null;
 			data.inside = null;
 			
@@ -66,27 +67,48 @@
 			}
 		},
 		"mounted": function() {
+			rsSystem.register(this);
+		
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
-				if(follow && (follow = this.universe.index.index[follow.value])) {
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
 					rsSystem.EventBus.$emit("display-info", follow);
 				}
 			};
-			
+
+			this.universe.$on("model:modified", this.updateFromUniverse);
 			this.character.$on("modified", this.update);
-			rsSystem.register(this);
+			this.updateFromUniverse();
 			this.update();
 		},
 		"methods": {
 			"showInfo": function(view) {
-				rsSystem.EventBus.$emit("display-info", {
-					"source": this.character,
-					"record": view
-				});
+				if(this.isOwner(view)) {
+					rsSystem.EventBus.$emit("display-info", {
+						"source": this.character,
+						"record": view
+					});
+				}
 			},
-			"exitEntity": function() {
+			"isOwner": function(record) {
+				if(record.owner === this.player.id) {
+					return true;
+				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
+					return true;
+				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			"exitEntity": function(entity) {
 				this.character.commit({
 					"inside": null
+				});
+			},
+			"stopPiloting": function(entity) {
+				entity.commit({
+					"entity": null
 				});
 			},
 			"updateCharacter": function() {
@@ -141,6 +163,49 @@
 				change[property] = value;
 				this.character.commit(change);
 			},
+			"updateFromUniverse": function() {
+				var buffer,
+					hold,
+					x;
+
+				for(x=0; !hold && x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.classification === "ship" && buffer.entity === this.character.id) {
+						hold = buffer;
+					}
+				}
+				if(hold) {
+					Vue.set(this, "piloting", hold);
+				} else {
+					Vue.set(this, "piloting", null);
+				}
+
+				hold = 0;
+				if(this.items.length !== this.character.item.length) {
+					this.items.splice(0);
+					if(this.character.item && this.character.item.length) {
+						for(x=0; x<this.character.item.length; x++) {
+							buffer = this.universe.nouns.item[this.character.item[x]];
+							if(buffer) {
+								hold += (buffer.encumberance || 0);
+								this.items.push(buffer);
+							} else {
+								console.warn("Item Not Found: " + this.character.item[x]);
+							}
+						}
+					}
+				} else {
+					for(x=0; x<this.character.item.length; x++) {
+						buffer = this.universe.nouns.item[this.character.item[x]];
+						if(buffer) {
+							hold += (buffer.encumberance || 0);
+						} else {
+							console.warn("Item Not Found: " + this.character.item[x]);
+						}
+					}
+				}
+				Vue.set(this, "encumberance", hold);
+			},
 			"update": function() {
 				var buffer,
 					x;
@@ -149,7 +214,6 @@
 				this.specializations.splice(0);
 				this.abilities.splice(0);
 				this.careers.splice(0);
-				this.items.splice(0);
 				this.rooms.splice(0);
 				
 				if(this.experience !== this.character.xp) {
@@ -171,18 +235,6 @@
 					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
 				}
 				this.encumberance_max = 5 + this.character.brawn + (this.character.encumberance_bonus || 0);
-				this.encumberance = 0;
-				if(this.character.item && this.character.item.length) {
-					for(x=0; x<this.character.item.length; x++) {
-						buffer = this.universe.nouns.item[this.character.item[x]];
-						if(buffer) {
-							this.encumberance += (buffer.encumberance || 0);
-							this.items.push(buffer);
-						} else {
-							console.warn("Item Not Found: " + this.character.item[x]);
-						}
-					}
-				}
 				if(this.character.room && this.character.room.length) {
 					for(x=0; x<this.character.room.length; x++) {
 						buffer = this.universe.nouns.room[this.character.room[x]];
@@ -222,6 +274,7 @@
 			}
 		},
 		"beforeDestroy": function() {
+			this.universe.$off("model:modified", this.updateFromUniverse);
 			this.character.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/character/info.html")

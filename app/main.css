@@ -17,62 +17,116 @@
 .rs-component .visibility {
   padding: 4px;
 }
-.rs-component .flow-h {
+.rs-component .flow-h,
+.rs-component .flow.h,
+.rs-component .flex.h {
   display: flex;
   flex-direction: row;
 }
-.rs-component .flow-h.wrap {
+.rs-component .flow-h.wrap,
+.rs-component .flow.h.wrap,
+.rs-component .flex.h.wrap {
   flex-wrap: wrap;
 }
-.rs-component .flow-h.reversed {
+.rs-component .flow-h.reversed,
+.rs-component .flow.h.reversed,
+.rs-component .flex.h.reversed {
   flex-direction: row-reversed;
 }
-.rs-component .flow-h.lefted {
+.rs-component .flow-h.lefted,
+.rs-component .flow.h.lefted,
+.rs-component .flex.h.lefted {
   justify-content: flex-start;
 }
-.rs-component .flow-h.justified {
+.rs-component .flow-h.justified,
+.rs-component .flow.h.justified,
+.rs-component .flex.h.justified {
   justify-content: space-between;
 }
-.rs-component .flow-h.righted {
+.rs-component .flow-h.righted,
+.rs-component .flow.h.righted,
+.rs-component .flex.h.righted {
   justify-content: flex-end;
 }
-.rs-component .flow-h.centered {
+.rs-component .flow-h.centered,
+.rs-component .flow.h.centered,
+.rs-component .flex.h.centered {
   justify-content: center;
+}
+.rs-component .flow-h.center,
+.rs-component .flow.h.center,
+.rs-component .flex.h.center {
   align-items: center;
 }
-.rs-component .flow-h.middled {
+.rs-component .flow-h.middled,
+.rs-component .flow.h.middled,
+.rs-component .flex.h.middled {
   align-content: center;
 }
-.rs-component .flow-h.inline {
+.rs-component .flow-h.inline,
+.rs-component .flow.h.inline,
+.rs-component .flex.h.inline {
   display: inline-flex;
 }
-.rs-component .flow-v {
+.rs-component .flow-v,
+.rs-component .flow-v,
+.rs-component .flex.v {
   display: flex;
   flex-direction: column;
 }
-.rs-component .flow-v.wrap {
+.rs-component .flow-v.wrap,
+.rs-component .flow-v.wrap,
+.rs-component .flex.v.wrap {
   flex-wrap: wrap;
 }
-.rs-component .flow-v.reversed {
+.rs-component .flow-v.reversed,
+.rs-component .flow-v.reversed,
+.rs-component .flex.v.reversed {
   flex-direction: column-reversed;
 }
-.rs-component .flow-v.lefted {
+.rs-component .flow-v.lefted,
+.rs-component .flow-v.lefted,
+.rs-component .flex.v.lefted {
   justify-content: flex-start;
 }
-.rs-component .flow-v.justified {
+.rs-component .flow-v.justified,
+.rs-component .flow-v.justified,
+.rs-component .flex.v.justified {
   justify-content: space-between;
 }
-.rs-component .flow-v.righted {
+.rs-component .flow-v.righted,
+.rs-component .flow-v.righted,
+.rs-component .flex.v.righted {
   justify-content: flex-end;
 }
-.rs-component .flow-v.centered {
+.rs-component .flow-v.centered,
+.rs-component .flow-v.centered,
+.rs-component .flex.v.centered {
   align-items: center;
 }
-.rs-component .flow-v.middled {
+.rs-component .flow-v.center,
+.rs-component .flow-v.center,
+.rs-component .flex.v.center {
+  align-items: center;
+}
+.rs-component .flow-v.middled,
+.rs-component .flow-v.middled,
+.rs-component .flex.v.middled {
   align-content: center;
 }
-.rs-component .flow-v.inline {
+.rs-component .flow-v.inline,
+.rs-component .flow-v.inline,
+.rs-component .flex.v.inline {
   display: inline-flex;
+}
+.rs-component .flex .spacer {
+  flex-grow: 10;
+}
+.rs-component .flex .start {
+  align-items: flex-start;
+}
+.rs-component .flex .end {
+  align-items: flex-end;
 }
 .rs-component .grow-0 {
   flex-grow: 0;
@@ -98,13 +152,16 @@
 .rs-component .flipped-v {
   transform: scaleY(-1);
 }
-.rs-component .aligned-left {
+.rs-component .aligned-left,
+.rs-component .align-left {
   text-align: left;
 }
-.rs-component .aligned-right {
+.rs-component .aligned-right,
+.rs-component .align-right {
   text-align: right;
 }
-.rs-component .aligned-center {
+.rs-component .aligned-center,
+.rs-component .align-center {
   text-align: center;
 }
 .rs-component .rs-border {
@@ -230,37 +287,111 @@
 .rs-component .fields .mb8 {
   margin-bottom: 8px;
 }
-.system-component .rs-darkOrange,
-.rs-component .rs-darkOrange {
-  color: #ac6530 !important;
+.system-component .rs-lightred,
+.rs-component .rs-lightred,
+.system-component .rs-light-red,
+.rs-component .rs-light-red {
+  color: #e43a3b !important;
+}
+.system-component .rs-red,
+.rs-component .rs-red {
+  color: #a91124 !important;
+}
+.system-component .rs-darkred,
+.rs-component .rs-darkred,
+.system-component .rs-dark-red,
+.rs-component .rs-dark-red {
+  color: #841213 !important;
+}
+.system-component .rs-lightOrange,
+.rs-component .rs-lightOrange,
+.system-component .rs-lightorange,
+.rs-component .rs-lightorange,
+.system-component .rs-light-orange,
+.rs-component .rs-light-orange {
+  color: #e0a65d !important;
 }
 .system-component .rs-orange,
 .rs-component .rs-orange {
   color: #FF9560 !important;
 }
-.system-component .rs-lightOrange,
-.rs-component .rs-lightOrange {
-  color: #e0a65d !important;
+.system-component .rs-darkOrange,
+.rs-component .rs-darkOrange,
+.system-component .rs-darkorange,
+.rs-component .rs-darkorange,
+.system-component .rs-dark-orange,
+.rs-component .rs-dark-orange {
+  color: #ac6530 !important;
 }
-.system-component .rs-darkblue,
-.rs-component .rs-darkblue {
-  color: #0c3a96 !important;
+.system-component .rs-lightyellow,
+.rs-component .rs-lightyellow,
+.system-component .rs-light-yellow,
+.rs-component .rs-light-yellow {
+  color: #e6df85 !important;
+}
+.system-component .rs-yellow,
+.rs-component .rs-yellow {
+  color: #b3b300 !important;
+}
+.system-component .rs-darkyellow,
+.rs-component .rs-darkyellow,
+.system-component .rs-dark-yellow,
+.rs-component .rs-dark-yellow {
+  color: #776f08 !important;
+}
+.system-component .rs-lightgreen,
+.rs-component .rs-lightgreen,
+.system-component .rs-light-green,
+.rs-component .rs-light-green {
+  color: #96FF99 !important;
+}
+.system-component .rs-green,
+.rs-component .rs-green {
+  color: #32b736 !important;
+}
+.system-component .rs-darkgreen,
+.rs-component .rs-darkgreen,
+.system-component .rs-dark-green,
+.rs-component .rs-dark-green {
+  color: #166118 !important;
+}
+.system-component .rs-lightBlue,
+.rs-component .rs-lightBlue,
+.system-component .rs-lightblue,
+.rs-component .rs-lightblue,
+.system-component .rs-light-blue,
+.rs-component .rs-light-blue {
+  color: #6f9bf5 !important;
 }
 .system-component .rs-blue,
 .rs-component .rs-blue {
   color: #617EB8 !important;
 }
-.system-component .rs-lightBlue,
-.rs-component .rs-lightBlue {
-  color: #6f9bf5 !important;
+.system-component .rs-darkblue,
+.rs-component .rs-darkblue,
+.system-component .rs-dark-blue,
+.rs-component .rs-dark-blue {
+  color: #0c3a96 !important;
+}
+.system-component .rs-lightpurple,
+.rs-component .rs-lightpurple,
+.system-component .rs-light-purple,
+.rs-component .rs-light-purple {
+  color: #b180f3 !important;
+}
+.system-component .rs-purple,
+.rs-component .rs-purple {
+  color: #cc00ff !important;
+}
+.system-component .rs-darkpurple,
+.rs-component .rs-darkpurple,
+.system-component .rs-dark-purple,
+.rs-component .rs-dark-purple {
+  color: #5a289e !important;
 }
 .system-component .rs-white,
 .rs-component .rs-white {
   color: #EAEFF9 !important;
-}
-.system-component .rs-black,
-.rs-component .rs-black {
-  color: #000000 !important;
 }
 .system-component .rs-gray,
 .rs-component .rs-gray,
@@ -268,33 +399,9 @@
 .rs-component .rs-grey {
   color: #928282 !important;
 }
-.system-component .rs-green,
-.rs-component .rs-green {
-  color: #32b736 !important;
-}
-.system-component .rs-red,
-.rs-component .rs-red {
-  color: #a91124 !important;
-}
-.system-component .rs-yellow,
-.rs-component .rs-yellow {
-  color: #b3b300 !important;
-}
-.system-component .rs-light-red,
-.rs-component .rs-light-red {
-  color: #e43a3b !important;
-}
-.system-component .rs-darkpurple,
-.rs-component .rs-darkpurple {
-  color: #5a289e !important;
-}
-.system-component .rs-purple,
-.rs-component .rs-purple {
-  color: #cc00ff !important;
-}
-.system-component .rs-lightpurple,
-.rs-component .rs-lightpurple {
-  color: #b180f3 !important;
+.system-component .rs-black,
+.rs-component .rs-black {
+  color: #000000 !important;
 }
 .system-component .rs-transparent,
 .rs-component .rs-transparent {
@@ -593,6 +700,27 @@ form {
 .rssw-page.page-dashboard .navigation-button:hover {
   color: #617EB8;
 }
+.rssw-page.page-dashboard button.ctrl {
+  background: transparent;
+  padding: 2px;
+  margin: 2px;
+  border: 0px;
+  cursor: pointer;
+}
+.rssw-page.page-dashboard .ctrl-icon {
+  display: inline-block;
+  line-height: 20px;
+  font-size: 18px;
+  width: 20px;
+}
+.rssw-page.page-dashboard .dashboards {
+  margin-left: 30px;
+}
+.rssw-page.page-dashboard .dashboard {
+  font-size: 18px;
+  padding: 4px;
+  margin: 4px;
+}
 .rssw-page.page-dashboard .self {
   margin: 7px;
   font-size: 17px;
@@ -622,6 +750,14 @@ form {
   position: relative;
   width: 100%
 	height: 100%;
+}
+.rssw-page.page-dashboard.page-ships {
+  display: flex;
+  flex-direction: row;
+}
+.rssw-page.page-dashboard.page-ships .ship-column {
+  max-width: 350px;
+  margin: 0px 10px;
 }
 .rssw-page.page-universe {
   position: relative;
@@ -956,12 +1092,27 @@ form {
   border: 0px;
   margin: 0px;
 }
-.rs-component.rs-image.general {
+.rs-component.rs-image {
   width: 100%;
+  text-align: center;
+}
+.rs-component.rs-image.general {
   margin-bottom: 10px !important;
 }
 .rs-component.rs-image.general img {
   max-width: 100%;
+}
+.rs-component.rs-image.wide img {
+  width: 100% !important;
+}
+.rs-component.rs-image.high img {
+  height: 100% !important;
+}
+.rs-component.rs-image.left {
+  text-align: left;
+}
+.rs-component.rs-image.right {
+  text-align: right;
 }
 .rs-component.rs-image.linked {
   cursor: pointer;
@@ -1041,6 +1192,14 @@ form {
 }
 .object-info .linked-value {
   cursor: pointer;
+}
+.object-info .general-information h1,
+.object-info .general-information h2,
+.object-info .general-information h3,
+.object-info .general-information h4,
+.object-info .general-information h5,
+.object-info .general-information h6 {
+  color: black;
 }
 .object-info .general-information p {
   margin: 0px 0px 17px 0px;
@@ -1552,6 +1711,31 @@ form {
   color: #000000;
   font-size: 20px;
 }
+.rs-component.rssw.component-entity-equipment.short {
+  width: 300px;
+  overflow-x: auto;
+}
+.rs-component.rssw.component-entity-equipment .slots .slot {
+  margin: 0px;
+}
+.rs-component.rssw.component-entity-equipment .slots .icon {
+  display: block;
+  border: 1px solid #928282;
+  border-radius: 4px;
+  padding: 2px;
+  background: transparent;
+  margin: 4px;
+}
+.rs-component.rssw.component-entity-equipment .slots .icon span {
+  display: block;
+  line-height: 22px;
+  width: 22px;
+  font-size: 18px;
+  text-align: center;
+}
+.rs-component.rssw.component-entity-knowledge .table-record.name .table-content {
+  text-align: left;
+}
 .rs-component.rssw.component-entity-inside .entities {
   border-top: 1px solid #EAEFF9;
   padding: 7px;
@@ -1563,65 +1747,72 @@ form {
   padding: 3px;
   border: 0px;
 }
+.rs-component.rssw.component-entity-inside .title-info > * {
+  vertical-align: middle;
+  display: inline-block;
+}
+.rs-component.rssw.component-entity-inside .title-readout {
+  font-size: 0.7em;
+}
 .rs-component.rssw.component-entity-inside .exit-ship {
   margin-left: 10px;
 }
-.rs-component.rssw.component-ship-stats {
+.rs-component.rssw.component-ship-stats .ship-card {
   display: inline-flex;
   flex-direction: column;
   width: 300px;
 }
-.rs-component.rssw.component-ship-stats .icon {
+.rs-component.rssw.component-ship-stats .ship-card .icon {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
 }
-.rs-component.rssw.component-ship-stats .icon * {
+.rs-component.rssw.component-ship-stats .ship-card .icon * {
   vertical-align: middle;
 }
-.rs-component.rssw.component-ship-stats .icon-bubble {
+.rs-component.rssw.component-ship-stats .ship-card .icon-bubble {
   display: inline-flex;
   justify-content: center;
   align-content: center;
   align-items: center;
 }
-.rs-component.rssw.component-ship-stats .picture img {
+.rs-component.rssw.component-ship-stats .ship-card .picture img {
   width: 300px;
 }
-.rs-component.rssw.component-ship-stats .information .skill {
+.rs-component.rssw.component-ship-stats .ship-card .information .skill {
   border: 1px solid #928282;
   border-radius: 30px;
   padding: 4px;
   margin: 0px 4px 0px 0px;
 }
-.rs-component.rssw.component-ship-stats .information .pilot-info {
+.rs-component.rssw.component-ship-stats .ship-card .information .pilot-info {
   text-align: center;
   flex-grow: 10;
 }
-.rs-component.rssw.component-ship-stats .information .name-display {
+.rs-component.rssw.component-ship-stats .ship-card .information .name-display {
   margin-right: 4px;
 }
-.rs-component.rssw.component-ship-stats .information .alliance {
+.rs-component.rssw.component-ship-stats .ship-card .information .alliance {
   justify-content: center;
   padding: 0px 5px;
 }
-.rs-component.rssw.component-ship-stats .information .icon {
+.rs-component.rssw.component-ship-stats .ship-card .information .icon {
   display: block;
   line-height: 30px;
   height: 30px;
   width: 30px;
   font-size: 30px;
 }
-.rs-component.rssw.component-ship-stats .information input {
+.rs-component.rssw.component-ship-stats .ship-card .information input {
   text-align: center;
   width: 100%;
 }
-.rs-component.rssw.component-ship-stats .data .stats .stat {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .stat {
   font-size: 28px;
   align-items: center;
   margin: 3px 0px;
 }
-.rs-component.rssw.component-ship-stats .data .stats .stat .icon-bubble {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .stat .icon-bubble {
   height: 30px;
   width: 30px;
   border: 1px solid #928282;
@@ -1629,36 +1820,47 @@ form {
   font-size: 20px;
   vertical-align: middle;
 }
-.rs-component.rssw.component-ship-stats .data .stats .stat .value {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .stat .value {
   margin-left: 5px;
 }
-.rs-component.rssw.component-ship-stats .data .details {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .point-bubble {
+  display: block;
+  height: 38px;
+  width: 38px;
+  line-height: 38px;
+  text-align: center;
+  border: 2px solid #928282;
+  border-radius: 15px;
+  vertical-align: middle;
+  font-size: 20px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details {
   padding: 0px 0px 0px 5px;
   flex-grow: 10;
 }
-.rs-component.rssw.component-ship-stats .data .details .pilot-name {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-name {
   white-space: nowrap;
   margin-right: 8px;
 }
-.rs-component.rssw.component-ship-stats .data .details .pilot {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot {
   justify-content: flex-end;
 }
-.rs-component.rssw.component-ship-stats .data .details .pilot-ability {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability {
   position: relative;
   flex-grow: 5;
   margin: 5px 0px;
 }
-.rs-component.rssw.component-ship-stats .data .details .pilot-ability p {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability p {
   margin: 0px 0px 8px 0px;
 }
-.rs-component.rssw.component-ship-stats .data .details .pilot-ability .pilot-ability-text {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability .pilot-ability-text {
   padding-bottom: 26px;
   padding: 3px;
   border: 2px solid #928282;
   background: #EAEFF9;
   border-radius: 5px;
 }
-.rs-component.rssw.component-ship-stats .data .details .pilot-ability .edit-pilot-ability {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability .edit-pilot-ability {
   position: absolute;
   background-color: transparent;
   padding: 2px;
@@ -1672,22 +1874,19 @@ form {
   width: 20px;
   color: #FF9560;
 }
-.rs-component.rssw.component-ship-stats .data .details .abilities {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .abilities {
   border: 2px solid #928282;
   border-radius: 15px;
 }
-.rs-component.rssw.component-ship-stats .data .details .abilities .ability {
+.rs-component.rssw.component-ship-stats .ship-card .data .details .abilities .ability {
   color: #6f9bf5;
   background: transparent;
   font-size: 24px;
-  padding: 4px;
+  padding: 3px;
   border: 0px;
   margin: 4px;
 }
-.rs-component.rssw.component-ship-stats .data-list {
-  margin: 7px 0px;
-}
-.rs-component.rssw.component-ship-stats .data-list .property-link {
+.rs-component.rssw.component-ship-stats .ship-card .data-list .property-link {
   color: #6f9bf5;
   background: transparent;
   font-size: 0.8em;
@@ -1695,10 +1894,10 @@ form {
   margin: 4px;
   border: 0px;
 }
-.rs-component.rssw.component-ship-stats .mounts {
+.rs-component.rssw.component-ship-stats .ship-card .mounts {
   justify-content: space-between;
 }
-.rs-component.rssw.component-ship-stats .mounts .icon-bubble {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .icon-bubble {
   border: 1px solid #928282;
   border-radius: 14px;
   height: 26px;
@@ -1706,18 +1905,18 @@ form {
   width: 26px;
   flex-shrink: 0;
 }
-.rs-component.rssw.component-ship-stats .mounts .icon-bubble .ship-icon {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .icon-bubble .ship-icon {
   color: #EAEFF9;
 }
-.rs-component.rssw.component-ship-stats .mounts .slots {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .slots {
   justify-content: center;
   flex-grow: 9;
 }
-.rs-component.rssw.component-ship-stats .mounts .slots .slot {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .slots .slot {
   line-height: 26px;
   vertical-align: middle;
 }
-.rs-component.rssw.component-ship-stats .mounts .points {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .points {
   line-height: 18px;
   border: 1px solid #EAEFF9;
   padding: 3px 6px;
@@ -1726,9 +1925,69 @@ form {
   position: relative;
   flex-shrink: 0;
 }
-.rs-component.rssw.component-ship-stats .mounts .points .icon {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .points .icon {
   color: #EAEFF9;
   font-size: 0.7em;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data-list.items {
+  margin-top: 8px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects {
+  width: 50px;
+  min-height: 50px;
+  padding-top: 50px;
+  z-index: 10;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-selector {
+  position: absolute;
+  z-index: 20;
+  top: 0px;
+  background: #000000;
+  transition: max-height 0.5s;
+  overflow: hidden;
+  max-height: 50px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-toggle span {
+  transition: transform 0.5s, color 0.5s;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-token-container {
+  position: relative;
+}
+.rs-component.rssw.component-ship-stats .ship-effects button.effect-token {
+  height: 42px;
+  width: 42px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects div.effect-token {
+  height: 32px;
+  width: 32px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-token {
+  position: relative;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-button {
+  display: block;
+  padding: 4px;
+  margin: 4px;
+  border: 1px solid #928282;
+  border-radius: 15px;
+  background: transparent;
+  outline: none !important;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-button span {
+  line-height: 32px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects button.effect-info {
+  position: absolute;
+  right: -40px;
+  top: 0px;
+  z-index: 30;
+  margin: 0px;
+  background: #000000;
+}
+.rs-component.rssw.component-ship-stats .ship-effects select {
+  margin: -4px 4px 4px 4px;
+  width: 42px;
 }
 .system-component.table-controls {
   display: flex;

@@ -1,10 +1,28 @@
 
 (function() {
 	
-	var dataSource,
+	var alterationIndex,
+		dataSource,
 		attrs,
 		stats,
 		notes;
+	
+	alterationIndex = new SearchIndex([{
+	        "name": "area",
+	        "id": "area"
+	    }, {
+	        "name": "building",
+	        "id": "building"
+	    }, {
+	        "name": "character",
+	        "id": "character"
+	    }, {
+	        "name": "ship",
+	        "id": "ship"
+	    }, {
+	        "name": "station",
+	        "id": "station"
+	    }]);
 	
 	attrs = {
 		"label": "Attributes",
@@ -61,10 +79,22 @@
 		"label": "Obscured",
 		"property": "obscured",
 		"type": "checkbox"
+	}, {
+		"label": "Alters",
+		"property": "alters",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"source_index": alterationIndex,
+		"noinfo": true
 	},
 	attrs,
 	stats,
 	{
+		"label": "Indicators",
+		"property": "indicators",
+		"type": "textarea"
+	}, {
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"

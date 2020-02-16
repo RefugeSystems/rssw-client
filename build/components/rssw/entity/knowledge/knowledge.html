@@ -1,0 +1,15 @@
+<div class="rs-component rssw component-entity-knowledge">
+	<h2>
+		<span>Knowledge</span>
+		<button v-on:click="resetHeaders" class="rs-light-blue rsbg-transparent flat">
+			<span class="far fa-sync"></span>
+		</button>
+	</h2>
+	<div class="knowledge-container">
+		<div class="controls flex h">
+			<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="knowledge" :state="state" v-on:action="processAction"></rs-table-controls>
+		</div>
+		<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="knowledge" :headers="state.headers" :state="state" v-on:selected="showInfo($event, entity)"></rs-table>
+		<rs-table-paging class="index" :universe="universe" :user="player" :index="knowledge" :state="state"></rs-table-paging>
+	</div>
+</div>

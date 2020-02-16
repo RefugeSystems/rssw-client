@@ -5,7 +5,8 @@
 		listSource,
 		dataSource,
 		abilities,
-		effects;
+		effects,
+		skills;
 	
 	abilities = {
 		"label": "Abilities",
@@ -23,6 +24,14 @@
 		"optionLabel": "name"
 	};
 	
+	skills = {
+		"label": "Skills",
+		"property": "skill",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -32,12 +41,12 @@
 		"property": "name",
 		"type": "text"
 	}, {
-		"label": "Soak",
-		"property": "soak",
-		"type": "text"
-	}, {
 		"label": "Critical",
 		"property": "critical",
+		"type": "text"
+	}, {
+		"label": "Soak",
+		"property": "soak",
 		"type": "text"
 	}, {
 		"label": "Max Wound",
@@ -72,6 +81,22 @@
 		"property": "pilot_skill",
 		"type": "text"
 	}, {
+		"label": "Point Cost",
+		"property": "point_cost",
+		"type": "text"
+	}, {
+		"label": "XP Cost",
+		"property": "xp_cost",
+		"type": "text"
+	}, {
+		"label": "Slots Used",
+		"property": "slots_used",
+		"type": "number"
+	}, {
+		"label": "Required Crew",
+		"property": "required_crew",
+		"type": "text"
+	}, {
 		"label": "Bonus: Boost",
 		"property": "bonus_boost",
 		"type": "text"
@@ -104,6 +129,10 @@
 		"property": "energy_potential",
 		"type": "text"
 	}, {
+		"label": "Mass",
+		"property": "mass",
+		"type": "text"
+	}, {
 		"label": "Encumberance",
 		"property": "encumberance",
 		"type": "text"
@@ -131,7 +160,8 @@
 	
 	listSource = [
 		abilities,
-		effects
+		effects,
+		skills
 	];
 	
 	commonSource = [{
@@ -218,6 +248,7 @@
 
 			abilities.source_index = this.universe.indexes.ability;
 			effects.source_index = this.universe.indexes.effect;
+			skills.source_index = this.universe.indexes.skill;
 			
 			return data;
 		},

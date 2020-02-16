@@ -54,12 +54,6 @@
 			data.history = [];
 			/**
 			 * Used for calculations.
-			 * @property source
-			 * @type Object
-			 */
-			data.source = null;
-			/**
-			 * Used for calculations.
 			 * @property target
 			 * @type Object
 			 */
@@ -101,8 +95,7 @@
 					if(toView.record) {
 //						console.warn("Received View Record: ", toView);
 						Vue.set(this, "target", toView.target);
-						Vue.set(this, "source", toView.source);
-						Vue.set(this, "base", toView.base);
+						Vue.set(this, "base", toView.base || toView.source);
 						if(typeof(toView.record) === "string") {
 							toView = this.universe.index.index[toView.record];
 						} else {
@@ -115,7 +108,6 @@
 							toView = this.universe.index.index[toView.id] || this.universe.index.index[toView.name];
 						}
 						Vue.set(this, "target", undefined);
-						Vue.set(this, "source", undefined);
 						Vue.set(this, "base", undefined);
 					}
 				}
@@ -149,9 +141,9 @@
 			},
 			"backOne": function() {
 				if(this.history.length) {
-					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
+//					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
 					Vue.set(this, "viewing", this.history.shift());
-					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
+//					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
 					this.update();
 				}
 			},

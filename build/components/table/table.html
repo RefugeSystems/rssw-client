@@ -37,7 +37,7 @@
 					<div v-if="!header.noHighlight && index.isSelected([record.id]) && i === 0" class="highlight starting"></div>
 					<div v-if="!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1" class="highlight ending"></div>
 					<button class="table-content">
-						<slot name="table-content">
+						<slot name="table-content" :header="header" :record="record">
 							<div class="contents" :class="header.field?header.field:''" v-if="header.formatter">
 								<div v-html="header.formatter(record[header.field], record, header)"></div>
 							</div>

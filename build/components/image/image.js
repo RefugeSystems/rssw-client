@@ -19,6 +19,10 @@
 				"required": true,
 				"type": Object
 			},
+			"modes": {
+				"default": "general",
+				"type": String
+			},
 			"linked": {
 				"type": Object
 			}
@@ -35,12 +39,12 @@
 			"image": {
 				"deep": true,
 				"handler": function() {
-					console.warn("Re-Render Image: ", this.image);
+//					console.warn("Re-Render Image: ", this.image);
 					this.update();
 				}
 			},
 			"linked": function() {
-				console.warn("Re-Link Image: ", this.linked);
+//				console.warn("Re-Link Image: ", this.linked);
 				this.update();
 			}
 		},
@@ -60,9 +64,14 @@
 				this.$forceUpdate();
 			},
 			"classes": function() {
-				var classes = "";
+				var classes;
 				
-				classes += "general";
+				if(this.modes) {
+					classes = this.modes;
+				} else {
+					classes = "general";
+				}
+				
 				if(this.linked) {
 					classes += " linked";
 				}

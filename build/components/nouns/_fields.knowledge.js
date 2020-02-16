@@ -66,10 +66,7 @@
 		"property": "related",
 		"type": "multireference",
 		"optionValue": "id",
-		"optionLabel": "name",
-		"filter": {
-			"template": true
-		}
+		"optionLabel": "name"
 	};
 	
 	attrs = {

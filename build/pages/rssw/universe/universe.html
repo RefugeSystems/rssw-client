@@ -7,24 +7,35 @@
 		
 		<div class="index">
 			<div class="controls">
-				<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-controls>
+				<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" v-on:action="processAction"></rs-table-controls>
 				
 				<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()">
 					<option value="">Choose Action</option>
+					<option disabled value="div">-- Dashboards --</option>
+					<option value="dashboard-ships">Dashboard: Ships</option>
+					<option disabled value="div">-- Items --</option>
 					<option value="spawn">Spawn Template Entities</option>
 					<option value="give">Give Items</option>
 					<option value="take">Take Items</option>
+					<option disabled value="div">-- Knowledge --</option>
+					<option value="grant-knowledge">Grant Knowledge</option>
+					<option value="forget-knowledge">Forget Knowledge</option>
+					<option disabled value="div">-- Records --</option>
 					<option value="obscure">Obscure Record</option>
 					<option value="unobscure">Unobscure Record</option>
+					<option disabled value="div">-- Clean --</option>
 					<option value="drop">Delete Objects</option>
 				</select>
 				<select v-model="target">
 					<option value="">No Target</option>
-					<option v-for="en in universe.indexes.entity.listing" :value="en.id">{{en.name}}</option>
-					<option value="">-- Player Divide --</option>
-					<option v-for="pl in universe.indexes.player.listing" :value="pl.id">{{pl.name}}</option>
-					<option value="">-- Item Divide --</option>
-					<option v-for="it in universe.indexes.item.listing" :value="it.id" v-if="!it.template">{{it.name}}</option>
+					<option disabled value="div">-- Entity Divide --</option>
+					<option v-for="en in listing.entity" :value="en.id">{{en.name}}</option>
+					<option disabled value="div">--- Item Divide ---</option>
+					<option v-for="it in listing.item" :value="it.id" v-if="!it.template">{{it.name}}</option>
+					<option disabled value="div">--- Room Divide ---</option>
+					<option v-for="it in listing.room" :value="it.id" v-if="!it.template">{{it.name}}</option>
+					<option disabled value="div">-- Player Divide --</option>
+					<option v-for="pl in listing.player" :value="pl.id">{{pl.name}}</option>
 				</select>
 				
 				<select v-model="state.activeIndex">
@@ -40,8 +51,8 @@
 					<option value="out">Out</option>
 				</select>
 			</div>
-			<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state" :options="state.indexOptions"></rs-table>
-			<rs-table-paging class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" :options="state.indexOptions" v-on:action="processAction"></rs-table-paging>
+			<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state"></rs-table>
+			<rs-table-paging class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state"></rs-table-paging>
 		</div>
 		
 		<div class="control">

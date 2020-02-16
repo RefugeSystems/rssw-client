@@ -1,5 +1,13 @@
 // Assist function for Reactive Component Printing
-var _p = function(x) {return JSON.parse(JSON.stringify(x));};
+var _p = function(x) {
+	if(x === undefined) {
+		return undefined;
+	} else if(x === null) {
+		return null;
+	} else {
+		return JSON.parse(JSON.stringify(x));
+	}
+};
 
 /**
  * 

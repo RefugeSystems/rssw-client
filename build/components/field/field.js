@@ -12,7 +12,7 @@
 	rsSystem.component("rsField", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSComponentUtility
 		],
 		"props": {
 			"root": {
@@ -40,9 +40,13 @@
 			return data;
 		},
 		"watch": {
+			
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+			if(this.field.source_index.listing) {
+				this.field.source_index.listing.sort(this.sortData);
+			}
 		},
 		"methods": {
 			"isVisible": function() {
@@ -97,7 +101,7 @@
 							} else if(this.field.condition[keys[x]].oneof) {
 								test = true;
 								for(v=0; test && v<this.field.condition[keys[x]].oneof.length; v++) {
-									if(this.root[keys[x]].indexOf(this.field.condition[keys[x]].oneof[v]) !== -1) {
+									if(this.root[keys[x]] && this.root[keys[x]].indexOf(this.field.condition[keys[x]].oneof[v]) !== -1) {
 										test = false;
 									}
 								}

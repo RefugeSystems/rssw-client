@@ -66,11 +66,12 @@
 			this.universe.$on("universe:modified", this.update);
 			this.index.$on("selection", this.update);
 			this.index.$on("indexed", this.update);
+			this.$on("update-table", this.update);
 			this.update();
 		},
 		"methods": {
 			"headerAction": function(header) {
-//				console.log("Header Action: ", header);
+				console.log("Header Action: ", header);
 				if(typeof header.action === "function") {
 					header.action(header);
 				} else if(header.action === null) {

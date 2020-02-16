@@ -1,5 +1,5 @@
 <div class="general-information">
-	<rs-render-image class="profile-image" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
+	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
 	
 	<div v-if="record.is_shop">
 		<span class="fas fa-warehouse"></span>
@@ -7,6 +7,14 @@
 	</div>
 	
 	<div v-if="description" v-html="description"></div>
+	
+	<div v-if="relatedError" class="related-error">
+		<h3>
+			<span class="fas fa-exclamation-triangle rs-light-red"></span>
+			<span>Related Error</span>
+		</h3>
+		<div class="rs-light-red" v-html="relatedError"></div>
+	</div>
 	
 	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
 	<div v-if="record.data" class="general-image">
@@ -17,30 +25,30 @@
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 			<div class="direct" v-if="!universe.indexes[property]">
 				<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']">
-					<a class="rendered-value" :data-id="knowledgeLink[property] || (property + '_quicklink')">{{prettifyPropertyName(property)}}</a>
+					<a class="rendered-value" :data-id="knowledgeLink[property] || (property + '_quicklink')">{{prettifyPropertyName(property, record)}}</a>
 				</span>
-				<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property)}}</span>
+				<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property, record)}}</span>
 				<span class="divide">:</span>
-				<span class="value">{{prettifyPropertyValue(property, record[property])}}</span>
+				<span class="value">{{prettifyPropertyValue(property, record[property], record, universe)}}</span>
 				<span class="raw" v-if="displayRaw[property]">{{value}}</span>
 			</div>
 		</div>
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 			<div class="reference" v-if="universe.indexes[property]">
 				<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
-					<div class="reference-heading">{{prettifyPropertyName(property).pluralize(true)}}</div>
-					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden">
+					<div class="reference-heading">{{prettifyPropertyName(property, record).pluralize(true)}}</div>
+					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].hidden">
 						<div class="reference-heading" v-if="!collapsed">
-							<span :class="universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''"></span>
-							<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>
+							<span :class="universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].icon:''"></span>
+							<span>{{universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>
 						</div>
-						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord]" :universe="universe"></rs-object-info>
-						<a v-if="collapsed && universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord].id">{{universe.indexes[property].lookup[subrecord].name}}</a>
-						<a v-if="collapsed && !universe.indexes[property].lookup[subrecord]" class="rendered-value unknown">{{subrecord}}[Unknown]</a>
+						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord._sourced || subrecord]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed && universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord._sourced || subrecord].id">{{universe.indexes[property].lookup[subrecord._sourced || subrecord].name}}</a>
+						<a v-if="collapsed && !universe.indexes[property].lookup[subrecord._sourced || subrecord]" class="rendered-value unknown">{{subrecord._sourced || subrecord}}[Unknown]</a>
 					</div>
 				</div>
 				<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
-					<div class="reference-heading">{{property.capitalize()}}</div>
+					<div class="reference-heading">{{prettifyPropertyName(property, record).capitalize()}}</div>
 					<div class="subreference">
 						<div class="reference-heading" v-if="!collapsed">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>
 						<rs-object-info v-if="!collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured" :record="universe.indexes[property].lookup[record[property]]" :universe="universe"></rs-object-info>
@@ -49,6 +57,41 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	
+	<div class="section" v-if="equipped.length">
+		<h3>Equipped Equipment</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="equipped_equipment in equipped">
+					<a class="rendered-value" v-on:click="showInfo(equipped_equipment[1], base)">{{equipped_equipment[1].name}}</a>
+					<span>On</span>
+					<a class="rendered-value" v-on:click="showInfo(equipped_equipment[0], base)">{{equipped_equipment[0].name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="section" v-if="base && relatedKnowledge.length">
+		<h3>{{base.name}}'s Related Knowledge</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="knowledge in relatedKnowledge">
+					<a class="rendered-value" v-on:click="showInfo(knowledge, base)">{{knowledge.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="section" v-if="record.related && record.related.length">
+		<h3>Related Data</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="data in record.related" v-if="universe.index.lookup[data]">
+					<a class="rendered-value" v-on:click="showInfo(universe.index.lookup[data], base)">{{universe.index.lookup[data].name}}</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 	
@@ -77,7 +120,7 @@
 			<option value="">Choose Target...</option>
 			<option value="cancel">Cancel</option>
 			<option disabled>--------------</option>
-			<option v-if="canTransferToSelf()" :value="source.id">{{source.name}}</option>
+			<option v-if="canTransferToSelf()" :value="base.id">{{base.name}}</option>
 			<option v-for="target in transfer_targets" :value="target.id">{{target.name}}</option>
 			<option disabled>--------------</option>
 			<option value="drop">Drop</option>
@@ -100,12 +143,36 @@
 		</div>
 	</div>
 	
-	<div v-if="canTravelTo()">
+	<div v-if="base && canTravelTo(base.id)">
+		<h3>Travel To</h3>
 		<div class="control">
-			<button class="action" v-on:click="travelToHere()">
+			<button class="action" v-on:click="travelToHere(base.id)">
 				<span class="fad fa-globe-africa"></span>
 				<span>Travel Here</span>
 			</button>
+		</div>
+	</div>
+	
+	<div v-if="canUnequip()">
+		<div class="control">
+			<button class="action" v-on:click="unequip()">
+				<span class="fas fa-unlink"></span>
+				<span>Unequip from {{base.name}}</span>
+			</button>
+		</div>
+	</div>
+	
+	<div v-if="canEquip() && !canUnequip()">
+		<h3>Equip To</h3>
+		<div class="control">
+			<label>
+				<select v-model="equipToSlot" v-on:change="equip(equipToSlot)">
+					<option value="">Choose Slot</option>
+					<option value="cancel">Cancel</option>
+					<option disabled value="disabled">----------</option>
+					<option v-for="slot in availableSlots" :value="slot.id">{{slot.name}}</option>
+				</select>
+			</label>
 		</div>
 	</div>
 	

@@ -80,11 +80,15 @@
 		"type": "select",
 		"raw": true,
 		"options": [
+			"astroid",
+			"astroid-belt",
 			"building",
 			"city",
 			"marker",
 			"moon",
+			"phenomenon",
 			"planet",
+			"star-system",
 			"station"
 		]
 	}, {

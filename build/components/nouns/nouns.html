@@ -1,4 +1,4 @@
-<div class="rs-component component-nouns">
+<div class="rs-component component-nouns" v-save="modify">
 	<div class="selection">
 		<label class="">
 			<span>Noun:</span>
@@ -35,7 +35,7 @@
 		</div>
 		
 		<div class="advanced-editor" v-if="state.advanced_editor">
-			<textarea v-model="rawValue" v-save="modify" v-tab v-filedrop="fileAttach">
+			<textarea v-model="rawValue" v-tab v-filedrop="fileAttach">
 			</textarea>
 			<label v-if="state.current === 'image'">
 				<span>Select Image File:</span>

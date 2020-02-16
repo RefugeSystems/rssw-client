@@ -13,6 +13,7 @@
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
 		],
@@ -27,14 +28,14 @@
 			
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
-			data.leveling = null;
+			data.leveling = "";
 			data.state = this.loadStorage(data.storageKeyID, {
 				"hideNames": false,
 				"search": ""
 			});
 			
 			data.levelSkills = [];
-
+			
 			return data;
 		},
 		"watch": {
@@ -54,14 +55,23 @@
 			this.update();
 		},
 		"methods": {
+			"viewSkill": function(skill) {
+				this.showInfo(this.universe.indexes.skill.lookup[skill], this.entity);
+			},
+			"skillTouched": function(skill) {
+				if(this.leveling === skill.id) {
+					this.viewSkill(skill.id);
+				}
+				Vue.set(this, "leveling", skill.id);
+			},
 			"getXPCost": function(skill, direction) {
-				skill = this.entityStats[skill];
+				skill = this.universe.indexes.skill.lookup[skill];
 				if(!skill) {
 					return "";
 				}
 				
 				var calculating = this.character[skill.propertyKey] || 0;
-				console.log("Cal: ", calculating);
+//				console.log("Cal: ", calculating);
 				if(calculating >= 5) {
 					return "X";
 				}
@@ -73,7 +83,7 @@
 				}
 			},
 			"levelSkill": function(skill, direction) {
-				skill = this.entityStats[skill];
+				skill = this.universe.indexes.skill.lookup[skill];
 				if(!skill) {
 					return "";
 				}
@@ -82,7 +92,7 @@
 					cost = this.getXPCost(skill.id, direction),
 					change = {};
 				
-				console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp)}));
+//				console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp)}));
 				if(direction > 0 && cost <= this.character.xp) {
 					change[skill.propertyKey] = calculating + 1;
 					change.xp = this.character.xp - cost;
@@ -117,10 +127,25 @@
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
-				var buffer, x;
+				var buffer,
+					x;
 
 				this.levelSkills.splice(0);
-				this.levelSkills.push.apply(this.levelSkills, this.skillStatsListing);
+				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+					if(this.universe.indexes.skill.listing[x].section) {
+						this.levelSkills.push(this.universe.indexes.skill.listing[x]);
+					}
+				}
+				if(this.character.skill) {
+					for(x=0; x<this.character.skill.length; x++) {
+						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
+						if(buffer) {
+							this.levelSkills.push(buffer);
+						}
+					}
+				}
+				this.uniqueByID(this.levelSkills);
+				this.levelSkills.sort(this.sortData);
 				
 				this.$forceUpdate();
 			}

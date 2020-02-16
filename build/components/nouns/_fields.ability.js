@@ -53,14 +53,21 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "XP Cost",
+		"property": "xp_cost",
+		"type": "text"
+	}, {
 		"label": "Type",
 		"property": "type",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name",
 		"options": [{
+			"name": "Building Ability",
+			"id": "building"
+		}, {
 			"name": "Character Ability",
-			"id": undefined
+			"id": "character"
 		}, {
 			"name": "Piloting Ability",
 			"id": "pilot"
@@ -68,8 +75,14 @@
 			"name": "Planet Ability",
 			"id": "planet"
 		}, {
+			"name": "Room Ability",
+			"id": "room"
+		}, {
 			"name": "Ship Ability",
 			"id": "ship"
+		}, {
+			"name": "Star System Ability",
+			"id": "system"
 		}, {
 			"name": "Station Ability",
 			"id": "station"

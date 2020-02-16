@@ -153,11 +153,11 @@ class RSUniverse extends RSObject {
 			};
 			
 			socket.onmessage = (message) => {
+				this.connection.entry(message, "Message Received");
+				this.connection.syncMark = message.time;
+				this.connection.last = Date.now();
+				
 				try {
-					this.connection.entry(message, "Message Received");
-					this.connection.syncMark = message.time;
-					this.connection.last = Date.now();
-					
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
@@ -170,6 +170,10 @@ class RSUniverse extends RSObject {
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
+					if(this.debug) {
+						console.warn("Emission[" + message.type + ":complete]: ", message.event);
+					}
+					this.$emit(message.type + ":complete", message.event);
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);
 					this.$emit("warning", {
@@ -197,6 +201,7 @@ class RSUniverse extends RSObject {
 					}
 					
 					this.$emit("universe:modified", this);
+					this.$emit("universe:modified:complete", this);
 				}
 			});
 			
@@ -212,6 +217,7 @@ class RSUniverse extends RSObject {
 					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
 					this.index.indexItem(this.nouns[event.type][event.id]);
 					this.$emit("universe:modified", this);
+					this.$emit("universe:modified:complete", this);
 				}
 			});
 			
@@ -401,6 +407,7 @@ class RSUniverse extends RSObject {
 			}
 			
 			if(!this.initialized) {
+				this.initialized = true;
 				this.$emit("initialized", this);
 			}
 			

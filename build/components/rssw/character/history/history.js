@@ -7,10 +7,21 @@
  * @module Components
  */
 (function() {
+	var controls = {
+		"formatter": {
+			"icon": function(icon, record) {
+				return "<span class='" + icon + "'></span>";
+			},
+			"time": function(icon, record) {
+				return "<span><span class=\"fas fa-calendar\"><span> " + record._dateString + "</span>";
+			}
+		}
+	};
 
 	rsSystem.component("rsswEntityHistory", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSCore
 		],
 		"props": {
@@ -21,7 +32,12 @@
 		},
 		"data": function() {
 			var data = {};
+			data.maxHistory = 300;
+			data.last = 0;
 
+			data.index = new SearchIndex();
+			data.ids = 1;
+			
 			data.history = [];
 			data.named = {
 				"xp": "experience"
@@ -35,41 +51,86 @@
 			this.update();
 		},
 		"watch": {
-			"wounds": function(nV, oV) {
-				this.character.commit({
-					"wounds": nV
-				});
-			},
-			"strain": function(nV, oV) {
-				this.character.commit({
-					"strain": nV
-				});
-			}
+
 		},
 		"methods": {
-			"showInfo": function(view) {
-				rsSystem.EventBus.$emit("display-info", {
-					"source": this.entity,
-					"record": view
-				});
-			},
 			"setStat": function() {
 				
 			},
 			"filter": function(text) {
 				
 			},
-			"update": function() {
-				var buffer,
+			"getRelated": function(entry) {
+				var records,
 					x;
 				
-				if(this.entity.history && this.entity.history.length !== this.history.length) {
-					this.history.splice(0);
+				if(!entry || !entry.difference) {
+					return false;
+				}
+
+				Vue.set(entry, "report", {
+					"gained": [],
+					"loss": []
+				});
+				
+				records = Object.keys(entry.difference);
+				if(records.length === 0) {
+					return false;
+				}
+				
+				for(x=0; x<records.length; x++) {
+					if(entry.difference[records[x]] > 0) {
+						entry.report.gained.push(this.universe.index.lookup[records[x]]);
+					} else {
+						entry.report.loss.push(this.universe.index.lookup[records[x]]);
+					}
+				}
+				
+				return true;
+			},
+			"copyRecord": function(record) {
+				return Object.assign({}, record);
+			},
+			"update": function() {
+				var max = 0,
+					buffer,
+					x;
+				
+				if(this.entity.history) {
 					for(x=0; x<this.entity.history.length && x < 50; x++) {
-						this.entity.history[x]._date = new Date(this.entity.history[x].time);
-						this.entity.history[x]._dateString = this.entity.history[x]._date.toLocaleDateString();
-						this.entity.history[x]._timeString = this.entity.history[x]._date.toLocaleTimeString();
-						this.history.push(this.entity.history[x]);
+						if(this.last < this.entity.history[x].time) {
+							buffer = this.copyRecord(this.entity.history[x]);
+							if(max < buffer.time) {
+								max = buffer.time;
+							}
+							
+							buffer.id = this.ids++;
+							buffer._date = new Date(buffer.time);
+							buffer._dateString = buffer._date.toLocaleDateString();
+							buffer._timeString = buffer._date.toLocaleTimeString();
+							buffer._search = buffer._dateString;
+							switch(buffer.type) {
+								case "record_acquired_or_loss":
+									buffer.icon = "fas fa-sort-circle";
+									this.getRelated(buffer);
+									break;
+								default:
+									buffer.icon = "fas fa-history";
+							}
+							
+							this.index.indexItem(buffer);
+							if(this.last) {
+								this.history.unshift(buffer);
+							} else {
+								this.history.push(buffer);
+							}
+						}
+					}
+					if(max) {
+						Vue.set(this, "last", max);
+					}
+					if(this.history.length > this.maxHistory) {
+						this.history.splice(this.maxHistory);
 					}
 				}
 			}
