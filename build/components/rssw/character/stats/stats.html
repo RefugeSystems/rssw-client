@@ -1,6 +1,6 @@
 <div class="rs-component rssw component-character-stats">
 	<div class="stats">
-		<div class="stat" v-for="stat in characterStats" :key="stat" v-on:click="leveling = stat">
+		<div class="stat" v-for="stat in characterStats" :key="stat" v-on:click="skillTouched(stat)">
 			<div class="bubble">
 				<div class="value">
 					{{character[stat]}}
