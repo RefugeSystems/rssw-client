@@ -204,6 +204,7 @@
 					x,
 					y;
 				
+				this.universeEntities.splice(0);
 				for(x=0; x<this.listingKeys.length; x++) {
 					this.listing[this.listingKeys[x]].splice(0);
 					for(y=0; y<this.universe.indexes[this.listingKeys[x]].listing.length; y++) {

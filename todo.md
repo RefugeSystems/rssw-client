@@ -16,6 +16,9 @@
         + Archetype Changes
         √ Stat Changes
         + Damage Changes
++ Ability bonus for having something in a slot
++ Items disable other slot types when worn
+	+ For example a war helment disables "goggles" or "eye wear"
 
 # Bugs
 √ Paged Table  

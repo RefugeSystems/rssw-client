@@ -13,22 +13,10 @@ rsSystem.component("RSSWDashboard", {
 		rsSystem.components.RSCore
 	],
 	"data": function() {
-		var data = {},
-			entities,
-			entity,
-			x;
+		var data = {};
 		
 		data.selectedEntities = [];
-		
-		entities = Object.keys(this.universe.nouns.entity);
 		data.owned = [];
-		for(x=0; x<entities.length; x++) {
-			entity = this.universe.nouns.entity[entities[x]];
-			if(entity && entity.owners && entity.owners.indexOf(this.user.id) !== -1) {
-				entity.$on("modified", this.updateDisplay);
-				data.owned.push(entity);
-			}
-		}
 		
 		return data;
 	},
@@ -41,6 +29,8 @@ rsSystem.component("RSSWDashboard", {
 		this.universe.$on("universe:modified", this.updateEntities);
 		this.universe.$on("model:modified", this.updateDisplay);
 		rsSystem.register(this);
+		
+		this.updateEntities();
 	},
 	"methods": {
 		"canOpenDashboard": function() {
