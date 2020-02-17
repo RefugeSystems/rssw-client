@@ -53,6 +53,7 @@
 	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
 	invisibleKeys.class = true;
+	invisibleKeys.order = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
