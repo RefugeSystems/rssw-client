@@ -8,6 +8,7 @@
  */
 (function() {
 	var keys = [
+		"damage",
 		"soak",
 	    "wounds",
 	    "wounds_max",

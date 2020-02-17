@@ -1479,16 +1479,18 @@ form {
   justify-content: space-between;
 }
 .rs-component.rssw.component-character-board .stat {
-  width: 90px;
+  /*width: 90px;*/
   overflow: hidden;
   border: 1px solid #EAEFF9;
   border-radius: 5px;
   margin: 3px;
+  flex-grow: 2;
 }
 .rs-component.rssw.component-character-board .stat .label {
   text-align: center;
   width: 100%;
   margin: 2px 0px 0px 0px;
+  white-space: nowrap;
 }
 .rs-component.rssw.component-character-board .stat .value {
   width: 50%;

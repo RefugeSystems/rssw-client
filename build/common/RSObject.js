@@ -578,9 +578,9 @@ class RSObject extends EventEmitter {
 	 * @param {Object} base
 	 * @return {Boolean} Whether the modification was performed or not.
 	 */
-	performModifications(base, origin, debug) {
+	performModifications(base, origin, finalize) {
 		if(this.needs_slot && !this.inSlot(base._equipped)) {
-			if(debug || this.debug || this.universe.debug) {
+			if(this.debug || this.universe.debug) {
 				console.error(" ! Mod Aborted for Slot[" + origin + "]: " + this.id);
 			}
 			return false;
@@ -593,7 +593,7 @@ class RSObject extends EventEmitter {
 			x,
 			y;
 		
-		if(debug || this.debug || this.universe.debug) {
+		if(this.debug || this.universe.debug) {
 			console.error("Perform Mod[" + origin + "]: " + this.id);
 		}
 		
@@ -607,7 +607,7 @@ class RSObject extends EventEmitter {
 		if(this.universe.index) {
 			for(x=0; x<rsSystem.listingNouns.length; x++) {
 				if(this._coreData[rsSystem.listingNouns[x]]) {
-					if(debug || this.debug || this.universe.debug) {
+					if(this.debug || this.universe.debug) {
 						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
 					}
 					if(this._coreData[rsSystem.listingNouns[x]] instanceof Array) {
@@ -615,7 +615,7 @@ class RSObject extends EventEmitter {
 							if(this._coreData[rsSystem.listingNouns[x]][y]) {
 								buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]][y]._sourced || this._coreData[rsSystem.listingNouns[x]][y]];
 								if(buffer) {
-									buffer.performModifications(base, this.id, debug);
+									buffer.performModifications(base, this.id);
 								} else {
 									console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 								}
@@ -624,7 +624,7 @@ class RSObject extends EventEmitter {
 					} else if(this._coreData[rsSystem.listingNouns[x]]) {
 						buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]]._sourced || this._coreData[rsSystem.listingNouns[x]]];
 						if(buffer) {
-							buffer.performModifications(base, this.id, debug);
+							buffer.performModifications(base, this.id);
 						} else {
 							console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 						}
@@ -642,7 +642,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(debug || this.debug || this.universe.debug) {
+		if(this.debug || this.universe.debug) {
 			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 		}
 		

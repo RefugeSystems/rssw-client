@@ -2,6 +2,25 @@
 	<div class="container flow-h inline">
 		<div class="stat soak flow-v inline">
 			<div class="label">
+				<span class="fal fa-location"></span>
+				<span>Damage</span>
+			</div>
+			<div class="bubble solo flow-h center">
+				<div class="value">
+					<div class="display">
+						{{damage}}
+						<!--
+						<select v-model="soak">
+							<option v-for="value in lowValues" :value="value">{{value}}</option>
+						</select>
+						-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stat soak flow-v inline">
+			<div class="label">
 				<span class="fas fa-shield"></span>
 				<span>Soak</span>
 			</div>
