@@ -101,6 +101,16 @@
 //			"isOwner": function(record) {
 //				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
 //			},
+			"getAbilityIconClass": function(ability) {
+				switch(ability.activation) {
+					case "passive":
+						return "rs-green";
+					case "automatic":
+						return "rs-yellow";
+					default:
+						return "";
+				}
+			},
 			"toggleEffectMenu": function(state) {
 				if(state === undefined) {
 					Vue.set(this, "effectsOpen", !this.effectsOpen);
