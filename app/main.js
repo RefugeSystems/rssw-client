@@ -18245,9 +18245,9 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/character/history.html": return "<div class=\"rs-component rssw component-entity-history\">\r\n\t<h2>History</h2>\r\n\t<div class=\"history\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry\" v-for=\"entry in history\">\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && (universe.indexes[entry.modified] || entry.modified === 'inside')\" class=\"message\">\r\n\t\t\t\t\t<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.previous]?universe.indexes.entity.index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<span>to</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.current]?universe.indexes.entity.index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && !universe.indexes[entry.modified] && entry.modified !== 'inside'\" class=\"message\">\r\n\t\t\t\t\t<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_gain'\" class=\"message\">\r\n\t\t\t\t\t<span>Gained Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_loss'\" class=\"message\">\r\n\t\t\t\t\t<span>Lost Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_acquired_or_loss'\" class=\"message\">\r\n\t\t\t\t\t<div>{{entry.modified.capitalize()}} Changed.</div>\r\n\t\t\t\t\t<div class=\"gained\" v-if=\"entry.report.gained.length\">\r\n\t\t\t\t\t\t<span>Gained:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.gained\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"loss\" v-if=\"entry.report.loss.length\">\r\n\t\t\t\t\t\t<span>Loss:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.loss\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"time\" :title=\"entry._timeString\">{{entry._dateString}}</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"exitEntity(inside)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"piloting\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Piloting:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(piloting)\">\r\n\t\t\t<span class=\"value\">{{piloting.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"stopPiloting(piloting)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"isVisible(skill)\" v-on:click=\"skillTouched(skill)\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"naming base\">\r\n\t\t\t\t{{(skill.base?skill.base:\"ERR\").capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
-			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"character.skill\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"leveling = stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Stat ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t</button>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"noIncrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<!-- List Slots and provide interface for selecting a slot and connecting or disconnecting the appropriate information -->\r\n\t<div class=\"slots flex h centered\">\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<div v-if=\"state.mode === 'long'\" class=\"slots flex h\">\r\n\t\t<h3>Equipment</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"state.mode === 'short'\" class=\"slots flex h centered\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"state.mode === 'long'\" class=\"slots flex v\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex h\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/entity/knowledge.html": return "<div class=\"rs-component rssw component-entity-knowledge\">\r\n\t<h2>\r\n\t\t<span>Knowledge</span>\r\n\t\t<button v-on:click=\"resetHeaders\" class=\"rs-light-blue rsbg-transparent flat\">\r\n\t\t\t<span class=\"far fa-sync\"></span>\r\n\t\t</button>\r\n\t</h2>\r\n\t<div class=\"knowledge-container\">\r\n\t\t<div class=\"controls flex h\">\r\n\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"knowledge\" :state=\"state\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t</div>\r\n\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"knowledge\" :headers=\"state.headers\" :state=\"state\" v-on:selected=\"showInfo($event, entity)\"></rs-table>\r\n\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"knowledge\" :state=\"state\"></rs-table-paging>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship/inside.html": return "<div class=\"rs-component rssw component-entity-inside\">\r\n\t<h2 class=\"title-info\">\r\n\t\t<span>Entities Inside</span>\r\n\t\t<span v-if=\"entity.required_crew\" class=\"title-readout\" :class=\"getCountClass()\">\r\n\t\t\t<span class=\"rs-white\">(</span>\r\n\t\t\t<span>{{crew}}</span>\r\n\t\t\t<span class=\"rs-white\">/</span>\r\n\t\t\t<span title=\"Minimum number of Crew required to fully operate this ship\">{{entity.required_crew}}</span>\r\n\t\t\t<span v-if=\"entity.maximum_crew\">\r\n\t\t\t\t<span class=\"rs-white\">[</span>\r\n\t\t\t\t<span title=\"Maximum number of Crew that fit in this ship\">{{entity.maximum_crew}}</span>\r\n\t\t\t\t<span class=\"rs-white\">]</span>\r\n\t\t\t</span>\r\n\t\t\t\r\n\t\t\t<span class=\"rs-white\">)</span>\r\n\t\t</span>\r\n\t</h2>\r\n\t<div class=\"entitites\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry flow-h\" v-for=\"entry in entities\">\r\n\t\t\t\t<button class=\"entity flow-h\" v-on:click=\"showInfo(entry)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<span class=\"entity\" v-else>\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<button class=\"exit-ship flow-h\" v-on:click=\"moveEntity(entry.id, null)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t\t\t<span>Exit Ship</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"board\">\r\n\t\t<div class=\"label\">\r\n\t\t\tBring Entity on Board\r\n\t\t</div>\r\n\t\t<div>\r\n\t\t\t<select v-model=\"moving\" v-on:change=\"moveEntity(moving, entity.id)\">\r\n\t\t\t\t<option value=\"\">Select Entity...</option>\r\n\t\t\t\t<option v-for=\"e in availableEntities\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"ship-info flex h\">\r\n\t\t<div class=\"ship-card\">\r\n\t\t\t<div class=\"picture\" v-on:click=\"recalculate()\">\r\n\t\t\t\t<rs-render-image class=\"record-image\" v-if=\"image\" mode=\"wide\" :image=\"image\"></rs-render-image>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"information flow-h\">\r\n\t\t\t\t<div class=\"skill\">\r\n\t\t\t\t\t<span v-if=\"!pilot\" class=\"icon fas fa-ban\"></span>\r\n\t\t\t\t\t<span v-if=\"pilot\" class=\"icon\">{{skill}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"pilot-info flow-v\">\r\n\t\t\t\t\t<div class=\"pilot pilot-name flow-h centered\">\r\n\t\t\t\t\t\t<div v-if=\"editingPilot\">\r\n\t\t\t\t\t\t\t<select v-model=\"setPilot\" v-on:change=\"setNewPilot(setPilot)\">\r\n\t\t\t\t\t\t\t\t<option value=\"\">No Pilot</option>\r\n\t\t\t\t\t\t\t\t<option v-for=\"p in availablePilots\" :value=\"p.id\">{{p.name}}</option>\r\n\t\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div v-if=\"!editingPilot && pilot\" class=\"name-display flow-h\" :class=\"getPilotClass()\">\r\n\t\t\t\t\t\t\t<span>{{pilot.name}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div v-if=\"!editingPilot && !pilot\" class=\"name-display flow-h\" :class=\"getPilotClass()\">\r\n\t\t\t\t\t\t\t<span>No Pilot</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<button v-on:click=\"editPilot()\" class=\"flow-h\">\r\n\t\t\t\t\t\t\t<span :class=\"editingPilot?'fas fa-check':'fas fa-edit'\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"name\">\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"properties.name\" v-on:change=\"updated('name')\" />\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"alliance flow-v\">\r\n\t\t\t\t\t<span v-if=\"!pilot\" class=\"icon fab fa-android\"></span>\r\n\t\t\t\t\t<span v-if=\"pilot\" class=\"icon\" :class=\"pilot.allegiance || pilot.icon\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"data flex h\">\r\n\t\t\t\t<div class=\"stats flex v\">\r\n\t\t\t\t\t<div class=\"stat flex h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\" v-if=\"stat\">\r\n\t\t\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"spacer\"></div>\r\n\t\t\t\t\t<div class=\"point-bubble\">\r\n\t\t\t\t\t\t<span>{{points}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"details flow-v\">\r\n\t\t\t\t\t<div class=\"pilot-ability object-info\">\r\n\t\t\t\t\t\t<div class=\"pilot-ability-text\" v-html=\"abilityDescription\" v-if=\"!editingPilotAbility\">\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div v-if=\"editingPilotAbility\">\r\n\t\t\t\t\t\t\t<div class=\"rs-white\">\r\n\t\t\t\t\t\t\t\tSelect Pilot Ability\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t<select v-model=\"setPilotAbility\" v-on:change=\"setNewPilotAbility(setPilotAbility)\">\r\n\t\t\t\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t\t\t\t<option value>No Ability</option>\r\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in pilotAbilities\" :value=\"a.id\">{{a.name}}</option>\r\n\t\t\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<button class=\"edit-pilot-ability\" v-on:click=\"editPilotAbility()\">\r\n\t\t\t\t\t\t\t<span :class=\"editingPilotAbility?'fas fa-check':'fas fa-pencil'\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"data-list status flow-v aligned-right\">\r\n\t\t\t\t\t\t<div class=\"property\" v-if=\"properties.location\">\r\n\t\t\t\t\t\t\t<span>Location: </span>\r\n\t\t\t\t\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(properties.location)\">\r\n\t\t\t\t\t\t\t\t<span :class=\"properties.location.icon\"></span>\r\n\t\t\t\t\t\t\t\t<span>{{properties.location.name}}</span>\r\n\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"property\" v-if=\"properties.inside\">\r\n\t\t\t\t\t\t\t<span>Inside: </span>\r\n\t\t\t\t\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(properties.inside)\">\r\n\t\t\t\t\t\t\t\t<span :class=\"properties.inside.icon\"></span>\r\n\t\t\t\t\t\t\t\t<span>{{properties.inside.name}}</span>\r\n\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"abilities flow-h centered wrap\">\r\n\t\t\t\t\t\t<button class=\"ability\" v-for=\"ability in abilities\" v-if=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t\t\t\t\t<span :class=\"ability.icon\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"data-list items\" v-if=\"items.length\">\r\n\t\t\t\t<div class=\"readout\">\r\n\t\t\t\t\t<span>Encumberance:</span>\r\n\t\t\t\t\t<span>{{encumberance}}</span>\r\n\t\t\t\t\t<span v-if=\"ship.contents_max\">/ {{ship.contents_max}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"property\" v-for=\"item in items\">\r\n\t\t\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t\t\t\t<span>{{item.name}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"ship-effects\">\r\n\t\t\t<div class=\"effect-selector\" :class=\"effectsOpen?'select-effect':'closed'\">\r\n\t\t\t\t<button class=\"effect-button effect-token effect-toggle\" v-on:click=\"toggleEffectMenu()\">\r\n\t\t\t\t\t<span class=\"fas fa-arrow-circle-up\" :class=\"effectsOpen?'rot0 rs-light-blue':'rot180 rs-white'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button v-for=\"effect in shipEffects\" class=\"effect-button effect-token rs-gray\" v-on:click=\"assignEffect(effect)\">\r\n\t\t\t\t\t<span :class=\"effect.icon\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"effect-button effect-token\" v-on:click=\"showInfo('knowledge:effects:ships')\">\r\n\t\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"effect-token-container\" v-for=\"effect in activeEffects\">\r\n\t\t\t\t<button class=\"effect-button effect-token rs-light-blue\" v-on:click=\"dismissEffect(effect)\" v-on:focus=\"focusEffect(effect)\" v-on:blur=\"blurEffect(effect)\">\r\n\t\t\t\t\t<span :class=\"getEffectIcon(effect)\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button v-if=\"showEffectInfo === effect.id\" class=\"effect-button effect-info rs-light-blue\" v-on:click=\"showInfo(effect._sourced)\" v-on:focus=\"focusEffect(effect)\" v-on:blur=\"blurEffect(effect)\">\r\n\t\t\t\t\t<span class=\"fas fa-info-circle\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<select v-if=\"hasEffectHasIndicators(effect)\" v-model=\"effectIndicators[effect.id]\" v-on:change=\"alterIndicator(effect, effectIndicators[effect.id])\">\r\n\t\t\t\t\t<option v-if=\"!effect.indicator\" value=\"\"></option>\r\n\t\t\t\t\t<option v-for=\"opt in availableEffects[effect._sourced].indicators\" :value=\"opt\">{{opt}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -18262,7 +18262,7 @@ Templify.install = function(Vue, options) {
 			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<div class=\"construction\">\r\n\t\t<div class=\"building\">\r\n\t\t\t<rs-nouns :universe=\"universe\" :player=\"player\" :built=\"built\" v-on:model=\"changeModel($event)\"></rs-nouns>\r\n\t\t</div>\r\n\t\t<div class=\"output rs-component\" v-if=\"modeling\">\r\n\t\t\t<h2>\r\n\t\t\t\t<span :class=\"modeling.icon\"></span>\r\n\t\t\t\t<span>{{modeling.name}}</span>\r\n\t\t\t</h2>\r\n\t\t\t<rs-object-info v-on:click=\"processRequest($event)\" :record=\"modeling\" :universe=\"universe\" :player=\"player\" :options=\"infoOptions\"></rs-object-info>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/rssw/base.html": return "<div class=\"rssw-page page-base\" v-if=\"entity\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
 			case "pages/rssw/character/builder.html": return "<div class=\"rssw-page character-builder\">\r\n\t<div class=\"stage species\" v-if=\"stage === 0\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Character Details</h1>\r\n\t\t</div>\r\n\t\t<div class=\"details\">\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-name\">\r\n\t\t\t\t\t<span>Name:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<input type=\"text\" v-model=\"building.name\" id=\"entity-name\"/>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-description\">\r\n\t\t\t\t\t<span>Description:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.description\" id=\"entity-description\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-obligations\">\r\n\t\t\t\t\t<span>Obligations:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.obligations\" id=\"entity-obligations\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-motivations\">\r\n\t\t\t\t\t<span>Motivations:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.motivations\" id=\"entity-motivations\"></textarea>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span>Continue</span>\r\n\t\t\t<span class=\"fas fa-chevron-circle-right\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage species\" v-if=\"stage === 1\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Species</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.species\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Species\"></rs-cards>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage careers\" v-else-if=\"stage === 2\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Career</h1>\r\n\t\t</div>\r\n\t\t<rs-cards class=\"cards\" v-on:selected=\"selected($event)\" :corpus=\"base.careers\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Career\"></rs-cards>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage specializations\" v-else-if=\"stage === 3\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Specialization</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.specializations\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Specialization\"></rs-cards>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage review\" v-else-if=\"stage === 4\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Review Selections</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"choices\" :state=\"state\" :universe=\"universe\" :user=\"player\" selection=\"Confirm\"></rs-cards>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage creating\" v-else-if=\"stage === 5\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span class=\"fas fa-spinner fa-pulse\"></span>\r\n\t\t\t\t<span>Creating</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage finalize\" v-else-if=\"stage === 6\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span>Finalize</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rssw-character-info :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t\t\t<rssw-character-board :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\t\t<rssw-character-stats :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t\t\t<rssw-character-skills :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span class=\"fas fa-check-circle\"></span>\r\n\t\t\t<span>Complete</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
-			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\" v-if=\"entity\">\r\n\t<rssw-character-info :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
+			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\" v-if=\"entity\">\r\n\t<!-- \r\n\t<rssw-character-info :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t -->\r\n\t \r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
 			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div v-if=\"!$route.params.oid\" class=\"rs-component\">\r\n\t\t<div class=\"inline flex h\">\r\n\t\t\t<div class=\"inline flex v entities\">\r\n\t\t\t\t<div class=\"title\">\r\n\t\t\t\t\t{{player.name}} Overview\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"self flex h center\">\r\n\t\t\t\t\t<button class=\"ctrl rs-light-blue\" v-on:click=\"toggleSelect(self)\">\r\n\t\t\t\t\t\t<span class=\"far ctrl-icon\" :class=\"isSelected(self)?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<router-link class=\"navigation-button\" v-if=\"self\" :to=\"'/dashboard/character/' + self.id\">\r\n\t\t\t\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t\t\t\t</router-link>\r\n\t\t\t\t\t<router-link class=\"navigation-button\" v-if=\"!self\" to=\"/construct/character\">\r\n\t\t\t\t\t\t<span class=\"link-icon fas fa-user-plus\"></span>\r\n\t\t\t\t\t\t<span class=\"link-label\">Make Yourself</span>\r\n\t\t\t\t\t</router-link>\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"control\">\r\n\t\t\t\t\t<div class=\"title\">\r\n\t\t\t\t\t\tOthers\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"entities\">\r\n\t\t\t\t\t\t<div class=\"flex h center\" v-for=\"entity in owned\">\r\n\t\t\t\t\t\t\t<button class=\"ctrl rs-light-blue\" v-on:click=\"toggleSelect(entity)\">\r\n\t\t\t\t\t\t\t\t<span class=\"far ctrl-icon\" :class=\"isSelected(entity)?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t\t<router-link class=\"entity navigation-button\" :to=\"'/dashboard/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t\t\t\t</router-link>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"inline flex v dashboards\">\r\n\t\t\t\t<button class=\"ctrl rs-light-blue dashboard\" v-if=\"canOpenDashboard()\" v-on:click=\"openDashboard('ship')\">\r\n\t\t\t\t\t<span class=\"fas fa-external-link\"></span>\r\n\t\t\t\t\t<span>Open Ship Dashboard</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/journal.html": return "<div class=\"rssw-page page-journal\">\r\n\t\r\n</div>\r\n";
@@ -21352,7 +21352,9 @@ class RSObject extends EventEmitter {
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
 				if(event && event.id === this.id) {
-//					console.log("Object Processing Modification: ", this, event);
+					if(this.debug || this.universe.debug) {
+						console.log("Object Processing Modification: ", this, event);
+					}
 					this.loadDelta(event.modification);
 				}
 			});
@@ -21602,7 +21604,7 @@ class RSObject extends EventEmitter {
 		}
 		
 		replacedReferences = replacedReferences || this._replacedReferences;
-		if(debug) {
+		if(debug || this.debug || this.universe.debug) {
 			console.warn("replacedReferences: ",replacedReferences);
 		}
 		
@@ -21630,11 +21632,14 @@ class RSObject extends EventEmitter {
 			delete(this._statContributions[keys[x]]);
 		}
 
-		base._equipped = this.equipped;
+		base._equipped = this._coreData.equipped;
 		base._replacedReferences = replacedReferences; // Skip & reference modifications
 		base._contributions = this._statContributions; // TODO: Track what item/entity/room contributed to the property
 		base._calculated = []; // Track calculated fields
 		base._overrides = {}; // Tracks slot like modifications where certain types should be overriden in modifier application
+		if(debug || this.debug || this.universe.debug) {
+			console.log("Initial Base Data:\n > This: ", _p(this.equipped), _p(this._equipped), "\n > Core: ", _p(this._coreData), "\n > Base: ", _p(base));
+		}
 		
 		keys = Object.keys(this._relatedErrors);
 		for(x=0; x<keys.length; x++) {
@@ -21642,20 +21647,24 @@ class RSObject extends EventEmitter {
 		}
 		if(this.slot) {
 			tracking = [].concat(this.slot);
-			if(this.equipped) {
-				keys = Object.keys(this.equipped);
+			if(this._coreData.equipped) {
+//			if(this.equipped) {
+				keys = Object.keys(this._coreData.equipped);
+//				keys = Object.keys(this.equipped);
 				for(x=0; x<keys.length; x++) { // "Accepts" of slot
-					buffer = Object.keys(this.equipped[keys[x]]);
+					buffer = Object.keys(this._coreData.equipped[keys[x]]);
+//					buffer = Object.keys(this.equipped[keys[x]]);
 					if(buffer.length) {
 						base._overrides[keys[x]] = [];
 						for(y=0; y<buffer.length; y++) { // ID of Slot
-							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
+							hold = this._coreData.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
+//							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
 							for(z=0; z<hold.length; z++) {
 								// If you have it (Item/Room) or it is inside you (Entity)
 								if(((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))
 										// And you have slots for it
 										&& this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
-									if(debug) {
+									if(debug || this.debug || this.universe.debug) {
 										console.log(" > Record is slot valid: " + hold[z]);
 									}
 									switch(keys[x]) {
@@ -21665,7 +21674,7 @@ class RSObject extends EventEmitter {
 											break;
 									}
 								} else {
-									if(debug) {
+									if(debug || this.debug || this.universe.debug) {
 										console.log(" > Record is not slot valid: " + hold[z]);
 									}
 									this._relatedErrors[hold[z]] = {
@@ -21739,7 +21748,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 
-		if(debug) {
+		if(debug || this.debug || this.universe.debug) {
 			console.log("Core Data: ", _p(this._coreData));
 			console.log("Base: ", _p(base));
 			console.log("Base Overrides: ", base._overrides);
@@ -21750,7 +21759,7 @@ class RSObject extends EventEmitter {
 		if(references  && references.length) {
 			for(x=0; x<references.length; x++) {
 				this.loadNounReferenceModifications(references[x], base, debug);
-				if(debug) {
+				if(debug || this.debug || this.universe.debug) {
 					console.log("Reference[" + references[x] + "]: ", _p(base));
 				}
 			}
@@ -21777,12 +21786,12 @@ class RSObject extends EventEmitter {
 			load = {};
 			for(x=0; x<base._calculated.length; x++) {
 				if(typeof(base[base._calculated[x]]) === "string" && base._calculated[x] !== "undefined" && !load[base._calculated[x]]) {
-					if(debug || this._debugging) {
+					if(debug || this.debug || this.universe.debug) {
 						console.warn("Calculator Processing[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
 					}
 					base[base._calculated[x]] = this.universe.calculator.process(base[base._calculated[x]], this);
 					load[base._calculated[x]] = true;
-					if(debug || this._debugging) {
+					if(debug || this.debug || this.universe.debug) {
 						console.warn(" > Result[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
 					}
 				}
@@ -21803,7 +21812,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(debug) {
+		if(debug || this.debug || this.universe.debug) {
 			console.log("Assembled: ", _p(this), _p(base));
 		}
 		
@@ -21811,8 +21820,8 @@ class RSObject extends EventEmitter {
 			this.recalculateHook();
 		}
 		
-		if(debug || this._debugging) {
-			console.log("Recalculated: " + this.id, base);
+		if(debug || this.debug || this.universe.debug) {
+			console.log("Recalculated: " + this.id + "\n > Base: ", _p(base), "\n > This: ", _p(this));
 		}
 		
 		/**
@@ -21843,17 +21852,17 @@ class RSObject extends EventEmitter {
 				reference = this[noun];
 			}
 			
-			if(debug) {
+			if(debug || this.debug || this.universe.debug) {
 				console.log("Check Noun Load[" + noun + " -> " + this.id + "]: ", reference);
 			}
 			
 			if(reference instanceof Array) {
 				for(x=0; x<reference.length; x++) {
-					if(debug) {
+					if(debug || this.debug || this.universe.debug) {
 						console.log("Perform Noun Load[" + noun + " -> " + this.id + "]: ", reference[x]);
 					}
 					if(reference[x] && (buffer = this.universe.nouns[noun][reference[x]._sourced || reference[x]])) {
-						if(debug) {
+						if(debug || this.debug || this.universe.debug) {
 							console.log("Buffered Noun Load[" + noun + " -> " + this.id + "]: ", buffer);
 						}
 						if(!this._registered[buffer.id]) {
@@ -21883,7 +21892,7 @@ class RSObject extends EventEmitter {
 	 */
 	performModifications(base, origin, debug) {
 		if(this.needs_slot && !this.inSlot(base._equipped)) {
-			if(debug) {
+			if(debug || this.debug || this.universe.debug) {
 				console.error(" ! Mod Aborted for Slot[" + origin + "]: " + this.id);
 			}
 			return false;
@@ -21896,7 +21905,7 @@ class RSObject extends EventEmitter {
 			x,
 			y;
 		
-		if(debug) {
+		if(debug || this.debug || this.universe.debug) {
 			console.error("Perform Mod[" + origin + "]: " + this.id);
 		}
 		
@@ -21910,7 +21919,7 @@ class RSObject extends EventEmitter {
 		if(this.universe.index) {
 			for(x=0; x<rsSystem.listingNouns.length; x++) {
 				if(this._coreData[rsSystem.listingNouns[x]]) {
-					if(debug) {
+					if(debug || this.debug || this.universe.debug) {
 						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
 					}
 					if(this._coreData[rsSystem.listingNouns[x]] instanceof Array) {
@@ -21945,7 +21954,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(debug) {
+		if(debug || this.debug || this.universe.debug) {
 			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 		}
 		
@@ -24339,13 +24348,13 @@ class RSUniverse extends RSObject {
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-					if(this.debugConnection) {
+					if(this.debugConnection || this.debug) {
 						console.log("Connection - Received: ", message);
 					}
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
-					if(this.debug) {
+					if(this.debugConnection || this.debug) {
 						console.warn("Emission[" + message.type + ":complete]: ", message.event);
 					}
 					this.$emit(message.type + ":complete", message.event);
@@ -31640,6 +31649,7 @@ class FieldDescriptor {
  */
 (function() {
 	var levelBars = [0,1,2,3,4];
+	var instance = 0;
 	
 	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
@@ -31656,6 +31666,10 @@ class FieldDescriptor {
 			"existing": {
 				"type": Array
 			},
+			"debug": {
+				"type": Boolean
+				
+			},
 			"named": {
 				"type": String
 			},
@@ -31666,7 +31680,8 @@ class FieldDescriptor {
 		},
 		"data": function() {
 			var data = {};
-			
+
+			data.instance = instance++;
 			data.levelBars = levelBars;
 			data.skills = [];
 
@@ -31705,26 +31720,25 @@ class FieldDescriptor {
 			"update": function() {
 				var buffer,
 					x;
+
+				this.skills.splice(0);
 				
 				if(this.named) {
-					this.skills.splice(0);
-					if(this.existing) {
-						for(x=0; x<this.existing.length; x++) {
-							buffer = this.universe.indexes.skill.lookup[this.existing[x]];
-							if(buffer) {
-								this.skills.push(buffer);
-							}
-						}
-					}
 					for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 						if(!this.universe.indexes.skill.listing[x].hidden && !this.universe.indexes.skill.listing[x].obscured && this.universe.indexes.skill.listing[x].section === this.named) {
 							this.skills.push(this.universe.indexes.skill.listing[x]);
 						}
 					}
-					this.uniqueByID(this.skills);
-					this.skills.sort(this.sortData);
 				}
 				
+				if(this.existing) {
+					for(x=0; x<this.existing.length; x++) {
+						this.skills.push(this.existing[x]);
+					}
+				}
+				
+				this.uniqueByID(this.skills);
+				this.skills.sort(this.sortData);
 				this.$forceUpdate();
 			}
 		},
@@ -31747,6 +31761,8 @@ class FieldDescriptor {
 	
 	var levelBars = [0,1,2,3,4];
 
+	var instance = 0;
+	
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
@@ -31770,7 +31786,9 @@ class FieldDescriptor {
 				"hideNames": false,
 				"search": ""
 			});
-			
+
+			data.instance = instance++;
+			data.customSkills = [];
 			data.levelSkills = [];
 			
 			return data;
@@ -31867,6 +31885,7 @@ class FieldDescriptor {
 				var buffer,
 					x;
 
+				this.customSkills.splice(0);
 				this.levelSkills.splice(0);
 				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 					if(this.universe.indexes.skill.listing[x].section) {
@@ -31877,6 +31896,7 @@ class FieldDescriptor {
 					for(x=0; x<this.character.skill.length; x++) {
 						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
 						if(buffer) {
+							this.customSkills.push(buffer);
 							this.levelSkills.push(buffer);
 						}
 					}
@@ -32016,6 +32036,9 @@ rsSystem.component("rsswCharacterStats", {
 				"required": true,
 				"type": Object
 			},
+			"mode": {
+				"type": String
+			},
 			"state": {
 				"type": Object
 			}
@@ -32067,13 +32090,25 @@ rsSystem.component("rsswCharacterStats", {
 			},
 			
 			"getModeClassing": function() {
-				if(this.state) {
-					
-					switch(this.state.mode) {
-						
-						default:
-							return "short";
-					}
+				var mode = this.mode,
+					state;
+				if(!mode && this.state) {
+					mode = this.state.mode;
+				}
+
+				if(typeof(mode) === "string") {
+					mode = mode.split(/[\s]+/);
+				} else {
+					mode = "short";
+				}
+				
+				state = mode[0];
+				
+				switch(state) {
+					case "long":
+						return state;
+					default:
+						mode;
 				}
 				
 				return "short";
@@ -34506,6 +34541,34 @@ rsSystem.component("RSSWCharacter", {
 						break;
 				}
 
+				this.widgets.push({
+		            "declaration": "rsswCharacterInfo",
+		            "sid": "entity:info:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswCharacterBoard",
+		            "sid": "entity:board:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswCharacterStats",
+		            "sid": "entity:stats:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswEntityEquipment",
+		            "sid": "entity:equip:" + this.entity.id,
+		            "enabled": true,
+		            "state": {
+		            	"mode": "long"
+		            }
+				});
+				this.widgets.push({
+		            "declaration": "rsswCharacterSkills",
+		            "sid": "entity:skills:" + this.entity.id,
+		            "enabled": true
+				});
 				this.widgets.push({
 		            "declaration": "rsswEntityKnowledge",
 		            "sid": "entity:knowledge:" + this.entity.id,

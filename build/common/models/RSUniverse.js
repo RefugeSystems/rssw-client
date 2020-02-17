@@ -164,13 +164,13 @@ class RSUniverse extends RSObject {
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-					if(this.debugConnection) {
+					if(this.debugConnection || this.debug) {
 						console.log("Connection - Received: ", message);
 					}
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
-					if(this.debug) {
+					if(this.debugConnection || this.debug) {
 						console.warn("Emission[" + message.type + ":complete]: ", message.event);
 					}
 					this.$emit(message.type + ":complete", message.event);

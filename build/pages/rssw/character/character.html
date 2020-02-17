@@ -1,8 +1,10 @@
 <div class="rssw-page page-dashboard" v-if="entity">
+	<!-- 
 	<rssw-character-info :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-info>
 	<rssw-character-board :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-board>
 	<rssw-character-stats :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-stats>
 	<rssw-character-skills :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-skills>
-	
+	 -->
+	 
 	<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="widget in widgets" :key="widget.id"></rs-container>
 </div>

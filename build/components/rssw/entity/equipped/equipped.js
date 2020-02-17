@@ -39,6 +39,9 @@
 				"required": true,
 				"type": Object
 			},
+			"mode": {
+				"type": String
+			},
 			"state": {
 				"type": Object
 			}
@@ -90,13 +93,25 @@
 			},
 			
 			"getModeClassing": function() {
-				if(this.state) {
-					
-					switch(this.state.mode) {
-						
-						default:
-							return "short";
-					}
+				var mode = this.mode,
+					state;
+				if(!mode && this.state) {
+					mode = this.state.mode;
+				}
+
+				if(typeof(mode) === "string") {
+					mode = mode.split(/[\s]+/);
+				} else {
+					mode = "short";
+				}
+				
+				state = mode[0];
+				
+				switch(state) {
+					case "long":
+						return state;
+					default:
+						mode;
 				}
 				
 				return "short";

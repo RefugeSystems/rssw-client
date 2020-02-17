@@ -10,6 +10,8 @@
 	
 	var levelBars = [0,1,2,3,4];
 
+	var instance = 0;
+	
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
@@ -33,7 +35,9 @@
 				"hideNames": false,
 				"search": ""
 			});
-			
+
+			data.instance = instance++;
+			data.customSkills = [];
 			data.levelSkills = [];
 			
 			return data;
@@ -130,6 +134,7 @@
 				var buffer,
 					x;
 
+				this.customSkills.splice(0);
 				this.levelSkills.splice(0);
 				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 					if(this.universe.indexes.skill.listing[x].section) {
@@ -140,6 +145,7 @@
 					for(x=0; x<this.character.skill.length; x++) {
 						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
 						if(buffer) {
+							this.customSkills.push(buffer);
 							this.levelSkills.push(buffer);
 						}
 					}

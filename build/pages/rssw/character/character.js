@@ -55,6 +55,34 @@ rsSystem.component("RSSWCharacter", {
 				}
 
 				this.widgets.push({
+		            "declaration": "rsswCharacterInfo",
+		            "sid": "entity:info:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswCharacterBoard",
+		            "sid": "entity:board:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswCharacterStats",
+		            "sid": "entity:stats:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswEntityEquipment",
+		            "sid": "entity:equip:" + this.entity.id,
+		            "enabled": true,
+		            "state": {
+		            	"mode": "long"
+		            }
+				});
+				this.widgets.push({
+		            "declaration": "rsswCharacterSkills",
+		            "sid": "entity:skills:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
 		            "declaration": "rsswEntityKnowledge",
 		            "sid": "entity:knowledge:" + this.entity.id,
 		            "enabled": true

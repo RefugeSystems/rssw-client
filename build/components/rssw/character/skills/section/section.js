@@ -7,6 +7,7 @@
  */
 (function() {
 	var levelBars = [0,1,2,3,4];
+	var instance = 0;
 	
 	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
@@ -23,6 +24,10 @@
 			"existing": {
 				"type": Array
 			},
+			"debug": {
+				"type": Boolean
+				
+			},
 			"named": {
 				"type": String
 			},
@@ -33,7 +38,8 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
+			data.instance = instance++;
 			data.levelBars = levelBars;
 			data.skills = [];
 
@@ -72,26 +78,25 @@
 			"update": function() {
 				var buffer,
 					x;
+
+				this.skills.splice(0);
 				
 				if(this.named) {
-					this.skills.splice(0);
-					if(this.existing) {
-						for(x=0; x<this.existing.length; x++) {
-							buffer = this.universe.indexes.skill.lookup[this.existing[x]];
-							if(buffer) {
-								this.skills.push(buffer);
-							}
-						}
-					}
 					for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 						if(!this.universe.indexes.skill.listing[x].hidden && !this.universe.indexes.skill.listing[x].obscured && this.universe.indexes.skill.listing[x].section === this.named) {
 							this.skills.push(this.universe.indexes.skill.listing[x]);
 						}
 					}
-					this.uniqueByID(this.skills);
-					this.skills.sort(this.sortData);
 				}
 				
+				if(this.existing) {
+					for(x=0; x<this.existing.length; x++) {
+						this.skills.push(this.existing[x]);
+					}
+				}
+				
+				this.uniqueByID(this.skills);
+				this.skills.sort(this.sortData);
 				this.$forceUpdate();
 			}
 		},

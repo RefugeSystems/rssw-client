@@ -1,7 +1,30 @@
 <div class="rs-component rssw component-entity-equipment" :class="getModeClassing()">
-	<!-- List Slots and provide interface for selecting a slot and connecting or disconnecting the appropriate information -->
-	<div class="slots flex h centered">
+	<div v-if="state.mode === 'long'" class="slots flex h">
+		<h3>Equipment</h3>
+	</div>
+	
+	<div v-if="state.mode === 'short'" class="slots flex h centered">
+		<div v-if="slotKeys.length === 0">
+			<h3>Equipment</h3>
+			<span>No Slots</span>
+		</div>
 		<div class="slot flex v" v-for="slot in slotKeys">
+			<button class="icon rs-white" v-on:click="showInfo(slots[slot], entity)">
+				<span :class="slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'"></span>
+			</button>
+			
+			<button class="icon" :class="getSlotClass(slots[slot], equipment, index)" v-if="slotMapping[slot]" v-for="(equipment, index) in slotMapping[slot]" v-on:click="showInfo(equipment, entity, slots[slot])">
+				<span :class="equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'"></span>
+			</button>
+		</div>
+	</div>
+	
+	<div v-if="state.mode === 'long'" class="slots flex v">
+		<div v-if="slotKeys.length === 0">
+			<h3>Equipment</h3>
+			<span>No Slots</span>
+		</div>
+		<div class="slot flex h" v-for="slot in slotKeys">
 			<button class="icon rs-white" v-on:click="showInfo(slots[slot], entity)">
 				<span :class="slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'"></span>
 			</button>

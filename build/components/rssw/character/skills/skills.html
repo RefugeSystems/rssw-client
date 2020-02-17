@@ -72,10 +72,10 @@
 			
 			<div class="skill-list custom flow-v">
 				<h3 class="titling">
-					<span class="fas cogs"></span>
+					<span class="fas fa-cogs"></span>
 					<span>Custom Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="custom" :existing="character.skill" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="custom" :existing="customSkills" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
 			</div>
 		</div>
 	</div>
