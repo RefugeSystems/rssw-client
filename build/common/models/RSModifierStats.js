@@ -76,18 +76,20 @@ class RSModifierStats extends RSModifier {
 							}
 					}
 				} else {
-					if(typeof(this._coreData[keys[x]]) === "object") {
-						if(this._coreData[keys[x]] instanceof Array) {
-							base[keys[x]] = [];
-							base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+					if(this._coreData[keys[x]] !== null) {
+						if(typeof(this._coreData[keys[x]]) === "object") {
+							if(this._coreData[keys[x]] instanceof Array) {
+								base[keys[x]] = [];
+								base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+							} else {
+								base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+							}
 						} else {
-							base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+							base[keys[x]] = this._coreData[keys[x]];
 						}
-					} else {
-						base[keys[x]] = this._coreData[keys[x]];
-					}
-					if(base._calculated) {
-						base._calculated.push(keys[x]);
+						if(base._calculated) {
+							base._calculated.push(keys[x]);
+						}
 					}
 				}
 			}
