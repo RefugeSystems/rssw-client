@@ -65,7 +65,7 @@ class RSModifierStats extends RSModifier {
 							}
 							break;
 						case "object":
-							if(base[keys[x]] !== null) {
+							if(this._coreData[keys[x]] !== null) {
 								if(base[keys[x]] instanceof Array) {
 									for(y=0; y<this._coreData[keys[x]].length; y++) {
 										base[keys[x]].push(this._coreData[keys[x]][y]);
