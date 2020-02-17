@@ -26441,6 +26441,7 @@ rsSystem.component("rsCards", {
 	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
 	invisibleKeys.class = true;
+	invisibleKeys.order = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
@@ -32179,6 +32180,7 @@ rsSystem.component("rsswCharacterStats", {
 			},
 			"updateFromUniverse": function() {
 				this.recalculateSlots();
+				this.slotKeys.sort(this.sortData);
 			},
 			"update": function() {
 				var buffer,
@@ -32237,6 +32239,8 @@ rsSystem.component("rsswCharacterStats", {
 						this.slotMapping[keys[x]].push(this.getEmptyIndicator(keys[x]));
 					}
 				}
+				
+				this.slotKeys.sort(this.sortData);
 			}
 		},
 		"beforeDestroy": function() {

@@ -167,6 +167,7 @@
 			},
 			"updateFromUniverse": function() {
 				this.recalculateSlots();
+				this.slotKeys.sort(this.sortData);
 			},
 			"update": function() {
 				var buffer,
@@ -225,6 +226,8 @@
 						this.slotMapping[keys[x]].push(this.getEmptyIndicator(keys[x]));
 					}
 				}
+				
+				this.slotKeys.sort(this.sortData);
 			}
 		},
 		"beforeDestroy": function() {
