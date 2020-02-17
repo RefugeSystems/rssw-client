@@ -1176,12 +1176,21 @@ form {
   color: #000000;
   padding: 3px;
 }
+.object-info .record-description {
+  max-height: 800px;
+  width: 100%;
+  overflow: auto;
+}
 .object-info .reference-heading {
   font-weight: 800;
   font-size: 1.2em;
 }
 .object-info .reference-heading span {
   border-bottom: 1px solid #EAEFF9;
+}
+.object-info .reference-heading,
+.object-info h3 {
+  margin-top: 6px;
 }
 .object-info .subreference {
   padding-left: 10px;
@@ -1242,6 +1251,12 @@ form {
 .object-info .control button.action:active,
 .object-info .control button.actionfocus {
   color: #FF9560;
+}
+.object-info .control button.action.direct {
+  border: 1px solid #000000;
+  color: #617EB8;
+  min-width: 120px;
+  text-align: left;
 }
 .object-info .control button.action:hover {
   background-color: #e0aef7;

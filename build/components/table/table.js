@@ -42,6 +42,12 @@
 				x;
 
 			data.start = 0;
+			if(this.state && !this.state.filter) {
+				Vue.set(this.state, "filter", {});
+			}
+			if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
+				Vue.set(this.state.filter, "null", "");
+			}
 			
 			return data;
 		},

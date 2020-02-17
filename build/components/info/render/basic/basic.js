@@ -21,7 +21,7 @@
 	invisibleKeys.source_template = true;
 	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
-	invisibleKeys.modifierattrs = true;
+	invisibleKeys.modifierattrs = true; 
 	invisibleKeys.no_modifiers = true;
 	invisibleKeys.restock_base = true;
 	invisibleKeys.restock_max = true;
@@ -44,6 +44,7 @@
 	invisibleKeys.created = true;
 	invisibleKeys.dataset = true;
 	invisibleKeys.history = true;
+	invisibleKeys.learned = true;
 	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
 	invisibleKeys.is_shop = true;
@@ -137,6 +138,18 @@
 		return value;
 	};
 	
+	prettifyValues.allegiance = function(property, value, record, universe) {
+		return "<span class=\"" + value + "\"></span>";
+	};
+	
+	prettifyValues.inside = function(property, value, record, universe) {
+		var entity = universe.indexes.entity.lookup[value];
+		if(entity) {
+			return "<a data-id=\"" + value + "\"><span class=\"" + entity.icon + "\" data-id=\"" + value + "\"></span><span data-id=\"" + value + "\">" + entity.name + "</span></a>";
+		}
+		return "Unknown[" + value + "]";
+	};
+	
 	prettifyValues.accepts = function(property, value, record, universe) {
 		if(value) {
 			switch(value) {
@@ -188,6 +201,10 @@
 		],
 		"props": {
 			"record": {
+				"required": true,
+				"type": Object
+			},
+			"universe": {
 				"required": true,
 				"type": Object
 			},
@@ -285,6 +302,12 @@
 			this.update();
 		},
 		"methods": {
+			"canDashboard": function() {
+				return (this.record._type === "entity" && this.record.classification && this.isOwner(this.record));
+			},
+			"viewDashboard": function() {
+				window.open(location.pathname + "#/dashboard/" + this.record.classification + "/" + this.record.id);
+			},
 			"highlight": function() {
 				var el = $(this.$el).find(".displayed-id");
 				if(el[0]) {
@@ -308,17 +331,6 @@
 			},
 			"isArray": function(value) {
 				return value instanceof Array;
-			},
-			"isOwner": function(record) {
-				if(record.owner === this.player.id) {
-					return true;
-				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
-					return true;
-				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
-					return true;
-				} else {
-					return false;
-				}
 			},
 			"canTransfer": function() {
 				var hold,
@@ -468,7 +480,7 @@
 				
 				switch(typeof(this.record._prettifyValue)) {
 					case "function":
-						return this.record._prettifyValue(property, value, record, universe);
+						return this.record._prettifyValue(property, value, record, universe || this.universe);
 					case "object":
 						if(this.record._prettifyValue[property]) {
 							return this.record._prettifyValue[property];
@@ -480,7 +492,7 @@
 						case "string":
 							return prettifyValues[property];
 						case "function":
-							return prettifyValues[property](property, value, record, universe);
+							return prettifyValues[property](property, value, record, universe || this.universe);
 					}
 				}
 				

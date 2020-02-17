@@ -77,6 +77,14 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+			
 			rsSystem.EventBus.$on("display-info", this.displayRecord);
 			this.universe.$on("universe:modified", this.update);
 		},

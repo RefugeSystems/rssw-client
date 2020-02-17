@@ -262,7 +262,7 @@
 					x;
 				
 				//TODO: Clean solution for forgetting data while open?
-				if(this.knowledge.listing.length !== this.entity.knowledge.length) {
+				if(this.entity.knowledge && this.knowledge.listing.length !== this.entity.knowledge.length) {
 					for(x=0; x<this.entity.knowledge.length; x++) {
 						if(!this.knowledge.index[this.entity.knowledge] && (buffer = this.universe.indexes.knowledge.lookup[this.entity.knowledge[x]])) {
 							this.knowledge.indexItem(buffer);

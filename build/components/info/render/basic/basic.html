@@ -6,7 +6,16 @@
 		<span>A Shop</span>
 	</div>
 	
-	<div v-if="description" v-html="description"></div>
+	<div v-if="description" v-html="description" class="record-description"></div>
+	
+	<div v-if="canDashboard(record)">
+		<div class="control">
+			<button class="action direct" v-on:click="viewDashboard()">
+				<span class="fas fa-tablet-android-alt"></span>
+				<span>View Dashboard</span>
+			</button>
+		</div>
+	</div>
 	
 	<div v-if="relatedError" class="related-error">
 		<h3>
@@ -29,7 +38,7 @@
 				</span>
 				<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property, record)}}</span>
 				<span class="divide">:</span>
-				<span class="value">{{prettifyPropertyValue(property, record[property], record, universe)}}</span>
+				<span class="value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
 				<span class="raw" v-if="displayRaw[property]">{{value}}</span>
 			</div>
 		</div>
@@ -146,7 +155,7 @@
 	<div v-if="base && canTravelTo(base.id)">
 		<h3>Travel To</h3>
 		<div class="control">
-			<button class="action" v-on:click="travelToHere(base.id)">
+			<button class="action direct" v-on:click="travelToHere(base.id)">
 				<span class="fad fa-globe-africa"></span>
 				<span>Travel Here</span>
 			</button>
@@ -155,7 +164,7 @@
 	
 	<div v-if="canUnequip()">
 		<div class="control">
-			<button class="action" v-on:click="unequip()">
+			<button class="action direct" v-on:click="unequip()">
 				<span class="fas fa-unlink"></span>
 				<span>Unequip from {{base.name}}</span>
 			</button>
@@ -212,14 +221,14 @@
 		</div>
 		
 		<div class="control">
-			<button class="action" v-on:click="editRecord()">
+			<button class="action direct" v-on:click="editRecord()">
 				<span class="fas fa-edit"></span>
 				<span>Edit</span>
 			</button>
 		</div>
 		
 		<div class="control">
-			<button class="action" v-if="record.restock_base" v-on:click="restockLocation()">
+			<button class="action direct" v-if="record.restock_base" v-on:click="restockLocation()">
 				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>
 				<span>Restock Items</span>
 			</button>

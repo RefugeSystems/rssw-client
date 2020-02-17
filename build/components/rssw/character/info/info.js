@@ -12,6 +12,7 @@
 	rsSystem.component("rsswCharacterInfo", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSShowdown,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
@@ -88,17 +89,6 @@
 						"source": this.character,
 						"record": view
 					});
-				}
-			},
-			"isOwner": function(record) {
-				if(record.owner === this.player.id) {
-					return true;
-				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
-					return true;
-				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
-					return true;
-				} else {
-					return false;
 				}
 			},
 			"exitEntity": function(entity) {

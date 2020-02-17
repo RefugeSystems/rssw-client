@@ -65,6 +65,12 @@
 	color: @rsBlack;
 	padding: 3px;
 	
+	.record-description {
+		max-height: 800px;
+		width: 100%;
+		overflow: auto;
+	}
+	
 	.reference-heading {
 		font-weight: 800;
 		font-size: 1.2em;
@@ -72,6 +78,11 @@
 		span {
 			border-bottom: 1px solid @rsWhite;
 		}
+	}
+	
+	.reference-heading,
+	h3 {
+		margin-top: 6px;
 	}
 	
 	.subreference {
@@ -145,6 +156,13 @@
 			&:active,
 			&focus {
 				color: @rsOrange;
+			}
+			
+			&.direct {
+				border: 1px solid @rsBlack;
+				color: @rsBlue;
+				min-width: 120px;
+				text-align: left;
 			}
 			
 			&:hover {

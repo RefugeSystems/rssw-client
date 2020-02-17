@@ -96,6 +96,10 @@
 					}
 				}
 				
+				if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
+					this.state.filter["null"] = "";
+				}
+				
 				widget = {};
 				widget.props = {};
 				widget.props["storage_id"] = this.storageID;
