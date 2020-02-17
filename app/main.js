@@ -33339,6 +33339,12 @@ rsSystem.component("rsswCharacterStats", {
 				"handler": function() {
 					this.update();
 				}
+			},
+			"state.paging": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
 			}
 		},
 		"mounted": function() {
@@ -35193,7 +35199,8 @@ rsSystem.component("RSSWStorage", {
 		},
 		"methods": {
 			"updateListings": function(event) {
-				var buffer,
+				var mapped = {},
+					buffer,
 					x,
 					y;
 				
@@ -35206,7 +35213,8 @@ rsSystem.component("RSSWStorage", {
 							this.listing[this.listingKeys[x]].push(buffer);
 							switch(this.listingKeys[x]) {
 								case "entity":
-									if(!buffer.hidden && !buffer.inactive) {
+									if(!mapped[buffer.id] && !buffer.hidden && !buffer.inactive) {
+										mapped[buffer.id] = true;
 										this.universeEntities.push(buffer);
 									}
 									break;

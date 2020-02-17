@@ -200,7 +200,8 @@
 		},
 		"methods": {
 			"updateListings": function(event) {
-				var buffer,
+				var mapped = {},
+					buffer,
 					x,
 					y;
 				
@@ -213,7 +214,8 @@
 							this.listing[this.listingKeys[x]].push(buffer);
 							switch(this.listingKeys[x]) {
 								case "entity":
-									if(!buffer.hidden && !buffer.inactive) {
+									if(!mapped[buffer.id] && !buffer.hidden && !buffer.inactive) {
+										mapped[buffer.id] = true;
 										this.universeEntities.push(buffer);
 									}
 									break;

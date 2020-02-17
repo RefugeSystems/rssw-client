@@ -65,6 +65,12 @@
 				"handler": function() {
 					this.update();
 				}
+			},
+			"state.paging": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
 			}
 		},
 		"mounted": function() {

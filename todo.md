@@ -19,6 +19,9 @@
 + Ability bonus for having something in a slot
 + Items disable other slot types when worn
 	+ For example a war helment disables "goggles" or "eye wear"
++ Range band "advantage" & "disadvantage" dice gains for attacks
+	+ Possibly use weapon types
+	+ must include abilities
 
 # Bugs
 √ Paged Table  
