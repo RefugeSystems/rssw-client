@@ -4,21 +4,21 @@
 # Properties
 √ Flag to nullify item stat inheritance (For Bags)  
         + This should remove the need for inventory types and they'll simply be items
-+ [STARTED] History / Log  
-		+ Solve when to update history as all will trigger from other clients in "auto" mode
++ [STARTED] History / Log 
+		√ Solve when to update history as all will trigger from other clients in "auto" mode
 				! Create new serverside class for entities
 				+ New class handles checking for tracked keys during updates and adding history
 				+ History gets updated and synced back with the modify response as needed
-		+ For list differences, finish counting by ID to determine new
-        + Use current time
-        + Location Changes
-        + XP Changes
+		√ For list differences, finish counting by ID to determine new
+        √ Use current time
+        √ Location Changes
+        √ XP Changes
         + Archetype Changes
-        + Stat Changes
+        √ Stat Changes
         + Damage Changes
 
 # Bugs
-+ Paged Table  
+√ Paged Table  
         + Doesn't properly follow current filter at load
         + When changing data sources and beyond the highest page, doesn't backtrack well
         + Changing data source seems problematic in general with regard to page
@@ -50,11 +50,11 @@
 		+ Self contained description display to allow multiple knowledges to be viewed at once
 + Info comparison state to "store" the current record for comparison that can be closed from a side-by-side view
 		+ Give a "DIFF" for any calculated fields?
-+ Clicking on a skill in character view sets it up for leveling
+√ Clicking on a skill in character view sets it up for leveling
 		+ This will involve $emit & v-on
 		+ Clicking it while it is set for leveling opens info
 		+ An info icon appears next to the selected skill for leveling
-+ Add custom skills to skill area widget for entities
+√ Add custom skills to skill area widget for entities
 + Need UI for controling Entity widgets for display (Simple list, stores to entity)
 + Roll Dice
 		+ Universe needs a way to specify its available dice configurations
