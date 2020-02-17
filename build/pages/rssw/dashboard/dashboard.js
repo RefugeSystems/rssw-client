@@ -9,6 +9,7 @@
 rsSystem.component("RSSWDashboard", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.RSComponentUtility,
 		rsSystem.components.RSCore
 	],
 	"data": function() {
@@ -108,6 +109,7 @@ rsSystem.component("RSSWDashboard", {
 			
 			this.owned.splice(0);
 			this.owned.push.apply(this.owned, owned);
+			this.owned.sort(this.sortData);
 			this.$forceUpdate();
 		}
 	},

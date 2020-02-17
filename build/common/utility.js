@@ -89,6 +89,9 @@ rsSystem.component("RSComponentUtility", {
 			return corpus;
 		},
 		"sortData": function(a, b) {
+			var aName,
+				bName;
+			
 			if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
 				if(a.order < b.order) {
 					return -1;
@@ -104,9 +107,11 @@ rsSystem.component("RSComponentUtility", {
 			}
 
 			if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {
-				if(a.name < b.name) {
+				aName = a.name.toLowerCase();
+				bName = b.name.toLowerCase();
+				if(aName < bName) {
 					return -1;
-				} else if(a.name > b.name) {
+				} else if(aName > bName) {
 					return 1;
 				}
 			}

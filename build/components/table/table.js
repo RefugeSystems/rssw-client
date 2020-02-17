@@ -54,7 +54,7 @@
 				newIndex.$on("indexed", this.update);
 				this.update();
 			},
-			"state": {
+			"state.filter": {
 				"deep": true,
 				"handler": function() {
 					this.update();

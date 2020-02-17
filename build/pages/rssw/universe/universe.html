@@ -60,7 +60,7 @@
 				<input class="filter" v-model="state.search" />
 			</div>
 			<div class="entities">
-				<router-link class="entity navigation-button" v-for="entity in universe.indexes.entity.listing" :to="'/universe/' + entity.classification + '/' + entity.id" :key="entity.id" v-if="filtered(entity)">
+				<router-link class="entity navigation-button" v-for="entity in universeEntities" :to="'/universe/' + entity.classification + '/' + entity.id" :key="entity.id" v-if="filtered(entity)">
 					<span class="link-icon" :class="entity.icon || 'fas fa-user-circle'"></span>
 					<span class="link-label">{{entity.name}}</span>
 				</router-link>

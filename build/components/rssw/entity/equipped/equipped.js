@@ -39,15 +39,14 @@
 				"required": true,
 				"type": Object
 			},
-			"mode": {
-				"type": String
-			},
 			"state": {
 				"type": Object
 			}
 		},
 		"data": function() {
 			var data = {};
+
+			data.mode = this.state?this.state.mode:"short";
 			
 			data.slotMapping = {};
 			data.slotCounts = {};
@@ -179,6 +178,11 @@
 					x,
 					y,
 					z;
+
+				if(this.state) {
+					Vue.set(this, "mode", this.state.mode || "short");
+				}
+				
 				
 				this.recalculateSlots();
 
