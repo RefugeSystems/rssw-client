@@ -74,6 +74,7 @@
 				for(x=0; x<keys.length; x++) {
 					Vue.set(this, keys[x], this.character[keys[x]] || 0);
 				}
+				Vue.set(this, "soak", this.soak + this.character.brawn);
 			}
 		},
 		"beforeDestroy": function() {
