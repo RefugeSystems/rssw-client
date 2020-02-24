@@ -9,7 +9,7 @@
  * @see Markdown: https://www.markdownguide.org/
  */
 (function() {
-	var converter = new showdown.Converter();
+	var converter = new showdown.Converter({tables: true});
 
 	var marking = {
 		"start": "${",
