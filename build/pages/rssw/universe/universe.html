@@ -5,7 +5,7 @@
 			<button class="fas fa-sync" v-on:click="resetHeaders()">Headers</button>
 		</div>
 		
-		<div class="index">
+		<div class="rs-component index">
 			<div class="controls">
 				<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" v-on:action="processAction"></rs-table-controls>
 				
