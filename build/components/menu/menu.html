@@ -7,8 +7,8 @@
 			</router-link>
 		</div>
 		<div class="separator"></div>
-		<div class="prefixed navigation-item" v-for="navItem in generalItems" v-if="isActive(navItem)">
-			<button class="prefixed navigation-contents"v-if="navItem.action" v-on:click="processNavigation(navItem)">
+		<div class="prefixed navigation-item" v-for="navItem in generalItems" v-if="isActive(navItem)" :class="navItem.class">
+			<button class="prefixed navigation-contents" v-if="navItem.action" v-on:click="processNavigation(navItem)">
 				<span class="nav-icon" :class="navItem.icon"></span>
 				<span class="nav-label" :class="navItem.labelClass">{{navItem.label}}</span>
 			</button>

@@ -9,10 +9,16 @@
 	<div v-if="description" v-html="description" class="record-description"></div>
 	
 	<div v-if="canDashboard(record)">
-		<div class="control">
-			<button class="action direct" v-on:click="viewDashboard()">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="viewDashboard(false)">
 				<span class="fas fa-tablet-android-alt"></span>
 				<span>View Dashboard</span>
+			</button>
+			<button class="action direct short" v-on:click="viewDashboard(true)">
+				<span class="fas fa-external-link-alt"></span>
+			</button>
+			<button class="action direct short" v-on:click="viewDashboard(true, true)">
+				<span class="fas fa-external-link-alt rot180"></span>
 			</button>
 		</div>
 	</div>
@@ -139,7 +145,7 @@
 	<div v-if="canAttach()">
 		<h3>Pass To Item</h3>
 		<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} attachments of {{record.hardpoints}}</span>
-		<span v-if="record.contents_max">Currently encumbers {{calculatedEncumberance}} of {{record.contents_max}}</span>
+		<span v-if="record.contents_max">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>
 		<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
 			<option value=""></option>
 			<option value="cancel">Cancel</option>
@@ -152,13 +158,22 @@
 		</div>
 	</div>
 	
-	<div v-if="base && canTravelTo(base.id)">
-		<h3>Travel To</h3>
-		<div class="control">
+	<div v-if="base && canMoveTo(base.id)">
+		<h3>Travel</h3>
+		<div class="control" v-if="canTravelTo(base.id)">
 			<button class="action direct" v-on:click="travelToHere(base.id)">
 				<span class="fad fa-globe-africa"></span>
 				<span>Travel Here</span>
 			</button>
+		</div>
+		<div class="control">
+			<label>
+				<span>Move Entity Here</span>
+				<select v-model="movingEntity" v-on:change="moveEntityHere(movingEntity)">
+					<option value="">{{movableEntities.length === 0?"None Available":""}}</option>
+					<option v-for="e in movableEntities" v-if="!e.template && !e.inactive" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
 		</div>
 	</div>
 	
@@ -220,10 +235,16 @@
 			</button>
 		</div>
 		
-		<div class="control">
-			<button class="action direct" v-on:click="editRecord()">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="editRecord(false)">
 				<span class="fas fa-edit"></span>
 				<span>Edit</span>
+			</button>
+			<button class="action direct short" v-on:click="editRecord(true)">
+				<span class="far fa-external-link-alt"></span>
+			</button>
+			<button class="action direct short" v-on:click="editRecord(true, true)">
+				<span class="fas fa-external-link-alt rot180"></span>
 			</button>
 		</div>
 		

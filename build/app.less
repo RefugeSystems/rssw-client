@@ -1467,6 +1467,11 @@ form {
 				color: @rsBlue;
 				min-width: 120px;
 				text-align: left;
+				
+				&.short {
+					min-width: 30px;
+					text-align: center;
+				}
 			}
 			
 			&:hover {
@@ -1616,11 +1621,6 @@ form {
 				color: @rsWhite;
 			}
 			
-			&:hover {
-				background: white;
-				color: black;
-			}
-			
 			.nav-label {
 				overflow: hidden;
 				max-width: 500px;
@@ -1644,6 +1644,11 @@ form {
 				flex-grow: 0;
 				font-size: 18px;
 				cursor: pointer;
+			
+				&:hover {
+					background: white;
+					color: black;
+				}
 			
 				.nav-icon {
 					padding-right: 10px;

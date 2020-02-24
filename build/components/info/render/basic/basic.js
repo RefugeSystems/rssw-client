@@ -259,6 +259,9 @@
 			data.entities = [];
 			data.hiddenEntities = [];
 			
+			data.movableEntities = [];
+			data.movingEntity = "";
+			
 			data.availableSlots = [];
 			data.equipToSlot = "";
 			
@@ -302,12 +305,6 @@
 			this.update();
 		},
 		"methods": {
-			"canDashboard": function() {
-				return (this.record._type === "entity" && this.record.classification && this.isOwner(this.record));
-			},
-			"viewDashboard": function() {
-				window.open(location.pathname + "#/dashboard/" + this.record.classification + "/" + this.record.id);
-			},
 			"highlight": function() {
 				var el = $(this.$el).find(".displayed-id");
 				if(el[0]) {
@@ -515,18 +512,40 @@
 				window.open("/#/nouns/entity/" + id + "?copy=true&values={\"location\":\"" + this.record.id + "\"}", "building");
 				Vue.set(this, "copyToHere", "");
 			},
-			"editRecord": function() {
-				window.open(location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id, "building");
-			},
 			"prettifyReferenceValue": function(reference, property, value) {
 				
 			},
 			"displayInfo": function(record) {
 				
 			},
+			"canDashboard": function() {
+				return (this.record._type === "entity" && this.record.classification && this.isOwner(this.record));
+			},
+			"viewDashboard": function(new_window, stay) {
+				var new_location = location.pathname + "#/dashboard/" + this.record.classification + "/" + this.record.id;
+				if(new_window) {
+					window.open(new_location);
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
+				}
+			},
+			"canMoveTo": function(id) {
+				id = id || this.player.entity;
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
+						&& this.universe.indexes.entity.index[id]) {
+					return true;
+				}
+				return false;
+			},
 			"canTravelTo": function(id) {
 				id = id || this.player.entity;
-				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id && this.universe.indexes.entity.index[id] && this.universe.indexes.entity.index[id].location !== this.record.id && this.universe.indexes.entity.index[id].inside !== this.record.id) {
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
+						&& this.universe.indexes.entity.index[id]
+						&& this.universe.indexes.entity.index[id].location !== this.record.id
+						&& this.universe.indexes.entity.index[id].inside !== this.record.id) {
 					return true;
 				}
 				return false;
@@ -537,6 +556,17 @@
 					this.universe.indexes.entity.index[id].commit({
 						"location": this.record.id
 					});
+				}
+			},
+			"editRecord": function(new_window, stay) {
+				var new_location = location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id;
+				if(new_window) {
+					window.open(new_location, "building");
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
 				}
 			},
 			"movePartyHere": function(party) {
@@ -585,6 +615,7 @@
 				}
 
 				Vue.set(this, "entityToMove", "");
+				Vue.set(this, "movingEntity", "");
 			},
 			"restockLocation": function() {
 				if(!this.restocking) {
@@ -712,10 +743,19 @@
 					this.attach_targets.sort(byName);
 				}
 				
+				buffer = this.player?this.player.id:null;
 				this.availableTemplates.entity.splice(0);
+				this.movableEntities.splice(0);
 				this.hiddenEntities.splice(0);
 				this.entities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					if(((!this.universe.indexes.entity.listing[x].owners && !this.universe.indexes.entity.listing[x].owner)
+							|| (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.indexOf(buffer) !== -1)
+							|| this.universe.indexes.entity.listing[x].owner === buffer)
+							&& this.universe.indexes.entity.listing[x].location !== this.record.id
+							&& this.universe.indexes.entity.listing[x].inside !== this.record.id){
+						this.movableEntities.push(this.universe.indexes.entity.listing[x]);
+					}
 					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
 						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
 					}

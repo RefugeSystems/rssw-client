@@ -8,7 +8,12 @@
  * @zindex 10
  */
 (function() {
-	var storageKey = "_rs_menuComponentKey";
+	var storageKey = "_rs_menuComponentKey",
+		bufferItem = {
+			"icon": "",
+			"class": "buffer",
+			"label": ""
+		};
 	
 	rsSystem.component("systemMenu", {
 		"inherit": true,
@@ -17,11 +22,16 @@
 		],
 		"props": {
 		},
-		"mounted": function() {
-			rsSystem.register(this);
-		},
 		"data": function() {
 			var data = {};
+
+			data.storageID = storageKey; 
+			data.state = this.loadStorage(data.storageID, {
+				"labels": true
+			});
+			if(data.state.labels === undefined) {
+				data.state.labels = true;
+			}
 			
 			data.navigationItems = [];
 			data.navigationItems.push({
@@ -93,6 +103,13 @@
 			});
 			
 			data.generalItems = [];
+			data.shrinkItem = {
+				"icon": "far fa-text-width",
+				"action": "toggle-labels",
+				"label": "Shrink"
+			};
+			data.generalItems.push(data.shrinkItem);
+			data.generalItems.push(bufferItem);
 			data.generalItems.push({
 				"icon": "far fa-sign-out",
 				"action": "logout",
@@ -108,7 +125,16 @@
 //					console.log("hi");
 					this.$forceUpdate();
 				}
+			},
+			"state": {
+				"deep": true,
+				"handler": function(value) {
+					this.saveStorage(this.storageID, this.state);
+				}
 			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
 		},
 		"methods": {
 			"isActive": function(navItem) {
@@ -139,15 +165,29 @@
 				}
 			},
 			"getClassSettings": function() {
-				return "full standard undocked";
+				var classes = "full standard undocked";
+				if(!this.state.labels) {
+					classes += " collapsed";
+				}
+				return classes;
 			},
 			"processNavigation": function(navItem) {
 //				console.log("Nav: " , navItem);
 				switch(navItem.action) {
 					case "navigate":
 						break;
+					case "toggle-labels":
+						Vue.set(this.state, "labels", !this.state.labels);
+						if(this.state.labels) {
+							Vue.set(this.shrinkItem, "label", "Shrink");
+						} else {
+							Vue.set(this.shrinkItem, "label", "Expand");
+						}
+						break;
 					case "logout":
 						this.universe.logout();
+						break;
+					case "none":
 						break;
 					default:
 						this.universe.log.warn({"message":"Unknown action[" + navItem.action + "] in menu navigation", "item": navItem});
