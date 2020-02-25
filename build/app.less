@@ -209,6 +209,10 @@
 	.align-center {
 		text-align: center;
 	}
+	
+	.nowrap {
+		white-space: nowrap;
+	}
 }
 .rs-component {
 	.rs-border {
@@ -1373,6 +1377,26 @@ form {
 		max-height: 800px;
 		width: 100%;
 		overflow: auto;
+		
+		table {
+			border-collapse: collapse;
+			color: black;
+			
+			th {
+				background: @rsWhite;
+				position: sticky;
+				z-index: 1;
+				top: 0px;
+			}
+			
+			td:first-child {
+				white-space: nowrap;
+			}
+			
+			tr:nth-child(odd) {
+				background-color: #bcd9e2;
+			}
+		}
 	}
 	
 	.reference-heading {

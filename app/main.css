@@ -164,6 +164,9 @@
 .rs-component .align-center {
   text-align: center;
 }
+.rs-component .nowrap {
+  white-space: nowrap;
+}
 .rs-component .rs-border {
   border-style: solid;
 }
@@ -1180,6 +1183,22 @@ form {
   max-height: 800px;
   width: 100%;
   overflow: auto;
+}
+.object-info .record-description table {
+  border-collapse: collapse;
+  color: black;
+}
+.object-info .record-description table th {
+  background: #EAEFF9;
+  position: sticky;
+  z-index: 1;
+  top: 0px;
+}
+.object-info .record-description table td:first-child {
+  white-space: nowrap;
+}
+.object-info .record-description table tr:nth-child(odd) {
+  background-color: #bcd9e2;
 }
 .object-info .reference-heading {
   font-weight: 800;
