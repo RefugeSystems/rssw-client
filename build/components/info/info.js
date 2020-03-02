@@ -140,7 +140,7 @@
 							this.viewing.$on("modified", this.update);
 						}
 					} else if(toView.id === this.viewing.id) {
-						this.closeInfo();
+//						this.closeInfo();
 					}
 				}
 				
