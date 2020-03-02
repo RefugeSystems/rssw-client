@@ -1,0 +1,68 @@
+<div class="rs-component rssw component-entity-weapons">
+	
+	<div class="report" v-if="equipped.length">
+		<h3>Equipped Weapons</h3>
+		<div class="weapon-report flex h" v-for="item in equipped">
+			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
+				<span :class="item.icon"></span>
+			</div>
+			<div class="pool band flex v element" v-on:click="showInfo('knowledge:skillchecks:dice')">
+				<div class="name align-center">
+					<span class="fas fa-dice"></span>
+				</div>
+				<div class="roll flex h">
+					<span class="dice" v-for="die in getAttackDice(item)" :class="die"></span>
+				</div>
+			</div>
+			<div class="damage band flex v element">
+				<div class="name align-center">
+					<span class="ra ra-explosion"></span>
+				</div>
+				<div class="roll align-center">
+					{{getWeaponDamage(item)}}
+				</div>
+			</div>
+			<div class="range band flex v element" v-for="band in rangeBands" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+				<div class="name">
+					<span>{{band.substring(0,2).capitalize()}}</span>
+				</div>
+				<div class="roll flex h">
+					<span class="dice" v-for="die in getRangeBandDifficulty(item, band)" :class="die"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="report" v-if="items.length">
+		<h3>Unequipped Weapons</h3>
+		<div class="weapon-report flex h" v-for="item in items">
+			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
+				<span :class="item.icon"></span>
+			</div>
+			<div class="pool band flex v element" v-on:click="showInfo('knowledge:skillchecks:dice')">
+				<div class="name align-center">
+					<span class="fas fa-dice"></span>
+				</div>
+				<div class="roll flex h">
+					<span class="dice" v-for="die in getAttackDice(item)" :class="die"></span>
+				</div>
+			</div>
+			<div class="damage band flex v element">
+				<div class="name align-center">
+					<span class="ra ra-explosion"></span>
+				</div>
+				<div class="roll align-center">
+					{{getWeaponDamage(item)}}
+				</div>
+			</div>
+			<div class="range band flex v element" v-for="band in rangeBands" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+				<div class="name">
+					<span>{{band.substring(0,2).capitalize()}}</span>
+				</div>
+				<div class="roll flex h">
+					<span class="dice" v-for="die in getRangeBandDifficulty(item, band)" :class="die"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
