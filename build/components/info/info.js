@@ -120,23 +120,27 @@
 					}
 				}
 				
-				if(toView && (!this.viewing || toView.id !== this.viewing.id)) {
-					if(this.viewing) {
-						if(!this.history.length || (this.viewing.id !== toView.id)) {
-							this.history.unshift(this.viewing);
-						} else {
-							console.warn("Repeated Shift? ", this.viewing.id);
+				if(toView) {
+					if(!this.viewing || toView.id !== this.viewing.id) {
+						if(this.viewing) {
+							if(!this.history.length || (this.viewing.id !== toView.id)) {
+								this.history.unshift(this.viewing);
+							} else {
+								console.warn("Repeated Shift? ", this.viewing.id);
+							}
+							if(this.viewing.$off) {
+								this.viewing.$off("modified", this.update);
+							}
 						}
-						if(this.viewing.$off) {
-							this.viewing.$off("modified", this.update);
+						
+						Vue.set(this, "viewing", toView);
+						Vue.set(this, "open", true);
+	
+						if(this.viewing.$on) {
+							this.viewing.$on("modified", this.update);
 						}
-					}
-					
-					Vue.set(this, "viewing", toView);
-					Vue.set(this, "open", true);
-
-					if(this.viewing.$on) {
-						this.viewing.$on("modified", this.update);
+					} else if(toView.id === this.viewing.id) {
+						this.closeInfo();
 					}
 				}
 				

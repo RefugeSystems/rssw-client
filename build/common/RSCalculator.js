@@ -14,9 +14,48 @@
  */
 class RSCalculator {
 	constructor(universe) {
-		this.variableExpression = new RegExp("([a-z_]+)\.?([a-z_]+)?", "g");
-		this.securityExpression = /^[<>a-zA-Z0-9\(\)+-\/\* ]*$/;
+		this.variableExpression = new RegExp("([a-z_]+)\.?([a-z:_]+)?", "g");
+		this.securityExpression = new RegExp("^[<>a-zA-Z0-9\\(\\)+-\\/\\* ]*$");
+		this.reductionExpression = new RegExp("[ \\(\\)\\[\\]:-]+", "g");
+		this.trimLeadExpression = new RegExp("^_+");
+		this.trimEndExpression = new RegExp("_+$");
+	
 		this.universe = universe;
+		
+		/**
+		 * Serves to map short names for properties to their proper keys.
+		 * 
+		 * For instance "melee" should map to "skill:melee" in the case of that skill existing and
+		 * being named that way.
+		 * 
+		 * All skills are loaded from the universe and mapped using a lower case name with "_" between
+		 * spaces and parenthesis. Additionally "Ranged (Light)" would become "ranged_light" with the
+		 * trailing "_" trimmed and the " (" combination becoming one "_". 
+		 * @property skillMapping
+		 * @type Object
+		 */
+		this.skillMapping = {};
+		
+		this.universe.$on("universe:modified", this.updateSkillMappings);
+		this.universe.$on("initialized", this.updateSkillMappings);
+	}
+	
+	/**
+	 * 
+	 * @
+	 */
+	updateSkillMappings() {
+		var skill,
+			name,
+			x;
+		
+		if(this.universe && this.universe.indexes && this.universe.indexes.skill) {
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				skill = this.universe.indexes.skill.listing[x];
+				name = skill.name.replace(this.reductionExpression, "_").replace(this.trimLeadExpression, "").replace(this.trimEndExpression,"").toLowerCase();
+				this.skillMapping[name] = skill.propertyKey;
+			}
+		}
 	}
 
 	/**
@@ -42,6 +81,8 @@ class RSCalculator {
 	 * @return {Number} 
 	 */
 	process(expression, source, base, target) {
+		var variableExpression = new RegExp("([a-z_]+)\.?([a-z:_]+)?", "g");
+		
 //		console.log("Received Expression: ", expression, source, base, target);
 		if(!source) {
 			return expression;
@@ -53,39 +94,46 @@ class RSCalculator {
 		var processed = expression,
 			variables;
 		
-		while(variables = this.variableExpression.exec(expression)) {
-//			console.log("Var Calculation: ", expression, variables);
+		while(variables = variableExpression.exec(expression)) {
+			if(this.universe.debug) {
+				console.log("Var Calculation: ", expression, source, base, target, variables);
+			}
 			if(variables.length === 3 && variables[2] !== undefined && variables[2] !== null) {
 				switch(variables[1]) {
-					case "character":
-					case "entity":
 					case "source":
 						if(source) {
-							processed = processed.replace(variables[0], parseInt(source[variables[2]]) || 0);
+							processed = processed.replace(variables[0], parseInt(source[this.skillMapping[variables[2]] || variables[2]]) || 0);
 						} else {
-							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
+//							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
+							return expression;
 						}
 						break;
 					case "target":
 						if(target) {
 							processed = processed.replace(variables[0], parseInt(target[variables[2]]) || 0);
 						} else {
-							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
+//							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
+							return expression;
 						}
 						break;
+					case "character":
+					case "entity":
+					case "ship":
 					case "base":
 						if(base) {
 							processed = processed.replace(variables[0], parseInt(base[variables[2]]) || 0);
 						} else {
-							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
+//							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
+							return expression;
 						}
 						break;
 					default:
 						console.warn("Calculator - Unknown variable root", expression, variables);
+						return expression;
 				}
 			} else {
 				if(typeof(processed) === "string") {
-					processed = processed.replace(variables[0], parseInt(source[variables[1]]) || 0);
+					processed = processed.replace(variables[0], parseInt(source[this.skillMapping[variables[1]] || variables[1]]) || 0);
 				}
 			}
 		}
@@ -94,7 +142,6 @@ class RSCalculator {
 
 		if(expression && typeof(expression) === "string" && expression.length < 150 && this.securityExpression.test(expression)) {
 			try {
-//				console.warn("Calculated: " + expression, variables);
 				return eval(expression);
 			} catch(ignored) {
 				console.error("Exception[" + source.id + "]: " + expression + "\n", ignored);

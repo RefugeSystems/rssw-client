@@ -54,7 +54,8 @@
 			"custom",
 			"general",
 			"knowledge",
-			"piloting"
+			"piloting",
+			"subskill"
 		]
 	},
 	bases,

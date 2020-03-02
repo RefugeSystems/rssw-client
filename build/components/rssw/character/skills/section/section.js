@@ -64,7 +64,7 @@
 					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
 						roll.push("fas fa-dice-d12 rs-yellow");
 					} else {
-						roll.push("fas fa-dice-d8 rs-green rot45");
+						roll.push("fas fa-dice-d8 rs-green");
 					}
 				}
 				for (x = 0; x < this.character[skill.bonusKey]; x++) {

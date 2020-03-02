@@ -68,8 +68,12 @@
 			},
 			"state.paging": {
 				"deep": true,
-				"handler": function() {
-					this.update();
+				"handler": function(oV, nV) {
+					if( (oV && nV && oV.current !== nV.current)
+							|| (oV && !nV)
+							|| (!oV && nV)){ 
+						this.update();
+					}
 				}
 			}
 		},

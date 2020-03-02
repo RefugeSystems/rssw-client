@@ -39,6 +39,7 @@
 			data.instance = instance++;
 			data.customSkills = [];
 			data.levelSkills = [];
+			data.subSkills = [];
 			
 			return data;
 		},
@@ -131,7 +132,8 @@
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
-				var buffer,
+				var mapped = {},
+					buffer,
 					x;
 
 				this.customSkills.splice(0);
@@ -144,9 +146,10 @@
 				if(this.character.skill) {
 					for(x=0; x<this.character.skill.length; x++) {
 						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
-						if(buffer) {
+						if(buffer && !mapped[buffer.id]) {
 							this.customSkills.push(buffer);
 							this.levelSkills.push(buffer);
+							mapped[buffer.id] = true;
 						}
 					}
 				}

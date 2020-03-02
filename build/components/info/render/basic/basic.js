@@ -468,10 +468,11 @@
 			"prettifyPropertyValue": function(property, value, record, universe) {
 				if(this.record._calculated && this.record._calculated[property]) {
 					property = this.universe.calculateExpression(value, this.record, this.base, this.target);
+//					console.warn("Display: ", property, value, this.universe.calculateExpression(value, this.record, this.base, this.target));
 					if(property == value) {
-						return this.universe.calculateExpression(value, this.record, this.base, this.target);
+						return property;
 					} else {
-						return this.universe.calculateExpression(value, this.record, this.base, this.target) + " [ " + value + " ]";
+						return property + " [ " + value + " ]";
 					}
 				}
 				

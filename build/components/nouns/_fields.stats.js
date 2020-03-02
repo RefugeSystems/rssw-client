@@ -6,7 +6,27 @@
 		dataSource,
 		abilities,
 		effects,
-		skills;
+		skills,
+		ranges,
+		dice;
+	
+	ranges = [
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+	
+	dice = [
+		"proficiency",
+		"ability",
+		"boost",
+		"challenge",
+		"difficulty",
+		"setback",
+		"setforward"
+	];
 	
 	abilities = {
 		"label": "Abilities",
@@ -67,6 +87,11 @@
 	}, {
 		"label": "Pierce",
 		"property": "pierce_damage",
+		"type": "text"
+			
+	}, {
+		"label": "General Defense",
+		"property": "defense_general",
 		"type": "text"
 	}, {
 		"label": "Melee Defense",
@@ -187,13 +212,30 @@
 		},
 		"data": function() {
 			var data = {},
-				x;
+				x,
+				y;
 			
 			data.fields = this.fields || {};
 			data.fields.modifierstats = [];
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, dataSource);
+
 			
 			// TODO: Build Fields for Skills and Stats Dynamically
+			data.fields.modifierstats.push({
+				"label": "Combat Range Bonuses",
+				"property": "__crb",
+				"type": "label"
+			});
+			for(x=0; x<ranges.length; x++) {
+				for(y=0; y<dice.length; y++) {
+					data.fields.modifierstats.push({
+						"label": ranges[x].capitalize() + " Range " + dice[y],
+						"property": "range_" + ranges[x] + "_" + dice[y],
+						"type": "text"
+					});
+				}
+			}
+			
 			data.fields.modifierstats.push({
 				"label": "Attributes",
 				"property": "__attr",

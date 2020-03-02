@@ -18240,13 +18240,15 @@ Templify.install = function(Vue, options) {
 			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\" :class=\"$router.currentRoute.path.startsWith(navItem.highlight)?'current':''\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\" :class=\"navItem.class\">\r\n\t\t\t<button class=\"prefixed navigation-contents\" v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/nouns.html": return "<div class=\"rs-component component-nouns\" v-save=\"modify\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\t<span>Noun:</span>\r\n\t\t\t<select v-model=\"state.current\" v-on:change=\"broadcastModel()\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\t<span>Copy:</span>\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"object in availableToCopy\" :value=\"object.id\">{{labelNoun(object)}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<div class=\"simplified-editor\" v-if=\"!state.advanced_editor\">\r\n\t\t\t<rs-field v-for=\"field in fields[state.current]\" :root=\"state.building[state.current]\" :field=\"field\" v-on:changed=\"sync($event)\" :key=\"field.property\">\r\n\t\t\t\t<span slot=\"info\">\r\n\t\t\t\t\t<span v-if=\"field.property === 'icon'\" :class=\"state.building[state.current].icon\"></span>\r\n\t\t\t\t\t<button class=\"info-link random-name fas fa-random\" v-if=\"field.property === 'name' && hasGenerator()\" v-on:click=\"randomizeName()\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"info-link random-name fas fa-sync\" v-if=\"field.property === 'name' && hasGenerator()\" v-on:click=\"pullRandomName()\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"info-link fas fa-info-circle\" v-if=\"field.knowledge\" v-on:click=\"openKnowledge(field.knowledge)\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"clear-link flat fas fa-ban\" v-on:click=\"clearField(field)\" v-if=\"field.type !== 'label'\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</span>\r\n\t\t\t</rs-field>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"advanced-editor\" v-if=\"state.advanced_editor\">\r\n\t\t\t<textarea v-model=\"rawValue\" v-tab v-filedrop=\"fileAttach\">\r\n\t\t\t</textarea>\r\n\t\t\t<label v-if=\"state.current === 'image'\">\r\n\t\t\t\t<span>Select Image File:</span>\r\n\t\t\t\t<input type=\"file\" id=\"attacher\" accept=\"image/*\" v-on:change=\"selectImage($event)\" />\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"newObject()\">\r\n\t\t\t<span class=\"action-icon fas fa-file-plus\"></span>\r\n\t\t\t<span class=\"action-text\">New Object</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"dropObject()\" v-if=\"this.state.building[state.current] && this.state.building[state.current].id\">\r\n\t\t\t<span class=\"action-icon fas fa-trash\"></span>\r\n\t\t\t<span class=\"action-text\">Drop Object</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"toggleEditMode()\">\r\n\t\t\t<span class=\"action-icon far\" :class=\"state.advanced_editor?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t<span class=\"action-text\">Advanced Editor</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "components/rssw/career/display.html": return "<div class=\"career-information\">\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t<div class=\"\">\r\n\t\t<span>Classification:</span>\r\n\t\t<span>{{record.classification}}</span>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fal fa-location\"></span>\r\n\t\t\t\t<span>Damage</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{damage}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\">\r\n\t\t\t\t<span class=\"ra ra-cracked-shield\"></span>\r\n\t\t\t\t<span>Damage</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else>\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\">\r\n\t\t\t\t<span class=\"ra ra-reactor\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else>\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('injury')\">\r\n\t\t\t\t<span class=\"ra ra-bleeding-hearts\"></span>\r\n\t\t\t\t<span>Injury</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"injury\">\r\n\t\t\t\t\t\t\t<option :value=\"0\">None</option>\r\n\t\t\t\t\t\t\t<option v-for=\"value in injuryValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\" v-on:click=\"infoStat('wounds:building')\">\r\n\t\t\t\t<span class=\"ra ra-cracked-shield\"></span>\r\n\t\t\t\t<span>Damage</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else v-on:click=\"infoStat('wounds:character')\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\" v-on:click=\"infoStat('strain:building')\">\r\n\t\t\t\t<span class=\"ra ra-reactor\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else v-on:click=\"infoStat('strain:character')\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('soak')\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('defense:ranged')\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('defense:melee')\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/display.html": return "<div class=\"character-information\">\r\n\t<div class=\"flow-h\">\r\n\t\t<div class=\"stat brawn flow-v centered\">\r\n\t\t\t<span>Brawn</span>\r\n\t\t\t<span>{{record.brawn}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"stat agility flow-v centered\">\r\n\t\t\t<span>Agility</span>\r\n\t\t\t<span>{{record.agility}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/history.html": return "<div class=\"rs-component rssw component-entity-history\">\r\n\t<h2>History</h2>\r\n\t<div class=\"history\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry\" v-for=\"entry in history\">\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && (universe.indexes[entry.modified] || entry.modified === 'inside')\" class=\"message\">\r\n\t\t\t\t\t<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.previous]?universe.indexes.entity.index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<span>to</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.current]?universe.indexes.entity.index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && !universe.indexes[entry.modified] && entry.modified !== 'inside'\" class=\"message\">\r\n\t\t\t\t\t<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_gain'\" class=\"message\">\r\n\t\t\t\t\t<span>Gained Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_loss'\" class=\"message\">\r\n\t\t\t\t\t<span>Lost Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_acquired_or_loss'\" class=\"message\">\r\n\t\t\t\t\t<div>{{entry.modified.capitalize()}} Changed.</div>\r\n\t\t\t\t\t<div class=\"gained\" v-if=\"entry.report.gained.length\">\r\n\t\t\t\t\t\t<span>Gained:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.gained\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"loss\" v-if=\"entry.report.loss.length\">\r\n\t\t\t\t\t\t<span>Loss:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.loss\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"time\" :title=\"entry._timeString\">{{entry._dateString}}</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"exitEntity(inside)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"piloting\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Piloting:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(piloting)\">\r\n\t\t\t<span class=\"value\">{{piloting.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"stopPiloting(piloting)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"exitEntity(inside)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"piloting\">\r\n\t\t<span class=\"icon\" :class=\"piloting.icon\"></span>\r\n\t\t<span class=\"label\">Piloting:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(piloting)\">\r\n\t\t\t<span class=\"value\">{{piloting.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"stopPiloting(piloting)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/journal.html": return "<div class=\"rs-component rssw component-entity-journal\">\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"isVisible(skill)\" v-on:click=\"skillTouched(skill)\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"naming base\">\r\n\t\t\t\t{{(skill.base?skill.base:\"ERR\").capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
-			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-drafting-compass\"></span>\r\n\t\t\t\t\t<span>Subskills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"subskill\" :existing=\"subSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"skillTouched(stat)\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Stat ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t</button>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"noIncrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\r\n\t\r\n\t<div class=\"report\" v-if=\"equipped.length\">\r\n\t\t<h3>Equipped Weapons</h3>\r\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\r\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"damage band flex v element\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll align-center\">\r\n\t\t\t\t\t{{getWeaponDamage(item)}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"range band flex v element\" v-for=\"band in rangeBands\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\r\n\t\t\t\t<div class=\"name\">\r\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"report\" v-if=\"items.length\">\r\n\t\t<h3>Unequipped Weapons</h3>\r\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\r\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"damage band flex v element\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll align-center\">\r\n\t\t\t\t\t{{getWeaponDamage(item)}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"range band flex v element\" v-for=\"band in rangeBands\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\r\n\t\t\t\t<div class=\"name\">\r\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex h\">\r\n\t\t<h3>Equipment</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'short'\" class=\"slots flex h centered\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex v\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex h\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/entity/knowledge.html": return "<div class=\"rs-component rssw component-entity-knowledge\">\r\n\t<h2>\r\n\t\t<span>Knowledge</span>\r\n\t\t<button v-on:click=\"resetHeaders\" class=\"rs-light-blue rsbg-transparent flat\">\r\n\t\t\t<span class=\"far fa-sync\"></span>\r\n\t\t</button>\r\n\t</h2>\r\n\t<div class=\"knowledge-container\">\r\n\t\t<div class=\"controls flex h\">\r\n\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"knowledge\" :state=\"state\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t</div>\r\n\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"knowledge\" :headers=\"state.headers\" :state=\"state\" v-on:selected=\"showInfo($event, entity)\"></rs-table>\r\n\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"knowledge\" :state=\"state\"></rs-table-paging>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship/inside.html": return "<div class=\"rs-component rssw component-entity-inside\">\r\n\t<h2 class=\"title-info\">\r\n\t\t<span>Entities Inside</span>\r\n\t\t<span v-if=\"entity.required_crew\" class=\"title-readout\" :class=\"getCountClass()\">\r\n\t\t\t<span class=\"rs-white\">(</span>\r\n\t\t\t<span>{{crew}}</span>\r\n\t\t\t<span class=\"rs-white\">/</span>\r\n\t\t\t<span title=\"Minimum number of Crew required to fully operate this ship\">{{entity.required_crew}}</span>\r\n\t\t\t<span v-if=\"entity.maximum_crew\">\r\n\t\t\t\t<span class=\"rs-white\">[</span>\r\n\t\t\t\t<span title=\"Maximum number of Crew that fit in this ship\">{{entity.maximum_crew}}</span>\r\n\t\t\t\t<span class=\"rs-white\">]</span>\r\n\t\t\t</span>\r\n\t\t\t\r\n\t\t\t<span class=\"rs-white\">)</span>\r\n\t\t</span>\r\n\t</h2>\r\n\t<div class=\"entitites\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry flow-h\" v-for=\"entry in entities\">\r\n\t\t\t\t<button class=\"entity flow-h\" v-on:click=\"showInfo(entry)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<span class=\"entity\" v-else>\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<button class=\"exit-ship flow-h\" v-on:click=\"moveEntity(entry.id, null)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t\t\t<span>Exit Ship</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"board\">\r\n\t\t<div class=\"label\">\r\n\t\t\tBring Entity on Board\r\n\t\t</div>\r\n\t\t<div>\r\n\t\t\t<select v-model=\"moving\" v-on:change=\"moveEntity(moving, entity.id)\">\r\n\t\t\t\t<option value=\"\">Select Entity...</option>\r\n\t\t\t\t<option v-for=\"e in availableEntities\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -21074,9 +21076,48 @@ rsSystem.Router = new VueRouter({
  */
 class RSCalculator {
 	constructor(universe) {
-		this.variableExpression = new RegExp("([a-z_]+)\.?([a-z_]+)?", "g");
-		this.securityExpression = /^[<>a-zA-Z0-9\(\)+-\/\* ]*$/;
+		this.variableExpression = new RegExp("([a-z_]+)\.?([a-z:_]+)?", "g");
+		this.securityExpression = new RegExp("^[<>a-zA-Z0-9\\(\\)+-\\/\\* ]*$");
+		this.reductionExpression = new RegExp("[ \\(\\)\\[\\]:-]+", "g");
+		this.trimLeadExpression = new RegExp("^_+");
+		this.trimEndExpression = new RegExp("_+$");
+	
 		this.universe = universe;
+		
+		/**
+		 * Serves to map short names for properties to their proper keys.
+		 * 
+		 * For instance "melee" should map to "skill:melee" in the case of that skill existing and
+		 * being named that way.
+		 * 
+		 * All skills are loaded from the universe and mapped using a lower case name with "_" between
+		 * spaces and parenthesis. Additionally "Ranged (Light)" would become "ranged_light" with the
+		 * trailing "_" trimmed and the " (" combination becoming one "_". 
+		 * @property skillMapping
+		 * @type Object
+		 */
+		this.skillMapping = {};
+		
+		this.universe.$on("universe:modified", this.updateSkillMappings);
+		this.universe.$on("initialized", this.updateSkillMappings);
+	}
+	
+	/**
+	 * 
+	 * @
+	 */
+	updateSkillMappings() {
+		var skill,
+			name,
+			x;
+		
+		if(this.universe && this.universe.indexes && this.universe.indexes.skill) {
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				skill = this.universe.indexes.skill.listing[x];
+				name = skill.name.replace(this.reductionExpression, "_").replace(this.trimLeadExpression, "").replace(this.trimEndExpression,"").toLowerCase();
+				this.skillMapping[name] = skill.propertyKey;
+			}
+		}
 	}
 
 	/**
@@ -21102,6 +21143,8 @@ class RSCalculator {
 	 * @return {Number} 
 	 */
 	process(expression, source, base, target) {
+		var variableExpression = new RegExp("([a-z_]+)\.?([a-z:_]+)?", "g");
+		
 //		console.log("Received Expression: ", expression, source, base, target);
 		if(!source) {
 			return expression;
@@ -21113,39 +21156,46 @@ class RSCalculator {
 		var processed = expression,
 			variables;
 		
-		while(variables = this.variableExpression.exec(expression)) {
-//			console.log("Var Calculation: ", expression, variables);
+		while(variables = variableExpression.exec(expression)) {
+			if(this.universe.debug) {
+				console.log("Var Calculation: ", expression, source, base, target, variables);
+			}
 			if(variables.length === 3 && variables[2] !== undefined && variables[2] !== null) {
 				switch(variables[1]) {
-					case "character":
-					case "entity":
 					case "source":
 						if(source) {
-							processed = processed.replace(variables[0], parseInt(source[variables[2]]) || 0);
+							processed = processed.replace(variables[0], parseInt(source[this.skillMapping[variables[2]] || variables[2]]) || 0);
 						} else {
-							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
+//							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
+							return expression;
 						}
 						break;
 					case "target":
 						if(target) {
 							processed = processed.replace(variables[0], parseInt(target[variables[2]]) || 0);
 						} else {
-							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
+//							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
+							return expression;
 						}
 						break;
+					case "character":
+					case "entity":
+					case "ship":
 					case "base":
 						if(base) {
 							processed = processed.replace(variables[0], parseInt(base[variables[2]]) || 0);
 						} else {
-							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
+//							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
+							return expression;
 						}
 						break;
 					default:
 						console.warn("Calculator - Unknown variable root", expression, variables);
+						return expression;
 				}
 			} else {
 				if(typeof(processed) === "string") {
-					processed = processed.replace(variables[0], parseInt(source[variables[1]]) || 0);
+					processed = processed.replace(variables[0], parseInt(source[this.skillMapping[variables[1]] || variables[1]]) || 0);
 				}
 			}
 		}
@@ -21154,7 +21204,6 @@ class RSCalculator {
 
 		if(expression && typeof(expression) === "string" && expression.length < 150 && this.securityExpression.test(expression)) {
 			try {
-//				console.warn("Calculated: " + expression, variables);
 				return eval(expression);
 			} catch(ignored) {
 				console.error("Exception[" + source.id + "]: " + expression + "\n", ignored);
@@ -22577,133 +22626,215 @@ rsSystem.component("RSSWStats", {
  * @constructor
  * @module Components
  */
-rsSystem.component("RSComponentUtility", {
-	"inherit": true,
-	"mixins": [
-	],
-	"props": {
-	},
-	"computed": {
-	},
-	"watch": {
-	},
-	"methods": {
-		"showInfo": function(view, base, target) {
-			if(view && view.id && this.isOwner(view)) {
-				rsSystem.EventBus.$emit("display-info", {
-					"target": target,
-					"record": view,
-					"base": base
-				});
-			}
+
+(function() {
+	var dice = {};
+	dice.proficiency = "fas fa-dice-d12 rs-yellow";
+	dice.ability = "fas fa-dice-d8 rs-green";
+	dice.boost = "fas fa-dice-d6 rs-color";
+	dice.challenge = "fas fa-dice-d12 rs-red";
+	dice.difficulty = "fas fa-dice-d8 rs-purple";
+	dice.setback = "fas fa-dice-d6 rs-black";
+	dice.setforward = "fas fa-dice-d6 rs-white";
+	
+	/**
+	 * Listed in render order
+	 * @property diceTypes
+	 * @type Array
+	 * @private
+	 * @static
+	 */
+	var diceTypes = [
+		"proficiency",
+		"ability",
+		"boost",
+		"challenge",
+		"difficulty",
+		"setback",
+		"setforward"
+	];
+	
+	rsSystem.component("RSComponentUtility", {
+		"inherit": true,
+		"mixins": [
+		],
+		"props": {
 		},
-		"isOwner": function(record, player) {
-			player = this.player || player;
-			
-			if(player.master) {
-				return true;
-			}
-			
-			if(record.owner === this.player.id) {
-				return true;
-			} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
-				return true;
-			} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
-				return true;
-			} else {
-				return false;
-			}
+		"computed": {
 		},
-		/**
-		 * Compare to lists and find the first matched occurrence. Used primarily for comparing
-		 * itemtype lists for agreement. 
-		 * @method sharesOne
-		 * @param {Array} corpus The list of Strings with which to start.
-		 * @param {Array} compare The list of Strings against which to compare.
-		 * @return The first element found that occurs in both lists or null if
-		 * 		no shared element is found.
-		 */
-		"sharesOne": function(corpus, compare) {
-			var x, y;
-			for(x=0; x<corpus.length; x++) {
-				for(y=0; y<compare.length; y++) {
-					if(corpus[x] === compare[y]) {
-						return corpus[x];
+		"watch": {
+		},
+		"methods": {
+			"getDice": function(skill, entity) {
+				return this.renderRoll(this.getSkillRoll(skill, entity));
+			},
+			"getSkillRoll": function(skill, entity) {
+				var roll = {},
+					x;
+
+				roll.proficiency = 0;
+				roll.ability = 0;
+				roll.boost = 0;
+				roll.challenge = 0;
+				roll.difficulty = 0;
+				roll.setback = 0;
+				roll.setfoward = 0;
+				
+				entity = entity || this.entity;
+				if(typeof(entity) === "string") {
+					skill = this.universe.indexes.entity.lookup[skill];
+				}
+				if(typeof(skill) === "string") {
+					skill = this.universe.indexes.skill.lookup[skill];
+				}
+				
+				if(skill && entity) {
+					for(x=0; x<entity[skill.base] || x<entity[skill.propertyKey]; x++) {
+						if(x<entity[skill.base] && x<entity[skill.propertyKey]) {
+							++roll.proficiency;
+						} else {
+							++roll.ability;
+						}
+					}
+					for(x=0; x<entity[skill.bonusKey]; x++) {
+						++roll.boost;
 					}
 				}
-			}
-			
-			return null;
-		},
-		/**
-		 * 
-		 * @method uniqueByID
-		 * @param {Array} corpus The array to clean.
-		 * @return {Array} The passed array that is now cleaned.
-		 */
-		"uniqueByID": function(corpus) {
-			if(!corpus) {
-				return corpus;
-			}
-			
-			var track = {},
-				x;
-			
-			for(x=corpus.length-1; 0<=x; x--) {
-				if(track[corpus[x].id]) {
-					corpus.splice(x, 1);
+				
+				return roll;
+			},
+			"renderRoll": function(roll) {
+				var rendering = [],
+					r,
+					x;
+
+				for(r=0; r<diceTypes.length; r++) {
+					for(x=0; roll[diceTypes[r]] && x<roll[diceTypes[r]]; x++) {
+						rendering.push(dice[diceTypes[r]]);
+					}
+				}
+
+				return rendering;
+			},
+			"showInfo": function(view, base, target) {
+				if(view && view.id && this.isOwner(view)) {
+					if(!base && this.entity) {
+						base = this.entity;
+					}
+					rsSystem.EventBus.$emit("display-info", {
+						"target": target,
+						"record": view,
+						"base": base
+					});
+				}
+			},
+			"isOwner": function(record, player) {
+				player = this.player || player;
+				
+				if(player.master) {
+					return true;
+				}
+				
+				if(record.owner === this.player.id) {
+					return true;
+				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
+					return true;
+				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
+					return true;
 				} else {
-					track[corpus[x].id] = true;
+					return false;
 				}
-			}
-			
-			return corpus;
-		},
-		"sortData": function(a, b) {
-			var aName,
-				bName;
-			
-			if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
-				if(a.order < b.order) {
+			},
+			/**
+			 * Compare to lists and find the first matched occurrence. Used primarily for comparing
+			 * itemtype lists for agreement. 
+			 * @method sharesOne
+			 * @param {Array} corpus The list of Strings with which to start.
+			 * @param {Array} compare The list of Strings against which to compare.
+			 * @return The first element found that occurs in both lists or null if
+			 * 		no shared element is found.
+			 */
+			"sharesOne": function(corpus, compare) {
+				var x, y;
+				for(x=0; x<corpus.length; x++) {
+					for(y=0; y<compare.length; y++) {
+						if(corpus[x] === compare[y]) {
+							return corpus[x];
+						}
+					}
+				}
+				
+				return null;
+			},
+			/**
+			 * 
+			 * @method uniqueByID
+			 * @param {Array} corpus The array to clean.
+			 * @return {Array} The passed array that is now cleaned.
+			 */
+			"uniqueByID": function(corpus) {
+				if(!corpus) {
+					return corpus;
+				}
+				
+				var track = {},
+					x;
+				
+				for(x=corpus.length-1; 0<=x; x--) {
+					if(track[corpus[x].id]) {
+						corpus.splice(x, 1);
+					} else {
+						track[corpus[x].id] = true;
+					}
+				}
+				
+				return corpus;
+			},
+			"sortData": function(a, b) {
+				var aName,
+					bName;
+				
+				if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
+					if(a.order < b.order) {
+						return -1;
+					} else if(a.order > b.order) {
+						return 1;
+					}
+				}
+				if((a.order === undefined || a.order === null) && b.order !== undefined && b.order !== null) {
 					return -1;
-				} else if(a.order > b.order) {
+				}
+				if((b.order === undefined || b.order === null) && a.order !== undefined && a.order !== null) {
 					return 1;
 				}
-			}
-			if((a.order === undefined || a.order === null) && b.order !== undefined && b.order !== null) {
-				return -1;
-			}
-			if((b.order === undefined || b.order === null) && a.order !== undefined && a.order !== null) {
-				return 1;
-			}
 
-			if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {
-				aName = a.name.toLowerCase();
-				bName = b.name.toLowerCase();
-				if(aName < bName) {
+				if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {
+					aName = a.name.toLowerCase();
+					bName = b.name.toLowerCase();
+					if(aName < bName) {
+						return -1;
+					} else if(aName > bName) {
+						return 1;
+					}
+				}
+				if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
 					return -1;
-				} else if(aName > bName) {
+				}
+				if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
 					return 1;
 				}
-			}
-			if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
-				return -1;
-			}
-			if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
-				return 1;
-			}
 
-			if(a.id < b.id) {
-				return -1;
-			} else if(a.id > b.id) {
-				return 1;
+				if(a.id < b.id) {
+					return -1;
+				} else if(a.id > b.id) {
+					return 1;
+				}
+				
+				return 0;
 			}
-			
-			return 0;
 		}
-	}
-});
-
+	});	
+})();
 
 /**
  * 
@@ -26208,23 +26339,27 @@ rsSystem.component("rsCards", {
 					}
 				}
 				
-				if(toView && (!this.viewing || toView.id !== this.viewing.id)) {
-					if(this.viewing) {
-						if(!this.history.length || (this.viewing.id !== toView.id)) {
-							this.history.unshift(this.viewing);
-						} else {
-							console.warn("Repeated Shift? ", this.viewing.id);
+				if(toView) {
+					if(!this.viewing || toView.id !== this.viewing.id) {
+						if(this.viewing) {
+							if(!this.history.length || (this.viewing.id !== toView.id)) {
+								this.history.unshift(this.viewing);
+							} else {
+								console.warn("Repeated Shift? ", this.viewing.id);
+							}
+							if(this.viewing.$off) {
+								this.viewing.$off("modified", this.update);
+							}
 						}
-						if(this.viewing.$off) {
-							this.viewing.$off("modified", this.update);
+						
+						Vue.set(this, "viewing", toView);
+						Vue.set(this, "open", true);
+	
+						if(this.viewing.$on) {
+							this.viewing.$on("modified", this.update);
 						}
-					}
-					
-					Vue.set(this, "viewing", toView);
-					Vue.set(this, "open", true);
-
-					if(this.viewing.$on) {
-						this.viewing.$on("modified", this.update);
+					} else if(toView.id === this.viewing.id) {
+						this.closeInfo();
 					}
 				}
 				
@@ -26875,10 +27010,11 @@ rsSystem.component("rsCards", {
 			"prettifyPropertyValue": function(property, value, record, universe) {
 				if(this.record._calculated && this.record._calculated[property]) {
 					property = this.universe.calculateExpression(value, this.record, this.base, this.target);
+//					console.warn("Display: ", property, value, this.universe.calculateExpression(value, this.record, this.base, this.target));
 					if(property == value) {
-						return this.universe.calculateExpression(value, this.record, this.base, this.target);
+						return property;
 					} else {
-						return this.universe.calculateExpression(value, this.record, this.base, this.target) + " [ " + value + " ]";
+						return property + " [ " + value + " ]";
 					}
 				}
 				
@@ -28427,6 +28563,45 @@ rsSystem.component("rsCards", {
 		"label": "Credits",
 		"property": "credits",
 		"type": "number"
+	}, {
+		"label": "Silhouette",
+		"property": "silhouette",
+		"type": "select",
+		"raw": true,
+		"options": [
+			0,
+			1,
+			2,
+			3,
+			4,
+			5,
+			6,
+			7,
+			8,
+			9,
+			10,
+			11,
+			12,
+			13,
+			14,
+			15,
+			16,
+			17,
+			18,
+			19,
+			20,
+			25,
+			30,
+			35,
+			40,
+			45,
+			50,
+			60,
+			70,
+			80,
+			90,
+			100
+		]
 	}, {
 		"label": "Classification",
 		"property": "classification",
@@ -30065,7 +30240,8 @@ rsSystem.component("rsCards", {
 			"custom",
 			"general",
 			"knowledge",
-			"piloting"
+			"piloting",
+			"subskill"
 		]
 	},
 	bases,
@@ -30209,6 +30385,10 @@ rsSystem.component("rsCards", {
 	attrs,
 	stats,
 	{
+		"label": "Combat Slot",
+		"property": "combat_slot",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -30264,7 +30444,27 @@ rsSystem.component("rsCards", {
 		dataSource,
 		abilities,
 		effects,
-		skills;
+		skills,
+		ranges,
+		dice;
+	
+	ranges = [
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+	
+	dice = [
+		"proficiency",
+		"ability",
+		"boost",
+		"challenge",
+		"difficulty",
+		"setback",
+		"setforward"
+	];
 	
 	abilities = {
 		"label": "Abilities",
@@ -30325,6 +30525,11 @@ rsSystem.component("rsCards", {
 	}, {
 		"label": "Pierce",
 		"property": "pierce_damage",
+		"type": "text"
+			
+	}, {
+		"label": "General Defense",
+		"property": "defense_general",
 		"type": "text"
 	}, {
 		"label": "Melee Defense",
@@ -30445,13 +30650,30 @@ rsSystem.component("rsCards", {
 		},
 		"data": function() {
 			var data = {},
-				x;
+				x,
+				y;
 			
 			data.fields = this.fields || {};
 			data.fields.modifierstats = [];
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, dataSource);
+
 			
 			// TODO: Build Fields for Skills and Stats Dynamically
+			data.fields.modifierstats.push({
+				"label": "Combat Range Bonuses",
+				"property": "__crb",
+				"type": "label"
+			});
+			for(x=0; x<ranges.length; x++) {
+				for(y=0; y<dice.length; y++) {
+					data.fields.modifierstats.push({
+						"label": ranges[x].capitalize() + " Range " + dice[y],
+						"property": "range_" + ranges[x] + "_" + dice[y],
+						"type": "text"
+					});
+				}
+			}
+			
 			data.fields.modifierstats.push({
 				"label": "Attributes",
 				"property": "__attr",
@@ -31232,13 +31454,17 @@ class FieldDescriptor {
 	    "wounds_max",
 	    "strain",
 	    "strain_max",
+	    "defense_general",
 	    "defense_range",
-	    "defense_melee"
+	    "defense_melee",
+	    "injury"
 	    ];
 	
 	
 	var highValues = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
 	var lowValues = [-2,-1,0,1,2,3,4,5,6,7,8,9,10];
+	
+	var injuryValues = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151];
 
 	rsSystem.component("rsswCharacterBoard", {
 		"inherit": true,
@@ -31256,6 +31482,7 @@ class FieldDescriptor {
 			var data = {},
 				x;
 
+			data.injuryValues = injuryValues;
 			data.highValues = highValues;
 			data.lowValues = lowValues;
 			for(x=0; x<keys.length; x++) {
@@ -31279,9 +31506,20 @@ class FieldDescriptor {
 				this.character.commit({
 					"strain": nV
 				});
+			},
+			"injury": function(nV, oV) {
+				this.character.commit({
+					"injury": nV
+				});
 			}
 		},
 		"methods": {
+			"infoStat": function(stat) {
+				rsSystem.EventBus.$emit("display-info", {
+					"source": this.character,
+					"record": "knowledge:stat:" + stat
+				});
+			},
 			"setStat": function() {
 				
 			},
@@ -31292,7 +31530,14 @@ class FieldDescriptor {
 				for(x=0; x<keys.length; x++) {
 					Vue.set(this, keys[x], this.character[keys[x]] || 0);
 				}
+				
 				Vue.set(this, "soak", this.soak + this.character.brawn);
+				if(this.defense_general > this.defense_range) {
+					Vue.set(this, "defense_range", this.defense_general);
+				}
+				if(this.defense_general > this.defense_melee) {
+					Vue.set(this, "defense_melee", this.defense_general);
+				}
 			}
 		},
 		"beforeDestroy": function() {
@@ -31759,6 +32004,96 @@ class FieldDescriptor {
 	});
 })();
 
+
+/**
+ * 
+ * 
+ * @class rsswEntityJournal
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_journalComponentKey";
+	
+	rsSystem.component("rsswEntityJournal", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.storageKeyID = storageKey + this.character.id;
+	
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+			
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.character.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"toggleDescription": function() {
+				if(this.state.viewing) {
+					Vue.set(this.state, "viewing", false);
+				} else {
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
+					Vue.set(this.state, "viewing", true);
+				}
+			},
+			"changed": function(property, value) {
+				var change = {};
+				change[property] = value;
+				this.character.commit(change);
+			},
+			"update": function() {
+				var buffer,
+					x;
+				
+				if(this.character.description) {
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/info.html")
+	});
+})();
+
 /**
  * 
  * 
@@ -31825,7 +32160,7 @@ class FieldDescriptor {
 					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
 						roll.push("fas fa-dice-d12 rs-yellow");
 					} else {
-						roll.push("fas fa-dice-d8 rs-green rot45");
+						roll.push("fas fa-dice-d8 rs-green");
 					}
 				}
 				for (x = 0; x < this.character[skill.bonusKey]; x++) {
@@ -31909,6 +32244,7 @@ class FieldDescriptor {
 			data.instance = instance++;
 			data.customSkills = [];
 			data.levelSkills = [];
+			data.subSkills = [];
 			
 			return data;
 		},
@@ -32001,7 +32337,8 @@ class FieldDescriptor {
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
-				var buffer,
+				var mapped = {},
+					buffer,
 					x;
 
 				this.customSkills.splice(0);
@@ -32014,9 +32351,10 @@ class FieldDescriptor {
 				if(this.character.skill) {
 					for(x=0; x<this.character.skill.length; x++) {
 						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
-						if(buffer) {
+						if(buffer && !mapped[buffer.id]) {
 							this.customSkills.push(buffer);
 							this.levelSkills.push(buffer);
+							mapped[buffer.id] = true;
 						}
 					}
 				}
@@ -32119,6 +32457,192 @@ rsSystem.component("rsswCharacterStats", {
 	},
 	"template": Vue.templified("components/rssw/character/stats.html")
 });
+
+
+/**
+ * 
+ * 
+ * @class rsswEntityWeapons
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_weaponsComponentKey:";
+	
+	var rangeType = "itemtype:rangedweapon",
+		meleeType = "itemtype:meleeweapon";
+	
+	var rangeBands = [
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+	
+	var rangeBandDifficulty = {
+		"engaged": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"short": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"medium": {
+			"difficulty": 2,
+			"challenge": 0,
+			"setback": 0
+		},
+		"long": {
+			"difficulty": 3,
+			"challenge": 0,
+			"setback": 0
+		},
+		"extreme": {
+			"difficulty": 4,
+			"challenge": 0,
+			"setback": 0
+		}
+	};
+	
+	rsSystem.component("rsswEntityWeapons", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.storageKeyID = storageKey + this.entity.id;
+	
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+			
+			data.rangeBands = rangeBands;
+			data.equipped = [];
+			data.items = [];
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.entity.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"getAttackDice": function(item) {
+				var pool = this.getSkillRoll(item.skill_check);
+				
+				// TODO: Compute?
+				
+				return this.renderRoll(pool);
+			},
+			"getWeaponDamage": function(item) {
+				var damage;
+				if(item.damage) {
+					damage = this.universe.calculateExpression(item.damage, item, this.entity);
+				} else {
+					damage = 0;
+				}
+				return damage;
+			},
+			"getRangeBandDifficulty": function(item, band) {
+				var pool = Object.assign({}, rangeBandDifficulty[band]);
+				
+				// TODO: Compute?
+				switch(band) {
+					case "engaged":
+						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
+							pool.difficulty = (pool.difficulty || 0) + 2;
+						}
+						break;
+				}
+				
+				
+				return this.renderRoll(pool);
+			},
+			"update": function() {
+				var mapped = {},
+					buffer,
+					item,
+					keys,
+					slot,
+					i,
+					x;
+
+				this.equipped.splice(0);
+				this.items.splice(0);
+				
+				if(this.entity.equipped && this.entity.equipped.item) {
+					keys = Object.keys(this.entity.equipped.item);
+					
+					for(x=0; x<keys.length; x++) {
+						slot = this.universe.indexes.slot.lookup[keys[x]];
+						if(slot && slot.combat_slot && this.entity.equipped.item[slot.id] && this.entity.equipped.item[slot.id].length) {
+							for(i=0; i<this.entity.equipped.item[slot.id].length; i++) {
+								item = this.universe.indexes.item.lookup[this.entity.equipped.item[slot.id][i]];
+								if(item && !mapped[item.id]) {
+									this.equipped.push(item);
+									mapped[item.id] = true;
+								} else {
+									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
+								}
+							}
+						} else {
+							console.warn("Unknown or Non-Combat Equipment Slot? " + keys[x], slot, this.entity);
+						}
+					}
+				}
+				
+				if(this.entity.item && this.entity.item.length) {
+					for(x=0; x<this.entity.item.length; x++) {
+						item = this.universe.indexes.item.lookup[this.entity.item[x]];
+						if(item && item.damage && !mapped[item.id]) {
+							this.items.push(item);
+						}
+					}
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.entity.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/weapons.html")
+	});
+})();
 
 
 /**
@@ -33436,8 +33960,12 @@ rsSystem.component("rsswCharacterStats", {
 			},
 			"state.paging": {
 				"deep": true,
-				"handler": function() {
-					this.update();
+				"handler": function(oV, nV) {
+					if( (oV && nV && oV.current !== nV.current)
+							|| (oV && !nV)
+							|| (!oV && nV)){ 
+						this.update();
+					}
 				}
 			}
 		},
@@ -34708,6 +35236,11 @@ rsSystem.component("RSSWCharacter", {
 				this.widgets.push({
 		            "declaration": "rsswCharacterStats",
 		            "sid": "entity:stats:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswEntityWeapons",
+		            "sid": "entity:weapons:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({

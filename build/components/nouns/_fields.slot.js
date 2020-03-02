@@ -90,6 +90,10 @@
 	attrs,
 	stats,
 	{
+		"label": "Combat Slot",
+		"property": "combat_slot",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"

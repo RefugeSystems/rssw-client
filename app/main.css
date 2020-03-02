@@ -112,7 +112,7 @@
 .rs-component .flow-v.middled,
 .rs-component .flow-v.middled,
 .rs-component .flex.v.middled {
-  align-content: center;
+  justify-content: center;
 }
 .rs-component .flow-v.inline,
 .rs-component .flow-v.inline,
@@ -405,6 +405,10 @@
 .system-component .rs-black,
 .rs-component .rs-black {
   color: #000000 !important;
+}
+.system-component .rs-black-visible,
+.rs-component .rs-black-visible {
+  color: #332f2f !important;
 }
 .system-component .rs-transparent,
 .rs-component .rs-transparent {
@@ -1148,6 +1152,7 @@ form {
   display: flex;
   flex-direction: row;
   top: 0px;
+  z-index: 20;
 }
 .system-component.system-info .main-bar .titling {
   display: flex;
@@ -1644,6 +1649,57 @@ form {
   max-height: 550px;
   max-width: inherit;
 }
+.rs-component.rssw.component-entity-journal a {
+  cursor: pointer;
+}
+.rs-component.rssw.component-entity-journal .property {
+  max-width: 550px;
+  color: #EAEFF9;
+  margin: 3px;
+}
+.rs-component.rssw.component-entity-journal .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
+}
+.rs-component.rssw.component-entity-journal .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-entity-journal .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-entity-journal .property-action {
+  color: #FF9560;
+  font-size: 0.9em;
+}
+.rs-component.rssw.component-entity-journal .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-entity-journal button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-entity-journal button.action {
+  color: white;
+}
+.rs-component.rssw.component-entity-journal .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
+.rs-component.rssw.component-entity-journal .text-container textarea {
+  width: 510px;
+  height: 300px;
+  max-height: 550px;
+  max-width: inherit;
+}
 .leveling {
   margin: 3px 0px;
 }
@@ -1750,6 +1806,31 @@ form {
 .rs-component.rssw.component-character-stats .stats .stat .value {
   color: #000000;
   font-size: 20px;
+}
+.rs-component.rssw.component-entity-weapons .weapon-report {
+  margin-bottom: 6px;
+  min-height: 40px;
+}
+.rs-component.rssw.component-entity-weapons .element {
+  padding: 0px 5px;
+}
+.rs-component.rssw.component-entity-weapons .name {
+  margin-top: 5px;
+}
+.rs-component.rssw.component-entity-weapons .icon {
+  min-width: 40px;
+  min-height: 40px;
+  line-height: 40px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-entity-weapons .band {
+  border-left: 3px solid #EAEFF9;
+}
+.rs-component.rssw.component-entity-weapons .roll {
+  margin: 5px 0px;
+}
+.rs-component.rssw.component-entity-weapons .roll .dice {
+  margin: 0px 2px;
 }
 .rs-component.rssw.component-entity-equipment.short {
   width: 300px;
