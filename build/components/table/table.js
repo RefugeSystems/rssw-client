@@ -66,12 +66,11 @@
 					this.update();
 				}
 			},
-			"state.paging": {
+			"state.paging.current": {
 				"deep": true,
-				"handler": function(oV, nV) {
-					if( (oV && nV && oV.current !== nV.current)
-							|| (oV && !nV)
-							|| (!oV && nV)){ 
+				"handler": function(nV) {
+					if(this.state.paging.tracked !== nV) {
+						this.state.paging.tracked = nV;
 						this.update();
 					}
 				}
@@ -145,7 +144,7 @@
 			"update": function() {
 				this.corpus.splice(0);
 				this.index.list(this.state.filter, this.state, this.corpus);
-				this.$forceUpdate();
+//				this.$forceUpdate();
 			}
 		},
 		"beforeDestroy": function() {

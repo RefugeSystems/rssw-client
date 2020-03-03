@@ -414,6 +414,9 @@
 .rs-component .rs-transparent {
   color: transparent !important;
 }
+.swg:before {
+  font-size: 1.25em;
+}
 h1,
 h2,
 h3,

@@ -40,9 +40,19 @@
 		],
 		"props": {
 		},
+		"data": function() {
+			var data = {};
+			
+			data.diceTypes = diceTypes;
+			
+			return data;
+		},
 		"computed": {
 		},
 		"watch": {
+		},
+		"mounted": function() {
+			
 		},
 		"methods": {
 			"getDice": function(skill, entity) {

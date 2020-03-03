@@ -21,6 +21,7 @@ class RSModifierStats extends RSModifier {
 	}
 	
 	performModifications(base, origin, debug) {
+		debug = debug || this.universe.debug;
 		var keys = Object.keys(this._coreData),
 			x,
 			y;

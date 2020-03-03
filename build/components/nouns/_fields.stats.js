@@ -11,6 +11,7 @@
 		dice;
 	
 	ranges = [
+		"general",
 		"engaged",
 		"short",
 		"medium",
@@ -226,10 +227,15 @@
 				"property": "__crb",
 				"type": "label"
 			});
+			data.fields.modifierstats.push({
+				"label": "Attack Range",
+				"property": "range",
+				"type": "text"
+			});
 			for(x=0; x<ranges.length; x++) {
 				for(y=0; y<dice.length; y++) {
 					data.fields.modifierstats.push({
-						"label": ranges[x].capitalize() + " Range " + dice[y],
+						"label": ranges[x].capitalize() + " " + dice[y],
 						"property": "range_" + ranges[x] + "_" + dice[y],
 						"type": "text"
 					});

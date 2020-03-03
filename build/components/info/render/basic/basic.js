@@ -466,31 +466,37 @@
 				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
 			},
 			"prettifyPropertyValue": function(property, value, record, universe) {
+				var suffix = "",
+					buffer;
+				
 				if(this.record._calculated && this.record._calculated[property]) {
-					property = this.universe.calculateExpression(value, this.record, this.base, this.target);
+					buffer = this.universe.calculateExpression(value, this.record, this.base, this.target);
 //					console.warn("Display: ", property, value, this.universe.calculateExpression(value, this.record, this.base, this.target));
-					if(property == value) {
-						return property;
-					} else {
-						return property + " [ " + value + " ]";
+					if(buffer != value) {
+						suffix = " [ " + value + " ]";
+						value = buffer;
 					}
 				}
 				
 				switch(typeof(this.record._prettifyValue)) {
 					case "function":
-						return this.record._prettifyValue(property, value, record, universe || this.universe);
+						value = this.record._prettifyValue(property, value, record, universe || this.universe);
+						break;
 					case "object":
 						if(this.record._prettifyValue[property]) {
-							return this.record._prettifyValue[property];
+							value = this.record._prettifyValue[property] ;
 						}
+						break;
 				}
 				
 				if(prettifyValues[property]) {
 					switch(typeof(prettifyValues[property])) {
 						case "string":
-							return prettifyValues[property];
+							value = prettifyValues[property];
+							break;
 						case "function":
-							return prettifyValues[property](property, value, record, universe || this.universe);
+							value = prettifyValues[property](property, value, record, universe || this.universe);
+							break;
 					}
 				}
 				
@@ -499,7 +505,7 @@
 				} else {
 					switch(typeof(value)) {
 						case "object":
-							return value.hidden_name || value.name || value.id || value.description;
+							value = (value.hidden_name || value.name || value.id || value.description);
 						default:
 							if(this.universe.indexes[property]) {
 								
@@ -507,7 +513,7 @@
 					}
 				}
 				
-				return value;
+				return value + suffix;
 			},
 			"copyEntityHere": function(id) {
 				window.open("/#/nouns/entity/" + id + "?copy=true&values={\"location\":\"" + this.record.id + "\"}", "building");

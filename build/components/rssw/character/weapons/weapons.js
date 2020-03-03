@@ -65,7 +65,8 @@
 			}
 		},
 		"data": function() {
-			var data = {};
+			var data = {},
+				x;
 			
 			data.storageKeyID = storageKey + this.entity.id;
 	
@@ -76,8 +77,13 @@
 			});
 			
 			data.rangeBands = rangeBands;
+			data.adjustments = {};
 			data.equipped = [];
 			data.items = [];
+
+			for(x=0; x<rangeBands.length; x++) {
+				data.adjustments[rangeBands[x]] = {};
+			}
 			
 			return data;
 		},
@@ -120,7 +126,30 @@
 				return damage;
 			},
 			"getRangeBandDifficulty": function(item, band) {
-				var pool = Object.assign({}, rangeBandDifficulty[band]);
+				var pool = Object.assign({}, rangeBandDifficulty[band]),
+					x,
+					y;
+
+				if(this.universe.debug) {
+					console.log("Pool Initial : ", pool, this.adjustments, _p(item));
+				}
+				if(this.adjustments[band]) {
+					for(x=0; x<this.diceTypes.length; x++) {
+						if(this.adjustments[band][this.diceTypes[x]]) {
+							pool[this.diceTypes[x]] = (pool[this.diceTypes[x]] || 0) + this.adjustments[band][this.diceTypes[x]];
+						}
+					}
+				}
+
+//				for(x=0; x<this.diceTypes.length; x++) {
+//					if(item["range_" + band + "_" + this.diceTypes[x]]) {
+//						pool[this.diceTypes[x]] = (pool[this.diceTypes[x]] || 0) + item["range_" + band + "_" + this.diceTypes[x]];
+//					}
+//				}
+				
+				if(this.universe.debug) {
+					console.log("Pool Final: ", pool);
+				}
 				
 				// TODO: Compute?
 				switch(band) {
@@ -130,7 +159,6 @@
 						}
 						break;
 				}
-				
 				
 				return this.renderRoll(pool);
 			},
@@ -143,6 +171,10 @@
 					i,
 					x;
 
+				for(x=0; x<this.items.length; x++) {
+					this.items[x].$off("modified", this.update);
+				}
+				
 				this.equipped.splice(0);
 				this.items.splice(0);
 				
@@ -155,6 +187,7 @@
 							for(i=0; i<this.entity.equipped.item[slot.id].length; i++) {
 								item = this.universe.indexes.item.lookup[this.entity.equipped.item[slot.id][i]];
 								if(item && !mapped[item.id]) {
+									item.$on("modified", this.update);
 									this.equipped.push(item);
 									mapped[item.id] = true;
 								} else {
@@ -171,14 +204,27 @@
 					for(x=0; x<this.entity.item.length; x++) {
 						item = this.universe.indexes.item.lookup[this.entity.item[x]];
 						if(item && item.damage && !mapped[item.id]) {
+							item.$on("modified", this.update);
 							this.items.push(item);
 						}
+					}
+				}
+				
+				for(x=0; x<rangeBands.length; x++) {
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.delete(this.adjustments[rangeBands[x]], this.diceTypes[i]);
+					}
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
 					}
 				}
 			}
 		},
 		"beforeDestroy": function() {
 			this.entity.$off("modified", this.update);
+			for(var x=0; x<this.items.length; x++) {
+				this.items[x].$off("modified", this.update);
+			}
 		},
 		"template": Vue.templified("components/rssw/character/weapons.html")
 	});

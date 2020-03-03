@@ -47,7 +47,7 @@ rsSystem.component("RSSWDashboard", {
 		"isSelected": function(record) {
 			return this.selectedEntities.indexOf(record) !== -1;
 		},
-		"openDashboard": function(type) {
+		"openDashboard": function(type, external) {
 			var primary = null,
 				eids = [].concat(this.selectedEntities),
 				x;
@@ -70,7 +70,11 @@ rsSystem.component("RSSWDashboard", {
 						eids[x] = eids[x].id;
 					}
 					
-					window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(","), "dashboard");
+					if(external) {
+						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(","), "dashboard");
+					} else {
+						window.location = location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(",");
+					}
 					break;
 			}
 		},

@@ -283,6 +283,9 @@ class RSObject extends EventEmitter {
 	 * @param {Object} [replacedProperties] Defaults to this._replacedProperties.
 	 */
 	recalculateProperties(replacedReferences, debug) {
+		if(debug || this.universe.debug) {
+			console.error("Recalculating Object: " + this.name + " [ " + this.id + " ]");
+		}
 		if(!this.id) {
 			return false;
 		}
@@ -388,15 +391,22 @@ class RSObject extends EventEmitter {
 		}
 		
 		// Stop listening for changes to known modifiers and clear
-//		for(x=0; x<this._modifiers.length; x++) {
-//			console.warn("Remove Listener: " + this.id + " from " + this._modifiers[x].id + ": " + this._modifiers[x].$off("modified", this.recalculateProperties));
-////			this._modifiers[x].$off("modified", this.recalculateProperties);
-//		}
-//		this._modifiers.splice(0);
+		for(x=0; x<this._modifiers.length; x++) {
+			if(debug) {
+				console.warn("Remove Listener: " + this.id + " from " + this._modifiers[x].id + ": " + this._modifiers[x].$off("modified", this.recalculateProperties));
+			} else {
+				this._modifiers[x].$off("modified", this.recalculateProperties);
+			}
+		}
+		this._modifiers.splice(0);
 		
+		// Establish Base from Core Data\
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_") {
+			if(keys[x][0] !== "_" && keys[x] !== "universe") {
+				if(debug) {
+					console.log("Checking Base Key: " + keys[x], this.universe);
+				}
 //				base[keys[x]] = this._coreData[keys[x]];
 				if(typeof(this._coreData[keys[x]]) === "object") {
 					if(this._coreData[keys[x]] === null) {
@@ -410,21 +420,6 @@ class RSObject extends EventEmitter {
 				} else {
 					base[keys[x]] = this._coreData[keys[x]];
 				}
-				/*
-				switch(typeof(this._coreData[keys[x]])) {
-					case "boolean":
-					case "string":
-					case "number":
-						base[keys[x]] = this._coreData[keys[x]];
-						break;
-					case "object":
-						// RSObjects should be flat but arrays are valid
-						if(this._coreData[keys[x]] instanceof Array) {
-							base[keys[x]] = this._coreData[keys[x]];
-						}
-						break;
-				}
-				*/
 
 				if(!this.universe.nouns) {
 					// console.trace("Noun Failure: ", this);
@@ -443,7 +438,6 @@ class RSObject extends EventEmitter {
 			console.log("References: ", references);
 		}
 		
-//		console.log("References: ", references, _p(base));
 		if(references  && references.length) {
 			for(x=0; x<references.length; x++) {
 				this.loadNounReferenceModifications(references[x], base, debug);
@@ -527,6 +521,7 @@ class RSObject extends EventEmitter {
 	 * @param {Object} base
 	 */
 	loadNounReferenceModifications(noun, base, debug) {
+		debug = debug || this.universe.debug;
 		if(this.universe.nouns) {
 			var reference,
 				buffer,
