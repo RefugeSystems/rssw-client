@@ -76,6 +76,7 @@
 				"viewing": false
 			});
 			
+			data.rangeBonus = 0;
 			data.rangeBands = rangeBands;
 			data.adjustments = {};
 			data.equipped = [];
@@ -130,9 +131,6 @@
 					x,
 					y;
 
-				if(this.universe.debug) {
-					console.log("Pool Initial : ", pool, this.adjustments, _p(item));
-				}
 				if(this.adjustments[band]) {
 					for(x=0; x<this.diceTypes.length; x++) {
 						if(this.adjustments[band][this.diceTypes[x]]) {
@@ -140,18 +138,12 @@
 						}
 					}
 				}
-
-//				for(x=0; x<this.diceTypes.length; x++) {
-//					if(item["range_" + band + "_" + this.diceTypes[x]]) {
-//						pool[this.diceTypes[x]] = (pool[this.diceTypes[x]] || 0) + item["range_" + band + "_" + this.diceTypes[x]];
-//					}
-//				}
-				
-				if(this.universe.debug) {
-					console.log("Pool Final: ", pool);
-				}
 				
 				// TODO: Compute?
+				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
+					return [];
+				}
+				
 				switch(band) {
 					case "engaged":
 						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
@@ -218,6 +210,8 @@
 						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
 					}
 				}
+				
+				this.rangeBonus = this.entity.range || 0;
 			}
 		},
 		"beforeDestroy": function() {

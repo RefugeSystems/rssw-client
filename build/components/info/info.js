@@ -73,6 +73,11 @@
 				"handler": function() {
 					console.warn("hold");
 				}
+			},
+			"$route.query.information": function(nV, oV) {
+				if(nV) {
+					this.displayRecord(nV);
+				}
 			}
 		},
 		"mounted": function() {
@@ -81,6 +86,7 @@
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					event.stopPropagation();
 					rsSystem.EventBus.$emit("display-info", follow);
 				}
 			};
@@ -99,6 +105,8 @@
 			 * @param {RSObject | Object | String} toView Something to identify the RSObject to view or the object itself.
 			 */
 			"displayRecord": function(toView) {
+				console.log("Info: ", toView);
+				
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
 //						console.warn("Received View Record: ", toView);
@@ -140,7 +148,7 @@
 							this.viewing.$on("modified", this.update);
 						}
 					} else if(toView.id === this.viewing.id) {
-//						this.closeInfo();
+						this.closeInfo();
 					}
 				}
 				

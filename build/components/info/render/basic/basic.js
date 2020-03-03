@@ -287,13 +287,13 @@
 			}
 		},
 		"mounted": function() {
-			this.$el.onclick = (event) => {
-				var follow = event.srcElement.attributes.getNamedItem("data-id");
-				if(follow && (follow = this.universe.index.index[follow.value])) {
-//					console.log("1Follow: ", follow);
-					rsSystem.EventBus.$emit("display-info", follow);
-				}
-			};
+//			this.$el.onclick = (event) => {
+//				var follow = event.srcElement.attributes.getNamedItem("data-id");
+//				if(follow && (follow = this.universe.index.index[follow.value])) {
+////					console.log("1Follow: ", follow);
+//					rsSystem.EventBus.$emit("display-info", follow);
+//				}
+//			};
 
 			this.universe.$on("model:modified", this.update);
 			if(this.record.$on) {

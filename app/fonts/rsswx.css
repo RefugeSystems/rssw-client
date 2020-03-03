@@ -7,6 +7,10 @@
 	font-family: rsswx;
 }
 
+.rsswx.rsswx-threat:before {
+	content: "A";
+}
+
 .rsswx.rsswx-dispair:before {
 	content: "B";
 }

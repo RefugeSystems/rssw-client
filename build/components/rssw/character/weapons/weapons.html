@@ -22,7 +22,7 @@
 					{{getWeaponDamage(item)}}
 				</div>
 			</div>
-			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="index < item.range" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="index < item.range + rangeBonus" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>
