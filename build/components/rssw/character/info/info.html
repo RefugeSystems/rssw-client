@@ -61,7 +61,7 @@
 		</button>
 	</div>
 	<div class="property inside" v-if="inside">
-		<span class="icon fad fa-starship-freighter"></span>
+		<span class="icon" :class="inside.icon"></span>
 		<span class="label">Inside:</span>
 		<button class="inside" v-on:click="showInfo(inside)">
 			<span class="value">{{inside.name}}</span>

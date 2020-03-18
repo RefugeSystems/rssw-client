@@ -25,7 +25,7 @@ pipeline {
 	post {
 		success {
 			sh '''#!/bin/bash -xe
-				export LATEST_GIT_SHA=$(curl -H "X-TrackerToken: $TRACKER_API_TOKEN" "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd/842da11c9304380e5d6911287c0d8614" | grep -oE '([^"latest_git_sha\":][a-zA-Z0-9]+)')
+				export LATEST_GIT_SHA=$(curl -H "X-TrackerToken: d30a134677560a1d50665f9c385485eb" "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd/842da11c9304380e5d6911287c0d8614" | grep -oE '([^"latest_git_sha\":][a-zA-Z0-9]+)')
 				git config --global core.pager cat
 				if git log $LATEST_GIT_SHA~..$LATEST_GIT_SHA; then
 					true # all is well
@@ -39,12 +39,12 @@ pipeline {
 				else
 					export STORY_IDS=($(git log $LATEST_GIT_SHA..HEAD | grep -E "\\[.*\\]" | grep -oE "\\[.*\\]" | grep -oE "([0-9]+)"))
 				fi
-				curl -X POST -H "X-TrackerToken: $TRACKER_API_TOKEN" -H "Content-Type: application/json" -d '{"status":"passed", "url":"'$BUILD_URL'", "uuid":"842da11c9304380e5d6911287c0d8614", "story_ids":['$(IFS=,; echo "${STORY_IDS[*]}")'], "latest_git_sha":"'$NEW_LATEST_GIT_SHA'", "version":1}' "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd"
+				curl -X POST -H "X-TrackerToken: d30a134677560a1d50665f9c385485eb" -H "Content-Type: application/json" -d '{"status":"passed", "url":"'$BUILD_URL'", "uuid":"842da11c9304380e5d6911287c0d8614", "story_ids":['$(IFS=,; echo "${STORY_IDS[*]}")'], "latest_git_sha":"'$NEW_LATEST_GIT_SHA'", "version":1}' "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd"
 			'''
 		}
 		failure {
 			sh '''#!/bin/bash -xe
-				export LATEST_GIT_SHA=$(curl -H "X-TrackerToken: $TRACKER_API_TOKEN" "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd/842da11c9304380e5d6911287c0d8614" | grep -oE '([^"latest_git_sha\":][a-zA-Z0-9]+)')
+				export LATEST_GIT_SHA=$(curl -H "X-TrackerToken: d30a134677560a1d50665f9c385485eb" "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd/842da11c9304380e5d6911287c0d8614" | grep -oE '([^"latest_git_sha\":][a-zA-Z0-9]+)')
 				git config --global core.pager cat
 				if git log $LATEST_GIT_SHA~..$LATEST_GIT_SHA; then
 					true # all is well
@@ -57,7 +57,7 @@ pipeline {
 				else
 					export STORY_IDS=($(git log $LATEST_GIT_SHA..HEAD | grep -E "\\[.*\\]" | grep -oE "\\[.*\\]" | grep -oE "([0-9]+)"))
 				fi
-				curl -X POST -H "X-TrackerToken: $TRACKER_API_TOKEN" -H "Content-Type: application/json" -d '{"status":"failed", "url":"'$BUILD_URL'", "uuid":"842da11c9304380e5d6911287c0d8614", "story_ids":['$(IFS=,; echo "${STORY_IDS[*]}")'], "version":1}' "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd"
+				curl -X POST -H "X-TrackerToken: d30a134677560a1d50665f9c385485eb" -H "Content-Type: application/json" -d '{"status":"failed", "url":"'$BUILD_URL'", "uuid":"842da11c9304380e5d6911287c0d8614", "story_ids":['$(IFS=,; echo "${STORY_IDS[*]}")'], "version":1}' "https://www.pivotaltracker.com/services/v5/projects/2439516/cicd"
 			'''
 		}
 	}
