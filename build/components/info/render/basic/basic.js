@@ -21,7 +21,7 @@
 	invisibleKeys.source_template = true;
 	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
-	invisibleKeys.modifierattrs = true;
+	invisibleKeys.modifierattrs = true; 
 	invisibleKeys.no_modifiers = true;
 	invisibleKeys.restock_base = true;
 	invisibleKeys.restock_max = true;
@@ -44,6 +44,7 @@
 	invisibleKeys.created = true;
 	invisibleKeys.dataset = true;
 	invisibleKeys.history = true;
+	invisibleKeys.learned = true;
 	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
 	invisibleKeys.is_shop = true;
@@ -53,6 +54,7 @@
 	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
 	invisibleKeys.class = true;
+	invisibleKeys.order = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
@@ -136,6 +138,18 @@
 		return value;
 	};
 	
+	prettifyValues.allegiance = function(property, value, record, universe) {
+		return "<span class=\"" + value + "\"></span>";
+	};
+	
+	prettifyValues.inside = function(property, value, record, universe) {
+		var entity = universe.indexes.entity.lookup[value];
+		if(entity) {
+			return "<a data-id=\"" + value + "\"><span class=\"" + entity.icon + "\" data-id=\"" + value + "\"></span><span data-id=\"" + value + "\">" + entity.name + "</span></a>";
+		}
+		return "Unknown[" + value + "]";
+	};
+	
 	prettifyValues.accepts = function(property, value, record, universe) {
 		if(value) {
 			switch(value) {
@@ -190,6 +204,10 @@
 				"required": true,
 				"type": Object
 			},
+			"universe": {
+				"required": true,
+				"type": Object
+			},
 			"target": {
 				"type": Object
 			},
@@ -241,6 +259,9 @@
 			data.entities = [];
 			data.hiddenEntities = [];
 			
+			data.movableEntities = [];
+			data.movingEntity = "";
+			
 			data.availableSlots = [];
 			data.equipToSlot = "";
 			
@@ -266,13 +287,13 @@
 			}
 		},
 		"mounted": function() {
-			this.$el.onclick = (event) => {
-				var follow = event.srcElement.attributes.getNamedItem("data-id");
-				if(follow && (follow = this.universe.index.index[follow.value])) {
-//					console.log("1Follow: ", follow);
-					rsSystem.EventBus.$emit("display-info", follow);
-				}
-			};
+//			this.$el.onclick = (event) => {
+//				var follow = event.srcElement.attributes.getNamedItem("data-id");
+//				if(follow && (follow = this.universe.index.index[follow.value])) {
+////					console.log("1Follow: ", follow);
+//					rsSystem.EventBus.$emit("display-info", follow);
+//				}
+//			};
 
 			this.universe.$on("model:modified", this.update);
 			if(this.record.$on) {
@@ -307,17 +328,6 @@
 			},
 			"isArray": function(value) {
 				return value instanceof Array;
-			},
-			"isOwner": function(record) {
-				if(record.owner === this.player.id) {
-					return true;
-				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
-					return true;
-				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
-					return true;
-				} else {
-					return false;
-				}
 			},
 			"canTransfer": function() {
 				var hold,
@@ -456,30 +466,37 @@
 				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
 			},
 			"prettifyPropertyValue": function(property, value, record, universe) {
+				var suffix = "",
+					buffer;
+				
 				if(this.record._calculated && this.record._calculated[property]) {
-					property = this.universe.calculateExpression(value, this.record, this.base, this.target);
-					if(property == value) {
-						return this.universe.calculateExpression(value, this.record, this.base, this.target);
-					} else {
-						return this.universe.calculateExpression(value, this.record, this.base, this.target) + " [ " + value + " ]";
+					buffer = this.universe.calculateExpression(value, this.record, this.base, this.target);
+//					console.warn("Display: ", property, value, this.universe.calculateExpression(value, this.record, this.base, this.target));
+					if(buffer != value) {
+						suffix = " [ " + value + " ]";
+						value = buffer;
 					}
 				}
 				
 				switch(typeof(this.record._prettifyValue)) {
 					case "function":
-						return this.record._prettifyValue(property, value, record, universe);
+						value = this.record._prettifyValue(property, value, record, universe || this.universe);
+						break;
 					case "object":
 						if(this.record._prettifyValue[property]) {
-							return this.record._prettifyValue[property];
+							value = this.record._prettifyValue[property] ;
 						}
+						break;
 				}
 				
 				if(prettifyValues[property]) {
 					switch(typeof(prettifyValues[property])) {
 						case "string":
-							return prettifyValues[property];
+							value = prettifyValues[property];
+							break;
 						case "function":
-							return prettifyValues[property](property, value, record, universe);
+							value = prettifyValues[property](property, value, record, universe || this.universe);
+							break;
 					}
 				}
 				
@@ -488,7 +505,7 @@
 				} else {
 					switch(typeof(value)) {
 						case "object":
-							return value.hidden_name || value.name || value.id || value.description;
+							value = (value.hidden_name || value.name || value.id || value.description);
 						default:
 							if(this.universe.indexes[property]) {
 								
@@ -496,14 +513,11 @@
 					}
 				}
 				
-				return value;
+				return value + suffix;
 			},
 			"copyEntityHere": function(id) {
 				window.open("/#/nouns/entity/" + id + "?copy=true&values={\"location\":\"" + this.record.id + "\"}", "building");
 				Vue.set(this, "copyToHere", "");
-			},
-			"editRecord": function() {
-				window.open(location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id, "building");
 			},
 			"prettifyReferenceValue": function(reference, property, value) {
 				
@@ -511,9 +525,34 @@
 			"displayInfo": function(record) {
 				
 			},
+			"canDashboard": function() {
+				return (this.record._type === "entity" && this.record.classification && this.isOwner(this.record));
+			},
+			"viewDashboard": function(new_window, stay) {
+				var new_location = location.pathname + "#/dashboard/" + this.record.classification + "/" + this.record.id;
+				if(new_window) {
+					window.open(new_location);
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
+				}
+			},
+			"canMoveTo": function(id) {
+				id = id || this.player.entity;
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
+						&& this.universe.indexes.entity.index[id]) {
+					return true;
+				}
+				return false;
+			},
 			"canTravelTo": function(id) {
 				id = id || this.player.entity;
-				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id && this.universe.indexes.entity.index[id] && this.universe.indexes.entity.index[id].location !== this.record.id && this.universe.indexes.entity.index[id].inside !== this.record.id) {
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
+						&& this.universe.indexes.entity.index[id]
+						&& this.universe.indexes.entity.index[id].location !== this.record.id
+						&& this.universe.indexes.entity.index[id].inside !== this.record.id) {
 					return true;
 				}
 				return false;
@@ -524,6 +563,17 @@
 					this.universe.indexes.entity.index[id].commit({
 						"location": this.record.id
 					});
+				}
+			},
+			"editRecord": function(new_window, stay) {
+				var new_location = location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id;
+				if(new_window) {
+					window.open(new_location, "building");
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
 				}
 			},
 			"movePartyHere": function(party) {
@@ -572,6 +622,7 @@
 				}
 
 				Vue.set(this, "entityToMove", "");
+				Vue.set(this, "movingEntity", "");
 			},
 			"restockLocation": function() {
 				if(!this.restocking) {
@@ -699,10 +750,19 @@
 					this.attach_targets.sort(byName);
 				}
 				
+				buffer = this.player?this.player.id:null;
 				this.availableTemplates.entity.splice(0);
+				this.movableEntities.splice(0);
 				this.hiddenEntities.splice(0);
 				this.entities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					if(((!this.universe.indexes.entity.listing[x].owners && !this.universe.indexes.entity.listing[x].owner)
+							|| (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.indexOf(buffer) !== -1)
+							|| this.universe.indexes.entity.listing[x].owner === buffer)
+							&& this.universe.indexes.entity.listing[x].location !== this.record.id
+							&& this.universe.indexes.entity.listing[x].inside !== this.record.id){
+						this.movableEntities.push(this.universe.indexes.entity.listing[x]);
+					}
 					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
 						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
 					}

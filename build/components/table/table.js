@@ -42,6 +42,12 @@
 				x;
 
 			data.start = 0;
+			if(this.state && !this.state.filter) {
+				Vue.set(this.state, "filter", {});
+			}
+			if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
+				Vue.set(this.state.filter, "null", "");
+			}
 			
 			return data;
 		},
@@ -54,10 +60,19 @@
 				newIndex.$on("indexed", this.update);
 				this.update();
 			},
-			"state": {
+			"state.filter": {
 				"deep": true,
 				"handler": function() {
 					this.update();
+				}
+			},
+			"state.paging.current": {
+				"deep": true,
+				"handler": function(nV) {
+					if(this.state.paging.tracked !== nV) {
+						this.state.paging.tracked = nV;
+						this.update();
+					}
 				}
 			}
 		},
@@ -129,7 +144,7 @@
 			"update": function() {
 				this.corpus.splice(0);
 				this.index.list(this.state.filter, this.state, this.corpus);
-				this.$forceUpdate();
+//				this.$forceUpdate();
 			}
 		},
 		"beforeDestroy": function() {

@@ -84,9 +84,22 @@
 			var elements = [],
 				classes = {},
 				contents,
-				widget;
+				widget,
+				keys,
+				x;
 			
 			if(this.contents.enabled && this.contents.declaration && rsSystem.components[this.contents.declaration]) {
+				if(this.contents.state) {
+					keys = Object.keys(this.contents.state);
+					for(x=0; x<keys.length; x++) {
+						Vue.set(this.state, keys[x], this.contents.state[keys[x]]);
+					}
+				}
+				
+				if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
+					this.state.filter["null"] = "";
+				}
+				
 				widget = {};
 				widget.props = {};
 				widget.props["storage_id"] = this.storageID;
@@ -125,7 +138,8 @@
 			
 			return createElement("div", {
 				"class": {
-					"rs-component rs-widget": true
+					"rs-component rs-widget": true,
+					"collapsed": this.state.closed
 				}
 			}, [contents]);
 			/* */

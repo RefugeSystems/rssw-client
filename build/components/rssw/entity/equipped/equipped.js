@@ -45,6 +45,8 @@
 		},
 		"data": function() {
 			var data = {};
+
+			data.mode = this.state?this.state.mode:"short";
 			
 			data.slotMapping = {};
 			data.slotCounts = {};
@@ -90,13 +92,25 @@
 			},
 			
 			"getModeClassing": function() {
-				if(this.state) {
-					
-					switch(this.state.mode) {
-						
-						default:
-							return "short";
-					}
+				var mode = this.mode,
+					state;
+				if(!mode && this.state) {
+					mode = this.state.mode;
+				}
+
+				if(typeof(mode) === "string") {
+					mode = mode.split(/[\s]+/);
+				} else {
+					mode = "short";
+				}
+				
+				state = mode[0];
+				
+				switch(state) {
+					case "long":
+						return state;
+					default:
+						mode;
 				}
 				
 				return "short";
@@ -153,6 +167,7 @@
 			},
 			"updateFromUniverse": function() {
 				this.recalculateSlots();
+				this.slotKeys.sort(this.sortData);
 			},
 			"update": function() {
 				var buffer,
@@ -164,6 +179,11 @@
 					x,
 					y,
 					z;
+
+				if(this.state) {
+					Vue.set(this, "mode", this.state.mode || "short");
+				}
+				
 				
 				this.recalculateSlots();
 
@@ -206,6 +226,8 @@
 						this.slotMapping[keys[x]].push(this.getEmptyIndicator(keys[x]));
 					}
 				}
+				
+				this.slotKeys.sort(this.sortData);
 			}
 		},
 		"beforeDestroy": function() {

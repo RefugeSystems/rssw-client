@@ -152,6 +152,7 @@
 			data.target = "";
 			data.corpus = [];
 			
+			data.universeEntities = [];			
 			
 			for(x=0; x<data.state.headers.length; x++) {
 				if(formatters[data.state.headers[x].field]) {
@@ -199,15 +200,32 @@
 		},
 		"methods": {
 			"updateListings": function(event) {
-				var x, y;
+				var mapped = {},
+					buffer,
+					x,
+					y;
 				
+				this.universeEntities.splice(0);
 				for(x=0; x<this.listingKeys.length; x++) {
 					this.listing[this.listingKeys[x]].splice(0);
 					for(y=0; y<this.universe.indexes[this.listingKeys[x]].listing.length; y++) {
-						this.listing[this.listingKeys[x]].push(this.universe.indexes[this.listingKeys[x]].listing[y]);
+						buffer = this.universe.indexes[this.listingKeys[x]].listing[y];
+						if(buffer) {
+							this.listing[this.listingKeys[x]].push(buffer);
+							switch(this.listingKeys[x]) {
+								case "entity":
+									if(!mapped[buffer.id] && !buffer.hidden && !buffer.inactive) {
+										mapped[buffer.id] = true;
+										this.universeEntities.push(buffer);
+									}
+									break;
+							}
+						}
 					}
 					this.listing[this.listingKeys[x]].sort(this.sortData);
 				}
+				
+				this.universeEntities.sort(this.sortData);
 			},
 			"showCommands": function() {
 				return !!(this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index).selection.length;

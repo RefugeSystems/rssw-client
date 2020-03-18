@@ -9,11 +9,18 @@
  * @see Markdown: https://www.markdownguide.org/
  */
 (function() {
-	var converter = new showdown.Converter();
+	var converter = new showdown.Converter({
+		"tables": true
+	});
 
 	var marking = {
 		"start": "${",
 		"end": "}$"
+	};
+	
+	var notFound = {
+		"icon": "",
+		"id": ""
 	};
 	
 	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
@@ -79,14 +86,14 @@
 				} else if(value[0] === "#") {
 					value = value.substring(1).trim();
 					if(value && (value = universe.index.index[value])) {
-						value = value.icon;
+//						value = value;
 					} else if(entity) {
-						value = entity.icon;
+						value = entity;
 					}
 					if(!value) {
-						value = "";
+						value = notFound;
 					}
-					element = $("<span class=\"" + value + "\"></span>");
+					element = $("<a class=\"" + value.icon + "\" data-id=\"" + (value.id) + "\"></a>");
 				} else if(value[0] === "\"") {
 					value = value.substring(1).trim();
 					element = $("<span class=\"" + value + "\"></span>");

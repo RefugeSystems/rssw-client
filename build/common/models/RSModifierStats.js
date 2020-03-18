@@ -21,6 +21,7 @@ class RSModifierStats extends RSModifier {
 	}
 	
 	performModifications(base, origin, debug) {
+		debug = debug || this.universe.debug;
 		var keys = Object.keys(this._coreData),
 			x,
 			y;
@@ -65,27 +66,31 @@ class RSModifierStats extends RSModifier {
 							}
 							break;
 						case "object":
-							if(base[keys[x]] instanceof Array) {
-								for(y=0; y<this._coreData[keys[x]].length; y++) {
-									base[keys[x]].push(this._coreData[keys[x]][y]);
+							if(this._coreData[keys[x]] !== null) {
+								if(base[keys[x]] instanceof Array) {
+									for(y=0; y<this._coreData[keys[x]].length; y++) {
+										base[keys[x]].push(this._coreData[keys[x]][y]);
+									}
+								} else {
+									Object.assign(base[keys[x]], this._coreData[keys[x]]);
 								}
-							} else {
-								Object.assign(base[keys[x]], this._coreData[keys[x]]);
 							}
 					}
 				} else {
-					if(typeof(this._coreData[keys[x]]) === "object") {
-						if(this._coreData[keys[x]] instanceof Array) {
-							base[keys[x]] = [];
-							base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+					if(this._coreData[keys[x]] !== null) {
+						if(typeof(this._coreData[keys[x]]) === "object") {
+							if(this._coreData[keys[x]] instanceof Array) {
+								base[keys[x]] = [];
+								base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+							} else {
+								base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+							}
 						} else {
-							base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+							base[keys[x]] = this._coreData[keys[x]];
 						}
-					} else {
-						base[keys[x]] = this._coreData[keys[x]];
-					}
-					if(base._calculated) {
-						base._calculated.push(keys[x]);
+						if(base._calculated) {
+							base._calculated.push(keys[x]);
+						}
 					}
 				}
 			}

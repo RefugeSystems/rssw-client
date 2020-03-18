@@ -143,7 +143,7 @@
 		}
 		
 		&.middled {
-			align-content: center;
+			justify-content: center;
 		}
 		
 		&.inline {
@@ -208,6 +208,10 @@
 	.aligned-center,
 	.align-center {
 		text-align: center;
+	}
+	
+	.nowrap {
+		white-space: nowrap;
 	}
 }
 .rs-component {
@@ -411,10 +415,17 @@
 	.rs-black {
 		color: @rsBlack !important;
 	}
+	.rs-black-visible {
+		color: #332f2f !important;
+	}
 	
 	.rs-transparent {
 		color: transparent !important;
 	}
+}
+
+.swg:before {
+	font-size: 1.25em;
 }
 h1, h2, h3, h4, h5, h6 {
 	margin: 0px;
@@ -1331,6 +1342,7 @@ form {
 		display: flex;
 		flex-direction: row;
 		top: 0px;
+		z-index:20;
 		
 		.titling {
 			display: flex;
@@ -1369,6 +1381,32 @@ form {
 	color: @rsBlack;
 	padding: 3px;
 	
+	.record-description {
+		max-height: 800px;
+		width: 100%;
+		overflow: auto;
+		
+		table {
+			border-collapse: collapse;
+			color: black;
+			
+			th {
+				background: @rsWhite;
+				position: sticky;
+				z-index: 1;
+				top: 0px;
+			}
+			
+			td:first-child {
+				white-space: nowrap;
+			}
+			
+			tr:nth-child(odd) {
+				background-color: #bcd9e2;
+			}
+		}
+	}
+	
 	.reference-heading {
 		font-weight: 800;
 		font-size: 1.2em;
@@ -1376,6 +1414,11 @@ form {
 		span {
 			border-bottom: 1px solid @rsWhite;
 		}
+	}
+	
+	.reference-heading,
+	h3 {
+		margin-top: 6px;
 	}
 	
 	.subreference {
@@ -1449,6 +1492,18 @@ form {
 			&:active,
 			&focus {
 				color: @rsOrange;
+			}
+			
+			&.direct {
+				border: 1px solid @rsBlack;
+				color: @rsBlue;
+				min-width: 120px;
+				text-align: left;
+				
+				&.short {
+					min-width: 30px;
+					text-align: center;
+				}
 			}
 			
 			&:hover {
@@ -1598,11 +1653,6 @@ form {
 				color: @rsWhite;
 			}
 			
-			&:hover {
-				background: white;
-				color: black;
-			}
-			
 			.nav-label {
 				overflow: hidden;
 				max-width: 500px;
@@ -1626,6 +1676,11 @@ form {
 				flex-grow: 0;
 				font-size: 18px;
 				cursor: pointer;
+			
+				&:hover {
+					background: white;
+					color: black;
+				}
 			
 				.nav-icon {
 					padding-right: 10px;
@@ -1736,16 +1791,18 @@ form {
 	}
 	
 	.stat {
-		width: 90px;
+		/*width: 90px;*/
 		overflow: hidden;
 		border: 1px solid @rsWhite;
 		border-radius: 5px;
 		margin: 3px;
+		flex-grow: 2;
 		
 		.label {
 			text-align: center;
 			width: 100%;
 			margin: 2px 0px 0px 0px;
+			white-space: nowrap;
 		}
 		
 		.value {
@@ -1851,6 +1908,71 @@ form {
 }
 
 .rs-component.rssw.component-character-info {
+
+	a {
+		cursor: pointer;
+	}
+
+	.property {
+		max-width: 550px;
+		color: @rsWhite;
+		margin: 3px;
+	}
+	
+	.divide {
+		color: @rsWhite;
+		margin: 0px 0px 0px 2px;
+	}
+	
+	.icon {
+		display: inline-block;
+		width: 20px;
+		text-align: center;
+	}
+	
+	.value {
+		color: @rsLightBlue;
+		font-size: 1.1em;
+	}
+	
+	.property-action {
+		color: @rsOrange;
+		font-size: .9em;
+	}
+	
+	.description {
+		min-height: 140px;
+		min-width: 360px;
+	}
+	
+	button {
+		background: transparent;
+		font-family: inherit;
+		font-size: inherit;
+		padding: 0px;
+		border: 0px;
+		margin: 0px;
+	}
+	
+	button.action {
+		color: white;
+	}
+	
+	.text-container {
+		max-height: 550px;
+		max-width: inherit;
+		overflow: auto;
+		
+		textarea {
+			width: 510px;
+			height: 300px;
+			max-height: 550px;
+			max-width: inherit;
+		}
+	}
+}
+
+.rs-component.rssw.component-entity-journal {
 
 	a {
 		cursor: pointer;
@@ -2059,6 +2181,41 @@ form {
 			.label {
 				
 			}
+		}
+	}
+}
+
+.rs-component.rssw.component-entity-weapons {
+
+	.weapon-report {
+		margin-bottom: 6px;
+		min-height: 40px;
+	}
+
+	.element {
+		padding: 0px 5px;
+	}
+	
+	.name {
+		margin-top: 5px;
+	}
+	
+	.icon {
+		min-width: 40px;
+		min-height: 40px;
+		line-height: 40px;
+		font-size: 30px;
+	}
+	
+	.band {
+		border-left: 3px solid @rsWhite;
+	}
+		
+	.roll {
+		margin: 5px 0px;
+
+		.dice {
+			margin: 0px 2px;
 		}
 	}
 }

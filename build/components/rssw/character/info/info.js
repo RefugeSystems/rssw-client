@@ -12,6 +12,7 @@
 	rsSystem.component("rsswCharacterInfo", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSShowdown,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
@@ -88,17 +89,6 @@
 						"source": this.character,
 						"record": view
 					});
-				}
-			},
-			"isOwner": function(record) {
-				if(record.owner === this.player.id) {
-					return true;
-				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
-					return true;
-				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
-					return true;
-				} else {
-					return false;
 				}
 			},
 			"exitEntity": function(entity) {
@@ -181,26 +171,28 @@
 				}
 
 				hold = 0;
-				if(this.items.length !== this.character.item.length) {
-					this.items.splice(0);
-					if(this.character.item && this.character.item.length) {
+				if(this.character.item) {
+					if(this.items.length !== this.character.item.length) {
+						this.items.splice(0);
+						if(this.character.item && this.character.item.length) {
+							for(x=0; x<this.character.item.length; x++) {
+								buffer = this.universe.nouns.item[this.character.item[x]];
+								if(buffer) {
+									hold += (buffer.encumberance || 0);
+									this.items.push(buffer);
+								} else {
+									console.warn("Item Not Found: " + this.character.item[x]);
+								}
+							}
+						}
+					} else {
 						for(x=0; x<this.character.item.length; x++) {
 							buffer = this.universe.nouns.item[this.character.item[x]];
 							if(buffer) {
 								hold += (buffer.encumberance || 0);
-								this.items.push(buffer);
 							} else {
 								console.warn("Item Not Found: " + this.character.item[x]);
 							}
-						}
-					}
-				} else {
-					for(x=0; x<this.character.item.length; x++) {
-						buffer = this.universe.nouns.item[this.character.item[x]];
-						if(buffer) {
-							hold += (buffer.encumberance || 0);
-						} else {
-							console.warn("Item Not Found: " + this.character.item[x]);
 						}
 					}
 				}

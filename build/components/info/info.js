@@ -73,10 +73,24 @@
 				"handler": function() {
 					console.warn("hold");
 				}
+			},
+			"$route.query.information": function(nV, oV) {
+				if(nV) {
+					this.displayRecord(nV);
+				}
 			}
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					event.stopPropagation();
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+			
 			rsSystem.EventBus.$on("display-info", this.displayRecord);
 			this.universe.$on("universe:modified", this.update);
 		},
@@ -91,6 +105,8 @@
 			 * @param {RSObject | Object | String} toView Something to identify the RSObject to view or the object itself.
 			 */
 			"displayRecord": function(toView) {
+				console.log("Info: ", toView);
+				
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
 //						console.warn("Received View Record: ", toView);
@@ -112,23 +128,27 @@
 					}
 				}
 				
-				if(toView && (!this.viewing || toView.id !== this.viewing.id)) {
-					if(this.viewing) {
-						if(!this.history.length || (this.viewing.id !== toView.id)) {
-							this.history.unshift(this.viewing);
-						} else {
-							console.warn("Repeated Shift? ", this.viewing.id);
+				if(toView) {
+					if(!this.viewing || toView.id !== this.viewing.id) {
+						if(this.viewing) {
+							if(!this.history.length || (this.viewing.id !== toView.id)) {
+								this.history.unshift(this.viewing);
+							} else {
+								console.warn("Repeated Shift? ", this.viewing.id);
+							}
+							if(this.viewing.$off) {
+								this.viewing.$off("modified", this.update);
+							}
 						}
-						if(this.viewing.$off) {
-							this.viewing.$off("modified", this.update);
+						
+						Vue.set(this, "viewing", toView);
+						Vue.set(this, "open", true);
+	
+						if(this.viewing.$on) {
+							this.viewing.$on("modified", this.update);
 						}
-					}
-					
-					Vue.set(this, "viewing", toView);
-					Vue.set(this, "open", true);
-
-					if(this.viewing.$on) {
-						this.viewing.$on("modified", this.update);
+					} else if(toView.id === this.viewing.id) {
+						this.closeInfo();
 					}
 				}
 				

@@ -86,7 +86,7 @@
 						</div>
 					</div>
 					<div class="abilities flow-h centered wrap">
-						<button class="ability" v-for="ability in abilities" v-if="ability" v-on:click="showInfo(ability)">
+						<button v-for="ability in abilities" class="ability getAbilityIconClass(ability)" v-if="ability" v-on:click="showInfo(ability)">
 							<span :class="ability.icon"></span>
 						</button>
 					</div>

@@ -9,25 +9,14 @@
 rsSystem.component("RSSWDashboard", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.RSComponentUtility,
 		rsSystem.components.RSCore
 	],
 	"data": function() {
-		var data = {},
-			entities,
-			entity,
-			x;
+		var data = {};
 		
 		data.selectedEntities = [];
-		
-		entities = Object.keys(this.universe.nouns.entity);
 		data.owned = [];
-		for(x=0; x<entities.length; x++) {
-			entity = this.universe.nouns.entity[entities[x]];
-			if(entity && entity.owners && entity.owners.indexOf(this.user.id) !== -1) {
-				entity.$on("modified", this.updateDisplay);
-				data.owned.push(entity);
-			}
-		}
 		
 		return data;
 	},
@@ -40,6 +29,8 @@ rsSystem.component("RSSWDashboard", {
 		this.universe.$on("universe:modified", this.updateEntities);
 		this.universe.$on("model:modified", this.updateDisplay);
 		rsSystem.register(this);
+		
+		this.updateEntities();
 	},
 	"methods": {
 		"canOpenDashboard": function() {
@@ -56,7 +47,7 @@ rsSystem.component("RSSWDashboard", {
 		"isSelected": function(record) {
 			return this.selectedEntities.indexOf(record) !== -1;
 		},
-		"openDashboard": function(type) {
+		"openDashboard": function(type, external) {
 			var primary = null,
 				eids = [].concat(this.selectedEntities),
 				x;
@@ -79,7 +70,11 @@ rsSystem.component("RSSWDashboard", {
 						eids[x] = eids[x].id;
 					}
 					
-					window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(","), "dashboard");
+					if(external) {
+						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(","), "dashboard");
+					} else {
+						window.location = location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(",");
+					}
 					break;
 			}
 		},
@@ -108,6 +103,7 @@ rsSystem.component("RSSWDashboard", {
 			
 			this.owned.splice(0);
 			this.owned.push.apply(this.owned, owned);
+			this.owned.sort(this.sortData);
 			this.$forceUpdate();
 		}
 	},

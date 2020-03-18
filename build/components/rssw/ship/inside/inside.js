@@ -110,7 +110,7 @@
 				this.availableEntities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					buffer = this.universe.indexes.entity.listing[x];
-					if(this.isOwner(buffer) && this.entities.indexOf(buffer.id) === -1 && buffer.id !== this.entity.id && buffer.inside !== this.entity.id) {
+					if(!buffer.template && !buffer.obscured && this.isOwner(buffer) && this.entities.indexOf(buffer.id) === -1 && buffer.id !== this.entity.id && buffer.inside !== this.entity.id) {
 						this.availableEntities.push(buffer);
 					}
 				}

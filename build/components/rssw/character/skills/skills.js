@@ -10,6 +10,8 @@
 	
 	var levelBars = [0,1,2,3,4];
 
+	var instance = 0;
+	
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
@@ -33,8 +35,11 @@
 				"hideNames": false,
 				"search": ""
 			});
-			
+
+			data.instance = instance++;
+			data.customSkills = [];
 			data.levelSkills = [];
+			data.subSkills = [];
 			
 			return data;
 		},
@@ -127,9 +132,11 @@
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
-				var buffer,
+				var mapped = {},
+					buffer,
 					x;
 
+				this.customSkills.splice(0);
 				this.levelSkills.splice(0);
 				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 					if(this.universe.indexes.skill.listing[x].section) {
@@ -139,8 +146,10 @@
 				if(this.character.skill) {
 					for(x=0; x<this.character.skill.length; x++) {
 						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
-						if(buffer) {
+						if(buffer && !mapped[buffer.id]) {
+							this.customSkills.push(buffer);
 							this.levelSkills.push(buffer);
+							mapped[buffer.id] = true;
 						}
 					}
 				}

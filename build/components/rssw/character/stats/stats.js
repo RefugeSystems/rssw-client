@@ -34,6 +34,12 @@ rsSystem.component("rsswCharacterStats", {
 		"viewSkill": function(skill) {
 			this.showInfo(this.universe.indexes.skill.lookup["skill:" + skill], this.entity);
 		},
+		"skillTouched": function(skill) {
+			if(this.leveling === skill) {
+				this.viewSkill(skill);
+			}
+			Vue.set(this, "leveling", skill);
+		},
 		"noIncrease": function(stat) {
 			console.warn("Stat Check[" + stat + "]: ", this.character[stat], this.getXPCost(stat, 1), this.character.xp);
 			return this.character[stat] >= 5 || this.getXPCost(stat, 1) > this.character.xp;
