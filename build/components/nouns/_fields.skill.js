@@ -1,10 +1,10 @@
 
 (function() {
-	
+
 	var dataSource,
 		bases,
 		sort;
-	
+
 	sort = function(a, b) {
 		if(a && a.name) {
 			a = a.name;
@@ -22,7 +22,7 @@
 			return 0;
 		}
 	};
-	
+
 	bases = {
 		"label": "Base",
 		"property": "base",
@@ -30,7 +30,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -44,6 +44,10 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
+	}, {
+		"label": "Order",
+		"property": "order",
+		"type": "number"
 	}, {
 		"label": "Section",
 		"property": "section",
@@ -76,7 +80,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsSkill", {
 		"inherit": true,
 		"props": {
@@ -98,11 +102,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

@@ -18244,11 +18244,11 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/character/display.html": return "<div class=\"character-information\">\r\n\t<div class=\"flow-h\">\r\n\t\t<div class=\"stat brawn flow-v centered\">\r\n\t\t\t<span>Brawn</span>\r\n\t\t\t<span>{{record.brawn}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"stat agility flow-v centered\">\r\n\t\t\t<span>Agility</span>\r\n\t\t\t<span>{{record.agility}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/history.html": return "<div class=\"rs-component rssw component-entity-history\">\r\n\t<h2>History</h2>\r\n\t<div class=\"history\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry\" v-for=\"entry in history\">\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && (universe.indexes[entry.modified] || entry.modified === 'inside')\" class=\"message\">\r\n\t\t\t\t\t<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.previous]?universe.indexes.entity.index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<span>to</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.current]?universe.indexes.entity.index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && !universe.indexes[entry.modified] && entry.modified !== 'inside'\" class=\"message\">\r\n\t\t\t\t\t<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_gain'\" class=\"message\">\r\n\t\t\t\t\t<span>Gained Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_loss'\" class=\"message\">\r\n\t\t\t\t\t<span>Lost Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_acquired_or_loss'\" class=\"message\">\r\n\t\t\t\t\t<div>{{entry.modified.capitalize()}} Changed.</div>\r\n\t\t\t\t\t<div class=\"gained\" v-if=\"entry.report.gained.length\">\r\n\t\t\t\t\t\t<span>Gained:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.gained\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"loss\" v-if=\"entry.report.loss.length\">\r\n\t\t\t\t\t\t<span>Loss:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.loss\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"time\" :title=\"entry._timeString\">{{entry._dateString}}</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon fad fa-starship-freighter\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"exitEntity(inside)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"piloting\">\r\n\t\t<span class=\"icon\" :class=\"piloting.icon\"></span>\r\n\t\t<span class=\"label\">Piloting:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(piloting)\">\r\n\t\t\t<span class=\"value\">{{piloting.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"stopPiloting(piloting)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/journal.html": return "<div class=\"rs-component rssw component-entity-journal\">\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/journal.html": return "<div class=\"rs-component rssw component-entity-journal\">\n\t<div class=\"property description\">\n\t\t<span class=\"icon fas fa-info-square\"></span>\n\t\t<span class=\"label\">\n\t\t\t<span>Description:</span>\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\n\t\t\t</button>\n\t\t</span>\n\t\t<div class=\"text-container\">\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\n\t\t\t<!--\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\n\t\t\t-->\n\t\t</div>\n\t</div>\n</div>";
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"isVisible(skill)\" v-on:click=\"skillTouched(skill)\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"naming base\">\r\n\t\t\t\t{{(skill.base?skill.base:\"ERR\").capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-drafting-compass\"></span>\r\n\t\t\t\t\t<span>Subskills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"subskill\" :existing=\"subSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"skillTouched(stat)\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Stat ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t</button>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"noIncrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\r\n\t\r\n\t<div class=\"report\" v-if=\"equipped.length\">\r\n\t\t<h3>Equipped Weapons</h3>\r\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\r\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"damage band flex v element\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll align-center\">\r\n\t\t\t\t\t{{getWeaponDamage(item)}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"index < item.range + rangeBonus\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\r\n\t\t\t\t<div class=\"name\">\r\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"report\" v-if=\"items.length\">\r\n\t\t<h3>Unequipped Weapons</h3>\r\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\r\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"damage band flex v element\">\r\n\t\t\t\t<div class=\"name align-center\">\r\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll align-center\">\r\n\t\t\t\t\t{{getWeaponDamage(item)}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"index < item.range\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\r\n\t\t\t\t<div class=\"name\">\r\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"roll flex h\">\r\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\n\n\t<div class=\"report\" v-if=\"equipped.length\">\n\t\t<h3>Equipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"report\" v-if=\"items.length\">\n\t\t<h3>Unequipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
 			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex h\">\r\n\t\t<h3>Equipment</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'short'\" class=\"slots flex h centered\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex v\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex h\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/entity/knowledge.html": return "<div class=\"rs-component rssw component-entity-knowledge\">\r\n\t<h2>\r\n\t\t<span>Knowledge</span>\r\n\t\t<button v-on:click=\"resetHeaders\" class=\"rs-light-blue rsbg-transparent flat\">\r\n\t\t\t<span class=\"far fa-sync\"></span>\r\n\t\t</button>\r\n\t</h2>\r\n\t<div class=\"knowledge-container\">\r\n\t\t<div class=\"controls flex h\">\r\n\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"knowledge\" :state=\"state\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t</div>\r\n\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"knowledge\" :headers=\"state.headers\" :state=\"state\" v-on:selected=\"showInfo($event, entity)\"></rs-table>\r\n\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"knowledge\" :state=\"state\"></rs-table-paging>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship/inside.html": return "<div class=\"rs-component rssw component-entity-inside\">\r\n\t<h2 class=\"title-info\">\r\n\t\t<span>Entities Inside</span>\r\n\t\t<span v-if=\"entity.required_crew\" class=\"title-readout\" :class=\"getCountClass()\">\r\n\t\t\t<span class=\"rs-white\">(</span>\r\n\t\t\t<span>{{crew}}</span>\r\n\t\t\t<span class=\"rs-white\">/</span>\r\n\t\t\t<span title=\"Minimum number of Crew required to fully operate this ship\">{{entity.required_crew}}</span>\r\n\t\t\t<span v-if=\"entity.maximum_crew\">\r\n\t\t\t\t<span class=\"rs-white\">[</span>\r\n\t\t\t\t<span title=\"Maximum number of Crew that fit in this ship\">{{entity.maximum_crew}}</span>\r\n\t\t\t\t<span class=\"rs-white\">]</span>\r\n\t\t\t</span>\r\n\t\t\t\r\n\t\t\t<span class=\"rs-white\">)</span>\r\n\t\t</span>\r\n\t</h2>\r\n\t<div class=\"entitites\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry flow-h\" v-for=\"entry in entities\">\r\n\t\t\t\t<button class=\"entity flow-h\" v-on:click=\"showInfo(entry)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<span class=\"entity\" v-else>\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<button class=\"exit-ship flow-h\" v-on:click=\"moveEntity(entry.id, null)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t\t\t<span>Exit Ship</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"board\">\r\n\t\t<div class=\"label\">\r\n\t\t\tBring Entity on Board\r\n\t\t</div>\r\n\t\t<div>\r\n\t\t\t<select v-model=\"moving\" v-on:change=\"moveEntity(moving, entity.id)\">\r\n\t\t\t\t<option value=\"\">Select Entity...</option>\r\n\t\t\t\t<option v-for=\"e in availableEntities\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -30206,11 +30206,11 @@ rsSystem.component("rsCards", {
 
 
 (function() {
-	
+
 	var dataSource,
 		bases,
 		sort;
-	
+
 	sort = function(a, b) {
 		if(a && a.name) {
 			a = a.name;
@@ -30228,7 +30228,7 @@ rsSystem.component("rsCards", {
 			return 0;
 		}
 	};
-	
+
 	bases = {
 		"label": "Base",
 		"property": "base",
@@ -30236,7 +30236,7 @@ rsSystem.component("rsCards", {
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -30250,6 +30250,10 @@ rsSystem.component("rsCards", {
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
+	}, {
+		"label": "Order",
+		"property": "order",
+		"type": "number"
 	}, {
 		"label": "Section",
 		"property": "section",
@@ -30282,7 +30286,7 @@ rsSystem.component("rsCards", {
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsSkill", {
 		"inherit": true,
 		"props": {
@@ -30304,11 +30308,11 @@ rsSystem.component("rsCards", {
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();
@@ -32119,7 +32123,6 @@ class FieldDescriptor {
 		"template": Vue.templified("components/rssw/character/info.html")
 	});
 })();
-
 /**
  * 
  * 
@@ -32486,18 +32489,18 @@ rsSystem.component("rsswCharacterStats", {
 
 
 /**
- * 
- * 
- * @class rsswEntityWeapons
+ *
+ *
+ * @class rsswEntityWeaponItem
  * @constructor
  * @module Components
  */
 (function() {
-	var storageKey = "_rs_weaponsComponentKey:";
-	
+	var storageKey = "_rs_weaponitemComponentKey:";
+
 	var rangeType = "itemtype:rangedweapon",
 		meleeType = "itemtype:meleeweapon";
-	
+
 	var rangeBands = [
 		"engaged",
 		"short",
@@ -32505,7 +32508,7 @@ rsSystem.component("rsswCharacterStats", {
 		"long",
 		"extreme"
 	];
-	
+
 	var rangeBandDifficulty = {
 		"engaged": {
 			"difficulty": 1,
@@ -32533,8 +32536,8 @@ rsSystem.component("rsswCharacterStats", {
 			"setback": 0
 		}
 	};
-	
-	rsSystem.component("rsswEntityWeapons", {
+
+	rsSystem.component("rsswEntityWeaponItem", {
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSComponentUtility,
@@ -32553,15 +32556,15 @@ rsSystem.component("rsswCharacterStats", {
 		"data": function() {
 			var data = {},
 				x;
-			
+
 			data.storageKeyID = storageKey + this.entity.id;
-	
+
 			data.mdDescription = null;
 			data.description = "";
 			data.state = this.loadStorage(data.storageKeyID, {
 				"viewing": false
 			});
-			
+
 			data.rangeBonus = 0;
 			data.rangeBands = rangeBands;
 			data.adjustments = {};
@@ -32571,7 +32574,7 @@ rsSystem.component("rsswCharacterStats", {
 			for(x=0; x<rangeBands.length; x++) {
 				data.adjustments[rangeBands[x]] = {};
 			}
-			
+
 			return data;
 		},
 		"watch": {
@@ -32584,7 +32587,7 @@ rsSystem.component("rsswCharacterStats", {
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-		
+
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
@@ -32598,9 +32601,9 @@ rsSystem.component("rsswCharacterStats", {
 		"methods": {
 			"getAttackDice": function(item) {
 				var pool = this.getSkillRoll(item.skill_check);
-				
+
 				// TODO: Compute?
-				
+
 				return this.renderRoll(pool);
 			},
 			"getWeaponDamage": function(item) {
@@ -32624,12 +32627,12 @@ rsSystem.component("rsswCharacterStats", {
 						}
 					}
 				}
-				
+
 				// TODO: Compute?
 				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
 					return [];
 				}
-				
+
 				switch(band) {
 					case "engaged":
 						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
@@ -32637,7 +32640,7 @@ rsSystem.component("rsswCharacterStats", {
 						}
 						break;
 				}
-				
+
 				return this.renderRoll(pool);
 			},
 			"update": function() {
@@ -32652,13 +32655,13 @@ rsSystem.component("rsswCharacterStats", {
 				for(x=0; x<this.items.length; x++) {
 					this.items[x].$off("modified", this.update);
 				}
-				
+
 				this.equipped.splice(0);
 				this.items.splice(0);
-				
+
 				if(this.entity.equipped && this.entity.equipped.item) {
 					keys = Object.keys(this.entity.equipped.item);
-					
+
 					for(x=0; x<keys.length; x++) {
 						slot = this.universe.indexes.slot.lookup[keys[x]];
 						if(slot && slot.combat_slot && this.entity.equipped.item[slot.id] && this.entity.equipped.item[slot.id].length) {
@@ -32677,7 +32680,7 @@ rsSystem.component("rsswCharacterStats", {
 						}
 					}
 				}
-				
+
 				if(this.entity.item && this.entity.item.length) {
 					for(x=0; x<this.entity.item.length; x++) {
 						item = this.universe.indexes.item.lookup[this.entity.item[x]];
@@ -32687,7 +32690,7 @@ rsSystem.component("rsswCharacterStats", {
 						}
 					}
 				}
-				
+
 				for(x=0; x<rangeBands.length; x++) {
 					for(i=0; i<this.diceTypes.length; i++) {
 						Vue.delete(this.adjustments[rangeBands[x]], this.diceTypes[i]);
@@ -32696,7 +32699,244 @@ rsSystem.component("rsswCharacterStats", {
 						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
 					}
 				}
-				
+
+				this.rangeBonus = this.entity.range || 0;
+			}
+		},
+		"beforeDestroy": function() {
+			this.entity.$off("modified", this.update);
+			for(var x=0; x<this.items.length; x++) {
+				this.items[x].$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/rssw/character/weapons/item.html")
+	});
+})();
+
+
+/**
+ *
+ *
+ * @class rsswEntityWeapons
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_weaponsComponentKey:";
+
+	var rangeType = "itemtype:rangedweapon",
+		meleeType = "itemtype:meleeweapon";
+
+	var rangeBands = [
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+
+	var rangeBandDifficulty = {
+		"engaged": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"short": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"medium": {
+			"difficulty": 2,
+			"challenge": 0,
+			"setback": 0
+		},
+		"long": {
+			"difficulty": 3,
+			"challenge": 0,
+			"setback": 0
+		},
+		"extreme": {
+			"difficulty": 4,
+			"challenge": 0,
+			"setback": 0
+		}
+	};
+
+	rsSystem.component("rsswEntityWeapons", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x;
+
+			data.storageKeyID = storageKey + this.entity.id;
+
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+
+			data.isRanged = {};
+			data.rangeBonus = 0;
+			data.rangeBands = rangeBands;
+			data.adjustments = {};
+			data.equipped = [];
+			data.items = [];
+
+			for(x=0; x<rangeBands.length; x++) {
+				data.adjustments[rangeBands[x]] = {};
+			}
+
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.entity.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"getAttackDice": function(item) {
+				var pool = this.getSkillRoll(item.skill_check);
+
+				// TODO: Compute?
+
+				return this.renderRoll(pool);
+			},
+			"getWeaponDamage": function(item) {
+				var damage;
+				if(item.damage) {
+					damage = this.universe.calculateExpression(item.damage, item, this.entity);
+				} else {
+					damage = 0;
+				}
+				return damage;
+			},
+			"getRangeBandDifficulty": function(item, band) {
+				var pool = Object.assign({}, rangeBandDifficulty[band]),
+					x,
+					y;
+
+				if(this.adjustments[band]) {
+					for(x=0; x<this.diceTypes.length; x++) {
+						if(this.adjustments[band][this.diceTypes[x]]) {
+							pool[this.diceTypes[x]] = (pool[this.diceTypes[x]] || 0) + this.adjustments[band][this.diceTypes[x]];
+						}
+					}
+				}
+
+				// TODO: Compute?
+				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
+					return [];
+				}
+
+				switch(band) {
+					case "engaged":
+						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
+							pool.difficulty = (pool.difficulty || 0) + 2;
+						}
+						break;
+				}
+
+				return this.renderRoll(pool);
+			},
+			"update": function() {
+				var mapped = {},
+					buffer,
+					item,
+					keys,
+					slot,
+					i,
+					x;
+
+				for(x=0; x<this.items.length; x++) {
+					this.items[x].$off("modified", this.update);
+				}
+
+				this.equipped.splice(0);
+				this.items.splice(0);
+
+				if(this.entity.equipped && this.entity.equipped.item) {
+					keys = Object.keys(this.entity.equipped.item);
+
+					for(x=0; x<keys.length; x++) {
+						slot = this.universe.indexes.slot.lookup[keys[x]];
+						if(slot && slot.combat_slot && this.entity.equipped.item[slot.id] && this.entity.equipped.item[slot.id].length) {
+							for(i=0; i<this.entity.equipped.item[slot.id].length; i++) {
+								item = this.universe.indexes.item.lookup[this.entity.equipped.item[slot.id][i]];
+								if(item && !mapped[item.id]) {
+									item.$on("modified", this.update);
+									this.equipped.push(item);
+									if(item.itemtype) {
+										this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
+									} else {
+										this.isRanged[item.id] = false;
+									}
+									mapped[item.id] = true;
+								} else {
+									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
+								}
+							}
+						} else {
+							console.warn("Unknown or Non-Combat Equipment Slot? " + keys[x], slot, this.entity);
+						}
+					}
+				}
+
+				if(this.entity.item && this.entity.item.length) {
+					for(x=0; x<this.entity.item.length; x++) {
+						item = this.universe.indexes.item.lookup[this.entity.item[x]];
+						if(item && item.damage && !mapped[item.id]) {
+							item.$on("modified", this.update);
+							this.items.push(item);
+							if(item.itemtype) {
+								this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
+							} else {
+								this.isRanged[item.id] = false;
+							}
+						}
+					}
+				}
+
+				for(x=0; x<rangeBands.length; x++) {
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.delete(this.adjustments[rangeBands[x]], this.diceTypes[i]);
+					}
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
+					}
+				}
+
 				this.rangeBonus = this.entity.range || 0;
 			}
 		},
@@ -32709,7 +32949,6 @@ rsSystem.component("rsswCharacterStats", {
 		"template": Vue.templified("components/rssw/character/weapons.html")
 	});
 })();
-
 
 /**
  * 
