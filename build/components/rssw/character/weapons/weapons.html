@@ -1,5 +1,5 @@
 <div class="rs-component rssw component-entity-weapons">
-	
+
 	<div class="report" v-if="equipped.length">
 		<h3>Equipped Weapons</h3>
 		<div class="weapon-report flex h" v-for="item in equipped">
@@ -22,7 +22,7 @@
 					{{getWeaponDamage(item)}}
 				</div>
 			</div>
-			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="index < item.range + rangeBonus" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="report" v-if="items.length">
 		<h3>Unequipped Weapons</h3>
 		<div class="weapon-report flex h" v-for="item in items">
@@ -55,7 +55,7 @@
 					{{getWeaponDamage(item)}}
 				</div>
 			</div>
-			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="index < item.range" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="(index === 0 || isRanged[item.id]) && index < item.range" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>

@@ -2,12 +2,12 @@
 /**
  *
  *
- * @class rsswEntityWeapons
+ * @class rsswEntityWeaponItem
  * @constructor
  * @module Components
  */
 (function() {
-	var storageKey = "_rs_weaponsComponentKey:";
+	var storageKey = "_rs_weaponitemComponentKey:";
 
 	var rangeType = "itemtype:rangedweapon",
 		meleeType = "itemtype:meleeweapon";
@@ -48,7 +48,7 @@
 		}
 	};
 
-	rsSystem.component("rsswEntityWeapons", {
+	rsSystem.component("rsswEntityWeaponItem", {
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSComponentUtility,
@@ -76,7 +76,6 @@
 				"viewing": false
 			});
 
-			data.isRanged = {};
 			data.rangeBonus = 0;
 			data.rangeBands = rangeBands;
 			data.adjustments = {};
@@ -182,11 +181,6 @@
 								if(item && !mapped[item.id]) {
 									item.$on("modified", this.update);
 									this.equipped.push(item);
-									if(item.itemtype) {
-										this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
-									} else {
-										this.isRanged[item.id] = false;
-									}
 									mapped[item.id] = true;
 								} else {
 									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
@@ -204,11 +198,6 @@
 						if(item && item.damage && !mapped[item.id]) {
 							item.$on("modified", this.update);
 							this.items.push(item);
-							if(item.itemtype) {
-								this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
-							} else {
-								this.isRanged[item.id] = false;
-							}
 						}
 					}
 				}
@@ -231,6 +220,6 @@
 				this.items[x].$off("modified", this.update);
 			}
 		},
-		"template": Vue.templified("components/rssw/character/weapons.html")
+		"template": Vue.templified("components/rssw/character/weapons/item.html")
 	});
 })();
