@@ -112,7 +112,7 @@
 .rs-component .flow-v.middled,
 .rs-component .flow-v.middled,
 .rs-component .flex.v.middled {
-  align-content: center;
+  justify-content: center;
 }
 .rs-component .flow-v.inline,
 .rs-component .flow-v.inline,
@@ -163,6 +163,9 @@
 .rs-component .aligned-center,
 .rs-component .align-center {
   text-align: center;
+}
+.rs-component .nowrap {
+  white-space: nowrap;
 }
 .rs-component .rs-border {
   border-style: solid;
@@ -403,9 +406,16 @@
 .rs-component .rs-black {
   color: #000000 !important;
 }
+.system-component .rs-black-visible,
+.rs-component .rs-black-visible {
+  color: #332f2f !important;
+}
 .system-component .rs-transparent,
 .rs-component .rs-transparent {
   color: transparent !important;
+}
+.swg:before {
+  font-size: 1.25em;
 }
 h1,
 h2,
@@ -1145,6 +1155,7 @@ form {
   display: flex;
   flex-direction: row;
   top: 0px;
+  z-index: 20;
 }
 .system-component.system-info .main-bar .titling {
   display: flex;
@@ -1176,12 +1187,37 @@ form {
   color: #000000;
   padding: 3px;
 }
+.object-info .record-description {
+  max-height: 800px;
+  width: 100%;
+  overflow: auto;
+}
+.object-info .record-description table {
+  border-collapse: collapse;
+  color: black;
+}
+.object-info .record-description table th {
+  background: #EAEFF9;
+  position: sticky;
+  z-index: 1;
+  top: 0px;
+}
+.object-info .record-description table td:first-child {
+  white-space: nowrap;
+}
+.object-info .record-description table tr:nth-child(odd) {
+  background-color: #bcd9e2;
+}
 .object-info .reference-heading {
   font-weight: 800;
   font-size: 1.2em;
 }
 .object-info .reference-heading span {
   border-bottom: 1px solid #EAEFF9;
+}
+.object-info .reference-heading,
+.object-info h3 {
+  margin-top: 6px;
 }
 .object-info .subreference {
   padding-left: 10px;
@@ -1242,6 +1278,16 @@ form {
 .object-info .control button.action:active,
 .object-info .control button.actionfocus {
   color: #FF9560;
+}
+.object-info .control button.action.direct {
+  border: 1px solid #000000;
+  color: #617EB8;
+  min-width: 120px;
+  text-align: left;
+}
+.object-info .control button.action.direct.short {
+  min-width: 30px;
+  text-align: center;
 }
 .object-info .control button.action:hover {
   background-color: #e0aef7;
@@ -1362,10 +1408,6 @@ form {
   background: #ac6530;
   color: #EAEFF9;
 }
-.system-component.system-menu .navigation .navigation-item:hover {
-  background: white;
-  color: black;
-}
 .system-component.system-menu .navigation .navigation-item .nav-label {
   overflow: hidden;
   max-width: 500px;
@@ -1386,6 +1428,10 @@ form {
   flex-grow: 0;
   font-size: 18px;
   cursor: pointer;
+}
+.system-component.system-menu .navigation .navigation-item .navigation-contents:hover {
+  background: white;
+  color: black;
 }
 .system-component.system-menu .navigation .navigation-item .navigation-contents .nav-icon {
   padding-right: 10px;
@@ -1464,16 +1510,18 @@ form {
   justify-content: space-between;
 }
 .rs-component.rssw.component-character-board .stat {
-  width: 90px;
+  /*width: 90px;*/
   overflow: hidden;
   border: 1px solid #EAEFF9;
   border-radius: 5px;
   margin: 3px;
+  flex-grow: 2;
 }
 .rs-component.rssw.component-character-board .stat .label {
   text-align: center;
   width: 100%;
   margin: 2px 0px 0px 0px;
+  white-space: nowrap;
 }
 .rs-component.rssw.component-character-board .stat .value {
   width: 50%;
@@ -1604,6 +1652,57 @@ form {
   max-height: 550px;
   max-width: inherit;
 }
+.rs-component.rssw.component-entity-journal a {
+  cursor: pointer;
+}
+.rs-component.rssw.component-entity-journal .property {
+  max-width: 550px;
+  color: #EAEFF9;
+  margin: 3px;
+}
+.rs-component.rssw.component-entity-journal .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
+}
+.rs-component.rssw.component-entity-journal .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-entity-journal .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-entity-journal .property-action {
+  color: #FF9560;
+  font-size: 0.9em;
+}
+.rs-component.rssw.component-entity-journal .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-entity-journal button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-entity-journal button.action {
+  color: white;
+}
+.rs-component.rssw.component-entity-journal .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
+.rs-component.rssw.component-entity-journal .text-container textarea {
+  width: 510px;
+  height: 300px;
+  max-height: 550px;
+  max-width: inherit;
+}
 .leveling {
   margin: 3px 0px;
 }
@@ -1710,6 +1809,31 @@ form {
 .rs-component.rssw.component-character-stats .stats .stat .value {
   color: #000000;
   font-size: 20px;
+}
+.rs-component.rssw.component-entity-weapons .weapon-report {
+  margin-bottom: 6px;
+  min-height: 40px;
+}
+.rs-component.rssw.component-entity-weapons .element {
+  padding: 0px 5px;
+}
+.rs-component.rssw.component-entity-weapons .name {
+  margin-top: 5px;
+}
+.rs-component.rssw.component-entity-weapons .icon {
+  min-width: 40px;
+  min-height: 40px;
+  line-height: 40px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-entity-weapons .band {
+  border-left: 3px solid #EAEFF9;
+}
+.rs-component.rssw.component-entity-weapons .roll {
+  margin: 5px 0px;
+}
+.rs-component.rssw.component-entity-weapons .roll .dice {
+  margin: 0px 2px;
 }
 .rs-component.rssw.component-entity-equipment.short {
   width: 300px;

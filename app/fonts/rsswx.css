@@ -1,0 +1,16 @@
+@font-face {
+	font-family: rsswx;
+	src: url("../fonts/rsswx.otf");
+}
+
+.rsswx {
+	font-family: rsswx;
+}
+
+.rsswx.rsswx-threat:before {
+	content: "A";
+}
+
+.rsswx.rsswx-dispair:before {
+	content: "B";
+}
