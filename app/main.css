@@ -675,6 +675,9 @@ form {
   min-height: 150px;
   width: 100%;
 }
+.rssw-page.character-builder .fill {
+  flex-grow: 5;
+}
 .rssw-page.character-builder .creating {
   justify-content: center;
   align-content: center;

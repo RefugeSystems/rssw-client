@@ -214,7 +214,7 @@
 		 <div v-html="note"></div>
 	</div>
 	
-	<div v-if="player.master && !options.noMaster" class="master-controls">
+	<div v-if="player && player.master && !options.noMaster" class="master-controls">
 		<h3>Master Controls</h3>
 	
 		<div class="record-id" v-on:click="highlight($event)">

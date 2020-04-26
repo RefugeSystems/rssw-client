@@ -69,33 +69,54 @@
 					
 					if(this.stage === 6) {
 						console.warn("Stage 6 Re-Calc: ", this.choices[0]);
-						if(this.choices[0].wound_start) {
+						if(this.choices[0].wounds_start) {
 							// TODO: Switch to System Set Calculation
-							console.warn("Wound Calc[" + this.building.brawn + "]: ", this.choices[0].wound_start);
-							buffer = eval(this.choices[0].wound_start.replace("brawn", this.building.brawn));
+							console.warn("Wounds Calc[" + this.building.brawn + "]: ", this.choices[0].wounds_start);
+//							buffer = eval(this.choices[0].wounds_start.replace("brawn", this.building.brawn));
+							switch(typeof(this.choices[0].wounds_start)) {
+								case "string":
+									buffer = parseInt(eval(this.choices[0].wounds_start.replace("starting.brawn", this.building.brawn)));
+									break;
+								case "number":
+									buffer = this.choices[0].wounds_start + this.building.brawn;
+									break;
+							}
+							console.log("Wounds Result: " + this.building.wounds_max + " -> " + buffer);
 							if(this.building.wounds_max !== buffer) {
 								modifier.wounds_max = buffer;
 								modifier.wounds = buffer;
 								push = true;
 							}
 						} else {
-							this.choices[0].wounds = 0;
+//							this.choices[0].wounds = 0;
+							console.error("No Wounds Calculation?");
 						}
 						if(this.choices[0].strain_start) {
 							// TODO: Switch to System Set Calculation
 							console.warn("Strain Calc[" + this.building.willpower + "]: ", this.choices[0].strain_start);
-							buffer = eval(this.choices[0].strain_start.replace("willpower", this.building.willpower));
+//							buffer = eval(this.choices[0].strain_start.replace("willpower", this.building.willpower));
+							switch(typeof(this.choices[0].strain_start)) {
+								case "string":
+									buffer = parseInt(eval(this.choices[0].strain_start.replace("starting.willpower", this.building.willpower)));
+									break;
+								case "number":
+									buffer = this.choices[0].strain_start + this.building.willpower;
+									break;
+							}
+							console.log("Strain Result: " + this.building.strain_max + " -> " + buffer);
 							if(this.building.strain_max !== buffer) {
 								modifier.strain_max = buffer;
 								modifier.strain = buffer;
 								push = true;
 							}
 						} else {
-							this.choices[0].strain = 0;
+//							this.choices[0].strain = 0;
+							console.error("No Strain Calculation?");
 						}
 					}
 					
 					if(push) {
+						console.log("Pushing Modification: ", modifier);
 						this.building.commit(modifier);
 					}
 				}
@@ -149,19 +170,35 @@
 							this.choices[0].xp_start = 0;
 						}
 
-						if(this.choices[0].wound_start) {
+						if(this.choices[0].wounds_start) {
 							// TODO: Switch to System Set Calculation
-							this.building.wounds_max = eval(this.choices[0].wound_start.replace("brawn", this.choices[0].brawn));
+							switch(typeof(this.choices[0].wounds_start)) {
+								case "string":
+									this.building.wounds_max = parseInt(eval(this.choices[0].wounds_start.replace("starting.brawn", this.choices[0].brawn)));
+									break;
+								case "number":
+									this.building.wounds_max = this.choices[0].wounds_start + this.choices[0].brawn;
+									break;
+							}
 							this.building.wounds = this.building.wounds_max;
 						} else {
-							this.choices[0].wounds = 0;
+							console.error("No Wounds Calculation?");
+//							this.choices[0].wounds = 0;
 						}
 						if(this.choices[0].strain_start) {
 							// TODO: Switch to System Set Calculation
-							this.building.strain_max = eval(this.choices[0].strain_start.replace("willpower", this.choices[0].willpower));
+							switch(typeof(this.choices[0].strain_start)) {
+								case "string":
+									this.building.strain_max = parseInt(eval(this.choices[0].strain_start.replace("starting.willpower", this.choices[0].willpower)));
+									break;
+								case "number":
+									this.building.strain_max = this.choices[0].strain_start + this.choices[0].willpower;
+									break;
+							}
 							this.building.strain = this.building.strain_max;
 						} else {
-							this.choices[0].strain = 0;
+							console.error("No Strain Calculation?");
+//							this.choices[0].strain = 0;
 						}
 
 						this.building.defense_melee = 0;

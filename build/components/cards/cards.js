@@ -58,6 +58,14 @@ rsSystem.component("rsCards", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		
+		this.$el.onclick = (event) => {
+			var follow = event.srcElement.attributes.getNamedItem("data-id");
+			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+				event.stopPropagation();
+				rsSystem.EventBus.$emit("display-info", follow);
+			}
+		};
 	},
 	"methods": {
 		"cardZIndex": function(index, card) {
@@ -75,7 +83,9 @@ rsSystem.component("rsCards", {
 			return "top: " + offset + "px; left: " + offset + "px;";
 		},
 		"toCard": function(index) {
-			Vue.set(this, "current", index);
+			if(this.current !== index) {
+				Vue.set(this, "current", index);
+			}
 		},
 		"nextCard": function() {
 			if(this.current < this.corpus.length - 1) {

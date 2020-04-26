@@ -38,9 +38,7 @@
 		<div class="heading">
 			<h1>Select Species</h1>
 		</div>
-		<div class="cards">
-			<rs-cards v-on:selected="selected($event)" :corpus="base.species" :state="state" :universe="universe" :user="player" labeling="Species"></rs-cards>
-		</div>
+		<rs-cards v-on:selected="selected($event)" :corpus="base.species" :state="state" :universe="universe" :user="player" labeling="Species"></rs-cards>
 		<button v-on:click="back()" class="regress">
 			<span class="fas fa-chevron-circle-left"></span>
 			<span>Back</span>
@@ -60,9 +58,7 @@
 		<div class="heading">
 			<h1>Select Specialization</h1>
 		</div>
-		<div class="cards">
-			<rs-cards v-on:selected="selected($event)" :corpus="base.specializations" :state="state" :universe="universe" :user="player" labeling="Specialization"></rs-cards>
-		</div>
+		<rs-cards v-on:selected="selected($event)" :corpus="base.specializations" :state="state" :universe="universe" :user="player" labeling="Specialization"></rs-cards>
 		<button v-on:click="back()" class="regress">
 			<span class="fas fa-chevron-circle-left"></span>
 			<span>Back</span>
@@ -72,9 +68,7 @@
 		<div class="heading">
 			<h1>Review Selections</h1>
 		</div>
-		<div class="cards">
-			<rs-cards v-on:selected="selected($event)" :corpus="choices" :state="state" :universe="universe" :user="player" selection="Confirm"></rs-cards>
-		</div>
+		<rs-cards v-on:selected="selected($event)" :corpus="choices" :state="state" :universe="universe" :user="player" selection="Confirm"></rs-cards>
 		<button v-on:click="back()" class="regress">
 			<span class="fas fa-chevron-circle-left"></span>
 			<span>Back</span>
