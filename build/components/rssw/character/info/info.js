@@ -149,6 +149,13 @@
 				}
 			},
 			"changed": function(property, value) {
+				console.log("Changed: " + property + " -> ", value);
+				var change = {};
+				change[property] = value;
+				this.character.commit(change);
+			},
+			"changeEvent": function(property, value) {
+				console.log("Changed: " + property + " -> ", value);
 				var change = {};
 				change[property] = value;
 				this.character.commit(change);

@@ -1128,6 +1128,60 @@ form {
   border-radius: 6px;
   padding: 8px;
 }
+.system-component.component-count {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: inherit;
+}
+.system-component.component-count .modeling {
+  padding-right: 0.5em;
+  font-size: inherit;
+}
+.system-component.component-count .op-controls {
+  position: relative;
+  height: 1.4em;
+  width: 1.6em;
+  overflow: hidden;
+  transition: width 0.5s;
+  font-size: inherit;
+  z-index: 5;
+}
+.system-component.component-count .op-controls .op-bar {
+  position: absolute;
+  height: 1.4em;
+  top: 0px;
+  right: 0px;
+  transition: padding 0.5s;
+  padding-right: 1.6em;
+}
+.system-component.component-count .op-controls.open {
+  width: 10.5em;
+}
+.system-component.component-count .op-controls.open .op-bar {
+  padding-right: 0px;
+}
+.system-component.component-count .op-controls .op-ctrl {
+  display: inline-block;
+  padding: 0px 0.2em;
+  font-size: 1.4em;
+  z-index: 6;
+}
+.system-component.component-count .op-controls .op-toggle {
+  position: absolute;
+  padding: 0px;
+  z-index: 7;
+  left: 0px;
+  top: 0px;
+}
+.system-component.component-count .op-controls .op-expression {
+  display: inline-block;
+  width: 7em;
+  height: 1.4em;
+  line-height: 1.4em;
+  font-size: inherit;
+  z-index: 6;
+}
 .rs-field.rs-autocomplete {
   position: relative;
 }

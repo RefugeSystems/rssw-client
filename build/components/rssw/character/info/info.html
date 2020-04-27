@@ -97,6 +97,7 @@
 		<span class="divide">/</span>
 		<span class="value">{{energy_output}}</span>
 	</div>
+	<!--
 	<div class="property credits">
 		<span class="icon fad fa-coins"></span>
 		<span class="label">Credits:</span>
@@ -106,6 +107,17 @@
 		<span class="icon fad fa-user-plus"></span>
 		<span class="label">Experience:</span>
 		<input class="experience" type="number" v-model.number="experience" v-on:change="changed('xp', experience)"/>
+	</div>
+	-->
+	<div class="property credits">
+		<span class="icon fad fa-coins"></span>
+		<span class="label">Credits:</span>
+		<rs-count class="experience" v-model="credits" v-on:change="changeEvent('credits', $event)"></rs-count>
+	</div>
+	<div class="property level" v-if="character.classification != 'base'">
+		<span class="icon fad fa-user-plus"></span>
+		<span class="label">Experience:</span>
+		<rs-count class="experience" v-model="experience" v-on:change="changeEvent('xp', $event)"></rs-count>
 	</div>
 	<div class="property description">
 		<span class="icon fas fa-info-square"></span>
