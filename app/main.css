@@ -1173,6 +1173,8 @@ form {
   z-index: 7;
   left: 0px;
   top: 0px;
+  font-size: 1.4em;
+  padding: 0px 0.15em;
 }
 .system-component.component-count .op-controls .op-expression {
   display: inline-block;

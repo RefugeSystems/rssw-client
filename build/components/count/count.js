@@ -39,11 +39,14 @@ rsSystem.component("rsCount", {
 		data.open = false;
 		data.operation = this.initial;
 		data.operations = {
-			"subtract": {
+			"sub": {
 				"icon": "far fa-minus-square rs-orange"
 			},
 			"add": {
 				"icon": "far fa-plus-square rs-orange"
+			},
+			"sum": {
+				"icon": "far fa-sigma rs-orange"
 			}
 		};
 		data.ops = Object.keys(data.operations);
@@ -69,16 +72,36 @@ rsSystem.component("rsCount", {
 			Vue.set(this, "open", false);
 		},
 		"complete": function() {
+			if(this.expression.length) {
+				switch(this.expression[0]) {
+					case "=":
+						Vue.set(this, "expression", this.expression.substring(1));
+						Vue.set(this, "operation", "sum");
+						break;
+					case "-":
+						Vue.set(this, "expression", this.expression.substring(1));
+						Vue.set(this, "operation", "sub");
+						break;
+					case "+":
+						Vue.set(this, "expression", this.expression.substring(1));
+						Vue.set(this, "operation", "add");
+						break;
+				}
+			}
+			
 			var value = Dice.calculateDiceRoll(this.expression, this.entity).sum;
 			value = this.toNumber(value);
 			
 			if(value) {
 				switch(this.operation) {
-					case "subtract":
+					case "sub":
 						value = this.toNumber(this.value - value);
 						break;
 					case "add":
 						value = this.toNumber(this.value + value);
+						break;
+					case "sum":
+						// Set to input value
 						break;
 					default:
 						console.warn("Unknown Operation: " + this.operation);

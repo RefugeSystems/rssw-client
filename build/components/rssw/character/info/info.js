@@ -149,13 +149,11 @@
 				}
 			},
 			"changed": function(property, value) {
-				console.log("Changed: " + property + " -> ", value);
 				var change = {};
 				change[property] = value;
 				this.character.commit(change);
 			},
 			"changeEvent": function(property, value) {
-				console.log("Changed: " + property + " -> ", value);
 				var change = {};
 				change[property] = value;
 				this.character.commit(change);
@@ -216,13 +214,13 @@
 				this.rooms.splice(0);
 				
 				if(this.experience !== this.character.xp) {
-					Vue.set(this, "experience", this.character.xp);
+					Vue.set(this, "experience", this.character.xp || 0);
 				}
 				if(this.description !== this.character.description) {
 					Vue.set(this, "description", this.character.description);
 				}
 				if(this.credits !== this.character.credits) {
-					Vue.set(this, "credits", this.character.credits);
+					Vue.set(this, "credits", this.character.credits || 0);
 				}
 				if((!this.location && this.character.location) || (this.location && this.location.id !== this.character.location)) {
 					Vue.set(this, "location", this.universe.indexes.location.index[this.character.location]);
