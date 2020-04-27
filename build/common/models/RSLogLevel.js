@@ -15,7 +15,7 @@
  * 		track. 
  */
 class RSLogLevel {
-	constructor(universe, details) {
+	constructor(details, universe) {
 		if(details.level) {
 			universe.log.levels[details.level] = details.value;
 		}

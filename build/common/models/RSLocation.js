@@ -13,5 +13,14 @@ class RSLocation extends RSObject {
 		if(!this.coordinates) {
 			this.coordinates = [];
 		}
+		if(details.showing) {
+			this.showing = details.showing;
+		}
+	}
+	
+	loadDeltaHook(details) {
+		if(details.showing) {
+			this.showing = details.showing;
+		}
 	}
 }

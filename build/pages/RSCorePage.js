@@ -9,6 +9,7 @@
 rsSystem.component("RSCorePage", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.StorageManager
 	],
 	"props": {
 		"universe": {

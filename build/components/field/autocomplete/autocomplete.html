@@ -1,0 +1,8 @@
+<div class="rs-field rs-autocomplete">
+	<input class="autocomplete-field" type="text" v-model="modeling" />
+	<div class="corpus" :class="{'open':matched.length}">
+		<div class="option" v-for="option in matched">
+			{{option}}
+		</div>
+	</div>
+</div>

@@ -18225,29 +18225,59 @@ Templify.install = function(Vue, options) {
 	options.name = options.name || "templified";
 	Vue[options.name] = function(name) {
 		switch(name) {
-			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<form onsubmit=\"return false;\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<span class=\"heading-icon\"></span>\r\n\t\t\t<span>Login</span>\r\n\t\t</div>\r\n\t\t<div class=\"fields\">\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.username\" />\r\n\t\t\t</label>\r\n\t\t\t<label class=\"full\">\r\n\t\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t\t<input type=\"text\" v-model=\"store.address\" />\r\n\t\t\t</label>\r\n\t\t\t<div class=\"actions\">\r\n\t\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\t\tSecure?\r\n\t\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</form>\r\n</div>";
+			case "common/panels/message.html": return "<div class=\"system-component rs-component message-panel\">\r\n\t<div class=\"message-container flow-h centered\" v-for=\"entry in messages\">\r\n\t\t<div class=\"control visibility\">\r\n\t\t\t<button class=\"interactability\" v-on:click=\"dismissMessage(entry)\">\r\n\t\t\t\tX\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"iconography visibility\">\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"message visibility\">\r\n\t\t\t<p>{{entry.message}}</p>\r\n\t\t\t<div class=\"date flow-h\" v-if=\"entry._display_time\">\r\n\t\t\t\t<span>{{entry._display_time.toLocaleDateString()}}</span>\r\n\t\t\t\t<span class=\"spacing\"></span>\r\n\t\t\t\t<span>{{entry._display_time.toLocaleTimeString()}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/cards.html": return "<div class=\"system-component component-cards\">\r\n\t<div class=\"card\" v-for=\"(card, $index) in corpus\" :class=\"cardClass($index, card)\" :style=\"'z-index: ' + cardZIndex($index, card) + '; ' + cardOffset($index, card)\" v-on:click=\"toCard($index)\">\r\n\t\r\n\t\t<div class=\"information\" v-swipe.left.stop=\"nextCard\" v-swipe.right.stop=\"prevCard\">\r\n\t\t\t<h1>{{card.name}}</h1>\r\n\t\t\t<rs-object-info v-on:click=\"processRequest($event)\" :record=\"card\" :universe=\"universe\"></rs-object-info>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"footer\">\r\n\t\t\t<button v-on:click.stop=\"selectCard(card)\" v-if=\"current === $index && select_label !== null\" class=\"select\">\r\n\t\t\t\t<span class=\"fas fa-check-circle\"></span>\r\n\t\t\t\t<span>{{select_label}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"goto\">\r\n\t\t\t\t<span>{{card_label}}: {{card.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"card\" v-for=\"(card, $index) in corpus\" :class=\"cardClass($index + corpus.length, card)\" :style=\"'z-index: ' + cardZIndex($index + corpus.length, card) + '; ' + cardOffset($index + corpus.length, card)\" v-if=\"$index < current\" v-on:click.stop=\"toCard($index)\">\r\n\t\r\n\t\t<div class=\"information\" v-swipe.left.stop=\"nextCard\" v-swipe.right.stop=\"prevCard\">\r\n\t\t\t<h1>{{card.name}}</h1>\r\n\t\t\t<rs-object-info v-on:click=\"processRequest($event)\" :record=\"card\" :universe=\"universe\"></rs-object-info>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"footer\">\r\n\t\t\t<button class=\"goto\">\r\n\t\t\t\t<span>{{card_label}}: {{card.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"back\" v-if=\"state && state.return\">\r\n\t\t\r\n\t</div>\r\n</div>";
+			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<div class=\"heading\">\r\n\t\t<span class=\"heading-icon\"></span>\r\n\t\t<span>Login</span>\r\n\t</div>\r\n\t<div class=\"fields\">\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t<input type=\"text\" v-enter=\"connect\" v-model=\"store.username\" />\r\n\t\t</label>\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t<input type=\"text\" v-enter=\"connect\" v-model=\"store.address\" />\r\n\t\t</label>\r\n\t\t<div class=\"actions\">\r\n\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\tSecure?\r\n\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
+			case "components/count.html": return "<div class=\"system-component component-count\">\r\n\t<div class=\"modeling\">\r\n\t\t<input v-if=\"editable\" v-model.number=\"shadow\" />\r\n\t\t<span v-if=\"!editable\">{{value}}</span>\r\n\t</div>\r\n\r\n\t<div class=\"op-controls rsbg-black\" :class=\"open?'open':'closed'\">\r\n\t\t<button class=\"op-ctrl op-toggle rsbg-black\" v-on:click=\"nextOp()\">\r\n\t\t\t<span :class=\"operations[operation].icon\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"op-bar flex h center rsbg-black\">\r\n\t\t\t<input class=\"op-expression\" v-model=\"expression\" v-on:keyup.enter=\"complete()\" v-on:keyup.esc=\"cancel()\" />\r\n\t\t\t<button class=\"op-ctrl\" v-on:click=\"complete()\">\r\n\t\t\t\t<span :class=\"open?'fas fa-equals rs-orange':operations[initial].icon\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
+			case "components/field/autocomplete.html": return "<div class=\"rs-field rs-autocomplete\">\r\n\t<input class=\"autocomplete-field\" type=\"text\" v-model=\"modeling\" />\r\n\t<div class=\"corpus\" :class=\"{'open':matched.length}\">\r\n\t\t<div class=\"option\" v-for=\"option in matched\">\r\n\t\t\t{{option}}\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/field.html": return "\r\n<div class=\"rs-component rs-field\" :class=\"field.type + ' property-' + field.property\" v-if=\"isVisible()\">\r\n\t<label :for=\"fid\">\r\n\t\t<span>{{field.label}}</span>\r\n\t</label>\r\n\t<span v-if=\"field.error\">\r\n\t\t<h3>\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>Error</span>\r\n\t\t</h3>\r\n\t\t<p>\r\n\t\t\t{{field.error | JSON}}\r\n\t\t</p>\r\n\t</span>\r\n\t\r\n\t<span v-if=\"field.type === 'label'\">\r\n\t\t<!-- Do Nothing Here -->\r\n\t</span>\r\n\t\r\n\t<select :id=\"fid\" v-if=\"field.type === 'select' && field.options && field.options.length\" v-model=\"root[field.property]\" v-on:change.stop=\"emitChanged()\">\r\n\t\t<option v-if=\"root[field.property] === 'undefined' && !field.persistUnset\" :value=\"root[field.property]\">{{field.unset}}</option>\r\n\t\t<option v-if=\"field.persistUnset\" value=undefined>{{field.unset || \"Select...\"}}</option>\r\n\t\t\r\n\t\t<option v-if=\"field.raw\" v-for=\"option in field.options\" :value=\"option\">{{option}}</option>\r\n\t\t<option v-if=\"!field.raw && !field.optionValue && !field.optionLabel\" v-for=\"option in field.options\" :value=\"option.value\" :title=\"option[field.optionDescription] || option.description || ''\">{{option.label}}</option>\r\n\t\t<option v-if=\"!field.raw && field.optionValue && field.optionLabel\" v-for=\"option in field.options\" :value=\"option[field.optionValue]\" :title=\"option[field.optionDescription] || option.description || ''\">{{option[field.optionLabel]}}</option>\r\n\t</select>\r\n\t\r\n\t<span v-if=\"field.type === 'select' && (!field.options || !field.options.length)\">\r\n\t\t<span class=\"fas fa-spinner fa-pulse\"></span>\r\n\t\t<span>Loading...</span>\r\n\t</span>\r\n\t\r\n\t<button :id=\"fid\" v-if=\"field.type === 'checkbox'\" :disabled=\"field.disable?field.disable():false\" v-on:click=\"set(!root[field.property])\" class=\"flat\">\r\n\t\t<span class=\"far\" :class=\"root[field.property]?'fa-check-square':'fa-square'\"></span>\r\n\t</button>\r\n\t\r\n\t<input :id=\"fid\" :type=\"field.type\" v-if=\"field.type === 'number'\" v-model.number=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" />\r\n\t<input :id=\"fid\" type=\"text\" v-if=\"field.type === 'rawnumber'\" v-model.number=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" />\r\n\t<input :id=\"fid\" :type=\"field.type\" v-if=\"field.follow_type\" v-model=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" />\r\n\t<input :id=\"fid\" type=\"text\" v-if=\"field.type === 'text'\" v-model=\"root[field.property]\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" />\r\n\t\r\n\t<span v-if=\"field.suffix\" class=\"suffix\">{{field.suffix}}</span>\r\n\t\r\n\t<span v-if=\"field.computed\" class=\"computed\" :class=\"field.computed.class?field.computed.class():{}\">{{field.computed.method()}}</span>\r\n\t<span v-if=\"field.computed && field.computed.suffix\" class=\"computed-suffix\">{{field.computed.suffix}}</span>\r\n\t<button v-if=\"field.info\" class=\"info fas fa-info-circle\" v-on:click.stop=\"field.info(root[field.property])\"></button>\r\n\t<button v-if=\"field.validation\" class=\"validation fas\" :class=\"{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}\" v-on:click.stop=\"field.validation.feedback(field, root[field.property], checkField())\"></button>\r\n\r\n\t<slot name=\"info\">\r\n\t</slot>\r\n\t\r\n\t<table :id=\"fid\" v-if=\"field.type === 'grid-select'\" class=\"grid-select\">\r\n\t\t<tr>\r\n\t\t\t<td></td>\r\n\t\t\t<td class=\"col label\" v-for=\"col in field.columns\">\r\n\t\t\t\t{{col.label}}\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t\t<tr v-for=\"row in field.rows\">\r\n\t\t\t<td class=\"row label\">{{row.label}}</td>\r\n\t\t\t<td v-for=\"col in field.columns\">\r\n\t\t\t\t<!-- button class=\"far option\" :class=\"{'fa-square': row.value !== _row || col.value !== _col, 'fa-square-check': row.value === _row && col.value === _col}\" v-on:click.stop=\"set((field.compose || compose)(col.value, row.value))\"></button -->\r\n\t\t\t\t<button class=\"far option\" :class=\"{'fa-square': !tracking[row.value][col.value], 'fa-check-square': tracking[row.value][col.value]}\" v-on:click.stop=\"set(compose(row.value, col.value))\"></button>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</table>\r\n\t\r\n\t<div v-if=\"field.type === 'textarea'\" class=\"textarea\">\r\n\t\t<textarea :id=\"fid\" v-model=\"root[field.property]\" v-tab :placeholder=\"field.placeholder\" v-on:input=\"emitChanged()\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"field.type === 'multireference'\" class=\"multireference\">\r\n\t\t<div v-if=\"!field.source_index\">\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>No Source Index</span>\r\n\t\t</div>\r\n\t\t<div class=\"referenced\" v-for=\"(reference, $index) in root[field.property]\">\r\n\t\t\t<span class=\"reference-display\">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:\"Missing:\" + reference}}</span>\r\n\t\t\t<button class=\"info fas fa-info-circle\" v-if=\"!field.noinfo\" v-on:click=\"openReference(reference)\"></button>\r\n\t\t\t<button class=\"remove fas fa-times-square\" v-on:click=\"dismissReference($index)\"></button>\r\n\t\t</div>\r\n\t\t<div class=\"referenced\">\r\n\t\t\t<select v-model=\"reference_value\" v-on:change=\"addReference(reference_value)\">\r\n\t\t\t\t<option value=\"\">Select To Add</option>\r\n\t\t\t\t<option v-for=\"option in field.source_index.listing\" v-if=\"optionAvailable(option)\" :id=\"option.id\" :value=\"option.id\">{{option.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"error\" v-if=\"field.error\">\r\n\t\t<span>Error:</span>\r\n\t\t<p>{{field.error.message || field.error.text || field.error}}</p>\r\n\t</div>\r\n</div>\r\n";
 			case "components/gyroscope.html": return "";
-			case "components/info.html": return "<div class=\"system-component system-info\">\r\n\r\n</div>\r\n";
-			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\">\r\n\t\t\t<button class=\"prefixed navigation-contents\"v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/nouns.html": return "<div class=\"rs-component component-nouns\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\tNoun:\r\n\t\t\t<select v-model=\"state.current\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\tCopy:\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"(object, id) in universe.nouns[state.current]\" :value=\"id\">{{id}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<textarea v-model=\"rawValue\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
-			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fas fa-user\"></span>\r\n\t\t<span class=\"value\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t</div>\r\n\t<div class=\"property species\">\r\n\t\t<span class=\"icon fas fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<span class=\"value\">{{race?race.name:\"No Species\"}}</span>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fas fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<span v-for=\"(archetype, $index) in careers\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fas fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<span v-for=\"(archetype, $index) in specializations\" class=\"archetype\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</span>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"!state.search || skill._search.indexOf(state.search) !== -1\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"base\">\r\n\t\t\t\t{{skill.base.capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
-			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.general\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.combat\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" :skills=\"skillStatsSections.knowledge\" :state=\"state\" :user=\"user\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"picture\">\r\n\t\t<img :src=\"'/images/rssw/ships/' + ship.profile\" />\r\n\t</div>\r\n\t<div class=\"information flow-h\">\r\n\t\t<div class=\"skill\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t<span v-if=\"pilot\">{{pilot.skill}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"container flow-v\">\r\n\t\t\t<div class=\"pilot\">\r\n\t\t\t\t<span v-if=\"!pilot\" class=\"fas fa-ban\"></span>\r\n\t\t\t\t<span v-if=\"pilot\">{{pilot.name}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"name\">\r\n\t\t\t\t<span>{{ship.name}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"alliance\">\r\n\t\t\t<span v-if=\"!pilot\" class=\"fab fa-rebel\"></span>\r\n\t\t\t<span v-if=\"pilot\" class=\"fab fa-empire\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"data flow-h\">\r\n\t\t<div class=\"stats flow-v\">\r\n\t\t\t<div class=\"stat flow-h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\">\r\n\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"details flow-v\">\r\n\t\t\t<div class=\"ability\">\r\n\t\t\t\t<p v-if=\"!pilot || !ability\">{{ship.description}}</p>\r\n\t\t\t\t<p v-if=\"pilot && ability\">{{ability.description}}</p>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"abilities\">\r\n\t\t\t\t<div class=\"ability\" v-for=\"ability in ship.abilities\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"mounts flow-h\">\r\n\t\t<div class=\"icon-bubble\">\r\n\t\t\t<span class=\"icon\" v-if=\"ship.icon\" :class=\"ship.icon\"></span>\r\n\t\t</div>\r\n\t\t<div class=\"slots flow-h\">\r\n\t\t\t<div class=\"slot\" v-for=\"mount in ship.slot\">\r\n\t\t\t\t{{mount}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"points\">\r\n\t\t\t<span class=\"fad fa-coin rs-gray\"></span>\r\n\t\t\t<span>{{points}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/table.html": return "";
-			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown.stop.prevent=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\" v-on:click.right.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pins && pointsOfInterest && pointsOfInterest.length\">\r\n\t\t\t\t\t\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in location.coordinates\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in location.coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span>\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<button class=\"control back\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/image.html": return "<div class=\"rs-component rs-image\" :class=\"classes()\">\r\n\t<router-link v-if=\"link\" :to=\"link\">\r\n\t\t<img class=\"image\" :src=\"uri\" draggable=\"false\"/>\r\n\t</router-link>\r\n\t<img v-else class=\"image\" :src=\"uri\" draggable=\"false\"/>\r\n</div>\r\n";
+			case "components/info.html": return "<div class=\"system-component system-info rs-component\" :class=\"open?'opened':'closed'\">\r\n\t<div class=\"main-bar\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"viewing && viewing.icon\" class=\"icon\" :class=\"viewing.icon\"></span>\r\n\t\t\t<span class=\"text\">{{viewing?viewing.name:\"Information\"}}</span>\r\n\t\t</div>\r\n\t\t<button class=\"control back\" v-on:click=\"backOne()\" v-if=\"history.length\">\r\n\t\t\t<span class=\"fas fa-step-backward\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"control close\" v-on:click=\"closeInfo()\" :tabindex=\"getTabIndex()\">\r\n\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t\r\n\t<rs-object-info v-if=\"viewing\" v-on:click=\"processRequest($event)\" :record=\"viewing\" :universe=\"universe\" :user=\"user\" :player=\"player\" :target=\"target\" :base=\"base\" :options=\"options\"></rs-object-info>\r\n</div>\r\n";
+			case "components/info/render/bag.html": return "<div class=\"general-information\">\r\n\r\n\t<rs-render-image class=\"profile-image\" v-if=\"profile\" :image=\"profile\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<rs-render-image class=\"record-image\" v-if=\"image\" :image=\"image\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t<div v-if=\"record.data\" class=\"general-image\">\r\n\t\t<img :src=\"record.data\" />\r\n\t</div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\" v-if=\"universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">\r\n\t\t\t\t\t\t\t<span :class=\"universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''\"></span>\r\n\t\t\t\t\t\t\t<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property] && record[property] && !record[property].hidden\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"direct\" v-else>\r\n\t\t\t\t<span class=\"key\" v-if=\"knowledgeLink[property]\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"knowledgeLink[property]\">{{prettifyPropertyName(property)}}</a>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"key\" v-else>{{prettifyPropertyName(property)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<h3>Contents</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"note && player && player.master\">\r\n\t\t<h3>Master Note</h3>\r\n\t\t <div v-html=\"note\"></div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/info/render/basic.html": return "<div class=\"general-information\">\r\n\t<rs-render-image class=\"profile-image\" modes=\"wide\" v-if=\"profile\" :image=\"profile\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t\r\n\t<div v-if=\"record.is_shop\">\r\n\t\t<span class=\"fas fa-warehouse\"></span>\r\n\t\t<span>A Shop</span>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\" class=\"record-description\"></div>\r\n\t\r\n\t<div v-if=\"canDashboard(record)\">\r\n\t\t<div class=\"control flex h\">\r\n\t\t\t<button class=\"action direct\" v-on:click=\"viewDashboard(false)\">\r\n\t\t\t\t<span class=\"fas fa-tablet-android-alt\"></span>\r\n\t\t\t\t<span>View Dashboard</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"action direct short\" v-on:click=\"viewDashboard(true)\">\r\n\t\t\t\t<span class=\"fas fa-external-link-alt\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"action direct short\" v-on:click=\"viewDashboard(true, true)\">\r\n\t\t\t\t<span class=\"fas fa-external-link-alt rot180\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"relatedError\" class=\"related-error\">\r\n\t\t<h3>\r\n\t\t\t<span class=\"fas fa-exclamation-triangle rs-light-red\"></span>\r\n\t\t\t<span>Related Error</span>\r\n\t\t</h3>\r\n\t\t<div class=\"rs-light-red\" v-html=\"relatedError\"></div>\r\n\t</div>\r\n\t\r\n\t<rs-render-image class=\"record-image\" v-if=\"image\" :image=\"image\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t<div v-if=\"record.data\" class=\"general-image\">\r\n\t\t<img :src=\"record.data\" />\r\n\t</div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"direct\" v-if=\"!universe.indexes[property]\">\r\n\t\t\t\t<span class=\"key\" v-if=\"knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"knowledgeLink[property] || (property + '_quicklink')\">{{prettifyPropertyName(property, record)}}</a>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"key\" v-if=\"!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']\">{{prettifyPropertyName(property, record)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\" v-html=\"prettifyPropertyValue(property, record[property], record, universe)\"></span>\r\n\t\t\t\t<span class=\"raw\" v-if=\"displayRaw[property]\">{{value}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"property\" v-for=\"property in keys\" v-if=\"visible(property, record[property])\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{prettifyPropertyName(property, record).pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\" v-if=\"universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].hidden\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\" v-if=\"!collapsed\">\r\n\t\t\t\t\t\t\t<span :class=\"universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].icon:''\"></span>\r\n\t\t\t\t\t\t\t<span>{{universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<rs-object-info v-if=\"!collapsed\" :record=\"universe.indexes[property].lookup[subrecord._sourced || subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].obscured\" class=\"rendered-value\" :data-id=\"universe.indexes[property].lookup[subrecord._sourced || subrecord].id\">{{universe.indexes[property].lookup[subrecord._sourced || subrecord].name}}</a>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && !universe.indexes[property].lookup[subrecord._sourced || subrecord]\" class=\"rendered-value unknown\">{{subrecord._sourced || subrecord}}[Unknown]</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property] && record[property] && !record[property].hidden\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{prettifyPropertyName(property, record).capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\" v-if=\"!collapsed\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info v-if=\"!collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured\" :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured\" class=\"rendered-value\" :data-id=\"universe.indexes[property].lookup[record[property]].id\">{{universe.indexes[property].lookup[record[property]].name}}</a>\r\n\t\t\t\t\t\t<a v-if=\"collapsed && !universe.indexes[property].lookup[record[property]]\" class=\"rendered-value unknown\" >{{record[property]}}[Unknown]</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"section\" v-if=\"equipped.length\">\r\n\t\t<h3>Equipped Equipment</h3>\r\n\t\t<div class=\"general-list\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"equipped_equipment in equipped\">\r\n\t\t\t\t\t<a class=\"rendered-value\" v-on:click=\"showInfo(equipped_equipment[1], base)\">{{equipped_equipment[1].name}}</a>\r\n\t\t\t\t\t<span>On</span>\r\n\t\t\t\t\t<a class=\"rendered-value\" v-on:click=\"showInfo(equipped_equipment[0], base)\">{{equipped_equipment[0].name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"section\" v-if=\"base && relatedKnowledge.length\">\r\n\t\t<h3>{{base.name}}'s Related Knowledge</h3>\r\n\t\t<div class=\"general-list\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"knowledge in relatedKnowledge\">\r\n\t\t\t\t\t<a class=\"rendered-value\" v-on:click=\"showInfo(knowledge, base)\">{{knowledge.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"section\" v-if=\"record.related && record.related.length\">\r\n\t\t<h3>Related Data</h3>\r\n\t\t<div class=\"general-list\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"data in record.related\" v-if=\"universe.index.lookup[data]\">\r\n\t\t\t\t\t<a class=\"rendered-value\" v-on:click=\"showInfo(universe.index.lookup[data], base)\">{{universe.index.lookup[data].name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"section\" v-if=\"(record._type === 'location' || record._type === 'entity') && entities.length\">\r\n\t\t<h3>Entities Here</h3>\r\n\t\t<div class=\"general-list\" v-if=\"player && player.master\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"entity in entities\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"entity.id\">{{entity.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t\t<div class=\"general-list\" v-if=\"!player || !player.master\">\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"entity in entities\">\r\n\t\t\t\t\t<a class=\"rendered-value\" v-if=\"isOwner(entity)\" :data-id=\"entity.id\">{{entity.name}}</a>\r\n\t\t\t\t\t<span class=\"data-value\" v-else>{{entity.name}}</span>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"record._type && canTransfer()\">\r\n\t\t<h3>Transfer {{record._type.capitalize()}}</h3>\r\n\t\t<select v-model=\"transfer_target\" v-on:change=\"transferObject()\">\r\n\t\t\t<option value=\"\">Choose Target...</option>\r\n\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option v-if=\"canTransferToSelf()\" :value=\"base.id\">{{base.name}}</option>\r\n\t\t\t<option v-for=\"target in transfer_targets\" :value=\"target.id\">{{target.name}}</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option value=\"drop\">Drop</option>\r\n\t\t</select>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canAttach()\">\r\n\t\t<h3>Pass To Item</h3>\r\n\t\t<span v-if=\"record.hardpoints\">Currently has {{record.item?record.item.length:0}} attachments of {{record.hardpoints}}</span>\r\n\t\t<span v-if=\"record.contents_max\">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>\r\n\t\t<select v-model=\"attach_target\" v-on:change=\"attachObject()\" v-if=\"attach_targets.length\">\r\n\t\t\t<option value=\"\"></option>\r\n\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t<option disabled>--------------</option>\r\n\t\t\t<option v-for=\"target in attach_targets\" :value=\"target.id\">{{target.name}}</option>\r\n\t\t</select>\r\n\t\t<div v-if=\"attach_targets.length === 0\">\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>No Viable Items</span>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"base && canMoveTo(base.id)\">\r\n\t\t<h3>Travel</h3>\r\n\t\t<div class=\"control\" v-if=\"canTravelTo(base.id)\">\r\n\t\t\t<button class=\"action direct\" v-on:click=\"travelToHere(base.id)\">\r\n\t\t\t\t<span class=\"fad fa-globe-africa\"></span>\r\n\t\t\t\t<span>Travel Here</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Move Entity Here</span>\r\n\t\t\t\t<select v-model=\"movingEntity\" v-on:change=\"moveEntityHere(movingEntity)\">\r\n\t\t\t\t\t<option value=\"\">{{movableEntities.length === 0?\"None Available\":\"\"}}</option>\r\n\t\t\t\t\t<option v-for=\"e in movableEntities\" v-if=\"!e.template && !e.inactive\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canUnequip()\">\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action direct\" v-on:click=\"unequip()\">\r\n\t\t\t\t<span class=\"fas fa-unlink\"></span>\r\n\t\t\t\t<span>Unequip from {{base.name}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"canEquip() && !canUnequip()\">\r\n\t\t<h3>Equip To</h3>\r\n\t\t<div class=\"control\">\r\n\t\t\t<label>\r\n\t\t\t\t<select v-model=\"equipToSlot\" v-on:change=\"equip(equipToSlot)\">\r\n\t\t\t\t\t<option value=\"\">Choose Slot</option>\r\n\t\t\t\t\t<option value=\"cancel\">Cancel</option>\r\n\t\t\t\t\t<option disabled value=\"disabled\">----------</option>\r\n\t\t\t\t\t<option v-for=\"slot in availableSlots\" :value=\"slot.id\">{{slot.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"note && player && player.master\">\r\n\t\t<div class=\"info-section\" v-if=\"(record._type === 'location' || record._type === 'entity') && hiddenEntities.length\">\r\n\t\t\t<h3>Hidden or Obscured Here</h3>\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"entity in hiddenEntities\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"entity.id\">{{entity.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t\r\n\t\t<h3>Master Note</h3>\r\n\t\t <div v-html=\"note\"></div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"player && player.master && !options.noMaster\" class=\"master-controls\">\r\n\t\t<h3>Master Controls</h3>\r\n\t\r\n\t\t<div class=\"record-id\" v-on:click=\"highlight($event)\">\r\n\t\t\t<span>ID:</span>\r\n\t\t\t<input class=\"displayed-id\" :value=\"record.id\" />\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"hideRecord()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"record.hidden?'far fa-check-square':'far fa-square'\"></span>\r\n\t\t\t\t<span>Hidden</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action\" v-on:click=\"obscureRecord()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"record.obscured?'far fa-check-square':'far fa-square'\"></span>\r\n\t\t\t\t<span>Obscured</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control flex h\">\r\n\t\t\t<button class=\"action direct\" v-on:click=\"editRecord(false)\">\r\n\t\t\t\t<span class=\"fas fa-edit\"></span>\r\n\t\t\t\t<span>Edit</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"action direct short\" v-on:click=\"editRecord(true)\">\r\n\t\t\t\t<span class=\"far fa-external-link-alt\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"action direct short\" v-on:click=\"editRecord(true, true)\">\r\n\t\t\t\t<span class=\"fas fa-external-link-alt rot180\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control\">\r\n\t\t\t<button class=\"action direct\" v-if=\"record.restock_base\" v-on:click=\"restockLocation()\">\r\n\t\t\t\t<span class=\"icon\" :class=\"restocking?'far fa-sync fa-spin':'far fa-inventory'\"></span>\r\n\t\t\t\t<span>Restock Items</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<div class=\"control\" v-if=\"record._type === 'location'\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Copy Entity to Here</span>\r\n\t\t\t\t<select v-model=\"copyToHere\" v-on:change=\"copyEntityHere(copyToHere)\">\r\n\t\t\t\t\t<option value=\"\">Select Template...</option>\r\n\t\t\t\t\t<option v-for=\"e in availableTemplates.entity\" v-if=\"e.template\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t\t<div class=\"control\" v-if=\"record._type === 'location' || record._type === 'entity'\">\r\n\t\t\t<div>\r\n\t\t\t\t<label>\r\n\t\t\t\t\t<span>Move Party Here</span>\r\n\t\t\t\t\t<select v-model=\"partyToMove\" v-on:change=\"movePartyHere(partyToMove)\">\r\n\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t<option v-for=\"p in parties\" v-if=\"p.active\" :value=\"p.id\">{{p.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</label>\r\n\t\t\t</div>\r\n\t\t\t<div>\r\n\t\t\t\t<label>\r\n\t\t\t\t\t<span>Move Entity Here</span>\r\n\t\t\t\t\t<select v-model=\"entityToMove\" v-on:change=\"moveEntityHere(entityToMove)\">\r\n\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t<option v-for=\"e in universe.indexes.entity.listing\" v-if=\"!e.template && !e.inactive\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t</label>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"info-section\" v-if=\"partiesPresent.length\">\r\n\t\t\t<h3>Parties Located Here</h3>\r\n\t\t\t<ul class=\"general-list\">\r\n\t\t\t\t<li v-for=\"party in partiesPresent\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"party.id\">{{party.name}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t</ul>\r\n\t\t</div>\r\n\t\t\r\n\t</div>\r\n</div>\r\n";
+			case "components/info/render/slot.html": return "<div class=\"general-information\">\r\n\r\n\t<rs-render-image class=\"profile-image\" v-if=\"profile\" :image=\"profile\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t\r\n\t<rs-render-image class=\"record-image\" v-if=\"image\" :image=\"image\" :linked=\"record.linked?record:null\"></rs-render-image>\r\n\t<div v-if=\"record.data\" class=\"general-image\">\r\n\t\t<img :src=\"record.data\" />\r\n\t</div>\r\n\t\r\n\t<div class=\"properties\">\r\n\t\t<div class=\"property\" v-for=\"property in keys\">\r\n\t\t\t<div class=\"reference\" v-if=\"universe.indexes[property]\">\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"isArray(record[property]) && record[property].length\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.pluralize(true)}}</div>\r\n\t\t\t\t\t<div class=\"subreference\" v-for=\"subrecord in record[property]\" v-if=\"universe.indexes[property].lookup[subrecord] && !universe.indexes[property].lookup[subrecord].hidden\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">\r\n\t\t\t\t\t\t\t<span :class=\"universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].icon:''\"></span>\r\n\t\t\t\t\t\t\t<span>{{universe.indexes[property].lookup[subrecord]?universe.indexes[property].lookup[subrecord].name:subrecord}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[subrecord]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"reference-values\" v-if=\"!isArray(record[property]) && record[property] && record[property] && !record[property].hidden\">\r\n\t\t\t\t\t<div class=\"reference-heading\">{{property.capitalize()}}</div>\r\n\t\t\t\t\t<div class=\"subreference\">\r\n\t\t\t\t\t\t<div class=\"reference-heading\">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>\r\n\t\t\t\t\t\t<rs-object-info :record=\"universe.indexes[property].lookup[record[property]]\" :universe=\"universe\"></rs-object-info>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"direct\" v-else>\r\n\t\t\t\t<span class=\"key\" v-if=\"knowledgeLink[property]\">\r\n\t\t\t\t\t<a class=\"rendered-value\" :data-id=\"knowledgeLink[property]\">{{prettifyPropertyName(property)}}</a>\r\n\t\t\t\t</span>\r\n\t\t\t\t<span class=\"key\" v-else>{{prettifyPropertyName(property)}}</span>\r\n\t\t\t\t<span class=\"divide\">:</span>\r\n\t\t\t\t<span class=\"value\">{{prettifyPropertyValue(property, record[property])}}</span>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<h3>Contents</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"note && player && player.master\">\r\n\t\t<h3>Master Note</h3>\r\n\t\t <div v-html=\"note\"></div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/info/text.html": return "<div class=\"rs-component info-text\">\r\n\r\n</div>\r\n";
+			case "components/menu.html": return "<div class=\"system-component system-menu\" :class=\"getClassSettings()\">\r\n\t<div class=\"navigation\">\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in navigationItems\" v-if=\"isActive(navItem)\" :class=\"$router.currentRoute.path.startsWith(navItem.highlight)?'current':''\">\r\n\t\t\t<router-link class=\"navigation-contents\" :to=\"navItem.path\" :key=\"navItem.path\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t\t<div class=\"separator\"></div>\r\n\t\t<div class=\"prefixed navigation-item\" v-for=\"navItem in generalItems\" v-if=\"isActive(navItem)\" :class=\"navItem.class\">\r\n\t\t\t<button class=\"prefixed navigation-contents\" v-if=\"navItem.action\" v-on:click=\"processNavigation(navItem)\">\r\n\t\t\t\t<span class=\"nav-icon\" :class=\"navItem.icon\"></span>\r\n\t\t\t\t<span class=\"nav-label\" :class=\"navItem.labelClass\">{{navItem.label}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/nouns.html": return "<div class=\"rs-component component-nouns\" v-save=\"modify\">\r\n\t<div class=\"selection\">\r\n\t\t<label class=\"\">\r\n\t\t\t<span>Noun:</span>\r\n\t\t\t<select v-model=\"state.current\" v-on:change=\"broadcastModel()\">\r\n\t\t\t\t<option v-for=\"type in nouns\" :value=\"type\">{{type}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"sourcing\">\r\n\t\t<label class=\"\">\r\n\t\t\t<span>Copy:</span>\r\n\t\t\t<select v-model=\"copy\">\r\n\t\t\t\t<option v-for=\"object in availableToCopy\" :value=\"object.id\">{{labelNoun(object)}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t</div>\r\n\t\r\n\t<div class=\"building\">\r\n\t\t<div class=\"simplified-editor\" v-if=\"!state.advanced_editor\">\r\n\t\t\t<rs-field v-for=\"field in fields[state.current]\" :root=\"state.building[state.current]\" :field=\"field\" v-on:changed=\"sync($event)\" :key=\"field.property\">\r\n\t\t\t\t<span slot=\"info\">\r\n\t\t\t\t\t<span v-if=\"field.property === 'icon'\" :class=\"state.building[state.current].icon\"></span>\r\n\t\t\t\t\t<button class=\"info-link random-name fas fa-random\" v-if=\"field.property === 'name' && hasGenerator()\" v-on:click=\"randomizeName()\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"info-link random-name fas fa-sync\" v-if=\"field.property === 'name' && hasGenerator()\" v-on:click=\"pullRandomName()\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"info-link fas fa-info-circle\" v-if=\"field.knowledge\" v-on:click=\"openKnowledge(field.knowledge)\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<button class=\"clear-link flat fas fa-ban\" v-on:click=\"clearField(field)\" v-if=\"field.type !== 'label'\" tabindex=2>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</span>\r\n\t\t\t</rs-field>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"advanced-editor\" v-if=\"state.advanced_editor\">\r\n\t\t\t<textarea v-model=\"rawValue\" v-tab v-filedrop=\"fileAttach\">\r\n\t\t\t</textarea>\r\n\t\t\t<label v-if=\"state.current === 'image'\">\r\n\t\t\t\t<span>Select Image File:</span>\r\n\t\t\t\t<input type=\"file\" id=\"attacher\" accept=\"image/*\" v-on:change=\"selectImage($event)\" />\r\n\t\t\t</label>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"actions\">\r\n\t\t<button class=\"primary-action\" v-on:click=\"newObject()\">\r\n\t\t\t<span class=\"action-icon fas fa-file-plus\"></span>\r\n\t\t\t<span class=\"action-text\">New Object</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"modify()\" :disabled=\"!isValid\">\r\n\t\t\t<span class=\"action-icon fas fa-cloud-upload\"></span>\r\n\t\t\t<span class=\"action-text\">Upload</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"dropObject()\" v-if=\"this.state.building[state.current] && this.state.building[state.current].id\">\r\n\t\t\t<span class=\"action-icon fas fa-trash\"></span>\r\n\t\t\t<span class=\"action-text\">Drop Object</span>\r\n\t\t</button>\r\n\t\t<button class=\"primary-action\" v-on:click=\"toggleEditMode()\">\r\n\t\t\t<span class=\"action-icon far\" :class=\"state.advanced_editor?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t<span class=\"action-text\">Advanced Editor</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/rssw/career/display.html": return "<div class=\"career-information\">\r\n\t<div v-if=\"description\" v-html=\"description\"></div>\r\n\t<div class=\"\">\r\n\t\t<span>Classification:</span>\r\n\t\t<span>{{record.classification}}</span>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/board.html": return "<div class=\"rs-component rssw component-character-board\">\r\n\t<div class=\"container flow-h inline\">\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('injury')\">\r\n\t\t\t\t<span class=\"ra ra-bleeding-hearts\"></span>\r\n\t\t\t\t<span>Injury</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"injury\">\r\n\t\t\t\t\t\t\t<option :value=\"0\">None</option>\r\n\t\t\t\t\t\t\t<option v-for=\"value in injuryValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\" v-on:click=\"infoStat('wounds:building')\">\r\n\t\t\t\t<span class=\"ra ra-cracked-shield\"></span>\r\n\t\t\t\t<span>Damage</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else v-on:click=\"infoStat('wounds:character')\">\r\n\t\t\t\t<span class=\"fas fa-heartbeat\"></span>\r\n\t\t\t\t<span>Wounds</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"wounds\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= wounds_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{wounds_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat wounds flow-v inline\">\r\n\t\t\t<div class=\"label\" v-if=\"character.classification == 'base'\" v-on:click=\"infoStat('strain:building')\">\r\n\t\t\t\t<span class=\"ra ra-reactor\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\" v-else v-on:click=\"infoStat('strain:character')\">\r\n\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t<span>Strain</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble pair flow-h inline\">\r\n\t\t\t\t<div class=\"value flow-v\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t<select v-model.number=\"strain\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in highValues\" v-if=\"value <= strain_max\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"value paired flow-v inline\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{strain_max}}\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('soak')\">\r\n\t\t\t\t<span class=\"fas fa-shield\"></span>\r\n\t\t\t\t<span>Soak</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{soak}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"soak\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('defense:ranged')\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Ranged</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_range}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_range\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"stat soak flow-v inline\">\r\n\t\t\t<div class=\"label\" v-on:click=\"infoStat('defense:melee')\">\r\n\t\t\t\t<span class=\"fas fa-user-shield\"></span>\r\n\t\t\t\t<span>Melee</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"bubble solo flow-h center\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t<div class=\"display\">\r\n\t\t\t\t\t\t{{defense_melee}}\r\n\t\t\t\t\t\t<!--\r\n\t\t\t\t\t\t<select v-model=\"defense_melee\">\r\n\t\t\t\t\t\t\t<option v-for=\"value in lowValues\" :value=\"value\">{{value}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t-->\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/display.html": return "<div class=\"character-information\">\r\n\t<div class=\"flow-h\">\r\n\t\t<div class=\"stat brawn flow-v centered\">\r\n\t\t\t<span>Brawn</span>\r\n\t\t\t<span>{{record.brawn}}</span>\r\n\t\t</div>\r\n\t\t<div class=\"stat agility flow-v centered\">\r\n\t\t\t<span>Agility</span>\r\n\t\t\t<span>{{record.agility}}</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/history.html": return "<div class=\"rs-component rssw component-entity-history\">\r\n\t<div class=\"history\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry\" v-for=\"entry in history\">\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && (universe.indexes[entry.modified] || entry.modified === 'inside')\" class=\"message\">\r\n\t\t\t\t\t<span>{{(named[entry.modified] || entry.modified).capitalize()}} from</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.previous]?universe.indexes[entry.modified].index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.previous)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.previous]?universe.indexes.entity.index[entry.previous].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<span>to</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified !== 'inside'\">{{universe.indexes[entry.modified].index[entry.current]?universe.indexes[entry.modified].index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.current)\" v-if=\"entry.modified === 'inside'\">{{universe.indexes.entity.index[entry.current]?universe.indexes.entity.index[entry.current].name:\"Unknown\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_keeping' && !universe.indexes[entry.modified] && entry.modified !== 'inside'\" class=\"message\">\r\n\t\t\t\t\t<span></span>{{(named[entry.modified] || entry.modified).capitalize()}} from {{entry.previous}} to {{entry.current}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_gain'\" class=\"message\">\r\n\t\t\t\t\t<span>Gained Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'item_loss'\" class=\"message\">\r\n\t\t\t\t\t<span>Lost Item</span>\r\n\t\t\t\t\t<a v-on:click=\"showInfo(entry.item)\">{{universe.indexes.item.index[entry.item]?universe.indexes.item.index[entry.item].name:\"Unknown Item\"}}</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"entry.type === 'record_acquired_or_loss'\" class=\"message\">\r\n\t\t\t\t\t<div>{{entry.modified.capitalize()}} Changed.</div>\r\n\t\t\t\t\t<div class=\"gained\" v-if=\"entry.report.gained.length\">\r\n\t\t\t\t\t\t<span>Gained:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.gained\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"loss\" v-if=\"entry.report.loss.length\">\r\n\t\t\t\t\t\t<span>Loss:</span> \r\n\t\t\t\t\t\t<a v-for=\"(related, $index) in entry.report.loss\" v-if=\"related\" v-on:click=\"showInfo(related)\">\r\n\t\t\t\t\t\t\t<span v-if=\"$index !== 0\">, </span><span>{{related.name}}</span>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"time\" :title=\"entry._timeString\">{{entry._dateString}}</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/info.html": return "<div class=\"rs-component rssw component-character-info\">\r\n\t<div class=\"property name\">\r\n\t\t<span class=\"icon fad fa-user\"></span>\r\n\t\t<span class=\"name\">{{character.name}}</span>\r\n\t\t<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>\r\n\t\t<button class=\"recalculate\" v-on:click=\"updateCharacter()\">\r\n\t\t\t<span class=\"far fa-sync\" :class=\"calculating?'fa-spin':''\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property species\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-bug rot45\"></span>\r\n\t\t<span class=\"label\">Species:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"value\" v-on:click=\"showInfo(race)\">\r\n\t\t\t{{race?race.name:\"No Species\"}}\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property career\">\r\n\t\t<span class=\"icon fad fa-user-hard-hat\"></span>\r\n\t\t<span class=\"label\">Careers:</span>\r\n\t\t<button v-for=\"(archetype, $index) in careers\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property speciailization\">\r\n\t\t<span class=\"icon fad fa-gavel\"></span>\r\n\t\t<span class=\"label\">Specializations:</span>\r\n\t\t<button v-for=\"(archetype, $index) in specializations\" class=\"archetype\" v-on:click=\"showInfo(archetype)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{archetype.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property ability\">\r\n\t\t<span class=\"icon fad fa-jedi\"></span>\r\n\t\t<span class=\"label\">Abilities:</span>\r\n\t\t<button v-for=\"(ability, $index) in abilities\" class=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">,</span>\r\n\t\t\t<span class=\"value\">{{ability.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property encumberance\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEncumberanceIcon()\"></span>\r\n\t\t<span class=\"label\">Encumberance:</span>\r\n\t\t<span class=\"value\">{{encumberance}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{encumberance_max}}</span>\r\n\t</div>\r\n\t<div class=\"property items\">\r\n\t\t<span class=\"icon fad fa-backpack\"></span>\r\n\t\t<span class=\"label\">Items:</span>\r\n\t\t<button v-for=\"(item, $index) in items\" class=\"item\" v-on:click=\"showInfo(item)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{item.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property location\" v-if=\"location\">\r\n\t\t<span class=\"icon fad fa-globe-africa\"></span>\r\n\t\t<span class=\"label\">Location:</span>\r\n\t\t<button class=\"location\" v-on:click=\"showInfo(location)\">\r\n\t\t\t<span class=\"value\">{{location.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"inside\">\r\n\t\t<span class=\"icon\" :class=\"inside.icon\"></span>\r\n\t\t<span class=\"label\">Inside:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(inside)\">\r\n\t\t\t<span class=\"value\">{{inside.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"exitEntity(inside)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property inside\" v-if=\"piloting\">\r\n\t\t<span class=\"icon\" :class=\"piloting.icon\"></span>\r\n\t\t<span class=\"label\">Piloting:</span>\r\n\t\t<button class=\"inside\" v-on:click=\"showInfo(piloting)\">\r\n\t\t\t<span class=\"value\">{{piloting.name}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"property-action\" v-on:click=\"stopPiloting(piloting)\">\r\n\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t<span class=\"\">Exit</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property rooms\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon fad fa-kaaba\"></span>\r\n\t\t<span class=\"label\">Rooms:</span>\r\n\t\t<button v-for=\"(room, $index) in rooms\" class=\"room\" v-on:click=\"showInfo(room)\">\r\n\t\t\t<span class=\"divide\" v-if=\"$index !== 0\">, </span>\r\n\t\t\t<span class=\"value\">{{room.name}}</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"property energy\" v-if=\"character.classification == 'base'\">\r\n\t\t<span class=\"icon\" :class=\"getEnergyIcon()\"></span>\r\n\t\t<span class=\"label\">Energy:</span>\r\n\t\t<span class=\"value\">{{energy_consumption}}</span>\r\n\t\t<span class=\"divide\">/</span>\r\n\t\t<span class=\"value\">{{energy_output}}</span>\r\n\t</div>\r\n\t<!--\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"credits\" v-on:change=\"changed('credits', credits)\"/>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<input class=\"experience\" type=\"number\" v-model.number=\"experience\" v-on:change=\"changed('xp', experience)\"/>\r\n\t</div>\r\n\t-->\r\n\t<div class=\"property credits\">\r\n\t\t<span class=\"icon fad fa-coins\"></span>\r\n\t\t<span class=\"label\">Credits:</span>\r\n\t\t<rs-count class=\"experience\" v-model=\"credits\" v-on:change=\"changeEvent('credits', $event)\"></rs-count>\r\n\t</div>\r\n\t<div class=\"property level\" v-if=\"character.classification != 'base'\">\r\n\t\t<span class=\"icon fad fa-user-plus\"></span>\r\n\t\t<span class=\"label\">Experience:</span>\r\n\t\t<rs-count class=\"experience\" v-model=\"experience\" v-on:change=\"changeEvent('xp', $event)\"></rs-count>\r\n\t</div>\r\n\t<div class=\"property description\">\r\n\t\t<span class=\"icon fas fa-info-square\"></span>\r\n\t\t<span class=\"label\">\r\n\t\t\t<span>Description:</span>\r\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\r\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\r\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\r\n\t\t\t</button>\r\n\t\t</span>\r\n\t\t<div class=\"text-container\">\r\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\r\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\r\n\t\t\t<!--\r\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\r\n\t\t\t-->\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/journal.html": return "<div class=\"rs-component rssw component-entity-journal\">\n\t<div class=\"property description\">\n\t\t<span class=\"icon fas fa-info-square\"></span>\n\t\t<span class=\"label\">\n\t\t\t<span>Description:</span>\n\t\t\t<button class=\"action\" v-on:click=\"toggleDescription()\">\n\t\t\t\t<span v-if=\"!state.viewing\" class=\"fas fa-file-alt\"></span>\n\t\t\t\t<span v-if=\"state.viewing\" class=\"fas fa-edit\"></span>\n\t\t\t</button>\n\t\t</span>\n\t\t<div class=\"text-container\">\n\t\t\t<textarea class=\"description\" v-if=\"!state.viewing\" v-model=\"description\" v-on:change=\"changed('description', description)\"></textarea>\n\t\t\t<div class=\"description rs-white object-info\" v-if=\"state.viewing\" v-html=\"mdDescription\"></div>\n\t\t\t<!--\n\t\t\t<rs-rendered-text :text=\"description\" :universe=\"universe\" :entity=\"character\"></rs-rendered-text>\n\t\t\t-->\n\t\t</div>\n\t</div>\n</div>";
+			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"isVisible(skill)\" v-on:click=\"skillTouched(skill)\">\r\n\t\t<td class=\"name aligned-right flow-v\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"naming base\">\r\n\t\t\t\t{{(skill.base?skill.base:\"\").capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\">\r\n\t\t\t<button class=\"roll-result flex h center\" :class=\"state && state.rolls && state.rolls[skill.id]?'show':''\" v-on:click.stop=\"clearRoll(skill.id)\">\r\n\t\t\t\t<span class=\"result-property flex h center\" v-for=\"result in rollProperties\" v-if=\"state && state.rolls && state.rolls[skill.id] && state.rolls[skill.id][result.property] !== undefined\">\r\n\t\t\t\t\t<span>{{state.rolls[skill.id][result.property]}}</span>\r\n\t\t\t\t\t<span class=\"result-icon\" :class=\"result.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t</button>\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
+			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label v-if=\"!state.hideFilter\">\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\" v-if=\"!state.hideLeveling\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-drafting-compass\"></span>\r\n\t\t\t\t\t<span>Subskills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"subskill\" :existing=\"subSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"skillTouched(stat)\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Stat ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t</button>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"noIncrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\n\n\t<div class=\"report\" v-if=\"equipped.length\">\n\t\t<h3>Equipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"report\" v-if=\"items.length\">\n\t\t<h3>Unequipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
+			case "components/rssw/dice.html": return "<div class=\"rs-component rssw dice-bin\">\r\n\r\n\t<div class=\"expression\">\r\n\t\t<span>Roll:</span>\r\n\t\t<input type=\"text\" class=\"lined\" v-model=\"state.expression\" v-on:keyup.enter=\"roll(state.expression)\" v-on:keyup.esc=\"clear()\"/>\r\n\t\t<button class=\"lined roll\" v-on:click=\"roll(state.expression)\">\r\n\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined info\" v-on:click=\"info()\">\r\n\t\t\t<span class=\"fas fa-info-circle\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined labels\" v-on:click=\"toggleLabels()\">\r\n\t\t\t<span class=\"far\" :class=\"state.hideLabels?'fa-align-slash':'fa-align-justify'\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined labels\" v-on:click=\"toggleExpressions()\">\r\n\t\t\t<span class=\"far\" :class=\"state.hideExpressions?'fa-sigma':'fa-function'\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined ending clear\" v-on:click=\"clear()\">\r\n\t\t\t<span class=\"fas fa-ban\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\r\n\t<div class=\"history\">\r\n\t\t<div class=\"rolled\" v-for=\"(roll,$index) in state.history\" v-if=\"roll\" v-on:click.stop=\"dismiss($index)\">\r\n\t\t\t<div class=\"roll-property\" v-if=\"roll.sum\">\r\n\t\t\t\t<span class=\"value\">{{roll.sum}}</span>\r\n\t\t\t\t<span class=\"info\">=</span>\r\n\t\t\t\t<span class=\"label\" v-if=\"!state.hideLabels\">Rolled</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll-property\" :class=\"rprop.property\" v-for=\"rprop in rollProperties\" v-if=\"roll[rprop.property] !== undefined\">\r\n\t\t\t\t<span class=\"value\">{{roll[rprop.property]}}</span>\r\n\t\t\t\t<span class=\"info\" :class=\"rprop.icon\"></span>\r\n\t\t\t\t<span class=\"label\" v-if=\"!state.hideLabels\">{{rprop.label}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"original\" v-if=\"!state.hideExpressions\">\r\n\t\t\t\t({{roll._expression}})\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<div v-if=\"mode === 'short'\" class=\"slots flex h centered\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex v\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex h\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/entity/knowledge.html": return "<div class=\"rs-component rssw component-entity-knowledge\">\r\n\t<div class=\"knowledge-container\">\r\n\t\t<div class=\"controls flex h\">\r\n\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"knowledge\" :state=\"state\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t<button v-on:click=\"resetHeaders\" class=\"rs-light-blue rsbg-transparent flat reset\">\r\n\t\t\t\t<span class=\"far fa-sync\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"knowledge\" :headers=\"state.headers\" :state=\"state\" v-on:selected=\"showInfo($event, entity)\"></rs-table>\r\n\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"knowledge\" :state=\"state\"></rs-table-paging>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship/inside.html": return "<div class=\"rs-component rssw component-entity-inside\">\r\n\t<h2 class=\"title-info\">\r\n\t\t<span>Entities Inside</span>\r\n\t\t<span v-if=\"entity.required_crew\" class=\"title-readout\" :class=\"getCountClass()\">\r\n\t\t\t<span class=\"rs-white\">(</span>\r\n\t\t\t<span>{{crew}}</span>\r\n\t\t\t<span class=\"rs-white\">/</span>\r\n\t\t\t<span title=\"Minimum number of Crew required to fully operate this ship\">{{entity.required_crew}}</span>\r\n\t\t\t<span v-if=\"entity.maximum_crew\">\r\n\t\t\t\t<span class=\"rs-white\">[</span>\r\n\t\t\t\t<span title=\"Maximum number of Crew that fit in this ship\">{{entity.maximum_crew}}</span>\r\n\t\t\t\t<span class=\"rs-white\">]</span>\r\n\t\t\t</span>\r\n\t\t\t\r\n\t\t\t<span class=\"rs-white\">)</span>\r\n\t\t</span>\r\n\t</h2>\r\n\t<div class=\"entitites\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry flow-h\" v-for=\"entry in entities\">\r\n\t\t\t\t<button class=\"entity flow-h\" v-on:click=\"showInfo(entry)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<span class=\"entity\" v-else>\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<button class=\"exit-ship flow-h\" v-on:click=\"moveEntity(entry.id, null)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t\t\t<span>Exit Ship</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"board\">\r\n\t\t<div class=\"label\">\r\n\t\t\tBring Entity on Board\r\n\t\t</div>\r\n\t\t<div>\r\n\t\t\t<select v-model=\"moving\" v-on:change=\"moveEntity(moving, entity.id)\">\r\n\t\t\t\t<option value=\"\">Select Entity...</option>\r\n\t\t\t\t<option v-for=\"e in availableEntities\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/rssw/ship/stats.html": return "<div class=\"rs-component rssw component-ship-stats\">\r\n\t<div class=\"ship-info flex h\">\r\n\t\t<div class=\"ship-card\">\r\n\t\t\t<div class=\"picture\" v-on:click=\"recalculate()\">\r\n\t\t\t\t<rs-render-image class=\"record-image\" v-if=\"image\" mode=\"wide\" :image=\"image\"></rs-render-image>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"information flow-h\">\r\n\t\t\t\t<div class=\"skill\">\r\n\t\t\t\t\t<span v-if=\"!pilot\" class=\"icon fas fa-ban\"></span>\r\n\t\t\t\t\t<span v-if=\"pilot\" class=\"icon\">{{skill}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"pilot-info flow-v\">\r\n\t\t\t\t\t<div class=\"pilot pilot-name flow-h centered\">\r\n\t\t\t\t\t\t<div v-if=\"editingPilot\">\r\n\t\t\t\t\t\t\t<select v-model=\"setPilot\" v-on:change=\"setNewPilot(setPilot)\">\r\n\t\t\t\t\t\t\t\t<option value=\"\">No Pilot</option>\r\n\t\t\t\t\t\t\t\t<option v-for=\"p in availablePilots\" :value=\"p.id\">{{p.name}}</option>\r\n\t\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div v-if=\"!editingPilot && pilot\" class=\"name-display flow-h\" :class=\"getPilotClass()\">\r\n\t\t\t\t\t\t\t<span>{{pilot.name}}</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div v-if=\"!editingPilot && !pilot\" class=\"name-display flow-h\" :class=\"getPilotClass()\">\r\n\t\t\t\t\t\t\t<span>No Pilot</span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<button v-on:click=\"editPilot()\" class=\"flow-h\">\r\n\t\t\t\t\t\t\t<span :class=\"editingPilot?'fas fa-check':'fas fa-edit'\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"name\">\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"properties.name\" v-on:change=\"updated('name')\" />\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"alliance flow-v\">\r\n\t\t\t\t\t<span v-if=\"!pilot\" class=\"icon fab fa-android\"></span>\r\n\t\t\t\t\t<span v-if=\"pilot\" class=\"icon\" :class=\"pilot.allegiance || pilot.icon\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"data flex h\">\r\n\t\t\t\t<div class=\"stats flex v\">\r\n\t\t\t\t\t<div class=\"stat flex h\" v-for=\"stat in shipStatList\" :key=\"stat.id\" :class=\"stat.class\" v-if=\"stat\">\r\n\t\t\t\t\t\t<span class=\"icon-bubble\">\r\n\t\t\t\t\t\t\t<span class=\"icon\" :class=\"stat.icon\"></span>\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<span class=\"value\">{{ship[stat.id]}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"spacer\"></div>\r\n\t\t\t\t\t<div class=\"point-bubble\">\r\n\t\t\t\t\t\t<span>{{points}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"details flow-v\">\r\n\t\t\t\t\t<div class=\"pilot-ability object-info\">\r\n\t\t\t\t\t\t<div class=\"pilot-ability-text\" v-html=\"abilityDescription\" v-if=\"!editingPilotAbility\">\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div v-if=\"editingPilotAbility\">\r\n\t\t\t\t\t\t\t<div class=\"rs-white\">\r\n\t\t\t\t\t\t\t\tSelect Pilot Ability\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t<select v-model=\"setPilotAbility\" v-on:change=\"setNewPilotAbility(setPilotAbility)\">\r\n\t\t\t\t\t\t\t\t\t<option value=\"\"></option>\r\n\t\t\t\t\t\t\t\t\t<option value>No Ability</option>\r\n\t\t\t\t\t\t\t\t\t<option v-for=\"a in pilotAbilities\" :value=\"a.id\">{{a.name}}</option>\r\n\t\t\t\t\t\t\t\t</select>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<button class=\"edit-pilot-ability\" v-on:click=\"editPilotAbility()\">\r\n\t\t\t\t\t\t\t<span :class=\"editingPilotAbility?'fas fa-check':'fas fa-pencil'\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"data-list status flow-v aligned-right\">\r\n\t\t\t\t\t\t<div class=\"property\" v-if=\"properties.location\">\r\n\t\t\t\t\t\t\t<span>Location: </span>\r\n\t\t\t\t\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(properties.location)\">\r\n\t\t\t\t\t\t\t\t<span :class=\"properties.location.icon\"></span>\r\n\t\t\t\t\t\t\t\t<span>{{properties.location.name}}</span>\r\n\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"property\" v-if=\"properties.inside\">\r\n\t\t\t\t\t\t\t<span>Inside: </span>\r\n\t\t\t\t\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(properties.inside)\">\r\n\t\t\t\t\t\t\t\t<span :class=\"properties.inside.icon\"></span>\r\n\t\t\t\t\t\t\t\t<span>{{properties.inside.name}}</span>\r\n\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"abilities flow-h centered wrap\">\r\n\t\t\t\t\t\t<button v-for=\"ability in abilities\" class=\"ability getAbilityIconClass(ability)\" v-if=\"ability\" v-on:click=\"showInfo(ability)\">\r\n\t\t\t\t\t\t\t<span :class=\"ability.icon\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"data-list items\" v-if=\"items.length\">\r\n\t\t\t\t<div class=\"readout\">\r\n\t\t\t\t\t<span>Encumberance:</span>\r\n\t\t\t\t\t<span>{{encumberance}}</span>\r\n\t\t\t\t\t<span v-if=\"ship.contents_max\">/ {{ship.contents_max}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"property\" v-for=\"item in items\">\r\n\t\t\t\t\t<button class=\"property-link\" v-on:click=\"showInfo(item)\">\r\n\t\t\t\t\t\t<span :class=\"item.icon\"></span>\r\n\t\t\t\t\t\t<span>{{item.name}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"ship-effects\">\r\n\t\t\t<div class=\"effect-selector\" :class=\"effectsOpen?'select-effect':'closed'\">\r\n\t\t\t\t<button class=\"effect-button effect-token effect-toggle\" v-on:click=\"toggleEffectMenu()\">\r\n\t\t\t\t\t<span class=\"fas fa-arrow-circle-up\" :class=\"effectsOpen?'rot0 rs-light-blue':'rot180 rs-white'\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button v-for=\"effect in shipEffects\" class=\"effect-button effect-token rs-gray\" v-on:click=\"assignEffect(effect)\">\r\n\t\t\t\t\t<span :class=\"effect.icon\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"effect-button effect-token\" v-on:click=\"showInfo('knowledge:effects:ships')\">\r\n\t\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"effect-token-container\" v-for=\"effect in activeEffects\">\r\n\t\t\t\t<button class=\"effect-button effect-token rs-light-blue\" v-on:click=\"dismissEffect(effect)\" v-on:focus=\"focusEffect(effect)\" v-on:blur=\"blurEffect(effect)\">\r\n\t\t\t\t\t<span :class=\"getEffectIcon(effect)\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button v-if=\"showEffectInfo === effect.id\" class=\"effect-button effect-info rs-light-blue\" v-on:click=\"showInfo(effect._sourced)\" v-on:focus=\"focusEffect(effect)\" v-on:blur=\"blurEffect(effect)\">\r\n\t\t\t\t\t<span class=\"fas fa-info-circle\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<select v-if=\"hasEffectHasIndicators(effect)\" v-model=\"effectIndicators[effect.id]\" v-on:change=\"alterIndicator(effect, effectIndicators[effect.id])\">\r\n\t\t\t\t\t<option v-if=\"!effect.indicator\" value=\"\"></option>\r\n\t\t\t\t\t<option v-for=\"opt in availableEffects[effect._sourced].indicators\" :value=\"opt\">{{opt}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/table/controls.html": return "<div class=\"system-component table-controls\">\r\n\t<div class=\"filtering\">\r\n\t\t<input type=\"text\" v-model=\"state.filter.null\" />\r\n\t\t<span class=\"search-icon fas fa-search\"></span>\r\n\t</div>\r\n\t<div class=\"controls\">\r\n\t\t<div class=\"selections\" v-if=\"index.selection.length\">\r\n\t\t\t<div v-for=\"control in controls\">\r\n\t\t\t\t{{control}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button class=\"selections clear\" v-if=\"index.selection.length\" v-on:click=\"clearSelection()\">\r\n\t\t\t<span class=\"far fa-ban\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections all\" v-if=\"index.selection.length != index.listing.length\" v-on:click=\"allSelection()\">\r\n\t\t\t<span class=\"far fa-check-square\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"selections info\" v-if=\"index.selection.length\" v-on:click=\"infoSelection(index.selection[index.selection.length-1])\">\r\n\t\t\t<span class=\"far fa-journal-whills\"></span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
+			case "components/table/paging.html": return "<div class=\"system-component table-paging\">\r\n\t<button class=\"index-page\" :class=\"classPage(0)\" v-on:click=\"toPage(0)\">\r\n\t\t1\r\n\t</button>\r\n\t<button v-for=\"page in pages\" class=\"index-page\" :class=\"classPage(page)\" v-on:click=\"toPage(page)\">\r\n\t\t{{page + 1}}\r\n\t</button>\r\n\t<button class=\"index-page\" :class=\"classPage(lastPage)\" v-if=\"lastPage > 0\" v-on:click=\"toPage(lastPage)\">\r\n\t\t{{lastPage + 1}}\r\n\t</button>\r\n</div>";
+			case "components/table.html": return "<div class=\"system-component table-index\">\r\n\t<table class=\"table-element\" :class=\"state.classes\">\r\n\t\t<thead>\r\n\t\t\t<tr>\r\n\t\t\t\t<th v-for=\"header in headers\">\r\n\t\t\t\t\t<button class=\"title actionable table-content\" v-on:click=\"headerAction(header)\" :class=\"header.thClass\" v-if=\"!header.hideBlock\">\r\n\t\t\t\t\t\t<span class=\"sort fas\" v-if=\"!header.nosort && state.sortKey === header.field\" :class=\"{'fa-sort-down':state.order, 'fa-sort-up':!state.order}\"></span>\r\n\t\t\t\t\t\t<span class=\"sort fas fa-sort\" v-if=\"!header.nosort && state.sortKey !== header.field\"></span>\r\n\t\t\t\t\t\t<span>{{header.title}}</span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</th>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t<tr v-if=\"corpus.length === 0 && index.listing.length\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>All Items Filtered Out</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"corpus.length === 0 && index.listing.length === 0\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>No Items Available</span>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-else-if=\"index.error\">\r\n\t\t\t\t<td class=\"notification\" :colspan=\"headers.length\">\r\n\t\t\t\t\t<span class=\"fas fa-exclamation-triangle warning\"></span>\r\n\t\t\t\t\t<span>Data Source Error</span>\r\n\t\t\t\t\t<p>{{index.error}}</p>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr v-for=\"record in corpus\" :key=\"record.id\" :class=\"index.isSelected([record.id])?'record-selected':''\">\r\n\t\t\t\t<td v-for=\"(header, i) in headers\" class=\"table-record\" :class=\"header.field\" v-on:click.stop=\"select(record, header)\" :title=\"header.tag?record[header.tag]:''\">\r\n\t\t\t\t\t<div v-if=\"!header.noCross\" class=\"crosshair\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === 0\" class=\"highlight starting\"></div>\r\n\t\t\t\t\t<div v-if=\"!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1\" class=\"highlight ending\"></div>\r\n\t\t\t\t\t<button class=\"table-content\">\r\n\t\t\t\t\t\t<slot name=\"table-content\" :header=\"header\" :record=\"record\">\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-if=\"header.formatter\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"header.formatter(record[header.field], record, header)\"></div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'array' || isArray(record[header.field])\">\r\n\t\t\t\t\t\t\t\t<ul>\r\n\t\t\t\t\t\t\t\t\t<li v-for=\"item in record[header.field]\">{{item.name || item}}</li>\r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"header.type === 'object'\">\r\n\t\t\t\t\t\t\t\t<div v-html=\"formatObjectHeader(record[header.field])\">\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field] && typeof record[header.field] === 'object' && record[header.field] !== 'undefined'\">\r\n\t\t\t\t\t\t\t\t<pre>{{record[header.field] | JSON}}</pre>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else-if=\"record[header.field]\">\r\n\t\t\t\t\t\t\t\t{{record[header.field]}}\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"contents\" :class=\"header.field?header.field:''\" v-else>\r\n\t\t\t\t\t\t\t\t<span> </span>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</slot>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t</tbody>\r\n\t</table>\r\n</div>";
+			case "components/viewer.html": return "\r\n<div class=\"rs-component component-viewer\" :class=\"renderState()\">\r\n\r\n\t<div class=\"map\" v-if=\"location && sourceImage\">\r\n\t\t<!-- <div class=\"view\" onexit=\"true\" v-on:mousemove.stop=\"dragging($event)\" v-on:click.stop.prevent=\"clicking($event)\" v-on:mousedown=\"down($event)\" v-on:mouseup.stop.prevent=\"up($event)\" v-on:mousewheel.stop.prevent=\"wheeling($event)\" v-on:mouseleave=\"out($event)\" v-pan=\"pan\"> -->\r\n\t\t<div class=\"view\" onexit=\"true\" v-pan=\"pan\">\r\n\t\t\t<!-- <div class=\"shadow\"></div> -->\r\n\t\t\t<div class=\"parchment\" v-on:contextmenu.stop.prevent=\"openActions($event)\">\r\n\t\t\t\t<div class=\"pointsOfInterest\" v-if=\"pointsOfInterest.length && state.markers\">\r\n\t\t\t\t\t<button class=\"poi\" v-if=\"poiVisible(link)\" v-for=\"link in pointsOfInterest\" :data-id=\"link.id\" :style=\"'left:' + link.x + '%; top:' + link.y + '%;'\" :key=\"link.id\" v-on:click=\"poiMenu(link)\">\r\n\t\t\t\t\t\t<span class=\"labeling\" v-if=\"link.label\">{{link.label}}</span>\r\n\t\t\t\t\t\t<span :class=\"poiClass(link)\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinates\" v-for=\"coordinate in coordinates\" v-if=\"!coordinate.standalone\">\r\n\t\t\t\t\t<span class=\"coordinate top left\" :style=\"'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t\t<span class=\"coordinate bottom right\" :style=\"'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')\"></span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"coordinate-dots\">\r\n\t\t\t\t\t<button class=\"dot\" v-for=\"coordinate in coordinates\" :style=\"'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')\" v-on:click=\"dismissCoordinate(coordinate)\"></button>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"actions\" v-if=\"actions.open\" :style=\"'left: ' + actions.x + 'px; top: ' + actions.y + ';'\">\r\n\t\t\t\t\t<div class=\"actions-header\">\r\n\t\t\t\t\t\t<span class=\"titling\">\r\n\t\t\t\t\t\t\t{{actions.header}}\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t\t<button class=\"actions-close alert\" v-on:click.stop.prevent=\"closeActions()\">\r\n\t\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"actions-options\">\r\n\t\t\t\t\t\t<button class=\"option normal\" v-for=\"option in actions.options\" v-on:click.stop.prevent=\"fire(option, $event)\">\r\n\t\t\t\t\t\t\t<span :class=\"option.icon || 'fas fa-chevron-square-right'\"></span>\r\n\t\t\t\t\t\t\t<span>{{option.text}}</span>\r\n\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t<input type=\"text\" v-model=\"state.alter\" v-if=\"player.master\"/>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<img :src=\"sourceImage\" draggable=\"false\" />\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"menu\" :class=\"menuOpen?'open':'closed'\">\r\n\t\t<button class=\"toggle\" v-on:click=\"toggleMenu()\">\r\n\t\t\t<span class=\"fas\" :class=\"menuOpen?'fa-caret-square-up':'fa-caret-square-down'\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"menu-items flow-v\">\r\n\t\t\t<div class=\"search\">\r\n\t\t\t\t<input type=\"text\" v-model=\"state.search\" v-on:keyup.enter=\"searchMap(state.search)\"/>\r\n\t\t\t\t<button class=\"control\" v-on:click=\"searchMap(state.search)\">\r\n\t\t\t\t\t<span class=\"icon far fa-search\"></span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t\t<button class=\"control\" v-on:click=\"processAction(menuItem)\" v-for=\"menuItem in menuItems\" :class=\"menuItem.action\">\r\n\t\t\t\t<span class=\"icon\" :class=\"menuItem.icon\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.markerItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.markers?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.markerItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.followItem)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.follow?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.followItem.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"control follow\" v-on:click=\"processAction(menuItems.fullscreen)\">\r\n\t\t\t\t<span class=\"icon fal\" :class=\"state.fullscreen?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t<span class=\"text\">{{menuItems.fullscreen.text}}</span>\r\n\t\t\t</button>\r\n\t\t\t<select class=\"control master\" v-model=\"state.master_view\" v-if=\"player.master\">\r\n\t\t\t\t<option value=\"\">Player Character</option>\r\n\t\t\t\t<option value=\"master\">Master</option>\r\n\t\t\t\t<option v-for=\"entity in universe.indexes.entity.listing\" :value=\"entity.id\">{{entity.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "components/widget/configure.html": return "<div class=\"rs-component widget-configure\">\r\n\t<div class=\"configuration\">\r\n\t\t<div class=\"field\" v-for=\"field in contents.configurations\">\r\n\t\t\t<rs-field :root=\"state\" :field=\"field\" :key=\"field.property\"></rs-field>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
+			case "components/widget.html": return "<div class=\"rs-component widget-controls\">\r\n\t<div class=\"flex v control-pane\">\r\n\t\t<button class=\"widget-ctrl toggle\" v-on:click=\"toggle()\">\r\n\t\t\t<span class=\"far\" :class=\"state.closed?'fa-expand-alt rot0':'fa-compress-alt rot90'\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"flex h center control-bar\">\r\n\t\t<span class=\"widget-title\">{{contents.title || contents.declaration}}</span>\r\n\t\t<button class=\"widget-ctrl config\" v-on:click=\"config()\" v-if=\"contents.configurations\">\r\n\t\t\t<span class=\"far fa-cogs\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"widget-ctrl toggle\" v-on:click=\"toggle()\">\r\n\t\t\t<span class=\"far\" :class=\"state.closed?'fa-expand-alt rot0':'fa-compress-alt rot90'\"></span>\r\n\t\t</button>\r\n\t</div>\r\n</div>";
 			case "pages/about.html": return "<div class=\"rs-page page-about\">\r\n\t<h1>About</h1>\r\n\r\n</div>\r\n";
-			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"player\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"player\"></system-info>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/home.html": return "<div class=\"rs-page page-home\">\r\n\t<div class=\"login prompt\" v-if=\"state === 0\">\r\n\t\t<div class=\"boxed\">\r\n\t\t\t<div class=\"message\" v-if=\"message\">{{message}}</div>\r\n\t\t\t<rs-connect v-on:connect=\"connect\"></rs-connect>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"login waiting\" v-if=\"0 < state && state < 10\">\r\n\t\t<div class=\"titling\">\r\n\t\t\t<span v-if=\"state === 1\">Connecting</span>\r\n\t\t\t<span v-if=\"state === 2\">Loading</span>\r\n\t\t</div>\r\n\t\t<div class=\"status\">\r\n\t\t\t<span class=\"far fa-spinner fa-pulse\"></span>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"system-display active\" v-if=\"state === 10\">\r\n\t\t<system-menu :universe=\"universe\" :user=\"user\"></system-menu>\r\n\t\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"user\"></router-view>\r\n\t\t<system-info :universe=\"universe\" :user=\"user\"></system-info>\r\n\t\t<message-panel :universe=\"universe\" :user=\"user\"></message-panel>\r\n\t</div>\r\n</div>\r\n";
 			case "pages/main.html": return "<div class=\"\">\r\n</div>\r\n";
-			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<h1>Nouns</h1>\r\n\t<rs-nouns :universe=\"universe\" :player=\"player\"></rs-nouns>\r\n</div>\r\n";
-			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n</div>\r\n";
-			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<div class=\"title\">\r\n\t\t{{player.name}} Overview\r\n\t</div>\r\n\t\r\n\t<div class=\"self\" v-if=\"self\">\r\n\t\t<router-link class=\"navigation-button\" :to=\"'/character/' + self.id\">\r\n\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t</router-link>\r\n\t</div>\r\n\t\r\n\t<div class=\"control\">\r\n\t\t<div class=\"title\">\r\n\t\t\tOthers\r\n\t\t</div>\r\n\t\t<div class=\"entities\">\r\n\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in owned\" :to=\"'/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t</router-link>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/noun/controls.html": return "<div class=\"rs-page page-noun_controls\">\r\n\t<div class=\"construction\">\r\n\t\t<div class=\"building\">\r\n\t\t\t<rs-nouns :universe=\"universe\" :player=\"player\" :built=\"built\" v-on:model=\"changeModel($event)\"></rs-nouns>\r\n\t\t</div>\r\n\t\t<div class=\"output rs-component\" v-if=\"modeling\">\r\n\t\t\t<h2>\r\n\t\t\t\t<span :class=\"modeling.icon\"></span>\r\n\t\t\t\t<span>{{modeling.name}}</span>\r\n\t\t\t</h2>\r\n\t\t\t<rs-object-info v-on:click=\"processRequest($event)\" :record=\"modeling\" :universe=\"universe\" :player=\"player\" :options=\"infoOptions\"></rs-object-info>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/rssw/base.html": return "<div class=\"rssw-page page-base\" v-if=\"entity\">\r\n\t<rssw-character-info :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\r\n\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n</div>\r\n";
+			case "pages/rssw/character/builder.html": return "<div class=\"rssw-page character-builder\">\r\n\t<div class=\"stage species\" v-if=\"stage === 0\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Character Details</h1>\r\n\t\t</div>\r\n\t\t<div class=\"details\">\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-name\">\r\n\t\t\t\t\t<span>Name:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<input type=\"text\" v-model=\"building.name\" id=\"entity-name\"/>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-description\">\r\n\t\t\t\t\t<span>Description:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.description\" id=\"entity-description\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-obligations\">\r\n\t\t\t\t\t<span>Obligations:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.obligations\" id=\"entity-obligations\"></textarea>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"text-block\">\r\n\t\t\t\t<label for=\"entity-motivations\">\r\n\t\t\t\t\t<span>Motivations:</span>\r\n\t\t\t\t</label>\r\n\t\t\t\t<textarea v-model=\"building.motivations\" id=\"entity-motivations\"></textarea>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span>Continue</span>\r\n\t\t\t<span class=\"fas fa-chevron-circle-right\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage species\" v-if=\"stage === 1\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Species</h1>\r\n\t\t</div>\r\n\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.species\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Species\"></rs-cards>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage careers\" v-else-if=\"stage === 2\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Career</h1>\r\n\t\t</div>\r\n\t\t<rs-cards class=\"cards\" v-on:selected=\"selected($event)\" :corpus=\"base.careers\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Career\"></rs-cards>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage specializations\" v-else-if=\"stage === 3\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Select Specialization</h1>\r\n\t\t</div>\r\n\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"base.specializations\" :state=\"state\" :universe=\"universe\" :user=\"player\" labeling=\"Specialization\"></rs-cards>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage review\" v-else-if=\"stage === 4\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Review Selections</h1>\r\n\t\t</div>\r\n\t\t<rs-cards v-on:selected=\"selected($event)\" :corpus=\"choices\" :state=\"state\" :universe=\"universe\" :user=\"player\" selection=\"Confirm\"></rs-cards>\r\n\t\t<button v-on:click=\"back()\" class=\"regress\">\r\n\t\t\t<span class=\"fas fa-chevron-circle-left\"></span>\r\n\t\t\t<span>Back</span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"stage creating\" v-else-if=\"stage === 5\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span class=\"fas fa-spinner fa-pulse\"></span>\r\n\t\t\t\t<span>Creating</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"stage finalize\" v-else-if=\"stage === 6\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>\r\n\t\t\t\t<span>Finalize</span>\r\n\t\t\t</h1>\r\n\t\t</div>\r\n\t\t<div class=\"cards\">\r\n\t\t\t<rssw-character-info :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t\t\t<rssw-character-board :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t\t\t<rssw-character-stats :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t\t\t<rssw-character-skills :character=\"building\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t\t</div>\r\n\t\t<button v-on:click=\"selected()\" class=\"complete\">\r\n\t\t\t<span class=\"fas fa-check-circle\"></span>\r\n\t\t\t<span>Complete</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/rssw/character.html": return "<div class=\"rssw-page page-dashboard page-characters\">\r\n\t<!-- \r\n\t<rssw-character-info :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-info>\r\n\t<rssw-character-board :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-board>\r\n\t<rssw-character-stats :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-stats>\r\n\t<rssw-character-skills :character=\"entity\" :entity=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-character-skills>\r\n\t -->\r\n\t \r\n\t<div class=\"entity-column\" v-if=\"entity\">\r\n\t\t<h2>{{entity.name}}</h2>\r\n\t\t<rs-container :entity=\"entity\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n\t</div>\r\n\t<div class=\"entity-column\" v-for=\"addchar in additional_characters\">\r\n\t\t<h2>{{addchar.name}}</h2>\r\n\t\t<rs-container :entity=\"addchar\" :user=\"user\" :universe=\"universe\" :contents=\"widget\" v-for=\"widget in widgets\" :key=\"widget.id\"></rs-container>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/rssw/dashboard.html": return "<div class=\"rssw-page page-dashboard rs-component\">\r\n\t<div v-if=\"!$route.params.oid\" class=\"rs-component\">\r\n\t\t<div class=\"inline flex h\">\r\n\t\t\t<div class=\"inline flex v entities\">\r\n\t\t\t\t<div class=\"title\">\r\n\t\t\t\t\t{{player.name}} Overview\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"self flex h center\">\r\n\t\t\t\t\t<button class=\"ctrl rs-light-blue\" v-on:click=\"toggleSelect(self)\">\r\n\t\t\t\t\t\t<span class=\"far ctrl-icon\" :class=\"isSelected(self)?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t\t</button>\r\n\t\t\t\t\t<router-link class=\"navigation-button\" v-if=\"self\" :to=\"'/dashboard/character/' + self.id\">\r\n\t\t\t\t\t\t<span class=\"link-icon\" :class=\"self.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t\t<span class=\"link-label\">{{self.name}}</span>\r\n\t\t\t\t\t</router-link>\r\n\t\t\t\t\t<router-link class=\"navigation-button\" v-if=\"!self\" to=\"/construct/character\">\r\n\t\t\t\t\t\t<span class=\"link-icon fas fa-user-plus\"></span>\r\n\t\t\t\t\t\t<span class=\"link-label\">Make Yourself</span>\r\n\t\t\t\t\t</router-link>\r\n\t\t\t\t</div>\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"control\">\r\n\t\t\t\t\t<div class=\"title\">\r\n\t\t\t\t\t\tOthers\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"entities\">\r\n\t\t\t\t\t\t<div class=\"flex h center\" v-for=\"entity in owned\" v-if=\"!self || entity.id !== self.id\">\r\n\t\t\t\t\t\t\t<button class=\"ctrl rs-light-blue\" v-on:click=\"toggleSelect(entity)\">\r\n\t\t\t\t\t\t\t\t<span class=\"far ctrl-icon\" :class=\"isSelected(entity)?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t\t<router-link class=\"entity navigation-button\" :to=\"'/dashboard/' + entity.classification + '/' + entity.id\" :key=\"entity.id\">\r\n\t\t\t\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t\t\t\t</router-link>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"inline flex v lefted dashboards\">\r\n\t\t\t\t<button class=\"ctrl rs-light-blue dashboard\" v-if=\"canOpenDashboard()\" v-on:click=\"openDashboard('character')\">\r\n\t\t\t\t\t<span class=\"fas fa-external-link\"></span>\r\n\t\t\t\t\t<span>Open Character Dashboard</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<button class=\"ctrl rs-light-blue dashboard\" v-if=\"canOpenDashboard()\" v-on:click=\"openDashboard('ship')\">\r\n\t\t\t\t\t<span class=\"fas fa-external-link\"></span>\r\n\t\t\t\t\t<span>Open Vehicle Dashboard</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/rssw/hangar.html": return "<div class=\"rssw-page page-dashboard\">\r\n\r\n</div>\r\n";
+			case "pages/rssw/journal.html": return "<div class=\"rssw-page page-journal\">\r\n\t\r\n</div>\r\n";
+			case "pages/rssw/locality.html": return "<div class=\"rssw-page page-locality\">\r\n\r\n</div>\r\n";
 			case "pages/rssw/map.html": return "<div class=\"rs-page map rssw\">\r\n\r\n\t<rs-viewer :user=\"user\" :player=\"player\" :universe=\"universe\" :location=\"location\"></rs-viewer>\r\n\t\r\n</div>\r\n";
-			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard\">\r\n\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n</div>\r\n";
+			case "pages/rssw/ship.html": return "<div class=\"rssw-page page-dashboard page-ships\">\r\n\t<div v-if=\"entity\" class=\"ship-column\">\r\n\t\t<rssw-ship-stats :ship=\"entity\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n\t\t<rssw-entity-equipment :entity=\"entity\" :user=\"user\" :universe=\"universe\" :player=\"player\"></rssw-entity-equipment>\r\n\t\t<rssw-entity-inside :entity=\"entity\" :user=\"user\" :universe=\"universe\" :player=\"player\"></rssw-entity-inside>\r\n\t</div>\r\n\t<div v-for=\"ship in additional_ships\" class=\"ship-column\">\r\n\t\t<rssw-ship-stats :ship=\"ship\" :user=\"user\" :universe=\"universe\"></rssw-ship-stats>\r\n\t\t<rssw-entity-equipment :entity=\"ship\" :user=\"user\" :universe=\"universe\" :player=\"player\"></rssw-entity-equipment>\r\n\t\t<rssw-entity-inside :entity=\"ship\" :user=\"user\" :universe=\"universe\" :player=\"player\"></rssw-entity-inside>\r\n\t</div>\r\n</div>\r\n";
+			case "pages/rssw/storage.html": return "<div class=\"rssw-page page-storage\">\r\n\r\n</div>\r\n";
+			case "pages/rssw/universe.html": return "<div class=\"rssw-page page-universe\">\r\n\t<div v-if=\"!$route.params.oid\">\r\n\t\t<div class=\"title\">\r\n\t\t\tGalactic Index\r\n\t\t\t<button class=\"fas fa-sync\" v-on:click=\"resetHeaders()\">Headers</button>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"rs-component index\">\r\n\t\t\t<div class=\"controls\">\r\n\t\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t\t\t\r\n\t\t\t\t<select v-model=\"command\" v-on:change=\"processCommand(command)\" v-if=\"showCommands()\">\r\n\t\t\t\t\t<option value=\"\">Choose Action</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Dashboards --</option>\r\n\t\t\t\t\t<option value=\"dashboard-ships\">Dashboard: Ships</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Items --</option>\r\n\t\t\t\t\t<option value=\"spawn\">Spawn Template Entities</option>\r\n\t\t\t\t\t<option value=\"give\">Give Items</option>\r\n\t\t\t\t\t<option value=\"take\">Take Items</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Knowledge --</option>\r\n\t\t\t\t\t<option value=\"grant-knowledge\">Grant Knowledge</option>\r\n\t\t\t\t\t<option value=\"forget-knowledge\">Forget Knowledge</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Records --</option>\r\n\t\t\t\t\t<option value=\"obscure\">Obscure Record</option>\r\n\t\t\t\t\t<option value=\"unobscure\">Unobscure Record</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Clean --</option>\r\n\t\t\t\t\t<option value=\"drop\">Delete Objects</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model=\"target\">\r\n\t\t\t\t\t<option value=\"\">No Target</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Entity Divide --</option>\r\n\t\t\t\t\t<option v-for=\"en in listing.entity\" :value=\"en.id\">{{en.name}}</option>\r\n\t\t\t\t\t<option disabled value=\"div\">--- Item Divide ---</option>\r\n\t\t\t\t\t<option v-for=\"it in listing.item\" :value=\"it.id\" v-if=\"!it.template\">{{it.name}}</option>\r\n\t\t\t\t\t<option disabled value=\"div\">--- Room Divide ---</option>\r\n\t\t\t\t\t<option v-for=\"it in listing.room\" :value=\"it.id\" v-if=\"!it.template\">{{it.name}}</option>\r\n\t\t\t\t\t<option disabled value=\"div\">-- Player Divide --</option>\r\n\t\t\t\t\t<option v-for=\"pl in listing.player\" :value=\"pl.id\">{{pl.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t\r\n\t\t\t\t<select v-model=\"state.activeIndex\">\r\n\t\t\t\t\t<option value>All</option>\r\n\t\t\t\t\t<option v-for=\"index in availableIndexes\" :value=\"index\">{{index}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model.number=\"state.paging.spread\">\r\n\t\t\t\t\t<option v-for=\"spread in getSpread()\" :value=\"spread\">{{spread}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t<select v-model=\"state.filterTemplate\">\r\n\t\t\t\t\t<option value=\"shown\">Shown</option>\r\n\t\t\t\t\t<option value=\"only\">Only</option>\r\n\t\t\t\t\t<option value=\"out\">Out</option>\r\n\t\t\t\t</select>\r\n\t\t\t</div>\r\n\t\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :headers=\"state.headers\" :state=\"state\"></rs-table>\r\n\t\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"state.activeIndex?universe.indexes[state.activeIndex]:universe.index\" :state=\"state\"></rs-table-paging>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"control rs-component\">\r\n\t\t\t<div class=\"title\">\r\n\t\t\t\t<input class=\"filter\" v-model=\"state.search\" />\r\n\t\t\t</div>\r\n\t\t\t<div class=\"entities\">\r\n\t\t\t\t<router-link class=\"entity navigation-button\" v-for=\"entity in universeEntities\" :to=\"'/universe/' + entity.classification + '/' + entity.id\" :key=\"entity.id\" v-if=\"filtered(entity)\">\r\n\t\t\t\t\t<span class=\"link-icon\" :class=\"entity.icon || 'fas fa-user-circle'\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">{{entity.name}}</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t\t<router-link class=\"entity navigation-button create-npc\" to=\"/construct/character\">\r\n\t\t\t\t\t<span class=\"link-icon fas fa-user-plus\"></span>\r\n\t\t\t\t\t<span class=\"link-label\">Construct NPC</span>\r\n\t\t\t\t</router-link>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<router-view class=\"system-view opened\" :universe=\"universe\" :user=\"player\" :class=\"$route.params.oid?'loaded':''\"></router-view>\r\n</div>\r\n";
 			case "pages/test.html": return "<div class=\"test\">\r\n\tThis is a test.\r\n</div>\r\n";
+			case "pages/window.html": return "<div class=\"rs-page page-window\">\r\n\t<router-view class=\"system-view\" :universe=\"universe\" :user=\"player\"></router-view>\r\n</div>\r\n";
 			default: return null;
 		}
 	};
@@ -18263,6 +18293,650 @@ Vue.use(Templify);
  * @module Library
  * @main Library
  */
+/**
+ * 
+ * 
+ * 
+ */
+var Dice = (function() {
+	
+	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|a|b|c|d|p|s|f)[ \+\/-]/g;
+	var calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/;
+	var dndStatCurve = true;
+	var tX;
+	
+	var rollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
+		["str", "strength"],
+		["dex", "dexterity"],
+		["con", "constitution"],
+		["int", "intelligence"],
+		["wis", "wisdom"],
+		["cha", "charisma"]
+	];
+	
+	var dndRollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
+   		["str", "strength"],
+		["dex", "dexterity"],
+		["con", "constitution"],
+		["int", "intelligence"],
+		["wis", "wisdom"],
+		["cha", "charisma"]
+	];
+	var swrpgRollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
+      	["bra", "brawn"],
+   		["agi", "agility"],
+   		["int", "intellect"],
+   		["cun", "cunning"],
+   		["wil", "willpower"],
+   		["pre", "pressence"]
+   	];
+	
+	var rollLevelMap = [ // TODO Consider against other classes or simplify expression? This is in theory a deprecated representation
+		["level","self"],
+		["barbarian","class:barbarian"],
+		["bard","class:bard"],
+		["cleric","class:cleric"],
+		["rogue","class:rogue"],
+		["ranger","class:ranger"],
+		["paladin", "class:paladin"],
+		["sorcerer", "class:sorcerer"],
+		["monk", "class:monk"],
+		["druid", "class:druid"],
+		["warlock", "class:warlock"],
+		["fighter", "class:fighter"],
+		["wizard","class:wizard"]
+	];
+	var rollDirectMap = [
+		["pro", "proficiency"], // TODO: Consider DnD proficiency against SWRPG proficiency dice 
+		["movement", "movement"],
+		["health", "health"],
+		["HP", "health"],
+		["maxHealth", "maxHealth"],
+		["maxHP", "maxHealth"],
+		["armor", "armor"],
+		["ac", "armor"],
+		["brawn"],
+		["agility"],
+		["intellect"],
+		["cunning"],
+		["willpower"],
+		["pressence"]
+	];
+
+	var calculate = function(expression) {
+		if(expression && expression[0] === "+") { // Other operators would expressly be an issue
+			expression = expression.substring(1);
+		}
+
+		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+			try {
+				return parseInt(Math.floor(eval(expression)));
+			} catch(ignored) {
+				return expression;
+			}
+		} else {
+			return expression;
+		}
+	};
+
+	var diceSummed = [
+		"d4",
+		"d6",
+		"d8",
+		"d10",
+		"d12",
+		"d20",
+		"d100"
+	];
+	
+	var diceSummedCheck = {};
+	for(tX=0; tX<diceSummed.length; tX++) {
+		diceSummedCheck[diceSummed[tX]] = true;
+	}
+
+	var diceOrder = [
+		"d4",
+		"d6",
+		"d8",
+		"d10",
+		"d12",
+		"d20",
+		"d100",
+		"ability",
+		"dja",
+		"a",
+		"boost",
+		"djb",
+		"b",
+		"challenge",
+		"djc",
+		"c",
+		"difficulty",
+		"djd",
+		"d",
+		"proficiency",
+		"djp",
+		"p",
+		"setback",
+		"djs",
+		"s",
+		"force",
+		"djf",
+		"f"
+	];
+
+	var diceRoll = function(dice) {
+		var roll = parseInt(parseInt(dice.substring(1)) * Math.random()) + 1;
+		return roll;
+	};
+
+	/**
+	 * Parses a string expression (e.g "con + 1d8") into an object for calculation or
+	 * display.
+	 * @method parseDiceRoll
+	 * @private
+	 * @param {String} expression
+	 * @param {AQCharacter} [source] Drives raw arguments for stats such as "str" and "wis".
+	 * @param {AQCharacter} [target] Drives 'target; arguments for stats such as "target.str"
+	 * 		and "target.wis".
+	 */
+	var parseDiceRoll = function(expression, source, target) {
+		var x, sCasting, tCasting, regex, buffer = [], dice = {};
+		if(!expression) {
+			return dice;
+		} else {
+			expression = expression.toString();
+		}
+
+		if(source) {
+			sCasting = source.castWith || "int";
+			sCasting = sCasting.substring(0, 3);
+		} else {
+			sCasting = "int";
+		}
+		if(target) {
+			tCasting = target.castWith || "int";
+			tCasting = tCasting.substring(0, 3);
+		} else {
+			tCasting = "int";
+		}
+
+		if(target && target.castWith && expression.indexOf("target.cast") !== -1) {
+			regex = new RegExp("target.cast", "g");
+			expression = expression.replace(regex, tCasting);
+		}
+
+		if(source && source.castWith && expression.indexOf("cast") !== -1) {
+			regex = new RegExp("cast", "g");
+			expression = expression.replace(regex, sCasting);
+		}
+
+		// TODO: Improve property mapping
+		if(target) {
+			for(x=0; x<rollMap.length; x++) {
+				regex = new RegExp("target\\." + rollMap[x][0], "g");
+				if(dndStatCurve) {
+					expression = expression.replace(regex, parseInt(Math.floor((target[rollMap[x][1]] || 0)/2) - 5));
+				} else {
+					expression = expression.replace(regex, parseInt(target[rollMap[x][1]] || 0));
+				}
+			}
+			for(x=0; x<rollDirectMap.length; x++) {
+				regex = new RegExp("target\\." + rollDirectMap[x][0], "g");
+				expression = expression.replace(regex, parseInt(target[rollDirectMap[x][1] || rollDirectMap[x][0]] || 0));
+			}
+		}
+		if(source) {
+			for(x=0; x<rollMap.length; x++) {
+				regex = new RegExp(rollMap[x][0], "g");
+				if(dndStatCurve) {
+					expression = expression.replace(regex, parseInt(Math.floor((source[rollMap[x][1]] || 0)/2) - 5));
+				} else {
+					expression = expression.replace(regex, parseInt(source[rollMap[x][1]] || 0));
+				}
+			}
+			for(x=0; x<rollDirectMap.length; x++) {
+				regex = new RegExp(rollDirectMap[x][0], "g");
+				expression = expression.replace(regex, parseInt(source[rollDirectMap[x][1] || rollDirectMap[x][0]] || 0));
+			}
+		}
+		expression = expression.replace(/ /g, "") + " ";
+		x = diceReductionRegEx.exec(expression);
+		while(x !== null) {
+			buffer.push(x[0]);
+			dice[x[2]] = dice[x[2]]?dice[x[2]] + "+" + x[1]:x[1];
+			x = diceReductionRegEx.exec(expression);
+		}
+		for(x=0; x<buffer.length; x++) {
+			expression = expression.replace(buffer[x], "");
+		}
+		dice.null = expression;
+//		console.log("Dice Expression: " + JSON.stringify(dice, null, 4));
+		for(x=0; x<diceOrder.length; x++) {
+			if(dice[diceOrder[x]]) {
+				dice[diceOrder[x]] = parseInt(calculate(dice[diceOrder[x]]));
+			}
+		}
+		return dice;
+	};
+
+	var rawDiceRoll = function(expression, source, target) {
+		var x, dice, add;
+		dice = parseDiceRoll(expression, source, target);
+		expression = calculate(dice.null);
+		for(x=0; x<diceOrder.length; x++) {
+			if(dice[diceOrder[x]]) {
+				add = parseInt(calculate(dice[diceOrder[x]]));
+				if(isNaN(add)) {
+					add = "(" + dice[diceOrder[x]] + ")" + diceOrder[x];
+				} else {
+					add = add + diceOrder[x];
+				}
+				if(expression) {
+					expression += " + " + add;
+				} else {
+					expression = add;
+				}
+			}
+		}
+		return expression;
+	};
+
+	var reduceDiceRoll = function(expression, source, target) {
+		var x, buffer, dice;
+		dice = parseDiceRoll(expression, source, target);
+		expression = calculate(dice.null);
+		for(x=0; x<diceOrder.length; x++) {
+			if(dice[diceOrder[x]]) {
+				if(expression) {
+					expression += " + " + (isNaN(buffer = parseInt(calculate(dice[diceOrder[x]])))?dice[diceOrder[x]]:buffer) + diceOrder[x];
+				} else {
+					expression = (isNaN(buffer = parseInt(calculate(dice[diceOrder[x]])))?dice[diceOrder[x]]:buffer) + diceOrder[x];
+				}
+			}
+		}
+		return expression;
+	};
+
+	var calculateDiceRoll = function(expression, source, target) {
+		var result = {},
+			dice,
+			d,
+			x;
+		
+		dice = parseDiceRoll(expression, source, target);
+		result.sum = parseInt(calculate(dice.null)) || 0;
+//		console.error(dice);
+//		console.warn(result);
+		for(d=0; d<diceOrder.length; d++) {
+			dice[diceOrder[d]] = parseInt(calculate(dice[diceOrder[d]]));
+//			console.log("Dice Count[" + diceOrder[d] + "]: " + dice[diceOrder[d]]);
+			for(x=0; x<dice[diceOrder[d]] && !isNaN(dice[diceOrder[d]]); x++) {
+//				console.log("Roll Dice[" + diceOrder[d] + "]: " + x + "/" + dice[diceOrder[d]]);
+				if(diceSummedCheck[diceOrder[d]]) {
+					result.sum += diceRoll(diceOrder[d]);
+				} else {
+					switch(diceOrder[d]) {
+						case "ability":
+						case "dja":
+						case "a":
+							rollStarWarsDice("ability", result);
+							break;
+						case "boost":
+						case "djb":
+						case "b":
+							rollStarWarsDice("boost", result);
+							break;
+						case "proficiency":
+						case "djp":
+						case "p":
+							rollStarWarsDice("proficiency", result);
+							break;
+						case "difficulty":
+						case "djd":
+						case "d":
+							rollStarWarsDice("difficulty", result);
+							break;
+						case "challenge":
+						case "djc":
+						case "c":
+							rollStarWarsDice("challenge", result);
+							break;
+						case "setback":
+						case "djs":
+						case "s":
+							rollStarWarsDice("setback", result);
+							break;
+						case "force":
+						case "djf":
+						case "f":
+							rollStarWarsDice("force", result);
+							break;
+						default:
+							console.warn("Unknown Dice: " + diceOrder[d]);
+					}
+				}
+			}
+		}
+		
+		return result;
+	};
+	
+	var starWarsMap = {
+		"ability": {
+			"dice": "d8",
+			"1": {
+				"advantage": 0,
+				"success": 0
+			},
+			"2": {
+				"advantage": 0,
+				"success": 1
+			},
+			"3": {
+				"advantage": 0,
+				"success": 1
+			},
+			"4": {
+				"advantage": 0,
+				"success": 2
+			},
+			"5": {
+				"advantage": 1,
+				"success": 0
+			},
+			"6": {
+				"advantage": 1,
+				"success": 0
+			},
+			"7": {
+				"advantage": 1,
+				"success": 1
+			},
+			"8": {
+				"advantage": 2,
+				"success": 0
+			}
+		},
+		"boost":  {
+			"dice": "d6",
+			"1": {
+				"advantage": 0,
+				"success": 0
+			},
+			"2": {
+				"advantage": 0,
+				"success": 0
+			},
+			"3": {
+				"advantage": 2,
+				"success": 0
+			},
+			"4": {
+				"advantage": 1,
+				"success": 0
+			},
+			"5": {
+				"advantage": 1,
+				"success": 1
+			},
+			"6": {
+				"advantage": 0,
+				"success": 2
+			}
+		},
+		"proficiency":  {
+			"dice": "d12",
+			"1": {
+				"advantage": 0,
+				"success": 0
+			},
+			"2": {
+				"advantage": 0,
+				"success": 1
+			},
+			"3": {
+				"advantage": 0,
+				"success": 1
+			},
+			"4": {
+				"advantage": 0,
+				"success": 2
+			},
+			"5": {
+				"advantage": 0,
+				"success": 2
+			},
+			"6": {
+				"advantage": 1,
+				"success": 0
+			},
+			"7": {
+				"advantage": 1,
+				"success": 1
+			},
+			"8": {
+				"advantage": 1,
+				"success": 1
+			},
+			"9": {
+				"advantage": 1,
+				"success": 1
+			},
+			"10": {
+				"advantage": 2,
+				"success": 0
+			},
+			"11": {
+				"advantage": 2,
+				"success": 0
+			},
+			"12": {
+				"advantage": 0,
+				"success": 0,
+				"triumph": 1
+			}
+		},
+		"difficulty":  {
+			"dice": "d8",
+			"1": {
+				"failure": 0,
+				"threat": 0
+			},
+			"2": {
+				"failure": 1,
+				"threat": 0
+			},
+			"3": {
+				"failure": 2,
+				"threat": 0
+			},
+			"4": {
+				"failure": 0,
+				"threat": 1
+			},
+			"5": {
+				"failure": 0,
+				"threat": 1
+			},
+			"6": {
+				"failure": 0,
+				"threat": 1
+			},
+			"7": {
+				"failure": 0,
+				"threat": 2
+			},
+			"8": {
+				"failure": 1,
+				"threat": 1
+			}
+		},
+		"setback":  {
+			"dice": "d6",
+			"1": {
+				"failure": 0,
+				"threat": 0
+			},
+			"2": {
+				"failure": 0,
+				"threat": 0
+			},
+			"3": {
+				"failure": 1,
+				"threat": 0
+			},
+			"4": {
+				"failure": 1,
+				"threat": 0
+			},
+			"5": {
+				"failure": 0,
+				"threat": 1
+			},
+			"6": {
+				"failure": 0,
+				"threat": 1
+			}
+		},
+		"challenge":  {
+			"dice": "d12",
+			"1": {
+				"failure": 0,
+				"threat": 0
+			},
+			"2": {
+				"failure": 1,
+				"threat": 0
+			},
+			"3": {
+				"failure": 1,
+				"threat": 0
+			},
+			"4": {
+				"failure": 2,
+				"threat": 0
+			},
+			"5": {
+				"failure": 2,
+				"threat": 0
+			},
+			"6": {
+				"failure": 0,	
+				"threat": 1
+			},
+			"7": {
+				"failure": 0,
+				"threat": 1
+			},
+			"8": {
+				"threat": 1,
+				"failure": 1
+			},
+			"9": {
+				"threat": 1,
+				"failure": 1
+			},
+			"10": {
+				"failure": 0,
+				"threat": 2
+			},
+			"11": {
+				"failure": 0,
+				"threat": 2
+			},
+			"12": {
+				"failure": 0,
+				"despair": 1,
+				"threat": 0
+			}
+		},
+		"force": {
+			"dice": "d12",
+			"1": {
+				"dark": 1
+			},
+			"2": {
+				"dark": 1
+			},
+			"3": {
+				"dark": 1
+			},
+			"4": {
+				"dark": 1
+			},
+			"5": {
+				"dark": 1
+			},
+			"6": {
+				"dark": 1
+			},
+			"7": {
+				"dark": 2
+			},
+			"8": {
+				"light": 1
+			},
+			"9": {
+				"light": 1
+			},
+			"10": {
+				"light": 2
+			},
+			"11": {
+				"light": 2
+			},
+			"12": {
+				"light": 2
+			}
+		}
+	};
+	
+	var rollStarWarsDice = function(roll, result) {
+		var roll = starWarsMap[roll],
+			keys,
+			x;
+			
+		if(roll) {
+			roll = roll[diceRoll(roll.dice)];
+			if(roll) {
+				keys = Object.keys(roll);
+				for(x=0; x<keys.length; x++) {
+					if(!result[keys[x]]) {
+						result[keys[x]] = 0;
+					}
+					result[keys[x]] += roll[keys[x]];
+				}
+			}
+		}
+		
+		return result;
+	};
+	
+	return {
+		
+		"calculateDiceRoll": calculateDiceRoll,
+		
+		
+		"parseDiceRoll": parseDiceRoll,
+		
+		
+		"reduceDiceRoll": reduceDiceRoll,
+		
+		
+		"rawDiceRoll": rawDiceRoll,
+		
+		"setDnD": function() {
+			rollMap = dndRollMap;
+			dndStatCurve = true;
+		},
+		
+		"setSWRPG": function() {
+			rollMap = swrpgRollMap;
+			dndStatCurve = false;
+		}
+	};
+})();
 
 /**
  * General class for replicating event emission properties to have classes
@@ -18274,6 +18948,7 @@ Vue.use(Templify);
 class EventEmitter {
 	constructor() {
 		this._listeners = {};
+		this._bindedListeners = {};
 		this._onceListeners = {};
 		this._bound = [];
 	}
@@ -18312,18 +18987,30 @@ class EventEmitter {
 	 * @param {String} [event]
 	 * @param {Function} listener
 	 */
-	$on(event, listener) {
-		if(typeof listener !== "function") {
-			rsSystem.log.error("Listener is not a function: ", listener);
-		}
+	$on(event, listener, binding) {
 		
 		if(listener === undefined) {
 			listener = event;
 			event = undefined;
 		}
-		this._listeners[event] = this._listeners[event] || [];
-		if(this._listeners[event].indexOf(listener) === -1) {
-			this._listeners[event].push(listener);
+		
+		if(typeof listener !== "function") {
+			rsSystem.log.error("Listener is not a function: ", listener);
+		}
+
+//		console.warn("Listening[" + this.id + "] on " + event + ": " + listener._owningID);
+		
+		if(typeof(binding) === "object") {
+			this._bindedListeners[event] = this._bindedListeners[event] || [];
+			this._bindedListeners[event].push({
+				"listener": listener,
+				"binding": binding
+			});
+		} else {
+			this._listeners[event] = this._listeners[event] || [];
+			if(this._listeners[event].indexOf(listener) === -1) {
+				this._listeners[event].push(listener);
+			}
 		}
 	}
 
@@ -18350,41 +19037,67 @@ class EventEmitter {
 	 * @param {String} [event]
 	 * @param {Function} listener
 	 */
-	$off(event, listener) {
+	$off(event, listener, binding) {
 		var x;
 		
 		if(listener === undefined) {
 			listener = event;
 			event = undefined;
 		}
+		
 		this._onceListeners[event] = this._onceListeners[event] || [];
-		if( (x = this._onceListeners[event].indexOf(listener)) === -1) {
+		if( (x = this._onceListeners[event].indexOf(listener)) !== -1) {
+//			console.log("Remove Once Listener: " + x);
 			this._onceListeners[event].splice(x, 1);
+			return true;
 		}
+		
+		this._listeners[event] = this._listeners[event] || [];
+		if( (x = this._listeners[event].indexOf(listener)) !== -1) {
+//			console.log("Remove Normal Listener: " + x);
+			this._listeners[event].splice(x, 1);
+			return true;
+		}
+		
+		for(x=0; this._bindedListeners[event] && x<this._bindedListeners[event].length; x++) {
+			if(this._bindedListeners[event][x].listener === listener) {
+//				console.log("Remove Bound Listener: " + x);
+				this._bindedListeners[event].splice(x, 1);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
 	 * 
 	 * @method $emit
 	 * @param {String} [event]
-	 * @param {Object | String | Number | Boolean} ...data
+	 * @param {Object | String | Number | Boolean} data
 	 */
-	$emit(event, ...data) {
+	$emit(event, data) {
 		var x, listeners;
 		listeners = this._listeners[event];
-		data = data || [];
-//		console.log("Emitting[" + event + "]: ", listeners, data);
+//		console.log("Emitting[" + event + " from " + this.id + "]: ", listeners, data);
 		if(listeners && listeners.length) {
 			for(x=0; x<listeners.length; x++) {
 				try {
-					try {
-						listeners[x].apply(listeners[x], data);
-					} catch(generalFault) {
-						rsSystem.log.warn("General Emit Failure[" + event + "]: ", generalFault);
-						listeners[x](data[0]);
-					}
+					listeners[x](data);
 				} catch(exception) {
 					console.log("Emit Failed[" + event + "]: ", listeners[x], exception);
+					rsSystem.log.warn(exception);
+				}
+			}
+		}
+		
+		listeners = this._bindedListeners[event];
+		if(listeners && listeners.length) {
+			for(x=0; x<listeners.length; x++) {
+				try {
+//					console.log("Binded Emission[" + event + "]: ", listeners[x], data);
+					listeners[x].listener.bind(listeners[x].binding)(data);
+				} catch(exception) {
 					rsSystem.log.warn(exception);
 				}
 			}
@@ -18402,36 +19115,69 @@ class EventEmitter {
 			listeners.splice(0, listeners.length);
 		}
 
-		data.unshift(event);
-		if(this._bound && this._bound.length) {
-			for(x=0; x<this._bound.length; x++) {
-				try {
-					this._bound[x].$emit.bind(this._bound[x]).apply(this._bound[x].$emit, data);
-				} catch(exception) {
-					rsSystem.log.warn(exception);
-					try {
-						this._bound[x].$emit(event, data[1]);
-					} catch(exception) {
-						rsSystem.log.warn(exception);
-					}
-				}
-			}
-		}
+		// Needs revised but currently unused
+//		data.unshift(event);
+//		if(this._bound && this._bound.length) {
+//			for(x=0; x<this._bound.length; x++) {
+//				try {
+//					console.log("Bounded Emission");
+//					this._bound[x].$emit.bind(this._bound[x]).apply(this._bound[x].$emit, data);
+//				} catch(exception) {
+//					rsSystem.log.warn(exception);
+//					try {
+//						this._bound[x].$emit(event, data[1]);
+//					} catch(exception) {
+//						rsSystem.log.warn(exception);
+//					}
+//				}
+//			}
+//		}
 	}
 };
 
+/**
+ * 
+ * @class String
+ * @constructor
+ */
 
 /**
  * 
  * @method capitalize
- * @for String
- * @return {String} .
+ * @return {String}
  */
 String.prototype.capitalize = function() {
 	if(this.length) {
 		return this[0].toUpperCase() + this.substring(1);
 	}
 	return this;
+};
+
+/**
+ * 
+ * @method pluralize
+ * @param {Boolean} capitalize
+ * @return {String}
+ */
+String.prototype.pluralize = function(capitalize) {
+	var plural;
+	
+	switch(this[this.length-1]) {
+		case "y":
+			plural = this.substring(0, this.length-1) + "ies";
+			break;
+		case "s":
+			plural = this;
+			break;
+		default:
+			plural = this + "s";
+	}
+	
+	if(capitalize) {
+		return plural[0].toUpperCase() + plural.substring(1);
+	} else {
+		return plural;
+	}
 };
 
 /**
@@ -18611,6 +19357,180 @@ if(!Array.prototype.union) {
 
 		return result;
 	};
+}
+
+(function() {
+	var sortBySorters = {};
+	
+	Array.prototype.sortBy = function(field) {
+		if(!sortBySorters[field]) {
+			sortBySorters[field] = function(a, b) {
+				if(a[field] < b[field]) {
+					return -1;
+				} else if(a[field] > b[field]) {
+					return 1;
+				} else {
+					return 0;
+				}
+			};
+		}
+		
+		this.sort(sortBySorters[field]);
+	};
+})();
+
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//name_generator.js
+//written and released to the public domain by drow <drow@bin.sh>
+//http://creativecommons.org/publicdomain/zero/1.0/
+//Modified for class based handling by aetherwalker (aetherwalker@refugesystems.net)
+
+/**
+ * 
+ * @class NameGenerator
+ * @constructor
+ * @see http://creativecommons.org/publicdomain/zero/1.0/
+ * @param {Array | String} corpus Array of string data to generate the underlying information.
+ */
+class NameGenerator {
+	constructor(corpus) {
+		if(typeof(corpus) === "string") {
+			corpus = corpus.split(/[\s,]/);
+		}
+		this.consumeCorpus(corpus);
+	}
+	
+	/**
+	 * 
+	 * @method consumeCorpus
+	 * @param {Array | String} corpus An array of string data to generate the base of information.
+	 */
+	consumeCorpus(corpus) {
+		this.corpus = corpus;
+		this.compendium = {};
+		
+		var c, x, y, z,
+			string,
+			lastC,
+			names,
+			name;
+
+		for(x=0; x<corpus.length; x++) {
+			corpus[x] = corpus[x].toLowerCase();
+			names = corpus[x].split(/\s+/);
+			this.nextChain("parts", names.length);
+			for(y=0; y<names.length; y++) {
+				name = names[y];
+				this.nextChain("nameLen", name.length);
+
+				c = name[0];
+				this.nextChain("initial", c);
+
+				string = name.substr(1);
+				lastC = c;
+
+				while(string.length > 0) {
+					c = string[0];
+					this.nextChain(lastC, c);
+					string = string.substr(1);
+					lastC = c;
+				}
+			}
+		}
+		
+		this.scaleChain();
+	}
+	
+	nextChain(key, token) {
+		if(this.compendium[key]) {
+			if(this.compendium[key][token]) {
+				this.compendium[key][token]++;
+			} else {
+				this.compendium[key][token] = 1;
+			}
+		} else {
+			this.compendium[key] = {};
+			this.compendium[key][token] = 1;
+		}
+	}
+
+	scaleChain() {
+		var key,
+			token,
+			count,
+			weighted,
+			tableLen = {};
+
+		for(key in this.compendium) {
+			tableLen[key] = 0;
+
+			for(token in this.compendium[key]) {
+				count = this.compendium[key][token];
+				weighted = Math.floor(Math.pow(count,1.3));
+
+				this.compendium[key][token] = weighted;
+				tableLen[key] += weighted;
+			}
+		}
+		this.compendium["tableLen"] = tableLen;
+	}
+	
+	/**
+	 * 
+	 * @method create
+	 * @return {String} A name generated from the underlying data.
+	 */
+	create() {
+		var parts = this.selectLink("parts"),
+			names = [],
+			nameLen,
+			lastC,
+			name,
+			x,
+			c;
+
+		for(x=0; x<parts; x++) {
+			nameLen = this.selectLink("nameLen");
+			c = this.selectLink("initial");
+			name = c;
+			lastC = c;
+
+			while(name.length < nameLen) {
+				c = this.selectLink(lastC);
+				name += c;
+				lastC = c;
+			}
+			names.push(name);
+		}
+		return names.join(" ");
+	}
+	
+	/**
+	 * 
+	 * @method fill
+	 * @param {Array} array Fills the passed array with generated names.
+	 */
+	fill(array) {
+		for(var x=0; x<array.length; x++) {
+			array[0] = this.create();
+		}
+	}
+	
+	selectLink(key) {
+		var len = this.compendium["tableLen"][key],
+			idx = Math.floor(Math.random() * len),
+			token,
+			x;
+
+		x = 0;
+		for(token in this.compendium[key]) {
+			x += this.compendium[key][token];
+			if(idx < x) {
+				return token;
+			}
+		}
+		return "-";
+	}
 }
 
 
@@ -19823,6 +20743,11 @@ class UserInformation {
  */
 var rsSystem = {};
 rsSystem.version = "0.0.1";
+/* Set up basic high level static configurations for the
+ * application.
+ */
+Dice.setSWRPG();
+
 
 /**
  * 
@@ -20020,9 +20945,11 @@ rsSystem.settings.logging.warn = true;
 })();
 
 
-rsSystem.component = {};
-rsSystem.component = function(name, definition) {
+rsSystem.components = {};
+rsSystem.component_classifications = {};
+rsSystem.component = function(name, definition, classification) {
 	rsSystem.components[name] = Vue.component(name, definition);
+	
 };
 
 /**
@@ -20057,6 +20984,7 @@ rsSystem.listingNouns = [];
  */
 rsSystem.registerNoun = function(constructor, name) {
 	name = name || constructor.name;
+	constructor.prototype._type = name;
 	rsSystem.availableNouns[name] = constructor;
 	if(!constructor.unavailable) {
 		rsSystem.listingNouns.push(name);
@@ -20785,6 +21713,161 @@ rsSystem.Router = new VueRouter({
 //})();
 
 
+/*
+ * Device | Character | Item - Level locking for display calculated vs display formula
+ * Info display events support objects that specify record & entity to support calculated displays
+ * 		Feed entity from source click
+ * Fix null reference possibilities in the Information Panel
+ */
+
+/**
+ * 
+ * @class RSCalculator
+ * @constructor
+ * @param {RSUniverse} universe 
+ */
+class RSCalculator {
+	constructor(universe) {
+		this.variableExpression = new RegExp("([a-z_]+)\.?([a-z:_]+)?", "g");
+		this.securityExpression = new RegExp("^[<>a-zA-Z0-9\\(\\)+-\\/\\* ]*$");
+		this.reductionExpression = new RegExp("[ \\(\\)\\[\\]:-]+", "g");
+		this.trimLeadExpression = new RegExp("^_+");
+		this.trimEndExpression = new RegExp("_+$");
+	
+		this.universe = universe;
+		
+		/**
+		 * Serves to map short names for properties to their proper keys.
+		 * 
+		 * For instance "melee" should map to "skill:melee" in the case of that skill existing and
+		 * being named that way.
+		 * 
+		 * All skills are loaded from the universe and mapped using a lower case name with "_" between
+		 * spaces and parenthesis. Additionally "Ranged (Light)" would become "ranged_light" with the
+		 * trailing "_" trimmed and the " (" combination becoming one "_". 
+		 * @property skillMapping
+		 * @type Object
+		 */
+		this.skillMapping = {};
+		
+		this.universe.$on("universe:modified", this.updateSkillMappings);
+		this.universe.$on("initialized", this.updateSkillMappings);
+	}
+	
+	/**
+	 * 
+	 * @
+	 */
+	updateSkillMappings() {
+		var skill,
+			name,
+			x;
+		
+		if(this.universe && this.universe.indexes && this.universe.indexes.skill) {
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				skill = this.universe.indexes.skill.listing[x];
+				name = skill.name.replace(this.reductionExpression, "_").replace(this.trimLeadExpression, "").replace(this.trimEndExpression,"").toLowerCase();
+				this.skillMapping[name] = skill.propertyKey;
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @method display
+	 * @param {String} expression 
+	 * @param {RSObject} [source] 
+	 * @param {Object} [base] 
+	 * @param {Object} [target] 
+	 * @return {Number} 
+	 */
+	display(expression, source, base, target) {
+		
+	}
+	
+	/**
+	 * 
+	 * @method process
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} [base] 
+	 * @param {Object} [target] 
+	 * @return {Number} 
+	 */
+	process(expression, source, base, target) {
+		var variableExpression = new RegExp("([a-z_]+)\.?([a-z:_]+)?", "g");
+		
+//		console.log("Received Expression: ", expression, source, base, target);
+		if(!source) {
+			return expression;
+		} else if(!expression || typeof(expression) === "number") {
+//			console.trace("Expressionless Calculation? ", expression, source, base, target);
+			return expression;
+		}
+		
+		var processed = expression,
+			variables;
+		
+		while(variables = variableExpression.exec(expression)) {
+			if(this.universe.debug) {
+				console.log("Var Calculation: ", expression, source, base, target, variables);
+			}
+			if(variables.length === 3 && variables[2] !== undefined && variables[2] !== null) {
+				switch(variables[1]) {
+					case "source":
+						if(source) {
+							processed = processed.replace(variables[0], parseInt(source[this.skillMapping[variables[2]] || variables[2]]) || 0);
+						} else {
+//							console.warn("Unable to calculate with 'source' as it was omitted: " + expression, source, base, target);
+							return expression;
+						}
+						break;
+					case "target":
+						if(target) {
+							processed = processed.replace(variables[0], parseInt(target[variables[2]]) || 0);
+						} else {
+//							console.warn("Unable to calculate with 'target' as it was omitted: " + expression, source, base, target);
+							return expression;
+						}
+						break;
+					case "character":
+					case "entity":
+					case "ship":
+					case "base":
+						if(base) {
+							processed = processed.replace(variables[0], parseInt(base[variables[2]]) || 0);
+						} else {
+//							console.warn("Unable to calculate with 'base' as it was omitted: " + expression, source, base, target);
+							return expression;
+						}
+						break;
+					default:
+						console.warn("Calculator - Unknown variable root", expression, variables);
+						return expression;
+				}
+			} else {
+				if(typeof(processed) === "string") {
+					processed = processed.replace(variables[0], parseInt(source[this.skillMapping[variables[1]] || variables[1]]) || 0);
+				}
+			}
+		}
+		
+		expression = processed;
+
+		if(expression && typeof(expression) === "string" && expression.length < 150 && this.securityExpression.test(expression)) {
+			try {
+				return eval(expression);
+			} catch(ignored) {
+				console.error("Exception[" + source.id + "]: " + expression + "\n", ignored);
+				return expression;
+			}
+		} else {
+			return expression;
+		}
+	}
+}
+
+
 /**
  * Logging object that handles send data back to the Universe for sorting/debugging
  * as well as local tracknig for follow-up.
@@ -20941,23 +22024,57 @@ class RSObject extends EventEmitter {
 	constructor(details, universe) {
 		super();
 		this.universe = universe;
+		this._replacedReferences = {};
+		this._sourceData = _p(details);
+		this._statContributions = {};
+		this._relatedErrors = {};
 		this._coreData = {};
+		this._registered = {};
+		this._shadow = JSON.parse(JSON.stringify(details));
+		
+		this._registered._marked = Date.now();
 		var keys = Object.keys(details),
 			x;
 		
+//		console.log("Key set for " + details.id + ": ", keys);
 		for(x=0; x<keys.length; x++) {
-			this._coreData[keys[x]] = details[keys[x]];
+			if(keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo") {
+				this._coreData[keys[x]] = details[keys[x]];
+			}
 		}
-		this.name = details.name;
+		
+//		this.name = details.name;
+//		console.log("Final Core Set for " + details.id + ": ", _p(this._coreData), _p(details));
+		this._coreData.description = details.description;
+		this._coreData.name = details.name;
+		this._modifiers = [];
 		this.id = details.id;
 		
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
 				if(event && event.id === this.id) {
-					console.log("Object Processing Modification: ", this, event);
+					if(this.debug || this.universe.debug) {
+						console.log("Object Processing Modification: ", this, event);
+					}
 					this.loadDelta(event.modification);
 				}
 			});
+		}
+	}
+	
+	get name() {
+		if(this.hidden) {
+			return this.hiddenName || "Unknown";
+		} else {
+			return this._coreData.name || this.id;
+		}
+	}
+	
+	get description() {
+		if(this.hidden) {
+			return this.hiddenDescription;
+		} else {
+			return this._coreData.description;
 		}
 	}
 	
@@ -20971,8 +22088,69 @@ class RSObject extends EventEmitter {
 		change.id = this.id;
 		this.universe.send("modify:" + this._type, change);
 	}
-
 	
+	/**
+	 * Set the learned property and add the knowledge entities.
+	 * @method learnKnowledge
+	 * @param {Array} knowledge Of ID Strings.
+	 */
+	learnKnowledge(knowledge) {
+		var updates,
+			x;
+
+		if(!this._shadow.learned) {
+			this._shadow.learned = {};
+		}
+		if(!this._shadow.knowledge) {
+			this._shadow.knowledge = [];
+		}
+		
+		for(x=0; x<knowledge.length; x++) {
+			if(!this._shadow.learned[knowledge[x]]) {
+				this._shadow.learned[knowledge[x]] = Date.now();
+				this._shadow.knowledge.push(knowledge[x]);
+				updates = true;
+			}
+		}
+		
+		if(updates) {
+			console.log("...");
+			this.commit({
+				"knowledge": this._shadow.knowledge,
+				"learned": this._shadow.learned
+			});
+		}
+	}
+	
+	/**
+	 * Clears the learned property and removes the knowledge entities.
+	 * @method forgetKnowledge
+	 * @param {Array} knowledge Of ID Strings.
+	 */
+	forgetKnowledge(knowledge) {
+		if(!this.learned || !this.knowledge) {
+			return false;
+		}
+		
+		var updates,
+			x;
+		
+		for(x=0; x<knowledge.length; x++) {
+			if(this._shadow.learned[knowledge[x]]) {
+				delete(this._shadow.learned[knowledge[x]]);
+				updates = this._shadow.knowledge.indexOf(knowledge[x]);
+				this._shadow.knowledge.splice(updates, 1);
+			}
+		}
+		
+		if(updates) {
+			this.commit({
+				"knowledge": this._shadow.knowledge,
+				"learned": this._shadow.learned
+			});
+		}
+	}
+
 	/**
 	 * 
 	 * @method toJSON
@@ -21011,57 +22189,341 @@ class RSObject extends EventEmitter {
 		return json;
 	}
 	
+	cleanCurrentData() {
+		var keys = Object.keys(this);
+		for(var x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "universe" && keys[x] !== "description" && keys[x] !== "name" && typeof(this[keys[x]]) !== "function") {
+				delete(this[keys[x]]);
+			}
+		}
+	}
+	
+	inSlot(equipment) {
+		if(this.universe.debug) {
+			console.debug("Check Slot[" + this.id + "]: ", equipment);
+		}
+		
+		if(!equipment || !equipment.item) {
+			if(this.universe.debug) {
+				console.debug("No Equipment Slot[" + this.id + "]");
+			}
+			return false;
+		}
+		
+		var keys = Object.keys(equipment.item),
+			x;
+		
+		for(x=0; x<keys.length; x++) {
+			if(this.universe.debug) {
+				console.debug("Check Slot[" + keys[x] + " for " + this.id + "]");
+			}
+			if(equipment.item[keys[x]] && equipment.item[keys[x]].length && equipment.item[keys[x]].indexOf(this.id) !== -1) {
+				return true;
+			}
+		}
+		
+		if(this.universe.debug) {
+			console.debug("Failed Slot Check[" + this.id + "]");
+		}
+		
+		return false;
+	}
+	
+	unregisterListeners() {
+//		rsSystem.log.debug("RSObject[" + this.id + "] Cleaning Reference Listeners");
+		var keys,
+			x;
+
+		keys = Object.keys(this._registered);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_") {
+				if(this._registered[keys[x]].$off) {
+					this._registered[keys[x]].$off("modified", this.dependencyFired);
+				} else {
+					console.warn("RSObject[" + this.id + "] unable To Remove Listener? ", this._registered[keys[x]]);
+				}
+				delete(this._registered[keys[x]]);
+			}
+		}
+	}
+	
+	dependencyFired(event) {
+		this.recalculateProperties();
+	}
+	
+	/**
+	 * 
+	 * @method consumeSlotsFor
+	 * @param {RSObject} record The record to check.
+	 * @param {String} id The ID of the slot that is to be used.
+	 * @param {Array} slots Strings indicating the remaining slots
+	 */
+	consumeSlotsFor(record, id, slots) {
+		return RSObject.consumeSlotsFor(record, id, slots);
+		/*
+		if(!record || !id || !slots || !slots.length) {
+			return false;
+		}
+		
+		var indexes = [],
+			index = -2,
+			need;
+		
+		if(record.slots_used > 1) {
+			need = record.slots_used;
+		} else {
+			need = 1;
+		}
+		
+		while(index !== -1 && indexes.length < need) {
+			index = slots.indexOf(id, index);
+			if(index !== -1) {
+				indexes.push(index);
+			}
+		}
+		
+		if(indexes.length === need) {
+			for()
+		} else {
+			return false;
+		}
+		*/
+	}
+	
 	/**
 	 * 
 	 * @method recalculateProperties
+	 * @param {Object} [replacedProperties] Defaults to this._replacedProperties.
 	 */
-	recalculateProperties() {
+	recalculateProperties(replacedReferences, debug) {
+		if(debug || this.universe.debug) {
+			console.error("Recalculating Object: " + this.name + " [ " + this.id + " ]");
+		}
+		if(!this.id) {
+			return false;
+		}
+		
+		if(this.recalculatePrefetch) {
+			this.recalculatePrefetch();
+		}
+		
+		replacedReferences = replacedReferences || this._replacedReferences;
+		if(debug || this.debug || this.universe.debug) {
+			console.warn("replacedReferences: ",replacedReferences);
+		}
+		
+		if(60000 < Date.now() - this._registered._marked) {
+			this.unregisterListeners();
+		}
+		
 		// Establish Base
-		var references = [],
+		var selfReference = this,
+			references = [],
 			base = {},
+			tracking,
+			loading,
+			buffer,
+			index,
+			hold,
 			keys,
 			load,
-			x;
+			x,
+			y,
+			z;
 		
+		keys = Object.keys(this._statContributions);
+		for(x=0; x<keys.length; x++) {
+			delete(this._statContributions[keys[x]]);
+		}
+
+		base._equipped = this._coreData.equipped;
+		base._replacedReferences = replacedReferences; // Skip & reference modifications
+		base._contributions = this._statContributions; // TODO: Track what item/entity/room contributed to the property
+		base._calculated = []; // Track calculated fields
+		base._overrides = {}; // Tracks slot like modifications where certain types should be overriden in modifier application
+		if(debug || this.debug || this.universe.debug) {
+			console.log("Initial Base Data:\n > This: ", _p(this.equipped), _p(this._equipped), "\n > Core: ", _p(this._coreData), "\n > Base: ", _p(base));
+		}
+		
+		keys = Object.keys(this._relatedErrors);
+		for(x=0; x<keys.length; x++) {
+			delete(this._relatedErrors[keys[x]]);
+		}
+		if(this.slot) {
+			tracking = [].concat(this.slot);
+			if(this._coreData.equipped) {
+//			if(this.equipped) {
+				keys = Object.keys(this._coreData.equipped);
+//				keys = Object.keys(this.equipped);
+				for(x=0; x<keys.length; x++) { // "Accepts" of slot
+					buffer = Object.keys(this._coreData.equipped[keys[x]]);
+//					buffer = Object.keys(this.equipped[keys[x]]);
+					if(buffer.length) {
+						base._overrides[keys[x]] = [];
+						for(y=0; y<buffer.length; y++) { // ID of Slot
+							hold = this._coreData.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
+//							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
+							for(z=0; z<hold.length; z++) {
+								// If you have it (Item/Room) or it is inside you (Entity)
+								if(((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))
+										// And you have slots for it
+										&& this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
+									if(debug || this.debug || this.universe.debug) {
+										console.log(" > Record is slot valid: " + hold[z]);
+									}
+									switch(keys[x]) {
+										case "item":
+										case "room":
+											base._overrides[keys[x]].push(hold[z]);
+											break;
+									}
+								} else {
+									if(debug || this.debug || this.universe.debug) {
+										console.log(" > Record is not slot valid: " + hold[z]);
+									}
+									this._relatedErrors[hold[z]] = {
+										"type": "error",
+										"message": "Not enough slots left",
+										"calculated": Date.now(),
+										"contents": hold[z],
+										"slot": buffer[y]
+									};
+								}
+							}
+						}
+					}
+				}
+			} else {
+				for(x=0; x<this.slot.length; x++) {
+					buffer = this.universe.indexes.slot.index[this.slot[x]];
+					if(buffer && !base._overrides[buffer.accepts] && (buffer.accepts === "item" || buffer.accepts === "room")) {
+						base._overrides[buffer.accepts] = [];
+					}
+				}
+			}
+		}
+		
+		// Stop listening for changes to known modifiers and clear
+		for(x=0; x<this._modifiers.length; x++) {
+			if(debug) {
+				console.warn("Remove Listener: " + this.id + " from " + this._modifiers[x].id + ": " + this._modifiers[x].$off("modified", this.recalculateProperties));
+			} else {
+				this._modifiers[x].$off("modified", this.recalculateProperties);
+			}
+		}
+		this._modifiers.splice(0);
+		
+		// Establish Base from Core Data\
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_") {
-				switch(typeof(this._coreData[keys[x]])) {
-					case "boolean":
-					case "string":
-					case "number":
-						base[keys[x]] = this._coreData[keys[x]];
-						break;
-					case "object":
-						// RSObjects should be flat but arrays are valid
-						if(this._coreData[keys[x]] instanceof Array) {
-							base[keys[x]] = this._coreData[keys[x]];
-						}
-						break;
+			if(keys[x][0] !== "_" && keys[x] !== "universe") {
+				if(debug) {
+					console.log("Checking Base Key: " + keys[x], this.universe);
+				}
+//				base[keys[x]] = this._coreData[keys[x]];
+				if(typeof(this._coreData[keys[x]]) === "object") {
+					if(this._coreData[keys[x]] === null) {
+						base[keys[x]] = null;
+					} else if(this._coreData[keys[x]] instanceof Array) {
+						base[keys[x]] = [];
+						base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+					} else {
+						base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+					}
+				} else {
+					base[keys[x]] = this._coreData[keys[x]];
 				}
 
+				if(!this.universe.nouns) {
+					// console.trace("Noun Failure: ", this);
+				}
 				// Isolate Reference Fields
-				if(this.universe.nouns[keys[x]]) {
+				if(this.universe.nouns && this.universe.nouns[keys[x]]) {
 					references.push(keys[x]);
 				}
 			}
 		}
+
+		if(debug || this.debug || this.universe.debug) {
+			console.log("Core Data: ", _p(this._coreData));
+			console.log("Base: ", _p(base));
+			console.log("Base Overrides: ", base._overrides);
+			console.log("References: ", references);
+		}
 		
-//		console.log("References: ", references, _p(base));
-		if(references && references.length) {
+		if(references  && references.length) {
 			for(x=0; x<references.length; x++) {
-				this.loadNounReferenceModifications(references[x], base);
+				this.loadNounReferenceModifications(references[x], base, debug);
+				if(debug || this.debug || this.universe.debug) {
+					console.log("Reference[" + references[x] + "]: ", _p(base));
+				}
+			}
+		}
+
+		// TODO: Listen for changes on references
+		
+		// Reform Search String
+		this._search = this.id.toLowerCase();
+		if(this.name) {
+			this._search += this.name.toLowerCase();
+		}
+		if(this.description) {
+			this._search += this.description.toLowerCase();
+		}
+		if(this.location && typeof(this.location) === "string") {
+			this._search += this.location.toLowerCase();
+			if(this.universe.index.lookup[this.location] && this.universe.index.lookup[this.location].name) {
+				this._search += this.universe.index.lookup[this.location].name.toLowerCase();
+			}
+		}
+		
+		if(this.universe.calculator) {
+			load = {};
+			for(x=0; x<base._calculated.length; x++) {
+				if(typeof(base[base._calculated[x]]) === "string" && base._calculated[x] !== "undefined" && !load[base._calculated[x]]) {
+					if(debug || this.debug || this.universe.debug) {
+						console.warn("Calculator Processing[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+					}
+					base[base._calculated[x]] = this.universe.calculator.process(base[base._calculated[x]], this);
+					load[base._calculated[x]] = true;
+					if(debug || this.debug || this.universe.debug) {
+						console.warn(" > Result[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
+					}
+				}
 			}
 		}
 		
 		//console.log("Final: ", base);
+		keys = Object.keys(this);
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "universe" && keys[x] !== "description" && keys[x] !== "name" && typeof(this[keys[x]]) !== "function") {
+				delete(this[keys[x]]);
+			}
+		}
 		keys = Object.keys(base);
 		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_" && typeof(this[keys[x]]) !== "function" ) {
+			if(keys[x][0] !== "_" && keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo" && typeof(this[keys[x]]) !== "function" ) {
 				this[keys[x]] = base[keys[x]];
 			}
 		}
 		
+		if(debug || this.debug || this.universe.debug) {
+			console.log("Assembled: ", _p(this), _p(base));
+		}
+		
+		if(this.recalculateHook) {
+			this.recalculateHook();
+		}
+		
+		if(debug || this.debug || this.universe.debug) {
+			console.log("Recalculated: " + this.id + "\n > Base: ", _p(base), "\n > This: ", _p(this));
+		}
+		
+		/**
+		 * 
+		 * @event modified
+		 * @param {RSObject} source The object that was modified.
+		 */
 		this.$emit("modified", this);
 	}
 
@@ -21071,20 +22533,49 @@ class RSObject extends EventEmitter {
 	 * @param {String} noun
 	 * @param {Object} base
 	 */
-	loadNounReferenceModifications(noun, base) {
-		var reference = this[noun],
-			x;
-		
-//		console.log("Load Noun[" + noun + "]: ", reference);
-		if(reference instanceof Array) {
-			for(x=0; x<reference.length; x++) {
-				if(this.universe.nouns[noun][reference[x]] && this.universe.nouns[noun][reference[x]].performModifications) {
-					this.universe.nouns[noun][reference[x]].performModifications(base);
-				}
+	loadNounReferenceModifications(noun, base, debug) {
+		debug = debug || this.universe.debug;
+		if(this.universe.nouns) {
+			var reference,
+				buffer,
+				x;
+			
+			if(base && base._overrides && base._overrides[noun]) {
+				reference = base._overrides[noun];
+			} else if(base && base._replacedReferences && base._replacedReferences[noun]) {
+				reference = base._replacedReferences[noun];
+			} else {
+				reference = this[noun];
 			}
-		} else {
-			if(this.universe.nouns[noun][reference] && this.universe.nouns[noun][reference].performModifications) {
-				this.universe.nouns[noun][reference].performModifications(base);
+			
+			if(debug || this.debug || this.universe.debug) {
+				console.log("Check Noun Load[" + noun + " -> " + this.id + "]: ", reference);
+			}
+			
+			if(reference instanceof Array) {
+				for(x=0; x<reference.length; x++) {
+					if(debug || this.debug || this.universe.debug) {
+						console.log("Perform Noun Load[" + noun + " -> " + this.id + "]: ", reference[x]);
+					}
+					if(reference[x] && (buffer = this.universe.nouns[noun][reference[x]._sourced || reference[x]])) {
+						if(debug || this.debug || this.universe.debug) {
+							console.log("Buffered Noun Load[" + noun + " -> " + this.id + "]: ", buffer);
+						}
+						if(!this._registered[buffer.id]) {
+							buffer.$on("modified", this.dependencyFired, this);
+							this._registered[buffer.id] = buffer;
+						}
+						buffer.performModifications(base, this.id, debug);
+					}
+				}
+			} else {
+				if(reference && (buffer = this.universe.nouns[noun][reference._sourced || reference])) {
+					buffer.performModifications(base, this.id, debug);
+					if(!this._registered[buffer.id]) {
+						buffer.$on("modified", this.dependencyFired, this);
+						this._registered[buffer.id] = buffer;
+					}
+				}
 			}
 		}
 	}
@@ -21093,22 +22584,77 @@ class RSObject extends EventEmitter {
 	 * 
 	 * @method performModifications
 	 * @param {Object} base
+	 * @return {Boolean} Whether the modification was performed or not.
 	 */
-	performModifications(base) {
-//		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
-		var x;
+	performModifications(base, origin, finalize) {
+		if(this.needs_slot && !this.inSlot(base._equipped)) {
+			if(this.debug || this.universe.debug) {
+				console.error(" ! Mod Aborted for Slot[" + origin + "]: " + this.id);
+			}
+			return false;
+		}
 		
-		if(this._coreData.modifierstats) {
-			for(x=0; x<this._coreData.modifierstats.length; x++) {
-				this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
+		var buffer,
+			keys,
+			mod,
+			m,
+			x,
+			y;
+		
+		if(this.debug || this.universe.debug) {
+			console.error("Perform Mod[" + origin + "]: " + this.id);
+		}
+		
+		for(x=0; this.condition && x < this.condition.length; x++) {
+			buffer = this.universe.index.lookup[this.condition[x]];
+			if(buffer && buffer.evaluate && !buffer.evaluate(base, this.id)) {
+				return false;
 			}
 		}
-		if(this._coreData.modifierattrs) {
-			for(x=0; x<this._coreData.modifierattrs.length; x++) {
-				this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+		
+		if(this.universe.index) {
+			for(x=0; x<rsSystem.listingNouns.length; x++) {
+				if(this._coreData[rsSystem.listingNouns[x]]) {
+					if(this.debug || this.universe.debug) {
+						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
+					}
+					if(this._coreData[rsSystem.listingNouns[x]] instanceof Array) {
+						for(y=0; y<this._coreData[rsSystem.listingNouns[x]].length; y++) {
+							if(this._coreData[rsSystem.listingNouns[x]][y]) {
+								buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]][y]._sourced || this._coreData[rsSystem.listingNouns[x]][y]];
+								if(buffer) {
+									buffer.performModifications(base, this.id);
+								} else {
+									console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
+								}
+							}
+						}
+					} else if(this._coreData[rsSystem.listingNouns[x]]) {
+						buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]]._sourced || this._coreData[rsSystem.listingNouns[x]]];
+						if(buffer) {
+							buffer.performModifications(base, this.id);
+						} else {
+							console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
+						}
+					}
+				}
 			}
 		}
-//		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+		
+		if(base._calculated) {
+			this._calculated = {};
+			for(x=0; x<base._calculated.length; x++) {
+				if(!this._calculated[base._calculated[x]]) {
+					this._calculated[base._calculated[x]] = true;
+				}
+			}
+		}
+		
+		if(this.debug || this.universe.debug) {
+			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+		}
+		
+		return true;
 	}
 
 	/**
@@ -21117,11 +22663,13 @@ class RSObject extends EventEmitter {
 	 * @param {Object} delta
 	 */
 	loadDelta(delta) {
+		this._lastDelta = _p(delta);
+		
 		var keys = Object.keys(delta),
 			x;
 		
 		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function") {
+			if(typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
 				this._coreData[keys[x]] = delta[keys[x]];
 			}
 		}
@@ -21131,9 +22679,52 @@ class RSObject extends EventEmitter {
 		}
 		
 		this.recalculateProperties();
+		// Array properties not recalculating with one pass?
+		this.recalculateProperties();
 	}
 }
 
+/**
+ * 
+ * @method consumeSlotsFor
+ * @param {RSObject} record The record to check.
+ * @param {String} id The ID of the slot that is to be used.
+ * @param {Array} slots Strings indicating the remaining slots
+ */
+RSObject.consumeSlotsFor = function(record, id, slots) {
+	if(!record || !id || !slots || !slots.length) {
+		return false;
+	}
+
+//	console.warn("Start Slot Check: " + record.id, record, id, slots);
+	
+	var indexes = [],
+		index = -1,
+		need;
+	
+	if(record.slots_used > 1) {
+		need = record.slots_used;
+	} else {
+		need = 1;
+	}
+	
+	while((index = slots.indexOf(id, index + 1)) !== -1 && indexes.length < need) {
+		if(index !== -1) {
+			indexes.push(index);
+		}
+	}
+	
+//	console.warn("Check Slots[" + need + "]: ", record, id, slots, indexes);
+	
+	if(indexes.length === need) {
+		for(index=indexes.length-1; 0 <= index; index--) {
+			slots.splice(indexes[index], 1);
+		}
+		return true;
+	} else {
+		return false;
+	}
+};
 /**
  * 
  * @class RSSheet
@@ -21158,93 +22749,109 @@ class RSSheet extends EventEmitter {
  * @see Markdown: https://www.markdownguide.org/
  */
 (function() {
-	var converter = new showdown.Converter();
+	var converter = new showdown.Converter({
+		"tables": true
+	});
 
 	var marking = {
 		"start": "${",
 		"end": "}$"
 	};
-
-	var mdWorldLink = new RegExp(":::/", "ig");
 	
-	var formatDnDMark = function(character, mark) {
-		
+	var notFound = {
+		"icon": "",
+		"id": ""
 	};
 	
-	var formatMarkdown = function(character, world, sourceText) {
-		var tracking,
+	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
+//		console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
+		var properties,
+			tracking,
 			element,
 			target,
 			value,
 			index,
 			mark,
-			keys,
 			end,
 			x;
-		
-		sourceText = sourceText.replace(mdWorldLink, location.protocol + "//" + location.host + "/#/worlds/aq/" + world.id + "/");
+
 		index = sourceText.indexOf(marking.start);
 		while(index !== -1 && (end = sourceText.indexOf(marking.end, index)) !== -1 && index + 3 < end) {
 			tracking = sourceText.substring(index, end + 2);
-			try {
-				target = sourceText.substring(index + 1, end + 1);
-				mark = JSON.parse(target);
-				
-				element = $("<span/>");
-				
-				keys = Object.keys(mark);
-				for(x=0; x<keys.length; x++) {
-					switch(keys[x]) {
-						case "class":
-							element.addClass(mark[keys[x]]);
-							break;
-						case "content":
-						case "text":
-						case "value":
-							element.html(mark[keys[x]]);
-							break;
-						case "roll":
-							if(mark.repeat) {
-								value = $("<span/>");
-								value.html(mark[keys[x]] + " ( ");
-								element.append(value);
-								
-								value = $("<span/>");
-								value.addClass(mark.repeat);
-								value.html(RSCalculator.reduceDiceRoll(mark[keys[x]], character));
-								element.append(value);
-								
-								value = $("<span> )</span>");
-								element.append(value);
-							} else {
-								element.html(RSCalculator.reduceDiceRoll(mark[keys[x]], character));
-							}
-							break;
-					}
+			target = sourceText.substring(index + 2, end);
+			properties = {};
+			
+			mark = target.indexOf(",");
+			if(mark === -1) {
+				value = target;
+			} else {
+				value = target.split(",");
+				switch(value.length) {
+					default:
+					case 4:
+						base = universe.index.lookup[value[3]];
+					case 3:
+						properties.id = value[2];
+					case 2:
+						properties.classes = value[1];
+					case 1:
+						value = value[0];
 				}
-				
-				if(mark.pre) {
-					sourceText = sourceText.replace(tracking, element[0].innerHTML);
+			}
+			
+			if(value) {
+//				console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
+				if(value[0] === "=") {
+					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
+					
+					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
+				} else if(value[0] === "~") {
+					value = value.substring(1).split(".");
+					if(value.length === 2) {
+						switch(value[0]) {
+							case "base":
+								value = base[value[1]] || "";
+								break;
+							case "target":
+								value = targetObject[value[1]] || "";
+								break;
+							default:
+								value = entity[value[1]] || "";
+								break;
+						}
+					} else {
+						value = entity[value[0]] || "";
+					}
+					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
+				} else if(value[0] === "#") {
+					value = value.substring(1).trim();
+					if(value && (value = universe.index.index[value])) {
+//						value = value;
+					} else if(entity) {
+						value = entity;
+					}
+					if(!value) {
+						value = notFound;
+					}
+					element = $("<a class=\"" + value.icon + "\" data-id=\"" + (value.id) + "\"></a>");
+				} else if(value[0] === "\"") {
+					value = value.substring(1).trim();
+					element = $("<span class=\"" + value + "\"></span>");
 				} else {
-					sourceText = sourceText.replace(tracking, element[0].outerHTML);
+					// Linked
+					mark = universe.index.index[properties.id || value];
+					if(mark) {
+						element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
+					} else {
+						element = $("<span class=\"calculated-result rendered-value " + properties.classes + " not-found\">" + value + "[Not Found]</span>");
+					}
+				}
+//				console.warn("Properties: ", properties);
+				if(properties.classes) {
+					element.css(properties.classes);
 				}
 				
-			} catch(ignore) { // TODO: Parse to warning later
-				target = sourceText.substring(index + 2, end);
-				value = target.indexOf(",");
-				if(value === -1) {
-					mark = RSCalculator.reduceDiceRoll(target, character);
-					if(mark !== undefined && mark !== null) {
-						sourceText = sourceText.replace(tracking, mark);
-					}
-				} else {
-					target = target.split(",");
-					mark = RSCalculator.reduceDiceRoll(target[0].trim(), character);
-					if(mark !== undefined && mark !== null) {
-						element = $("<span style=\"color:" + target[1] + "\">" + mark + "</span>");
-						sourceText = sourceText.replace(tracking, element[0].outerHTML);
-					}
-				}
+				sourceText = sourceText.replace(tracking, element[0].outerHTML);
 			}
 			
 			index = sourceText.indexOf(marking.start, index + 1);
@@ -21256,18 +22863,15 @@ class RSSheet extends EventEmitter {
 	rsSystem.component("RSShowdown", {
 		"inherit": true,
 		"props": {
-			"character": {
-				"required": true,
-				"type": Object
-			},
-			"world": {
+			"universe": {
 				"required": true,
 				"type": Object
 			}
 		},
 		"methods": {
-			"rsshowdown": function(sourceText) {
-				return converter.makeHtml(formatMarkdown(this.character, this.world, sourceText));
+			"rsshowdown": function(sourceText, entity, base, target) {
+//				console.warn("RS Showdown: ", entity, base, target);
+				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, base, target));
 			}
 		}
 	});
@@ -21332,9 +22936,9 @@ rsSystem.component("RSSWStats", {
 				"class": "rs-red",
 				"icon": "fas fa-flame rot315"
 			},
-			"maneuverability": {
-				"name": "Maneuverability",
-				"info": "Similar to strength",
+			"evasion": {
+				"name": "Evasion",
+				"info": "Nimbleness of the ship. Allows it to dodge incoming fire.",
 				"class": "rs-green",
 				"icon": "fad fa-chevron-double-right"
 			},
@@ -21346,9 +22950,46 @@ rsSystem.component("RSSWStats", {
 			},
 			"shield": {
 				"name": "Shield",
-				"info": "Similar to strength",
+				"info": "A ship's ability to absorb incoming damage before its hull begins to take damage",
 				"class": "rs-blue",
-				"icon": "fal fa-futbol rot45"
+				"icon": "fal fa-futbol"
+			}
+		};
+		data.entityStats.flight = {
+			"manuevers": {
+				"name": "Maneuvers",
+				"section": "piloting",
+				"info": "Control of your ship",
+				"icon": "fad fa-random",
+				"base": "agility"
+			},
+			"pilotingplanetary": {
+				"name": "Planetary",
+				"section": "piloting",
+				"info": "",
+				"icon": "fas fa-fighter-jet",
+				"base": "cunning"
+			},
+			"sensors": {
+				"name": "Sensors",
+				"section": "piloting",
+				"info": "Reading and controling a ship's sensor array",
+				"icon": "fas fa-signal-stream",
+				"base": "intellect"
+			},
+			"tracking": {
+				"name": "Tracking",
+				"section": "piloting",
+				"info": "Follow a target",
+				"icon": "ra ra-targeted",
+				"base": "willpower"
+			},
+			"hacking": {
+				"name": "Hacking",
+				"section": "piloting",
+				"info": "Remotely access another ship by force",
+				"icon": "fad fa-router",
+				"base": "intellect"
 			}
 		};
 		data.entityStats.skill = {
@@ -21400,7 +23041,7 @@ rsSystem.component("RSSWStats", {
 				"name": "Outer Rim",
 				"section": "knowledge",
 				"info": "",
-				"icon": "far fa-circle",
+				"icon": "fal fa-planet-ringed",
 				"base": "intellect"
 			},
 			"underworld": {
@@ -21412,7 +23053,7 @@ rsSystem.component("RSSWStats", {
 			"xenology": {
 				"section": "knowledge",
 				"info": "",
-				"icon": "fab fa-reddit-alien",
+				"icon": "fas fa-user-alien",
 				"base": "intellect"
 			},
 			"athletics": {
@@ -21469,20 +23110,6 @@ rsSystem.component("RSSWStats", {
 				"section": "general",
 				"info": "",
 				"icon": "fal fa-balance-scale",
-				"base": "agility"
-			},
-			"pilotingplanetary": {
-				"name": "Piloting (Planetary)",
-				"section": "general",
-				"info": "",
-				"icon": "fas fa-fighter-jet",
-				"base": "agility"
-			},
-			"pilotingspace": {
-				"name": "Piloting (Space)",
-				"section": "general",
-				"info": "",
-				"icon": "fad fa-fighter-jet",
 				"base": "agility"
 			},
 			"stealth": {
@@ -21564,11 +23191,12 @@ rsSystem.component("RSSWStats", {
 				"section": "knowledge",
 				"info": "General knowledge of planets. Can not be leveled manually.",
 				"controlled": true,
-				"icon": "fas fa-globe-stand",
+				"icon": "fad fa-planet-ringed",
 				"base": "intellect"
 			}
 		};
 		
+		Object.assign(data.entityStats.skill, data.entityStats.flight);
 		Object.assign(data.entityStats, data.entityStats.character);
 		Object.assign(data.entityStats, data.entityStats.skill);
 		Object.assign(data.entityStats, data.entityStats.ship);
@@ -21581,17 +23209,20 @@ rsSystem.component("RSSWStats", {
 				}
 				data.entityStats[keys[x]].propertyKey = "skill_" + keys[x];
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
+				data.entityStats[keys[x]].bonusKey = "skill_bonuses_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
-				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
-				if(data.entityStats[keys[x]].info) {
-					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
-				}
 			}
 		}
 
 		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
-		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
+		data.characterStatsListing = [];
+		for(x=0; x<data.characterStats.length; x++) {
+			data.characterStatsListing.push(data.entityStats[data.characterStats[x]]);
+		}
+		
+		data.shipStats = ["attack", "evasion", "hull", "shield"];
 		data.skillStats = Object.keys(data.entityStats.skill).sort();
+		data.skillStatsListing = [];
 		data.listAllStats = data.characterStats.concat(data.shipStats).concat(data.skillStats);
 		data.skillStatsSections = {};
 		for(x=0; x<data.skillStats.length; x++) {
@@ -21601,6 +23232,7 @@ rsSystem.component("RSSWStats", {
 					data.skillStatsSections[buffer.section] = [];
 				}
 				data.skillStatsSections[buffer.section].push(data.entityStats[data.skillStats[x]]);
+				data.skillStatsListing.push(buffer);
 			} else {
 				console.error("Unaligned Skill/Stat Key: " + data.skillStats[x]);
 			}
@@ -21610,12 +23242,501 @@ rsSystem.component("RSSWStats", {
 		for(x=0;x<data.shipStats.length;x++) {
 			data.shipStatList.push(data.entityStats[data.shipStats[x]]);
 		}
+
+		keys = Object.keys(data.entityStats);
+		for(x=0; x<keys.length; x++) {
+			data.entityStats[keys[x]]._search = data.entityStats[keys[x]]._search || "";
+			if(data.entityStats[keys[x]].id) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].id.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].name) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].name.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].info) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].base) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].base.toLowerCase();
+			}
+		}
 		
 		return data;
 	},
 	"methods": {
 	}
 });
+
+/**
+ * 
+ * 
+ * @class RSComponentUtility
+ * @constructor
+ * @module Components
+ */
+
+(function() {
+	var dice = {};
+	dice.proficiency = "fas fa-dice-d12 rs-yellow";
+	dice.ability = "fas fa-dice-d8 rs-green";
+	dice.boost = "fas fa-dice-d6 rs-color";
+	dice.challenge = "fas fa-dice-d12 rs-red";
+	dice.difficulty = "fas fa-dice-d8 rs-purple";
+	dice.setback = "fas fa-dice-d6 rs-black";
+	dice.setforward = "fas fa-dice-d6 rs-white";
+	
+	/**
+	 * Listed in render order
+	 * @property diceTypes
+	 * @type Array
+	 * @private
+	 * @static
+	 */
+	var diceTypes = [
+		"proficiency",
+		"ability",
+		"boost",
+		"challenge",
+		"difficulty",
+		"setback",
+		"setforward"
+	];
+	
+	rsSystem.component("RSComponentUtility", {
+		"inherit": true,
+		"mixins": [
+		],
+		"props": {
+		},
+		"data": function() {
+			var data = {};
+			
+			data.diceTypes = diceTypes;
+			
+			return data;
+		},
+		"computed": {
+		},
+		"watch": {
+		},
+		"mounted": function() {
+			
+		},
+		"methods": {
+			"getDice": function(skill, entity) {
+				return this.renderRoll(this.getSkillRoll(skill, entity));
+			},
+			"getSkillRoll": function(skill, entity) {
+				var roll = {},
+					x;
+
+				roll.proficiency = 0;
+				roll.ability = 0;
+				roll.boost = 0;
+				roll.challenge = 0;
+				roll.difficulty = 0;
+				roll.setback = 0;
+				roll.setfoward = 0;
+				
+				entity = entity || this.entity;
+				if(typeof(entity) === "string") {
+					skill = this.universe.indexes.entity.lookup[skill];
+				}
+				if(typeof(skill) === "string") {
+					skill = this.universe.indexes.skill.lookup[skill];
+				}
+				
+				if(skill && entity) {
+					for(x=0; x<entity[skill.base] || x<entity[skill.propertyKey]; x++) {
+						if(x<entity[skill.base] && x<entity[skill.propertyKey]) {
+							++roll.proficiency;
+						} else {
+							++roll.ability;
+						}
+					}
+					for(x=0; x<entity[skill.bonusKey]; x++) {
+						++roll.boost;
+					}
+				}
+				
+				return roll;
+			},
+			"renderRoll": function(roll) {
+				var rendering = [],
+					r,
+					x;
+
+				for(r=0; r<diceTypes.length; r++) {
+					for(x=0; roll[diceTypes[r]] && x<roll[diceTypes[r]]; x++) {
+						rendering.push(dice[diceTypes[r]]);
+					}
+				}
+
+				return rendering;
+			},
+			"showInfo": function(view, base, target) {
+				if(view && view.id && this.isOwner(view)) {
+					if(!base && this.entity) {
+						base = this.entity;
+					}
+					rsSystem.EventBus.$emit("display-info", {
+						"target": target,
+						"record": view,
+						"base": base
+					});
+				}
+			},
+			"isOwner": function(record, player) {
+				player = this.player || player;
+				
+				if(player.master) {
+					return true;
+				}
+				
+				if(record.owner === this.player.id) {
+					return true;
+				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
+					return true;
+				} else if(!record.owner && (!record.owners || record.owners.length === 0)) {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			/**
+			 * Compare to lists and find the first matched occurrence. Used primarily for comparing
+			 * itemtype lists for agreement. 
+			 * @method sharesOne
+			 * @param {Array} corpus The list of Strings with which to start.
+			 * @param {Array} compare The list of Strings against which to compare.
+			 * @return The first element found that occurs in both lists or null if
+			 * 		no shared element is found.
+			 */
+			"sharesOne": function(corpus, compare) {
+				var x, y;
+				for(x=0; x<corpus.length; x++) {
+					for(y=0; y<compare.length; y++) {
+						if(corpus[x] === compare[y]) {
+							return corpus[x];
+						}
+					}
+				}
+				
+				return null;
+			},
+			/**
+			 * 
+			 * @method uniqueByID
+			 * @param {Array} corpus The array to clean.
+			 * @return {Array} The passed array that is now cleaned.
+			 */
+			"uniqueByID": function(corpus) {
+				if(!corpus) {
+					return corpus;
+				}
+				
+				var track = {},
+					x;
+				
+				for(x=corpus.length-1; 0<=x; x--) {
+					if(track[corpus[x].id]) {
+						corpus.splice(x, 1);
+					} else {
+						track[corpus[x].id] = true;
+					}
+				}
+				
+				return corpus;
+			},
+			"sortData": function(a, b) {
+				var aName,
+					bName;
+				
+				if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
+					if(a.order < b.order) {
+						return -1;
+					} else if(a.order > b.order) {
+						return 1;
+					}
+				}
+				if((a.order === undefined || a.order === null) && b.order !== undefined && b.order !== null) {
+					return -1;
+				}
+				if((b.order === undefined || b.order === null) && a.order !== undefined && a.order !== null) {
+					return 1;
+				}
+
+				if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {
+					aName = a.name.toLowerCase();
+					bName = b.name.toLowerCase();
+					if(aName < bName) {
+						return -1;
+					} else if(aName > bName) {
+						return 1;
+					}
+				}
+				if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
+					return -1;
+				}
+				if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
+					return 1;
+				}
+
+				if(a.id < b.id) {
+					return -1;
+				} else if(a.id > b.id) {
+					return 1;
+				}
+				
+				return 0;
+			}
+		}
+	});	
+})();
+
+/**
+ * 
+ * 
+ * @class RSEquipmentControl
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("RSEquipmentControl", {
+	"inherit": true,
+	"mixins": [
+	],
+	"props": {
+	},
+	"computed": {
+	},
+	"watch": {
+	},
+	"methods": {
+	}
+});
+
+/**
+ * Specific collection of directives within the Common module.
+ * 
+ * @module Common
+ * @submodule Directives
+ * @main Directives
+ */
+/**
+ * 
+ * @class enter
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("enter", {
+	"bind": function(el, binding) {
+		if(typeof(binding.value) === "function") {
+			var save = function(event) {
+				if(event.code === "Enter") {
+					binding.value();
+					event.preventDefault();
+					return false;
+				}
+			};
+			
+			var skip = function(event) {
+				if(event.code === "Enter") {
+					event.preventDefault();
+					return false;
+				}
+			};
+			
+			$(el).keypress(skip);
+			$(el).keydown(skip);
+			$(el).keyup(save);
+		}
+	}
+});
+
+/**
+ * 
+ * @class save
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("save", {
+	"bind": function(el, binding) {
+		if(typeof(binding.value) === "function") {
+			var save = function(event) {
+				if(event.ctrlKey && event.code === "KeyS") {
+//					console.warn("Saving");
+					binding.value();
+					event.preventDefault();
+					return false;
+				}
+			};
+			
+			var skip = function(event) {
+				if(event.ctrlKey && event.code === "KeyS") {
+//					console.warn("Skipped");
+					event.preventDefault();
+					return false;
+				}
+			};
+			
+			$(el).keypress(skip);
+			$(el).keydown(skip);
+			$(el).keyup(save);
+		}
+	}
+});
+
+/**
+ * 
+ * @class tab
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("tab", {
+	"bind": function(el, binding) {
+		var tab = function(event) {
+			if(event.code === "Tab") {
+				var hold = el.selectionStart;
+				el.value = el.value.substring(0, hold) + "\t" + el.value.substring(el.selectionEnd);
+				el.selectionStart = hold + 1;
+				el.selectionEnd = hold + 1;
+				event.preventDefault();
+				return false;
+			}
+		};
+		
+		var skip = function(event) {
+			if(event.code === "Tab") {
+				event.preventDefault();
+				return false;
+			}
+		};
+		
+		$(el).keypress(skip);
+		$(el).keydown(skip);
+		$(el).keyup(tab);
+	}
+});
+
+/**
+ * 
+ * @class filedrop
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the file event
+ */
+Vue.directive("filedrop", {
+	"bind": function(el, binding) {
+		if(typeof(binding.value) === "function") {
+			var test = function(event) {
+				event.preventDefault();
+				console.warn("Drag: ", event);
+				return false;
+			};
+			
+			el.addEventListener("dragenter", function(event) {
+				// Display Drop Overlay
+				el.classList.add("overlay");
+			});
+			el.addEventListener("dragleave", function(event) {
+				// Remove Drop Overlay
+				el.classList.remove("overlay");
+			});
+			el.addEventListener("drop", function(event) {
+				el.classList.remove("overlay");
+				event.stopPropagation();
+				event.preventDefault();
+				
+				binding.value(event.dataTransfer);
+				
+				return false;
+			});
+		}
+	}
+});
+
+/**
+ * 
+ * @class pan
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("pan", {
+	"bind": function(el, binding) {
+		if (typeof(binding.value) === "function") {
+			var mc = new Hammer(el);
+			mc.get("pan").set({ direction: Hammer.DIRECTION_ALL });
+			mc.on("pan", binding.value);
+		}
+	}
+});
+
+/**
+ * 
+ * @class pinchin
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("pinchin", {
+	"bind": function(el, binding) {
+		if (typeof binding.value === "function") {
+			var mc = new Hammer(el),
+				options = {};
+			
+			if(binding.modifiers.left) {
+				options.direction = Hammer.DIRECTION_LEFT;
+			} else if(binding.modifiers.right) {
+				options.direction = Hammer.DIRECTION_RIGHT;
+			} else if(binding.modifiers.up) {
+				options.direction = Hammer.DIRECTION_UP;
+			} else if(binding.modifiers.down) {
+				options.direction = Hammer.DIRECTION_DOWN;
+			}
+			
+			mc.get("pinch").set(options);
+			if(binding.modifiers.in) {
+				mc.on("pinchin", binding.value);
+			}
+			if(binding.modifiers.out) {
+				mc.on("pinchout", binding.value);
+			}
+		}
+	}
+});
+
+/**
+ * 
+ * @class swipe
+ * @module Common
+ * @submodule Directives
+ * @param {Function} handler The function to handle the pan event
+ */
+Vue.directive("swipe", {
+	"bind": function(el, binding) {
+		if (typeof binding.value === "function") {
+			var mc = new Hammer(el),
+				options = {};
+			
+			if(binding.modifiers.left) {
+				options.direction = Hammer.DIRECTION_LEFT;
+			} else if(binding.modifiers.right) {
+				options.direction = Hammer.DIRECTION_RIGHT;
+			} else if(binding.modifiers.up) {
+				options.direction = Hammer.DIRECTION_UP;
+			} else if(binding.modifiers.down) {
+				options.direction = Hammer.DIRECTION_DOWN;
+			}
+			
+			mc.get("swipe").set(options);
+			mc.on("swipe", binding.value);
+		}
+	}
+});
+
 /**
  * 
  * @class RSAbility
@@ -21650,6 +23771,48 @@ class RSArchetype extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+	
+	/**
+	 * 
+	 * Archetypes have different conditionals that can be applied to them to limit their application.
+	 * + condition
+	 * + singleton
+	 * + limited
+	 * @method performModifications
+	 * @param {Object} base
+	 * @return {Boolean} True if this object applied modifications, false otherwise.
+	 */
+	/*
+	performModifications(base) {
+		var index,
+			x;
+		
+		if(this.singleton && this.singleton.length) {
+			index = base.archetype.indexOf(this);
+			for(x=0; x<this.singleton.length; x++) {
+				if(x < index) {
+					return false;
+				}
+			}
+		}
+		
+//		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
+		
+		if(this._coreData.modifierstats) {
+			for(x=0; x<this._coreData.modifierstats.length; x++) {
+				this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);
+			}
+		}
+		if(this._coreData.modifierattrs) {
+			for(x=0; x<this._coreData.modifierattrs.length; x++) {
+				this.universe.nouns.modifierattrs[this._coreData.modifierattrs[x]].performModifications(base);
+			}
+		}
+//		console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+
+		return true;
+	}
+	*/
 }
 /**
  * 
@@ -21668,6 +23831,87 @@ class RSBook extends RSObject {
 }
 /**
  * 
+ * 
+ * @class RSCondition
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSCondition extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+	
+	/**
+	 * 
+	 * @method evaluate
+	 * @param {Object} base The object on which the condition should be considered
+	 * @param {String} [target] Optional ID 
+	 * @return {Boolean} If the condition passes or not. 
+	 */
+	evaluate(base, target) {
+		if(!this.type || !base[this.type]) {
+			return false;
+		}
+		
+		var count = 0,
+			index,
+			limit,
+			load,
+			x;
+	
+//		console.log("Checking Condition[" + target + "]: " + this.id + "\n > " + this.type + "\n > Base: ", base, "\n > Condition: ", this);
+		if(this.singleton && this.singleton.length) {
+			index = base[this.type].indexOf(target);
+			limit = this.limited || 1;
+
+			for(x=0; x<this.singleton.length; x++) {
+				load = base[this.type].indexOf(this.singleton[x]);
+//				console.log(" > Singleton Check[" + index + " | " + load + "]: " + this.singleton[x]);
+				if(load !== -1 && load < index) {
+//					console.log(" > Count");
+					count++;
+					if(count >= limit) {
+//						console.log(" < Failed");
+						return false;
+					}
+				}
+			}
+		}
+
+//		console.log(" < Passed");
+		return true;
+	}
+}
+
+/**
+ * Representation for datasets for things like sourcing language data into name generation.
+ * @class RSDataset
+ * @extends RSLocation
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSDataset extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+	
+	recalculateHook() {
+		// console.warn("Dataset Updated: ", this.id);
+		
+		if(this.default_set) {
+			this.universe.defaultDataset = this;
+		}
+	}
+}
+
+/**
+ * 
  * @class RSEffect
  * @extends RSObject
  * @constructor
@@ -21678,9 +23922,36 @@ class RSBook extends RSObject {
 class RSEffect extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
+		this._alterationLookup = {};
 	}
 	
+	recalculatePrefetch() {
+		var x;
+		
+		if(this.alters && this.alters.length) {
+			for(x=0; x<this.alters.length; x++) {
+				delete(this._alterationLookup[this.alters[x]]);
+			}
+		}
+	}
+
+	recalculateHook() {
+		var x;
+		
+		if(this.alters && this.alters.length) {
+			for(x=0; x<this.alters.length; x++) {
+				this._alterationLookup[this.alters[x]] = true;
+			}
+		}
+		
+		if(this.indicators) {
+			if(this.indicators.split) {
+				this.indicators = this.indicators.split(/[\s,]+/);
+			} else {
+				console.warn("Effect[" + this.id + "] has an unsplittable indicator specified: ", this.indicators);
+			}
+		}
+	}
 }
 
 /**
@@ -21695,12 +23966,305 @@ class RSEffect extends RSObject {
 class RSEntity extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		if(this._coreData.equipped) {
+			this._equipBuffer = JSON.parse(JSON.stringify(this._coreData.equipped));
+		} else {
+			this._equipBuffer = {};
+		}
+		if(this._coreData.effect) {
+			this._effectBuffer = JSON.parse(JSON.stringify(this._coreData.effect));
+		} else {
+			this._effectBuffer = [];
+		}
+		if(!details.location) {
+			details.location = "location:universe";
+		}
+//		this._tracking = {};
+//		if(!this.history) {
+//			this.history = [];
+//		}
+//		
+//		this._tracked = [
+//			"location",
+//			"credits",
+//			"brawn",
+//			"agility",
+//			"intellect",
+//			"cunning",
+//			"willpower",
+//			"pressence",
+//			"xp"
+//		];
+//		
+//		this._trackedDiff = [
+//			"archetype",
+//			"knowledge",
+//			"ability",
+//			"item"
+//		];
+	}
+	
+	/**
+	 * 
+	 * @method assignEffect
+	 * @param {RSEffect} effect
+	 * @param {Object} [details]
+	 */
+	assignEffect(effect, details) {
+		effect = effect.id || effect;
+		details = details || {};
+		details.id = effect + ":" + this._effectBuffer.length + ":" + Date.now();
+		details._sourced = effect;
+		details.time = this.universe.time_game || this.universe.time || Date.now();
+		this._effectBuffer.push(details);
+		this.commit({
+			"effect": this._effectBuffer
+		});
+	}
+	
+	
+	assignEffectIndicator(detail_id, indicator) {
+		detail_id = detail_id.id || detail_id;
+		
+		if(detail_id && this._effectBuffer.length) {
+			var index = -1,
+				x;
+			
+			if(!indicator) {
+				indicator = null;
+			}
+			
+			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
+				if(this._effectBuffer[x].id === detail_id) {
+					index = x;
+				}
+			}
+			
+			if(index !== -1) {
+				this._effectBuffer[index].indicator = indicator;
+				this.commit({
+					"effect": this._effectBuffer
+				});
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	editEffect(detail_id, details) {
+		detail_id = detail_id.id || detail_id;
+		
+		if(detail_id && this._effectBuffer.length && details) {
+			var index = -1,
+				x;
+			
+			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
+				if(this._effectBuffer[x].id === detail_id) {
+					index = x;
+				}
+			}
+			
+			if(index !== -1) {
+				Object.assign(this._effectBuffer[index],  details);
+				this.commit({
+					"effect": this._effectBuffer
+				});
+				return true;
+			}
+		}
+	}
+
+	dismissEffect(detail_id) {
+		detail_id = detail_id.id || detail_id;
+		
+		if(detail_id && this._effectBuffer.length) {
+			var index = -1,
+				x;
+			
+			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
+				if(this._effectBuffer[x].id === detail_id) {
+					index = x;
+				}
+			}
+			
+			if(index !== -1) {
+				this._effectBuffer.splice(index, 1);
+				this.commit({
+					"effect": this._effectBuffer
+				});
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	recalculateHook() {
+//		var pilot,
+//			stats,
+//			x;
+//		
+//		if(this.pilot && (pilot = this.universe.indexes.entity.index[this.pilot])) {
+//			stats = [
+//				"evasion",
+//				"attack",
+//				"shield",
+//				"hull"
+//			];
+//			
+//			for(x=0; x<stats.length; x++) {
+//				if(pilot["bonus_" + stats[x]]) {
+//					this[stats[x]] += pilot["bonus_" + stats[x]];
+//				}
+//			}
+//		}
+	}
+	
+	/**
+	 * 
+	 * @method setPilot
+	 * @param {RSEntity} pilot
+	 */
+	setPilot(pilot) {
 		
 	}
 	
-	loadDeltaHook(event) {
+	/**
+	 * 
+	 * @method equipSlot
+	 * @param {String | RSSlot} slot
+	 * @param {String | RSEntity | RSItem | RSRoom} equip
+	 */
+	equipSlot(slot, equip) {
+		if(typeof(slot) === "string") {
+			slot = this.universe.index.lookup[slot];
+		}
+
+		if(typeof(equip) === "string") {
+			equip = this.universe.index.lookup[equip];
+		}
 		
+		if(slot.accepts && equip._type === slot.accepts) {
+			if(!this._equipBuffer[slot.accepts]) {
+				this._equipBuffer[slot.accepts] = {};
+			}
+			if(!this._equipBuffer[slot.accepts][slot.id]) {
+				this._equipBuffer[slot.accepts][slot.id] = [];
+			}
+			this._equipBuffer[slot.accepts][slot.id].push(equip.id);
+			
+			this.commit({
+				"equipped": this._equipBuffer
+			});
+		} else if(!slot.accepts) {
+			console.warn("Slot[" + slot.id + "] accepts no records");
+		} else if(slot.accepts !== equip._type) {
+			console.warn("Slot[" + slot.id + "] does not accept that equipment type[" + equip._type + "@" + equip.id + "]");
+		}
 	}
+	
+	/**
+	 * 
+	 * @method unequipSlot
+	 * @param {String | RSSlot} slot
+	 * @param {String | RSEntity | RSItem | RSRoom} equip
+	 */
+	unequipSlot(slot, equip) {
+		var index;
+		
+		if(typeof(slot) === "string") {
+			slot = this.universe.index.lookup[slot];
+		}
+
+		if(typeof(equip) === "string") {
+			equip = this.universe.index.lookup[equip];
+		}
+		
+		if(slot.accepts && this._equipBuffer[slot.accepts] && this._equipBuffer[slot.accepts][slot.id] && (index = this._equipBuffer[slot.accepts][slot.id].indexOf(equip.id)) !== -1) {
+			this._equipBuffer[slot.accepts][slot.id].splice(index, 1);
+			
+			this.commit({
+				"equipped": this._equipBuffer
+			});
+		} else if(!slot.accepts) {
+			console.warn("Slot[" + slot.id + "] accepts no records");
+		} else if(index === -1) {
+			console.warn("Slot[" + slot.id + "] does not have that equipment[" + equip.id + "] equipped");
+		}
+	}
+	
+//	addHistory(event, delay) {
+//		this.history.unshift(event);
+//		if(this.history.length > 300) {
+//			this.history.pop();
+//		}
+//		if(!delay) {
+//			this.commit({
+//				"history": this.history
+//			});
+//		}
+//	}
+	
+//	loadDeltaHook(event) {
+//		if(this._trackHistory) {
+//			var commit = false,
+//				diffNew,
+//				diffOld,
+//				tests,
+//				x,
+//				y;
+//			
+//			for(x=0; x<this._tracked.length; x++) {
+//				if(this._tracking[this._tracked[x]] === undefined || this._tracking[this._tracked[x]] === null) {
+//					this._tracking[this._tracked[x]] = this[this._tracked[x]];
+//				} else if(this._tracking[this._tracked[x]] !== this[this._tracked[x]]) {
+//					commit = true;
+//					this.addHistory({
+//						"type": this._tracked[x],
+//						"previous": this._tracking[this._tracked[x]],
+//						"current": this[this._tracked[x]],
+//						"time": Date.now()
+//						// TODO: Session & Universe Time support
+//					}, true);
+//				}
+//			}
+//			
+//			for(x=0; x<this._trackedDiff.length; x++) {
+//				if(this._tracking[this._trackedDiff[x]] === undefined || this._tracking[this._trackedDiff[x]] === null) {
+//					this._tracking[this._trackedDiff[x]] = this[this._trackedDiff[x]];
+//				} else if(this._tracking[this._trackedDiff[x]] && this[this._trackedDiff[x]] && this._tracking[this._trackedDiff[x]].length !== this[this._trackedDiff[x]].length) {
+//					diffNew = {};
+//					diffOld = {};
+//					// TODO: Finish adding up IDs and then computing difference
+//					
+//					for(y=0; y<this._trackedDiff[this._tracked].length; y++) {
+//						if(!diffOld[this._trackedDiff[this._tracked][y]]) {
+//							diffOld[this._trackedDiff[this._tracked][y]] = 1;
+//						} else {
+//							diffOld[this._trackedDiff[this._tracked][y]]++;
+//						}
+//					}
+//					
+//					commit = true;
+//					this.addHistory({
+//						"type": this._tracked,
+//						"previous": this._tracking[this._tracked],
+//						"current": this[this._tracked],
+//						"time": Date.now()
+//						// TODO: Session & Universe Time support
+//					}, true);
+//				}
+//			}
+//			
+//			if(commit) {
+//				this.commit({
+//					"history": this.history
+//				});
+//			}
+//		}
+//	}
 }
 
 /**
@@ -21723,6 +24287,82 @@ RSHistory.ignore = true;
 
 /**
  * 
+ * @class RSImage
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details 
+ */
+class RSImage extends RSObject {
+	
+	constructor(details, universe) {
+		super(details, universe);
+		
+		if(this.data) {
+			this._blob = this.base64toBlob(this.data, this.content_type);
+		}
+	}
+	
+	base64toBlob(base64Data, contentType) {
+		contentType = contentType || "";
+		var sliceSize = 1024;
+		var byteCharacters = atob(base64Data);
+		var bytesLength = byteCharacters.length;
+		var slicesCount = Math.ceil(bytesLength / sliceSize);
+		var byteArrays = new Array(slicesCount);
+	
+		for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+			var begin = sliceIndex * sliceSize;
+			var end = Math.min(begin + sliceSize, bytesLength);
+	
+			var bytes = new Array(end - begin);
+			for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+				bytes[i] = byteCharacters[offset].charCodeAt(0);
+			}
+			byteArrays[sliceIndex] = new Uint8Array(bytes);
+		}
+		return new Blob(byteArrays, { type: contentType });
+	}
+	
+	/**
+	 * 
+	 * @property data
+	 * @type String
+	 */
+	
+	/**
+	 * 
+	 * @property path
+	 * @type String
+	 */
+	
+	/**
+	 * 
+	 * @property height
+	 * @type Integer
+	 */
+	
+	/**
+	 * 
+	 * @property width
+	 * @type Integer
+	 */
+	
+	/**
+	 * 
+	 * @property aspect
+	 * @type Number
+	 */
+	
+	/**
+	 * 
+	 * @property data
+	 * @type String
+	 */
+}
+
+/**
+ * 
  * @class RSInventory
  * @extends RSObject
  * @constructor
@@ -21735,7 +24375,23 @@ class RSInventory extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
+
+	/**
+	 * Inventories perform modifications differently, requiring specific conditions for anything contained to actually modify
+	 * the base.
+	 * @method performModifications
+	 * @return {Boolean} Whether the modification was performed or not.
+	 */
+	performModifications(base) {
+		var buffer,
+			x;
+		
+		// TODO: Implement inventory conditional
+		
+		return true;
+	}
 }
+
 /**
  * 
  * @class RSItem
@@ -21748,9 +24404,66 @@ class RSInventory extends RSObject {
 class RSItem extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
 	}
 	
+	recalculatePrefetch() {
+		if(this._coreData.no_modifiers) {
+			this._replacedReferences.item = [];
+		} else {
+			this._replacedReferences.item = false;
+		}
+	}
+	
+	recalculateHook() {
+		var sum = 0,
+			buffer,
+			x;
+		
+		if(this.adds_encumberance && this.item && this.item.length) {
+			for(x=0; x<this.item.length; x++) {
+				buffer = this.universe.indexes.item.lookup[this.item[x]];
+				if(buffer) {
+					sum += parseInt(buffer.encumberance) || 0;
+				}
+			}
+			
+			if(this.scaled_encumberance && this.contents_max) {
+				sum = parseInt(Math.ceil(this.scaled_encumberance * (sum / this.contents_max)));
+			}
+		}
+		
+		if(this.encumberance) {
+			this.encumberance += sum;
+		} else {
+			this.encumberance = sum;
+		}
+	}
+
+	/**
+	 * 
+	 * @method performModifications
+	 */
+	performModifications(base, origin, debug) {
+		if(this.no_modifiers) {
+			return false;
+		}
+		return super.performModifications(base, origin, debug);
+	}
+}
+
+/**
+ * 
+ * @class RSItemType
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSItemType extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}	
 }
 
 /**
@@ -21800,6 +24513,15 @@ class RSLocation extends RSObject {
 		if(!this.coordinates) {
 			this.coordinates = [];
 		}
+		if(details.showing) {
+			this.showing = details.showing;
+		}
+	}
+	
+	loadDeltaHook(details) {
+		if(details.showing) {
+			this.showing = details.showing;
+		}
 	}
 }
 
@@ -21820,7 +24542,7 @@ class RSLocation extends RSObject {
  * 		track. 
  */
 class RSLogLevel {
-	constructor(universe, details) {
+	constructor(details, universe) {
 		if(details.level) {
 			universe.log.levels[details.level] = details.value;
 		}
@@ -21833,8 +24555,48 @@ class RSLogLevel {
 RSLogLevel.ignore = true;
 
 /**
- * Modifiers represent changes to the properties of an entity and are computed and the summed result
- * is placed in a RSSheet for the corresponding entity.
+ * Modifiers represent changes to the properties of an Object.
+ * 
+ * @class RSModifier
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSModifier extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+	}
+	
+	/**
+	 * 
+	 * @method _evaluateConditions
+	 * @param {Object} base
+	 * @return {Boolean}
+	 */
+	_evaluateConditions(base) {
+		var result = true;
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @method _evaluateConditions
+	 * @param {Object} base
+	 * @param {Object} condition
+	 * @param {Boolean} cuurent
+	 * @return {Boolean}
+	 */
+	_evaluateCondition(base, condition, current) {
+		
+	}
+}
+
+/**
+ * Modifiers represent changes to the properties of an object.
  * 
  * Attribute Modifiers are for flat information that doesn't have a computation involved, such as adding descriptions
  * or setting age.
@@ -21850,17 +24612,32 @@ RSLogLevel.ignore = true;
  * 		received from the Universe.
  * @param {Object} universe
  */
-class RSModifierAttributes extends RSObject {
+class RSModifierAttributes extends RSModifier {
 	constructor(details, universe) {
 		super(details, universe);
 	}
 	
-	performModifications(base) {
+	performModifications(base, origin, debug) {
 		var keys = Object.keys(this._coreData),
 			x;
+		
+		if(debug) {
+			console.warn("Perform Mod[" + origin + "]: " + this.id);
+		}
 
 		for(x=0; x<keys.length; x++) {
-			if(!RSModifierAttributes._skip[keys[x]]) {
+			if(!RSModifierAttributes._skip[keys[x]] && keys[x][0] !== "_" && keys[x] !== "history" && keys[x] !== "created" && keys[x] !== "updated") {
+				if(base._contributions) {
+					if(!base._contributions[keys[x]]) {
+						base._contributions[keys[x]] = {};
+					}
+					if(base._contributions) {
+						if(!base._contributions[keys[x]]) {
+							base._contributions[keys[x]] = {};
+						}
+						base._contributions[keys[x]][origin] = true;
+					}
+				}
 				if(base[keys[x]]) {
 					switch(typeof(this._coreData[keys[x]])) {
 						case "boolean":
@@ -21913,11 +24690,11 @@ RSModifierAttributes._skip = {
 };
 
 /**
- * Modifiers represent changes to the properties of an entity and are computed and the summed result
- * is placed in a RSSheet for the corresponding entity.
+ * Modifiers represent changes to the properties of an object.
  * 
- * Stats Modifiers are for values that need some form of computation. In this case, a String value is considered
- * a mathematical additive and then passed to the Calculator to determine the result, which is used as a number.
+ * Stats Modifiers are for values that need some form of computation. In this
+ * case, a String value is considered a mathematical additive and then passed
+ * to the Calculator to determine the result, which is used as a number.
  * 
  * Numbers are simply summed and boolean values are treated as or conditions.
  * 
@@ -21925,26 +24702,46 @@ RSModifierAttributes._skip = {
  * @extends RSObject
  * @constructor
  * @module Common
- * @param {Object} details Source information to initialize the object
- * 		received from the Universe.
+ * @param {Object} details Source information to initialize the object received
+ * 		from the Universe.
  * @param {Object} universe
  */
-class RSModifierStats extends RSObject {
+class RSModifierStats extends RSModifier {
 	constructor(details, universe) {
 		super(details, universe);
 	}
 	
-	performModifications(base) {
+	performModifications(base, origin, debug) {
+		debug = debug || this.universe.debug;
 		var keys = Object.keys(this._coreData),
-			x;
-
+			x,
+			y;
+		
+		if(debug) {
+			console.warn("Perform Mod[" + origin + "]: " + this.id);
+		}
+		
 		for(x=0; x<keys.length; x++) {
-//			console.warn("Check[" + this.id + ":" + keys[x] + "]: " + base[keys[x]] + " | " + this[keys[x]]);
-			if(!RSModifierStats._skip[keys[x]]) {
+			if(debug) {
+				console.warn("Check Key Mod[" + this.id + "]: " + keys[x] + " oftype " + typeof(this[keys[x]]), _p(base[keys[x]]), _p(this._coreData[keys[x]]));
+			}
+			if(!RSModifierStats._skip[keys[x]] && keys[x] && keys[x][0] !== "_" && keys[x] !== "history" && keys[x] !== "created" && keys[x] !== "updated") {
+				if(origin === "undefined") {
+					console.warn("???: ", this, base);
+				}
+				if(base._contributions) {
+					if(!base._contributions[keys[x]]) {
+						base._contributions[keys[x]] = {};
+					}
+					base._contributions[keys[x]][origin] = true;
+				}
 				if(base[keys[x]]) {
 					switch(typeof(this[keys[x]])) {
 						case "string":
 							base[keys[x]] = this._coreData[keys[x]] + " + " + base[keys[x]];
+							if(base._calculated) {
+								base._calculated.push(keys[x]);
+							}
 							break;
 						case "boolean":
 							base[keys[x]] = this._coreData[keys[x]] || base[keys[x]];
@@ -21954,19 +24751,50 @@ class RSModifierStats extends RSObject {
 								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
 							} else {
 								base[keys[x]] = base[keys[x]].toString() + " + " + this._coreData[keys[x]];
+								if(base._calculated) {
+									base._calculated.push(keys[x]);
+								}
 							}
 							break;
+						case "object":
+							if(this._coreData[keys[x]] !== null) {
+								if(base[keys[x]] instanceof Array) {
+									for(y=0; y<this._coreData[keys[x]].length; y++) {
+										base[keys[x]].push(this._coreData[keys[x]][y]);
+									}
+								} else {
+									Object.assign(base[keys[x]], this._coreData[keys[x]]);
+								}
+							}
 					}
 				} else {
-//					console.warn("Check[" + this.id + "]: Straight Add");
-					base[keys[x]] = this._coreData[keys[x]];
+					if(this._coreData[keys[x]] !== null) {
+						if(typeof(this._coreData[keys[x]]) === "object") {
+							if(this._coreData[keys[x]] instanceof Array) {
+								base[keys[x]] = [];
+								base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
+							} else {
+								base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
+							}
+						} else {
+							base[keys[x]] = this._coreData[keys[x]];
+						}
+						if(base._calculated) {
+							base._calculated.push(keys[x]);
+						}
+					}
 				}
+			}
+			if(debug) {
+				console.log(" > Result of Key Mod[" + this.id + "]: " + keys[x], _p(base[keys[x]]));
 			}
 		}
 	}
 }
 
 RSModifierStats._skip = {
+	"description": true,
+	"master_note": true,
 	"name": true,
 	"id": true
 };
@@ -22036,14 +24864,25 @@ class RSPlayer extends RSObject {
 		var keys = Object.keys(this._coreData),
 			x;
 		
-		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function") {
-				this[keys[x]] = this._coreData[keys[x]];
-			}
-		}
 	}
 	
 	recalculateSheet() {}
+}
+
+/**
+ * 
+ * RSPlaylist
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSPlaylist extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}
 }
 
 /**
@@ -22064,6 +24903,38 @@ class RSRace extends RSObject {
 }
 /**
  * 
+ * @class RSRoom
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSRoom extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}	
+}
+
+/**
+ * 
+ * @class RSSex
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSSex extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}	
+}
+
+/**
+ * 
  * @class RSSkill
  * @extends RSObject
  * @constructor
@@ -22073,6 +24944,41 @@ class RSRace extends RSObject {
  * @param {Object} universe
  */
 class RSSkill extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+		if(this.id) {
+			this.property = this.id.replace("skill:", "");
+		}
+		this.propertyKey = "skill_" + this.property;
+		this.enhancementKey = "skill_enhanced_" + this.property;
+		this.bonusKey = "skill_bonuses_" + this.property;
+	}
+	
+	recalculateHook() {
+		if(this.base) {
+			this._search += this.base.toLowerCase();
+		}
+		
+		if(this.id) {
+			this.property = this.id.replace("skill:", "");
+		}
+		this.propertyKey = "skill_" + this.property;
+		this.enhancementKey = "skill_enhanced_" + this.property;
+		this.bonusKey = "skill_bonuses_" + this.property;
+	}
+}
+/**
+ * 
+ * @class RSSlot
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ * @param {Object} universe
+ */
+class RSSlot extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
@@ -22100,6 +25006,7 @@ class RSUniverse extends RSObject {
 		 */
 		this.loggedOut = false;
 		this.initialized = false;
+		this.debugConnection = false;
 		this.index = new SearchIndex();
 		this.indexes = {};
 		this.nouns = {};
@@ -22126,6 +25033,11 @@ class RSUniverse extends RSObject {
 				this.connection.history.pop();
 			}
 		};
+		
+		
+		if(!details.calculator) {
+			this.calculator = new RSCalculator(this);
+		}
 		
 		/**
 		 * Logging point for this universe.
@@ -22226,21 +25138,27 @@ class RSUniverse extends RSObject {
 			};
 			
 			socket.onmessage = (message) => {
+				this.connection.entry(message, "Message Received");
+				this.connection.syncMark = message.time;
+				this.connection.last = Date.now();
+				
 				try {
-					this.connection.entry(message, "Message Received");
-					this.connection.syncMark = message.time;
-					this.connection.last = Date.now();
-					
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-					console.log("Received: ", message);
+					if(this.debugConnection || this.debug) {
+						console.log("Connection - Received: ", message);
+					}
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
+					if(this.debugConnection || this.debug) {
+						console.warn("Emission[" + message.type + ":complete]: ", message.event);
+					}
+					this.$emit(message.type + ":complete", message.event);
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);
 					this.$emit("warning", {
@@ -22255,8 +25173,25 @@ class RSUniverse extends RSObject {
 				}
 			};
 			
+			this.$on("model:deleted", (event) => {
+				console.log("Deleting: ", event);
+				var record = this.nouns[event.type][event.id];
+				if(record) {
+					console.warn("Deleting Record: " + event.type + " - " + event.id + ": ", event, record);
+
+					this.index.unindexItem(record);
+					if(this.indexes[event.type]) {
+						this.indexes[event.type].unindexItem(record);
+						delete(this.nouns[event.type][event.id]);
+					}
+					
+					this.$emit("universe:modified", this);
+					this.$emit("universe:modified:complete", this);
+				}
+			});
+			
 			this.$on("model:modified", (event) => {
-				console.log("Modifying: ", event);
+//				console.log("Modifying: ", event);
 				var record = this.nouns[event.type][event.id];
 				if(!record) {
 					console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
@@ -22264,7 +25199,23 @@ class RSUniverse extends RSObject {
 						this.nouns[event.type] = {};
 					}
 					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
+					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
+					this.index.indexItem(this.nouns[event.type][event.id]);
 					this.$emit("universe:modified", this);
+					this.$emit("universe:modified:complete", this);
+				}
+			});
+			
+			this.$on("control", (event) => {
+				if(this.debugConnection) {
+					console.warn("Control Event: ", event);
+				}
+				switch(event.data.control) {
+					case "page":
+						if(this.checkEventCondition(event.data.condition)) {
+							window.location = "#" + event.data.url;
+						}
+						break;
 				}
 			});
 			
@@ -22272,6 +25223,64 @@ class RSUniverse extends RSObject {
 			this.user = userInformation;
 			done();
 		});
+	}
+
+	/**
+	 * 
+	 * @method calculateExpression
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} base 
+	 * @param {RSObject} target 
+	 * @return {String} 
+	 */
+	calculateExpression(expression, source, base, target) {
+		if(this.calculator) {
+			return this.calculator.process(expression, source, base, target).toString();
+		} else {
+			return expression.toString();
+		}
+	}
+	
+	/**
+	 * 
+	 * @method displayExpression
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} base 
+	 * @param {RSObject} target  
+	 * @return {String} 
+	 */
+	displayExpression(expression, source, base, target) {
+		if(this.calculator) {
+			return this.calculator.display(expression, source, base, target).toString();
+		} else {
+			return expression.toString();
+		}
+	}
+	
+	checkEventCondition(condition) {
+		if(!condition) {
+			return true;
+		}
+		
+		var keys = Object.keys(condition),
+			result = true,
+			buffer,
+			x;
+		
+		for(x=0; result && x<keys.length; x++) {
+			switch(keys[x]) {
+				case "hash":
+					buffer = new RegExp(condition[keys[x]]);
+					result = buffer.test(location.hash);
+					break;
+				default:
+					console.warn("Unknown Event Conditional[" + keys[x] + "]: ", condition);
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -22328,7 +25337,6 @@ class RSUniverse extends RSObject {
 	 */
 	loadState(state) {
 		return new Promise((done, fail) => {
-			console.log("Loading State: ", state);
 			var keys = Object.keys(state),
 				Constructor,
 				noun,
@@ -22338,10 +25346,15 @@ class RSUniverse extends RSObject {
 				i,
 				t;
 			
+			keys.unshift("modifierattrs");
+			keys.unshift("modifierstats");
+			keys.unshift("condition");
+//			console.warn("Load State: ", keys, state);
+			
 			for(t=0; t<keys.length; t++) {
 				type = keys[t];
 				Constructor = rsSystem.availableNouns[type];
-				if(Constructor) {
+				if(Constructor && state[type]) {
 					ids = Object.keys(state[type]);
 					if(!this.nouns[type]) {
 						this.indexes[type] = new SearchIndex();
@@ -22349,6 +25362,7 @@ class RSUniverse extends RSObject {
 					}
 					for(i=0; i<ids.length; i++) {
 						id = ids[i];
+//						console.log("Loading " + id + ": ", state[type][id]);
 						if(this.nouns[type][id]) {
 							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
@@ -22358,6 +25372,7 @@ class RSUniverse extends RSObject {
 							this.index.indexItem(this.nouns[type][id]);
 						}
 						noun = this.nouns[type][id];
+//						console.log("Final Noun for " + id + ": ", noun);
 					}
 				} else {
 					rsSystem.log.error("Noun does not have a registered constructor: " + type);
@@ -22377,8 +25392,11 @@ class RSUniverse extends RSObject {
 			}
 			
 			if(!this.initialized) {
+				this.initialized = true;
 				this.$emit("initialized", this);
 			}
+			
+			this.$emit("universe:modified", this);
 		});
 	}
 	
@@ -22404,7 +25422,9 @@ class RSUniverse extends RSObject {
 				"event": type,
 				"data": data
 			};
-			console.log("Sending: ", data);
+			if(this.debugConnection) {
+				console.log("Connection - Sending: ", data);
+			}
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {
@@ -22413,6 +25433,120 @@ class RSUniverse extends RSObject {
 	}
 }
 
+
+/**
+ * 
+ * @class RSWidget
+ * @extends RSObject
+ * @constructor
+ * @module Common
+ * @param {Object} details Source information to initialize the object
+ * 		received from the Universe.
+ */
+class RSWidget extends RSObject {
+	constructor(details, universe) {
+		super(details, universe);
+		
+	}	
+}
+
+
+/**
+ * 
+ * 
+ * @class messagePanel
+ * @constructor
+ * @module common
+ * @zindex 50
+ */
+(function() {
+	
+	rsSystem.component("messagePanel", {
+		"inherit": true,
+		"mixins": [
+			
+		],
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			},
+			"user": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			/**
+			 * 
+			 * @property messages
+			 * @type Array
+			 */
+			data.messages = [];
+			
+			return data;
+		},
+		"watch": {
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.universe.$on("error", this.receiveMessage);
+		},
+		"methods": {
+			/**
+			 * 
+			 * @method receiveMessage
+			 * @param {Object} event
+			 */
+			"receiveMessage": function(event) {
+				event._display_time = new Date(event.time);
+				if(!event._display_time.getTime()) {
+					event._display_time = new Date();
+				}
+				
+				if(!event.message) {
+					if(event.data) {
+						if(event.data.message) {
+							event.message = event.data.message;
+						} else if(event.data.description) {
+							event.message = event.data.description;
+						}
+					} else if(event.error) {
+						if(event.error.message) {
+							event.message = event.error.message;
+						} else if(event.error.description) {
+							event.message = event.error.description;
+						}
+					} else {
+						event.message = "Unidentified Error - See Logs: " + JSON.stringify(event);
+					}
+				}
+				
+				this.messages.unshift(event);
+				if(this.messages.length > 5) {
+					this.messages.pop();
+				}
+			},
+			/**
+			 * 
+			 * @method dismissMessage
+			 * @param {Object} event
+			 */
+			"dismissMessage": function(event) {
+				var index = this.messages.indexOf(event);
+				if(index !== -1) {
+					this.messages.splice(index, 1);
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("error", this.update);
+		},
+		"template": Vue.templified("common/panels/message.html")
+	});
+})();
 
 
 /**
@@ -22448,7 +25582,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = dataSet[x].id.toLowerCase();
 						this.index[buffer.id] = dataSet[x];
 						this.index[buffer.name] = dataSet[x];
-						dataSet[x]._search = this.createSearchString(dataSet[x]);
+//						dataSet[x]._search = this.createSearchString(dataSet[x]);
 					}
 				}
 			} else if(dataSet instanceof Object) {
@@ -22462,7 +25596,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
 						this.index[buffer.name] = this.lookup[buffer[x]];
-						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
+//						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
 					}
 				}
 			}
@@ -22492,7 +25626,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = dataSet[x].id.toLowerCase();
 						this.index[buffer.id] = dataSet[x];
 						this.index[buffer.name] = dataSet[x];
-						dataSet[x]._search = this.createSearchString(dataSet[x]);
+//						dataSet[x]._search = this.createSearchString(dataSet[x]);
 					}
 				}
 			} else if(dataSet instanceof Object) {
@@ -22506,7 +25640,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
 						this.index[buffer.name] = this.lookup[buffer[x]];
-						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
+//						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
 					}
 				}
 			}
@@ -22530,7 +25664,7 @@ class SearchIndex extends EventEmitter {
 					if(record[x]) {
 						buffer = record[x].id || record[x];
 						if(this.lookup[buffer]) {
-							console.log("Selected", this.lookup[buffer]);
+//							console.log("Selected", this.lookup[buffer]);
 							this.selected[buffer] = this.lookup[buffer];
 						} else {
 							rsSystem.log.warn("Can not select non-indexed record: ", record[x]);
@@ -22618,9 +25752,11 @@ class SearchIndex extends EventEmitter {
 	toggleSelect(record) {
 		if(this.selected[record.id]) {
 			delete(this.selected[record.id]);
+			this.$emit("selection");
 			return false;
 		} else {
 			this.selected[record.id] = record;
+			this.$emit("selection");
 			return true;
 		}
 	}
@@ -22644,7 +25780,7 @@ class SearchIndex extends EventEmitter {
 		return Object.keys(this.selected);
 	}
 	
-	/**
+	/*
 	 * 
 	 * @method list
 	 * @param {String | Object} filter Defines how to filter against the _search string as a string or
@@ -22660,6 +25796,7 @@ class SearchIndex extends EventEmitter {
 	 * @param {Boolean} options.noInstances
 	 * @param {Boolean} options.onlyInstances
 	 * @param {Boolean} options.sortKey
+	 * @param {Array} options.list Specify a list object to populate. If omitted, a new list is created and returned.
 	 * @param {Function} options.sorter Custom function that takes `sorter(recordA, recordB, order)` to sort the list
 	 * 		of objects.
 	 * @param {Boolean} options.secondarySortKey
@@ -22667,43 +25804,29 @@ class SearchIndex extends EventEmitter {
 	 * 		one page.
 	 * @param {Number} options.paging.current The current page number (NOT the expected offset).
 	 * @param {Number} options.paging.per The number or entries per page.
-	 * @param {Number} options.paging._pages This is essentially a hack for passing back the page count calculation, as
-	 * 		the list method would return only 1 page always with the current implementation.
+	 * @param {Number} options.paging.count The current page count.
 	 * @param {Function} options.customFilter Passed a single record to check if the record is valid to include or not.
+	 * @parma {Array} list Optionally specified list to use
 	 */
-	list(filter, order, limit, options) {
-		var x, keys, list = [];
+	
+	/**
+	 * 
+	 * @method list
+	 * @param {Object} filter Defines how to filter against the _search string as a string or
+	 * 		how to compare object fields based on the properties present on the filter object where the
+	 * 		property "null" corresponds to the general _Search string property on the object.
+	 * @param {Object} state
+	 * @param {Array} list
+	 */
+	list(filter, state, list) {
+		var x, keys;
 		
-		if(filter && filter.options && typeof filter.options === "object") {
-			options = filter.options;
-			delete(filter.options);
-			keys = Object.keys(filter);
-			if(keys.length === 1 && filter.null) {
-				filter = filter.null;
-			}
-		} else {
-			options = options || {};
-		}
-		
-		order = order===undefined?options.order:order;
-		limit = limit===undefined?options.limit:limit;
-		
-		if(typeof filter === "string") {
-			filter = filter.toLowerCase();
-			for(x=0; x<this.listing.length; x++) {
-				if(this.listing[x]._search.indexOf(filter) !== -1 &&
-						(!options.noInstances || !this.listing[x].instanceOf) &&
-						(!options.onlyInstances || this.listing[x].instanceOf)) {
-					list.push(this.listing[x]);
-				}
-			}
-		} else if(filter /* null is technically an object */ && typeof filter === "object") {
+		if(filter /* null is technically an object */ && typeof filter === "object") {
 			var y, result;
 			keys = keys || Object.keys(filter);
-			if(filter.null) {
-				filter.null = filter.null.toLowerCase();
+			if(filter["null"]) {
+				filter["null"] = filter["null"].toLowerCase();
 			}
-			
 			for(x=0; x<this.listing.length; x++) {
 				result = true;
 				for(y=0; result && y<keys.length; y++) {
@@ -22711,26 +25834,27 @@ class SearchIndex extends EventEmitter {
 						if(!this.listing[x]._search) {
 							this.listing[x]._search = this.createSearchString(this.listing[x]);
 						}
-						if(this.listing[x]._search.indexOf(filter.null) === -1) {
+						if(this.listing[x]._search.indexOf(filter["null"]) === -1) {
 							result = false;
 						}
+//						console.warn("Null Filter: " + filter["null"] + "[" + this.listing[x]._search.indexOf(filter["null"]) + "]");
 					} else {
 						switch(typeof this.listing[x][keys[y]]) {
 							case "string":
 								if(filter[keys[y]] instanceof RegExp) {
-									result = filter[keys[y]].test(this.listing[x][keys[y]]);
 //									console.log("String reg result this.listing[x][" + keys[y] + "] =?= ", filter[keys[y]], " --> " + result);
+									result = filter[keys[y]].test(this.listing[x][keys[y]]);
 								} else {
 									if(this.listing[x][keys[y]].indexOf(filter[keys[y]]) === -1) {
-										result = false;
 //										console.log("String index result this.listing[x][" + keys[y] + "] =?= ", filter[keys[y]], " --> " + result);
+										result = false;
 									}
 								}
 								break;
 							case "boolean":
 								if(!!this.listing[x][keys[y]] !== !!filter[keys[y]]) {
-									result = false;
 //									console.log("Raw Boolean this.listing[x][" + keys[y] + "](" + !!this.listing[x][keys[y]] + ") != " + !!filter[keys[y]]);
+									result = false;
 								}
 								break;
 							case "undefined":
@@ -22757,7 +25881,7 @@ class SearchIndex extends EventEmitter {
 						}
 					}
 				}
-				if(result && (!options.customFilter || options.customFilter(this.listing[x]))) {
+				if(result && (!state.customFilter || state.customFilter(this.listing[x]))) {
 					list.push(this.listing[x]);
 				}
 			}
@@ -22765,66 +25889,73 @@ class SearchIndex extends EventEmitter {
 			list.push.apply(list, this.listing);
 		}
 		
-		if(order !== undefined && options.sortKey) {
-			if(options.sorter) {
+		if(state.order !== undefined && state.sortKey) {
+			if(state.sorter) {
 //				console.log("Custom sort");
-				list.sort(options.sorter);
-				if(order) {
+				list.sort(state.sorter);
+				if(state.order) {
 					list.reverse();
 				}
 			} else {
 //				console.log("Simple sort");
 				// TODO Implement sub-sort
-				var forward = order?1:-1,
-					reverse = order?-1:1;
+				var forward = state.order?1:-1,
+					reverse = state.order?-1:1;
 				list.sort(function(a, b) {
-					a = a[options.sortKey] || "";
-					b = b[options.sortKey] || "";
+					a = a[state.sortKey] || "";
+					b = b[state.sortKey] || "";
 					return a < b?reverse:(a > b?forward:0);
 				});
 			}
 		}
 		
-		if(limit || options.limit) {
-			list.splice(0, parseInt(limit || options.limit));
+		if(state.limit) {
+			list.splice(0, parseInt(state.limit));
 		}
 		
-		if(options.paging) {
-			options.paging._pages = parseInt(Math.ceil(list.length / options.paging.per));
-			list = list.splice(options.paging.current * options.paging.per, options.paging.per);
+		if(state.paging) {
+			state.paging.count = parseInt(Math.ceil(list.length / state.paging.per));
+			if(state.paging.current >= state.paging.count) {
+				state.paging.current = state.paging.count - 1;
+			}
+			if(state.paging.current < 0) {
+				state.paging.current = 0;
+			}
+			list.splice(state.paging.current * state.paging.per + state.paging.per);
+			list.splice(0, state.paging.current * state.paging.per);
 		}
 		
-		return list;
+		return state.paging;
 	}
 	
 	createSearchString(object) {
 		var string = "";
 		if(object.name && object.name.toLowerCase) {
-			string += object.name.toLowerCase(); 
+			string += object.name.toLowerCase();
 		}
 		if(object.id) {
-			string += object.id; 
+			string += object.id;
 		}
 		if(object.location) {
-			string += object.location; 
+			string += object.location;
 		}
 		if(object.origin) {
-			string += object.origin; 
+			string += object.origin;
 		}
 		if(object.owner) {
-			string += object.owner; 
+			string += object.owner;
 		}
 		if(object.backstory) {
-			string += object.backstory.toLowerCase(); 
+			string += object.backstory.toLowerCase();
 		}
 		if(object.description) {
-			string += object.description.toLowerCase(); 
+			string += object.description.toLowerCase();
 		}
 		if(object.note) {
-			string += object.note.toLowerCase(); 
+			string += object.note.toLowerCase();
 		}
 		if(object.hiddenState) {
-			string += "?"; 
+			string += "?";
 		}
 		return string;
 	}
@@ -22858,7 +25989,7 @@ class SearchIndex extends EventEmitter {
 					} else {
 						Object.assign(this.lookup[item[x].id], item[x]);
 					}
-					this.lookup[item[x].id]._search = this.createSearchString(this.lookup[item[x].id]);
+//					this.lookup[item[x].id]._search = this.createSearchString(this.lookup[item[x].id]);
 				} else {
 					console.warn("Unidentified Search Index Update[Array]: ", item[x]);
 				}
@@ -22894,10 +26025,10 @@ class SearchIndex extends EventEmitter {
 				} else {
 					Object.assign(this.lookup[item.id], item);
 				}
-				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
+//				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
 				this.$emit("indexed");
 			} else {
-				console.warn("Unidentified Search Index Update: ", item);
+				console.warn("Search Index unable to index item due to lack of identifier: ", item);
 			}
 		}
 	}
@@ -22915,12 +26046,29 @@ class SearchIndex extends EventEmitter {
 			delete(this.index[this.lookup[item].name]);
 			delete(this.lookup[item]);
 			delete(this.index[item]);
-			this.lookup[item.id] = item;
-			this.named[item.name] = item;
-			this.index[item.name] = item;
-			this.index[item.id] = item;
 			this.$emit("indexed");
 		}
+	}
+	
+	/**
+	 * Lookup the elements in the passed array and receive a new array containing the elements
+	 * that are part of this index.
+	 * @method translate
+	 * @param {Array} source Array of IDs to search.
+	 * @return {Array} A new array that is the referenced data within this index. Elements
+	 * 		of the array that do not belong are skipped by default.
+	 */
+	translate(source) {
+		var result = [],
+			x;
+		
+		for(x=0; x<source.length; x++) {
+			if(this.lookup[source[x]]) {
+				result.push(this.lookup[source[x]]);
+			}
+		}
+		
+		return result;
 	}
 }
 
@@ -22933,6 +26081,57 @@ class SearchIndex extends EventEmitter {
  * @module Components
  * @main Components
  */
+/**
+ * 
+ * @class DataManager
+ * @constructor
+ */
+rsSystem.component("DataManager", {
+	"inherit": true,
+	"mixins": [
+	],
+	"props": [
+	],
+	"mounted": function() {
+	},
+	"methods": {
+		"encodeFile": function(file) {
+			console.warn("Encoding File: ", file);
+			return new Promise(function(done, fail) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					done({
+						"data": e.currentTarget.result,
+						"name": file.name,
+						"size": file.size
+					});
+				};
+				reader.onerror = fail;
+				reader.readAsDataURL(file);
+			});
+		},
+		"base64toBlob": function(base64Data, contentType) {
+			contentType = contentType || "";
+			var sliceSize = 1024;
+			var byteCharacters = atob(base64Data);
+			var bytesLength = byteCharacters.length;
+			var slicesCount = Math.ceil(bytesLength / sliceSize);
+			var byteArrays = new Array(slicesCount);
+
+			for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+				var begin = sliceIndex * sliceSize;
+				var end = Math.min(begin + sliceSize, bytesLength);
+
+				var bytes = new Array(end - begin);
+				for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+					bytes[i] = byteCharacters[offset].charCodeAt(0);
+				}
+				byteArrays[sliceIndex] = new Uint8Array(bytes);
+			}
+			return new Blob(byteArrays, { type: contentType });
+		}
+	}
+}); 
 /**
  * 
  * @class StorageManager
@@ -22955,7 +26154,7 @@ rsSystem.component("StorageManager", {
 	},
 	"methods": {
 		"loadStorage": function(key, defaults) {
-			key = key || this.storageKey;
+			key = key || this.storageKeyID || this.storageKey;
 			var data = localStorage.getItem(key);
 			if(data) {
 //				console.log("Load[" + key + "]: ", data);
@@ -22966,7 +26165,7 @@ rsSystem.component("StorageManager", {
 			}
 		},
 		"saveStorage": function(key, object) {
-			key = key || this.storageKey;
+			key = key || this.storageKeyID || this.storageKey;
 			if(!key || !object) {
 				throw new Error("Missing arguments");
 			}
@@ -22975,6 +26174,171 @@ rsSystem.component("StorageManager", {
 		}
 	}
 }); 
+
+/**
+ * 
+ * 
+ * @class RSCore
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("RSCore", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSComponentUtility,
+		rsSystem.components.StorageManager
+	],
+	"props": {
+		"storage_id": {
+			"type": String
+		},
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"user": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"computed": {
+		"player": function() {
+			return this.universe.nouns.player[this.user.id];
+		}
+	},
+	"watch": {
+	},
+	"mounted": function() {
+		this.$el.onclick = (event) => {
+			var follow = event.srcElement.attributes.getNamedItem("data-id");
+			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+				rsSystem.EventBus.$emit("display-info", follow);
+			}
+		};
+	},
+	"methods": {
+		"getPlayer": function() {
+			return this.universe.nouns.player[this.user.id];
+		}
+	}
+});
+
+
+/**
+ * 
+ * 
+ * @class rsCards
+ * @constructor
+ * @module Components
+ * @zindex 1
+ */
+rsSystem.component("rsCards", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"selection": {
+			"required": false,
+			"type": String
+		},
+		"labeling": {
+			"required": false,
+			"type": String
+		},
+		"corpus": {
+			"required": true,
+			"type": Array
+		},
+		"state": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"data": function() {
+		var data = {},
+			x;
+
+//		data.select_label = "";
+//		data.card_label = "";
+		data.current = 0;
+		
+		return data;
+	},
+	"computed": {
+		"select_label": function() {
+			return this.selection || "Select";
+		},
+		"card_label": function() {
+			return this.labeling || "Card";
+		}
+	},
+	"watch": {
+		"state": {
+			"deep": true,
+			"handler": function() {
+				this.update();
+			}
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+		
+		this.$el.onclick = (event) => {
+			var follow = event.srcElement.attributes.getNamedItem("data-id");
+			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+				event.stopPropagation();
+				rsSystem.EventBus.$emit("display-info", follow);
+			}
+		};
+	},
+	"methods": {
+		"cardZIndex": function(index, card) {
+			return (this.corpus.length + 10) - index;
+		},
+		"cardClass": function(index, card) {
+			if(index < this.current) {
+				return "passed";
+			} else if(index === this.current) {
+				return "current";
+			}
+		},
+		"cardOffset": function(index, card) {
+			var offset = (index - this.current) * 30 + 10;
+			return "top: " + offset + "px; left: " + offset + "px;";
+		},
+		"toCard": function(index) {
+			if(this.current !== index) {
+				Vue.set(this, "current", index);
+			}
+		},
+		"nextCard": function() {
+			if(this.current < this.corpus.length - 1) {
+				Vue.set(this, "current", this.current + 1);
+			} else {
+				Vue.set(this, "current", 0);
+			}
+		},
+		"prevCard": function() {
+			if(this.current > 0) {
+				Vue.set(this, "current", this.current - 1);
+			} else {
+				Vue.set(this, "current", this.corpus.length - 1);
+			}
+		},
+		"selectCard": function(card) {
+			this.$emit("selected", card);
+		},
+		"update": function() {
+			this.$forceUpdate();
+		}
+	},
+	"beforeDestroy": function() {
+		this.universe.$off("universe:modified", this.update);
+	},
+	"template": Vue.templified("components/cards.html")
+});
+
 
 /**
  * 
@@ -23005,7 +26369,6 @@ rsSystem.component("StorageManager", {
 				"username": "",
 				"address": ""
 			});
-			console.log("Loaded Data[" + storageKey + "]: ", data.store);
 			
 			return data;
 		},
@@ -23021,7 +26384,9 @@ rsSystem.component("StorageManager", {
 					event.address = "ws" + event.address;
 				}
 				this.$emit("connect", event);
-				console.warn("connect");
+			},
+			"test": function(e) {
+				console.warn("Test: ", e);
 			}
 		},
 		"template": Vue.templified("components/connect.html")
@@ -23029,6 +26394,502 @@ rsSystem.component("StorageManager", {
 })();
 
 
+/**
+ * 
+ * 
+ * @class rsCount
+ * @constructor
+ * @module Components
+ * @zindex 5
+ */
+rsSystem.component("rsCount", {
+	"inherit": true,
+	"mixins": [
+	],
+	"props": {
+		"entity": {
+			"type": Object
+		},
+		"accuracy": {
+			"default": 2,
+			"type": Number
+		},
+		"editable": {
+			"default": false,
+			"type": Boolean
+		},
+		"initial": {
+			"default": "add",
+			"type": String
+		},
+		"value": {
+
+		}
+	},
+	"data": function() {
+		console.log("Data: ", this.value);
+		var data = {};
+		
+		data.expression = "";
+		data.open = false;
+		data.operation = this.initial;
+		data.operations = {
+			"add": {
+				"icon": "far fa-plus-square rs-orange"
+			},
+			"sub": {
+				"icon": "far fa-minus-square rs-orange"
+			},
+			"sum": {
+				"icon": "far fa-sigma rs-orange"
+			}
+		};
+		data.ops = ["add", "sub", "sum"];
+		//data.ops = Object.keys(data.operations);
+		
+		data.shadow = this.toNumber(this.value || 0);
+		data.toggleElement = null;
+		data.focusOn = null;
+		
+		return data;
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+		Vue.set(this, "toggleElement", this.$el.getElementsByClassName("op-toggle")[0]);
+		Vue.set(this, "focusOn", this.$el.getElementsByClassName("op-expression")[0]);
+	},
+	"methods": {
+		"toNumber": function(value, accuracy) {
+			return parseFloat(parseFloat(value).toFixed(this.accuracy));
+		},
+		"cancel": function() {
+			Vue.set(this, "operation", this.initial);
+			Vue.set(this, "expression", "");
+			Vue.set(this, "open", false);
+		},
+		"complete": function() {
+			if(this.expression.length) {
+				switch(this.expression[0]) {
+					case "=":
+						Vue.set(this, "expression", this.expression.substring(1));
+						Vue.set(this, "operation", "sum");
+						break;
+					case "-":
+						Vue.set(this, "expression", this.expression.substring(1));
+						Vue.set(this, "operation", "sub");
+						break;
+					case "+":
+						Vue.set(this, "expression", this.expression.substring(1));
+						Vue.set(this, "operation", "add");
+						break;
+				}
+			}
+			
+			var value = Dice.calculateDiceRoll(this.expression, this.entity).sum;
+			value = this.toNumber(value);
+			
+			if(value) {
+				switch(this.operation) {
+					case "sub":
+						value = this.toNumber(this.value - value);
+						break;
+					case "add":
+						value = this.toNumber(this.value + value);
+						break;
+					case "sum":
+						// Set to input value
+						break;
+					default:
+						console.warn("Unknown Operation: " + this.operation);
+						value = NaN;
+				}
+
+//				console.log("Process '" + this.operation + "' Expression[" + this.expression + "]: " + this.value + ", " + value);
+				if(!isNaN(value)) {
+					this.$emit("change", value);
+					this.$emit("input", value);
+				}
+			}
+
+			Vue.set(this, "open", false);
+			if(document.activeElement == this.focusOn) {
+				this.focusOn.blur();
+			}
+			if(this.toggleElement) {
+				setTimeout(() => {
+					this.toggleElement.focus();
+				}, 0);
+			}
+		},
+		"toggle": function() {
+			if(this.open && document.activeElement != this.focusOn) {
+				this.complete();
+			} else {
+				Vue.set(this, "operation", this.initial);
+				if(this.focusOn) {
+					this.focusOn.focus();
+				}
+				Vue.set(this, "open", true);
+			}
+		},
+		"nextOp": function() {
+			if(this.open) {
+				Vue.set(this, "operation", this.ops[(this.ops.indexOf(this.operation) + 1)%this.ops.length]);
+			} else {
+				Vue.set(this, "operation", this.initial);
+				if(this.focusOn) {
+					this.focusOn.focus();
+				}
+				Vue.set(this, "open", true);
+			}
+		}
+	},
+	"template": Vue.templified("components/count.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class rsAutocomplete
+ * @constructor
+ * @module Components
+ * @param {Object} root The object to which the value should be modeled back
+ * @param {Array} corpus The array of Strings on which autocompletion shouold recommend
+ * @param {String} key The key for 
+ */
+(function() {
+	var storageKey = "_rs_autocompleteComponentKey";
+	
+	rsSystem.component("rsAutocomplete", {
+		"inherit": true,
+		"mixins": [
+			
+		],
+		"props": {
+			"value": {
+				"required": true
+			},
+			"corpus": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.modeling = this.value;
+			data.matched = [];
+			
+			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		},
+		"watch": {
+			"modeling": function(ol, nv) {
+				console.log("Auto: " + ol + " -> " + nv);
+			}
+		},
+		"methods": {
+			"inputReceived": function() {
+				this.$emit("input", this.modeling);
+			}
+		},
+		"template": Vue.templified("components/field/autocomplete.html")
+	});
+})();
+
+
+/**
+ * 
+ * 
+ * @class rsField
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_fieldComponentKey";
+	
+	rsSystem.component("rsField", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility
+		],
+		"props": {
+			"root": {
+				"required": true,
+				"type": Object
+			},
+			"field": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var x, y, data = {};
+			Vue.set(this.field, "type", (this.field.type || "text").toLowerCase());
+			if(this.field.unset === undefined) {
+				this.field.unset = "Select...";
+			}
+			data.fid = Random.identifier("field");
+			data.reference_value = "";
+			
+			if(this.field.filter) {
+				data.filterKeys = Object.keys(this.field.filter);
+			}
+			
+			return data;
+		},
+		"watch": {
+			
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			if(this.field.source_index.listing) {
+				this.field.source_index.listing.sort(this.sortData);
+			}
+		},
+		"methods": {
+			"isVisible": function() {
+				if(!this.field.condition) {
+					return true;
+				}
+				
+				var keys = Object.keys(this.field.condition),
+					test,
+					x,
+					v;
+				
+				for(x=0; x<keys.length; x++) {
+					switch(this.field.condition[keys[x]].operation) {
+						case "<":
+							if(this.root[keys[x]] >= this.field.condition[keys[x]].value) {
+								return false;
+							}
+							break;
+						case "<=":
+							if(this.root[keys[x]] > this.field.condition[keys[x]].value) {
+								return false;
+							}
+							break;
+						case ">":
+							if(this.root[keys[x]] <= this.field.condition[keys[x]].value) {
+								return false;
+							}
+							break;
+						case ">=":
+							if(this.root[keys[x]] < this.field.condition[keys[x]].value) {
+								return false;
+							}
+							break;
+						case "=":
+							if(this.root[keys[x]] != this.field.condition[keys[x]].value) {
+								return false;
+							}
+							break;
+						case "exists":
+							if(!this.root[keys[x]]) {
+								return false;
+							}
+							break;
+						case "contains":
+							if(this.field.condition[keys[x]].values) {
+								for(v=0; v<this.field.condition[keys[x]].values.length; v++) {
+									if(this.root[keys[x]].indexOf(this.field.condition[keys[x]].values[v]) === -1) {
+										return false;
+									}
+								}
+							} else if(this.field.condition[keys[x]].oneof) {
+								test = true;
+								for(v=0; test && v<this.field.condition[keys[x]].oneof.length; v++) {
+									if(this.root[keys[x]] && this.root[keys[x]].indexOf(this.field.condition[keys[x]].oneof[v]) !== -1) {
+										test = false;
+									}
+								}
+								if(test) {
+									return false;
+								}
+							} else {
+								if(this.root[keys[x]].indexOf(this.field.condition[keys[x]].value) === -1) {
+									return false;
+								}
+							}
+							break;
+						default:
+							if(this.root[keys[x]] != this.field.condition[keys[x]]) {
+								return false;
+							}
+					}
+				}
+				
+				return true;
+			},
+			"optionAvailable": function(option) {
+				if(this.filterKeys) {
+					for(var x=0; x<this.filterKeys.length; x++) {
+						if(option[this.filterKeys[x]] != this.field.filter[this.filterKeys[x]]) {
+							return false;
+						}
+					}
+				}
+				
+				return true;
+			},
+			"dismissReference": function(index, record) {
+				this.root[this.field.property].splice(index, 1);
+				this.emitChanged();
+			},
+			"addReference": function(reference) {
+				if(!(this.root[this.field.property] instanceof Array)) {
+					Vue.set(this.root, this.field.property, []);
+				}
+				this.root[this.field.property].push(reference);
+				Vue.set(this, "reference_value", "");
+				this.emitChanged();
+			},
+			"openReference": function(reference) {
+				rsSystem.EventBus.$emit("display-info", reference);
+			},
+			"checkField": function() {
+				if(!this.root[this.field.property]) {
+					return false;
+				} else if(this.field.min && (this.root[this.field.property] < this.field.min || this.root[this.field.property].length <this.field.min)) {
+					return false;
+				} else if(this.field.max && (this.root[this.field.property] >this.field.max || this.root[this.field.property].length >this.field.max)) {
+					return false;
+				} else if(this.field.validation.pattern && !this.field.validation.pattern.test(this.root[this.field.property])) {
+					return false;
+				} else if(this.field.validation.method && !this.field.validation.method(this.root[this.field.property])) {
+					return false;
+				} else {
+					return true;
+				}
+			},
+			"emitChanged": function() {
+				this.$emit("changed", {
+					"value": this.root[this.field.property],
+					"property": this.field.property,
+					"time": Date.now()
+				});
+				
+				if(this.field.onchange) {
+					this.field.onchange(this.root[this.field.property]);
+				}
+			},
+			"set": function(value) {
+				Vue.set(this.root, this.field.property, value);
+				this.emitChanged();
+			},
+			"compose": function(row, col) {
+				Vue.set(this.tracking[this.r], this.c, false);
+				Vue.set(this.tracking[this.r], this.c, false);
+				Vue.set(this.tracking[row], col, true);
+				Vue.set(this, "r", row);
+				Vue.set(this, "c", col);
+				return this.field.compose?this.field.compose(row, col):col + ":" + row;
+			},
+			"separate": function(value) {
+				if(value) {
+					var apart = value.split(":");
+					return {
+						"c": apart[0],
+						"r": apart[1]
+					};
+				} else {
+					return {};
+				}
+			}
+		},
+		"template": Vue.templified("components/field.html")
+	});
+})();
+
+
+
+/**
+ * 
+ * 
+ * @class rsRenderImage
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	
+	rsSystem.component("rsRenderImage", {
+		"inherit": true,
+		"mixins": [
+			
+		],
+		"props": {
+			"image": {
+				"required": true,
+				"type": Object
+			},
+			"modes": {
+				"default": "general",
+				"type": String
+			},
+			"linked": {
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.link = null;
+			data.uri = null;
+			
+			return data;
+		},
+		"watch": {
+			"image": {
+				"deep": true,
+				"handler": function() {
+//					console.warn("Re-Render Image: ", this.image);
+					this.update();
+				}
+			},
+			"linked": function() {
+//				console.warn("Re-Link Image: ", this.linked);
+				this.update();
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+				Vue.set(this, "uri", this.image.data || this.image.url);
+				if(this.linked) {
+					this.link = "/" + this.linked.linked + "/" + this.linked.id;
+				} else {
+					this.link = false;
+				}
+				
+				this.$forceUpdate();
+			},
+			"classes": function() {
+				var classes;
+				
+				if(this.modes) {
+					classes = this.modes;
+				} else {
+					classes = "general";
+				}
+				
+				if(this.linked) {
+					classes += " linked";
+				}
+				
+				return classes;
+			}
+		},
+		"template": Vue.templified("components/image.html")
+	});
+})();
 
 /**
  * 
@@ -23044,7 +26905,7 @@ rsSystem.component("StorageManager", {
 	rsSystem.component("systemInfo", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSCore
 		],
 		"props": {
 			"universe": {
@@ -23054,21 +26915,1429 @@ rsSystem.component("StorageManager", {
 			"user": {
 				"required": true,
 				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
 			}
-		},
-		"mounted": function() {
-			rsSystem.register(this);
 		},
 		"data": function() {
 			var data = {};
 			
+			/**
+			 * 
+			 * @property viewing
+			 * @type RSObject
+			 */
+			data.viewing = null;
+			/**
+			 * 
+			 * @property open
+			 * @type Boolean
+			 */
+			data.open = false;
+			/**
+			 * Stores viewed records to go back to while the panel is open.
+			 * @property history
+			 * @type Array
+			 */
+			data.history = [];
+			/**
+			 * Used for calculations.
+			 * @property target
+			 * @type Object
+			 */
+			data.target = null;
+			/**
+			 * Used for calculations.
+			 * @property base
+			 * @type Object
+			 */
+			data.base = null;
+			
 			return data;
 		},
 		"watch": {
+			"record": {
+				"deep": true,
+				"handler": function() {
+					console.warn("hold");
+				}
+			},
+			"$route.query.information": function(nV, oV) {
+				if(nV) {
+					this.displayRecord(nV);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					event.stopPropagation();
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+			
+			rsSystem.EventBus.$on("display-info", this.displayRecord);
+			this.universe.$on("universe:modified", this.update);
 		},
 		"methods": {
+			
+			"getTabIndex": function() {
+				return this.open?5:-1;
+			},
+			/**
+			 * 
+			 * @method displayRecord
+			 * @param {RSObject | Object | String} toView Something to identify the RSObject to view or the object itself.
+			 */
+			"displayRecord": function(toView) {
+				console.log("Info: ", toView);
+				
+				if(toView && !(toView instanceof RSObject)) {
+					if(toView.record) {
+//						console.warn("Received View Record: ", toView);
+						Vue.set(this, "target", toView.target);
+						Vue.set(this, "base", toView.base || toView.source);
+						if(typeof(toView.record) === "string") {
+							toView = this.universe.index.index[toView.record];
+						} else {
+							toView = toView.record;
+						}
+					} else {
+						if(typeof(toView) === "string") {
+							toView = this.universe.index.index[toView];
+						} else {
+							toView = this.universe.index.index[toView.id] || this.universe.index.index[toView.name];
+						}
+						Vue.set(this, "target", undefined);
+						Vue.set(this, "base", undefined);
+					}
+				}
+				
+				if(toView) {
+					if(!this.viewing || toView.id !== this.viewing.id) {
+						if(this.viewing) {
+							if(!this.history.length || (this.viewing.id !== toView.id)) {
+								this.history.unshift(this.viewing);
+							} else {
+								console.warn("Repeated Shift? ", this.viewing.id);
+							}
+							if(this.viewing.$off) {
+								this.viewing.$off("modified", this.update);
+							}
+						}
+						
+						Vue.set(this, "viewing", toView);
+						Vue.set(this, "open", true);
+	
+						if(this.viewing.$on) {
+							this.viewing.$on("modified", this.update);
+						}
+					} else if(toView.id === this.viewing.id) {
+						this.closeInfo();
+					}
+				}
+				
+//				console.warn("Info View Updated: ", this);
+			},
+			
+			"processRequest": function(event) {
+				
+				
+			},
+			"backOne": function() {
+				if(this.history.length) {
+//					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
+					Vue.set(this, "viewing", this.history.shift());
+//					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
+					this.update();
+				}
+			},
+			/**
+			 * 
+			 * @method closeInfo
+			 */
+			"closeInfo": function() {
+				Vue.set(this, "viewing", null);
+				Vue.set(this, "open", false);
+				this.history.splice(0);
+			},
+			/**
+			 * 
+			 * @method update
+			 */
+			"update": function() {
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
 		},
 		"template": Vue.templified("components/info.html")
+	});
+})();
+
+
+/**
+ * 
+ * 
+ * @class rsObjectInfoBag
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	rsSystem.component("rsObjectInfoBasic", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			},
+			"player": {
+				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.holdDescription = null;
+			data.description = null;
+			data.holdNote = null;
+			data.note = null;
+			data.profile = null;
+			data.image = null;
+			data.keys = [
+				"encumberance",
+				"content_type",
+				"content_max",
+				""
+			];
+			data.id = null;
+			
+			return data;
+		},
+		"watch": {
+			"record": {
+				"deep": true,
+				"handler": function() {
+//					console.warn("Record Shift: ", this.record);
+					this.update();
+				}
+			}
+		},
+		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+//					console.log("1Follow: ", follow);
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			} else {
+				console.warn("Record is not listenable? ", this.record);
+			}
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+//				console.log("Check: " + this.id + " | " + this.record.id);
+				if(this.id && this.id !== this.record.id) {
+//					console.log("Shifting");
+					if(this.universe.index.index[this.id] && this.universe.index.index[this.id].$off) {
+						this.universe.index.index[this.id].$off("modified", this.update);
+					}
+					if(this.record.$on) {
+						this.record.$on("modified", this.update);
+					}
+					Vue.set(this, "id", this.record.id);
+				} else {
+//					console.log("Setting");
+					Vue.set(this, "id", this.record.id);
+				}
+				
+				if(this.record.description) {
+					if(this.holdDescription !== this.record.description) {
+						Vue.set(this, "holdDescription", this.record.description);
+						Vue.set(this, "description", this.rsshowdown(this.record.description));
+					}
+				} else {
+					Vue.set(this, "holdDescription", null);
+					Vue.set(this, "description", null);
+				}
+				
+				if(this.record.master_note) {
+					if(this.holdNote !== this.record.master_note) {
+						Vue.set(this, "holdNote", this.record.master_note);
+						Vue.set(this, "note", this.rsshowdown(this.record.master_note));
+					}
+				} else {
+					Vue.set(this, "holdNote", null);
+					Vue.set(this, "note", null);
+				}
+				
+				if(this.record.image && this.universe.nouns.image[this.record.image]) {
+					Vue.set(this, "image", this.universe.nouns.image[this.record.image]);
+				} else {
+					Vue.set(this, "image", null);
+				}
+				
+				if(this.record.profile && this.universe.nouns.image[this.record.profile]) {
+					Vue.set(this, "profile", this.universe.nouns.image[this.record.profile]);
+				} else {
+					Vue.set(this, "profile", null);
+				}
+				
+				this.keys.splice(0);
+				this.keys.push.apply(this.keys, Object.keys(this.record));
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/info/render/bag.html")
+	}, "display");
+})();
+
+/**
+ * 
+ * 
+ * @class rsObjectInfoBasic
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var invisibleKeys = {};
+
+	invisibleKeys.property = true;
+	invisibleKeys.enhancementKey= true;
+	invisibleKeys.propertyKey = true;
+	invisibleKeys.bonusKey= true;
+	
+	invisibleKeys.information_renderer = true;
+	invisibleKeys.invisibleProperties = true;
+	invisibleKeys.locked_attunement = true;
+	invisibleKeys.source_template = true;
+	invisibleKeys.randomize_name = true;
+	invisibleKeys.modifierstats = true;
+	invisibleKeys.modifierattrs = true; 
+	invisibleKeys.no_modifiers = true;
+	invisibleKeys.restock_base = true;
+	invisibleKeys.restock_max = true;
+	invisibleKeys.declaration = true;
+	invisibleKeys.description = true;
+	invisibleKeys.for_players = true;
+	invisibleKeys.master_note = true;
+	invisibleKeys.rarity_min = true;
+	invisibleKeys.rarity_max = true;
+	invisibleKeys.cancontain = true;
+	invisibleKeys.properties = true;
+//	invisibleKeys.indicators = true;
+	invisibleKeys.condition = true;
+	invisibleKeys.singleton = true;
+	invisibleKeys.equipped = true;
+	invisibleKeys.obscured = true;
+	invisibleKeys.property = true;
+	invisibleKeys.universe = true;
+	invisibleKeys.playable = true;
+	invisibleKeys.created = true;
+	invisibleKeys.dataset = true;
+	invisibleKeys.history = true;
+	invisibleKeys.learned = true;
+	invisibleKeys.updated = true;
+	invisibleKeys.widgets = true;
+	invisibleKeys.is_shop = true;
+	invisibleKeys.alters = true;
+	invisibleKeys.linked = true;
+	invisibleKeys.owners = true;
+	invisibleKeys.parent = true;
+	invisibleKeys.hidden = true;
+	invisibleKeys.class = true;
+	invisibleKeys.order = true;
+	invisibleKeys.name = true;
+	invisibleKeys.icon = true;
+	invisibleKeys.data = true;
+	invisibleKeys.echo = true;
+	invisibleKeys.url = true;
+	invisibleKeys.sid = true;
+	invisibleKeys.id = true;
+	invisibleKeys.x = true;
+	invisibleKeys.y = true;
+	
+
+	invisibleKeys.coordinates = true;
+	invisibleKeys.shown_at = true;
+	invisibleKeys.profile = true;
+	invisibleKeys.showing = true;
+	invisibleKeys.viewed = true;
+	invisibleKeys.map = true;
+	
+	var prettifyValues = {};
+	var prettifyNames = {};
+	var knowledgeLink = {};
+	var displayRaw = {};
+	
+	prettifyNames.itemtype = "Item Types";
+	prettifyNames.entity = function(value, record) {
+		if(record._type === "entity") {
+			return "Pilot";
+		} else {
+			return value;
+		}
+	};
+	
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+
+	knowledgeLink.encumberance = "knowledge:item:encumberance";
+	knowledgeLink.critical = "knowledge:combat:critical";
+	knowledgeLink.range = "knowledge:combat:rangebands";
+	
+	prettifyValues.category = function(property, value, record, universe) {
+		var index;
+		if(value && (index = value.indexOf(":")) !== -1) {
+			value = value.substring(0, index).trim().capitalize() + " (" + value.substring(index + 1).trim().capitalize() + ")";
+		}
+		return value;
+	};
+	
+	prettifyValues.related = function(property, value, record, universe) {
+		return "to " + (value?value.length:0) + " records";
+	};
+	
+	prettifyValues.range = function(property, value, record, universe) {
+		if(record.is_attachment) {
+			return value;
+		}
+		
+		switch(value) {
+			case 1: return "Engaged (1)";
+			case 2: return "Short (2)";
+			case 3: return "Medium (3)";
+			case 4: return "Long (4)";
+			case 5: return "Extreme (5)";
+		}
+		
+		return value;
+	};
+	
+	prettifyValues.piloting = function(property, value, record, universe) {
+		if(universe.indexes.entity[value]) {
+			return universe.indexes.entity[value].name;
+		}
+		return value;
+	};
+	
+	prettifyValues.allegiance = function(property, value, record, universe) {
+		return "<span class=\"" + value + "\"></span>";
+	};
+	
+	prettifyValues.inside = function(property, value, record, universe) {
+		var entity = universe.indexes.entity.lookup[value];
+		if(entity) {
+			return "<a data-id=\"" + value + "\"><span class=\"" + entity.icon + "\" data-id=\"" + value + "\"></span><span data-id=\"" + value + "\">" + entity.name + "</span></a>";
+		}
+		return "Unknown[" + value + "]";
+	};
+	
+	prettifyValues.accepts = function(property, value, record, universe) {
+		if(value) {
+			switch(value) {
+				case "entity":
+					return "Character or Ship";
+				default:
+					return value.capitalize();
+			}
+		}
+		return value;
+	};
+	
+	prettifyValues.skill_check = function(property, value, record, universe) {
+		if(!value || !universe.indexes.skill || !universe.indexes.skill.lookup) {
+			return value;
+		}
+		
+		var buffer = universe.indexes.skill.lookup[value] || universe.indexes.skill.lookup["skill:" + value];
+		if(!buffer) {
+			return value;
+		}
+		
+		return buffer.name;
+	};
+	
+	prettifyValues.indicators = function(property, value, record, universe) {
+		if(value && value.length) {
+			if(value.length < 10) {
+				return value.join(", ");
+			} else {
+				value = [].concat(value).splice(0, 10);
+				value.push("...");
+				return value.join(", ");
+			}
+		}
+		return "";
+	};
+	
+	var prettifyPropertyPattern = /_([a-z])/ig, 
+		prettifyPropertyName = function(full, match) {
+			return " " + match.capitalize();
+		};
+	
+	rsSystem.component("rsObjectInfoBasic", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			},
+			"universe": {
+				"required": true,
+				"type": Object
+			},
+			"target": {
+				"type": Object
+			},
+			"player": {
+				"type": Object
+			},
+			"user": {
+				"type": Object
+			},
+			"base": {
+				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.collapsed = true;
+			data.relatedError = null;
+			data.calculatedEncumberance = 0;
+			data.knowledgeLink = knowledgeLink;
+			data.displayRaw = displayRaw;
+			data.holdDescription = null;
+			data.restocking = false;
+			data.description = null;
+			data.holdNote = null;
+			data.note = null;
+			data.profile = null;
+			data.image = null;
+			data.id = null;
+
+			data.availableTemplates = {};
+			data.availableTemplates.entity = [];
+			data.copyToHere = "";
+			
+			data.transfer_targets = [];
+			data.transfer_target = "";
+			
+			data.attach_targets = [];
+			data.attach_target = "";
+			
+			data.locations = [];
+			
+			data.entities = [];
+			data.hiddenEntities = [];
+			
+			data.movableEntities = [];
+			data.movingEntity = "";
+			
+			data.availableSlots = [];
+			data.equipToSlot = "";
+			
+			data.partiesPresent = [];
+			data.parties = [];
+			data.entityToMove = "";
+			data.partyToMove = "";
+			
+			data.equipped = [];
+			
+			data.relatedKnowledge = [];
+			data.keys = [];
+			
+			return data;
+		},
+		"watch": {
+			"record": {
+				"deep": true,
+				"handler": function() {
+//					console.warn("Record Shift: ", this.record);
+					this.update();
+				}
+			}
+		},
+		"mounted": function() {
+//			this.$el.onclick = (event) => {
+//				var follow = event.srcElement.attributes.getNamedItem("data-id");
+//				if(follow && (follow = this.universe.index.index[follow.value])) {
+////					console.log("1Follow: ", follow);
+//					rsSystem.EventBus.$emit("display-info", follow);
+//				}
+//			};
+
+			this.universe.$on("model:modified", this.update);
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			} else {
+				console.warn("Record is not listenable? ", this.record);
+			}
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"highlight": function() {
+				var el = $(this.$el).find(".displayed-id");
+				if(el[0]) {
+					el[0].select();
+					document.execCommand("copy");
+					el.css({"background-color": "#63b35d"});
+					if (window.getSelection) {
+						this.$emit("copying", window.getSelection().toString());
+						window.getSelection().removeAllRanges();
+					} else if (document.selection) {
+						this.$emit("copying", document.selection.toString());
+						document.selection.empty();
+					}
+					setTimeout(function() {
+						el.css({"background-color": "transparent"});
+					}, 5000);
+				}
+			},
+			"visible": function(key, value) {
+				return key && key !== "image" && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"isArray": function(value) {
+				return value instanceof Array;
+			},
+			"canTransfer": function() {
+				var hold,
+					x;
+				
+				if(this.record.untradable) {
+					return false;
+				}
+				
+				for(x=0; this.base && this.base.item && x<this.base.item.length; x++) {
+					hold = this.universe.indexes.item.index[this.base.item[x]];
+					if(hold && hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
+						return true;
+					} else if(!hold) {
+						console.warn("Invalid Item? " + this.base.item[x], hold);
+					}
+				}
+				
+				return this.base && ((this.base.item && this.base.item.indexOf(this.record.id) !== -1)
+						|| (this.base.inventory && this.base.inventory.indexOf(this.record.id) !== -1));
+			},
+			"canTransferToSelf": function() {
+				return this.base && !((this.base.item && this.base.item.indexOf(this.record.id) !== -1)
+						|| (this.base.inventory && this.base.inventory.indexOf(this.record.id) !== -1));
+			},
+			"canAttach": function() {
+				return this.base && (this.record.hardpoints || this.record.contents_max);
+			},
+			"canUnequip": function() {
+				if(this.target) {
+					if(this.base
+							&& this.target._type === "slot"
+							&& this.base.equipped
+							&& this.base.equipped[this.target.accepts]
+							&& this.base.equipped[this.target.accepts][this.target.id]
+							&& this.base.equipped[this.target.accepts][this.target.id].indexOf(this.record.id) !== -1) {
+						return this.target;
+					}
+				} else {
+					if(this.base
+							&& this.base.slot
+							&& this.base.slot.length
+							&& this.base.item
+							&& this.base.item.indexOf(this.record.id) !== -1
+							&& this.availableSlots.length) {
+						for(var x=0; x<this.availableSlots.length; x++) {
+							if(this.base.equipped && this.base.equipped[this.availableSlots[x].accepts] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id].indexOf(this.record.id) !== -1) {
+								return this.availableSlots[x];
+							}
+						}
+					}
+				}
+
+				return false;
+			},
+			"unequip": function() {
+				var slot = this.canUnequip();
+				if(slot && this.base) {
+					this.base.unequipSlot(slot, this.record);
+				}
+			},
+			"canEquip": function() {
+				if(this.base
+						&& this.base.slot
+						&& this.base.slot.length
+						&& this.base.item
+						&& this.base.item.indexOf(this.record.id) !== -1
+						&& this.availableSlots.length) {
+					for(var x=0; x<this.availableSlots.length; x++) {
+						if(this.base.equipped && this.base.equipped[this.availableSlots[x].accepts] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id] && this.base.equipped[this.availableSlots[x].accepts][this.availableSlots[x].id].indexOf(this.record.id) !== -1) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+			},
+			"equip": function(slot) {
+				if(slot && slot !== "cancel") {
+					this.base.equipSlot(slot, this.record);
+				}
+				Vue.set(this, "equipToSlot", "");
+			},
+			"transferObject": function() {
+				if(this.transfer_target && this.transfer_target !== "cancel") {
+					this.universe.send("give:item", {
+						"source": this.base.id,
+						"target": this.transfer_target,
+						"item": this.record.id
+					});
+				}
+				Vue.set(this, "transfer_target", "");
+			},
+			"attachObject": function() {
+				if(this.attach_target && this.attach_target !== "cancel") {
+					this.universe.send("give:item", {
+						"source": this.base.id,
+						"target": this.record.id,
+						"item": this.attach_target
+					});
+				}
+				Vue.set(this, "attach_target", "");
+			},
+			"hideRecord": function() {
+				this.record.commit({
+					"hidden": this.record.hidden?null:true
+				});
+			},
+			"obscureRecord": function() {
+				this.record.commit({
+					"obscured": this.record.obscured?null:true
+				});
+			},
+			"prettifyKey": function(key) {
+			},
+			"prettifyPropertyName": function(property, record) {
+				switch(typeof(this.record._prettifyName)) {
+					case "function":
+						return this.record._prettifyName(property);
+					case "object":
+						if(this.record._prettifyName[property]) {
+							return this.record._prettifyName[property];
+						}
+				}
+				
+				if(prettifyNames[property]) {
+					switch(typeof(prettifyNames[property])) {
+						case "string":
+							return prettifyNames[property];
+						case "function":
+							return prettifyNames[property](property, record, this.universe);
+					}
+				}
+
+				return property.replace(prettifyPropertyPattern, prettifyPropertyName).capitalize();
+			},
+			"prettifyPropertyValue": function(property, value, record, universe) {
+				var suffix = "",
+					buffer;
+				
+				if(this.record._calculated && this.record._calculated[property]) {
+					buffer = this.universe.calculateExpression(value, this.record, this.base, this.target);
+//					console.warn("Display: ", property, value, this.universe.calculateExpression(value, this.record, this.base, this.target));
+					if(buffer != value) {
+						suffix = " [ " + value + " ]";
+						value = buffer;
+					}
+				}
+				
+				switch(typeof(this.record._prettifyValue)) {
+					case "function":
+						value = this.record._prettifyValue(property, value, record, universe || this.universe);
+						break;
+					case "object":
+						if(this.record._prettifyValue[property]) {
+							value = this.record._prettifyValue[property] ;
+						}
+						break;
+				}
+				
+				if(prettifyValues[property]) {
+					switch(typeof(prettifyValues[property])) {
+						case "string":
+							value = prettifyValues[property];
+							break;
+						case "function":
+							value = prettifyValues[property](property, value, record, universe || this.universe);
+							break;
+					}
+				}
+				
+				if(value instanceof Array) {
+					
+				} else {
+					switch(typeof(value)) {
+						case "object":
+							value = (value.hidden_name || value.name || value.id || value.description);
+						default:
+							if(this.universe.indexes[property]) {
+								
+							}
+					}
+				}
+				
+				return value + suffix;
+			},
+			"copyEntityHere": function(id) {
+				window.open("/#/nouns/entity/" + id + "?copy=true&values={\"location\":\"" + this.record.id + "\"}", "building");
+				Vue.set(this, "copyToHere", "");
+			},
+			"prettifyReferenceValue": function(reference, property, value) {
+				
+			},
+			"displayInfo": function(record) {
+				
+			},
+			"canDashboard": function() {
+				return (this.record._type === "entity" && this.record.classification && this.isOwner(this.record));
+			},
+			"viewDashboard": function(new_window, stay) {
+				var new_location = location.pathname + "#/dashboard/" + this.record.classification + "/" + this.record.id;
+				if(new_window) {
+					window.open(new_location);
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
+				}
+			},
+			"canMoveTo": function(id) {
+				id = id || this.player.entity;
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
+						&& this.universe.indexes.entity.index[id]) {
+					return true;
+				}
+				return false;
+			},
+			"canTravelTo": function(id) {
+				id = id || this.player.entity;
+				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
+						&& this.universe.indexes.entity.index[id]
+						&& this.universe.indexes.entity.index[id].location !== this.record.id
+						&& this.universe.indexes.entity.index[id].inside !== this.record.id) {
+					return true;
+				}
+				return false;
+			},
+			"travelToHere": function(id) {
+				id = id || this.player.entity;
+				if(this.canTravelTo(id)) {
+					this.universe.indexes.entity.index[id].commit({
+						"location": this.record.id
+					});
+				}
+			},
+			"editRecord": function(new_window, stay) {
+				var new_location = location.pathname + "#/nouns/" + this.record._type + "/" + this.record.id;
+				if(new_window) {
+					window.open(new_location, "building");
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
+				}
+			},
+			"movePartyHere": function(party) {
+				var update = {},
+					hold,
+					x;
+				
+				switch(this.record._type) {
+					case "entity":
+						update.inside = this.record.id;
+						break;
+					default:
+						update[this.record._type] = this.record.id;
+				}
+				
+				party = this.universe.indexes.party.index[party];
+				if(party) {
+					party.commit(update);
+					for(x=0; party.entity && x < party.entity.length; x++) {
+						hold = this.universe.indexes.entity.index[party.entity[x]];
+						if(hold) {
+							hold.commit(update);
+						}
+					}
+				}
+				
+				Vue.set(this, "partyToMove", "");
+			},
+			"moveEntityHere": function(entity) {
+				var update = {},
+					hold,
+					x;
+				
+				switch(this.record._type) {
+					case "entity":
+						update.inside = this.record.id;
+						break;
+					default:
+						update[this.record._type] = this.record.id;
+				}
+
+				
+				entity = this.universe.indexes.entity.index[entity];
+				if(entity) {
+					entity.commit(update);
+				}
+
+				Vue.set(this, "entityToMove", "");
+				Vue.set(this, "movingEntity", "");
+			},
+			"restockLocation": function() {
+				if(!this.restocking) {
+					Vue.set(this, "restocking", true);
+					
+					this.universe.send("location:restock", {
+						"id": this.record.id
+					});
+					
+					setTimeout(() => {
+						Vue.set(this, "restocking", false);
+					}, 1000);
+				}
+			},
+			"update": function() {
+				var buffer,
+					hold,
+					slot,
+					map,
+					x,
+					y,
+					z;
+				
+//				console.log("Check: " + this.id + " | " + this.record.id);
+				if(this.id && this.id !== this.record.id) {
+//					console.log("Shifting");
+					if(this.universe.index.index[this.id] && this.universe.index.index[this.id].$off) {
+						this.universe.index.index[this.id].$off("modified", this.update);
+					}
+					if(this.record.$on) {
+						this.record.$on("modified", this.update);
+					}
+					Vue.set(this, "id", this.record.id);
+				} else {
+//					console.log("Setting");
+					Vue.set(this, "id", this.record.id);
+				}
+				
+				if(this.record.description) {
+					Vue.set(this, "description", this.rsshowdown(this.record.description, this.record, this.base, this.target));
+//					if(this.holdDescription !== this.record.description) {
+//						Vue.set(this, "holdDescription", this.record.description);
+//						Vue.set(this, "description", this.rsshowdown(this.record.description, this.record, this.base, this.target));
+//					}
+				} else {
+					Vue.set(this, "holdDescription", null);
+					Vue.set(this, "description", null);
+				}
+				
+				if(this.record.master_note) {
+					if(this.holdNote !== this.record.master_note) {
+						Vue.set(this, "holdNote", this.record.master_note);
+						Vue.set(this, "note", this.rsshowdown(this.record.master_note, this.record, this.base));
+					}
+				} else {
+					Vue.set(this, "holdNote", null);
+					Vue.set(this, "note", null);
+				}
+				
+				if(this.record.image && this.universe.nouns.image[this.record.image]) {
+					Vue.set(this, "image", this.universe.nouns.image[this.record.image]);
+				} else {
+					Vue.set(this, "image", null);
+				}
+				
+				if(this.record.profile && this.universe.nouns.image[this.record.profile]) {
+					Vue.set(this, "profile", this.universe.nouns.image[this.record.profile]);
+				} else {
+					Vue.set(this, "profile", null);
+				}
+				
+				this.keys.splice(0);
+				this.keys.push.apply(this.keys, Object.keys(this.record));
+				
+				this.partiesPresent.splice(0);
+				map = {};
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					buffer = this.universe.indexes.party.listing[x];
+					if(buffer.location === this.record.id) {
+						this.partiesPresent.push(buffer);
+					}
+					if(this.base && buffer.entity && buffer.entity.indexOf(this.base.id) !== -1) {
+						for(y=0; y<buffer.entity.length; y++) {
+							if(!map[buffer.entity[y]]) {
+								map[buffer.entity[y]] = true;
+							}
+						}
+					}
+				}
+
+				this.transfer_targets.splice(0);
+				this.attach_targets.splice(0);
+				if(this.base) {
+					if(this.base.inside) {
+						map[this.base.inside] = true;
+					}
+					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+						buffer = this.universe.indexes.entity.listing[x];
+						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.base.id && (buffer.location === this.base.location || buffer.inside === this.base.inside || buffer.id === this.base.inside || buffer.inside === this.base.id || buffer.entity === this.base.id || buffer.id === this.base.entity || map[buffer.id])) {
+							this.transfer_targets.push(buffer);
+						}
+					}
+					this.transfer_targets.sort(byName);
+					
+					if(this.record.hardpoints || this.record.contents_max) {
+						for(x=0; this.base.item && x<this.base.item.length; x++) {
+							buffer = this.universe.indexes.item.lookup[this.base.item[x]];
+							if(buffer.id !== this.record.id && !buffer.untradable) {
+								if(this.record.cancontain && this.record.cancontain.length) {
+									if(buffer.itemtype && buffer.itemtype.length) {
+										hold = true;
+										for(y=0; hold && y<buffer.itemtype.length; y++) {
+											if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
+												this.attach_targets.push(buffer);
+												hold = false;
+											}
+										}
+									}
+								} else {
+									this.attach_targets.push(buffer);
+								}
+							}
+						}
+					}
+					this.attach_targets.sort(byName);
+				}
+				
+				buffer = this.player?this.player.id:null;
+				this.availableTemplates.entity.splice(0);
+				this.movableEntities.splice(0);
+				this.hiddenEntities.splice(0);
+				this.entities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					if(((!this.universe.indexes.entity.listing[x].owners && !this.universe.indexes.entity.listing[x].owner)
+							|| (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.indexOf(buffer) !== -1)
+							|| this.universe.indexes.entity.listing[x].owner === buffer)
+							&& this.universe.indexes.entity.listing[x].location !== this.record.id
+							&& this.universe.indexes.entity.listing[x].inside !== this.record.id){
+						this.movableEntities.push(this.universe.indexes.entity.listing[x]);
+					}
+					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
+						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
+					}
+					if(this.universe.indexes.entity.listing[x].location === this.record.id || this.universe.indexes.entity.listing[x].inside === this.record.id) {
+						if(this.universe.indexes.entity.listing[x].hidden || this.universe.indexes.entity.listing[x].obscured) {
+							this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
+						} else {
+							this.entities.push(this.universe.indexes.entity.listing[x]);
+						}
+					}
+				}
+				
+				this.availableSlots.splice(0);
+				if(this.base && this.base.slot && this.base.slot.length) {
+					for(x=0; x<this.base.slot.length; x++) {
+						hold = this.universe.indexes.slot.lookup[this.base.slot[x]];
+						if(hold && hold.accepts === this.record._type && this.availableSlots.indexOf(hold) === -1 && ((!hold.itemtype) || (this.record.itemtype && this.sharesOne(hold.itemtype, this.record.itemtype)))) {
+							this.availableSlots.push(hold);
+						}
+					}
+				}
+				
+				hold = 0;
+				if(this.record.item && this.record.item.length) {
+					for(x=0; x<this.record.item.length; x++) {
+						buffer = this.universe.indexes.item.lookup[this.record.item[x]];
+						if(buffer) {
+							hold += parseInt(buffer.encumberance) || 0;
+						} else {
+							console.warn({
+								"message": "Invalid item in record",
+								"record": this.record,
+								"item": this.record.item[x]
+							});
+						}
+					}
+					Vue.set(this, "calculatedEncumberance", hold);
+				}
+				
+				this.parties.splice(0);
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					if(this.universe.indexes.party.listing[x].active) {
+						this.parties.push(this.universe.indexes.party.listing[x]);
+					}
+				}
+				
+				this.relatedKnowledge.splice(0);
+				if(this.base && this.base.knowledge) {
+					for(x=0; x<this.base.knowledge.length; x++) {
+						if((buffer = this.universe.indexes.knowledge.lookup[this.base.knowledge[x]]) && buffer.related && buffer.related.indexOf(this.record.id) !== -1) {
+							this.relatedKnowledge.push(buffer);
+						}
+					}
+				}
+				
+				this.equipped.splice(0);
+				if(this.record.equipped) {
+					buffer = Object.keys(this.record.equipped);
+					for(x=0; x<buffer.length; x++) {
+						map = Object.keys(this.record.equipped[buffer[x]]);
+						for(y=0; y<map.length; y++) {
+							slot = this.universe.indexes.slot.lookup[map[y]];
+							if(slot && this.record.equipped[buffer[x]][slot.id] && this.record.equipped[buffer[x]][slot.id].length) {
+								for(z=0; z<this.record.equipped[buffer[x]][slot.id].length; z++) {
+									if(hold = this.universe.index.lookup[this.record.equipped[buffer[x]][slot.id][z]]) {
+										this.equipped.push([slot,hold]);
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				if(this.base && this.base._relatedErrors && this.base._relatedErrors[this.record.id]) {
+					Vue.set(this, "relatedError", this.rsshowdown(this.base._relatedErrors[this.record.id].message || this.base._relatedErrors[this.record.id], this.record, this.base, this.target));
+				} else {
+					Vue.set(this, "relatedError", null);
+				}
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+//			console.log("Finishing");
+			this.universe.$off("model:modified", this.update);
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/info/render/basic.html")
+	}, "display");
+})();
+
+/**
+ * Handles rendering the record's information display.
+ * 
+ * This defaults to the rs-object-info-basic component if the record doesn't specify
+ * a "information_renderer" property to point to a different component to handle
+ * rending its information.
+ * 
+ * @class rsObjectInfo
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var invisibleKeys = {};
+	invisibleKeys.id = true;
+	invisibleKeys.name = true;
+	invisibleKeys.universe = true;
+	invisibleKeys.icon = true;
+	invisibleKeys.modifierstats = true;
+	invisibleKeys.modifierattrs = true;
+	invisibleKeys.invisibleProperties = true;
+	invisibleKeys.description = true;
+	invisibleKeys.echo = true;
+	
+	rsSystem.component("rsObjectInfo", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			},
+			"player": {
+				"type": Object
+			},
+			"target": {
+				"type": Object
+			},
+			"user": {
+				"type": Object
+			},
+			"base": {
+				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.holdDescription = null;
+			data.description = null;
+			data.keys = [];
+			data.id = null;
+			
+			return data;
+		},
+		"watch": {
+			
+		},
+		"mounted": function() {
+			
+		},
+		"methods": {
+			"visible": function(key) {
+				return key && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+			},
+			"update": function() {
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
+		},
+		"render": function(createElement) {
+			var elements = false,
+				classes = {},
+				contents,
+				widget;
+			
+			elements = [createElement(this.record.information_renderer || "rs-object-info-basic", {
+				"props": {
+					"universe": this.universe,
+					"options": this.options,
+					"player": this.player,
+					"record": this.record,
+					"target": this.target,
+					"base": this.base,
+					"user": this.user
+				}
+			})];
+			
+			if(!elements) {
+				elements = [createElement("div")];
+			}
+			
+			classes["object-info"] = true;
+			if(this.record.information_classes) {
+				classes[this.record.information_classes] = true;
+			}
+			
+			return createElement("div", {
+				"class": classes
+			}, elements);
+		}
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsObjectInfoSlot
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	rsSystem.component("rsObjectInfoSlot", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			},
+			"player": {
+				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			
+			return data;
+		},
+		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+//					console.log("1Follow: ", follow);
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			if(this.record.$on) {
+				this.record.$on("modified", this.update);
+			}
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/info/render/slot.html")
+	}, "display");
+})();
+
+/**
+ * 
+ * 
+ * @class rsRenderedText
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_infoComponentKey";
+	
+	rsSystem.component("rsRenderedText", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"text": {
+				"required": true,
+				"type": String
+			},
+			"universe": {
+				"required": true,
+				"type": Object
+			},
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"target": {
+				"type": Object
+			},
+			"base": {
+				"type": Object
+			},
+			"options": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value])) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+			
+			this.character.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+
+			}
+		},
+		"beforeDestroy": function() {
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/info/text.html")
 	});
 })();
 
@@ -23082,28 +28351,30 @@ rsSystem.component("StorageManager", {
  * @zindex 10
  */
 (function() {
-	var storageKey = "_rs_menuComponentKey";
+	var storageKey = "_rs_menuComponentKey",
+		bufferItem = {
+			"icon": "",
+			"class": "buffer",
+			"label": ""
+		};
 	
 	rsSystem.component("systemMenu", {
 		"inherit": true,
 		"mixins": [
-			
+			rsSystem.components.RSCore
 		],
 		"props": {
-			"universe": {
-				"required": true,
-				"type": Object
-			},
-			"user": {
-				"required": true,
-				"type": Object
-			}
-		},
-		"mounted": function() {
-			rsSystem.register(this);
 		},
 		"data": function() {
 			var data = {};
+
+			data.storageID = storageKey; 
+			data.state = this.loadStorage(data.storageID, {
+				"labels": true
+			});
+			if(data.state.labels === undefined) {
+				data.state.labels = true;
+			}
 			
 			data.navigationItems = [];
 			data.navigationItems.push({
@@ -23111,21 +28382,60 @@ rsSystem.component("StorageManager", {
 				"action": "navigate",
 				"label": "Dashboard",
 				"path": "/dashboard",
-				"highlight": "/dashboard"
+				"highlight": "/dashboard",
+				"conditionals": [{
+					"master": false
+				}]
 			});
 			data.navigationItems.push({
-				"icon": "fas fa-fighter-jet",
+				"icon": "fas fa-street-view",
 				"action": "navigate",
-				"label": "Hangar",
-				"path": "/hangar",
-				"highlight": "/hangar"
+				"label": "Locality",
+				"path": "/locality",
+				"highlight": "/locality",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-warehouse-alt",
+				"action": "navigate",
+				"label": "Storage",
+				"path": "/storage",
+				"highlight": "/storage",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fas fa-journal-whills",
+				"action": "navigate",
+				"label": "Journal",
+				"path": "/journal",
+				"highlight": "/journal",
+				"conditionals": [{
+					"master": false
+				}]
+			});
+			data.navigationItems.push({
+				"icon": "fad fa-galaxy",
+				"action": "navigate",
+				"label": "Galaxy",
+				"path": "/galaxy",
+				"highlight": "/galaxy",
+				"conditionals": [{
+					"master": true
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-treasure-chest",
 				"action": "navigate",
 				"label": "Nouns",
 				"path": "/nouns",
-				"highlight": "/nouns"
+				"highlight": "/nouns",
+				"conditionals": [{
+					"master": true
+				}]
 			});
 			data.navigationItems.push({
 				"icon": "fas fa-map",
@@ -23136,6 +28446,13 @@ rsSystem.component("StorageManager", {
 			});
 			
 			data.generalItems = [];
+			data.shrinkItem = {
+				"icon": "far fa-text-width",
+				"action": "toggle-labels",
+				"label": "Shrink"
+			};
+			data.generalItems.push(data.shrinkItem);
+			data.generalItems.push(bufferItem);
 			data.generalItems.push({
 				"icon": "far fa-sign-out",
 				"action": "logout",
@@ -23145,6 +28462,22 @@ rsSystem.component("StorageManager", {
 			return data;
 		},
 		"watch": {
+			"$route": {
+				"deep": true,
+				"handler": function() {
+//					console.log("hi");
+					this.$forceUpdate();
+				}
+			},
+			"state": {
+				"deep": true,
+				"handler": function(value) {
+					this.saveStorage(this.storageID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
 		},
 		"methods": {
 			"isActive": function(navItem) {
@@ -23158,19 +28491,46 @@ rsSystem.component("StorageManager", {
 				}
 				return true;
 			},
-			"evaluateConditional": function() {
+			"evaluateConditional": function(condition) {
+				var keys = Object.keys(condition),
+					x;
 				
+				for(x=0; x<keys.length; x++) {
+					switch(keys[x]) {
+						case "master":
+							if(condition[keys[x]] === true) {
+								return this.player.master;
+							} else if(condition[keys[x]] === false) {
+								return !this.player.master;
+							}
+							break;
+					}
+				}
 			},
 			"getClassSettings": function() {
-				return "full standard undocked";
+				var classes = "full standard undocked";
+				if(!this.state.labels) {
+					classes += " collapsed";
+				}
+				return classes;
 			},
 			"processNavigation": function(navItem) {
-				console.log("Nav: " , navItem);
+//				console.log("Nav: " , navItem);
 				switch(navItem.action) {
 					case "navigate":
 						break;
+					case "toggle-labels":
+						Vue.set(this.state, "labels", !this.state.labels);
+						if(this.state.labels) {
+							Vue.set(this.shrinkItem, "label", "Shrink");
+						} else {
+							Vue.set(this.shrinkItem, "label", "Expand");
+						}
+						break;
 					case "logout":
 						this.universe.logout();
+						break;
+					case "none":
 						break;
 					default:
 						this.universe.log.warn({"message":"Unknown action[" + navItem.action + "] in menu navigation", "item": navItem});
@@ -23180,6 +28540,3104 @@ rsSystem.component("StorageManager", {
 		"template": Vue.templified("components/menu.html")
 	});
 })();
+
+
+(function() {
+	
+	var dataSource,
+		dependency,
+		attrs,
+		stats,
+		notes;
+
+	dependency = {
+		"label": "Dependencies",
+		"property": "dependency",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "XP Cost",
+		"property": "xp_cost",
+		"type": "text"
+	}, {
+		"label": "Type",
+		"property": "type",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Building Ability",
+			"id": "building"
+		}, {
+			"name": "Character Ability",
+			"id": "character"
+		}, {
+			"name": "Piloting Ability",
+			"id": "pilot"
+		}, {
+			"name": "Planet Ability",
+			"id": "planet"
+		}, {
+			"name": "Room Ability",
+			"id": "room"
+		}, {
+			"name": "Ship Ability",
+			"id": "ship"
+		}, {
+			"name": "Star System Ability",
+			"id": "system"
+		}, {
+			"name": "Station Ability",
+			"id": "station"
+		}]
+	}, {
+		"label": "Activation",
+		"property": "activation",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"automatic",
+			"passive",
+			"active"
+		]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Dependency Type",
+		"property": "dependency_type",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Any",
+			"id": undefined
+		}, {
+			"name": "All",
+			"id": "all"
+		}]
+	},
+	dependency,
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsAbility", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.ability = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			dependency.source_index = this.universe.indexes.ability;
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var commonSource,
+		dataSource;
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Career Skill Flag",
+		"property": "__enhanced",
+		"type": "label"
+	}];
+	
+	commonSource = [{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsModifierAttrs", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSSWStats
+		],
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x;
+			
+			data.fields = this.fields || {};
+			data.fields.modifierattrs = [];
+			data.fields.modifierattrs.push.apply(data.fields.modifierattrs, dataSource);
+			/*
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				data.fields.modifierattrs.push({
+					"label": this.universe.indexes.skill.listing[x].name,
+					"property": "skill_enhanced_" + this.universe.indexes.skill.listing[x].property,
+					"type": "checkbox"
+				});
+			}
+			
+			data.fields.modifierattrs.push.apply(data.fields.modifierattrs, commonSource);
+			*/
+			
+			return data;
+		},
+		"mounted": function() {
+			var x;
+			
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				this.fields.modifierattrs.push({
+					"label": this.universe.indexes.skill.listing[x].name,
+					"property": "skill_enhanced_" + this.universe.indexes.skill.listing[x].property,
+					"type": "checkbox"
+				});
+			}
+			
+			this.fields.modifierattrs.push.apply(this.fields.modifierattrs, commonSource);
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource;
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Default Set",
+		"property": "default_set",
+		"type": "checkbox"
+	}, {
+		"label": "Data Set",
+		"property": "set",
+		"type": "textarea"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsDataset", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.dataset = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var alterationIndex,
+		dataSource,
+		attrs,
+		stats,
+		notes;
+	
+	alterationIndex = new SearchIndex([{
+	        "name": "area",
+	        "id": "area"
+	    }, {
+	        "name": "building",
+	        "id": "building"
+	    }, {
+	        "name": "character",
+	        "id": "character"
+	    }, {
+	        "name": "ship",
+	        "id": "ship"
+	    }, {
+	        "name": "station",
+	        "id": "station"
+	    }]);
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Activation",
+		"property": "activation",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"automatic",
+			"passive",
+			"active"
+		]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Alters",
+		"property": "alters",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"source_index": alterationIndex,
+		"noinfo": true
+	},
+	attrs,
+	stats,
+	{
+		"label": "Indicators",
+		"property": "indicators",
+		"type": "textarea"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsEffect", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.effect = dataSource;
+			return data;
+		},
+		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		shipAbilities,
+		knowledges,
+		archetypes,
+		itemtypes,
+		abilities,
+		location,
+		profiles,
+		widgets,
+		entity,
+		images,
+		owners,
+		attrs,
+		items,
+		notes,
+		pilot,
+		races,
+		rooms,
+		slots,
+		stats,
+		sexes;
+	
+	location = {
+		"label": "Location",
+		"property": "location",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	entity = {
+		"label": "Inside",
+		"property": "inside", // Not "entity" as modifier inheritence is not wanted
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	shipAbilities = {
+		"label": "Active Piloting Abilities",
+		"property": "ship_active_abilities",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
+	};
+	
+	pilot = {
+		"label": "Pilot",
+		"property": "entity",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
+	};
+	
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	races = {
+		"label": "Races",
+		"property": "race",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	sexes = {
+		"label": "Sex",
+		"property": "sex",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	archetypes = {
+		"label": "Archetypes",
+		"property": "archetype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	widgets = {
+		"label": "Widgets",
+		"property": "widget",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	rooms = {
+		"label": "Rooms",
+		"property": "room",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["building", "ship", "station", "base"]
+			}
+		}
+	};
+	
+	items = {
+		"label": "Items",
+		"property": "item",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	abilities = {
+		"label": "Abilities",
+		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	owners = {
+		"label": "Owners",
+		"property": "owners",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	slots = {
+		"label": "Slots",
+		"property": "slot",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	images = {
+		"label": "Image",
+		"property": "image",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	itemtypes = {
+		"label": "Available Item Types",
+		"property": "itemtype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"is_shop": true
+		}
+	};
+	
+	knowledges = {
+		"label": "Knowledge",
+		"property": "knowledge",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attribute Modifers",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stat Modifers",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Parent",
+		"property": "parent",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Allegiance",
+		"property": "allegiance",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Age",
+		"property": "age",
+		"type": "number"
+	}, {
+		"label": "Height",
+		"property": "height",
+		"type": "number"
+	}, {
+		"label": "Mass",
+		"property": "mass",
+		"type": "text"
+	}, {
+		"label": "Experience",
+		"property": "xp",
+		"type": "number"
+	}, {
+		"label": "Credits",
+		"property": "credits",
+		"type": "number"
+	}, {
+		"label": "Silhouette",
+		"property": "silhouette",
+		"type": "select",
+		"raw": true,
+		"options": [
+			0,
+			1,
+			2,
+			3,
+			4,
+			5,
+			6,
+			7,
+			8,
+			9,
+			10,
+			11,
+			12,
+			13,
+			14,
+			15,
+			16,
+			17,
+			18,
+			19,
+			20,
+			25,
+			30,
+			35,
+			40,
+			45,
+			50,
+			60,
+			70,
+			80,
+			90,
+			100
+		]
+	}, {
+		"label": "Classification",
+		"property": "classification",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"base",
+			"building",
+			"character",
+			"ship",
+			"station"
+		]
+	}, {
+		"label": "Pilot Skill",
+		"property": "pilot_skill",
+		"type": "number",
+		"condition": {
+			"classification": "character"
+		}
+	}, {
+		"label": "Required Crew",
+		"property": "required_crew",
+		"type": "number",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["station", "ship", "building", "base"]
+			}
+		}
+	}, {
+		"label": "Maximum Crew",
+		"property": "maximum_crew",
+		"type": "number",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["station", "ship", "building", "base"]
+			}
+		}
+	},
+	shipAbilities,
+	pilot,
+	races,
+	sexes,
+	{
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
+	}, {
+		"label": "Random Name",
+		"property": "randomize_name",
+		"type": "select",
+		"raw": true,
+		"condition": {
+			"template": true
+		},
+		"options": [0,1,2,3,4,5,6]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	slots,
+	location,
+	{
+		"label": "X Coordinate",
+		"property": "x",
+		"type": "number",
+		"condition": {
+			"location": {
+				"operation": "exists"
+			}
+		}
+	}, {
+		"label": "Y Coordinate",
+		"property": "y",
+		"type": "number",
+		"condition": {
+			"location": {
+				"operation": "exists"
+			}
+		}
+	},
+	entity,
+	{
+		"label": "Size",
+		"property": "size",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"tiny",
+			"small",
+			"medium",
+			"large",
+			"huge",
+			"gigantic",
+			"city",
+			"mountainous",
+			"enormouos",
+			"planetary",
+			"star_system",
+			"galactic"
+		]
+	},
+	profiles,
+//	images,
+	{
+		"label": "Inactivated",
+		"property": "inactive",
+		"type": "checkbox"
+	},
+	{
+		"label": "Is Shop",
+		"property": "is_shop",
+		"type": "checkbox"
+	},
+	itemtypes,
+	{
+		"label": "Restock Base",
+		"property": "restock_base",
+		"type": "number",
+		"condition": {
+			"is_shop": true
+		}
+	}, {
+		"label": "Restock Max",
+		"property": "restock_max",
+		"type": "number",
+		"condition": {
+			"is_shop": true
+		}
+	}, {
+		"label": "Rarity Min",
+		"property": "rarity_min",
+		"type": "number",
+		"condition": {
+			"is_shop": true
+		}
+	}, {
+		"label": "Rarity Max",
+		"property": "rarity_max",
+		"type": "number",
+		"condition": {
+			"is_shop": true
+		}
+	},
+	attrs,
+	stats,
+	knowledges,
+	archetypes,
+	abilities,
+	items,
+	widgets,
+	rooms,
+	owners,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Motivations",
+		"property": "motivations",
+		"type": "textarea"
+	}, {
+		"label": "Obligations",
+		"property": "obligations",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsEntity", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.entity = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			location.options = this.universe.indexes.location.listing;
+			location.options.sortBy("name");
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+			images.options = this.universe.indexes.image.listing;
+			images.options.sortBy("name");
+			entity.options = this.universe.indexes.entity.listing;
+			entity.options.sortBy("name");
+			pilot.options = this.universe.indexes.entity.listing;
+			pilot.options.sortBy("name");
+			races.options = this.universe.indexes.race.listing;
+			races.options.sortBy("name");
+			sexes.options = this.universe.indexes.sex.listing;
+			sexes.options.sortBy("name");
+
+			shipAbilities.source_index = this.universe.indexes.ability;
+			knowledges.source_index = this.universe.indexes.knowledge;
+			archetypes.source_index = this.universe.indexes.archetype;
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			itemtypes.source_index = this.universe.indexes.itemtype;
+			abilities.source_index = this.universe.indexes.ability;
+			widgets.source_index = this.universe.indexes.widget;
+			owners.source_index = this.universe.indexes.player;
+			notes.source_index = this.universe.indexes.note;
+			rooms.source_index = this.universe.indexes.room;
+			slots.source_index = this.universe.indexes.slot;
+			items.source_index = this.universe.indexes.item;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		cancontain,
+		abilities,
+		itemtypes,
+		profiles,
+		entities,
+		attrs,
+		items,
+		notes,
+		skill,
+		stats;
+	
+	itemtypes = {
+		"label": "Item Types",
+		"property": "itemtype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	cancontain = {
+		"label": "Limited To Holding These Types",
+		"property": "cancontain",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	abilities = {
+		"label": "Abilities",
+		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	entities = {
+		"label": "Attunee",
+		"property": "attuned_to",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	items = {
+		"label": "Attachments",
+		"property": "item",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	skill = {
+		"label": "Skill",
+		"property": "skill_check",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Parent",
+		"property": "parent",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Price",
+		"property": "price",
+		"type": "number"
+	}, {
+		"label": "Damage",
+		"property": "damage",
+		"type": "text"
+	}, {
+		"label": "Encumberance",
+		"property": "encumberance",
+		"type": "number"
+	}, {
+		"label": "Critical",
+		"property": "critical",
+		"type": "number"
+	}, {
+		"label": "Max Contents",
+		"property": "contents_max",
+		"type": "number"
+//	}, {
+//		"label": "Contents Type",
+//		"property": "contents_type",
+//		"type": "text"
+	}, {
+		"label": "Rarity",
+		"property": "rarity",
+		"type": "number"
+	}, {
+		"label": "Slots Used",
+		"property": "slots_used",
+		"type": "number"
+	},
+	profiles,
+	skill,
+	{
+		"label": "Info Render",
+		"property": "information_renderer",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"options": [{
+			"name": "Basic",
+			"id": undefined
+		}, {
+			"name": "Bag",
+			"id": "rssw-bag-render"
+		}]
+	}, {
+		"label": "Attunement",
+		"property": "attunement",
+		"type": "checkbox"
+	}, {
+		"label": "Untradable",
+		"property": "untradable",
+		"type": "checkbox"
+	}, {
+		"label": "Locked Attunement",
+		"property": "locked_attunement",
+		"type": "checkbox"
+	}, {
+		"label": "No Modifiers",
+		"property": "no_modifiers",
+		"type": "checkbox"
+	}, {
+		"label": "Add Encumberance",
+		"property": "adds_encumberance",
+		"type": "checkbox",
+		"condition": {
+			"no_modifiers": true
+		}
+	}, {
+		"label": "Scaled Encumberance",
+		"property": "scaled_encumberance",
+		"type": "number",
+		"condition": {
+			"adds_encumberance": true,
+			"no_modifiers": true,
+			"contents_max": {
+				"operation": "exists"
+			}
+		}
+	}, {
+		"label": "Needs Slot",
+		"property": "needs_slot",
+		"type": "checkbox"
+	}, {
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	cancontain,
+	itemtypes,
+	abilities,
+	items,
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsItem", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.item = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+			skill.options = this.universe.indexes.skill.listing;
+			skill.options.sortBy("name");
+			entities.options = this.universe.indexes.entity.listing;
+			entities.options.sortBy("name");
+
+			cancontain.source_index = this.universe.indexes.itemtype;
+			itemtypes.source_index = this.universe.indexes.itemtype;
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			abilities.source_index = this.universe.indexes.ability;
+			items.source_index = this.universe.indexes.item;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		bases;
+	
+	
+	bases = {
+		"label": "Base",
+		"property": "base",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsItemType", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.itemtype = dataSource;
+
+			return data;
+		},
+		"mounted": function() {
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		categories,
+		profiles,
+		related,
+		attrs,
+		stats,
+		notes;
+
+	var categories = [
+		"quest",
+		"quest:task",
+		"quest:main",
+		"quest:seconary",
+		
+		"ideas",
+		"ideas:force",
+		"ideas:electronics",
+		"ideas:skill",
+		"ideas:ability",
+		"ideas:job",
+		
+		"things",
+		"things:army",
+		"things:ship",
+		"things:fleet",
+		"things:item",
+		"things:market",
+		"things:temple",
+		
+		"peoples",
+		"peoples:ancestry",
+		"peoples:character",
+		"peoples:clan",
+		"peoples:creature",
+		"peoples:culture",
+		"peoples:language",
+		"peoples:empire",
+		"peoples:race",
+		"peoples:ruler",
+		
+		"locations",
+		"locations:starsystem",
+		"locations:planet",
+		"locations:city",
+		"locations:continent",
+		"locations:expedition",
+		"locations:forest",
+		"locations:mountain",
+		"locations:temple",
+		"locations:sector"
+	].sort();
+
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	related = {
+		"label": "Related",
+		"property": "related",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Category",
+		"property": "category",
+		"type": "select",
+		"raw": true,
+		"options": categories
+	}, {
+		"label": "State",
+		"property": "state",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"undiscovered",
+			"pending",
+			"active",
+			"completed"
+		]
+	},
+	profiles,
+	related,
+	{
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsKnowledge", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.knowledge = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+			related.source_index = this.universe.index;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		knowledges,
+		playlists,
+		location,
+		profiles,
+		images,
+		notes;
+	
+	location = {
+		"label": "Resides In",
+		"property": "location",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	images = {
+		"label": "Image",
+		"property": "image",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	knowledges = {
+		"label": "Knowledge",
+		"property": "knowledge",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	playlists = {
+		"label": "Playlists",
+		"property": "playlist",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Label",
+		"property": "label",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Type",
+		"property": "type",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"astroid",
+			"astroid-belt",
+			"building",
+			"city",
+			"marker",
+			"moon",
+			"phenomenon",
+			"planet",
+			"star-system",
+			"station"
+		]
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "X Coordinate",
+		"property": "x",
+		"type": "number"
+	}, {
+		"label": "Y Coordinate",
+		"property": "y",
+		"type": "number"
+	}, {
+		"label": "Size",
+		"property": "size",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"tiny",
+			"small",
+			"medium",
+			"large",
+			"huge",
+			"gigantic",
+			"city",
+			"mountainous",
+			"enormouos",
+			"planetary",
+			"star_system",
+			"galactic"
+		]
+	}, {
+		"label": "Link",
+		"property": "linked",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"map"
+		]
+	},
+	location,
+	profiles,
+	images,
+	playlists,
+	knowledges,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsLocation", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.location = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			location.options = this.universe.indexes.location.listing;
+			location.options.sortBy("name");
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+			images.options = this.universe.indexes.image.listing;
+			images.options.sortBy("name");
+
+			knowledges.source_index = this.universe.indexes.knowledge;
+			playlists.source_index = this.universe.indexes.playlist;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		knowledges;
+	
+	
+	knowledges = {
+		"label": "Knowledge",
+		"property": "knowledge",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	},
+	knowledges,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsNote", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.note = dataSource;
+			
+
+			return data;
+		},
+		"mounted": function() {
+			knowledges.source_index = this.universe.indexes.knowledge;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		location,
+		entities,
+		inside,
+		notes;
+	
+	entities = {
+		"label": "Members",
+		"property": "entity",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	location = {
+		"label": "Location",
+		"property": "location",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	inside = {
+		"label": "Inside",
+		"property": "inside",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	},
+	location,
+	inside,
+	{
+		"label": "Active",
+		"property": "active",
+		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	entities,
+	{
+		"label": "X Coordinate",
+		"property": "x",
+		"type": "number",
+		"condition": {
+			"location": {
+				"operation": "exists"
+			}
+		}
+	}, {
+		"label": "Y Coordinate",
+		"property": "y",
+		"type": "number",
+		"condition": {
+			"location": {
+				"operation": "exists"
+			}
+		}
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsParty", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.party = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+			var x;
+			
+			location.options = this.universe.indexes.location.listing;
+			location.options.sortBy("name");
+			inside.options = [];
+			for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+				if(!this.universe.indexes.entity.listing[x].template) {
+					inside.options.push(this.universe.indexes.entity.listing[x]);
+				}
+			}
+			inside.options.sortBy("name");
+			
+			entities.source_index = this.universe.indexes.entity;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource;
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Username",
+		"property": "username",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "E-Mail",
+		"property": "email",
+		"type": "text"
+	}, {
+		"label": "Entity",
+		"property": "entity",
+		"type": "text"
+	}, {
+		"label": "Master",
+		"property": "master",
+		"type": "checkbox"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsPlayer", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.player = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		bases;
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "General",
+		"property": "general",
+		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Stream URIs",
+		"property": "stream_uris",
+		"type": "textarea"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsPlaylist", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.playlist = dataSource;
+
+			return data;
+		},
+		"mounted": function() {
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		datasets,
+		profiles,
+		attrs,
+		stats,
+		notes;
+	
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	datasets = {
+		"label": "Name Generation Dataset",
+		"property": "dataset",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	},
+	profiles,
+	{
+		"label": "Playable",
+		"property": "playable",
+		"type": "checkbox"
+	},
+	datasets,
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsRace", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.race = dataSource;
+			return data;
+		},
+		"mounted": function() {
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+			
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			datasets.source_index = this.universe.indexes.dataset;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		profiles,
+		effects,
+		attrs,
+		stats,
+		notes;
+
+	profiles = {
+		"label": "Profile",
+		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	effects = {
+		"label": "Effects",
+		"property": "effect",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	},
+	profiles,
+	{
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
+	},
+	effects,
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsRoom", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.room = dataSource;
+
+			profiles.options = this.universe.indexes.image.listing;
+			profiles.options.sortBy("name");
+			
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			effects.source_index = this.universe.indexes.effect;
+			notes.source_index = this.universe.indexes.note;
+			
+			return data;
+		},
+		"mounted": function() {
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		attrs,
+		notes,
+		stats;
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	attrs,
+	stats,
+	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsSex", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.sex = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+
+	var dataSource,
+		bases,
+		sort;
+
+	sort = function(a, b) {
+		if(a && a.name) {
+			a = a.name;
+		}
+		if(b && b.name) {
+			b = b.name;
+		}
+		a = a || "";
+		b = b || "";
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+
+	bases = {
+		"label": "Base",
+		"property": "base",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Order",
+		"property": "order",
+		"type": "number"
+	}, {
+		"label": "Section",
+		"property": "section",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"combat",
+			"custom",
+			"general",
+			"knowledge",
+			"piloting",
+			"subskill"
+		]
+	},
+	bases,
+	{
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+
+	rsSystem.component("NounFieldsSkill", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.skill = dataSource;
+
+			return data;
+		},
+		"mounted": function() {
+			bases.options = this.characterStatsListing;
+			bases.options.sort(sort);
+		},
+		"methods": {
+			"update": function() {
+
+			}
+		},
+		"beforeDestroy": function() {
+
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource,
+		itemtypes,
+		accepts,
+		attrs,
+		stats,
+		notes;
+	
+	accepts = {
+		"label": "Accepts",
+		"property": "accepts",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"item",
+			"room",
+			"entity"
+		]
+	};
+	
+	itemtypes = {
+		"label": "Item Types",
+		"property": "itemtype",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"accepts": "item"
+		}
+	};
+	
+	attrs = {
+		"label": "Attributes",
+		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	stats = {
+		"label": "Stats",
+		"property": "modifierstats",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	notes = {
+		"label": "Notes",
+		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Price",
+		"property": "price",
+		"type": "number"
+	}, {
+		"label": "Encumberance",
+		"property": "encumberance",
+		"type": "number"
+	}, {
+		"label": "Points",
+		"property": "points",
+		"type": "number"
+	}, {
+		"label": "Order",
+		"property": "order",
+		"type": "number"
+	},
+	accepts,
+	itemtypes,
+	attrs,
+	stats,
+	{
+		"label": "Combat Slot",
+		"property": "combat_slot",
+		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	},
+	notes,
+	{
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsSlot", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.slot = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+			attrs.source_index = this.universe.indexes.modifierattrs;
+			stats.source_index = this.universe.indexes.modifierstats;
+			itemtypes.source_index = this.universe.indexes.itemtype;
+			notes.source_index = this.universe.indexes.note;
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var commonSource,
+		listSource,
+		dataSource,
+		abilities,
+		effects,
+		skills,
+		ranges,
+		dice;
+	
+	ranges = [
+		"general",
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+	
+	dice = [
+		"proficiency",
+		"ability",
+		"boost",
+		"challenge",
+		"difficulty",
+		"setback",
+		"setforward"
+	];
+	
+	abilities = {
+		"label": "Abilities",
+		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	effects = {
+		"label": "Effects",
+		"property": "effect",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	skills = {
+		"label": "Skills",
+		"property": "skill",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Critical",
+		"property": "critical",
+		"type": "text"
+	}, {
+		"label": "Soak",
+		"property": "soak",
+		"type": "text"
+	}, {
+		"label": "Max Wound",
+		"property": "wounds_max",
+		"type": "text"
+	}, {
+		"label": "Max Strain",
+		"property": "strain_max",
+		"type": "text"
+	}, {
+		"label": "Range",
+		"property": "range",
+		"type": "text"
+	}, {
+		"label": "Damage",
+		"property": "damage",
+		"type": "text"
+	}, {
+		"label": "Pierce",
+		"property": "pierce_damage",
+		"type": "text"
+			
+	}, {
+		"label": "General Defense",
+		"property": "defense_general",
+		"type": "text"
+	}, {
+		"label": "Melee Defense",
+		"property": "defense_melee",
+		"type": "text"
+	}, {
+		"label": "Range Defense",
+		"property": "defense_range",
+		"type": "text"
+	}, {
+		"label": "Pilot Skill",
+		"property": "pilot_skill",
+		"type": "text"
+	}, {
+		"label": "Point Cost",
+		"property": "point_cost",
+		"type": "text"
+	}, {
+		"label": "XP Cost",
+		"property": "xp_cost",
+		"type": "text"
+	}, {
+		"label": "Slots Used",
+		"property": "slots_used",
+		"type": "number"
+	}, {
+		"label": "Required Crew",
+		"property": "required_crew",
+		"type": "text"
+	}, {
+		"label": "Bonus: Boost",
+		"property": "bonus_boost",
+		"type": "text"
+	}, {
+		"label": "Ship Shield",
+		"property": "shield",
+		"type": "text"
+	}, {
+		"label": "Ship Attack",
+		"property": "attack",
+		"type": "text"
+	}, {
+		"label": "Ship Evasion",
+		"property": "evasion",
+		"type": "text"
+	}, {
+		"label": "Ship Hull",
+		"property": "hull",
+		"type": "text"
+	}, {
+		"label": "Energy Output",
+		"property": "energy_out",
+		"type": "text"
+	}, {
+		"label": "Energy Consumption",
+		"property": "energy_consume",
+		"type": "text"
+	}, {
+		"label": "Energy Potential",
+		"property": "energy_potential",
+		"type": "text"
+	}, {
+		"label": "Mass",
+		"property": "mass",
+		"type": "text"
+	}, {
+		"label": "Encumberance",
+		"property": "encumberance",
+		"type": "text"
+	}, {
+		"label": "Encumberance Bonus",
+		"property": "encumberance_bonus",
+		"type": "text"
+	}, {
+		"label": "Max Contents",
+		"property": "contents_max",
+		"type": "text"
+	}, {
+		"label": "Scaled Encumberance",
+		"property": "scaled_encumberance",
+		"type": "text"
+	}, {
+		"label": "Rarity",
+		"property": "rarity",
+		"type": "text"
+	}, {
+		"label": "Hardpoints",
+		"property": "hardpoints",
+		"type": "text"
+	}];
+	
+	listSource = [
+		abilities,
+		effects,
+		skills
+	];
+	
+	commonSource = [{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsModifierStats", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSSWStats
+		],
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x,
+				y;
+			
+			data.fields = this.fields || {};
+			data.fields.modifierstats = [];
+			data.fields.modifierstats.push.apply(data.fields.modifierstats, dataSource);
+
+			
+			// TODO: Build Fields for Skills and Stats Dynamically
+			data.fields.modifierstats.push({
+				"label": "Combat Range Bonuses",
+				"property": "__crb",
+				"type": "label"
+			});
+			data.fields.modifierstats.push({
+				"label": "Attack Range",
+				"property": "range",
+				"type": "text"
+			});
+			for(x=0; x<ranges.length; x++) {
+				for(y=0; y<dice.length; y++) {
+					data.fields.modifierstats.push({
+						"label": ranges[x].capitalize() + " " + dice[y],
+						"property": "range_" + ranges[x] + "_" + dice[y],
+						"type": "text"
+					});
+				}
+			}
+			
+			data.fields.modifierstats.push({
+				"label": "Attributes",
+				"property": "__attr",
+				"type": "label"
+			});
+			data.fields.modifierstats.push({
+				"property": "brawn",
+				"label": "Brawn",
+				"type": "text"
+			});
+			data.fields.modifierstats.push({
+				"property": "agility",
+				"label": "Agility",
+				"type": "text"
+			});
+			data.fields.modifierstats.push({
+				"property": "intellect",
+				"label": "Intellect",
+				"type": "text"
+			});
+			data.fields.modifierstats.push({
+				"property": "cunning",
+				"label": "Cunning",
+				"type": "text"
+			});
+			data.fields.modifierstats.push({
+				"property": "willpower",
+				"label": "Willpower",
+				"type": "text"
+			});
+			data.fields.modifierstats.push({
+				"property": "pressence",
+				"label": "Pressence",
+				"type": "text"
+			});
+			
+			data.fields.modifierstats.push({
+				"label": "Skills",
+				"property": "__skills",
+				"type": "label"
+			});
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				data.fields.modifierstats.push({
+					"label": this.universe.indexes.skill.listing[x].name,
+					"property": this.universe.indexes.skill.listing[x].propertyKey,
+					"type": "text"
+				});
+			}
+			
+			data.fields.modifierstats.push.apply(data.fields.modifierstats, listSource);
+			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
+
+			abilities.source_index = this.universe.indexes.ability;
+			effects.source_index = this.universe.indexes.effect;
+			skills.source_index = this.universe.indexes.skill;
+			
+			return data;
+		},
+		"mounted": function() {
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+(function() {
+	
+	var dataSource;
+
+	dataSource = [{
+		"label": "ID",
+		"property": "id",
+		"type": "text"
+	}, {
+		"label": "Name",
+		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Icon",
+		"property": "icon",
+		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	}, {
+		"label": "Declaration",
+		"property": "declaration",
+		"type": "text"
+	}, {
+		"label": "Storage ID",
+		"property": "sid",
+		"type": "text"
+	}, {
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
+	}, {
+		"label": "For Players",
+		"property": "for_players",
+		"type": "checkbox"
+	}, {
+		"label": "Hidden",
+		"property": "hidden",
+		"type": "checkbox"
+	}, {
+		"label": "Obscured",
+		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
+	}];
+	
+	rsSystem.component("NounFieldsWidget", {
+		"inherit": true,
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.fields = this.fields || {};
+			data.fields.widget = dataSource;
+			
+			return data;
+		},
+		"mounted": function() {
+		},
+		"methods": {
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			
+		}
+	});
+})();
+
+
+
+/**
+ * 
+ * @class FieldDescription
+ * @constructor
+ * @param {Object} details
+ */
+class FieldDescriptor {
+	
+	constructor(details) {
+		Object.assign(this, details);
+	}
+
+	/**
+	 * 
+	 * @property label
+	 * @type String
+	 */
+
+	/**
+	 * 
+	 * @property property
+	 * @type String
+	 */
+
+	/**
+	 * 
+	 * @property type
+	 * @type String
+	 * @default text
+	 * @optional
+	 */
+
+	/**
+	 * 
+	 * @property options
+	 * @type Array | Object
+	 */
+	
+	
+	/**
+	 * Flag to direct the system to just use the ifled type
+	 * as a raw input control. Useful for things like "date"
+	 * if the target browser has good native support.
+	 * @property follow_type
+	 * @type Boolean
+	 */
+}
 
 
 /**
@@ -23192,10 +31650,68 @@ rsSystem.component("StorageManager", {
 (function() {
 	var storageKey = "_rs_nounComponentKey";
 	
+	var spacing = / /g;
+	
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+	
+	/**
+	 * Fill out item to complete fields.
+	 * @method completeItem
+	 * @param {Object} item
+	 */
+	var completeItem = function(type, item) {
+		if(!item.id) {
+			if(!item.name) {
+				throw new Error("No ID or name");
+			} else {
+				item.id = type + ":" + item.name.toLowerCase().replace(spacing, "");
+			}
+		}
+		
+		item.id = item.id.toLowerCase().trim();
+		if(item.name) {
+			item.name = item.name.trim();
+		}
+		
+		return item;
+	};
+	
 	rsSystem.component("rsNouns", {
 		"inherit": true,
 		"mixins": [
-			rsSystem.components.StorageManager
+			rsSystem.components.StorageManager,
+			rsSystem.components.DataManager,
+
+			rsSystem.components.NounFieldsModifierStats,
+			rsSystem.components.NounFieldsModifierAttrs,
+			rsSystem.components.NounFieldsKnowledge,
+			rsSystem.components.NounFieldsItemType,
+			rsSystem.components.NounFieldsLocation,
+			rsSystem.components.NounFieldsPlaylist,
+			rsSystem.components.NounFieldsAbility,
+			rsSystem.components.NounFieldsDataset,
+			rsSystem.components.NounFieldsEntity,
+			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsPlayer,
+			rsSystem.components.NounFieldsWidget,
+			rsSystem.components.NounFieldsParty,
+			rsSystem.components.NounFieldsSkill,
+			rsSystem.components.NounFieldsItem,
+			rsSystem.components.NounFieldsNote,
+			rsSystem.components.NounFieldsRace,
+			rsSystem.components.NounFieldsRoom,
+			rsSystem.components.NounFieldsSlot,
+			rsSystem.components.NounFieldsSex
 		],
 		"props": {
 			"universe": {
@@ -23205,49 +31721,377 @@ rsSystem.component("StorageManager", {
 			"player": {
 				"required": true,
 				"type": Object
+			},
+			"built": {
+				"type": Object
 			}
 		},
-		"mounted": function() {
-			rsSystem.register(this);
-		},
 		"data": function() {
-			var data = {};
-			
-			data.message = null;
+			var data = {},
+				x;
+
+			data.availableToCopy = [];
+			data.nameGenerators = {};
+			data.attaching = null;
 			data.rawValue = "{}";
+			data.message = null;
 			data.isValid = true;
+			data.models = {};
 			data.copy = null;
-			data.nouns = rsSystem.listingNouns;
-			data.state = this.loadStorage(storageKey, {
+			data.nouns = rsSystem.listingNouns.sort();
+			data.storageKeyID = storageKey;
+			data.state = this.loadStorage(data.storageKeyID, {
 				"current": "player",
 				"building": {}
 			});
-			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+//			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+			if(this.$route.params.type) {
+				data.state.current = this.$route.params.type;
+			}
+			
+			for(x=0; x<data.nouns.length; x++) {
+				if(!data.state.building[data.nouns[x]]) {
+					data.state.building[data.nouns[x]] = {};
+				}
+				data.models[data.nouns[x]] = new rsSystem.availableNouns[data.nouns[x]](data.state.building[data.nouns[x]], this.universe);
+				data.models[data.nouns[x]]._coreData = data.state.building[data.nouns[x]];
+			}
+			
+			data.extra_properties = [];
 			
 			return data;
 		},
 		"watch": {
 			"copy": function(value) {
 				if(value) {
-//					var copy = this.copyNoun(this.universe.nouns[this.state.current][value]);
-					Vue.set(this, "rawValue", JSON.stringify(this.universe.nouns[this.state.current][value].toJSON(), null, 4));
+					var copy = this.universe.nouns[this.state.current][value],
+						x;
+					
+//					if(!copy) {
+//						console.warn("Unable to find copy source[" + this.state.current + "]? " + value, copy);
+//					} else {
+//						console.warn("Copying source[" + this.state.current + "]? " + value, copy);
+//					}
+					
+					value = copy?JSON.stringify(copy, null, 4):"{}";
+					value = JSON.parse(value);
+					if(copy && copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
+						value.parent = value.id;
+						value.id += ":" + Date.now();
+						if(value.randomize_name) {
+							copy = this.getGenerator(value.race);
+							if(copy) {
+								value.name = copy.corpus[Random.integer(copy.corpus.length)].capitalize();
+								for(x=1; x<value.randomize_name; x++) {
+									value.name += " " + copy.corpus[Random.integer(copy.corpus.length)].capitalize();
+								}
+							}
+						}
+						delete(value.randomize_name);
+						delete(value.template);
+					}
+					if((!copy || (copy && !copy.template)) && this.$route.query.copy === "true") {
+						value.id += ":" + Date.now();
+					}
+					if(this.$route.query.values) {
+						try {
+							copy = JSON.parse(this.$route.query.values);
+							Object.assign(value, copy);
+						} catch(exception) {
+							console.warn("Failed to load values due to parse exception: ", exception);
+						}
+					}
+					value = JSON.stringify(value, null, 4);
+//					console.warn("Setting Raw Value: ", value);
+					Vue.set(this, "rawValue", value);
 					Vue.set(this, "copy", null);
+				}
+			},
+			"state.current": function(n, p) {
+//				console.warn("Current Shift: ", n, p);
+				if(this.state.building[n]) {
+					Vue.set(this, "rawValue", JSON.stringify(this.state.building[n], null, "\t"));
+				} else {
+					Vue.set(this, "rawValue", {});
+				}
+				
+				this.buildAvailableCopies();
+			},
+			"state": {
+				"deep": true,
+				"handler": function() {
+//					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+					this.models[this.state.current].id = this.state.building[this.state.current].id;
+					this.models[this.state.current].recalculateProperties();
+					this.saveStorage(this.storageKeyID, this.state);
+					this.$forceUpdate();
+				}
+			},
+			"$route.params": {
+				"deep": true,
+				"handler": function(params) {
+//					console.warn("New Parameters: ", params);
+					if(this.$route.params.type) {
+						Vue.set(this.state, "current", params.type);
+						this.broadcastModel();
+					}
+					if(this.$route.params.oid) {
+						setTimeout(() => {
+							Vue.set(this, "copy", params.oid);
+						},0);
+					}
 				}
 			},
 			"rawValue": function(value) {
 				try {
-					var parsed = JSON.parse(value);
-					Vue.set(this.state.building, this.state.current, parsed);
-					this.saveStorage(storageKey, this.state);
+//					console.warn("Processing Raw Value Change[" + this.state.current + "]: ", value);
+					var parsed = JSON.parse(value),
+						keys,
+						x;
+
+//					console.warn(" -- Parsed Raw Value Change[" + this.state.current + "]: ", parsed);
+					
+//					Vue.set(this.state.building, this.state.current, parsed);
+					keys = Object.keys(this.state.building[this.state.current]);
+					for(x=0; x<keys.length; x++) {
+						Vue.delete(this.state.building[this.state.current], keys[x]);
+					}
+					keys = Object.keys(parsed);
+					for(x=0; x<keys.length; x++) {
+						Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
+					}
+					if(parsed instanceof Array) {
+						Vue.set(this.state.building[this.state.current], "length", parsed.length);
+					}
+					
+//					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
 					Vue.set(this, "isValid", true);
+					
+					if(this.built) {
+//						console.warn("Sync Built: ", this.built);
+						keys = Object.keys(this.built);
+						for(x=0; x<keys.length; x++) {
+							Vue.set(this.built, keys[x], null);
+						}
+						keys = Object.keys(parsed);
+						for(x=0; x<keys.length; x++) {
+							Vue.set(this.built, keys[x], parsed[keys[x]]);
+						}
+					}
+//					console.warn(" -- Raw Value Changed");
+					
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
 					Vue.set(this, "isValid", false);
 				}
 			}
 		},
+		"mounted": function() {
+			rsSystem.register(this);
+			if(this.state.building[this.state.current]) {
+				Vue.set(this, "rawValue", JSON.stringify(this.state.building[this.state.current], null, "\t"));
+			} else {
+				Vue.set(this, "rawValue", "{}");
+			}
+			if(this.$route.params.oid) {
+				Vue.set(this, "copy", this.$route.params.oid);
+			}
+			
+			this.universe.$on("universe:modified", this.universeUpdate);
+			this.models[this.state.current].recalculateProperties();
+			this.$emit("model", this.models[this.state.current]);
+			this.universeUpdate();
+		},
 		"methods": {
+			"buildAvailableCopies": function() {
+				this.availableToCopy.splice(0);
+				this.availableToCopy.push.apply(this.availableToCopy, this.universe.indexes[this.state.current].listing);
+				this.availableToCopy.sort(byName);
+			},
+			"clearField": function(field) {
+				Vue.set(this.state.building[this.state.current], field.property, null);
+				if(this.built) {
+					Vue.set(this.built, field.property, null);
+				}
+			},
+			"hasGenerator": function(race) {
+				race = race || this.state.building[this.state.current].race;
+				return (race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset)
+					|| (!race && this.universe.defaultDataset);
+			},
+			"pullRandomName": function(generator) {
+				generator = generator || this.getGenerator(this.state.building[this.state.current].race);
+				if(generator) {
+					Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+				}
+			},
+			"randomizeName": function(generator) {
+				generator = generator || this.getGenerator(this.state.building[this.state.current].race);
+				if(generator) {
+					Vue.set(this.state.building[this.state.current], "name", generator.create().capitalize() + " " + generator.create().capitalize());
+				}
+			},
+			"getGenerator": function(race) {
+				var generator = null,
+					data,
+					x;
+				
+				if(race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset) {
+					if(!this.nameGenerators[race]) {
+						data = "";
+						for(x=0; x<this.universe.indexes.race.index[race].dataset.length; x++) {
+							if(this.universe.indexes.dataset.index[this.universe.indexes.race.index[race].dataset[x]]) {
+								data += " " + this.universe.indexes.dataset.index[this.universe.indexes.race.index[race].dataset[x]].set;
+							}
+						}
+						generator = new NameGenerator(data);
+						Vue.set(this.nameGenerators, race, generator);
+					} else {
+						generator = this.nameGenerators[race];
+					}
+//					return this.nameGenerators[race];
+				} else if(this.universe.defaultDataset) {
+					if(!this.nameGenerators._default) {
+						if(!this.universe.defaultDataset.set) {
+							console.warn("UI[pdate: ", this.universe.defaultDataset);
+							this.universe.defaultDataset.recalculateProperties();
+						}
+						generator = new NameGenerator(this.universe.defaultDataset.set);
+						Vue.set(this.nameGenerators, "_default", generator);
+					} else {
+						generator = this.nameGenerators._default;
+					}
+				}
+				
+				return generator;
+			},
+			"broadcastModel": function() {
+				console.warn("New Model: ", this.state.current, this.models[this.state.current]);
+				this.$emit("model", this.models[this.state.current]);
+				this.models[this.state.current].recalculateProperties();
+			},
+			"openKnowledge": function(id) {
+				if(this.universe.index.index[id]) {
+					rsSystem.EventBus.$emit("display-info", this.universe.index.index[id]);
+				} else {
+					console.warn("ID Not Found for Knowledge: ", id);
+				}
+			},
+			"sync": function(event) {
+//				console.warn("Sync: ", event);
+				if(this.built) {
+					Vue.set(this.built, event.property, event.value);
+				}
+			},
+			"labelNoun": function(noun) {
+				if(noun.name) {
+					if(noun.template) {
+						return noun.name + " (Template)";
+					}
+					if(noun.source_template) {
+						return noun.name + " (..." + noun.id.replace(noun.source_template, "") + ")";
+					}
+					return noun.name + " (..." + noun.id.substring(noun.id.length - 15) + ")";
+				}
+				return noun.id;
+			},
+			"newObject": function() {
+				var keys = Object.keys(this.state.building[this.state.current]),
+					x;
+
+				if(this.built) {
+					for(x=0; x<keys.length; x++) {
+						Vue.delete(this.state.building[this.state.current], keys[x]);
+						Vue.set(this.built, keys[x], null);
+					}
+				} else {
+					for(x=0; x<keys.length; x++) {
+						Vue.delete(this.state.building[this.state.current], keys[x]);
+					}
+				}
+				
+				if(this.$route.query.values) {
+					Vue.set(this, "rawValue", this.$route.query.values);
+				} else {
+					Vue.set(this, "rawValue", "{}");
+				}
+			},
+			"dropObject": function() {
+				this.state.building[this.state.current]._type = this.state.current;
+				this.universe.send("delete:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
+			},
+			"fileAttach": function(event) {
+//				console.warn("Noun File Attach: ", event);
+				try {
+					var file = event.items[0].getAsFile();
+//					console.warn("File: ", file);
+				} catch(exception) {
+					console.error("Ex: ", exception);
+				}
+			},
+			"selectImage": function(event) {
+				var input = $(this.$el).find("#attacher"),
+					value,
+					keys,
+					x;
+				
+				if(this.state.current === "image" && input && input.length && input[0].files.length) {
+//					console.warn("Set Image");
+					if(this.state.building[this.state.current]) {
+						keys = Object.keys(this.state.building[this.state.current]);
+						if(this.built) {
+							for(x=0; x<keys.length; x++) {
+								Vue.delete(this.state.building[this.state.current], keys[x]);
+								Vue.set(this.built, keys[x], null);
+							}
+						} else {
+							for(x=0; x<keys.length; x++) {
+								Vue.delete(this.state.building[this.state.current], keys[x]);
+							}
+						}
+					}
+					
+					value = {};
+					this.encodeFile(input[0].files[0])
+					.then((result) => {
+						value.data = result.data;
+						result.name = result.name.substring(0, result.name.lastIndexOf("."));
+						value.id = "image:" + result.name.replace(/\./g, ":");
+						value.name = result.name;
+						Vue.set(this, "rawValue", JSON.stringify(value, null, 4));
+						input[0].value = null;
+//						console.warn("New Value: ", value);
+					});
+				}
+			},
+			"toggleEditMode": function() {
+				var parsed,
+					keys,
+					x;
+				
+				if(this.state.advanced_editor) {
+					try {
+						parsed = JSON.parse(this.rawValue);
+						keys = Object.keys(this.state.building[this.state.current]);
+						for(x=0; x<keys.length; x++) {
+							Vue.delete(this.state.building[this.state.current], keys[x]);
+						}
+						
+						keys = Object.keys(parsed);
+						for(x=0; x<keys.length; x++) {
+							Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
+						}
+					} catch(ex) {
+						console.error("Parse Failed: ", ex);
+						Vue.set(this, "error", ex.message);
+					}
+					Vue.set(this.state, "advanced_editor", false);
+				} else {
+					Vue.set(this, "rawValue", JSON.stringify(this.state.building[this.state.current], null, 4));
+					Vue.set(this.state, "advanced_editor", true);
+				}
+			},
 			"copyNoun": function(source) {
 				var result = {},
 					keys = Object.keys(source),
@@ -23261,12 +32105,41 @@ rsSystem.component("StorageManager", {
 				
 				return result;
 			},
+			"saveEvent": function(event) {
+//				console.warn("Save?", event);
+				if(event.code === "KeyS" && event.ctrlKey) {
+//					console.warn("Save");
+					this.modify();
+					event.stopPropagation();
+					event.preventDefault();
+					return false;
+				}
+			},
+			"universeUpdate": function() {
+				this.buildAvailableCopies();
+			},
 			"modify": function() {
+//				console.warn("modify: ", event);
+				
 				if(this.isValid) {
-					this.state.building[this.state.current]._type = this.state.current;
-					this.universe.send("modify:" + this.state.current, this.state.building[this.state.current]);
+//					console.log("valid");
+					if(this.state.building[this.state.current] instanceof Array || (this.state.building[this.state.current]["0"] && this.state.building[this.state.current].length)) {
+//						console.log("array");
+						for(var x=0; x<this.state.building[this.state.current].length; x++) {
+//							console.warn("sync: ", this.state.building[this.state.current][x]);
+							this.state.building[this.state.current][x]._type = this.state.current;
+							this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current][x]));
+						}
+					} else {
+//						console.warn("sync: ", this.state.building[this.state.current]);
+						this.state.building[this.state.current]._type = this.state.current;
+						this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
+					}
 				}
 			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.universeUpdate);
 		},
 		"template": Vue.templified("components/nouns.html")
 	});
@@ -23276,36 +32149,60 @@ rsSystem.component("StorageManager", {
 /**
  * 
  * 
- * @class RSCore
+ * @class rsswCareerRecordDisplay
  * @constructor
  * @module Components
  */
-rsSystem.component("RSCore", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.StorageManager
-	],
-	"props": {
-		"universe": {
-			"required": true,
-			"type": Object
+(function() {
+	rsSystem.component("rsswCareerRecordDisplay", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSShowdown
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			}
 		},
-		"user": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"computed": {
-		"player": function() {
-			return this.universe.nouns.player[this.user.id];
-		}
-	},
-	"watch": {
-	},
-	"methods": {
-	}
-});
+		"data": function() {
+			var data = {};
 
+			data.holdDescription = null;
+			data.description = null;
+			
+			return data;
+		},
+		"mounted": function() {
+			if(this.record && this.record.$on) {
+				this.record.$on("modified", this.update);
+			}
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+				if(this.record.description) {
+					if(this.holdDescription !== this.record.description) {
+						Vue.set(this, "holdDescription", this.record.description);
+						Vue.set(this, "description", this.rsshowdown(this.holdDescription));
+					}
+				} else {
+					Vue.set(this, "holdDescription", null);
+					Vue.set(this, "description", null);
+				}
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.record && this.record.$off) {
+				this.record.$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/rssw/career/display.html")
+	});
+})();
 
 /**
  * 
@@ -23316,18 +32213,23 @@ rsSystem.component("RSCore", {
  */
 (function() {
 	var keys = [
+		"damage",
 		"soak",
 	    "wounds",
 	    "wounds_max",
 	    "strain",
 	    "strain_max",
+	    "defense_general",
 	    "defense_range",
-	    "defense_melee"
+	    "defense_melee",
+	    "injury"
 	    ];
 	
 	
 	var highValues = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
 	var lowValues = [-2,-1,0,1,2,3,4,5,6,7,8,9,10];
+	
+	var injuryValues = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151];
 
 	rsSystem.component("rsswCharacterBoard", {
 		"inherit": true,
@@ -23345,6 +32247,7 @@ rsSystem.component("RSCore", {
 			var data = {},
 				x;
 
+			data.injuryValues = injuryValues;
 			data.highValues = highValues;
 			data.lowValues = lowValues;
 			for(x=0; x<keys.length; x++) {
@@ -23363,9 +32266,25 @@ rsSystem.component("RSCore", {
 				this.character.commit({
 					"wounds": nV
 				});
+			},
+			"strain": function(nV, oV) {
+				this.character.commit({
+					"strain": nV
+				});
+			},
+			"injury": function(nV, oV) {
+				this.character.commit({
+					"injury": nV
+				});
 			}
 		},
 		"methods": {
+			"infoStat": function(stat) {
+				rsSystem.EventBus.$emit("display-info", {
+					"source": this.character,
+					"record": "knowledge:stat:" + stat
+				});
+			},
 			"setStat": function() {
 				
 			},
@@ -23374,7 +32293,15 @@ rsSystem.component("RSCore", {
 					x;
 				
 				for(x=0; x<keys.length; x++) {
-					Vue.set(this, keys[x], this.character[keys[x]]);
+					Vue.set(this, keys[x], this.character[keys[x]] || 0);
+				}
+				
+				Vue.set(this, "soak", this.soak + this.character.brawn);
+				if(this.defense_general > this.defense_range) {
+					Vue.set(this, "defense_range", this.defense_general);
+				}
+				if(this.defense_general > this.defense_melee) {
+					Vue.set(this, "defense_melee", this.defense_general);
 				}
 			}
 		},
@@ -23388,76 +32315,554 @@ rsSystem.component("RSCore", {
 /**
  * 
  * 
+ * @class rsswCharacterRecordDisplay
+ * @constructor
+ * @module Components
+ */
+(function() {
+	rsSystem.component("rsswCharacterRecordDisplay", {
+		"inherit": true,
+		"mixins": [
+		],
+		"props": {
+			"record": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			return data;
+		},
+		"mounted": function() {
+			this.record.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"update": function() {
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.record.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/display.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsswEntityHistory
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var controls = {
+		"formatter": {
+			"icon": function(icon, record) {
+				return "<span class='" + icon + "'></span>";
+			},
+			"time": function(icon, record) {
+				return "<span><span class=\"fas fa-calendar\"><span> " + record._dateString + "</span>";
+			}
+		}
+	};
+
+	rsSystem.component("rsswEntityHistory", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			data.maxHistory = 300;
+			data.last = 0;
+
+			data.index = new SearchIndex();
+			data.ids = 1;
+			
+			data.history = [];
+			data.named = {
+				"xp": "experience"
+			};
+			
+			return data;
+		},
+		"mounted": function() {
+			this.entity.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"watch": {
+
+		},
+		"methods": {
+			"setStat": function() {
+				
+			},
+			"filter": function(text) {
+				
+			},
+			"getRelated": function(entry) {
+				var records,
+					x;
+				
+				if(!entry || !entry.difference) {
+					return false;
+				}
+
+				Vue.set(entry, "report", {
+					"gained": [],
+					"loss": []
+				});
+				
+				records = Object.keys(entry.difference);
+				if(records.length === 0) {
+					return false;
+				}
+				
+				for(x=0; x<records.length; x++) {
+					if(entry.difference[records[x]] > 0) {
+						entry.report.gained.push(this.universe.index.lookup[records[x]]);
+					} else {
+						entry.report.loss.push(this.universe.index.lookup[records[x]]);
+					}
+				}
+				
+				return true;
+			},
+			"copyRecord": function(record) {
+				return Object.assign({}, record);
+			},
+			"update": function() {
+				var max = 0,
+					buffer,
+					x;
+				
+				if(this.entity.history) {
+					for(x=0; x<this.entity.history.length && x < 50; x++) {
+						if(this.last < this.entity.history[x].time) {
+							buffer = this.copyRecord(this.entity.history[x]);
+							if(max < buffer.time) {
+								max = buffer.time;
+							}
+							
+							buffer.id = this.ids++;
+							buffer._date = new Date(buffer.time);
+							buffer._dateString = buffer._date.toLocaleDateString();
+							buffer._timeString = buffer._date.toLocaleTimeString();
+							buffer._search = buffer._dateString;
+							switch(buffer.type) {
+								case "record_acquired_or_loss":
+									buffer.icon = "fas fa-sort-circle";
+									this.getRelated(buffer);
+									break;
+								default:
+									buffer.icon = "fas fa-history";
+							}
+							
+							this.index.indexItem(buffer);
+							if(this.last) {
+								this.history.unshift(buffer);
+							} else {
+								this.history.push(buffer);
+							}
+						}
+					}
+					if(max) {
+						Vue.set(this, "last", max);
+					}
+					if(this.history.length > this.maxHistory) {
+						this.history.splice(this.maxHistory);
+					}
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.entity.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/history.html")
+	});
+})();
+
+/**
+ * 
+ * 
  * @class rsswCharacterInfo
  * @constructor
  * @module Components
  */
-rsSystem.component("rsswCharacterInfo", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.RSSWStats,
-		rsSystem.components.RSCore
-	],
-	"props": {
-		"character": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"mounted": function() {
-		this.character.$on("modified", this.update);
-		rsSystem.register(this);
-		this.update();
-	},
-	"data": function() {
-		var data = {};
-		data.race = null;
-		data.specializations = [];
-		data.careers = [];
-		
-		return data;
-	},
-	"methods": {
-		"getSex": function() {
-			if(this.character.sex) {
-				var index = this.character.sex.indexOf(":");
-				if(index === -1) {
-					return this.character.sex;
-				}
-				return this.character.sex.substring(index + 1);
+(function() {
+	var storageKey = "_rs_infoComponentKey";
+	
+	rsSystem.component("rsswCharacterInfo", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"character": {
+				"required": true,
+				"type": Object
 			}
-			return "";
 		},
-		"update": function() {
-			var buffer,
-				x;
+		"data": function() {
+			var data = {};
 			
-			Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
-			this.specializations.splice(0);
-			this.careers.splice(0);
-			if(this.character.archetype) {
-				for(x=0; x<this.character.archetype.length; x++) {
-					buffer = this.universe.nouns.archetype[this.character.archetype[x]];
-					if(buffer) {
-						switch(buffer.classification) {
-							case "secondary":
-								this.specializations.push(buffer);
-								break;
-							case "primary":
-								this.careers.push(buffer);
-								break;
+			data.storageKeyID = storageKey + this.character.id;
+			
+			data.race = null;
+			data.energy_consumption = 0;
+			data.energy_output = 0;
+			data.encumberance_max = 0;
+			data.encumberance = 0;
+			data.experience = 0;
+			data.credits = 0;
+	
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+			
+			data.piloting = null;
+			data.location = null;
+			data.inside = null;
+			
+			data.specializations = [];
+			data.abilities = [];
+			data.inventory = [];
+			data.loadout = [];
+			data.items = [];
+			data.rooms = [];
+			
+			data.careers = [];
+			
+			data.calculating = false;
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.universe.$on("model:modified", this.updateFromUniverse);
+			this.character.$on("modified", this.update);
+			this.updateFromUniverse();
+			this.update();
+		},
+		"methods": {
+			"showInfo": function(view) {
+				if(this.isOwner(view)) {
+					rsSystem.EventBus.$emit("display-info", {
+						"source": this.character,
+						"record": view
+					});
+				}
+			},
+			"exitEntity": function(entity) {
+				this.character.commit({
+					"inside": null
+				});
+			},
+			"stopPiloting": function(entity) {
+				entity.commit({
+					"entity": null
+				});
+			},
+			"updateCharacter": function() {
+				if(!this.calculating) {
+					Vue.set(this, "calculating", true);
+					this.character.recalculateProperties();
+					setTimeout(() => {
+						Vue.set(this, "calculating", false);
+					}, 1000);
+				}
+			},
+			"getSex": function() {
+				if(this.character.sex) {
+					var index = this.character.sex.indexOf(":");
+					if(index === -1) {
+						return this.character.sex;
+					}
+					return this.character.sex.substring(index + 1);
+				}
+				return "";
+			},
+			"getEnergyIcon": function() {
+				if(this.energy_consumption > this.energy_output) {
+					return "far fa-battery-empty rs-red";
+				} else if(this.energy_consumption == this.energy_output || this.energy_consumption > this.energy_output - (this.energy_output * .15)) {
+					return "far fa-battery-quarter rs-orange";
+				} else if(this.energy_consumption && this.energy_output) {
+					return "far fa-battery-three-quarters rs-green";
+				} else {
+					return "far fa-battery-full rs-green";
+				}
+			},
+			"getEncumberanceIcon": function() {
+				if(this.encumberance > this.encumberance_max) {
+					return "fas fa-person-carry rs-red";
+				} else if(this.encumberance == this.encumberance_max || this.encumberance > this.encumberance_max - (this.encumberance_max * .15)) {
+					return "fas fa-person-carry rs-orange";
+				} else {
+					return "fas fa-person-carry rs-green";
+				}
+			},
+			"toggleDescription": function() {
+				if(this.state.viewing) {
+					Vue.set(this.state, "viewing", false);
+				} else {
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
+					Vue.set(this.state, "viewing", true);
+				}
+			},
+			"changed": function(property, value) {
+				var change = {};
+				change[property] = value;
+				this.character.commit(change);
+			},
+			"changeEvent": function(property, value) {
+				var change = {};
+				change[property] = value;
+				this.character.commit(change);
+			},
+			"updateFromUniverse": function() {
+				var buffer,
+					hold,
+					x;
+
+				for(x=0; !hold && x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.classification === "ship" && buffer.entity === this.character.id) {
+						hold = buffer;
+					}
+				}
+				if(hold) {
+					Vue.set(this, "piloting", hold);
+				} else {
+					Vue.set(this, "piloting", null);
+				}
+
+				hold = 0;
+				if(this.character.item) {
+					if(this.items.length !== this.character.item.length) {
+						this.items.splice(0);
+						if(this.character.item && this.character.item.length) {
+							for(x=0; x<this.character.item.length; x++) {
+								buffer = this.universe.nouns.item[this.character.item[x]];
+								if(buffer) {
+									hold += (buffer.encumberance || 0);
+									this.items.push(buffer);
+								} else {
+									console.warn("Item Not Found: " + this.character.item[x]);
+								}
+							}
+						}
+					} else {
+						for(x=0; x<this.character.item.length; x++) {
+							buffer = this.universe.nouns.item[this.character.item[x]];
+							if(buffer) {
+								hold += (buffer.encumberance || 0);
+							} else {
+								console.warn("Item Not Found: " + this.character.item[x]);
+							}
 						}
 					}
 				}
+				Vue.set(this, "encumberance", hold);
+			},
+			"update": function() {
+				var buffer,
+					x;
+				
+				Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
+				this.specializations.splice(0);
+				this.abilities.splice(0);
+				this.careers.splice(0);
+				this.rooms.splice(0);
+				
+				if(this.experience !== this.character.xp) {
+					Vue.set(this, "experience", this.character.xp || 0);
+				}
+				if(this.description !== this.character.description) {
+					Vue.set(this, "description", this.character.description);
+				}
+				if(this.credits !== this.character.credits) {
+					Vue.set(this, "credits", this.character.credits || 0);
+				}
+				if((!this.location && this.character.location) || (this.location && this.location.id !== this.character.location)) {
+					Vue.set(this, "location", this.universe.indexes.location.index[this.character.location]);
+				}
+				if((!this.inside && this.character.inside) || (this.inside && this.inside.id !== this.character.inside)) {
+					Vue.set(this, "inside", this.universe.indexes.entity.index[this.character.inside]);
+				}
+				if(this.character.description) {
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
+				}
+				this.encumberance_max = 5 + this.character.brawn + (this.character.encumberance_bonus || 0);
+				if(this.character.room && this.character.room.length) {
+					for(x=0; x<this.character.room.length; x++) {
+						buffer = this.universe.nouns.room[this.character.room[x]];
+						if(buffer) {
+							this.rooms.push(buffer);
+						} else {
+							console.warn("Room Not Found: " + this.character.room[x]);
+						}
+					}
+				}
+				
+				if(this.character.archetype) {
+					for(x=0; x<this.character.archetype.length; x++) {
+						buffer = this.universe.nouns.archetype[this.character.archetype[x]];
+						if(buffer) {
+							switch(buffer.classification) {
+								case "secondary":
+									this.specializations.push(buffer);
+									break;
+								case "primary":
+									this.careers.push(buffer);
+									break;
+							}
+						}
+					}
+				}
+	
+				this.energy_consumption = this.character.energy_consume || 0;
+				this.energy_output = this.character.energy_out || 0;
+				
+				if(this.character.ability) {
+					for(x=0; x<this.character.ability.length; x++) {
+						buffer = this.universe.nouns.ability[this.character.ability[x]];
+						this.abilities.push(buffer);
+					}
+				}
 			}
-		}
-	},
-	"beforeDestroy": function() {
-		this.character.$off("modified", this.update);
-	},
-	"template": Vue.templified("components/rssw/character/info.html")
-});
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("model:modified", this.updateFromUniverse);
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/info.html")
+	});
+})();
 
+
+/**
+ * 
+ * 
+ * @class rsswEntityJournal
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_journalComponentKey";
+	
+	rsSystem.component("rsswEntityJournal", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.storageKeyID = storageKey + this.character.id;
+	
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+			
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.character.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"toggleDescription": function() {
+				if(this.state.viewing) {
+					Vue.set(this.state, "viewing", false);
+				} else {
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
+					Vue.set(this.state, "viewing", true);
+				}
+			},
+			"changed": function(property, value) {
+				var change = {};
+				change[property] = value;
+				this.character.commit(change);
+			},
+			"update": function() {
+				var buffer,
+					x;
+				
+				if(this.character.description) {
+					Vue.set(this, "mdDescription", this.rsshowdown(this.character.description, this.character));
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.character.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/character/info.html")
+	});
+})();
 /**
  * 
  * 
@@ -23467,10 +32872,38 @@ rsSystem.component("rsswCharacterInfo", {
  */
 (function() {
 	var levelBars = [0,1,2,3,4];
+	var instance = 0;
+
+	var rollProperties = [{
+		"icon": "ra ra-bomb-explosion",
+		"property": "success",
+		"label": "Success"
+	}, {
+		"icon": "fad fa-jedi",
+		"property": "advantage",
+		"label": "Advantage"
+	}, {
+		"icon": "xwm xwing-miniatures-font-epic",
+		"property": "triumph",
+		"label": "Triumph"
+	}, {
+		"icon": "fal fa-triangle rot180",
+		"property": "failure",
+		"label": "Failure"
+	}, {
+		"icon": "rsswx rsswx-threat",
+		"property": "threat",
+		"label": "Threat"
+	}, {
+		"icon": "rsswx rsswx-despair",
+		"property": "despair",
+		"label": "Despair"
+	}];
 	
 	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
 		],
@@ -23479,9 +32912,14 @@ rsSystem.component("rsswCharacterInfo", {
 				"required": true,
 				"type": Object
 			},
-			"skills": {
-				"required": true,
+			"existing": {
 				"type": Array
+			},
+			"debug": {
+				"type": Boolean
+			},
+			"named": {
+				"type": String
 			},
 			"state": {
 				"required": true,
@@ -23490,25 +32928,41 @@ rsSystem.component("rsswCharacterInfo", {
 		},
 		"data": function() {
 			var data = {};
-			
+
+			data.rollProperties = rollProperties;
+			data.instance = instance++;
 			data.levelBars = levelBars;
+			data.skills = [];
 
 			return data;
 		},
 		"mounted": function() {
 			this.character.$on("modified", this.update);
 			rsSystem.register(this);
+			this.update();
 		},
 		"methods": {
+			"clearRoll": function(skill) {
+				Vue.delete(this.state.rolls, skill);
+			},
+			"skillTouched": function(skill) {
+				this.$emit("touched", skill);
+			},
+			"isVisible": function(skill) {
+				return !this.state.search || skill._search.indexOf(this.state.search) !== -1;
+			},
 			"getDice": function(skill) {
 				var roll = [], x;
 
-				for (x = 0; x < this.character[skill.base]; x++) {
+				for (x = 0; x < this.character[skill.base] ||  x < this.character[skill.propertyKey]; x++) {
 					if (x < this.character[skill.base] && x < this.character[skill.propertyKey]) {
 						roll.push("fas fa-dice-d12 rs-yellow");
 					} else {
-						roll.push("fas fa-dice-d8 rs-green rot45");
+						roll.push("fas fa-dice-d8 rs-green");
 					}
+				}
+				for (x = 0; x < this.character[skill.bonusKey]; x++) {
+					roll.push("fas fa-dice-d6 rs-lightblue");
 				}
 				return roll;
 			},
@@ -23516,6 +32970,27 @@ rsSystem.component("rsswCharacterInfo", {
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
+				var buffer,
+					x;
+
+				this.skills.splice(0);
+				
+				if(this.named) {
+					for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+						if(!this.universe.indexes.skill.listing[x].hidden && !this.universe.indexes.skill.listing[x].obscured && this.universe.indexes.skill.listing[x].section === this.named) {
+							this.skills.push(this.universe.indexes.skill.listing[x]);
+						}
+					}
+				}
+				
+				if(this.existing) {
+					for(x=0; x<this.existing.length; x++) {
+						this.skills.push(this.existing[x]);
+					}
+				}
+				
+				this.uniqueByID(this.skills);
+				this.skills.sort(this.sortData);
 				this.$forceUpdate();
 			}
 		},
@@ -23538,15 +33013,21 @@ rsSystem.component("rsswCharacterInfo", {
 	
 	var levelBars = [0,1,2,3,4];
 
+	var instance = 0;
+	
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSSWStats,
 			rsSystem.components.RSCore
 		],
 		"props": {
 			"character": {
 				"required": true,
+				"type": Object
+			},
+			"state": {
 				"type": Object
 			}
 		},
@@ -23555,23 +33036,33 @@ rsSystem.component("rsswCharacterInfo", {
 			
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
-			data.state = this.loadStorage(data.storageKeyID, {
-				"hideNames": false,
-				"search": ""
-			});
+			data.leveling = "";
+//			data.state = this.loadStorage(data.storageKeyID, {
+//				"hideNames": false,
+//				"search": ""
+//			});
 
+			data.instance = instance++;
+			data.customSkills = [];
+			data.levelSkills = [];
+			data.subSkills = [];
+			
+			if(!this.state.rolls) {
+				Vue.set(this.state, "rolls", {});
+			}
+			
 			return data;
 		},
 		"watch": {
-			"state": {
-				"deep": true,
-				"handler": function() {
-					if(this.state.search !== this.state.search.toLowerCase()) {
-						Vue.set(this.state, "search", this.state.search.toLowerCase());
-					}
-					this.saveStorage(this.storageKeyID, this.state);
-				}
-			}
+//			"state": {
+//				"deep": true,
+//				"handler": function() {
+//					if(this.state.search !== this.state.search.toLowerCase()) {
+//						Vue.set(this.state, "search", this.state.search.toLowerCase());
+//					}
+//					this.saveStorage(this.storageKeyID, this.state);
+//				}
+//			}
 		},
 		"mounted": function() {
 			this.character.$on("modified", this.update);
@@ -23579,6 +33070,77 @@ rsSystem.component("rsswCharacterInfo", {
 			this.update();
 		},
 		"methods": {
+			"viewSkill": function(skill) {
+				this.showInfo(this.universe.indexes.skill.lookup[skill], this.entity);
+			},
+			"skillTouched": function(skill) {
+				if(this.state.rollSkill) {
+					Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+				} else if(this.leveling === skill.id) {
+					this.viewSkill(skill.id);
+				}
+				Vue.set(this, "leveling", skill.id);
+			},
+			"getXPCost": function(skill, direction) {
+				skill = this.universe.indexes.skill.lookup[skill];
+				if(!skill) {
+					return "";
+				}
+				
+				var calculating = this.character[skill.propertyKey] || 0;
+//				console.log("Cal: ", calculating);
+				if(calculating >= 5) {
+					return "X";
+				}
+				
+				if(direction > 0) {
+					return (this.character[skill.enhancementKey]?5:10) * (calculating + 1);
+				} else {
+					return -1 * (this.character[skill.enhancementKey]?5:10) * (calculating);
+				}
+			},
+			"levelSkill": function(skill, direction) {
+				skill = this.universe.indexes.skill.lookup[skill];
+				if(!skill) {
+					return "";
+				}
+
+				var calculating = this.character[skill.propertyKey] || 0,
+					cost = this.getXPCost(skill.id, direction),
+					change = {};
+				
+//				console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp)}));
+				if(direction > 0 && cost <= this.character.xp) {
+					change[skill.propertyKey] = calculating + 1;
+					change.xp = this.character.xp - cost;
+					if(!isNaN(change.xp)) {
+						this.character.commit(change);
+					}
+				} else if(direction < 0 && calculating > 0) {
+					change[skill.propertyKey] = calculating - 1;
+					change.xp = this.character.xp - cost;
+					if(!isNaN(change.xp)) {
+						this.character.commit(change);
+					}
+				}
+			},
+			"getDiceExpression": function(skill) {
+				var roll = {},
+					s,
+					x;
+				
+				s = this.character[skill.propertyKey] || 0;
+				roll.b = this.character[skill.bonusKey] || 0;
+				if(this.character[skill.base] < s) {
+					roll.a = s - this.character[skill.base];
+					roll.p = this.character[skill.base];
+				} else {
+					roll.a = this.character[skill.base] - s;
+					roll.p = s;
+				}
+
+				return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
+			},
 			"getDice": function(skill) {
 				var roll = [], x;
 
@@ -23589,6 +33151,9 @@ rsSystem.component("rsswCharacterInfo", {
 						roll.push("fas fa-dice-d8 rs-green rot45");
 					}
 				}
+				for (x = 0; this.character[skill.bonusKey] && x < this.character[skill.bonusKey]; x++) {
+					roll.push("fas fa-dice-d6 rs-lightblue");
+				}
 
 				return roll;
 			},
@@ -23596,8 +33161,30 @@ rsSystem.component("rsswCharacterInfo", {
 				return !!this.character[skill.enhancementKey];
 			},
 			"update": function() {
-				var buffer, x;
+				var mapped = {},
+					buffer,
+					x;
 
+				this.customSkills.splice(0);
+				this.levelSkills.splice(0);
+				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+					if(this.universe.indexes.skill.listing[x].section) {
+						this.levelSkills.push(this.universe.indexes.skill.listing[x]);
+					}
+				}
+				if(this.character.skill) {
+					for(x=0; x<this.character.skill.length; x++) {
+						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
+						if(buffer && !mapped[buffer.id]) {
+							this.customSkills.push(buffer);
+							this.levelSkills.push(buffer);
+							mapped[buffer.id] = true;
+						}
+					}
+				}
+				this.uniqueByID(this.levelSkills);
+				this.levelSkills.sort(this.sortData);
+				
 				this.$forceUpdate();
 			}
 		},
@@ -23628,26 +33215,65 @@ rsSystem.component("rsswCharacterStats", {
 			"type": Object
 		}
 	},
-	"mounted": function() {
-		this.character.$on("modified", this.update);
-		rsSystem.register(this);
-	},
 	"data": function() {
 		var data = {};
 		
 		data.keys = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
+		data.leveling = "";
 		
 		return data;
 	},
+	"mounted": function() {
+		this.character.$on("modified", this.update);
+		rsSystem.register(this);
+	},
 	"methods": {
+		"viewSkill": function(skill) {
+			this.showInfo(this.universe.indexes.skill.lookup["skill:" + skill], this.entity);
+		},
+		"skillTouched": function(skill) {
+			if(this.leveling === skill) {
+				this.viewSkill(skill);
+			}
+			Vue.set(this, "leveling", skill);
+		},
+		"noIncrease": function(stat) {
+			console.warn("Stat Check[" + stat + "]: ", this.character[stat], this.getXPCost(stat, 1), this.character.xp);
+			return this.character[stat] >= 5 || this.getXPCost(stat, 1) > this.character.xp;
+		},
+		"canDecrease": function(stat) {
+			return this.character._coreData[stat] === undefined || this.character._coreData[stat] <= 0;
+		},
+		"getXPCost": function(stat, dir) {
+			if(dir > 0) {
+				return (parseInt(this.character[stat]) + dir) * 10;
+			} else {
+				return -1 * parseInt(this.character[stat]) * 10;
+			}
+		},
+		"levelStat": function(stat, direction) {
+			var calculating = this.character[stat] || 0,
+				cost = this.getXPCost(stat, direction),
+				change = {};
+			
+//			console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp), calculating}));
+			if(direction > 0 && cost <= this.character.xp) {
+				change[stat] = (this.character._coreData[stat] || 0) + 1;
+				change.xp = this.character.xp - cost;
+				if(!isNaN(change.xp)) {
+					this.character.commit(change);
+				}
+			} else if(direction < 0 && calculating > 0) {
+				change[stat] = (this.character._coreData[stat] || 0)  - 1;
+				change.xp = this.character.xp - cost;
+				if(!isNaN(change.xp)) {
+					this.character.commit(change);
+				}
+			}
+//			console.log("Result: ", change);
+		},
 		"update": function() {
 			this.$forceUpdate();
-		},
-		"getXPCost": function(stat) {
-			return (parseInt(this.character[stat]) + 1) * 10;
-		},
-		"levelStat": function(stat) {
-			console.log("Level Stat: " + stat);
 		}
 	},
 	"beforeDestroy": function() {
@@ -23658,110 +33284,1989 @@ rsSystem.component("rsswCharacterStats", {
 
 
 /**
+ *
+ *
+ * @class rsswEntityWeaponItem
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_weaponitemComponentKey:";
+
+	var rangeType = "itemtype:rangedweapon",
+		meleeType = "itemtype:meleeweapon";
+
+	var rangeBands = [
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+
+	var rangeBandDifficulty = {
+		"engaged": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"short": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"medium": {
+			"difficulty": 2,
+			"challenge": 0,
+			"setback": 0
+		},
+		"long": {
+			"difficulty": 3,
+			"challenge": 0,
+			"setback": 0
+		},
+		"extreme": {
+			"difficulty": 4,
+			"challenge": 0,
+			"setback": 0
+		}
+	};
+
+	rsSystem.component("rsswEntityWeaponItem", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x;
+
+			data.storageKeyID = storageKey + this.entity.id;
+
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+
+			data.rangeBonus = 0;
+			data.rangeBands = rangeBands;
+			data.adjustments = {};
+			data.equipped = [];
+			data.items = [];
+
+			for(x=0; x<rangeBands.length; x++) {
+				data.adjustments[rangeBands[x]] = {};
+			}
+
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.entity.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"getAttackDice": function(item) {
+				var pool = this.getSkillRoll(item.skill_check);
+
+				// TODO: Compute?
+
+				return this.renderRoll(pool);
+			},
+			"getWeaponDamage": function(item) {
+				var damage;
+				if(item.damage) {
+					damage = this.universe.calculateExpression(item.damage, item, this.entity);
+				} else {
+					damage = 0;
+				}
+				return damage;
+			},
+			"getRangeBandDifficulty": function(item, band) {
+				var pool = Object.assign({}, rangeBandDifficulty[band]),
+					x,
+					y;
+
+				if(this.adjustments[band]) {
+					for(x=0; x<this.diceTypes.length; x++) {
+						if(this.adjustments[band][this.diceTypes[x]]) {
+							pool[this.diceTypes[x]] = (pool[this.diceTypes[x]] || 0) + this.adjustments[band][this.diceTypes[x]];
+						}
+					}
+				}
+
+				// TODO: Compute?
+				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
+					return [];
+				}
+
+				switch(band) {
+					case "engaged":
+						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
+							pool.difficulty = (pool.difficulty || 0) + 2;
+						}
+						break;
+				}
+
+				return this.renderRoll(pool);
+			},
+			"update": function() {
+				var mapped = {},
+					buffer,
+					item,
+					keys,
+					slot,
+					i,
+					x;
+
+				for(x=0; x<this.items.length; x++) {
+					this.items[x].$off("modified", this.update);
+				}
+
+				this.equipped.splice(0);
+				this.items.splice(0);
+
+				if(this.entity.equipped && this.entity.equipped.item) {
+					keys = Object.keys(this.entity.equipped.item);
+
+					for(x=0; x<keys.length; x++) {
+						slot = this.universe.indexes.slot.lookup[keys[x]];
+						if(slot && slot.combat_slot && this.entity.equipped.item[slot.id] && this.entity.equipped.item[slot.id].length) {
+							for(i=0; i<this.entity.equipped.item[slot.id].length; i++) {
+								item = this.universe.indexes.item.lookup[this.entity.equipped.item[slot.id][i]];
+								if(item && !mapped[item.id]) {
+									item.$on("modified", this.update);
+									this.equipped.push(item);
+									mapped[item.id] = true;
+								} else {
+									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
+								}
+							}
+						} else {
+							console.warn("Unknown or Non-Combat Equipment Slot? " + keys[x], slot, this.entity);
+						}
+					}
+				}
+
+				if(this.entity.item && this.entity.item.length) {
+					for(x=0; x<this.entity.item.length; x++) {
+						item = this.universe.indexes.item.lookup[this.entity.item[x]];
+						if(item && item.damage && !mapped[item.id]) {
+							item.$on("modified", this.update);
+							this.items.push(item);
+						}
+					}
+				}
+
+				for(x=0; x<rangeBands.length; x++) {
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.delete(this.adjustments[rangeBands[x]], this.diceTypes[i]);
+					}
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
+					}
+				}
+
+				this.rangeBonus = this.entity.range || 0;
+			}
+		},
+		"beforeDestroy": function() {
+			this.entity.$off("modified", this.update);
+			for(var x=0; x<this.items.length; x++) {
+				this.items[x].$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/rssw/character/weapons/item.html")
+	});
+})();
+
+
+/**
+ *
+ *
+ * @class rsswEntityWeapons
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_weaponsComponentKey:";
+
+	var rangeType = "itemtype:rangedweapon",
+		meleeType = "itemtype:meleeweapon";
+
+	var rangeBands = [
+		"engaged",
+		"short",
+		"medium",
+		"long",
+		"extreme"
+	];
+
+	var rangeBandDifficulty = {
+		"engaged": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"short": {
+			"difficulty": 1,
+			"challenge": 0,
+			"setback": 0
+		},
+		"medium": {
+			"difficulty": 2,
+			"challenge": 0,
+			"setback": 0
+		},
+		"long": {
+			"difficulty": 3,
+			"challenge": 0,
+			"setback": 0
+		},
+		"extreme": {
+			"difficulty": 4,
+			"challenge": 0,
+			"setback": 0
+		}
+	};
+
+	rsSystem.component("rsswEntityWeapons", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"universe": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x;
+
+			data.storageKeyID = storageKey + this.entity.id;
+
+			data.mdDescription = null;
+			data.description = "";
+			data.state = this.loadStorage(data.storageKeyID, {
+				"viewing": false
+			});
+
+			data.isRanged = {};
+			data.rangeBonus = 0;
+			data.rangeBands = rangeBands;
+			data.adjustments = {};
+			data.equipped = [];
+			data.items = [];
+
+			for(x=0; x<rangeBands.length; x++) {
+				data.adjustments[rangeBands[x]] = {};
+			}
+
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", follow);
+				}
+			};
+
+			this.entity.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"getAttackDice": function(item) {
+				var pool = this.getSkillRoll(item.skill_check);
+
+				// TODO: Compute?
+
+				return this.renderRoll(pool);
+			},
+			"getWeaponDamage": function(item) {
+				var damage;
+				if(item.damage) {
+					damage = this.universe.calculateExpression(item.damage, item, this.entity);
+				} else {
+					damage = 0;
+				}
+				return damage;
+			},
+			"getRangeBandDifficulty": function(item, band) {
+				var pool = Object.assign({}, rangeBandDifficulty[band]),
+					x,
+					y;
+
+				if(this.adjustments[band]) {
+					for(x=0; x<this.diceTypes.length; x++) {
+						if(this.adjustments[band][this.diceTypes[x]]) {
+							pool[this.diceTypes[x]] = (pool[this.diceTypes[x]] || 0) + this.adjustments[band][this.diceTypes[x]];
+						}
+					}
+				}
+
+				// TODO: Compute?
+				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
+					return [];
+				}
+
+				switch(band) {
+					case "engaged":
+						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
+							pool.difficulty = (pool.difficulty || 0) + 2;
+						}
+						break;
+				}
+
+				return this.renderRoll(pool);
+			},
+			"update": function() {
+				var mapped = {},
+					buffer,
+					item,
+					keys,
+					slot,
+					i,
+					x;
+
+				for(x=0; x<this.items.length; x++) {
+					this.items[x].$off("modified", this.update);
+				}
+
+				this.equipped.splice(0);
+				this.items.splice(0);
+
+				if(this.entity.equipped && this.entity.equipped.item) {
+					keys = Object.keys(this.entity.equipped.item);
+
+					for(x=0; x<keys.length; x++) {
+						slot = this.universe.indexes.slot.lookup[keys[x]];
+						if(slot && slot.combat_slot && this.entity.equipped.item[slot.id] && this.entity.equipped.item[slot.id].length) {
+							for(i=0; i<this.entity.equipped.item[slot.id].length; i++) {
+								item = this.universe.indexes.item.lookup[this.entity.equipped.item[slot.id][i]];
+								if(item && !mapped[item.id]) {
+									item.$on("modified", this.update);
+									this.equipped.push(item);
+									if(item.itemtype) {
+										this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
+									} else {
+										this.isRanged[item.id] = false;
+									}
+									mapped[item.id] = true;
+								} else {
+									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
+								}
+							}
+						} else {
+							console.warn("Unknown or Non-Combat Equipment Slot? " + keys[x], slot, this.entity);
+						}
+					}
+				}
+
+				if(this.entity.item && this.entity.item.length) {
+					for(x=0; x<this.entity.item.length; x++) {
+						item = this.universe.indexes.item.lookup[this.entity.item[x]];
+						if(item && item.damage && !mapped[item.id]) {
+							item.$on("modified", this.update);
+							this.items.push(item);
+							if(item.itemtype) {
+								this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
+							} else {
+								this.isRanged[item.id] = false;
+							}
+						}
+					}
+				}
+
+				for(x=0; x<rangeBands.length; x++) {
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.delete(this.adjustments[rangeBands[x]], this.diceTypes[i]);
+					}
+					for(i=0; i<this.diceTypes.length; i++) {
+						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
+					}
+				}
+
+				this.rangeBonus = this.entity.range || 0;
+			}
+		},
+		"beforeDestroy": function() {
+			this.entity.$off("modified", this.update);
+			for(var x=0; x<this.items.length; x++) {
+				this.items[x].$off("modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/rssw/character/weapons.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsswDiceBin
+ * @constructor
+ * @module Components
+ */
+(function() {
+
+	var rollProperties = [{
+		"icon": "ra ra-bomb-explosion",
+		"property": "success",
+		"label": "Success"
+	}, {
+		"icon": "fad fa-jedi",
+		"property": "advantage",
+		"label": "Advantage"
+	}, {
+		"icon": "xwm xwing-miniatures-font-epic",
+		"property": "triumph",
+		"label": "Triumph"
+	}, {
+		"icon": "fal fa-triangle rot180",
+		"property": "failure",
+		"label": "Failure"
+	}, {
+		"icon": "rsswx rsswx-threat",
+		"property": "threat",
+		"label": "Threat"
+	}, {
+		"icon": "rsswx rsswx-despair",
+		"property": "despair",
+		"label": "Despair"
+	}, {
+		"icon": "fad fa-circle rs-white rs-secondary-black",
+		"property": "light",
+		"label": "Light"
+	}, {
+		"icon": "fad fa-circle rs-black rs-secondary-white",
+		"property": "dark",
+		"label": "Dark"
+	}];
+	
+	
+	rsSystem.component("rsswDiceBin", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"type": Object
+			},
+			"state": {
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.rollProperties = rollProperties;
+			data.bound = false;
+			
+			if(!this.state.expression) {
+				Vue.set(this.state, "expression", "");
+			}
+			if(!this.state.history) {
+				Vue.set(this.state, "history", []);
+			}
+			
+			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			
+			if(this.entity) {
+				this.entity.$on("modified", this.update);
+				Vue.set(this, "bound", true);
+				this.update();
+			}
+		},
+		"methods": {
+			"roll": function(expression) {
+				var rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
+				rolled._expression = expression;
+				this.state.history.unshift(rolled);
+			},
+			"dismiss": function(index) {
+				this.state.history.splice(index, 1);
+			},
+			"toggleExpressions": function() {
+				Vue.set(this.state, "hideExpressions", !this.state.hideExpressions);
+			},
+			"toggleLabels": function() {
+				Vue.set(this.state, "hideLabels", !this.state.hideLabels);
+			},
+			"clear": function() {
+				if(this.state.history.length) {
+					this.state.history.splice(0);
+				} else {
+					Vue.set(this.state, "expression", "");
+				}
+			},
+			"info": function() {
+				rsSystem.EventBus.$emit("display-info", this.state.knowledge || "knowledge:dice:playerbin");
+			},
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.bound) {
+				this.entity.$off("model:modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/rssw/dice.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsswEntityEquipment
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+
+	var emptyRef = {},
+		emptySlotIndicator = {
+			"id": "__emptyslot",
+			"_type": "empty_slot",
+			"name": "Empty Slot",
+			"icon": "far fa-square",
+			"description": "An empty ${~target.name,rs-blue}$ slot on ${~base.name,rs-blue}$"
+		};
+
+	var consumedRef = {},
+		consumedSlotIndicator = {
+			"id": "__consumedslot",
+			"_type": "consumed_slot",
+			"name": "Consumed Slot",
+			"icon": "fas fa-square",
+			"description": "This ${~target.name,rs-blue}$ slot on ${~base.name,rs-blue}$ is being used as space for another component"
+		};
+
+
+	rsSystem.component("rsswEntityEquipment", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"state": {
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+
+			data.mode = this.state?this.state.mode:"short";
+			
+			data.slotMapping = {};
+			data.slotCounts = {};
+			data.slotKeys = [];
+			data.slots = {};
+			
+			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			
+			this.universe.$on("model:modified", this.updateFromUniverse);
+			this.entity.$on("modified", this.update);
+			
+			this.updateFromUniverse();
+			this.update();
+		},
+		"watch": {
+			"entity": function() {
+				this.update();
+			}
+		},
+		"methods": {
+			
+			"getSlotClass": function(slot, equipment, index) {
+				if(this.entity._relatedErrors[equipment.id]) {
+					return "rs-red";
+				}
+				if(equipment._type === emptySlotIndicator._type) {
+					return "rs-green";
+				}
+				if(equipment._type === consumedSlotIndicator._type) {
+					return "rs-orange";
+				}
+				
+				if( (this.entity[slot.accepts] && this.entity[slot.accepts].indexOf(equipment.id) === -1)
+						|| !(slot.itemtype && slot.itemtype.length && equipment.itemtype && equipment.itemtype.length && this.sharesOne(slot.itemtype, equipment.itemtype))
+						|| (slot.accepts !== equipment._type)) {
+					return "rs-light-red";
+				}
+				
+				return "rs-blue";
+			},
+			
+			"getModeClassing": function() {
+				var mode = this.mode,
+					state;
+				if(!mode && this.state) {
+					mode = this.state.mode;
+				}
+
+				if(typeof(mode) === "string") {
+					mode = mode.split(/[\s]+/);
+				} else {
+					mode = "short";
+				}
+				
+				state = mode[0];
+				
+				switch(state) {
+					case "long":
+						return state;
+					default:
+						mode;
+				}
+				
+				return "short";
+			},
+			/**
+			 * 
+			 * @method equipSlot
+			 * @param {RSSlot} slot To receive the record
+			 * @param {RSItem | RSRoom | RSEntity} record To place to the passed slot
+			 */
+			"equipSlot": function(slot, record) {
+				this.entity.equipSlot(slot, record);
+			},
+			
+			"recalculateSlots": function() {
+				var buffer,
+					hold,
+					x;
+
+				for(x=0; x<this.slotKeys.length; x++) {
+					Vue.delete(this.slots, this.slotKeys[x]);
+				}
+				this.slotKeys.splice(0);
+				if(this.entity.slot) {
+					for(x=0; x<this.entity.slot.length; x++) {
+						if(this.slots[this.entity.slot[x]]) {
+							Vue.set(this.slotCounts, this.entity.slot[x], this.slotCounts[this.entity.slot[x]] + 1);
+						} else {
+							Vue.set(this.slots, this.entity.slot[x], this.universe.indexes.slot.lookup[this.entity.slot[x]]);
+							Vue.set(this.slotCounts, this.entity.slot[x], 1);
+							this.slotKeys.push(this.entity.slot[x]);
+							if(!this.slotMapping[this.entity.slot[x]]) {
+								Vue.set(this.slotMapping, this.entity.slot[x], []);
+							}
+						}
+					}
+				}
+			},
+			
+			"getEmptyIndicator": function(slot) {
+				if(!emptyRef[slot]) {
+					emptyRef[slot] = Object.assign({}, emptySlotIndicator);
+					emptyRef[slot].id += slot;
+				}
+				return emptyRef[slot];
+			},
+			
+			"getConsumedIndicator": function(slot) {
+				if(!consumedRef[slot]) {
+					consumedRef[slot] = Object.assign({}, consumedSlotIndicator);
+					consumedRef[slot].id += slot;
+				}
+				return consumedRef[slot];
+			},
+			"updateFromUniverse": function() {
+				this.recalculateSlots();
+				this.slotKeys.sort(this.sortData);
+			},
+			"update": function() {
+				var buffer,
+					count,
+					hold,
+					keys,
+					sub,
+					i,
+					x,
+					y,
+					z;
+
+				if(this.state) {
+					Vue.set(this, "mode", this.state.mode || "short");
+				}
+				
+				
+				this.recalculateSlots();
+
+				keys = Object.keys(this.slotMapping);
+				for(x=0; x<keys.length; x++) {
+					this.slotMapping[keys[x]].splice(0);
+				}
+				
+				if(this.entity.equipped) {
+					keys = Object.keys(this.entity.equipped);
+					for(x=0; x<keys.length; x++) {
+						if(this.entity.equipped[keys[x]]) {
+							sub = Object.keys(this.entity.equipped[keys[x]]);
+							for(y=0; y<sub.length; y++) {
+								if(!this.slotMapping[sub[y]]) {
+									Vue.set(this.slotMapping, sub[y], []);
+								}
+								for(z=0; z<this.entity.equipped[keys[x]][sub[y]].length; z++) {
+									buffer = this.universe.index.lookup[this.entity.equipped[keys[x]][sub[y]][z]];
+									if(buffer) {
+										this.slotMapping[sub[y]].push(buffer);
+										if(1 < buffer.slots_used) {
+											for(i=1; i<buffer.slots_used; i++) {
+												this.slotMapping[sub[y]].push(this.getConsumedIndicator(keys[x]));
+											}
+										}
+									} else {
+										console.warn("Unable to find equipped record[" + this.entity.equipped[keys[x]][sub[y]][z] + "] for entity[" + this.id + "]");
+									}
+								}
+							}
+						}
+					}
+				}
+
+				keys = Object.keys(this.slotMapping);
+				for(x=0; x<keys.length; x++) {
+					count = this.slotCounts[keys[x]] - this.slotMapping[keys[x]].length;
+					for(z=0; z<count; z++) {
+						this.slotMapping[keys[x]].push(this.getEmptyIndicator(keys[x]));
+					}
+				}
+				
+				this.slotKeys.sort(this.sortData);
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("model:modified", this.updateFromUniverse);
+			this.entity.$off("model:modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/entity/equipped.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsswEntityKnowledge
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var controls = {
+		"formatter": {
+			"icon": function(icon) {
+				return "<span class='" + icon + "'></span>";
+			},
+			"info": function(icon) {
+				return "<span class=\"fas fa-info-circle\"></span>";
+			}
+		},
+		"sorter": {
+			"acquired": function(a, b) {
+				console.log("Sort Acquired: ", a, b);
+			}
+		},
+		"recordAction": {
+			"info": function(record) {
+				rsSystem.EventBus.$emit("display-info", record);
+			}
+		}
+	};
+
+	rsSystem.component("rsswEntityKnowledge", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			},
+			"state": {
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+
+			data.knowledge = new SearchIndex();
+			data.corpus = [];
+
+			Vue.set(this.state, "noSelect", true);
+			if(this.state && !this.state.filter) {
+				Vue.set(this.state, "filter", {});
+			}
+			if(this.state && !this.state.paging) {
+				Vue.set(this.state, "paging", {});
+			}
+			if(!this.state.paging.per) {
+				Vue.set(this.state.paging, "per", 20);
+			}
+			if(this.state && !this.state.headers) {
+				this.resetHeaders();
+			} else {
+				this.rebindHeaders();
+			}
+			
+			return data;
+		},
+		"mounted": function() {
+			this.entity.$on("modified", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"methods": {
+			"resetHeaders": function() {
+				if(!this.state.headers) {
+					Vue.set(this.state, "headers", []);
+				}
+				this.state.headers.splice(0);
+				this.state.headers.push({
+					"title": "",
+					"field": "icon"
+				});
+				this.state.headers.push({
+					"title": "Name",
+					"field": "name"
+				});
+				this.state.headers.push({
+					"title": "Acquired",
+					"field": "time"
+				});
+				this.state.headers.push({
+					"title": "Relations",
+					"field": "related"
+				});
+				this.state.headers.push({
+					"title": "Status",
+					"field": "status"
+				});
+				this.state.headers.push({
+					"title": "",
+					"field": "info",
+					"hideBlock": true,
+					"nosort": true
+				});
+				this.rebindHeaders();
+			},
+			"rebindHeaders": function() {
+				var keys,
+					x,
+					c;
+				
+				keys = Object.keys(controls);
+				for(x=0; x<this.state.headers.length; x++) {
+					for(c=0; c<keys.length; c++) {
+						if(controls[keys[c]]) {
+							if(controls[keys[c]][this.state.headers[x].field]) {
+								Vue.set(this.state.headers[x], keys[c], controls[keys[c]][this.state.headers[x].field]);
+							} else {
+//								console.log(" ! " + this.state.headers[x].field + " @ "+ keys[c]);
+								Vue.delete(this.state.headers[x], keys[c]);
+							}
+						}
+					}
+					
+					switch(this.state.headers[x].field) {
+						case "time":
+							this.state.headers[x].formatter = (empty, record) => {
+								if(!this.entity.learned) {
+									return "";
+								}
+								var date = this.entity.learned[record.id];
+								if(date) {
+									date = new Date(date);
+									date = date.toLocaleDateString();
+								} else {
+									date = "[Unknown]";
+								}
+								return "<span><span class=\"fas fa-calendar\"><span> " + date + "</span>";
+							};
+							this.state.headers[x].sorter = (a, b) => {
+								if(!this.entity.learned) {
+									return 0;
+								}
+								a = this.entity.learned[a.id] || 0;
+								b = this.entity.learned[b.id] || 0;
+								
+								if(a < b) {
+									return -1;
+								} else if(a > b) {
+									return 1;
+								} else {
+									return 0;
+								}
+							};
+							break;
+						case "status":
+							this.state.headers[x].formatter = (empty, record) => {
+								if(!this.entity.related_status) {
+									return "";
+								}
+								var status = this.entity.related_status[record.id];
+								switch(status) {
+									case "active":
+										status = "fas fa-brain";
+										break;
+									case "complete":
+										status = "fas fa-check";
+										break;
+									case "ignored":
+										status = "fas fa-times";
+										break;
+									case "favorited":
+										status = "fas fa-star";
+										break;
+									case "investigate":
+										status = "far fa-search-location";
+										break;
+									case "working":
+										status = "far fa-users-cog";
+										break;
+									case "learning":
+										status = "fad fa-book-reader";
+										break;
+									default:
+										status = "";
+								}
+								return "<span class=\"" + status + "\"><span>";
+							};
+							this.state.headers[x].sorter = (a, b) => {
+								if(!this.entity.related_status) {
+									return 0;
+								}
+								a = this.entity.related_status[a.id] || "";
+								b = this.entity.related_status[b.id] || "";
+								
+								if(a < b) {
+									return -1;
+								} else if(a > b) {
+									return 1;
+								} else {
+									return 0;
+								}
+							};
+							break;
+						case "related":
+							this.state.headers[x].formatter = (empty, record) => {
+								var count = 0;
+								
+								if(record.related) {
+									count += record.related.length;
+								}
+								
+								if(!this.entity.related_mapping) {
+									return count;
+								}
+								
+								if(this.entity.related_mapping[record.id]) {
+									count += this.entity.related_mapping[record.id].length;
+								}
+								return count;
+							};
+							this.state.headers[x].sorter = (a, b) => {
+								var ca = 0,
+									cb = 0;
+								
+								if(a.related) {
+									ca += a.related.length;
+								}
+								if(b.related) {
+									cb += b.related.length;
+								}
+								
+								if(this.entity.related_mapping) {
+									if(this.entity.related_mapping[a.id]) {
+										ca += this.entity.related_mapping[a.id].length;
+									}
+									if(this.entity.related_mapping[b.id]) {
+										cb += this.entity.related_mapping[b.id].length;
+									}
+								}
+								
+								if(ca < cb) {
+									return -1;
+								} else if(ca > cb) {
+									return 1;
+								} else {
+									return 0;
+								}
+							};
+							break;
+					}
+				}
+			},
+			"processAction": function(command) {
+				
+			},
+			"update": function() {
+				var buffer,
+					x;
+				
+				//TODO: Clean solution for forgetting data while open?
+				if(this.entity.knowledge && this.knowledge.listing.length !== this.entity.knowledge.length) {
+					for(x=0; x<this.entity.knowledge.length; x++) {
+						if(!this.knowledge.index[this.entity.knowledge] && (buffer = this.universe.indexes.knowledge.lookup[this.entity.knowledge[x]])) {
+							this.knowledge.indexItem(buffer);
+						}
+					}
+					this.$forceUpdate();
+				}
+			}
+		},
+		"beforeDestroy": function() {
+			this.entity.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/rssw/entity/knowledge.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsswEntityInside
+ * @constructor
+ * @module Components
+ */
+(function() {
+	
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+
+	rsSystem.component("rsswEntityInside", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+
+			data.availableEntities = [];
+			data.entities = [];
+			data.moving = "";
+			data.crew = 0;
+			
+			return data;
+		},
+		"mounted": function() {
+			this.universe.$on("model:modified:complete", this.update);
+			rsSystem.register(this);
+			this.update();
+		},
+		"watch": {
+			"entity": function() {
+				this.update();
+			}
+		},
+		"methods": {
+			"moveEntity": function(entity, destination) {
+				entity = this.universe.indexes.entity.index[entity];
+				if(entity && this.isOwner(entity)) {
+					entity.commit({
+						"inside": destination
+					});
+				}
+				Vue.set(this, "moving", null);
+			},
+			"showInfo": function(view) {
+				if(this.isOwner(view)) {
+					rsSystem.EventBus.$emit("display-info", {
+						"source": this.entity,
+						"record": view
+					});
+				}
+			},
+			"getCountClass": function() {
+				if(this.entity.required_crew) {
+					var p;
+					
+					p = this.crew / this.entity.required_crew;
+					
+					if(0 <= p && p < .6) {
+						return "rs-light-red";
+					} else if(.6 <= p && p < 1) {
+						return "rs-light-orange";
+					}
+				}
+				if(this.entity.maximum_crew) {
+					if(this.entity.maximum_crew < this.crew) {
+						return "rs-red";
+					}
+				}
+				return "rs-green";
+			},
+			"update": function() {
+				var crew = 0,
+					buffer,
+					x;
+
+				this.entities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.inside === this.entity.id) {
+						this.entities.push(buffer);
+						if(buffer.classification === "character" && !buffer.mob) {
+							crew++;
+						}
+					}
+				}
+				Vue.set(this, "crew", crew);
+				this.entities.sort(byName);
+				
+				this.availableEntities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(!buffer.template && !buffer.obscured && this.isOwner(buffer) && this.entities.indexOf(buffer.id) === -1 && buffer.id !== this.entity.id && buffer.inside !== this.entity.id) {
+						this.availableEntities.push(buffer);
+					}
+				}
+				this.availableEntities.sort(byName);
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("model:modified:complete", this.update);
+		},
+		"template": Vue.templified("components/rssw/ship/inside.html")
+	});
+})();
+
+/**
  * 
  * 
  * @class rsswShipStats
  * @constructor
  * @module Components
  */
-rsSystem.component("rsswShipStats", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.RSSWStats,
-		rsSystem.components.RSCore
-	],
-	"props": {
-		"ship": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"data": function() {
-		var data = {};
 
-		data.points = 0;
-		data.mounted = {};
-		data.abilities = [];
-		data.ability = null;
-		data.pilot = null;
-		
-		return data;
-	},
-	"mounted": function() {
-		this.ship.$on("modified", this.update);
-		rsSystem.register(this);
-		this.update();
-	},
-	"methods": {
-		"update": function() {
-			var points = this.ship.points || 0,
-				buffer,
-				x;
-			
-			buffer = Object.keys(this.mounted);
-			for(x=0; x< buffer.length; x++) {
-				Vue.delete(this.mounted, buffer[x]);
+(function() {
+
+	var byName = function(a, b) {
+		a = (a.name || "").toLowerCase();
+		b = (b.name || "").toLowerCase();
+		if(a < b) {
+			return -1;
+		} else if(a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+	
+	rsSystem.component("rsswShipStats", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSSWStats,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"ship": {
+				"required": true,
+				"type": Object
 			}
+		},
+		"data": function() {
+			var data = {};
+
+			data.encumberance = 0;
+			data.properties = {};
+			data.image = null;
+			data.items = [];
+			data.points = 0;
 			
-			buffer = this.universe.nouns.entity[this.ship.pilot];
-			if(buffer) {
-				if(this.pilot) {
-					if(this.pilot.id !== buffer.id) {
-						this.pilot.$off("modified", this.update);
+			data.availablePilots = [];
+			data.editingPilot = false;
+			data.setPilot = null;
+			data.pilot = null;
+			data.skill = 0;
+
+			data.editingPilotAbility = false;
+			data.abilityDescription = "";
+			data.setPilotAbility = "";
+			data.pilotAbilities = [];
+			data.pilotAbility = null;
+			data.abilities = [];
+			data.ability = null;
+
+			data.trackEffectTimeout = null;
+			data.showEffectInfo = null;
+			data.effectIndicators = {};
+			data.effectDismissTimer = {};
+			data.effectDismissCount = {};
+			data.effectSelector = null;
+			data.availableEffects = {};
+			data.effectsOpen = false;
+			data.activeEffects = [];
+			data.shipEffects = [];
+
+			data.availableSlots = [];
+			data.mounted = [];
+			data.points = 0;
+			
+			return data;
+		},
+		"watch": {
+			"ship": function() {
+				this.update();
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			
+//			this.$el.onclick = (event) => {
+//				var follow = event.srcElement.attributes.getNamedItem("data-id");
+//				if(follow && (follow = this.universe.index.index[follow.value])) {
+//					rsSystem.EventBus.$emit("display-info", follow);
+//				}
+//			};
+
+			Vue.set(this, "effectSelector", $(this.$el).find(".effect-selector"));
+
+			this.universe.$on("model:modified:complete", this.updateFromUniverse);
+			this.ship.$on("modified", this.update);
+			this.updateFromUniverse();
+			this.update();
+		},
+		"methods": {
+//			"isOwner": function(record) {
+//				return !record.template && (record.owner === this.player.id || (!record.owner && record.owners && record.owners.indexOf(this.player.id) !== -1));
+//			},
+			"getAbilityIconClass": function(ability) {
+				switch(ability.activation) {
+					case "passive":
+						return "rs-green";
+					case "automatic":
+						return "rs-yellow";
+					default:
+						return "";
+				}
+			},
+			"toggleEffectMenu": function(state) {
+				if(state === undefined) {
+					Vue.set(this, "effectsOpen", !this.effectsOpen);
+				} else {
+					Vue.set(this, "effectsOpen", !!state);
+				}
+				
+				if(this.effectsOpen) {
+					this.effectSelector.css({"max-height": (100 + 50 * this.shipEffects.length) + "px"});
+				} else {
+					this.effectSelector.css({"max-height": ""});
+				}
+			},
+			"focusEffect": function(effect) {
+				setTimeout(() => {
+					if(this.trackEffectTimeout) {
+						clearTimeout(this.trackEffectTimeout);
+						this.trackEffectTimeout = null;
+					}
+					Vue.set(this, "showEffectInfo", effect.id);
+				}, 1);
+			},
+			"blurEffect": function(effect) {
+				this.trackEffectTimeout = setTimeout(() => {
+					Vue.set(this, "showEffectInfo", null);
+					this.trackEffectTimeout = null;
+				}, 500);
+			},
+			"getEffectIcon": function(effect) {
+				if(effect) {
+					if(effect.icon) {
+						return effect.icon;
+					}
+					if(this.availableEffects[effect._sourced]) {
+						return this.availableEffects[effect._sourced].icon;
+					}
+				}
+				return "ra ra-doubled";
+			},
+			"assignEffect": function(effect) {
+				this.ship.assignEffect(effect);
+				this.toggleEffectMenu(false);
+			},
+			"hasEffectHasIndicators": function(effect) {
+				return this.availableEffects[effect._sourced] && this.availableEffects[effect._sourced].indicators;
+			},
+			"alterIndicator": function(effect, indicator) {
+				if(effect.indicator !== indicator) {
+					this.ship.assignEffectIndicator(effect, indicator);
+				}
+			},
+			"dismissEffect": function(effect) {
+				console.log("Dismiss: " + effect.id);
+				if(this.effectDismissTimer[effect.id] && (Date.now() - this.effectDismissTimer[effect.id]) < 1000) {
+					this.effectDismissCount[effect.id] += 1;
+					if(this.effectDismissCount[effect.id] === 3) {
+						this.ship.dismissEffect(effect);
+					}
+				} else {
+					this.effectDismissTimer[effect.id] = Date.now();
+					this.effectDismissCount[effect.id] = 1;
+				}
+			},
+			"editPilot": function() {
+				Vue.set(this, "editingPilot", !this.editingPilot);
+			},
+			"editPilotAbility": function() {
+				Vue.set(this, "editingPilotAbility", !this.editingPilotAbility);
+			},
+			"showInfo": function(view) {
+				rsSystem.EventBus.$emit("display-info", {
+					"base": this.ship,
+					"target": this.pilot,
+					"record": view
+				});
+			},
+			"getPilotClass": function() {
+				if(!this.pilot) {
+					return "rs-light-red";
+				}
+				
+				if(this.pilot && this.pilot.inside !== this.ship.id) {
+					return "rs-light-orange";
+				}
+				
+				return "rs-white";
+			},
+			"setNewPilot": function(setPilot) {
+				Vue.set(this, "editingPilot", false);
+				
+				if(setPilot === "") {
+					setPilot = null;
+				}
+				
+				this.ship.commit({
+					"entity": setPilot
+				});
+			},
+			"setNewPilotAbility": function(setPilotAbility) {
+				Vue.set(this, "editingPilotAbility", false);
+				
+				if(setPilotAbility === "") {
+					setPilotAbility = null;
+				}
+				
+				this.ship.commit({
+					"ship_active_abilities": [setPilotAbility]
+				});
+				
+			},
+			"recalculate": function() {
+				this.ship.recalculateProperties();
+			},
+			"updated": function(field) {
+				var committing = {};
+				committing[field] = this.properties[field];
+				this.ship.commit(committing);
+				console.log("Commit: ", committing);
+			},
+			"updateFromUniverse": function() {
+				var buffer,
+					hold,
+					x;
+
+				this.availablePilots.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.classification === "character" && this.isOwner(buffer) && buffer.inside === this.ship.id) {
+						this.availablePilots.push(buffer);
+					}
+				}
+				this.availablePilots.sort(byName);
+
+				for(x=0; x<this.shipEffects.length; x++) {
+					Vue.delete(this.availableEffects, this.shipEffects[x].id);
+				}
+				this.shipEffects.splice(0);
+				for(x=0; x<this.universe.indexes.effect.listing.length; x++) {
+					buffer = this.universe.indexes.effect.listing[x];
+					if(buffer.alters && buffer.alters.indexOf("ship") !== -1) {
+						Vue.set(this.availableEffects, buffer.id, buffer);
+						if(!buffer.obscured || this.player.master) {
+							this.shipEffects.push(buffer);
+						}
+					}
+				}
+				this.shipEffects.sort(this.sortData);
+			},
+			"update": function() {
+				var points = this.ship.points || 0,
+					buffer,
+					hold,
+					x;
+
+				if(this.ship.profile && this.universe.nouns.image[this.ship.profile]) {
+					Vue.set(this, "image", this.universe.nouns.image[this.ship.profile]);
+				} else {
+					Vue.set(this, "image", null);
+				}
+
+				buffer = this.universe.nouns.entity[this.ship.entity];
+				if(buffer) {
+					if(this.pilot) {
+						if(this.pilot.id !== buffer.id) {
+							this.pilot.$off("modified", this.update);
+							buffer.$on("modified", this.update);
+							Vue.set(this, "pilot", buffer);
+						}
+					} else {
 						buffer.$on("modified", this.update);
 						Vue.set(this, "pilot", buffer);
 					}
-				} else {
-					buffer.$on("modified", this.update);
-					Vue.set(this, "pilot", buffer);
+				} else if(this.pilot) {
+					this.pilot.$off("modified", this.update);
+					Vue.set(this, "pilot", null);
 				}
-			} else if(this.pilot) {
+
+				this.pilotAbilities.splice(0);
+				this.abilities.splice(0);
+				
+				for(x=0; this.ship.ability && x<this.ship.ability.length; x++) {
+					buffer = this.universe.nouns.ability[this.ship.ability[x]];
+					if(buffer && buffer.type === "ship") {
+						this.abilities.push(buffer);
+					}
+				}
+				
+				if(this.pilot) {
+					Vue.set(this, "skill", this.pilot.pilot_skill || 0);
+					
+					for(x=0; this.pilot.ability && x<this.pilot.ability.length; x++) {
+						buffer = this.universe.nouns.ability[this.pilot.ability[x]];
+						if(buffer) {
+							switch(buffer.type) {
+								case "ship":
+									this.abilities.push(buffer);
+									break;
+								case "pilot":
+									this.pilotAbilities.push(buffer);
+									break;
+							}
+						} else {
+							console.warn("Unidentified Ability: " + this.pilot.ability[x]);
+						}
+					}
+				}
+				
+				if(this.pilot && this.pilot.ability && this.ship.ship_active_abilities && this.ship.ship_active_abilities.length && this.pilot.ability.indexOf(this.ship.ship_active_abilities[0]) !== -1 && (buffer = this.universe.indexes.ability.index[this.ship.ship_active_abilities[0]])) {
+					Vue.set(this, "abilityDescription", this.rsshowdown(buffer.description, this.ship, this.pilot));
+					Vue.set(this, "pilotAbility", buffer);
+				} else {
+					Vue.set(this, "abilityDescription", this.rsshowdown(this.ship.description || "", this.ship));
+					Vue.set(this, "pilotAbility", null);
+				}
+				
+				this.availableSlots.splice(0);
+				for(x=0; this.ship.slot && x<this.ship.slot.length; x++) {
+					buffer = this.universe.indexes.slot.index[this.ship.slot[x]];
+					if(buffer) {
+						this.availableSlots.push(buffer);
+					}
+				}
+				
+				this.mounted.splice(0);
+				for(x=0; this.ship.item && x<this.ship.item.length; x++) {
+					buffer = this.universe.indexes.item.index[this.ship.item[x]];
+					if(buffer && buffer.needs_slot) {
+						this.mounted.push(buffer);
+					}
+				}
+
+				if(this.ship.item) {
+					if(this.items.length !== this.ship.item.length) {
+						this.items.splice(0);
+						hold = 0;
+						for(x=0; x<this.ship.item.length; x++) {
+							buffer = this.universe.indexes.item.index[this.ship.item[x]];
+							if(buffer) {
+								hold += buffer.encumberance;
+								this.items.push(buffer);
+							}
+						}
+						Vue.set(this, "encumberance", hold);
+					}
+				} else {
+					this.items.splice(0);
+				}
+				
+				if(this.ship.effect && this.ship.effect.length !== this.activeEffects.length) {
+					this.activeEffects.splice(0);
+					for(x=0; x<this.ship.effect.length; x++) {
+						this.activeEffects.push(this.ship.effect[x]);
+						Vue.set(this.effectIndicators, this.ship.effect[x].id, this.ship.effect[x].indicator || "");
+					}
+					this.activeEffects.sort(this.sortData);
+				}
+				
+				if(this.ship.name) {
+					Vue.set(this.properties, "name", this.ship.name);
+				}
+				if(this.ship.location) {
+					Vue.set(this.properties, "location", this.universe.indexes.location.index[this.ship.location]);
+				} else {
+					Vue.set(this.properties, "location", null);
+				}
+				if(this.ship.inside) {
+					Vue.set(this.properties, "inside", this.universe.indexes.entity.index[this.ship.inside]);
+				} else {
+					Vue.set(this.properties, "inside", null);
+				}
+				
+				Vue.set(this, "points", this.ship.point_cost || 0);
+				this.uniqueByID(this.abilities);
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("model:modified", this.updateFromUniverse);
+			this.ship.$off("modified", this.update);
+			if(this.pilot) {
 				this.pilot.$off("modified", this.update);
 			}
-			
-			if(this.pilot) {
-				Vue.set(this, "ability", this.universe.nouns.ability[this.pilot.active_ship_ability]);
-			} else if(this.ability) {
-				Vue.set(this, "ability", null);
-			}
-			
-			this.abilities.splice(0);
-			for(x=0; this.ship.ability && x<this.ship.ability.length; x++) {
-				buffer = this.universe.nouns.ability[this.ship.ability[x]];
-				if(buffer) {
-					this.abilities.push(buffer);
-				} else {
-					console.warn("Unidentified Ability: " + this.ship.ability[x]);
-				}
-			}
-			for(x=0; this.pilot && this.pilot.ship_abilities && x<this.pilot.ship_abilities.length; x++) {
-				buffer = this.universe.nouns.ability[this.pilot.ship_abilities[x]];
-				if(buffer) {
-					this.abilities.push(buffer);
-				} else {
-					console.warn("Unidentified Ability: " + this.pilot.ship_abilities[x]);
-				}
-			}
-			
-			for(x=0; this.ship.slot && x<this.ship.slot.length; x++) {
-				buffer = this.ship["slot_" + this.ship.slot[x]];
-				if(buffer) {
-					Vue.set(this.mounted, this.ship.slot[x], buffer);
-				}
-			}
-			
-			this.$forceUpdate();
-		}
-	},
-	"beforeDestroy": function() {
-		if(this.pilot) {
-			this.pilot.$off("modified", this.update);
-		}
-		this.ship.$off("modified", this.update);
-	},
-	"template": Vue.templified("components/rssw/ship/stats.html")
-});
+		},
+		"template": Vue.templified("components/rssw/ship/stats.html")
+	});	
+})();
 
+/**
+ * 
+ * 
+ * @class rsTable
+ * @constructor
+ * @module Components
+ * @zindex 1
+ */
+(function() {
+	var storageKey = "_rs_menuComponentKey";
+	
+	rsSystem.component("rsTableControls", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"index": {
+				"required": true,
+				"type": Object
+			},
+			"controls": {
+				"required": false,
+				"type": Array
+			},
+			"corpus": {
+				"required": true,
+				"type": Array
+			},
+			"state": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x;
+
+			data.start = 0;
+			
+			return data;
+		},
+		"watch": {
+			"index": function(newIndex, oldIndex) {
+				console.warn("Controls Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
+				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
+				newIndex.$on("indexed", this.update);
+				this.update();
+			},
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.index.$on("selection", this.update);
+			this.index.$on("indexed", this.update);
+			this.update();
+		},
+		"methods": {
+			"clearSelection": function() {
+				
+				this.index.clearSelection();
+				this.update();
+			},
+			"allSelection": function() {
+				this.index.select(this.corpus);
+				this.update();
+			},
+			"infoSelection": function(record) {
+				rsSystem.EventBus.$emit("display-info", record);
+			},
+			"update": function() {
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
+			this.index.$off("selection", this.update);
+			this.index.$off("indexed", this.update);
+		},
+		"template": Vue.templified("components/table/controls.html")
+	});
+})();
+
+
+/**
+ * 
+ * 
+ * @class rsTable
+ * @constructor
+ * @module Components
+ * @zindex 1
+ */
+(function() {
+	var storageKey = "_rs_menuComponentKey";
+	
+	rsSystem.component("rsTablePaging", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"index": {
+				"required": true,
+				"type": Object
+			},
+			"controls": {
+				"required": false,
+				"type": Array
+			},
+			"state": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.lastPage = 0;
+			data.pages = [];
+
+			return data;
+		},
+		"watch": {
+			"index": function(newIndex, oldIndex) {
+				console.warn("Paging Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
+				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
+				newIndex.$on("indexed", this.update);
+				this.update();
+			},
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.index.$on("indexed", this.update);
+			this.update();
+		},
+		"methods": {
+			"toPage": function(page) {
+				Vue.set(this.state.paging, "current", page);
+//				console.warn("To Page: " + page);
+			},
+			"classPage": function(page) {
+				if(page === this.state.paging.current) {
+					return "current-page";
+				} else if(page === 0) {
+					return "first-page";
+				} else if(page === this.state.paging.count - 1) {
+					return "last-page";
+				} else {
+					return "general-page";
+				}
+			},
+			"update": function() {
+				this.pages.splice(0);
+				
+				if(this.state.paging && this.state.paging.count) {
+					var max,
+						x;
+					
+					Vue.set(this, "lastPage", this.state.paging.count - 1);
+					
+					if(this.state.paging.spread) {
+						max = Math.min(this.state.paging.current + this.state.paging.spread, this.lastPage);
+						x = Math.max(this.state.paging.current - this.state.paging.spread, 1);
+					} else {
+						x = 1;
+					}
+					
+//					console.log("Pages: ", x, max, _p(this.state.paging));
+					
+					for(; x<max; x++) {
+						this.pages.push(x);
+					}
+				}
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
+			this.index.$off("selection", this.update);
+			this.index.$off("indexed", this.update);
+		},
+		"template": Vue.templified("components/table/paging.html")
+	});
+})();
+
+
+/**
+ * 
+ * 
+ * @class rsTable
+ * @constructor
+ * @module Components
+ * @zindex 1
+ */
+(function() {
+	var storageKey = "_rs_menuComponentKey";
+	
+	rsSystem.component("rsTable", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"index": {
+				"required": true,
+				"type": Object
+			},
+			"corpus": {
+				"required": true,
+				"type": Array
+			},
+			"headers": {
+				"required": true,
+				"type": Array
+			},
+			"controls": {
+				"required": false,
+				"type": Array
+			},
+			"state": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {},
+				x;
+
+			data.start = 0;
+			if(this.state && !this.state.filter) {
+				Vue.set(this.state, "filter", {});
+			}
+			if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
+				Vue.set(this.state.filter, "null", "");
+			}
+			
+			return data;
+		},
+		"watch": {
+			"index": function(newIndex, oldIndex) {
+				console.warn("Table Index Updated: ", oldIndex, "\n -> \n", newIndex);
+				oldIndex.$off("selection", this.update);
+				oldIndex.$off("indexed", this.update);
+				newIndex.$on("selection", this.update);
+				newIndex.$on("indexed", this.update);
+				this.update();
+			},
+			"state.filter": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
+			},
+			"state.paging.current": {
+				"deep": true,
+				"handler": function(nV) {
+					if(this.state.paging.tracked !== nV) {
+						this.state.paging.tracked = nV;
+						this.update();
+					}
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.universe.$on("universe:modified", this.update);
+			this.index.$on("selection", this.update);
+			this.index.$on("indexed", this.update);
+			this.$on("update-table", this.update);
+			this.update();
+		},
+		"methods": {
+			"headerAction": function(header) {
+				console.log("Header Action: ", header);
+				if(typeof header.action === "function") {
+					header.action(header);
+				} else if(header.action === null) {
+					/* No Action */
+				} else {
+					if(this.state.sortKey === header.field) {
+						Vue.set(this.state, "order", !this.state.order);
+					} else {
+						Vue.set(this.state, "sortKey", header.field);
+					}
+					if(header.sorter) {
+						if(this.state.sorter !== header.sorter) {
+							Vue.set(this.state, "sorter", header.sorter);
+						}
+					} else {
+						Vue.delete(this.state, "sorter");
+					}
+				}
+				this.update();
+			},
+			"isArray": function(item) {
+				return (item instanceof Array) || (item && item.constructor && item.constructor.name.toLowerCase().indexOf("array") !== -1);
+			},
+			"formatObjectHeader": function(object) {
+				var x, keys, html;
+				keys = Object.keys(object);
+				html = "<ul>";
+				for(x=0; x<keys.length; x++) {
+					html += "<li><span class='property'>" + keys[x] + "</span>: <span class='value'>" + object[keys[x]] + "</span></li>"; 
+				}
+				html += "<ul>";
+			},
+			"select": function(record, header) {
+//				console.log("Table Selection: ", record, header);
+				if(header.recordAction) {
+					header.recordAction(record, header);
+				} else if(!this.state.noSelect) {
+					if(this.index.toggleSelect(record)) {
+						if(!this.state.noEmit) {
+							this.$emit("selected", record, header);
+						}
+					} else {
+						if(!this.state.noEmit) {
+							this.$emit("unselected", record, header);
+						}
+					}
+					this.$forceUpdate();
+				} else if(!this.state.noEmit) {
+					this.$emit("selected", record, header);
+				} else {
+					// Selection is suppressed
+				}
+				this.update();
+			},
+			"update": function() {
+				this.corpus.splice(0);
+				this.index.list(this.state.filter, this.state, this.corpus);
+//				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
+			this.index.$off("selection", this.update);
+			this.index.$off("indexed", this.update);
+		},
+		"template": Vue.templified("components/table.html")
+	});
+})();
 
 
 /**
@@ -23771,236 +35276,835 @@ rsSystem.component("rsswShipStats", {
  * @constructor
  * @module Components
  */
-rsSystem.component("rsViewer", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.RSCore
-	],
-	"props": {
-		"location": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"data": function() {
-		var data = {};
+(function() {
+	var storageKey = "_rs_viewerComponentKey";
 
-		data.image = {};
-		data.sourceImage = null;
-		data.parchment = null;
-		data.element = null;
-		data.ready = false;
-		
-		data.isDragging = false;
-		data.dragX = null;
-		data.dragY = null;
-		
-		data.pointsOfInterest = [];
-		data.pins = true;
-		data.alter = "";
-		
-		data.menuOpen = false;
-		data.menuItems = [{
-			"action": "back",
-			"text": "Back",
-			"icon": "fas fa-arrow-left"
-		}, {
-			"action": "reset",
-			"text": "Reset",
-			"icon": "far fa-refresh"
-		}];
-		
-
-		data.actions = {};
-		data.actions.open = false;
-		data.actions.header = "Location";
-		data.actions.options = [];
-		data.actions.menu = null;
-		
-		return data;
-	},
-	"mounted": function() {
-		Vue.set(this, "element", $(this.$el));
-		rsSystem.register(this);
-		this.location.$on("modified", this.update);
-		this.update();
-	},
-	"methods": {
-		"toggleMenu": function() {
-			Vue.set(this, "menuOpen", !this.menuOpen);
-		},
-		"processAction": function(item) {
-			console.log("Process Action: ", item);
-		},
-		"openActions": function(event) {
-			console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
-			Vue.set(this.actions, "x", event.offsetX);
-			Vue.set(this.actions, "y", event.offsetY);
-			Vue.set(this.actions, "open", true);
-		},
-		"closeActions": function() {
-			Vue.set(this.actions, "open", false);
-		},
-		"fire": function(option, event) {
-			console.log("Fire Option: ", option);
-			event.actionMenu = true;
-			if(this.player.master) {
-				
-			} else {
-				
+	rsSystem.component("rsViewer", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"location": {
+				"required": true,
+				"type": Object
 			}
-			this.closeActions();
 		},
-		"dismissCoordinate": function(coordinate) {
+		"data": function() {
+			var data = {};
+
+			data.storageKeyID = storageKey + this.location.id;
+			data.state = this.loadStorage(data.storageKeyID, {
+				"zoomStep": 1
+			});
 			
-		},
-		"getViewport": function() {
+			if(!data.state.crosshairing) {
+				data.state.crosshairing = {
+					"icon": "fal fa-crosshairs",
+					"event": "toggle-crosshair",
+					"text": "Crosshairs On",
+					"state": false
+				};
+			}
 
-		},
-		"getDimensions": function(path) {
-			console.log("Get Dimensions: " + path);
-			var img = new Image;
+			data.state.viewed_at = data.state.viewed_at || 0;
+			data.state.search = data.state.search || "";
+			data.state.alter = data.state.alter || "";
+			if(data.state.image) {
+				data.image = data.state.image;
+			} else {
+				data.image = data.state.image = {};
+			}
+			if(data.state.markers === undefined) {
+				data.state.markers = true;
+			}
+			if(data.state.follow === undefined) {
+				data.state.follow = true;
+			}
+			if(data.state.master_view === undefined) {
+				data.state.master_view = "";
+			}
+			
+			data.original = {};
+			data.sourceImage = null;
+			data.parchment = null;
+			data.element = null;
+			data.ready = false;
+			
+			data.isDragging = false;
+			data.dragX = null;
+			data.dragY = null;
 
-			img.onload = () => {
-				this.image.height = img.height;
-				this.image.width = img.width;
-				this.image.ratio = img.width / img.height;
-
-				Vue.set(this, "ready", true);
-				Vue.set(this, "parchment", this.element.find(".parchment"));
-				this.apply(this.image);
+			data.pointsOfInterest = [];
+			data.coordinates = [];
+			data.pins = true;
+			data.alter = "";
+			
+			data.menuOpen = false;
+			data.menuItems = [{
+				"action": "zoomin",
+				"text": "Zoom",
+				"icon": "fas fa-plus-square"
+			}, {
+				"action": "zoomout",
+				"text": "Zoom",
+				"icon": "fas fa-minus-square"
+			}, {
+				"action": "reset",
+				"text": "Reset",
+				"icon": "far fa-refresh"
+			}];
+			
+			data.menuItems.followItem = {
+				"action": "follow",
+				"text": "Follow"
 			};
-
-			img.src = path;
+			data.menuItems.markerItem = {
+				"action": "markings",
+				"text": "Markers"
+			};
+			data.menuItems.fullscreen = {
+				"action": "fullscreen",
+				"text": "Fill Page"
+			};
+			
+			data.actions = {};
+			data.actions.open = false;
+			data.actions.header = "Location";
+			data.actions.options = [];
+			data.actions.menu = null;
+			
+			return data;
 		},
-		"clicking": function(event) {
-//			console.log("click");
-
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+					if(this.state.search !== this.state.search.toLowerCase()) {
+						Vue.set(this.state, "search", this.state.search.toLowerCase());
+					}
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			},
+			"location": {
+				"handler": function(newValue, oldValue) {
+					oldValue.$off("modified", this.update);
+					newValue.$on("modified", this.update);
+				}
+			},
+			"$route": {
+				"deep": true,
+				"handler": function() {
+					this.update();
+				}
+			}
 		},
-		"down": function(event) {
-//			console.log("down:" + event.button, event);
-			switch(event.button) {
-				case 0:
-					this.isDragging = true;
+		"mounted": function() {
+			Vue.set(this, "element", $(this.$el));
+			rsSystem.register(this);
+			this.universe.$on("universe:modified", this.update);
+			this.universe.$on("model:modified", this.update);
+			this.location.$on("modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"searchMap": function(search) {
+				console.log("Search Map: ", search);
+			},
+			"toggleMenu": function() {
+				Vue.set(this, "menuOpen", !this.menuOpen);
+			},
+			"processAction": function(item) {
+//				console.log("Process Action: ", item);
+				switch(item.action) {
+					case "zoomin":
+						this.image.zoom = this.image.zoom || 0;
+						this.image.zoom += this.state.zoomStep;
+						this.apply(this.image);
+						break;
+					case "zoomout":
+						this.image.zoom = this.image.zoom || 0;
+						this.image.zoom -= this.state.zoomStep;
+						this.apply(this.image);
+						break;
+					case "markings":
+						Vue.set(this.state, "markers", !this.state.markers);
+						break;
+					case "follow":
+						Vue.set(this.state, "follow", !this.state.follow);
+						break;
+					case "reset":
+						this.resetViewport();
+						break;
+					case "fullscreen":
+						Vue.set(this.state, "fullscreen", !this.state.fullscreen);
+						break;
+				}
+			},
+			"openActions": function(event) {
+//				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
+				Vue.set(this.actions, "x", event.offsetX);
+				Vue.set(this.actions, "y", event.offsetY);
+				Vue.set(this.actions, "open", true);
+			},
+			"closeActions": function() {
+				Vue.set(this.actions, "open", false);
+			},
+			"fire": function(option, event) {
+//				console.log("Fire Option: ", option);
+				var buffer;
+				
+				switch(option.event) {
+					case "set-crosshair":
+						this.coordinates.push({
+							"x": (this.actions.x/this.image.width*100),
+							"y": (this.actions.y/this.image.height*100),
+							"standalone": this.state.crosshairing.state,
+							"color": option.color
+						});
+						this.location.commit({
+							"coordinates": this.coordinates
+						});
+						break;
+					case "toggle-crosshair":
+						if(this.state.crosshairing.state) {
+							Vue.set(this.state.crosshairing, "icon", "fal fa-crosshairs");
+							Vue.set(this.state.crosshairing, "text", "Crosshairs On");
+							Vue.set(this.state.crosshairing, "state", false);
+						} else {
+							Vue.set(this.state.crosshairing, "icon", "fal fa-slash");
+							Vue.set(this.state.crosshairing, "text", "Crosshairs Off");
+							Vue.set(this.state.crosshairing, "state", true);
+						}
+						break;
+					case "set-map":
+						this.location.commit({
+							"shown_at": Date.now(),
+							"showing": this.image
+						});
+						break;
+					case "set-location":
+						buffer = this.universe.index.index[this.state.alter];
+						if(buffer && this.player.master) {
+							buffer.commit({
+								"location": this.location.id,
+								"y": this.actions.y/this.image.height*100,
+								"x": this.actions.x/this.image.width*100
+							});
+						}
+						break;
+					case "set-current":
+						if(this.player.master) {
+							this.universe.send("control", {
+								"control": "page",
+								"url": "/map/" + this.location.id,
+								"condition": {
+									"hash": "^#/map"
+								}
+							});
+						}
+						break;
+				}
+				
+				this.closeActions();
+			},
+			"dismissCoordinate": function(coordinate) {
+				var index = this.coordinates.indexOf(coordinate);
+//				console.log("Dismiss[" + index + "]: ", coordinate, this.coordinates);
+				if(index !== -1) {
+					this.coordinates.splice(index, 1);
+					this.location.commit({
+						"coordinates": this.coordinates
+					});
+				}
+			},
+			"resetViewport": function() {
+				Object.assign(this.image, this.original);
+				var view = this.getViewport();
+				
+				this.image.zoom = 0;
+				this.image.left = view.width/2 - this.image.width/2;
+				this.image.top = view.height/2 - this.image.height/2;
+				this.apply(this.image);
+			},
+			"getViewport": function() {
+				return {
+					"height": this.element.outerHeight(),
+					"width": this.element.outerWidth()
+				};
+			},
+			"getDimensions": function(path) {
+//				console.log("Get Dimensions: " + path);
+				var img = new Image;
+
+				img.onload = () => {
+					this.image.height = img.height;
+					this.image.width = img.width;
+					this.image.ratio = img.width / img.height;
+					Object.assign(this.original, this.image);
+
+					Vue.set(this, "ready", true);
+					Vue.set(this, "parchment", this.element.find(".parchment"));
+					this.apply(this.image);
+				};
+
+				img.src = path;
+			},
+			"clicking": function(event) {
+//				console.log("click");
+
+			},
+			"down": function(event) {
+//				console.log("down:" + event.button, event);
+				switch(event.button) {
+					case 0:
+						this.isDragging = true;
+						this.dragX = event.pageX;
+						this.dragY = event.pageY;
+						break;
+				}
+			},
+			"up": function(event) {
+//				console.log("up");
+				this.isDragging = false;
+			},
+			"out": function(event) {
+//				console.log("out");
+				if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
+					this.isDragging = false;
+				}
+			},
+			"panning": function($event) {
+
+			},
+			"dragging": function(event) {
+				if(this.isDragging) {
+					var left = this.parchment.css("left") || "0px",
+						top = this.parchment.css("top") || "0px",
+						dX = this.dragX - event.pageX,
+						dY = this.dragY - event.pageY;
+
+					left = parseInt(left.replace("px", ""));
+					top = parseInt(top.replace("px", ""));
+					
+					//console.log("drag: " + left + " x " + top + " - [" + this.dragX + ", " + this.dragY + "] d[" + dX + ", " + dY + "] @[" + event.pageX + ", " + event.pageY + "]");
+										
+					left -= dX;
+					top -= dY;
+					
+					this.apply({
+						"left": left,
+						"top": top
+					});
+
 					this.dragX = event.pageX;
 					this.dragY = event.pageY;
-					break;
-			}
-		},
-		"up": function(event) {
-//			console.log("up");
-			this.isDragging = false;
-		},
-		"out": function(event) {
-//			console.log("out");
-			if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
-				this.isDragging = false;
-			}
-		},
-		"panning": function($event) {
-
-		},
-		"dragging": function(event) {
-			if(this.isDragging) {
-//				console.log("drag");
+				}
+			},
+			"zoom": function(level) {
+				if(10 > level && level > -10) {
+					Vue.set(this.image, "zoom", level);
+					this.apply(this.image);
+				}
+			},
+			"pan": function(panned) {
 				var left = this.parchment.css("left") || "0px",
 					top = this.parchment.css("top") || "0px",
-					dX = this.dragX - event.pageX,
-					dY = this.dragY - event.pageY;
-				
+					dX,
+					dY;
+
+//				console.log("Panning[]: ", panned.velocityX, panned.velocityY);
 				left = parseInt(left.replace("px", ""));
+				top = parseInt(top.replace("px", ""));				
+
+//				console.log("Panning: ", panned);
+				if(this.isDragging) {
+					dX = this.dragX - panned.deltaX;
+					dY = this.dragY - panned.deltaY;
+				} else {
+					this.isDragging = true;
+					dX = panned.deltaX;
+					dY = panned.deltaY;
+				}
+
+//				console.warn("Pan[" + dX + ", " + dY + "]: " + left + ", " + top + " --> " + (left-dX) + ", " + (top-dY));
 				left -= dX;
-				
-				top = parseInt(top.replace("px", ""));
 				top -= dY;
+
+				if(panned.isFinal) {
+					this.isDragging = false;
+				} else {
+					this.dragX = panned.deltaX;
+					this.dragY = panned.deltaY;
+				}
 				
 				this.apply({
 					"left": left,
 					"top": top
 				});
+			},
+			"wheeling": function(event) {
+				console.log("wheel");
+				
+			},
+			"apply": function(applying) {
+//				console.log("apply: ", applying, this.parchment);
+				if(this.parchment && this.parchment.length) {
+					if(applying.height === undefined) {
+						applying.height = this.image.height;
+					}
+					if(applying.width === undefined) {
+						applying.width = this.image.width;
+					}
+					if(applying.left === undefined) {
+						applying.left = this.image.left;
+					}
+					if(applying.top === undefined) {
+						applying.top = this.image.top;
+					}
+					
+//					applying.height = applying.height || this.image.height || 0;
+//					applying.width = applying.width || this.image.width || 0;
+//					applying.left = applying.left || this.image.left || 0;
+//					applying.top = applying.top || this.image.left || 0;
 
-				this.dragX = event.pageX;
-				this.dragY = event.pageY;
-			}
-		},
-		"pan": function(x, y) {
-			console.log("pan");
-			
-		},
-		"wheeling": function(event) {
-			console.log("wheel");
-			
-		},
-		"apply": function(applying) {
-//			console.log("apply: ", applying, this.parchment);
-			if(this.parchment && this.parchment.length) {
-				applying.height = applying.height || this.image.height || 0;
-				applying.width = applying.width || this.image.width || 0;
-				applying.left = applying.left || this.image.left || 0;
-				applying.top = applying.top || this.image.left || 0;
+					if(10 > applying.zoom && applying.zoom > -10) {
+						this.image.height = this.original.height * (1 + .1 * applying.zoom);
+						this.image.width = this.original.width * (1 + .1 * applying.zoom);
+					}
+					
+					this.parchment.css({
+						"height": applying.height + "px",
+						"width": applying.width + "px",
+						"left": applying.left + "px",
+						"top": applying.top + "px"
+				    });
+					
+					Object.assign(this.image, applying);
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			},
+			"poiVisible": function(link) {
+				if(link.template || link.x === undefined || link.y === undefined) {
+					return false;
+				}
 				
-				this.parchment.css({
-					"height": applying.height + "px",
-					"width": applying.width + "px",
-					"left": applying.left + "px",
-					"top": applying.top + "px"
-			    });
+				if(this.player.master && this.state.master_view === "master") {
+					return true;
+				}
 				
-				Object.assign(this.image, applying);
+				if(link.hidden || (link.obscured && !this.player.master)) {
+					return false;
+				}
+				
+				if(!link.required_knowledge) {
+					return true;
+				}
+				
+				var entity = this.universe.nouns.entity[this.player.entity];
+				if(entity && (entity = this.universe.nouns.knowledge[entity.knowledge])) {
+					return !!entity[link.knowledge];
+				}
+				
+				return false;
+			},
+			"renderState": function() {
+				var state = "";
+				if(this.state.fullscreen) {
+					state += " fullscreen";
+				}
+				return state;
+			},
+			"poiClass": function(link) {
+				return link.class || link.icon;
+			},
+			"poiMenu": function(link) {
+				rsSystem.EventBus.$emit("display-info", link);
+			},
+			"minorUpdate": function() {
+				this.$forceUpdate();
+			},
+			"update": function() {
+//				console.warn("Update");
+				var buffer,
+					x;
+				
+				this.actions.options.splice(0);
+				if(this.player.master) {
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Red",
+						"color": "red"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Green",
+						"color": "green"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Blue",
+						"color": "blue"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: White",
+						"color": "white"
+					});
+					
+					this.actions.options.push(this.state.crosshairing);
+					
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-location",
+						"text": "Set Location"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-map",
+						"event": "set-map",
+						"text": "Set Location View"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-map-marked",
+						"event": "set-current",
+						"text": "Show Map"
+					});
+				}
+				
+				this.coordinates.splice(0);
+				if(this.location.coordinates && this.location.coordinates.length) {
+					this.coordinates.push.apply(this.coordinates, this.location.coordinates);
+				}
+				
+				while(this.pointsOfInterest.length !== 0) {
+					buffer = this.pointsOfInterest.pop();
+					if(buffer.$off) {
+						buffer.$off("modified", this.minorUpdate);
+					}
+				}
+				for(x=0; x<this.universe.indexes.location.listing.length; x++) {
+					buffer = this.universe.indexes.location.listing[x];
+					if(buffer.location === this.location.id) {
+						this.pointsOfInterest.push(buffer);
+						buffer.$on("modified", this.minorUpdate);
+					}
+				}
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					buffer = this.universe.indexes.entity.listing[x];
+					if(buffer.location === this.location.id) {
+						this.pointsOfInterest.push(buffer);
+						buffer.$on("modified", this.minorUpdate);
+					}
+				}
+				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+					buffer = this.universe.indexes.party.listing[x];
+					if(buffer.location === this.location.id) {
+						this.pointsOfInterest.push(buffer);
+						buffer.$on("modified", this.minorUpdate);
+					}
+				}
+				
+				if(this.location.image && this.universe.nouns.image[this.location.image]) {
+					Vue.set(this, "ready", false);
+					Vue.set(this, "sourceImage", this.universe.nouns.image[this.location.image].data);
+					this.getDimensions(this.universe.nouns.image[this.location.image].data);
+				} else if(this.location.viewed !== this.sourceImage) {
+					Vue.set(this, "ready", false);
+					Vue.set(this, "sourceImage", this.location.viewed);
+					this.getDimensions(this.location.viewed);
+				}
+				
+				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
+//					console.log("View State Sync: ", this.location, this.state);
+					Vue.set(this.state, "viewed_at", this.location.shown_at);
+					Object.assign(this.image, this.location.showing);
+					this.apply(this.image);
+				}
+				
+				this.$forceUpdate();
 			}
 		},
-		"update": function() {
-			var buffer;
-			
-			this.actions.options.splice(0);
-			if(this.player.master) {
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Red",
-					"color": "red"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Green",
-					"color": "green"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Blue",
-					"color": "blue"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-crosshair",
-					"text": "Mark: Black",
-					"color": "black"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-chevron-double-right",
-					"event": "set-location",
-					"text": "Set Location"
-				});
-				this.actions.options.push({
-					"icon": "fas fa-map",
-					"event": "set-map",
-					"text": "Set Map"
-				});
-			}
-			
-			if(this.location.viewed !== this.sourceImage) {
-				Vue.set(this, "ready", false);
-				Vue.set(this, "sourceImage", this.location.viewed);
-				this.getDimensions(this.location.viewed);
-			}
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
+			this.universe.$off("model:modified", this.update);
+			this.location.$off("modified", this.update);
+		},
+		"template": Vue.templified("components/viewer.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class rsWidgetConfigure
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsWidgetConfigure", {
+	"inherit": true,
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"settings": {
+			"type": Object
+		},
+		"contents": {
+			"type": Object
+		},
+		"state": {
+			"required": false,
+			"type": Object
 		}
 	},
-	"beforeDestroy": function() {
-		this.location.$off("modified", this.update);
+	"mounted": function() {
+		rsSystem.register(this);
 	},
-	"template": Vue.templified("components/viewer.html")
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+
+	},
+	"template": Vue.templified("components/widget/configure.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class rsContainer
+ * @constructor
+ * @module Components
+ */
+(function() {
+	var storageKey = "_rs_containerComponentKey";
+	
+	rsSystem.component("rsContainer", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.StorageManager
+		],
+		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			},
+			"entity": {
+				"required": false,
+				"type": Object
+			},
+			"user": {
+				"required": false,
+				"type": Object
+			},
+			"contents": {
+				"required": true,
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.storageID = storageKey + (this.contents.sid || this.contents.id || this.contents._sourced); 
+			data.state = this.loadStorage(data.storageID, {
+				"closed": false
+			});
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function(value) {
+					this.saveStorage(this.storageID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+
+			if(this.$el) {
+				if(this.state.configuring) {
+					if(this.state.closed) {
+						this.$el.classList.add("configuring");
+					} else {
+						Vue.set(this.state, "configuring", false);
+					}
+				}
+			} else {
+				console.error("no el");
+			}
+		},
+		"methods": {
+			"getClasses": function() {
+				var classes = "";
+				if(this.borderColor) {
+					classes += " rs-border one rsbd-" + this.borderColor;
+				}
+				return classes.trim();
+			},
+			"toggle": function() {
+				if(this.$el) {
+					if(this.state.closed) {
+						Vue.set(this.state, "configuring", false);
+						this.$el.classList.remove("configuring");
+						this.$el.classList.remove("collapsed");
+					} else {
+						this.$el.classList.add("collapsed");
+					}
+					Vue.set(this.state, "closed", !this.state.closed);
+				} else {
+					console.error("Can't Find Container");
+				}
+			},
+			"config": function() {
+				if(this.$el) {
+					if(this.state.configuring) {
+						this.$el.classList.remove("configuring");
+					} else {
+						this.$el.classList.add("configuring");
+					}
+					Vue.set(this.state, "configuring", !this.state.configuring);
+				} else {
+					console.error("Can't Find Container");
+				}
+			},
+			"editSettings": function() {
+
+			},
+			"closeSettings": function() {
+			
+			}
+		},
+		"render": function(createElement) {
+			var elements = [],
+				classes = {},
+				contents,
+				widget,
+				keys,
+				x;
+			
+			if(this.contents.enabled && this.contents.declaration && rsSystem.components[this.contents.declaration]) {
+				if(this.contents.state) {
+					keys = Object.keys(this.contents.state);
+					for(x=0; x<keys.length; x++) {
+						Vue.set(this.state, keys[x], this.contents.state[keys[x]]);
+					}
+				}
+				
+				if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
+					this.state.filter["null"] = "";
+				}
+				
+				widget = {};
+				widget.props = {};
+				widget.props["storage_id"] = this.storageID;
+				widget.props["universe"] = this.universe;
+				widget.props["character"] = this.entity;
+				widget.props["entity"] = this.entity;
+				widget.props["sid"] = this.storageID;
+				widget.props["state"] = this.state;
+				widget.props["user"] = this.user;
+				widget.class = {};
+				widget.class["rs-containment"] = true;
+				elements.push(createElement(this.contents.declaration, widget));
+
+				widget = {};
+				widget.props = {};
+				widget.props["settings"] = this.contents.settings;
+				widget.props["universe"] = this.universe;
+				widget.props["contents"] = this.contents;
+				widget.props["state"] = this.state;
+				elements.push(createElement("rs-widget-configure", widget));
+				
+				widget.on = {};
+				widget.on.toggle = this.toggle;
+				widget.on.config = this.config;
+				elements.push(createElement("rs-widget-control", widget));
+			} else {
+				elements.push(createElement("div"));
+			}
+			
+			classes["rs-component rs-container"] = true;
+			classes[this.getClasses()] = true;
+			/*
+			return createElement("div", {
+				"class": classes
+			}, elements);
+			/* */
+			contents = [createElement("div", {
+				"class": classes
+			}, elements)];
+			
+			return createElement("div", {
+				"class": {
+					"rs-component rs-widget": true,
+					"collapsed": this.state.closed
+				}
+			}, [contents]);
+			/* */
+		}
+	});
+})();
+
+
+/**
+ * 
+ * 
+ * @class rsWidgetControl
+ * @constructor
+ * @module Components
+ */
+rsSystem.component("rsWidgetControl", {
+	"inherit": true,
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
+		},
+		"settings": {
+			"type": Object
+		},
+		"contents": {
+			"type": Object
+		},
+		"state": {
+			"required": false,
+			"type": Object
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		"getClasses": function() {
+			var classes = "";
+			if(this.borderColor) {
+				classes += " rs-border one rsbd-" + this.borderColor;
+			}
+			return classes.trim();
+		},
+		"toggle": function() {
+			this.$emit("toggle");
+		},
+		"config": function() {
+			this.$emit("config");
+		}
+	},
+	"template": Vue.templified("components/widget.html")
 });
 
 /**
@@ -24034,6 +36138,7 @@ rsSystem.component("rsViewer", {
 rsSystem.component("RSCorePage", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.StorageManager
 	],
 	"props": {
 		"universe": {
@@ -24102,7 +36207,7 @@ rsSystem.component("RSHome", {
 		
 		// Track Connection Information
 		data.universe = null;
-		data.player = null;
+		data.user = null;
 		
 		return data;
 	},
@@ -24114,7 +36219,7 @@ rsSystem.component("RSHome", {
 			} else {
 				Vue.set(this, "state", 1);
 				Vue.set(this, "universe", new RSUniverse({}));
-				Vue.set(this, "player", event.user);
+				Vue.set(this, "user", event.user);
 				
 				this.universe.$on("disconnected", () => {
 					Vue.set(this, "message", "Disconnected");
@@ -24144,17 +36249,43 @@ rsSystem.component("RSHome", {
 rsSystem.component("RSNounControls", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.RSCorePage
+		rsSystem.components.RSCorePage,
+		rsSystem.components.RSShowdown
 	],
 	"data": function() {
 		var data = {};
 		
+		data.infoOptions = {};
+		data.infoOptions.noMaster = true;
+		
+		data.modeling = null;
+		data.description = "";
+		data.built = {};
+		
 		return data;
+	},
+	"watch": {
+		/*
+		"built": {
+			"deep": true,
+			"handler": function() {
+				if(this.built.description) {
+					console.warn("Update DEscription");
+					Vue.set(this, "description", this.rsshowdown(this.built.description));
+				} else {
+					Vue.set(this, "description", "");
+				}
+			}
+		}
+		*/
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"changeModel": function(modeling) {
+			Vue.set(this, "modeling", modeling);
+		}
 	},
 	"template": Vue.templified("pages/noun/controls.html")
 });
@@ -24163,7 +36294,365 @@ rsSystem.component("RSNounControls", {
 /**
  * 
  * 
- * @class RSSWDashboard
+ * @class RSSWBase
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWBase", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"data": function() {
+		var data = {};
+
+		data.entity = null;
+		data.widgets = [];
+		
+		return data;
+	},
+	"watch": {
+		"$route.params.oid": function(oid) {
+			this.entity.$off("modified", this.update);
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+			this.update();
+		}
+	},
+	"mounted": function() {
+		if(this.$route.params.oid) {
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+		}
+		rsSystem.register(this);
+		this.update();
+	},
+	"methods": {
+		"update": function() {
+			console.warn("Base Update: ", this.entity, this.widgets);
+			this.widgets.splice(0);
+			if(this.entity) {
+				if(this.entity.widgets) {
+					this.widgets.push.apply(this.widgets, this.entity.widgets);
+				}
+
+				switch(this.entity.classification) {
+					case "base":
+					case "building":
+					case "ship":
+						this.widgets.push({
+				            "declaration": "rsswEntityInside",
+				            "sid": "entity:inside:" + this.entity.id,
+				            "enabled": true
+						});
+						break;
+				}
+				
+				this.widgets.push({
+		            "declaration": "rsswEntityHistory",
+		            "sid": "entity:history:" + this.entity.id,
+		            "enabled": true
+				});
+			}
+			console.warn("Updated: ", this.entity, this.widgets);
+		}
+	},
+	"beforeDestroy": function() {
+		this.entity.$off("modified", this.update);
+	},
+	"template": Vue.templified("pages/rssw/base.html")
+});
+
+/**
+ * 
+ * 
+ * @class RSSWCharacterBuilder
+ * @constructor
+ * @module Pages
+ */
+(function() {
+	var storageKey = "_rs_characterBuilderComponentKey";
+	
+	var spaces = /\\s/g;
+	
+	var nameSort = function(a, b) {
+		if(a.name < b.name) {
+			return -1;
+		} else if(a.name > b.name) {
+			return 1;
+		} else if(a.id < b.id) {
+			return -1;
+		} else if(a.id > b.id) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
+	
+	rsSystem.component("RSSWCharacterBuilder", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSCorePage
+		],
+		"state": {
+			"deep": true,
+			"handler": function() {
+				this.update();
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.base = {};
+			data.base.species =[];
+			data.base.careers =[];
+			data.base.specializations = [];
+			
+			data.choices = [];
+	
+			data.building = {};
+			data.building.id = "character:" + this.user.id + ":" + Date.now();
+			
+			data.stage = 0;
+			
+			data.storageKeyID = storageKey;
+			if(this.cid) {
+				data.storageKeyID += ":" + this.cid;
+			}
+			data.state = this.loadStorage(data.storageKeyID, {
+			});
+			
+			return data;
+		},
+		"watch": {
+			"building": {
+				"deep": true,
+				"handler": function() {
+					var modifier = {},
+						push = false,
+						buffer;
+					
+					if(this.stage === 6) {
+						console.warn("Stage 6 Re-Calc: ", this.choices[0]);
+						if(this.choices[0].wounds_start) {
+							// TODO: Switch to System Set Calculation
+							console.warn("Wounds Calc[" + this.building.brawn + "]: ", this.choices[0].wounds_start);
+//							buffer = eval(this.choices[0].wounds_start.replace("brawn", this.building.brawn));
+							switch(typeof(this.choices[0].wounds_start)) {
+								case "string":
+									buffer = parseInt(eval(this.choices[0].wounds_start.replace("starting.brawn", this.building.brawn)));
+									break;
+								case "number":
+									buffer = this.choices[0].wounds_start + this.building.brawn;
+									break;
+							}
+							console.log("Wounds Result: " + this.building.wounds_max + " -> " + buffer);
+							if(this.building.wounds_max !== buffer) {
+								modifier.wounds_max = buffer;
+								modifier.wounds = buffer;
+								push = true;
+							}
+						} else {
+//							this.choices[0].wounds = 0;
+							console.error("No Wounds Calculation?");
+						}
+						if(this.choices[0].strain_start) {
+							// TODO: Switch to System Set Calculation
+							console.warn("Strain Calc[" + this.building.willpower + "]: ", this.choices[0].strain_start);
+//							buffer = eval(this.choices[0].strain_start.replace("willpower", this.building.willpower));
+							switch(typeof(this.choices[0].strain_start)) {
+								case "string":
+									buffer = parseInt(eval(this.choices[0].strain_start.replace("starting.willpower", this.building.willpower)));
+									break;
+								case "number":
+									buffer = this.choices[0].strain_start + this.building.willpower;
+									break;
+							}
+							console.log("Strain Result: " + this.building.strain_max + " -> " + buffer);
+							if(this.building.strain_max !== buffer) {
+								modifier.strain_max = buffer;
+								modifier.strain = buffer;
+								push = true;
+							}
+						} else {
+//							this.choices[0].strain = 0;
+							console.error("No Strain Calculation?");
+						}
+					}
+					
+					if(push) {
+						console.log("Pushing Modification: ", modifier);
+						this.building.commit(modifier);
+					}
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			this.universe.$on("universe:modified", this.update);
+			this.update();
+		},
+		"methods": {
+			"back": function(stage) {
+				if(stage === undefined) {
+					stage = this.stage - 1;
+				}
+				Vue.set(this, "stage", stage);
+			},
+			"selected": function(record) {
+				switch(this.stage) {
+					case 0:
+						this.forward();
+						break;
+					case 1:
+						Vue.set(this.building, record._type, record.id);
+						this.choices.splice(0);
+						this.choices.push(record);
+						this.forward();
+						break;
+					case 2:
+						this.building.archetype = [record.id];
+						if(!this.building[record._type]) {
+							Vue.set(this.building, record._type, []);
+						}
+						this.building[record._type].splice(0);
+						this.building[record._type].push(record.id);
+						this.choices.splice(1);
+						this.choices.push(record);
+						this.forward();
+						break;
+					case 3:
+						this.building.archetype.splice(1);
+						this.building.archetype.push(record.id);
+						this.choices.splice(2);
+						this.choices.push(record);
+						this.forward();
+						break;
+					case 4:
+						if(this.choices[0].xp_start) {
+							this.building.xp = parseInt(this.choices[0].xp_start);
+						} else {
+							this.choices[0].xp_start = 0;
+						}
+
+						if(this.choices[0].wounds_start) {
+							// TODO: Switch to System Set Calculation
+							switch(typeof(this.choices[0].wounds_start)) {
+								case "string":
+									this.building.wounds_max = parseInt(eval(this.choices[0].wounds_start.replace("starting.brawn", this.choices[0].brawn)));
+									break;
+								case "number":
+									this.building.wounds_max = this.choices[0].wounds_start + this.choices[0].brawn;
+									break;
+							}
+							this.building.wounds = this.building.wounds_max;
+						} else {
+							console.error("No Wounds Calculation?");
+//							this.choices[0].wounds = 0;
+						}
+						if(this.choices[0].strain_start) {
+							// TODO: Switch to System Set Calculation
+							switch(typeof(this.choices[0].strain_start)) {
+								case "string":
+									this.building.strain_max = parseInt(eval(this.choices[0].strain_start.replace("starting.willpower", this.choices[0].willpower)));
+									break;
+								case "number":
+									this.building.strain_max = this.choices[0].strain_start + this.choices[0].willpower;
+									break;
+							}
+							this.building.strain = this.building.strain_max;
+						} else {
+							console.error("No Strain Calculation?");
+//							this.choices[0].strain = 0;
+						}
+
+						this.building.defense_melee = 0;
+						this.building.defense_range = 0;
+						this.building.soak = 0;
+						
+						console.warn("Create Player Entity: ", this.building);
+						this.universe.$on("universe:modified", (event) => {
+							setTimeout(() => {
+								console.warn("Checking[" + this.building.id + "]: ", this.universe.indexes.entity.lookup[this.building.id], event);
+								if(this.universe.nouns.entity[this.building.id]) {
+									this.universe.nouns.entity[this.building.id].recalculateProperties();
+									this.universe.nouns.entity[this.building.id].recalculateProperties();
+									Vue.set(this, "building", this.universe.nouns.entity[this.building.id]);
+									this.forward();
+								}
+							}, 0);
+						});
+						this.universe.send("create:self", this.building);
+						
+						this.forward();
+						break;
+					case 6:
+						this.$router.push("/dashboard/character/" + this.building.id);
+						break;
+				}
+			},
+			"forward": function() {
+				switch(this.stage) {
+					case 2:
+						if(this.user.master) {
+							this.building.id = "entity:npc:" + this.reduceName(this.building.name) + ":" + Date.now();
+						}
+						break;
+					case 3:
+						break;
+				}
+				Vue.set(this, "stage", this.stage + 1);
+				this.update();
+			},
+			"reduceName": function(name) {
+				return name.toLowerCase().replace(spaces, "");
+			},
+			"update": function() {
+				var loading,
+					x;
+				
+				this.base.species.splice(0);
+				for(x=0; x<this.universe.indexes.race.listing.length; x++) {
+					if(this.universe.indexes.race.listing[x].playable) {
+						this.base.species.push(this.universe.indexes.race.listing[x]);
+					}
+				}
+				
+				this.base.careers.splice(0);
+				for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+					if(this.universe.indexes.archetype.listing[x].classification === "primary" && this.universe.indexes.archetype.listing[x].playable) {
+						this.base.careers.push(this.universe.indexes.archetype.listing[x]);
+					} else {
+//						console.warn("Skip Archetype: ", _p(this.universe.indexes.archetype.listing[x]));
+					}
+				}
+				
+				if(this.stage > 2 && this.stage < 5) {
+					this.base.specializations.splice(0);
+					for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+						if(this.universe.indexes.archetype.listing[x].classification === "secondary" && this.universe.indexes.archetype.listing[x].parent === this.building.archetype[0]) {
+							this.base.specializations.push(this.universe.indexes.archetype.listing[x]);
+						}
+					}
+				}
+
+				this.base.careers.sort(nameSort);
+				this.base.species.sort(nameSort);
+				
+				this.$forceUpdate();
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.update);
+		},
+		"template": Vue.templified("pages/rssw/character/builder.html")
+	});
+})();
+
+/**
+ * 
+ * 
+ * @class RSSWCharacter
  * @constructor
  * @module Pages
  */
@@ -24172,21 +36661,160 @@ rsSystem.component("RSSWCharacter", {
 	"mixins": [
 		rsSystem.components.RSCore
 	],
-	"computed": {
-		"entity": function() {
-			return this.universe.nouns.entity[this.$route.params.oid];
-		}
-	},
 	"data": function() {
 		var data = {};
+
+		data.additional_characters = [];
+		data.entity = null;
+		data.widgets = [];
 		
 		return data;
 	},
+	"watch": {
+		"$route.params.oid": function(oid) {
+			this.entity.$off("modified", this.update);
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+		}
+	},
 	"mounted": function() {
+		if(this.$route.params.oid) {
+			Vue.set(this, "entity", this.universe.nouns.entity[this.$route.params.oid]);
+			this.entity.$on("modified", this.update);
+		}
 		rsSystem.register(this);
+		this.update();
 	},
 	"methods": {
-		
+		"update": function() {
+			var characters,
+				entity,
+				prep = [],
+				x;
+
+			if(this.$route.query.characters) {
+				characters = this.$route.query.characters.split(",");
+				for(x=0; x<characters.length; x++) {
+					entity = this.universe.indexes.entity.lookup[characters[x]];
+					if(entity && entity.classification === "character" && this.isOwner(entity)) {
+						prep.push(entity);
+					}
+				}
+			}
+
+			if(prep.length !== this.additional_characters.length) {
+				this.additional_characters.splice(0);
+				for(x=0; x<prep.length; x++) {
+					this.additional_characters.push(prep[x]);
+				}
+			}
+			
+			this.widgets.splice(0);
+			if(this.entity) {
+				if(this.entity.widgets) {
+					this.widgets.push.apply(this.widgets, this.entity.widgets);
+				}
+
+				switch(this.entity.classification) {
+					case "base":
+					case "building":
+					case "ship":
+						this.widgets.push({
+				            "declaration": "rsswEntityInside",
+				            "sid": "entity:inside:" + this.entity.id,
+				            "enabled": true
+						});
+						break;
+				}
+
+				this.widgets.push({
+					"title": "Character",
+		            "declaration": "rsswCharacterInfo",
+		            "sid": "entity:info:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+					"title": "Vitals",
+		            "declaration": "rsswCharacterBoard",
+		            "sid": "entity:board:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+					"title": "Stats",
+		            "declaration": "rsswCharacterStats",
+		            "sid": "entity:stats:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+					"title": "Dice",
+		            "declaration": "rsswDiceBin",
+		            "sid": "entity:dice:" + this.entity.id,
+		            "enabled": true,
+		            "configurations": [{
+		        		"label": "Hide Lables",
+		        		"property": "hideLabels",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Hide Expression",
+		        		"property": "hideExpressions",
+		        		"type": "checkbox"
+		            }]
+				});
+				this.widgets.push({
+					"title": "Weapons",
+		            "declaration": "rsswEntityWeapons",
+		            "sid": "entity:weapons:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+					"title": "Equipment",
+		            "declaration": "rsswEntityEquipment",
+		            "sid": "entity:equip:" + this.entity.id,
+		            "enabled": true,
+		            "state": {
+		            	"mode": "long"
+		            }
+				});
+				this.widgets.push({
+					"title": "Skills",
+		            "declaration": "rsswCharacterSkills",
+		            "sid": "entity:skills:" + this.entity.id,
+		            "enabled": true,
+		            "configurations": [{
+		        		"label": "Hide Filter",
+		        		"property": "hideFilter",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Hide Names",
+		        		"property": "hideNames",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Hide Leveling",
+		        		"property": "hideLeveling",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Roll on Click",
+		        		"property": "rollSkill",
+		        		"type": "checkbox"
+		            }]
+				});
+				this.widgets.push({
+					"title": "Knowledge",
+		            "declaration": "rsswEntityKnowledge",
+		            "sid": "entity:knowledge:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+					"title": "History",
+		            "declaration": "rsswEntityHistory",
+		            "sid": "entity:history:" + this.entity.id,
+		            "enabled": true
+				});
+			}
+		}
+	},
+	"beforeDestroy": function() {
+		this.entity.$off("modified", this.update);
 	},
 	"template": Vue.templified("pages/rssw/character.html")
 });
@@ -24202,28 +36830,14 @@ rsSystem.component("RSSWCharacter", {
 rsSystem.component("RSSWDashboard", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.RSComponentUtility,
 		rsSystem.components.RSCore
 	],
-	"mounted": function() {
-		this.universe.$on("universe:modified", this.updateEntities);
-		this.universe.$on("model:modified", this.updateDisplay);
-		rsSystem.register(this);
-	},
 	"data": function() {
-		var data = {},
-			entities,
-			entity,
-			x;
+		var data = {};
 		
-		entities = Object.keys(this.universe.nouns.entity);
+		data.selectedEntities = [];
 		data.owned = [];
-		for(x=0; x<entities.length; x++) {
-			entity = this.universe.nouns.entity[entities[x]];
-			if(entity && entity.owners && entity.owners.indexOf(this.user.id) !== -1) {
-				entity.$on("modified", this.updateDisplay);
-				data.owned.push(entity);
-			}
-		}
 		
 		return data;
 	},
@@ -24232,7 +36846,82 @@ rsSystem.component("RSSWDashboard", {
 			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
 		}
 	},
+	"mounted": function() {
+		this.universe.$on("universe:modified", this.updateEntities);
+		this.universe.$on("model:modified", this.updateDisplay);
+		rsSystem.register(this);
+		
+		this.updateEntities();
+	},
 	"methods": {
+		"canOpenDashboard": function() {
+			return !!this.selectedEntities.length;
+		},
+		"toggleSelect": function(record) {
+			var index = this.selectedEntities.indexOf(record);
+			if(index === -1) {
+				this.selectedEntities.push(record);
+			} else {
+				this.selectedEntities.splice(index, 1);
+			}
+		},
+		"isSelected": function(record) {
+			return this.selectedEntities.indexOf(record) !== -1;
+		},
+		"openDashboard": function(type, external) {
+			var primary = null,
+				eids = [].concat(this.selectedEntities),
+				x;
+			
+			switch(type) {
+				case "ship":
+					for(x=0; !primary && x<this.selectedEntities.length; x++) {
+						if(this.selectedEntities[x].entity === this.self.id) {
+							primary = this.selectedEntities[x].id;
+							eids.splice(x, 1);
+						}
+					}
+					
+					if(!primary) {
+						primary = this.selectedEntities[0].id;
+						eids.splice(0, 1);
+					}
+
+					for(x=0; x<eids.length; x++) {
+						eids[x] = eids[x].id;
+					}
+					
+					if(external) {
+						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(","), "dashboard");
+					} else {
+						window.location = location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(",");
+					}
+					break;
+				case "character":
+					for(x=0; !primary && x<this.selectedEntities.length; x++) {
+						if(this.selectedEntities[x].entity === this.self.id) {
+							primary = this.selectedEntities[x].id;
+							eids.splice(x, 1);
+						}
+					}
+					
+					if(!primary) {
+						primary = this.selectedEntities[0].id;
+						eids.splice(0, 1);
+					}
+
+					for(x=0; x<eids.length; x++) {
+						eids[x] = eids[x].id;
+					}
+					
+					if(external) {
+						window.open(location.pathname + "#/dashboard/character/" + primary + "?characters=" + eids.join(","), "dashboard");
+					} else {
+						window.location = location.pathname + "#/dashboard/character/" + primary + "?characters=" + eids.join(",");
+					}
+					break;
+			}
+		},
 		"updateDisplay": function() {
 			this.$forceUpdate();
 		},
@@ -24258,6 +36947,7 @@ rsSystem.component("RSSWDashboard", {
 			
 			this.owned.splice(0);
 			this.owned.push.apply(this.owned, owned);
+			this.owned.sort(this.sortData);
 			this.$forceUpdate();
 		}
 	},
@@ -24272,7 +36962,7 @@ rsSystem.component("RSSWDashboard", {
 /**
  * 
  * 
- * @class RSSWDashboard
+ * @class RSSWHangar
  * @constructor
  * @module Pages
  */
@@ -24297,6 +36987,81 @@ rsSystem.component("RSSWHangar", {
 /**
  * 
  * 
+ * @class RSSWJournal
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWJournal", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCore
+	],
+	"data": function() {
+		var data = {};
+		
+		data.knowledge = [];
+		
+		return data;
+	},
+	"computed": {
+		"entity": function() {
+			return this.universe.nouns.entity[this.$route.params.oid];
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"methods": {
+		
+		
+		/**
+		 * 
+		 * @method update
+		 */
+		"update": function() {
+			var buffer,
+				x;
+			
+			this.knowledge.splice(0);
+			for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+				
+			}
+			
+			
+		}
+	},
+	"template": Vue.templified("pages/rssw/journal.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWLocality
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWLocality", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"methods": {
+		
+	},
+	"template": Vue.templified("pages/rssw/locality.html")
+});
+
+
+/**
+ * 
+ * 
  * @class RSSWMap
  * @constructor
  * @module Pages
@@ -24304,7 +37069,7 @@ rsSystem.component("RSSWHangar", {
 rsSystem.component("RSSWMap", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.RSCore
+		rsSystem.components.RSCorePage
 	],
 	"props": {
 		
@@ -24339,25 +37104,582 @@ rsSystem.component("RSSWMap", {
 rsSystem.component("RSSWShip", {
 	"inherit": true,
 	"mixins": [
+		rsSystem.components.RSComponentUtility,
 		rsSystem.components.RSCore
 	],
+	"data": function() {
+		var data = {};
+
+		data.additional_ships = [];
+		data.entity = null;
+		
+		return data;
+	},
+	"watch": {
+		"$route": {
+			"deep": true,
+			"handler": function() {
+				this.update();
+			}
+		}
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+		this.universe.$on("model:modified:complete", this.update);
+		this.update();
+	},
+	"methods": {
+		"update": function() {
+			var data = {},
+				prep = [],
+				ships,
+				ship,
+				x;
+			
+			if((this.entity && this.entity.id !== this.$route.params.oid)
+					|| (!this.entity && this.$route.params.oid)) {
+				ship = this.universe.nouns.entity[this.$route.params.oid];
+				if(ship && this.isOwner(ship)) {
+					Vue.set(this, "entity", ship);
+				} else {
+					console.warn("? ", this.isOwner(ship), ship);
+				}
+			}
+	
+			if(this.$route.query.ships) {
+				ships = this.$route.query.ships.split(",");
+				for(x=0; x<ships.length; x++) {
+					ship = this.universe.indexes.entity.lookup[ships[x]];
+					if(ship && ship.classification === "ship" && this.isOwner(ship)) {
+						prep.push(ship);
+					}
+				}
+			}
+			
+			if(prep.length !== this.additional_ships.length) {
+				this.additional_ships.splice(0);
+				for(x=0; x<prep.length; x++) {
+					this.additional_ships.push(prep[x]);
+				}
+			}
+		}
+	},
+	"beforeDestroy": function() {
+		this.universe.$off("model:modified:complete", this.update);
+	},
+	"template": Vue.templified("pages/rssw/ship.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWStorage
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSSWStorage", {
+	"inherit": true,
+	"mixins": [rsSystem.components.RSCore],
+	"mounted": function() {
+		rsSystem.register(this);
+	},
 	"data": function() {
 		var data = {};
 		
 		return data;
 	},
-	"computed": {
-		"entity": function() {
-			return this.universe.nouns.entity[this.$route.params.oid];
-		}
-	},
-	"mounted": function() {
-		rsSystem.register(this);
-	},
 	"methods": {
 		
 	},
-	"template": Vue.templified("pages/rssw/ship.html")
+	"template": Vue.templified("pages/rssw/storage.html")
+});
+
+
+/**
+ * 
+ * 
+ * @class RSSWUniverse
+ * @constructor
+ * @module Pages
+ */
+(function() {
+	var storageKey = "_rssw_universeComponentKey";
+	
+	var formatters = {
+		"icon": function(icon) {
+			return "<span class='" + icon + "'></span>";
+		},
+		"template": function(state) {
+			if(state) {
+				return "<span class='fas fa-check'></span>";
+			}
+			return "";
+		},
+		"__info": function(value, record) {
+			return "<span class=\"fas fa-info-circle\"></span>";
+		},
+		"__edit": function(value, record) {
+			return "<span class=\"fas fa-edit\"></span>";
+		},
+		"__copy": function(value, record) {
+			return "<span class=\"fas fa-copy\"></span>";
+		},
+		"__view": function(value, record) {
+			if(record.classification && record._type === "entity") {
+				return "<span class=\"fas fa-external-link\"></span>";
+			}
+		}
+	};
+
+	var recordActions = {
+		"__info": function(record) {
+			rsSystem.EventBus.$emit("display-info", record);
+		},
+		"__edit": function(record) {
+			this.$router.push("/nouns/" + record._type + "/" + record.id);
+		},
+		"__copy": function(record) {
+			this.$router.push("/nouns/" + record._type + "/" + record.id + "?copy=true");
+		},
+		"__view": function(record) {
+			if(record.classification && record._type === "entity") {
+				this.$router.push("/universe/" + record.classification + "/" + record.id);
+			}
+		}
+	};
+
+	var actions = {
+	};
+
+	var sorters = {
+		"__view": function(a, b) {
+			if(a._type === "entity" && b._type !== "entity") {
+				return 1;
+			} else if(b._type === "entity" && a._type !== "entity") {
+				return -1;
+			}
+			return 0;
+		}
+	};
+	
+	
+	var templateValues = {
+		"shown": undefined,
+		"only": true,
+		"out": false
+	};
+	
+	rsSystem.component("RSSWUniverse", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCorePage
+		],
+		"data": function() {
+			var data = {},
+				entities,
+				entity,
+				x;
+			
+			data.storageKeyID = storageKey;
+			data.state = this.loadStorage(data.storageKeyID, {
+				"search": ""
+			});
+			if(data.state.filter === undefined) {
+				data.state.filter = {};
+				data.state.filter.null = data.state.filter.null || "";
+			}
+			if(data.state.headers === undefined) {
+				data.state.headers = [{
+					"title":"",
+					"field": "icon",
+					"formatter": formatters.icon
+				}, {
+					"title":"Name",
+					"field": "name"
+				}, {
+					"title":"ID",
+					"field": "id"
+				}, {
+					"field": "__info",
+					"formatter": formatters.__info,
+					"recordAction": recordActions.__info.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__edit",
+					"formatter": formatters.__edit,
+					"recordAction": recordActions.__edit.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__copy",
+					"formatter": formatters.__copy,
+					"recordAction": recordActions.__copy.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__view",
+					"formatter": formatters.__view,
+					"recordAction": recordActions.__view.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}];
+			}
+			if(data.state.paging === undefined) {
+				data.state.paging = {};
+				data.state.paging.per = 20;
+				data.state.paging.current = 1;
+				data.state.paging.pages = 0;
+				data.state.paging.spread = 10;
+			}
+			
+			data.availableIndexes = Object.keys(this.universe.indexes);
+			data.availableIndexes.sort();
+			
+			data.listing = {};
+			data.listing.entity = [];
+			data.listing.player = [];
+			data.listing.item = [];
+			data.listing.room = [];
+			data.listingKeys = Object.keys(data.listing);
+			
+			data.command = "";
+			data.target = "";
+			data.corpus = [];
+			
+			data.universeEntities = [];			
+			
+			for(x=0; x<data.state.headers.length; x++) {
+				if(formatters[data.state.headers[x].field]) {
+					data.state.headers[x].formatter = formatters[data.state.headers[x].field];
+				}
+				if(recordActions[data.state.headers[x].field]) {
+					data.state.headers[x].recordAction = recordActions[data.state.headers[x].field].bind(this);
+				}
+				if(actions[data.state.headers[x].field]) {
+					data.state.headers[x].action = actions[data.state.headers[x].field].bind(this);
+				}
+				if(sorters[data.state.headers[x].field]) {
+					data.state.headers[x].sorter = sorters[data.state.headers[x].field].bind(this);
+					if(data.state.sortKey === data.state.headers[x].field) {
+						data.state.sorter = data.state.headers[x].sorter;
+					}
+				}
+			}
+			
+			data.state.filter.template = false;
+			
+			return data;
+		},
+		"watch": {
+			"state": {
+				"deep": true,
+				"handler": function() {
+//					if(this.state.search !== this.state.search.toLowerCase()) {
+//						Vue.set(this.state.filter, "null", this.state.search.toLowerCase());
+//					}
+					if(templateValues[this.state.filterTemplate] !== undefined) {
+						Vue.set(this.state.filter, "template", templateValues[this.state.filterTemplate]);
+					} else {
+						Vue.delete(this.state.filter, "template");
+					}
+					this.saveStorage(this.storageKeyID, this.state);
+				}
+			}
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			
+			this.universe.$on("universe:modified", this.updateListings);
+			this.updateListings();
+		},
+		"methods": {
+			"updateListings": function(event) {
+				var mapped = {},
+					buffer,
+					x,
+					y;
+				
+				this.universeEntities.splice(0);
+				for(x=0; x<this.listingKeys.length; x++) {
+					this.listing[this.listingKeys[x]].splice(0);
+					for(y=0; y<this.universe.indexes[this.listingKeys[x]].listing.length; y++) {
+						buffer = this.universe.indexes[this.listingKeys[x]].listing[y];
+						if(buffer) {
+							this.listing[this.listingKeys[x]].push(buffer);
+							switch(this.listingKeys[x]) {
+								case "entity":
+									if(!mapped[buffer.id] && !buffer.hidden && !buffer.inactive) {
+										mapped[buffer.id] = true;
+										this.universeEntities.push(buffer);
+									}
+									break;
+							}
+						}
+					}
+					this.listing[this.listingKeys[x]].sort(this.sortData);
+				}
+				
+				this.universeEntities.sort(this.sortData);
+			},
+			"showCommands": function() {
+				return !!(this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index).selection.length;
+			},
+			"resetHeaders": function() {
+				Vue.set(this.state, "headers", [{
+					"title":"",
+					"field": "icon",
+					"formatter": formatters.icon
+				}, {
+					"title":"Name",
+					"field": "name",
+					"tag": "id"
+				}, {
+					"title":"Location",
+					"field": "location"
+				}, {
+					"title":"T",
+					"field": "template",
+					"formatter": formatters.template
+				}, {
+					"field": "__info",
+					"formatter": formatters.__info,
+					"recordAction": recordActions.__info.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__edit",
+					"formatter": formatters.__edit,
+					"recordAction": recordActions.__edit.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__copy",
+					"formatter": formatters.__copy,
+					"recordAction": recordActions.__copy.bind(this),
+					"hideBlock": true,
+					"nosort": true
+				}, {
+					"field": "__view",
+					"formatter": formatters.__view,
+					"recordAction": recordActions.__view.bind(this),
+					"sorter": sorters.__view
+				}]);
+			},
+			"getSpread": function() {
+				var possibles = [],
+					start = Math.max(this.state.paging.spread-5, 2),
+					end = this.state.paging.spread+5,
+					x;
+				
+				for(x=start; x<end; x++) {
+					possibles.push(x);
+				}
+
+				if(start > 10) {
+					possibles.unshift(10);
+				}
+				if(start > 2) {
+					possibles.unshift(2);
+				}
+				if(end < 50) {
+					possibles.push(50);
+				}
+				if(end < 100) {
+					possibles.push(100);
+				}
+				
+				return possibles;
+			},
+			"processCommand": function(command) {
+				var index = (this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index),
+					target = this.universe.index.lookup[this.target],
+					loading,
+					sending,
+					item,
+					keys,
+					x;
+				
+//				command = command.split(",");
+//				console.warn("Table Command: ", command, index);
+				
+				switch(command) {
+					case "give":
+//						console.warn("Giving Items");
+						for(x=0; x<index.selection.length; x++) {
+							console.warn("Sending " + index.selection[x] + "...");
+							if(this.universe.nouns.item[index.selection[x]]) {
+								sending = {};
+								sending.item = index.selection[x];
+								sending.target = this.target;
+								this.universe.send("give:item", sending);
+							} else if(this.universe.nouns.room[index.selection[x]]) {
+								sending = {};
+								sending.room = index.selection[x];
+								sending.target = this.target;
+								this.universe.send("give:room", sending);
+							} else {
+								console.warn("Can only give item & room objects");
+							}
+						}
+						break;
+					case "take":
+//						console.warn("Taking Items");
+						for(x=0; x<index.selection.length; x++) {
+							console.warn("Sending " + index.selection[x] + "...");
+							if(this.universe.nouns.item[index.selection[x]]) {
+								sending = {};
+								sending.item = index.selection[x];
+								sending.target = this.target;
+								this.universe.send("take:item", sending);
+							} else if(this.universe.nouns.room[index.selection[x]]) {
+								sending = {};
+								sending.room = index.selection[x];
+								sending.target = this.target;
+								this.universe.send("take:room", sending);
+							} else {
+								console.warn("Can only take item & room objects");
+							}
+						}
+						break;
+					case "obscure":
+//						console.warn("Taking Items");
+						for(x=0; x<index.selection.length; x++) {
+							if(this.universe.index.index[index.selection[x]]) {
+								this.universe.index.index[index.selection[x]].commit({
+									"obscured": true
+								});
+							}
+						}
+						break;
+					case "unobscure":
+//						console.warn("Taking Items");
+						for(x=0; x<index.selection.length; x++) {
+							if(this.universe.index.index[index.selection[x]]) {
+								this.universe.index.index[index.selection[x]].commit({
+									"obscured": false
+								});
+							}
+						}
+						break;
+					case "drop":
+						loading = index.selection.concat([]);
+						for(x=0; x<loading.length; x++) {
+							if(index.selected[loading[x]]._drop) {
+								// Drop Item
+								sending = {};
+								sending._type = index.selected[loading[x]]._type;
+								sending.id = index.selected[loading[x]].id;
+								sending.time = Date.now();
+								this.universe.send("delete:" + index.selected[loading[x]]._type, sending);
+								index.unselect(index.selected[loading[x]]);
+							} else {
+								// Flag Item
+								index.selected[loading[x]]._drop = true;
+							}
+						}
+						break;
+					case "spawn":
+						for(x=0; x<index.selection.length; x++) {
+							loading = index.selected[index.selection[x]];
+							if(loading.template && loading._type === "entity") {
+								keys = Object.keys(loading);
+								sending = {};
+								
+								for(x=0; x<keys.length; x++) {
+									if(keys[x] && keys[x][0] !== "_") {
+										sending[keys[x]] = loading[keys[x]];
+									}
+								}
+								
+								sending.parent = loading.id;
+								sending.name = loading.name + " (New)";
+								sending.description = loading.description;
+								sending.id += ":" + Date.now();
+								sending.template = false;
+								sending._type = "entity";
+								if(this.target) {
+									sending.owners = [this.target];
+								}
+	
+								this.universe.send("modify:entity", sending);
+							} else {
+								console.warn("Skipping Selection: ", loading);
+							}
+						}
+						break;
+					case "dashboard-ships":
+						var primary = index.selection[0],
+							ships = index.selection.slice(1);
+						
+						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + ships.join(","), "dashboard");
+						break;
+					case "grant-knowledge":
+						if(target) {
+							sending = [];
+							for(x=0; x<index.selection.length; x++) {
+								if(this.universe.indexes.knowledge.lookup[index.selection[x]]) {
+									sending.push(index.selection[x]);
+								}
+							}
+							target.learnKnowledge(sending);
+						}
+						break;
+					case "forget-knowledge":
+						if(target) {
+							sending = [];
+							for(x=0; x<index.selection.length; x++) {
+								if(this.universe.indexes.knowledge.lookup[index.selection[x]]) {
+									sending.push(index.selection[x]);
+								}
+							}
+							target.forgetKnowledge(sending);
+						}
+						break;
+				}
+				
+				
+				Vue.set(this, "command", "");
+			},
+			"processAction": function(action) {
+				console.warn("Table Action: ", action);
+				
+			},
+			"filtered": function(entity) {
+				if(entity.template || entity.inactive) {
+					return false;
+				}
+				
+				return !this.state.search ||
+					(entity._search && entity._search.indexOf(this.state.search) !== -1) ||
+					entity.id.indexOf(this.state.search) !== -1 ||
+					entity.name.indexOf(this.state.search) !== -1 ||
+					(entity.description && entity.description.indexOf(this.state.search) !== -1);
+			}
+		},
+		"beforeDestroy": function() {
+			this.universe.$off("universe:modified", this.updateEntities);
+		},
+		"template": Vue.templified("pages/rssw/universe.html")
+	});
+})();
+
+
+/**
+ * 
+ * 
+ * @class RSWindow
+ * @constructor
+ * @module Pages
+ */
+rsSystem.component("RSWindow", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.RSCorePage
+	],
+	"template": Vue.templified("pages/window.html")
 });
 
 
@@ -24395,24 +37717,41 @@ rsSystem.registerNoun(RSModifierStats, "modifierstats");
 rsSystem.registerNoun(RSArchetype, "archetype");
 rsSystem.registerNoun(RSInventory, "inventory");
 rsSystem.registerNoun(RSKnowledge, "knowledge");
+rsSystem.registerNoun(RSCondition, "condition");
+rsSystem.registerNoun(RSItemType, "itemtype");
 rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
+rsSystem.registerNoun(RSPlaylist, "playlist");
 rsSystem.registerNoun(RSAbility, "ability");
-rsSystem.registerNoun(RSHistory, "history");
+//rsSystem.registerNoun(RSHistory, "history");
+rsSystem.registerNoun(RSDataset, "dataset");
 rsSystem.registerNoun(RSLoadout, "loadout");
 rsSystem.registerNoun(RSPlayer, "player");
 rsSystem.registerNoun(RSEntity, "entity");
 rsSystem.registerNoun(RSEffect, "effect");
-rsSystem.registerNoun(RSPlanet, "planet");
+//rsSystem.registerNoun(RSPlanet, "planet"); // Just a location type
+rsSystem.registerNoun(RSWidget, "widget");
+rsSystem.registerNoun(RSImage, "image");
 rsSystem.registerNoun(RSParty, "party");
 rsSystem.registerNoun(RSSkill, "skill");
 rsSystem.registerNoun(RSNote, "note");
 rsSystem.registerNoun(RSBook, "book");
 rsSystem.registerNoun(RSItem, "item");
 rsSystem.registerNoun(RSRace, "race");
+rsSystem.registerNoun(RSRoom, "room");
+rsSystem.registerNoun(RSSlot, "slot");
+rsSystem.registerNoun(RSSex, "sex");
 
 // Assist function for Reactive Component Printing
-var _p = function(x) {return JSON.parse(JSON.stringify(x));};
+var _p = function(x) {
+	if(x === undefined) {
+		return undefined;
+	} else if(x === null) {
+		return null;
+	} else {
+		return JSON.parse(JSON.stringify(x));
+	}
+};
 
 /**
  * 
@@ -24437,15 +37776,54 @@ rsSystem.App = new Vue({
 				"path": "dashboard",
 				"component": rsSystem.components.RSSWDashboard,
 				"children": [{
-					"path": ":oid",
-					"component": rsSystem.components.RSSWDashboard
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacter,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "base",
+					"component": rsSystem.components.RSSWBase,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWBase
+					}]
+				}, {
+					"path": "ship",
+					"component": rsSystem.components.RSSWShip,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWShip
+					}]
+				}, {
+					"path": "item",
+					"component": rsSystem.components.RSSWItem,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWItem
+					}]
 				}]
 			}, {
-				"path": "character",
-				"component": rsSystem.components.RSSWCharacter,
+				"path": "construct",
+				"component": rsSystem.components.RSWindow,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacterBuilder
+				}]
+			}, {
+				"path": "base",
+				"component": rsSystem.components.RSSWBase,
 				"children": [{
 					"path": ":oid",
-					"component": rsSystem.components.RSSWCharacter
+					"component": rsSystem.components.RSSWBase
+				}]
+			}, {
+				"path": "inventory",
+				"component": rsSystem.components.RSSWInventory,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWInventory
 				}]
 			}, {
 				"path": "hangar",
@@ -24455,11 +37833,25 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWHangar
 				}]
 			}, {
-				"path": "ship",
-				"component": rsSystem.components.RSSWShip,
+				"path": "locality",
+				"component": rsSystem.components.RSSWLocality,
 				"children": [{
 					"path": ":oid",
-					"component": rsSystem.components.RSSWShip
+					"component": rsSystem.components.RSSWLocality
+				}]
+			}, {
+				"path": "storage",
+				"component": rsSystem.components.RSSWStorage,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWStorage
+				}]
+			}, {
+				"path": "journal",
+				"component": rsSystem.components.RSSWJournal,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWJournal
 				}]
 			}, {
 				"path": "map",
@@ -24469,7 +37861,71 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWMap
 				}]
 			}, {
-				"path": "nouns",
+				"path": "galaxy",
+				"component": rsSystem.components.RSSWUniverse,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacter,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "base",
+					"component": rsSystem.components.RSSWBase,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWBase
+					}]
+				}, {
+					"path": "ship",
+					"component": rsSystem.components.RSSWShip,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWShip
+					}]
+				}, {
+					"path": "item",
+					"component": rsSystem.components.RSSWItem,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWItem
+					}]
+				}]
+			}, {
+				"path": "universe",
+				"component": rsSystem.components.RSSWUniverse,
+				"children": [{
+					"path": "character",
+					"component": rsSystem.components.RSSWCharacter,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWCharacter
+					}]
+				}, {
+					"path": "base",
+					"component": rsSystem.components.RSSWBase,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWBase
+					}]
+				}, {
+					"path": "ship",
+					"component": rsSystem.components.RSSWShip,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWShip
+					}]
+				}, {
+					"path": "item",
+					"component": rsSystem.components.RSSWItem,
+					"children": [{
+						"path": ":oid",
+						"component": rsSystem.components.RSSWItem
+					}]
+				}]
+			}, {
+				"path": "nouns/:type?/:oid?",
 				"component": rsSystem.components.RSNounControls
 			}, {
 				"path": "ship",

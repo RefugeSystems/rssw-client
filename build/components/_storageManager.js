@@ -20,7 +20,7 @@ rsSystem.component("StorageManager", {
 	},
 	"methods": {
 		"loadStorage": function(key, defaults) {
-			key = key || this.storageKey;
+			key = key || this.storageKeyID || this.storageKey;
 			var data = localStorage.getItem(key);
 			if(data) {
 //				console.log("Load[" + key + "]: ", data);
@@ -31,7 +31,7 @@ rsSystem.component("StorageManager", {
 			}
 		},
 		"saveStorage": function(key, object) {
-			key = key || this.storageKey;
+			key = key || this.storageKeyID || this.storageKey;
 			if(!key || !object) {
 				throw new Error("Missing arguments");
 			}

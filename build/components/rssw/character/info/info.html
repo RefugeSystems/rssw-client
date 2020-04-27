@@ -1,28 +1,139 @@
 <div class="rs-component rssw component-character-info">
 	<div class="property name">
-		<span class="icon fas fa-user"></span>
-		<span class="value">{{character.name}}</span>
+		<span class="icon fad fa-user"></span>
+		<span class="name">{{character.name}}</span>
 		<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>
+		<button class="recalculate" v-on:click="updateCharacter()">
+			<span class="far fa-sync" :class="calculating?'fa-spin':''"></span>
+		</button>
 	</div>
-	<div class="property species">
-		<span class="icon fas fa-bug rot45"></span>
+	<div class="property species" v-if="character.classification != 'base'">
+		<span class="icon fad fa-bug rot45"></span>
 		<span class="label">Species:</span>
-		<span class="value">{{race?race.name:"No Species"}}</span>
+		<button v-for="(archetype, $index) in careers" class="value" v-on:click="showInfo(race)">
+			{{race?race.name:"No Species"}}
+		</button>
 	</div>
 	<div class="property career">
-		<span class="icon fas fa-user-hard-hat"></span>
+		<span class="icon fad fa-user-hard-hat"></span>
 		<span class="label">Careers:</span>
-		<span v-for="(archetype, $index) in careers" class="archetype">
+		<button v-for="(archetype, $index) in careers" class="archetype" v-on:click="showInfo(archetype)">
 			<span class="divide" v-if="$index !== 0">, </span>
 			<span class="value">{{archetype.name}}</span>
-		</span>
+		</button>
 	</div>
 	<div class="property speciailization">
-		<span class="icon fas fa-gavel"></span>
+		<span class="icon fad fa-gavel"></span>
 		<span class="label">Specializations:</span>
-		<span v-for="(archetype, $index) in specializations" class="archetype">
+		<button v-for="(archetype, $index) in specializations" class="archetype" v-on:click="showInfo(archetype)">
 			<span class="divide" v-if="$index !== 0">, </span>
 			<span class="value">{{archetype.name}}</span>
+		</button>
+	</div>
+	<div class="property ability">
+		<span class="icon fad fa-jedi"></span>
+		<span class="label">Abilities:</span>
+		<button v-for="(ability, $index) in abilities" class="ability" v-on:click="showInfo(ability)">
+			<span class="divide" v-if="$index !== 0">,</span>
+			<span class="value">{{ability.name}}</span>
+		</button>
+	</div>
+	<div class="property encumberance" v-if="character.classification != 'base'">
+		<span class="icon" :class="getEncumberanceIcon()"></span>
+		<span class="label">Encumberance:</span>
+		<span class="value">{{encumberance}}</span>
+		<span class="divide">/</span>
+		<span class="value">{{encumberance_max}}</span>
+	</div>
+	<div class="property items">
+		<span class="icon fad fa-backpack"></span>
+		<span class="label">Items:</span>
+		<button v-for="(item, $index) in items" class="item" v-on:click="showInfo(item)">
+			<span class="divide" v-if="$index !== 0">, </span>
+			<span class="value">{{item.name}}</span>
+		</button>
+	</div>
+	<div class="property location" v-if="location">
+		<span class="icon fad fa-globe-africa"></span>
+		<span class="label">Location:</span>
+		<button class="location" v-on:click="showInfo(location)">
+			<span class="value">{{location.name}}</span>
+		</button>
+	</div>
+	<div class="property inside" v-if="inside">
+		<span class="icon" :class="inside.icon"></span>
+		<span class="label">Inside:</span>
+		<button class="inside" v-on:click="showInfo(inside)">
+			<span class="value">{{inside.name}}</span>
+		</button>
+		<button class="property-action" v-on:click="exitEntity(inside)">
+			<span class="fas fa-sign-out-alt"></span>
+			<span class="">Exit</span>
+		</button>
+	</div>
+	<div class="property inside" v-if="piloting">
+		<span class="icon" :class="piloting.icon"></span>
+		<span class="label">Piloting:</span>
+		<button class="inside" v-on:click="showInfo(piloting)">
+			<span class="value">{{piloting.name}}</span>
+		</button>
+		<button class="property-action" v-on:click="stopPiloting(piloting)">
+			<span class="fas fa-sign-out-alt"></span>
+			<span class="">Exit</span>
+		</button>
+	</div>
+	<div class="property rooms" v-if="character.classification == 'base'">
+		<span class="icon fad fa-kaaba"></span>
+		<span class="label">Rooms:</span>
+		<button v-for="(room, $index) in rooms" class="room" v-on:click="showInfo(room)">
+			<span class="divide" v-if="$index !== 0">, </span>
+			<span class="value">{{room.name}}</span>
+		</button>
+	</div>
+	<div class="property energy" v-if="character.classification == 'base'">
+		<span class="icon" :class="getEnergyIcon()"></span>
+		<span class="label">Energy:</span>
+		<span class="value">{{energy_consumption}}</span>
+		<span class="divide">/</span>
+		<span class="value">{{energy_output}}</span>
+	</div>
+	<!--
+	<div class="property credits">
+		<span class="icon fad fa-coins"></span>
+		<span class="label">Credits:</span>
+		<input class="experience" type="number" v-model.number="credits" v-on:change="changed('credits', credits)"/>
+	</div>
+	<div class="property level" v-if="character.classification != 'base'">
+		<span class="icon fad fa-user-plus"></span>
+		<span class="label">Experience:</span>
+		<input class="experience" type="number" v-model.number="experience" v-on:change="changed('xp', experience)"/>
+	</div>
+	-->
+	<div class="property credits">
+		<span class="icon fad fa-coins"></span>
+		<span class="label">Credits:</span>
+		<rs-count class="experience" v-model="credits" v-on:change="changeEvent('credits', $event)"></rs-count>
+	</div>
+	<div class="property level" v-if="character.classification != 'base'">
+		<span class="icon fad fa-user-plus"></span>
+		<span class="label">Experience:</span>
+		<rs-count class="experience" v-model="experience" v-on:change="changeEvent('xp', $event)"></rs-count>
+	</div>
+	<div class="property description">
+		<span class="icon fas fa-info-square"></span>
+		<span class="label">
+			<span>Description:</span>
+			<button class="action" v-on:click="toggleDescription()">
+				<span v-if="!state.viewing" class="fas fa-file-alt"></span>
+				<span v-if="state.viewing" class="fas fa-edit"></span>
+			</button>
 		</span>
+		<div class="text-container">
+			<textarea class="description" v-if="!state.viewing" v-model="description" v-on:change="changed('description', description)"></textarea>
+			<div class="description rs-white object-info" v-if="state.viewing" v-html="mdDescription"></div>
+			<!--
+			<rs-rendered-text :text="description" :universe="universe" :entity="character"></rs-rendered-text>
+			-->
+		</div>
 	</div>
 </div>

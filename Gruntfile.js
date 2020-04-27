@@ -2,7 +2,7 @@
 var fs = require("fs");
 var pkg = JSON.parse(fs.readFileSync("./package.json"));
 
-var seek = /^.*build[\/\\](components|pages)[\/\\]/;
+var seek = /^.*build[\/\\](components|pages|common)[\/\\]/;
 
 var config = {
 	"pkg": pkg,
@@ -91,40 +91,51 @@ var config = {
 				"$",
 
 				"rsSystem",
-				"Random",
-				"Component",
 				"NameGenerator",
-				"SearchIndex",
 				"EventEmitter",
+				"SearchIndex",
+				"Component",
 				"Invasion",
 				"Anomaly",
+				"Random",
+				"Dice",
 				"_p",
 
 				"RSModifierAttributes",
 				"UserInformation",
 				"RSModifierStats",
 				"RSCalculator",
+				"RSCondition",
 				"RSArchetype",
 				"RSInventory",
+				"RSItemType",
 				"RSKnowledge",
+				"RSPlaylist",
 				"RSLogLevel",
 				"RSLocation",
 				"RSUniverse",
+				"RSModifier",
 				"RSAbility",
 				"RSHistory",
+				"RSDataset",
 				"RSLoadout",
 				"RSPlayer",
 				"RSObject",
 				"RSEffect",
 				"RSEntity",
 				"RSPlanet",
+				"RSWidget",
+				"RSImage",
 				"RSParty",
 				"RSSkill",
 				"RSNote",
 				"RSBook",
 				"RSItem",
 				"RSRace",
-				"RSLog"
+				"RSRoom",
+				"RSSlot",
+				"RSLog",
+				"RSSex"
 			]
 		},
 		"app": [
@@ -143,7 +154,7 @@ var config = {
 				"middleware": function(connect, options, middlewares) {
 					middlewares.unshift(function(req, res, next) {
 						res.setHeader("Access-Control-Allow-Origin", "*");
-						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval';");
+						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: blob: https:;");
 						next();
 					});
 					return middlewares;
@@ -232,6 +243,7 @@ var config = {
 				"build/styles/*.less",
 				"build/styles/*/**/*.less",
 				"build/pages/**/*.less",
+				"build/common/**/*.less",
 				"build/components/**/*.less"
 			],
 			"dest": "build/app.less"

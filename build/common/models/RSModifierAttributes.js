@@ -1,6 +1,5 @@
 /**
- * Modifiers represent changes to the properties of an entity and are computed and the summed result
- * is placed in a RSSheet for the corresponding entity.
+ * Modifiers represent changes to the properties of an object.
  * 
  * Attribute Modifiers are for flat information that doesn't have a computation involved, such as adding descriptions
  * or setting age.
@@ -16,17 +15,32 @@
  * 		received from the Universe.
  * @param {Object} universe
  */
-class RSModifierAttributes extends RSObject {
+class RSModifierAttributes extends RSModifier {
 	constructor(details, universe) {
 		super(details, universe);
 	}
 	
-	performModifications(base) {
+	performModifications(base, origin, debug) {
 		var keys = Object.keys(this._coreData),
 			x;
+		
+		if(debug) {
+			console.warn("Perform Mod[" + origin + "]: " + this.id);
+		}
 
 		for(x=0; x<keys.length; x++) {
-			if(!RSModifierAttributes._skip[keys[x]]) {
+			if(!RSModifierAttributes._skip[keys[x]] && keys[x][0] !== "_" && keys[x] !== "history" && keys[x] !== "created" && keys[x] !== "updated") {
+				if(base._contributions) {
+					if(!base._contributions[keys[x]]) {
+						base._contributions[keys[x]] = {};
+					}
+					if(base._contributions) {
+						if(!base._contributions[keys[x]]) {
+							base._contributions[keys[x]] = {};
+						}
+						base._contributions[keys[x]][origin] = true;
+					}
+				}
 				if(base[keys[x]]) {
 					switch(typeof(this._coreData[keys[x]])) {
 						case "boolean":

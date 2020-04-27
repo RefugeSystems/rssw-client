@@ -1,15 +1,46 @@
+/**
+ * 
+ * @class String
+ * @constructor
+ */
 
 /**
  * 
  * @method capitalize
- * @for String
- * @return {String} .
+ * @return {String}
  */
 String.prototype.capitalize = function() {
 	if(this.length) {
 		return this[0].toUpperCase() + this.substring(1);
 	}
 	return this;
+};
+
+/**
+ * 
+ * @method pluralize
+ * @param {Boolean} capitalize
+ * @return {String}
+ */
+String.prototype.pluralize = function(capitalize) {
+	var plural;
+	
+	switch(this[this.length-1]) {
+		case "y":
+			plural = this.substring(0, this.length-1) + "ies";
+			break;
+		case "s":
+			plural = this;
+			break;
+		default:
+			plural = this + "s";
+	}
+	
+	if(capitalize) {
+		return plural[0].toUpperCase() + plural.substring(1);
+	} else {
+		return plural;
+	}
 };
 
 /**
@@ -190,3 +221,23 @@ if(!Array.prototype.union) {
 		return result;
 	};
 }
+
+(function() {
+	var sortBySorters = {};
+	
+	Array.prototype.sortBy = function(field) {
+		if(!sortBySorters[field]) {
+			sortBySorters[field] = function(a, b) {
+				if(a[field] < b[field]) {
+					return -1;
+				} else if(a[field] > b[field]) {
+					return 1;
+				} else {
+					return 0;
+				}
+			};
+		}
+		
+		this.sort(sortBySorters[field]);
+	};
+})();

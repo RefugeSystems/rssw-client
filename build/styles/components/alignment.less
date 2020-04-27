@@ -1,5 +1,7 @@
 .rs-component {
-	.flow-h {
+	.flow-h,
+	.flow.h,
+	.flex.h {
 		display: flex;
 		flex-direction: row;
 	
@@ -24,6 +26,10 @@
 		}
 		
 		&.centered {
+			justify-content: center;
+		}
+		
+		&.center {
 			align-items: center;
 		}
 		
@@ -36,7 +42,9 @@
 		}
 	}
 	
-	.flow-v {
+	.flow-v,
+	.flow-v,
+	.flex.v {
 		display: flex;
 		flex-direction: column;
 	
@@ -50,6 +58,7 @@
 		
 		&.lefted {
 			justify-content: flex-start;
+			align-items: flex-start;
 		}
 		
 		&.justified {
@@ -64,12 +73,30 @@
 			align-items: center;
 		}
 		
+		&.center {
+			align-items: center;
+		}
+		
 		&.middled {
-			align-content: center;
+			justify-content: center;
 		}
 		
 		&.inline {
 			display: inline-flex;
+		}
+	}
+	
+	.flex {
+		.spacer {
+			flex-grow: 10;
+		}
+		
+		.start {
+			align-items: flex-start;
+		}
+		
+		.end {
+			align-items: flex-end;
 		}
 	}
 	
@@ -105,13 +132,20 @@
 		transform: scaleY(-1);
 	}
 	
-	.aligned-left {
+	.aligned-left,
+	.align-left {
 		text-align: left;
 	}
-	.aligned-right {
+	.aligned-right,
+	.align-right {
 		text-align: right;
 	}
-	.aligned-center {
+	.aligned-center,
+	.align-center {
 		text-align: center;
+	}
+	
+	.nowrap {
+		white-space: nowrap;
 	}
 }

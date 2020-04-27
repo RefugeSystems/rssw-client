@@ -2,7 +2,7 @@
 /**
  * 
  * 
- * @class RSSWDashboard
+ * @class RSSWHangar
  * @constructor
  * @module Pages
  */

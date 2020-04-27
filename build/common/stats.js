@@ -57,9 +57,9 @@ rsSystem.component("RSSWStats", {
 				"class": "rs-red",
 				"icon": "fas fa-flame rot315"
 			},
-			"maneuverability": {
-				"name": "Maneuverability",
-				"info": "Similar to strength",
+			"evasion": {
+				"name": "Evasion",
+				"info": "Nimbleness of the ship. Allows it to dodge incoming fire.",
 				"class": "rs-green",
 				"icon": "fad fa-chevron-double-right"
 			},
@@ -71,9 +71,46 @@ rsSystem.component("RSSWStats", {
 			},
 			"shield": {
 				"name": "Shield",
-				"info": "Similar to strength",
+				"info": "A ship's ability to absorb incoming damage before its hull begins to take damage",
 				"class": "rs-blue",
-				"icon": "fal fa-futbol rot45"
+				"icon": "fal fa-futbol"
+			}
+		};
+		data.entityStats.flight = {
+			"manuevers": {
+				"name": "Maneuvers",
+				"section": "piloting",
+				"info": "Control of your ship",
+				"icon": "fad fa-random",
+				"base": "agility"
+			},
+			"pilotingplanetary": {
+				"name": "Planetary",
+				"section": "piloting",
+				"info": "",
+				"icon": "fas fa-fighter-jet",
+				"base": "cunning"
+			},
+			"sensors": {
+				"name": "Sensors",
+				"section": "piloting",
+				"info": "Reading and controling a ship's sensor array",
+				"icon": "fas fa-signal-stream",
+				"base": "intellect"
+			},
+			"tracking": {
+				"name": "Tracking",
+				"section": "piloting",
+				"info": "Follow a target",
+				"icon": "ra ra-targeted",
+				"base": "willpower"
+			},
+			"hacking": {
+				"name": "Hacking",
+				"section": "piloting",
+				"info": "Remotely access another ship by force",
+				"icon": "fad fa-router",
+				"base": "intellect"
 			}
 		};
 		data.entityStats.skill = {
@@ -125,7 +162,7 @@ rsSystem.component("RSSWStats", {
 				"name": "Outer Rim",
 				"section": "knowledge",
 				"info": "",
-				"icon": "far fa-circle",
+				"icon": "fal fa-planet-ringed",
 				"base": "intellect"
 			},
 			"underworld": {
@@ -137,7 +174,7 @@ rsSystem.component("RSSWStats", {
 			"xenology": {
 				"section": "knowledge",
 				"info": "",
-				"icon": "fab fa-reddit-alien",
+				"icon": "fas fa-user-alien",
 				"base": "intellect"
 			},
 			"athletics": {
@@ -194,20 +231,6 @@ rsSystem.component("RSSWStats", {
 				"section": "general",
 				"info": "",
 				"icon": "fal fa-balance-scale",
-				"base": "agility"
-			},
-			"pilotingplanetary": {
-				"name": "Piloting (Planetary)",
-				"section": "general",
-				"info": "",
-				"icon": "fas fa-fighter-jet",
-				"base": "agility"
-			},
-			"pilotingspace": {
-				"name": "Piloting (Space)",
-				"section": "general",
-				"info": "",
-				"icon": "fad fa-fighter-jet",
 				"base": "agility"
 			},
 			"stealth": {
@@ -289,11 +312,12 @@ rsSystem.component("RSSWStats", {
 				"section": "knowledge",
 				"info": "General knowledge of planets. Can not be leveled manually.",
 				"controlled": true,
-				"icon": "fas fa-globe-stand",
+				"icon": "fad fa-planet-ringed",
 				"base": "intellect"
 			}
 		};
 		
+		Object.assign(data.entityStats.skill, data.entityStats.flight);
 		Object.assign(data.entityStats, data.entityStats.character);
 		Object.assign(data.entityStats, data.entityStats.skill);
 		Object.assign(data.entityStats, data.entityStats.ship);
@@ -306,17 +330,20 @@ rsSystem.component("RSSWStats", {
 				}
 				data.entityStats[keys[x]].propertyKey = "skill_" + keys[x];
 				data.entityStats[keys[x]].enhancementKey = "skill_enhanced_" + keys[x];
+				data.entityStats[keys[x]].bonusKey = "skill_bonuses_" + keys[x];
 				data.entityStats[keys[x]].id = keys[x];
-				data.entityStats[keys[x]]._search = data.entityStats[keys[x]].id + data.entityStats[keys[x]].name.toLowerCase();
-				if(data.entityStats[keys[x]].info) {
-					data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
-				}
 			}
 		}
 
 		data.characterStats = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
-		data.shipStats = ["attack", "maneuverability", "hull", "shield"];
+		data.characterStatsListing = [];
+		for(x=0; x<data.characterStats.length; x++) {
+			data.characterStatsListing.push(data.entityStats[data.characterStats[x]]);
+		}
+		
+		data.shipStats = ["attack", "evasion", "hull", "shield"];
 		data.skillStats = Object.keys(data.entityStats.skill).sort();
+		data.skillStatsListing = [];
 		data.listAllStats = data.characterStats.concat(data.shipStats).concat(data.skillStats);
 		data.skillStatsSections = {};
 		for(x=0; x<data.skillStats.length; x++) {
@@ -326,6 +353,7 @@ rsSystem.component("RSSWStats", {
 					data.skillStatsSections[buffer.section] = [];
 				}
 				data.skillStatsSections[buffer.section].push(data.entityStats[data.skillStats[x]]);
+				data.skillStatsListing.push(buffer);
 			} else {
 				console.error("Unaligned Skill/Stat Key: " + data.skillStats[x]);
 			}
@@ -334,6 +362,23 @@ rsSystem.component("RSSWStats", {
 		data.shipStatList = [];
 		for(x=0;x<data.shipStats.length;x++) {
 			data.shipStatList.push(data.entityStats[data.shipStats[x]]);
+		}
+
+		keys = Object.keys(data.entityStats);
+		for(x=0; x<keys.length; x++) {
+			data.entityStats[keys[x]]._search = data.entityStats[keys[x]]._search || "";
+			if(data.entityStats[keys[x]].id) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].id.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].name) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].name.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].info) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].info.toLowerCase();
+			}
+			if(data.entityStats[keys[x]].base) {
+				data.entityStats[keys[x]]._search += data.entityStats[keys[x]].base.toLowerCase();
+			}
 		}
 		
 		return data;

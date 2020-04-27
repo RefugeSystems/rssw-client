@@ -16,11 +16,6 @@ class RSPlayer extends RSObject {
 		var keys = Object.keys(this._coreData),
 			x;
 		
-		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function") {
-				this[keys[x]] = this._coreData[keys[x]];
-			}
-		}
 	}
 	
 	recalculateSheet() {}

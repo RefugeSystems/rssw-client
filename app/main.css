@@ -8,61 +8,126 @@
 .rs-component .actions {
   margin-top: 7px;
 }
-.rs-component .flow-h {
+.rs-component .interactability {
+  min-width: 30px;
+  min-height: 30px;
+  font-size: 24px;
+  line-height: 30px;
+}
+.rs-component .visibility {
+  padding: 4px;
+}
+.rs-component .flow-h,
+.rs-component .flow.h,
+.rs-component .flex.h {
   display: flex;
   flex-direction: row;
 }
-.rs-component .flow-h.wrap {
+.rs-component .flow-h.wrap,
+.rs-component .flow.h.wrap,
+.rs-component .flex.h.wrap {
   flex-wrap: wrap;
 }
-.rs-component .flow-h.reversed {
+.rs-component .flow-h.reversed,
+.rs-component .flow.h.reversed,
+.rs-component .flex.h.reversed {
   flex-direction: row-reversed;
 }
-.rs-component .flow-h.lefted {
+.rs-component .flow-h.lefted,
+.rs-component .flow.h.lefted,
+.rs-component .flex.h.lefted {
   justify-content: flex-start;
 }
-.rs-component .flow-h.justified {
+.rs-component .flow-h.justified,
+.rs-component .flow.h.justified,
+.rs-component .flex.h.justified {
   justify-content: space-between;
 }
-.rs-component .flow-h.righted {
+.rs-component .flow-h.righted,
+.rs-component .flow.h.righted,
+.rs-component .flex.h.righted {
   justify-content: flex-end;
 }
-.rs-component .flow-h.centered {
+.rs-component .flow-h.centered,
+.rs-component .flow.h.centered,
+.rs-component .flex.h.centered {
+  justify-content: center;
+}
+.rs-component .flow-h.center,
+.rs-component .flow.h.center,
+.rs-component .flex.h.center {
   align-items: center;
 }
-.rs-component .flow-h.middled {
+.rs-component .flow-h.middled,
+.rs-component .flow.h.middled,
+.rs-component .flex.h.middled {
   align-content: center;
 }
-.rs-component .flow-h.inline {
+.rs-component .flow-h.inline,
+.rs-component .flow.h.inline,
+.rs-component .flex.h.inline {
   display: inline-flex;
 }
-.rs-component .flow-v {
+.rs-component .flow-v,
+.rs-component .flow-v,
+.rs-component .flex.v {
   display: flex;
   flex-direction: column;
 }
-.rs-component .flow-v.wrap {
+.rs-component .flow-v.wrap,
+.rs-component .flow-v.wrap,
+.rs-component .flex.v.wrap {
   flex-wrap: wrap;
 }
-.rs-component .flow-v.reversed {
+.rs-component .flow-v.reversed,
+.rs-component .flow-v.reversed,
+.rs-component .flex.v.reversed {
   flex-direction: column-reversed;
 }
-.rs-component .flow-v.lefted {
+.rs-component .flow-v.lefted,
+.rs-component .flow-v.lefted,
+.rs-component .flex.v.lefted {
   justify-content: flex-start;
+  align-items: flex-start;
 }
-.rs-component .flow-v.justified {
+.rs-component .flow-v.justified,
+.rs-component .flow-v.justified,
+.rs-component .flex.v.justified {
   justify-content: space-between;
 }
-.rs-component .flow-v.righted {
+.rs-component .flow-v.righted,
+.rs-component .flow-v.righted,
+.rs-component .flex.v.righted {
   justify-content: flex-end;
 }
-.rs-component .flow-v.centered {
+.rs-component .flow-v.centered,
+.rs-component .flow-v.centered,
+.rs-component .flex.v.centered {
   align-items: center;
 }
-.rs-component .flow-v.middled {
-  align-content: center;
+.rs-component .flow-v.center,
+.rs-component .flow-v.center,
+.rs-component .flex.v.center {
+  align-items: center;
 }
-.rs-component .flow-v.inline {
+.rs-component .flow-v.middled,
+.rs-component .flow-v.middled,
+.rs-component .flex.v.middled {
+  justify-content: center;
+}
+.rs-component .flow-v.inline,
+.rs-component .flow-v.inline,
+.rs-component .flex.v.inline {
   display: inline-flex;
+}
+.rs-component .flex .spacer {
+  flex-grow: 10;
+}
+.rs-component .flex .start {
+  align-items: flex-start;
+}
+.rs-component .flex .end {
+  align-items: flex-end;
 }
 .rs-component .grow-0 {
   flex-grow: 0;
@@ -88,14 +153,20 @@
 .rs-component .flipped-v {
   transform: scaleY(-1);
 }
-.rs-component .aligned-left {
+.rs-component .aligned-left,
+.rs-component .align-left {
   text-align: left;
 }
-.rs-component .aligned-right {
+.rs-component .aligned-right,
+.rs-component .align-right {
   text-align: right;
 }
-.rs-component .aligned-center {
+.rs-component .aligned-center,
+.rs-component .align-center {
   text-align: center;
+}
+.rs-component .nowrap {
+  white-space: nowrap;
 }
 .rs-component .rs-border {
   border-style: solid;
@@ -141,7 +212,7 @@
   border-color: #617EB8 !important;
 }
 .rs-component .rsbd-green {
-  border-color: #96FF99 !important;
+  border-color: #32b736 !important;
 }
 .rs-component .rsbd-yellow {
   border-color: #b3b300 !important;
@@ -150,7 +221,7 @@
   border-color: #a91124 !important;
 }
 .rs-component .rsbd-light-red {
-  border-color: #ff8392 !important;
+  border-color: #e43a3b !important;
 }
 .rs-component .rsbd-purple {
   border-color: #cc00ff !important;
@@ -190,7 +261,7 @@
   background-color: #617EB8 !important;
 }
 .rs-component .rsbg-green {
-  background-color: #96FF99 !important;
+  background-color: #32b736 !important;
 }
 .rs-component .rsbg-yellow {
   background-color: #b3b300 !important;
@@ -199,7 +270,7 @@
   background-color: #a91124 !important;
 }
 .rs-component .rsbg-light-red {
-  background-color: #ff8392 !important;
+  background-color: #e43a3b !important;
 }
 .rs-component .rsbg-purple {
   background-color: #cc00ff !important;
@@ -220,48 +291,256 @@
 .rs-component .fields .mb8 {
   margin-bottom: 8px;
 }
-.rs-component .rs-orange {
-  color: #FF9560 !important;
+.system-component .rs-lightred,
+.rs-component .rs-lightred,
+.system-component .rs-light-red,
+.rs-component .rs-light-red {
+  color: #e43a3b !important;
 }
-.rs-component .rs-darkOrange {
-  color: #ac6530 !important;
-}
-.rs-component .rs-blue {
-  color: #617EB8 !important;
-}
-.rs-component .rs-lightBlue {
-  color: #6f9bf5 !important;
-}
-.rs-component .rs-white {
-  color: #EAEFF9 !important;
-}
-.rs-component .rs-black {
-  color: #000000 !important;
-}
-.rs-component .rs-gray,
-.rs-component .rs-grey {
-  color: #928282 !important;
-}
-.rs-component .rs-blue {
-  color: #617EB8 !important;
-}
-.rs-component .rs-green {
-  color: #96FF99 !important;
-}
+.system-component .rs-red,
 .rs-component .rs-red {
   color: #a91124 !important;
 }
+.system-component .rs-darkred,
+.rs-component .rs-darkred,
+.system-component .rs-dark-red,
+.rs-component .rs-dark-red {
+  color: #841213 !important;
+}
+.system-component .rs-lightOrange,
+.rs-component .rs-lightOrange,
+.system-component .rs-lightorange,
+.rs-component .rs-lightorange,
+.system-component .rs-light-orange,
+.rs-component .rs-light-orange {
+  color: #e0a65d !important;
+}
+.system-component .rs-orange,
+.rs-component .rs-orange {
+  color: #FF9560 !important;
+}
+.system-component .rs-darkOrange,
+.rs-component .rs-darkOrange,
+.system-component .rs-darkorange,
+.rs-component .rs-darkorange,
+.system-component .rs-dark-orange,
+.rs-component .rs-dark-orange {
+  color: #ac6530 !important;
+}
+.system-component .rs-lightyellow,
+.rs-component .rs-lightyellow,
+.system-component .rs-light-yellow,
+.rs-component .rs-light-yellow {
+  color: #e6df85 !important;
+}
+.system-component .rs-yellow,
 .rs-component .rs-yellow {
   color: #b3b300 !important;
 }
-.rs-component .rs-light-red {
-  color: #ff8392 !important;
+.system-component .rs-darkyellow,
+.rs-component .rs-darkyellow,
+.system-component .rs-dark-yellow,
+.rs-component .rs-dark-yellow {
+  color: #776f08 !important;
 }
-.rs-component .rsbg-purple {
+.system-component .rs-lightgreen,
+.rs-component .rs-lightgreen,
+.system-component .rs-light-green,
+.rs-component .rs-light-green {
+  color: #96FF99 !important;
+}
+.system-component .rs-green,
+.rs-component .rs-green {
+  color: #32b736 !important;
+}
+.system-component .rs-darkgreen,
+.rs-component .rs-darkgreen,
+.system-component .rs-dark-green,
+.rs-component .rs-dark-green {
+  color: #166118 !important;
+}
+.system-component .rs-lightBlue,
+.rs-component .rs-lightBlue,
+.system-component .rs-lightblue,
+.rs-component .rs-lightblue,
+.system-component .rs-light-blue,
+.rs-component .rs-light-blue {
+  color: #6f9bf5 !important;
+}
+.system-component .rs-blue,
+.rs-component .rs-blue {
+  color: #617EB8 !important;
+}
+.system-component .rs-darkblue,
+.rs-component .rs-darkblue,
+.system-component .rs-dark-blue,
+.rs-component .rs-dark-blue {
+  color: #0c3a96 !important;
+}
+.system-component .rs-lightpurple,
+.rs-component .rs-lightpurple,
+.system-component .rs-light-purple,
+.rs-component .rs-light-purple {
+  color: #b180f3 !important;
+}
+.system-component .rs-purple,
+.rs-component .rs-purple {
   color: #cc00ff !important;
 }
+.system-component .rs-darkpurple,
+.rs-component .rs-darkpurple,
+.system-component .rs-dark-purple,
+.rs-component .rs-dark-purple {
+  color: #5a289e !important;
+}
+.system-component .rs-white,
+.rs-component .rs-white {
+  color: #EAEFF9 !important;
+}
+.system-component .rs-gray,
+.rs-component .rs-gray,
+.system-component .rs-grey,
+.rs-component .rs-grey {
+  color: #928282 !important;
+}
+.system-component .rs-black,
+.rs-component .rs-black {
+  color: #000000 !important;
+}
+.system-component .rs-black-visible,
+.rs-component .rs-black-visible {
+  color: #332f2f !important;
+}
+.system-component .rs-transparent,
 .rs-component .rs-transparent {
   color: transparent !important;
+}
+.system-component .rs-secondary-lightred,
+.rs-component .rs-secondary-lightred,
+.system-component .rs-secondary-light-red,
+.rs-component .rs-secondary-light-red {
+  --fa-secondary-color: #e43a3b !important;
+}
+.system-component .rs-secondary-red,
+.rs-component .rs-secondary-red {
+  --fa-secondary-color: #a91124 !important;
+}
+.system-component .rs-secondary-darkred,
+.rs-component .rs-secondary-darkred,
+.system-component .rs-secondary-dark-red,
+.rs-component .rs-secondary-dark-red {
+  --fa-secondary-color: #841213 !important;
+}
+.system-component .rs-secondary-lightOrange,
+.rs-component .rs-secondary-lightOrange,
+.system-component .rs-secondary-lightorange,
+.rs-component .rs-secondary-lightorange,
+.system-component .rs-secondary-light-orange,
+.rs-component .rs-secondary-light-orange {
+  --fa-secondary-color: #e0a65d !important;
+}
+.system-component .rs-secondary-orange,
+.rs-component .rs-secondary-orange {
+  --fa-secondary-color: #FF9560 !important;
+}
+.system-component .rs-secondary-darkOrange,
+.rs-component .rs-secondary-darkOrange,
+.system-component .rs-secondary-darkorange,
+.rs-component .rs-secondary-darkorange,
+.system-component .rs-secondary-dark-orange,
+.rs-component .rs-secondary-dark-orange {
+  --fa-secondary-color: #ac6530 !important;
+}
+.system-component .rs-secondary-lightyellow,
+.rs-component .rs-secondary-lightyellow,
+.system-component .rs-secondary-light-yellow,
+.rs-component .rs-secondary-light-yellow {
+  --fa-secondary-color: #e6df85 !important;
+}
+.system-component .rs-secondary-yellow,
+.rs-component .rs-secondary-yellow {
+  --fa-secondary-color: #b3b300 !important;
+}
+.system-component .rs-secondary-darkyellow,
+.rs-component .rs-secondary-darkyellow,
+.system-component .rs-secondary-dark-yellow,
+.rs-component .rs-secondary-dark-yellow {
+  --fa-secondary-color: #776f08 !important;
+}
+.system-component .rs-secondary-lightgreen,
+.rs-component .rs-secondary-lightgreen,
+.system-component .rs-secondary-light-green,
+.rs-component .rs-secondary-light-green {
+  --fa-secondary-color: #96FF99 !important;
+}
+.system-component .rs-secondary-green,
+.rs-component .rs-secondary-green {
+  --fa-secondary-color: #32b736 !important;
+}
+.system-component .rs-secondary-darkgreen,
+.rs-component .rs-secondary-darkgreen,
+.system-component .rs-secondary-dark-green,
+.rs-component .rs-secondary-dark-green {
+  --fa-secondary-color: #166118 !important;
+}
+.system-component .rs-secondary-lightBlue,
+.rs-component .rs-secondary-lightBlue,
+.system-component .rs-secondary-lightblue,
+.rs-component .rs-secondary-lightblue,
+.system-component .rs-secondary-light-blue,
+.rs-component .rs-secondary-light-blue {
+  --fa-secondary-color: #6f9bf5 !important;
+}
+.system-component .rs-secondary-blue,
+.rs-component .rs-secondary-blue {
+  --fa-secondary-color: #617EB8 !important;
+}
+.system-component .rs-secondary-darkblue,
+.rs-component .rs-secondary-darkblue,
+.system-component .rs-secondary-dark-blue,
+.rs-component .rs-secondary-dark-blue {
+  --fa-secondary-color: #0c3a96 !important;
+}
+.system-component .rs-secondary-lightpurple,
+.rs-component .rs-secondary-lightpurple,
+.system-component .rs-secondary-light-purple,
+.rs-component .rs-secondary-light-purple {
+  --fa-secondary-color: #b180f3 !important;
+}
+.system-component .rs-secondary-purple,
+.rs-component .rs-secondary-purple {
+  --fa-secondary-color: #cc00ff !important;
+}
+.system-component .rs-secondary-darkpurple,
+.rs-component .rs-secondary-darkpurple,
+.system-component .rs-secondary-dark-purple,
+.rs-component .rs-secondary-dark-purple {
+  --fa-secondary-color: #5a289e !important;
+}
+.system-component .rs-secondary-white,
+.rs-component .rs-secondary-white {
+  --fa-secondary-color: #EAEFF9 !important;
+}
+.system-component .rs-secondary-gray,
+.rs-component .rs-secondary-gray,
+.system-component .rs-secondary-grey,
+.rs-component .rs-secondary-grey {
+  --fa-secondary-color: #928282 !important;
+}
+.system-component .rs-secondary-black,
+.rs-component .rs-secondary-black {
+  --fa-secondary-color: #000000 !important;
+}
+.system-component .rs-secondary-black-visible,
+.rs-component .rs-secondary-black-visible {
+  --fa-secondary-color: #332f2f !important;
+}
+.system-component .rs-secondary-transparent,
+.rs-component .rs-secondary-transparent {
+  --fa-secondary-color: transparent !important;
+}
+.swg:before {
+  font-size: 1.25em;
 }
 h1,
 h2,
@@ -271,9 +550,33 @@ h5,
 h6 {
   margin: 0px;
 }
+.calculated-result {
+  color: #ec6d2e;
+}
+.rendered-value.red {
+  color: #a91124;
+}
+.rendered-value.orange {
+  color: #FF9560;
+}
+.rendered-value.yellow {
+  color: #b3b300;
+}
+.rendered-value.green {
+  color: #32b736;
+}
+.rendered-value.blue {
+  color: #617EB8;
+}
+.rendered-value.purple {
+  color: #cc00ff;
+}
 .rs-component {
   /* -------------- */
   /* -------------- */
+}
+.rs-component .ra {
+  display: inline-block;
 }
 .rs-component .rot45 {
   transform: rotate(45deg);
@@ -332,6 +635,12 @@ h6 {
 .rs-component .rotY60 {
   transform: rotateY(60deg);
 }
+button.flat {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  font-size: 1em;
+}
 #game .maTop10 {
   margin-top: 10px;
 }
@@ -360,11 +669,319 @@ form {
   color: inherit;
 }
 .rs-page {
-  paddding: 0px !important;
+  padding: 0px !important;
   margin: 0px !important;
+}
+.rsswx-dice {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+}
+.rsswx-dice.force {
+  border-radius: 1em;
+  border-width: 2px;
+}
+.rsswx-dice.light {
+  border-color: #000000;
+  background: #EAEFF9;
+}
+.rsswx-dice.dark {
+  border-color: #EAEFF9;
+  background: #000000;
+}
+.light-side {
+  --fa-secondary-color: #000000;
+}
+.dark-side {
+  --fa-secondary-color: #EAEFF9;
 }
 .rs-page.page-about h1 {
   color: #EAEFF9;
+}
+.rs-page.page-home {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+.rs-page.page-home h1 {
+  color: #EAEFF9;
+}
+.rs-page.page-home .login {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.rs-page.page-home .waiting {
+  flex-direction: column;
+  text-align: center;
+  font-size: 30px;
+}
+.rs-page.page-home .system-display {
+  display: flex;
+  align-content: stretch;
+  align-items: stretch;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  margin: 0px !important;
+  border-width: 0px !important;
+  padding: 0px !important;
+  color: inherit;
+  overflow: hidden;
+}
+.rs-page.page-home .system-view {
+  overflow: auto;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}
+.rs-page.page-noun_controls {
+  display: block;
+}
+.rs-page.page-noun_controls .construction {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 100%;
+  margin-left: 10px;
+  overflow: hidden;
+}
+.rs-page.page-noun_controls .construction .building {
+  width: 440px;
+}
+.rs-page.page-noun_controls .construction .output {
+  background-color: #EAEFF9;
+  min-width: 400px;
+  max-width: 400px;
+  width: 400px;
+  padding: 5px;
+  max-height: 100%;
+  overflow: auto;
+}
+.rs-page.page-noun_controls .construction .output h1,
+.rs-page.page-noun_controls .construction .output h2,
+.rs-page.page-noun_controls .construction .output h3,
+.rs-page.page-noun_controls .construction .output h4 {
+  color: #000000;
+}
+.rs-page.page-noun_controls .construction .description {
+  color: #000000;
+}
+.rs-page.page-noun_controls .construction .primary-action {
+  background: transparent;
+  transition: color 0.5s, border 0.5s;
+  border: 1px solid #FF9560;
+  color: #FF9560;
+  cursor: pointer;
+  margin: 0px 5px 0px 0px;
+  padding: 5px;
+}
+.rs-page.page-noun_controls .construction .primary-action:active,
+.rs-page.page-noun_controls .construction .primary-action:hover {
+  border-color: #EAEFF9;
+  color: #EAEFF9;
+}
+.rssw-page.character-builder .stage {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+.rssw-page.character-builder .stage .heading {
+  flex-shrink: 0;
+}
+.rssw-page.character-builder .stage .details {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+.rssw-page.character-builder .stage .text-block {
+  position: relative;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  align-items: stretch;
+  margin-bottom: 17px;
+}
+.rssw-page.character-builder .stage .text-block label {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+.rssw-page.character-builder .stage .text-block input[type=text] {
+  padding: 3px;
+  width: 100%;
+}
+.rssw-page.character-builder .stage .text-block textarea {
+  padding: 3px;
+  min-height: 150px;
+  width: 100%;
+}
+.rssw-page.character-builder .fill {
+  flex-grow: 5;
+}
+.rssw-page.character-builder .creating {
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.rssw-page.character-builder .complete {
+  background-color: #166118;
+  color: #96FF99;
+  cont-weight: 800;
+  flex-shrink: 0;
+  height: 50px;
+}
+.rssw-page.character-builder .regress {
+  background-color: #841213;
+  color: #e43a3b;
+  cont-weight: 800;
+  flex-shrink: 0;
+  height: 50px;
+}
+.rssw-page.page-dashboard.page-characters {
+  display: flex !important;
+  flex-direction: row !important;
+}
+.rssw-page.page-dashboard.page-characters .entity-column {
+  max-width: 570px;
+  margin: 0px 10px;
+}
+.rssw-page.page-dashboard {
+  position: relative;
+  display: block;
+}
+.rssw-page.page-dashboard .title {
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+.rssw-page.page-dashboard .navigation-button {
+  text-decoration: none;
+  color: #FF9560;
+}
+.rssw-page.page-dashboard .navigation-button:active,
+.rssw-page.page-dashboard .navigation-button:hover {
+  color: #617EB8;
+}
+.rssw-page.page-dashboard button.ctrl {
+  background: transparent;
+  padding: 2px;
+  margin: 2px;
+  border: 0px;
+  cursor: pointer;
+}
+.rssw-page.page-dashboard .ctrl-icon {
+  display: inline-block;
+  line-height: 20px;
+  font-size: 18px;
+  width: 20px;
+}
+.rssw-page.page-dashboard .dashboards {
+  margin-left: 30px;
+}
+.rssw-page.page-dashboard .dashboard {
+  font-size: 18px;
+  padding: 4px;
+  margin: 4px;
+}
+.rssw-page.page-dashboard .self {
+  margin: 7px;
+  font-size: 17px;
+}
+.rssw-page.page-dashboard .control {
+  margin: 7px;
+}
+.rssw-page.page-dashboard .control .entities {
+  display: flex;
+  flex-direction: column;
+}
+.rssw-page.page-dashboard .control .entities .entity {
+  margin: 5px 0px;
+}
+.rssw-page.page-dashboard .opened {
+  position: absolute;
+  display: block;
+  transition: left 0.5s;
+  left: 100%;
+  z-index: 5;
+  top: 0px;
+}
+.rssw-page.page-dashboard .opened.loaded {
+  left: 0px;
+}
+.rs-page.rssw.page-map {
+  position: relative;
+  width: 100%
+	height: 100%;
+}
+.rssw-page.page-dashboard.page-ships {
+  display: flex;
+  flex-direction: row;
+}
+.rssw-page.page-dashboard.page-ships .ship-column {
+  max-width: 350px;
+  margin: 0px 10px;
+}
+.rssw-page.page-universe {
+  position: relative;
+  display: block;
+}
+.rssw-page.page-universe .title {
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+.rssw-page.page-universe .navigation-button {
+  text-decoration: none;
+  color: #FF9560;
+}
+.rssw-page.page-universe .navigation-button:active,
+.rssw-page.page-universe .navigation-button:hover {
+  color: #617EB8;
+}
+.rssw-page.page-universe .self {
+  margin: 7px;
+  font-size: 17px;
+}
+.rssw-page.page-universe .controls {
+  display: flex;
+  flex-direction: row;
+}
+.rssw-page.page-universe .control {
+  display: inline-block;
+  margin: 7px;
+  min-width: 240px;
+}
+.rssw-page.page-universe .control .title .filter {
+  width: 100%;
+}
+.rssw-page.page-universe .control .entities {
+  display: flex;
+  flex-direction: column;
+}
+.rssw-page.page-universe .control .entities .entity {
+  margin: 5px 0px;
+}
+.rssw-page.page-universe .opened {
+  position: absolute;
+  display: block;
+  transition: left 0.5s;
+  left: 100%;
+  z-index: 5;
+  top: 0px;
+}
+.rssw-page.page-universe .opened.loaded {
+  left: 0px;
+}
+.rssw-page.page-universe .create-npc {
+  border-top: 2px solid #FF9560;
+  padding-top: 5px !important;
+  margin-top: 5px !important;
 }
 .rs-page.page-home {
   display: flex;
@@ -405,45 +1022,304 @@ form {
   width: 100%;
   height: 100%;
 }
-.rs-page.page-noun_controls {
+.system-component.message-panel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  bottom: 0px;
+  right: 0px;
+  background-color: black;
+  border-left: 1px solid white;
+  border-top: 1px solid white;
+  border-top-left-radius: 10px;
+  z-index: 50;
+}
+.system-component.message-panel .message-container {
+  padding: 5px;
+  border-bottom: 1px solid white;
+}
+.system-component.message-panel .message-container p {
+  margin: 5px 0px;
+}
+.system-component.message-panel .spacing {
   display: block;
+  width: 10px;
 }
-.rssw-page.page-dashboard .title {
-  font-size: 20px;
-  margin-bottom: 7px;
+.system-component.component-cards {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
-.rssw-page.page-dashboard .navigation-button {
-  text-decoration: none;
-  color: #FF9560;
-}
-.rssw-page.page-dashboard .navigation-button:active,
-.rssw-page.page-dashboard .navigation-button:hover {
-  color: #617EB8;
-}
-.rssw-page.page-dashboard .self {
-  margin: 7px;
-  font-size: 17px;
-}
-.rssw-page.page-dashboard .control {
-  margin: 7px;
-}
-.rssw-page.page-dashboard .control .entities {
+.system-component.component-cards .card {
+  position: absolute;
+  background-color: white;
+  color: black;
+  border: 1px solid #FF9560;
+  width: 300px;
+  transition: left 0.5s, top 0.5s, border-color 0.5s;
+  left: 0px;
+  top: 0px;
   display: flex;
   flex-direction: column;
 }
-.rssw-page.page-dashboard .control .entities .entity {
-  margin: 5px 0px;
+.system-component.component-cards .card.passed {
+  top: -100% !important;
+  left: -100% !important;
 }
-.rs-page.rssw.page-map {
-  position: relative;
-  width: 100%
-	height: 100%;
+.system-component.component-cards .card h1,
+.system-component.component-cards .card h2,
+.system-component.component-cards .card h3,
+.system-component.component-cards .card h4,
+.system-component.component-cards .card h5,
+.system-component.component-cards .card h6 {
+  color: #000000;
+}
+.system-component.component-cards .card .information {
+  overflow: hidden;
+  flex-grow: 100;
+  padding: 5px;
+}
+.system-component.component-cards .card.current .information {
+  overflow: auto !important;
+}
+.system-component.component-cards .card .footer {
+  bottom: 0px;
+  left: 0px;
+  height: 26px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  background-color: white;
+  color: #000000;
+  flex-shrink: 0;
+  user-select: none;
+}
+.system-component.component-cards .card .footer button {
+  background-color: white;
+  color: #000000;
+}
+.system-component.component-cards .card .footer button.goto {
+  min-width: 50%;
+}
+.system-component.component-cards .back {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  height: 30px;
+  width: 30px;
+  background: #a91124;
+}
+@media only screen and (max-height: 500px) {
+  .system-component.component-cards .card {
+    max-height: calc( 100% - 30px );
+  }
+}
+@media only screen and (min-height: 501px) {
+  .system-component.component-cards .card {
+    height: 500px;
+  }
 }
 .rs-component.connect-component {
   max-width: 400px;
   border: 1px solid white;
   border-radius: 6px;
   padding: 8px;
+}
+.system-component.component-count {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: inherit;
+}
+.system-component.component-count .modeling {
+  padding-right: 0.5em;
+  font-size: inherit;
+}
+.system-component.component-count .op-controls {
+  position: relative;
+  height: 1.4em;
+  width: 1.6em;
+  overflow: hidden;
+  transition: width 0.5s;
+  font-size: inherit;
+  z-index: 5;
+}
+.system-component.component-count .op-controls .op-bar {
+  position: absolute;
+  height: 1.4em;
+  top: 0px;
+  right: 0px;
+  transition: padding 0.5s;
+  padding-right: 1.6em;
+}
+.system-component.component-count .op-controls.open {
+  width: 10.5em;
+}
+.system-component.component-count .op-controls.open .op-bar {
+  padding-right: 0px;
+}
+.system-component.component-count .op-controls .op-ctrl {
+  display: inline-block;
+  padding: 0px 0.2em;
+  font-size: 1.4em;
+  z-index: 6;
+}
+.system-component.component-count .op-controls .op-toggle {
+  position: absolute;
+  padding: 0px;
+  z-index: 7;
+  left: 0px;
+  top: 0px;
+  font-size: 1.4em;
+  padding: 0px 0.15em;
+}
+.system-component.component-count .op-controls .op-expression {
+  display: inline-block;
+  width: 7em;
+  height: 1.4em;
+  line-height: 1.4em;
+  font-size: inherit;
+  z-index: 6;
+}
+.rs-field.rs-autocomplete {
+  position: relative;
+}
+.rs-field.rs-autocomplete .corpus {
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  z-index: 5;
+  background-color: black;
+  color: white;
+  border-color: white;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 0px;
+}
+.rs-field.rs-autocomplete .corpus.open {
+  max-height: 300px;
+}
+.rs-field.rs-autocomplete .corpus .option {
+  white-space: nowrap;
+  padding: 2px 4px;
+  border-top: 1px solid #617EB8;
+}
+.rs-component.rs-field {
+  color: inherit;
+  margin: 3px 0px !important;
+}
+.rs-component.rs-field input,
+.rs-component.rs-field button,
+.rs-component.rs-field label,
+.rs-component.rs-field table {
+  color: inherit;
+  background-color: inherit;
+}
+.rs-component.rs-field label {
+  display: inline-block;
+  text-align: right;
+  min-width: 100px;
+}
+.rs-component.rs-field.label label span {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+.rs-component.rs-field select,
+.rs-component.rs-field input {
+  font-size: 13px;
+  padding: 3px;
+}
+.rs-component.rs-field textarea,
+.rs-component.rs-field input {
+  user-select: all;
+}
+.rs-component.rs-field select {
+  max-width: 160px;
+}
+.rs-component.rs-field textarea {
+  width: 90%;
+  min-height: 160px;
+}
+.rs-component.rs-field .checkbox-field {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  font-size: 1.2em;
+}
+.rs-component.rs-field .multireference {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 3px;
+  border: 1px solid #928282;
+  background: #EAEFF9;
+  width: calc(100% - 10px);
+}
+.rs-component.rs-field .multireference .referenced {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #928282;
+  background: #000000;
+  border-radius: 5px;
+  color: #EAEFF9;
+  padding: 3px;
+  margin: 3px;
+}
+.rs-component.rs-field .multireference .referenced .reference-display {
+  max-width: 160px;
+  padding: 0px 7px;
+  overflow: hidden;
+}
+.rs-component.rs-field .multireference .referenced .info {
+  color: #6f9bf5;
+  line-height: 24px;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  padding: 0px;
+  border: 0px;
+  margin: 0px 8px 0px 0px;
+}
+.rs-component.rs-field .multireference .referenced .remove {
+  color: #EAEFF9;
+  line-height: 26px;
+  font-size: 26px;
+  height: 26px;
+  width: 26px;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rs-image {
+  width: 100%;
+  text-align: center;
+}
+.rs-component.rs-image.general {
+  margin-bottom: 10px !important;
+}
+.rs-component.rs-image.general img {
+  max-width: 100%;
+}
+.rs-component.rs-image.wide img {
+  width: 100% !important;
+}
+.rs-component.rs-image.high img {
+  height: 100% !important;
+}
+.rs-component.rs-image.left {
+  text-align: left;
+}
+.rs-component.rs-image.right {
+  text-align: right;
+}
+.rs-component.rs-image.linked {
+  cursor: pointer;
 }
 .system-component.system-info {
   position: absolute;
@@ -456,8 +1332,207 @@ form {
   overflow-y: auto;
   overflow-x: hidden;
   transition: width 0.5s, right 0.5s, top 0.5s;
-  background-color: inherit;
+  border-left: 1px solid black;
+  background-color: #EAEFF9;
   z-index: 20;
+}
+.system-component.system-info.opened {
+  right: 0px;
+}
+.system-component.system-info .main-bar {
+  position: sticky;
+  width: 100%;
+  height: 40px;
+  background-color: #928282;
+  color: #000000;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  top: 0px;
+  z-index: 20;
+}
+.system-component.system-info .main-bar .titling {
+  display: flex;
+  flex-grow: 10;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  font-size: 22px;
+  padding: 3px;
+}
+.system-component.system-info .main-bar .titling .icon {
+  margin-right: 3px;
+}
+.system-component.system-info .main-bar .control {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.system-component.system-info .main-bar .control.close {
+  background: #a91124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+}
+.object-info {
+  color: #000000;
+  padding: 3px;
+}
+.object-info .record-description {
+  max-height: 800px;
+  width: 100%;
+  overflow: auto;
+}
+.object-info .record-description table {
+  border-collapse: collapse;
+  color: black;
+}
+.object-info .record-description table th {
+  background: #EAEFF9;
+  position: sticky;
+  z-index: 1;
+  top: 0px;
+}
+.object-info .record-description table td:first-child {
+  white-space: nowrap;
+}
+.object-info .record-description table tr:nth-child(odd) {
+  background-color: #bcd9e2;
+}
+.object-info .reference-heading {
+  font-weight: 800;
+  font-size: 1.2em;
+}
+.object-info .reference-heading span {
+  border-bottom: 1px solid #EAEFF9;
+}
+.object-info .reference-heading,
+.object-info h3 {
+  margin-top: 6px;
+}
+.object-info .subreference {
+  padding-left: 10px;
+  border-left: 1px solid #FF9560;
+}
+.object-info .rendered-value {
+  -webkit-text-stroke-width: thin;
+}
+.object-info .linked-value {
+  cursor: pointer;
+}
+.object-info .general-information h1,
+.object-info .general-information h2,
+.object-info .general-information h3,
+.object-info .general-information h4,
+.object-info .general-information h5,
+.object-info .general-information h6 {
+  color: black;
+}
+.object-info .general-information p {
+  margin: 0px 0px 17px 0px;
+}
+.object-info .general-information .general-image {
+  width: 100%;
+}
+.object-info .general-information .general-image img {
+  max-width: 100%;
+}
+.object-info .general-list {
+  margin: 0px;
+}
+.object-info a {
+  color: #0055ff;
+}
+.object-info .record-id {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.object-info .record-id .displayed-id {
+  transition: background-color 0.5s;
+  max-width: 80%;
+}
+.object-info .control .icon {
+  display: inline-block;
+  margin: 0px 6px 0px 0px;
+  text-align: center;
+  width: 20px;
+}
+.object-info .control button.action {
+  cursor: pointer;
+  background: transparent;
+  border-radius: 5px;
+  padding: 4px;
+  margin: 4px;
+  border: 0px;
+}
+.object-info .control button.action:active,
+.object-info .control button.actionfocus {
+  color: #FF9560;
+}
+.object-info .control button.action.direct {
+  border: 1px solid #000000;
+  color: #617EB8;
+  min-width: 120px;
+  text-align: left;
+}
+.object-info .control button.action.direct.short {
+  min-width: 30px;
+  text-align: center;
+}
+.object-info .control button.action:hover {
+  background-color: #e0aef7;
+  color: #617EB8;
+}
+.rs-component.rssw.component-character-info a {
+  cursor: pointer;
+}
+.rs-component.rssw.component-character-info .property {
+  max-width: 550px;
+  color: #EAEFF9;
+  margin: 3px;
+}
+.rs-component.rssw.component-character-info .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
+}
+.rs-component.rssw.component-character-info .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-character-info .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-character-info .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-character-info button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-character-info button.action {
+  color: white;
+}
+.rs-component.rssw.component-character-info .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
+.rs-component.rssw.component-character-info .text-container textarea {
+  width: 510px;
+  height: 300px;
+  max-height: 550px;
+  max-width: inherit;
 }
 .system-component.system-menu {
   display: block;
@@ -488,6 +1563,15 @@ form {
 .system-component.system-menu.expanded {
   width: 180px;
 }
+.system-component.system-menu.collapsed {
+  width: 36px;
+}
+.system-component.system-menu.collapsed .nav-label {
+  max-width: 0px !important;
+}
+.system-component.system-menu.collapsed .nav-icon {
+  padding-right: 0px !important;
+}
 .system-component.system-menu .navigation {
   display: flex;
   flex-direction: column;
@@ -514,15 +1598,20 @@ form {
   text-align: left;
   text-decoration: none;
 }
-.system-component.system-menu .navigation .navigation-item:hover {
-  background: white;
-  color: black;
+.system-component.system-menu .navigation .navigation-item.current {
+  background: #ac6530;
+  color: #EAEFF9;
+}
+.system-component.system-menu .navigation .navigation-item .nav-label {
+  overflow: hidden;
+  max-width: 500px;
+  transition: max-width 0.5s;
 }
 .system-component.system-menu .navigation .navigation-item .navigation-contents {
   display: flex;
   align-content: flex-start;
   align-items: center;
-  padding: 0px 10px;
+  padding: 0px 3px;
   height: 36px;
   width: 100%;
   background: transparent;
@@ -534,31 +1623,99 @@ form {
   font-size: 18px;
   cursor: pointer;
 }
+.system-component.system-menu .navigation .navigation-item .navigation-contents:hover {
+  background: white;
+  color: black;
+}
 .system-component.system-menu .navigation .navigation-item .navigation-contents .nav-icon {
   padding-right: 10px;
+  text-align: center;
+  width: 24px;
 }
 .system-component.system-menu .navigation .separator {
   flex-grow: 100;
 }
-.rs-component.component-nouns textarea {
-  min-width: 500px;
+.rs-component.component-nouns .selection,
+.rs-component.component-nouns .sourcing {
+  margin: 4px 0px;
+}
+.rs-component.component-nouns .selection span,
+.rs-component.component-nouns .sourcing span {
+  display: inline-block;
+  text-align: right;
+  width: 50px;
+}
+.rs-component.component-nouns .selection select,
+.rs-component.component-nouns .sourcing select {
+  width: 360px;
+}
+.rs-component.component-nouns .building {
+  border-top: 1px solid white;
+  padding-top: 9px;
+  margin-top: 9px;
+}
+.rs-component.component-nouns .building .simplified-editor {
+  max-height: calc(100% - 100px);
+  overflow: auto;
+}
+.rs-component.component-nouns .info-link {
+  line-height: 16px;
+  font-size: 16px;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+.rs-component.component-nouns .advanced-editor textarea {
   min-height: 350px;
+  min-width: 100%;
+  max-width: 100%;
+  width: 100%;
+  tab-size: 4;
+}
+.rs-component.component-nouns .advanced-editor textarea.overlay {
+  color: rgba(0, 0, 0, 0.4);
+}
+.rs-component.rssw.component-character-info .property {
+  margin: 3px;
+}
+.rs-component.rssw.component-character-info .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-character-info .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-character-info .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-character-info button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
 }
 .rs-component.rssw.component-character-board .container {
   min-width: 510px;
   justify-content: space-between;
 }
 .rs-component.rssw.component-character-board .stat {
-  width: 90px;
+  /*width: 90px;*/
   overflow: hidden;
   border: 1px solid #EAEFF9;
   border-radius: 5px;
   margin: 3px;
+  flex-grow: 2;
 }
 .rs-component.rssw.component-character-board .stat .label {
   text-align: center;
   width: 100%;
   margin: 2px 0px 0px 0px;
+  white-space: nowrap;
 }
 .rs-component.rssw.component-character-board .stat .value {
   width: 50%;
@@ -603,6 +1760,158 @@ form {
   color: #6f9bf5;
   font-size: 1.1em;
 }
+.rs-component.rssw.component-character-info .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-character-info button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-entity-history .history {
+  display: block;
+  position: relative;
+  max-height: 300px;
+  overflow: auto;
+  padding: 7px;
+}
+.rs-component.rssw.component-entity-history .history .flow {
+  display: inline-flex;
+  flex-direction: column;
+}
+.rs-component.rssw.component-entity-history .entry {
+  position: relative;
+  display: inline-block;
+  border-top: 1px solid #EAEFF9;
+}
+.rs-component.rssw.component-entity-history .entry a {
+  color: #6f9bf5;
+  cursor: pointer;
+}
+.rs-component.rssw.component-entity-history .entry .time {
+  color: #FF9560;
+}
+.rs-component.rssw.component-character-info a {
+  cursor: pointer;
+}
+.rs-component.rssw.component-character-info .property {
+  max-width: 550px;
+  color: #EAEFF9;
+  margin: 3px;
+}
+.rs-component.rssw.component-character-info .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
+}
+.rs-component.rssw.component-character-info .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-character-info .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-character-info .property-action {
+  color: #FF9560;
+  font-size: 0.9em;
+}
+.rs-component.rssw.component-character-info .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-character-info button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-character-info button.action {
+  color: white;
+}
+.rs-component.rssw.component-character-info .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
+.rs-component.rssw.component-character-info .text-container textarea {
+  width: 510px;
+  height: 300px;
+  max-height: 550px;
+  max-width: inherit;
+}
+.rs-component.rssw.component-entity-journal a {
+  cursor: pointer;
+}
+.rs-component.rssw.component-entity-journal .property {
+  max-width: 550px;
+  color: #EAEFF9;
+  margin: 3px;
+}
+.rs-component.rssw.component-entity-journal .divide {
+  color: #EAEFF9;
+  margin: 0px 0px 0px 2px;
+}
+.rs-component.rssw.component-entity-journal .icon {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.rs-component.rssw.component-entity-journal .value {
+  color: #6f9bf5;
+  font-size: 1.1em;
+}
+.rs-component.rssw.component-entity-journal .property-action {
+  color: #FF9560;
+  font-size: 0.9em;
+}
+.rs-component.rssw.component-entity-journal .description {
+  min-height: 140px;
+  min-width: 360px;
+}
+.rs-component.rssw.component-entity-journal button {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+}
+.rs-component.rssw.component-entity-journal button.action {
+  color: white;
+}
+.rs-component.rssw.component-entity-journal .text-container {
+  max-height: 550px;
+  max-width: inherit;
+  overflow: auto;
+}
+.rs-component.rssw.component-entity-journal .text-container textarea {
+  width: 510px;
+  height: 300px;
+  max-height: 550px;
+  max-width: inherit;
+}
+.leveling {
+  margin: 3px 0px;
+}
+.leveling button {
+  background-color: #000000;
+  color: #EAEFF9;
+  border: 1ps solid #EAEFF9;
+  transition: background-color 0.5s, color 0.5s, border;
+  cursor: pointer;
+}
+.leveling button:disabled {
+  background-color: #841213;
+  color: #EAEFF9;
+  cursor: not-allowed;
+}
 .rs-component.rssw.component-character-skills .skill-list .titling {
   border-bottom: 1px solid #EAEFF9;
   padding-right: 15px;
@@ -621,9 +1930,38 @@ form {
 .rs-component.rssw.component-character-skills .skill-list .skill * {
   vertical-align: middle;
 }
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  background: #000000;
+  color: #EAEFF9;
+  height: 0px;
+  transition: max-height 0.5s, border 0.5s;
+  z-index: 1;
+  cursor: pointer;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+  user-select: none;
+}
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result.show {
+  border: 1px solid #FF9560;
+  height: 100%;
+}
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result .result-property {
+  margin: 0px 2px;
+}
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result .result-icon {
+  padding-left: 3px;
+}
 .rs-component.rssw.component-character-skills .skill-list .base {
   color: #FF9560;
   font-size: 0.8em;
+}
+.rs-component.rssw.component-character-skills .skill-list .stats {
+  position: relative;
 }
 .rs-component.rssw.component-character-skills .skill-list .stats .level {
   white-space: nowrap;
@@ -695,34 +2033,188 @@ form {
   color: #000000;
   font-size: 20px;
 }
-.rs-component.rssw.component-ship-stats {
+.rs-component.rssw.component-entity-weapons .weapon-report {
+  margin-bottom: 6px;
+  min-height: 40px;
+}
+.rs-component.rssw.component-entity-weapons .element {
+  padding: 0px 5px;
+}
+.rs-component.rssw.component-entity-weapons .name {
+  margin-top: 5px;
+}
+.rs-component.rssw.component-entity-weapons .icon {
+  min-width: 40px;
+  min-height: 40px;
+  line-height: 40px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-entity-weapons .band {
+  border-left: 3px solid #EAEFF9;
+}
+.rs-component.rssw.component-entity-weapons .roll {
+  margin: 5px 0px;
+}
+.rs-component.rssw.component-entity-weapons .roll .dice {
+  margin: 0px 2px;
+}
+.rs-component.rssw.dice-bin .expression {
+  display: inline-flex;
+  line-height: 26px;
+  font-size: 26px;
+  margin: 3px;
+}
+.rs-component.rssw.dice-bin .expression input[type=text] {
+  padding: 0px 6px;
+  font-size: 16px;
+}
+.rs-component.rssw.dice-bin .expression .lined {
+  background: #EAEFF9;
+  min-width: 36px;
+  margin: 0px;
+}
+.rs-component.rssw.dice-bin .expression button.lined {
+  display: inline-block;
+  text-align: center;
+  background-color: #000000;
+  color: #EAEFF9;
+  font-size: 17px;
+  width: 35px;
+}
+.rs-component.rssw.dice-bin .expression .ending {
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.rs-component.rssw.dice-bin .history {
+  width: 100%;
+  max-height: 400px;
+  overflow: auto;
+}
+.rs-component.rssw.dice-bin .history .rolled {
+  display: inline-block;
+  border: 1px solid #617EB8;
+  margin: 3px;
+  padding: 3px;
+  vertical-align: top;
+}
+.rs-component.rssw.dice-bin .history .rolled .value {
+  display: inline-block;
+  min-width: 36px;
+  text-align: right;
+}
+.rs-component.rssw.dice-bin .history .rolled .info {
+  display: inline-block;
+  min-width: 24px;
+  text-align: center;
+}
+.rs-component.rssw.dice-bin .history .rolled .original {
+  text-align: center;
+}
+.rs-component.rssw.component-entity-equipment.short {
+  width: 300px;
+  overflow-x: auto;
+}
+.rs-component.rssw.component-entity-equipment .slots .slot {
+  margin: 0px;
+}
+.rs-component.rssw.component-entity-equipment .slots .icon {
+  display: block;
+  border: 1px solid #928282;
+  border-radius: 4px;
+  padding: 2px;
+  background: transparent;
+  margin: 4px;
+}
+.rs-component.rssw.component-entity-equipment .slots .icon span {
+  display: block;
+  line-height: 22px;
+  width: 22px;
+  font-size: 18px;
+  text-align: center;
+}
+.rs-component.rssw.component-entity-knowledge .controls .reset {
+  padding: 2px 8px;
+}
+.rs-component.rssw.component-entity-knowledge .table-record.name .table-content {
+  text-align: left;
+}
+.rs-component.rssw.component-entity-inside .entities {
+  border-top: 1px solid #EAEFF9;
+  padding: 7px;
+}
+.rs-component.rssw.component-entity-inside .entity {
+  background: transparent;
+  color: #617EB8;
+  margin: 3px 0px;
+  padding: 3px;
+  border: 0px;
+}
+.rs-component.rssw.component-entity-inside .title-info > * {
+  vertical-align: middle;
+  display: inline-block;
+}
+.rs-component.rssw.component-entity-inside .title-readout {
+  font-size: 0.7em;
+}
+.rs-component.rssw.component-entity-inside .exit-ship {
+  margin-left: 10px;
+}
+.rs-component.rssw.component-ship-stats .ship-card {
   display: inline-flex;
   flex-direction: column;
   width: 300px;
 }
-.rs-component.rssw.component-ship-stats .icon {
+.rs-component.rssw.component-ship-stats .ship-card .icon {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
 }
-.rs-component.rssw.component-ship-stats .icon * {
+.rs-component.rssw.component-ship-stats .ship-card .icon * {
   vertical-align: middle;
 }
-.rs-component.rssw.component-ship-stats .icon-bubble {
+.rs-component.rssw.component-ship-stats .ship-card .icon-bubble {
   display: inline-flex;
   justify-content: center;
   align-content: center;
   align-items: center;
 }
-.rs-component.rssw.component-ship-stats .picture img {
+.rs-component.rssw.component-ship-stats .ship-card .picture img {
   width: 300px;
 }
-.rs-component.rssw.component-ship-stats .data .stats .stat {
+.rs-component.rssw.component-ship-stats .ship-card .information .skill {
+  border: 1px solid #928282;
+  border-radius: 30px;
+  padding: 4px;
+  margin: 0px 4px 0px 0px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .information .pilot-info {
+  text-align: center;
+  flex-grow: 10;
+}
+.rs-component.rssw.component-ship-stats .ship-card .information .name-display {
+  margin-right: 4px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .information .alliance {
+  justify-content: center;
+  padding: 0px 5px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .information .icon {
+  display: block;
+  line-height: 30px;
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .information input {
+  text-align: center;
+  width: 100%;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .stat {
   font-size: 28px;
   align-items: center;
   margin: 3px 0px;
 }
-.rs-component.rssw.component-ship-stats .data .stats .stat .icon-bubble {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .stat .icon-bubble {
   height: 30px;
   width: 30px;
   border: 1px solid #928282;
@@ -730,13 +2222,84 @@ form {
   font-size: 20px;
   vertical-align: middle;
 }
-.rs-component.rssw.component-ship-stats .data .stats .stat .value {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .stat .value {
   margin-left: 5px;
 }
-.rs-component.rssw.component-ship-stats .mounts {
+.rs-component.rssw.component-ship-stats .ship-card .data .stats .point-bubble {
+  display: block;
+  height: 38px;
+  width: 38px;
+  line-height: 38px;
+  text-align: center;
+  border: 2px solid #928282;
+  border-radius: 15px;
+  vertical-align: middle;
+  font-size: 20px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details {
+  padding: 0px 0px 0px 5px;
+  flex-grow: 10;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-name {
+  white-space: nowrap;
+  margin-right: 8px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot {
+  justify-content: flex-end;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability {
+  position: relative;
+  flex-grow: 5;
+  margin: 5px 0px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability p {
+  margin: 0px 0px 8px 0px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability .pilot-ability-text {
+  padding-bottom: 26px;
+  padding: 3px;
+  border: 2px solid #928282;
+  background: #EAEFF9;
+  border-radius: 5px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .pilot-ability .edit-pilot-ability {
+  position: absolute;
+  background-color: transparent;
+  padding: 2px;
+  border: 0px;
+  margin: 0px;
+  bottom: 0px;
+  right: 0px;
+  line-height: 16px;
+  font-size: 16px;
+  height: 20px;
+  width: 20px;
+  color: #FF9560;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .abilities {
+  border: 2px solid #928282;
+  border-radius: 15px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data .details .abilities .ability {
+  color: #6f9bf5;
+  background: transparent;
+  font-size: 24px;
+  padding: 3px;
+  border: 0px;
+  margin: 4px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .data-list .property-link {
+  color: #6f9bf5;
+  background: transparent;
+  font-size: 0.8em;
+  padding: 4px;
+  margin: 4px;
+  border: 0px;
+}
+.rs-component.rssw.component-ship-stats .ship-card .mounts {
   justify-content: space-between;
 }
-.rs-component.rssw.component-ship-stats .mounts .icon-bubble {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .icon-bubble {
   border: 1px solid #928282;
   border-radius: 14px;
   height: 26px;
@@ -744,18 +2307,18 @@ form {
   width: 26px;
   flex-shrink: 0;
 }
-.rs-component.rssw.component-ship-stats .mounts .icon-bubble .ship-icon {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .icon-bubble .ship-icon {
   color: #EAEFF9;
 }
-.rs-component.rssw.component-ship-stats .mounts .slots {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .slots {
   justify-content: center;
   flex-grow: 9;
 }
-.rs-component.rssw.component-ship-stats .mounts .slots .slot {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .slots .slot {
   line-height: 26px;
   vertical-align: middle;
 }
-.rs-component.rssw.component-ship-stats .mounts .points {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .points {
   line-height: 18px;
   border: 1px solid #EAEFF9;
   padding: 3px 6px;
@@ -764,14 +2327,296 @@ form {
   position: relative;
   flex-shrink: 0;
 }
-.rs-component.rssw.component-ship-stats .mounts .points .icon {
+.rs-component.rssw.component-ship-stats .ship-card .mounts .points .icon {
   color: #EAEFF9;
   font-size: 0.7em;
 }
+.rs-component.rssw.component-ship-stats .ship-card .data-list.items {
+  margin-top: 8px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects {
+  width: 50px;
+  min-height: 50px;
+  padding-top: 50px;
+  z-index: 10;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-selector {
+  position: absolute;
+  z-index: 20;
+  top: 0px;
+  background: #000000;
+  transition: max-height 0.5s;
+  overflow: hidden;
+  max-height: 50px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-toggle span {
+  transition: transform 0.5s, color 0.5s;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-token-container {
+  position: relative;
+}
+.rs-component.rssw.component-ship-stats .ship-effects button.effect-token {
+  height: 42px;
+  width: 42px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects div.effect-token {
+  height: 32px;
+  width: 32px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-token {
+  position: relative;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-button {
+  display: block;
+  padding: 4px;
+  margin: 4px;
+  border: 1px solid #928282;
+  border-radius: 15px;
+  background: transparent;
+  outline: none !important;
+}
+.rs-component.rssw.component-ship-stats .ship-effects .effect-button span {
+  line-height: 32px;
+  font-size: 30px;
+}
+.rs-component.rssw.component-ship-stats .ship-effects button.effect-info {
+  position: absolute;
+  right: -40px;
+  top: 0px;
+  z-index: 30;
+  margin: 0px;
+  background: #000000;
+}
+.rs-component.rssw.component-ship-stats .ship-effects select {
+  margin: -4px 4px 4px 4px;
+  width: 42px;
+}
+.system-component.table-controls {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+}
+.system-component.table-controls .filtering {
+  position: relative;
+  display: block;
+}
+.system-component.table-controls .filtering input {
+  position: relative;
+  padding: 3px 26px 3px 3px;
+  line-height: 26px;
+  height: 26px;
+}
+.system-component.table-controls .filtering .search-icon {
+  position: absolute;
+  color: #000000;
+  right: 2px;
+  top: 2px;
+  line-height: 24px;
+  font-size: 22px;
+  height: 22px;
+  width: 22px;
+}
+.system-component.table-controls .controls {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+}
+.system-component.table-paging {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+}
+.system-component.table-paging .index-page {
+  position: relative;
+  display: block;
+  min-width: 32px;
+  font-size: 16px;
+  padding: 6px;
+  margin: 0px 7px;
+  border: 1px solid #EAEFF9;
+  border-radius: 5px;
+  transition: color 0.5s, background-color 0.5s, margin 0.5s;
+}
+.system-component.table-paging .first-page {
+  border: 1px solid #FF9560;
+  margin-right: 5px !important;
+}
+.system-component.table-paging .current-page {
+  background-color: #FF9560;
+  margin: 0px 17px;
+}
+.system-component.table-paging .last-page {
+  border: 1px solid #FF9560;
+  margin-left: 5px !important;
+}
+.system-component.table-index {
+  display: inline-block;
+  position: relative;
+  user-select: none;
+  min-width: 360px;
+  color: white;
+  overflow: hidden;
+}
+.system-component.table-index table {
+  position: relative;
+  color: #EAEFF9;
+  z-index: 6;
+}
+.system-component.table-index table.bounded {
+  overflow: hidden;
+}
+.system-component.table-index table.unbounded {
+  border-collapse: collapse;
+}
+.system-component.table-index table.unbounded tbody tr {
+  padding: 6px 0px;
+  border-bottom: 1px solid #d4d5d8;
+}
+.system-component.table-index table button.table-content {
+  background: transparent;
+  margin: 0px;
+  padding: 4px;
+  font-size: 15px;
+  border: 0px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: block;
+  z-index: 5;
+}
+.system-component.table-index table th {
+  text-align: left;
+  background-color: #000000;
+  white-space: nowrap;
+  color: inherit;
+}
+.system-component.table-index table th * {
+  color: inherit;
+  position: relative;
+  z-index: 5;
+}
+.system-component.table-index table td {
+  position: relative;
+  color: inherit;
+}
+.system-component.table-index table td.notification {
+  color: #FF9560;
+  font-size: 20px;
+}
+.system-component.table-index table td * {
+  color: inherit;
+}
+.system-component.table-index table td tbody {
+  overflow: hidden;
+}
+.system-component.table-index table td .highlight {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+}
+.system-component.table-index table td .highlight.starting:before {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: 0px;
+  width: 500px;
+  height: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(to right, #97a5ff, transparent);
+  opacity: 0.3;
+  z-index: 3;
+}
+.system-component.table-index table td .highlight.ending:before {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: calc(-500px + 100%);
+  width: 500px;
+  height: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(to right, transparent, #97a5ff);
+  opacity: 0.3;
+  z-index: 3;
+}
+.system-component.table-index table td .crosshair {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  opacity: 0.4;
+  top: 0px;
+  left: 0px;
+}
+.system-component.table-index table td:hover .crosshair {
+  z-index: 2;
+}
+.system-component.table-index table td:hover .crosshair:before {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: -200px;
+  width: calc(100% + 400px);
+  height: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(to right, transparent, #ffc33c, transparent);
+  /*background: @tableCrosshair;*/
+  opacity: inherit;
+  z-index: 2;
+}
+.system-component.table-index table td:hover .crosshair:after {
+  position: absolute;
+  display: block;
+  top: -200px;
+  left: 0px;
+  height: calc(100% + 400px);
+  width: 100%;
+  content: '*';
+  color: transparent;
+  background-image: linear-gradient(transparent, #ffc33c, transparent);
+  /*background: @tableCrosshair;*/
+  opacity: inherit;
+  z-index: 2;
+}
+.system-component.table-index table tr.record-selected .crosshair:before {
+  background-image: linear-gradient(to right, transparent, #97a5ff, transparent) !important;
+}
+.system-component.table-index table tr.record-selected .crosshair:after {
+  background-image: linear-gradient(transparent, #97a5ff, transparent) !important;
+}
+.system-component.table-index table .additional {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.system-component.table-index table .additional > * {
+  position: relative;
+  display: block;
+  z-index: 15;
+  margin-left: 7px !important;
+  padding: 5px;
+}
+.system-component.table-index table .additional > *:hover {
+  z-index: 15;
+}
 .rs-component.component-viewer {
   position: relative;
-  width: 100%
-	height: 100%;
+  height: 100%;
+  width: 100%;
+}
+.rs-component.component-viewer.fullscreen {
+  position: absolute;
+  z-index: 10;
+  left: 0px;
+  top: 0px;
 }
 .rs-component.component-viewer .map {
   position: relative;
@@ -795,16 +2640,7 @@ form {
   z-index: 5;
   width: 100%;
   height: 100%;
-}
-.rs-component.component-viewer .map .view .shadow {
-  position: absolute;
-  z-index: 4;
-  background: transparent;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  box-shadow: 0px 0px 15px inset black;
+  background: black;
 }
 .rs-component.component-viewer .map .view .coordinates {
   position: absolute;
@@ -845,6 +2681,7 @@ form {
   border-radius: 10px;
   margin-left: -5px;
   margin-top: -5px;
+  padding: 0px;
   height: 10px;
   width: 10px;
 }
@@ -882,6 +2719,7 @@ form {
 .rs-component.component-viewer .map .view .parchment {
   position: absolute;
   z-index: 1;
+  transition: width 0.5s, height 0.5s;
 }
 .rs-component.component-viewer .map .view .parchment img {
   position: absolute;
@@ -890,18 +2728,22 @@ form {
 }
 .rs-component.component-viewer .map .view .parchment .poi {
   position: absolute;
-  width: 20px;
-  height: 20px;
   margin-left: -10px;
-  border-radius: 10px;
+  border-radius: 40px;
+  z-index: 50;
+  padding: 3px;
+  min-height: 30px;
+  min-width: 30px;
+  cursor: pointer;
   margin-top: -10px;
-  color: #451458;
+  color: #FF9560;
   text-align: center;
   /*
 					margin-top: -10px;
 					opacity: .5;
 					background: red;
 					*/
+  background-color: #000000;
 }
 .rs-component.component-viewer .map .view .parchment .poi > * {
   color: inherit;
@@ -916,27 +2758,68 @@ form {
 .rs-component.component-viewer .map .view .parchment .poi .readout {
   text-align: left;
 }
+.rs-component.component-viewer .map .view .parchment .poi .labeling {
+  position: absolute;
+  top: 0px;
+  left: calc(100% + 10px);
+  color: #EAEFF9;
+  font-weight: 900;
+  background-color: black;
+  white-space: nowrap;
+}
 .rs-component.component-viewer .map .actions {
   position: absolute;
-  border: 1px solid black;
-  z-index: 20;
-  background-color: white;
+  z-index: 100;
+  background-color: black;
+  border: 2px solid #FF9560;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.rs-component.component-viewer .map .actions button {
+  border: 0px;
+  cursor: pointer;
+  color: #EAEFF9;
+  transition: color 0.5s, background-color 0.5s;
+}
+.rs-component.component-viewer .map .actions button.normal {
+  background-color: #000000;
+}
+.rs-component.component-viewer .map .actions button.normal:hover {
+  color: #000000;
+}
+.rs-component.component-viewer .map .actions button.alert {
+  background-color: #a91124;
+}
+.rs-component.component-viewer .map .actions button.alert:hover {
+  color: #a91124;
+}
+.rs-component.component-viewer .map .actions button:hover {
+  background-color: #EAEFF9;
+}
+.rs-component.component-viewer .map .actions input {
+  color: #000000;
+  padding: 3px;
 }
 .rs-component.component-viewer .map .actions .actions-header {
   display: flex;
   flex-direction: row;
+  color: #EAEFF9;
+  font-size: 18px;
+}
+.rs-component.component-viewer .map .actions .actions-header .titling {
+  font-size: 1.3em;
+  padding-left: 7px;
 }
 .rs-component.component-viewer .map .actions .actions-header span {
   line-height: 26px;
   flex-grow: 10;
-  color: black;
+  color: inherit;
 }
 .rs-component.component-viewer .map .actions .actions-header .heading {
   line-height: 26px;
   font-size: 18px;
 }
-.rs-component.component-viewer .map .actions .actions-header .menu-close {
-  background-color: #a91124;
+.rs-component.component-viewer .map .actions .actions-header .actions-close {
   flex-grow: 1;
   font-size: 22px;
   height: 26px;
@@ -949,7 +2832,6 @@ form {
 .rs-component.component-viewer .map .actions .actions-options button.option {
   border-bottom: 3px solid transparent;
   text-align: left;
-  color: black;
   padding: 4px 7px;
   margin: 5px;
 }
@@ -974,7 +2856,7 @@ form {
   max-height: 40px;
   transition: width 0.5s, max-height 0.5s;
   overflow: hidden;
-  z-index: 50;
+  z-index: 100;
   border: 1px solid #EAEFF9;
   border-radius: 5px;
   background: #000000;
@@ -996,7 +2878,106 @@ form {
   color: #000000;
   cursor: pointer;
 }
+.rs-component.component-viewer .menu .search {
+  white-space: nowrap;
+}
 .rs-component.component-viewer .menu.open {
   max-height: 500px;
   width: 200px;
+}
+.rs-component.widget-configure {
+  position: relative;
+  overflow: hidden;
+  padding: 0px !important;
+  margin: 0px !important;
+  border: 0px !important;
+}
+.rs-component.widget-configure .configuration {
+  transition: max-height 0.5s, padding-top 0.5s, border-bottom 0.5s;
+  border-bottom: 0px;
+  padding-top: 0px;
+  max-height: 0px;
+  overflow: auto;
+}
+.rs-component.rs-widget {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  max-width: 550px;
+  /*border: 1px solid white;*/
+  border-radius: 6px;
+  /*padding: 8px;*/
+  transition: min-height 0.5s;
+  min-height: 60px;
+}
+.rs-component.rs-widget .rs-containment {
+  overflow: hidden;
+  max-height: 2000px;
+  transition: max-height 0.5s;
+}
+.rs-component.rs-widget.collapsed {
+  min-height: 30px;
+}
+.rs-component.rs-widget.collapsed .rs-containment {
+  max-height: 0px;
+}
+.rs-container {
+  position: relative;
+}
+.collapsed .rs-component.widget-controls {
+  width: 100%;
+}
+.configuring .rs-component.widget-configure .configuration {
+  border-bottom: 1px solid #EAEFF9;
+  max-height: 400px;
+  padding-top: 30px;
+}
+.rs-component.widget-controls {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  right: 0px;
+  top: 0px;
+  overflow: hidden;
+  transition: width 0.5s;
+  z-index: 1;
+}
+.rs-component.widget-controls .control-bar {
+  position: relative;
+  background: #000000;
+  z-index: 3;
+}
+.rs-component.widget-controls .control-bar .widget-title {
+  white-space: nowrap;
+  padding: 2px 6px;
+  font-size: 20px;
+  flex-grow: 10;
+}
+.rs-component.widget-controls .control-pane {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: 5;
+}
+.rs-component.widget-controls .widget-ctrl {
+  display: block;
+  height: 30px;
+  width: 30px;
+  background: #000000;
+  border: 1px solid #FF9560;
+  color: #FF9560;
+  transition: border 0.5s, color 0.5s;
+  cursor: pointer;
+  margin: 0px;
+}
+.rs-component.widget-controls .widget-ctrl:active,
+.rs-component.widget-controls .widget-ctrl:hover {
+  border: 1px solid #EAEFF9;
+  color: #EAEFF9;
+}
+.rs-component.widget-controls .widget-ctrl span {
+  transition: transform 0.5s;
+}
+.collapsed .rs-component.widget-controls {
+  width: 100%;
 }

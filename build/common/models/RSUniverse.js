@@ -21,6 +21,7 @@ class RSUniverse extends RSObject {
 		 */
 		this.loggedOut = false;
 		this.initialized = false;
+		this.debugConnection = false;
 		this.index = new SearchIndex();
 		this.indexes = {};
 		this.nouns = {};
@@ -47,6 +48,11 @@ class RSUniverse extends RSObject {
 				this.connection.history.pop();
 			}
 		};
+		
+		
+		if(!details.calculator) {
+			this.calculator = new RSCalculator(this);
+		}
 		
 		/**
 		 * Logging point for this universe.
@@ -147,21 +153,27 @@ class RSUniverse extends RSObject {
 			};
 			
 			socket.onmessage = (message) => {
+				this.connection.entry(message, "Message Received");
+				this.connection.syncMark = message.time;
+				this.connection.last = Date.now();
+				
 				try {
-					this.connection.entry(message, "Message Received");
-					this.connection.syncMark = message.time;
-					this.connection.last = Date.now();
-					
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}
-					console.log("Received: ", message);
+					if(this.debugConnection || this.debug) {
+						console.log("Connection - Received: ", message);
+					}
 					
 					this.$emit(message.type, message.event);
 					this.connection.entry(message, message.type);
+					if(this.debugConnection || this.debug) {
+						console.warn("Emission[" + message.type + ":complete]: ", message.event);
+					}
+					this.$emit(message.type + ":complete", message.event);
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);
 					this.$emit("warning", {
@@ -176,8 +188,25 @@ class RSUniverse extends RSObject {
 				}
 			};
 			
+			this.$on("model:deleted", (event) => {
+				console.log("Deleting: ", event);
+				var record = this.nouns[event.type][event.id];
+				if(record) {
+					console.warn("Deleting Record: " + event.type + " - " + event.id + ": ", event, record);
+
+					this.index.unindexItem(record);
+					if(this.indexes[event.type]) {
+						this.indexes[event.type].unindexItem(record);
+						delete(this.nouns[event.type][event.id]);
+					}
+					
+					this.$emit("universe:modified", this);
+					this.$emit("universe:modified:complete", this);
+				}
+			});
+			
 			this.$on("model:modified", (event) => {
-				console.log("Modifying: ", event);
+//				console.log("Modifying: ", event);
 				var record = this.nouns[event.type][event.id];
 				if(!record) {
 					console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
@@ -185,7 +214,23 @@ class RSUniverse extends RSObject {
 						this.nouns[event.type] = {};
 					}
 					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
+					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
+					this.index.indexItem(this.nouns[event.type][event.id]);
 					this.$emit("universe:modified", this);
+					this.$emit("universe:modified:complete", this);
+				}
+			});
+			
+			this.$on("control", (event) => {
+				if(this.debugConnection) {
+					console.warn("Control Event: ", event);
+				}
+				switch(event.data.control) {
+					case "page":
+						if(this.checkEventCondition(event.data.condition)) {
+							window.location = "#" + event.data.url;
+						}
+						break;
 				}
 			});
 			
@@ -193,6 +238,64 @@ class RSUniverse extends RSObject {
 			this.user = userInformation;
 			done();
 		});
+	}
+
+	/**
+	 * 
+	 * @method calculateExpression
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} base 
+	 * @param {RSObject} target 
+	 * @return {String} 
+	 */
+	calculateExpression(expression, source, base, target) {
+		if(this.calculator) {
+			return this.calculator.process(expression, source, base, target).toString();
+		} else {
+			return expression.toString();
+		}
+	}
+	
+	/**
+	 * 
+	 * @method displayExpression
+	 * @param {String} expression 
+	 * @param {RSObject} source 
+	 * @param {Object} base 
+	 * @param {RSObject} target  
+	 * @return {String} 
+	 */
+	displayExpression(expression, source, base, target) {
+		if(this.calculator) {
+			return this.calculator.display(expression, source, base, target).toString();
+		} else {
+			return expression.toString();
+		}
+	}
+	
+	checkEventCondition(condition) {
+		if(!condition) {
+			return true;
+		}
+		
+		var keys = Object.keys(condition),
+			result = true,
+			buffer,
+			x;
+		
+		for(x=0; result && x<keys.length; x++) {
+			switch(keys[x]) {
+				case "hash":
+					buffer = new RegExp(condition[keys[x]]);
+					result = buffer.test(location.hash);
+					break;
+				default:
+					console.warn("Unknown Event Conditional[" + keys[x] + "]: ", condition);
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -249,7 +352,6 @@ class RSUniverse extends RSObject {
 	 */
 	loadState(state) {
 		return new Promise((done, fail) => {
-			console.log("Loading State: ", state);
 			var keys = Object.keys(state),
 				Constructor,
 				noun,
@@ -259,10 +361,15 @@ class RSUniverse extends RSObject {
 				i,
 				t;
 			
+			keys.unshift("modifierattrs");
+			keys.unshift("modifierstats");
+			keys.unshift("condition");
+//			console.warn("Load State: ", keys, state);
+			
 			for(t=0; t<keys.length; t++) {
 				type = keys[t];
 				Constructor = rsSystem.availableNouns[type];
-				if(Constructor) {
+				if(Constructor && state[type]) {
 					ids = Object.keys(state[type]);
 					if(!this.nouns[type]) {
 						this.indexes[type] = new SearchIndex();
@@ -270,6 +377,7 @@ class RSUniverse extends RSObject {
 					}
 					for(i=0; i<ids.length; i++) {
 						id = ids[i];
+//						console.log("Loading " + id + ": ", state[type][id]);
 						if(this.nouns[type][id]) {
 							this.nouns[type][id].loadDelta(state[type][id]);
 						} else {
@@ -279,6 +387,7 @@ class RSUniverse extends RSObject {
 							this.index.indexItem(this.nouns[type][id]);
 						}
 						noun = this.nouns[type][id];
+//						console.log("Final Noun for " + id + ": ", noun);
 					}
 				} else {
 					rsSystem.log.error("Noun does not have a registered constructor: " + type);
@@ -298,8 +407,11 @@ class RSUniverse extends RSObject {
 			}
 			
 			if(!this.initialized) {
+				this.initialized = true;
 				this.$emit("initialized", this);
 			}
+			
+			this.$emit("universe:modified", this);
 		});
 	}
 	
@@ -325,7 +437,9 @@ class RSUniverse extends RSObject {
 				"event": type,
 				"data": data
 			};
-			console.log("Sending: ", data);
+			if(this.debugConnection) {
+				console.log("Connection - Sending: ", data);
+			}
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {

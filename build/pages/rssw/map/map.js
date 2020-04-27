@@ -9,7 +9,7 @@
 rsSystem.component("RSSWMap", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.RSCore
+		rsSystem.components.RSCorePage
 	],
 	"props": {
 		

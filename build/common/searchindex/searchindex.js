@@ -32,7 +32,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = dataSet[x].id.toLowerCase();
 						this.index[buffer.id] = dataSet[x];
 						this.index[buffer.name] = dataSet[x];
-						dataSet[x]._search = this.createSearchString(dataSet[x]);
+//						dataSet[x]._search = this.createSearchString(dataSet[x]);
 					}
 				}
 			} else if(dataSet instanceof Object) {
@@ -46,7 +46,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
 						this.index[buffer.name] = this.lookup[buffer[x]];
-						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
+//						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
 					}
 				}
 			}
@@ -76,7 +76,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = dataSet[x].id.toLowerCase();
 						this.index[buffer.id] = dataSet[x];
 						this.index[buffer.name] = dataSet[x];
-						dataSet[x]._search = this.createSearchString(dataSet[x]);
+//						dataSet[x]._search = this.createSearchString(dataSet[x]);
 					}
 				}
 			} else if(dataSet instanceof Object) {
@@ -90,7 +90,7 @@ class SearchIndex extends EventEmitter {
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
 						this.index[buffer.name] = this.lookup[buffer[x]];
-						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
+//						this.lookup[buffer[x]]._search = this.createSearchString(this.lookup[buffer[x]]);
 					}
 				}
 			}
@@ -114,7 +114,7 @@ class SearchIndex extends EventEmitter {
 					if(record[x]) {
 						buffer = record[x].id || record[x];
 						if(this.lookup[buffer]) {
-							console.log("Selected", this.lookup[buffer]);
+//							console.log("Selected", this.lookup[buffer]);
 							this.selected[buffer] = this.lookup[buffer];
 						} else {
 							rsSystem.log.warn("Can not select non-indexed record: ", record[x]);
@@ -202,9 +202,11 @@ class SearchIndex extends EventEmitter {
 	toggleSelect(record) {
 		if(this.selected[record.id]) {
 			delete(this.selected[record.id]);
+			this.$emit("selection");
 			return false;
 		} else {
 			this.selected[record.id] = record;
+			this.$emit("selection");
 			return true;
 		}
 	}
@@ -228,7 +230,7 @@ class SearchIndex extends EventEmitter {
 		return Object.keys(this.selected);
 	}
 	
-	/**
+	/*
 	 * 
 	 * @method list
 	 * @param {String | Object} filter Defines how to filter against the _search string as a string or
@@ -244,6 +246,7 @@ class SearchIndex extends EventEmitter {
 	 * @param {Boolean} options.noInstances
 	 * @param {Boolean} options.onlyInstances
 	 * @param {Boolean} options.sortKey
+	 * @param {Array} options.list Specify a list object to populate. If omitted, a new list is created and returned.
 	 * @param {Function} options.sorter Custom function that takes `sorter(recordA, recordB, order)` to sort the list
 	 * 		of objects.
 	 * @param {Boolean} options.secondarySortKey
@@ -251,43 +254,29 @@ class SearchIndex extends EventEmitter {
 	 * 		one page.
 	 * @param {Number} options.paging.current The current page number (NOT the expected offset).
 	 * @param {Number} options.paging.per The number or entries per page.
-	 * @param {Number} options.paging._pages This is essentially a hack for passing back the page count calculation, as
-	 * 		the list method would return only 1 page always with the current implementation.
+	 * @param {Number} options.paging.count The current page count.
 	 * @param {Function} options.customFilter Passed a single record to check if the record is valid to include or not.
+	 * @parma {Array} list Optionally specified list to use
 	 */
-	list(filter, order, limit, options) {
-		var x, keys, list = [];
+	
+	/**
+	 * 
+	 * @method list
+	 * @param {Object} filter Defines how to filter against the _search string as a string or
+	 * 		how to compare object fields based on the properties present on the filter object where the
+	 * 		property "null" corresponds to the general _Search string property on the object.
+	 * @param {Object} state
+	 * @param {Array} list
+	 */
+	list(filter, state, list) {
+		var x, keys;
 		
-		if(filter && filter.options && typeof filter.options === "object") {
-			options = filter.options;
-			delete(filter.options);
-			keys = Object.keys(filter);
-			if(keys.length === 1 && filter.null) {
-				filter = filter.null;
-			}
-		} else {
-			options = options || {};
-		}
-		
-		order = order===undefined?options.order:order;
-		limit = limit===undefined?options.limit:limit;
-		
-		if(typeof filter === "string") {
-			filter = filter.toLowerCase();
-			for(x=0; x<this.listing.length; x++) {
-				if(this.listing[x]._search.indexOf(filter) !== -1 &&
-						(!options.noInstances || !this.listing[x].instanceOf) &&
-						(!options.onlyInstances || this.listing[x].instanceOf)) {
-					list.push(this.listing[x]);
-				}
-			}
-		} else if(filter /* null is technically an object */ && typeof filter === "object") {
+		if(filter /* null is technically an object */ && typeof filter === "object") {
 			var y, result;
 			keys = keys || Object.keys(filter);
-			if(filter.null) {
-				filter.null = filter.null.toLowerCase();
+			if(filter["null"]) {
+				filter["null"] = filter["null"].toLowerCase();
 			}
-			
 			for(x=0; x<this.listing.length; x++) {
 				result = true;
 				for(y=0; result && y<keys.length; y++) {
@@ -295,26 +284,27 @@ class SearchIndex extends EventEmitter {
 						if(!this.listing[x]._search) {
 							this.listing[x]._search = this.createSearchString(this.listing[x]);
 						}
-						if(this.listing[x]._search.indexOf(filter.null) === -1) {
+						if(this.listing[x]._search.indexOf(filter["null"]) === -1) {
 							result = false;
 						}
+//						console.warn("Null Filter: " + filter["null"] + "[" + this.listing[x]._search.indexOf(filter["null"]) + "]");
 					} else {
 						switch(typeof this.listing[x][keys[y]]) {
 							case "string":
 								if(filter[keys[y]] instanceof RegExp) {
-									result = filter[keys[y]].test(this.listing[x][keys[y]]);
 //									console.log("String reg result this.listing[x][" + keys[y] + "] =?= ", filter[keys[y]], " --> " + result);
+									result = filter[keys[y]].test(this.listing[x][keys[y]]);
 								} else {
 									if(this.listing[x][keys[y]].indexOf(filter[keys[y]]) === -1) {
-										result = false;
 //										console.log("String index result this.listing[x][" + keys[y] + "] =?= ", filter[keys[y]], " --> " + result);
+										result = false;
 									}
 								}
 								break;
 							case "boolean":
 								if(!!this.listing[x][keys[y]] !== !!filter[keys[y]]) {
-									result = false;
 //									console.log("Raw Boolean this.listing[x][" + keys[y] + "](" + !!this.listing[x][keys[y]] + ") != " + !!filter[keys[y]]);
+									result = false;
 								}
 								break;
 							case "undefined":
@@ -341,7 +331,7 @@ class SearchIndex extends EventEmitter {
 						}
 					}
 				}
-				if(result && (!options.customFilter || options.customFilter(this.listing[x]))) {
+				if(result && (!state.customFilter || state.customFilter(this.listing[x]))) {
 					list.push(this.listing[x]);
 				}
 			}
@@ -349,66 +339,73 @@ class SearchIndex extends EventEmitter {
 			list.push.apply(list, this.listing);
 		}
 		
-		if(order !== undefined && options.sortKey) {
-			if(options.sorter) {
+		if(state.order !== undefined && state.sortKey) {
+			if(state.sorter) {
 //				console.log("Custom sort");
-				list.sort(options.sorter);
-				if(order) {
+				list.sort(state.sorter);
+				if(state.order) {
 					list.reverse();
 				}
 			} else {
 //				console.log("Simple sort");
 				// TODO Implement sub-sort
-				var forward = order?1:-1,
-					reverse = order?-1:1;
+				var forward = state.order?1:-1,
+					reverse = state.order?-1:1;
 				list.sort(function(a, b) {
-					a = a[options.sortKey] || "";
-					b = b[options.sortKey] || "";
+					a = a[state.sortKey] || "";
+					b = b[state.sortKey] || "";
 					return a < b?reverse:(a > b?forward:0);
 				});
 			}
 		}
 		
-		if(limit || options.limit) {
-			list.splice(0, parseInt(limit || options.limit));
+		if(state.limit) {
+			list.splice(0, parseInt(state.limit));
 		}
 		
-		if(options.paging) {
-			options.paging._pages = parseInt(Math.ceil(list.length / options.paging.per));
-			list = list.splice(options.paging.current * options.paging.per, options.paging.per);
+		if(state.paging) {
+			state.paging.count = parseInt(Math.ceil(list.length / state.paging.per));
+			if(state.paging.current >= state.paging.count) {
+				state.paging.current = state.paging.count - 1;
+			}
+			if(state.paging.current < 0) {
+				state.paging.current = 0;
+			}
+			list.splice(state.paging.current * state.paging.per + state.paging.per);
+			list.splice(0, state.paging.current * state.paging.per);
 		}
 		
-		return list;
+		return state.paging;
 	}
 	
 	createSearchString(object) {
 		var string = "";
 		if(object.name && object.name.toLowerCase) {
-			string += object.name.toLowerCase(); 
+			string += object.name.toLowerCase();
 		}
 		if(object.id) {
-			string += object.id; 
+			string += object.id;
 		}
 		if(object.location) {
-			string += object.location; 
+			string += object.location;
 		}
 		if(object.origin) {
-			string += object.origin; 
+			string += object.origin;
 		}
 		if(object.owner) {
-			string += object.owner; 
+			string += object.owner;
 		}
 		if(object.backstory) {
-			string += object.backstory.toLowerCase(); 
+			string += object.backstory.toLowerCase();
 		}
 		if(object.description) {
-			string += object.description.toLowerCase(); 
+			string += object.description.toLowerCase();
 		}
 		if(object.note) {
-			string += object.note.toLowerCase(); 
+			string += object.note.toLowerCase();
 		}
 		if(object.hiddenState) {
-			string += "?"; 
+			string += "?";
 		}
 		return string;
 	}
@@ -442,7 +439,7 @@ class SearchIndex extends EventEmitter {
 					} else {
 						Object.assign(this.lookup[item[x].id], item[x]);
 					}
-					this.lookup[item[x].id]._search = this.createSearchString(this.lookup[item[x].id]);
+//					this.lookup[item[x].id]._search = this.createSearchString(this.lookup[item[x].id]);
 				} else {
 					console.warn("Unidentified Search Index Update[Array]: ", item[x]);
 				}
@@ -478,10 +475,10 @@ class SearchIndex extends EventEmitter {
 				} else {
 					Object.assign(this.lookup[item.id], item);
 				}
-				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
+//				this.lookup[item.id]._search = this.createSearchString(this.lookup[item.id]);
 				this.$emit("indexed");
 			} else {
-				console.warn("Unidentified Search Index Update: ", item);
+				console.warn("Search Index unable to index item due to lack of identifier: ", item);
 			}
 		}
 	}
@@ -499,11 +496,28 @@ class SearchIndex extends EventEmitter {
 			delete(this.index[this.lookup[item].name]);
 			delete(this.lookup[item]);
 			delete(this.index[item]);
-			this.lookup[item.id] = item;
-			this.named[item.name] = item;
-			this.index[item.name] = item;
-			this.index[item.id] = item;
 			this.$emit("indexed");
 		}
+	}
+	
+	/**
+	 * Lookup the elements in the passed array and receive a new array containing the elements
+	 * that are part of this index.
+	 * @method translate
+	 * @param {Array} source Array of IDs to search.
+	 * @return {Array} A new array that is the referenced data within this index. Elements
+	 * 		of the array that do not belong are skipped by default.
+	 */
+	translate(source) {
+		var result = [],
+			x;
+		
+		for(x=0; x<source.length; x++) {
+			if(this.lookup[source[x]]) {
+				result.push(this.lookup[source[x]]);
+			}
+		}
+		
+		return result;
 	}
 }
