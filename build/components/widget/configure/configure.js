@@ -2,11 +2,11 @@
 /**
  * 
  * 
- * @class rsWidgetControl
+ * @class rsWidgetConfigure
  * @constructor
  * @module Components
  */
-rsSystem.component("rsWidgetControl", {
+rsSystem.component("rsWidgetConfigure", {
 	"inherit": true,
 	"props": {
 		"universe": {
@@ -14,6 +14,9 @@ rsSystem.component("rsWidgetControl", {
 			"type": Object
 		},
 		"settings": {
+			"type": Object
+		},
+		"contents": {
 			"type": Object
 		},
 		"state": {
@@ -30,16 +33,7 @@ rsSystem.component("rsWidgetControl", {
 		return data;
 	},
 	"methods": {
-		"getClasses": function() {
-			var classes = "";
-			if(this.borderColor) {
-				classes += " rs-border one rsbd-" + this.borderColor;
-			}
-			return classes.trim();
-		},
-		"toggle": function() {
-			this.$emit("toggle");
-		}
+
 	},
-	"template": Vue.templified("components/widget-control.html")
+	"template": Vue.templified("components/widget/configure.html")
 });

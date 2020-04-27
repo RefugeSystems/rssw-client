@@ -55,31 +55,46 @@ rsSystem.component("RSSWCharacter", {
 				}
 
 				this.widgets.push({
+					"title": "Character",
 		            "declaration": "rsswCharacterInfo",
 		            "sid": "entity:info:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "Vitals",
 		            "declaration": "rsswCharacterBoard",
 		            "sid": "entity:board:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "Stats",
 		            "declaration": "rsswCharacterStats",
 		            "sid": "entity:stats:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "Dice",
 		            "declaration": "rsswDiceBin",
 		            "sid": "entity:dice:" + this.entity.id,
-		            "enabled": true
+		            "enabled": true,
+		            "configurations": [{
+		        		"label": "Hide Lables",
+		        		"property": "hideLabels",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Hide Expression",
+		        		"property": "hideExpressions",
+		        		"type": "checkbox"
+		            }]
 				});
 				this.widgets.push({
+					"title": "Weapons",
 		            "declaration": "rsswEntityWeapons",
 		            "sid": "entity:weapons:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "Equipment",
 		            "declaration": "rsswEntityEquipment",
 		            "sid": "entity:equip:" + this.entity.id,
 		            "enabled": true,
@@ -88,16 +103,19 @@ rsSystem.component("RSSWCharacter", {
 		            }
 				});
 				this.widgets.push({
+					"title": "Skills",
 		            "declaration": "rsswCharacterSkills",
 		            "sid": "entity:skills:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "Knowledge",
 		            "declaration": "rsswEntityKnowledge",
 		            "sid": "entity:knowledge:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "History",
 		            "declaration": "rsswEntityHistory",
 		            "sid": "entity:history:" + this.entity.id,
 		            "enabled": true

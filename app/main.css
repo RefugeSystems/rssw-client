@@ -972,27 +972,6 @@ form {
   border-radius: 6px;
   padding: 8px;
 }
-.rs-component.rs-widget {
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-  max-width: 550px;
-  /*border: 1px solid white;*/
-  border-radius: 6px;
-  /*padding: 8px;*/
-  min-height: 30px;
-}
-.rs-component.rs-widget .rs-containment {
-  overflow: hidden;
-  max-height: 2000px;
-  transition: max-height 0.5s;
-}
-.rs-component.rs-widget.collapsed .rs-containment {
-  max-height: 0px;
-}
-.rs-container {
-  position: relative;
-}
 .rs-field.rs-autocomplete {
   position: relative;
 }
@@ -2662,12 +2641,81 @@ form {
   max-height: 500px;
   width: 200px;
 }
+.rs-component.widget-configure {
+  position: relative;
+  overflow: hidden;
+  padding: 0px !important;
+  margin: 0px !important;
+  border: 0px !important;
+}
+.rs-component.widget-configure .configuration {
+  transition: max-height 0.5s, padding-top 0.5s, border-bottom 0.5s;
+  border-bottom: 0px;
+  padding-top: 0px;
+  max-height: 0px;
+  overflow: auto;
+}
+.rs-component.rs-widget {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  max-width: 550px;
+  /*border: 1px solid white;*/
+  border-radius: 6px;
+  /*padding: 8px;*/
+  transition: min-height 0.5s;
+  min-height: 60px;
+}
+.rs-component.rs-widget .rs-containment {
+  overflow: hidden;
+  max-height: 2000px;
+  transition: max-height 0.5s;
+}
+.rs-component.rs-widget.collapsed {
+  min-height: 30px;
+}
+.rs-component.rs-widget.collapsed .rs-containment {
+  max-height: 0px;
+}
+.rs-container {
+  position: relative;
+}
+.collapsed .rs-component.widget-controls {
+  width: 100%;
+}
+.configuring .rs-component.widget-configure .configuration {
+  border-bottom: 1px solid #EAEFF9;
+  max-height: 400px;
+  padding-top: 30px;
+}
 .rs-component.widget-controls {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  right: 0px;
+  top: 0px;
+  overflow: hidden;
+  transition: width 0.5s;
+  z-index: 1;
+}
+.rs-component.widget-controls .control-bar {
+  position: relative;
+  background: #000000;
+  z-index: 3;
+}
+.rs-component.widget-controls .control-bar .widget-title {
+  white-space: nowrap;
+  padding: 2px 6px;
+  font-size: 20px;
+  flex-grow: 10;
+}
+.rs-component.widget-controls .control-pane {
   position: absolute;
   right: 0px;
   top: 0px;
+  z-index: 5;
 }
-.rs-component.widget-controls .toggle {
+.rs-component.widget-controls .widget-ctrl {
   display: block;
   height: 30px;
   width: 30px;
@@ -2675,12 +2723,17 @@ form {
   border: 1px solid #FF9560;
   color: #FF9560;
   transition: border 0.5s, color 0.5s;
+  cursor: pointer;
+  margin: 0px;
 }
-.rs-component.widget-controls .toggle:active,
-.rs-component.widget-controls .toggle:hover {
+.rs-component.widget-controls .widget-ctrl:active,
+.rs-component.widget-controls .widget-ctrl:hover {
   border: 1px solid #EAEFF9;
   color: #EAEFF9;
 }
-.rs-component.widget-controls .toggle span {
+.rs-component.widget-controls .widget-ctrl span {
   transition: transform 0.5s;
+}
+.collapsed .rs-component.widget-controls {
+  width: 100%;
 }

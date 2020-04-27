@@ -6,7 +6,8 @@
 	/*border: 1px solid white;*/
 	border-radius: 6px;
 	/*padding: 8px;*/
-	min-height: 30px;
+	transition: min-height .5s;
+	min-height: 60px;
 	
 	.rs-containment {
 		overflow: hidden;
@@ -15,6 +16,7 @@
 	}
 		
 	&.collapsed {
+		min-height: 30px;
 	
 		.rs-containment {
 			max-height: 0px;
@@ -26,3 +28,18 @@
 	position: relative;
 }
 
+.collapsed {
+	.rs-component.widget-controls {
+		width: 100%;
+	}
+}
+
+.configuring {
+	.rs-component.widget-configure {
+		.configuration {
+			border-bottom: 1px solid @rsWhite;
+			max-height: 400px;
+			padding-top: 30px;
+		}
+	}
+}

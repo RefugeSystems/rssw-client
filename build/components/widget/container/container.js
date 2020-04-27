@@ -73,6 +73,18 @@
 					console.error("Can't Find Container");
 				}
 			},
+			"config": function() {
+				if(this.$el) {
+					if(this.state.configuring) {
+						this.$el.classList.remove("configuring");
+					} else {
+						this.$el.classList.add("configuring");
+					}
+					Vue.set(this.state, "configuring", !this.state.configuring);
+				} else {
+					console.error("Can't Find Container");
+				}
+			},
 			"editSettings": function() {
 
 			},
@@ -117,9 +129,13 @@
 				widget.props = {};
 				widget.props["settings"] = this.contents.settings;
 				widget.props["universe"] = this.universe;
+				widget.props["contents"] = this.contents;
 				widget.props["state"] = this.state;
+				elements.push(createElement("rs-widget-configure", widget));
+				
 				widget.on = {};
 				widget.on.toggle = this.toggle;
+				widget.on.config = this.config;
 				elements.push(createElement("rs-widget-control", widget));
 			} else {
 				elements.push(createElement("div"));
