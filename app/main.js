@@ -26444,7 +26444,8 @@ rsSystem.component("rsCount", {
 				"icon": "far fa-sigma rs-orange"
 			}
 		};
-		data.ops = Object.keys(data.operations);
+		data.ops = ["add", "sub", "sum"];
+		//data.ops = Object.keys(data.operations);
 		
 		data.shadow = this.toNumber(this.value || 0);
 		data.toggleElement = null;
