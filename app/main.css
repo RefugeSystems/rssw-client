@@ -88,6 +88,7 @@
 .rs-component .flow-v.lefted,
 .rs-component .flex.v.lefted {
   justify-content: flex-start;
+  align-items: flex-start;
 }
 .rs-component .flow-v.justified,
 .rs-component .flow-v.justified,
@@ -843,6 +844,14 @@ form {
   cont-weight: 800;
   flex-shrink: 0;
   height: 50px;
+}
+.rssw-page.page-dashboard.page-characters {
+  display: flex !important;
+  flex-direction: row !important;
+}
+.rssw-page.page-dashboard.page-characters .entity-column {
+  max-width: 570px;
+  margin: 0px 10px;
 }
 .rssw-page.page-dashboard {
   position: relative;
@@ -1886,7 +1895,10 @@ form {
   height: 100%;
 }
 .rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result .result-property {
-  margin: 0px 4px;
+  margin: 0px 2px;
+}
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result .result-icon {
+  padding-left: 3px;
 }
 .rs-component.rssw.component-character-skills .skill-list .base {
   color: #FF9560;

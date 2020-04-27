@@ -76,6 +76,29 @@ rsSystem.component("RSSWDashboard", {
 						window.location = location.pathname + "#/dashboard/ship/" + primary + "?ships=" + eids.join(",");
 					}
 					break;
+				case "character":
+					for(x=0; !primary && x<this.selectedEntities.length; x++) {
+						if(this.selectedEntities[x].entity === this.self.id) {
+							primary = this.selectedEntities[x].id;
+							eids.splice(x, 1);
+						}
+					}
+					
+					if(!primary) {
+						primary = this.selectedEntities[0].id;
+						eids.splice(0, 1);
+					}
+
+					for(x=0; x<eids.length; x++) {
+						eids[x] = eids[x].id;
+					}
+					
+					if(external) {
+						window.open(location.pathname + "#/dashboard/character/" + primary + "?characters=" + eids.join(","), "dashboard");
+					} else {
+						window.location = location.pathname + "#/dashboard/character/" + primary + "?characters=" + eids.join(",");
+					}
+					break;
 			}
 		},
 		"updateDisplay": function() {

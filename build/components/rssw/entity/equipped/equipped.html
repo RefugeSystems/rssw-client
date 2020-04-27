@@ -1,8 +1,4 @@
 <div class="rs-component rssw component-entity-equipment" :class="getModeClassing()">
-	<div v-if="mode === 'long'" class="slots flex h">
-		<h3>Equipment</h3>
-	</div>
-	
 	<div v-if="mode === 'short'" class="slots flex h centered">
 		<div v-if="slotKeys.length === 0">
 			<h3>Equipment</h3>
@@ -21,7 +17,6 @@
 	
 	<div v-if="mode === 'long'" class="slots flex v">
 		<div v-if="slotKeys.length === 0">
-			<h3>Equipment</h3>
 			<span>No Slots</span>
 		</div>
 		<div class="slot flex h" v-for="slot in slotKeys">

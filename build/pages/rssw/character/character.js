@@ -13,7 +13,8 @@ rsSystem.component("RSSWCharacter", {
 	],
 	"data": function() {
 		var data = {};
-		
+
+		data.additional_characters = [];
 		data.entity = null;
 		data.widgets = [];
 		
@@ -36,6 +37,28 @@ rsSystem.component("RSSWCharacter", {
 	},
 	"methods": {
 		"update": function() {
+			var characters,
+				entity,
+				prep = [],
+				x;
+
+			if(this.$route.query.characters) {
+				characters = this.$route.query.characters.split(",");
+				for(x=0; x<characters.length; x++) {
+					entity = this.universe.indexes.entity.lookup[characters[x]];
+					if(entity && entity.classification === "character" && this.isOwner(entity)) {
+						prep.push(entity);
+					}
+				}
+			}
+
+			if(prep.length !== this.additional_characters.length) {
+				this.additional_characters.splice(0);
+				for(x=0; x<prep.length; x++) {
+					this.additional_characters.push(prep[x]);
+				}
+			}
+			
 			this.widgets.splice(0);
 			if(this.entity) {
 				if(this.entity.widgets) {

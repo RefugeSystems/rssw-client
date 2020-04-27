@@ -124,6 +124,7 @@
 		
 		&.lefted {
 			justify-content: flex-start;
+			align-items: flex-start;
 		}
 		
 		&.justified {
@@ -858,8 +859,14 @@ form {
 	}
 }
 
-.rssw-page.page-dashboard {
+.rssw-page.page-dashboard.page-characters {
+	display: flex !important;
+	flex-direction: row !important;
 
+	.entity-column {
+		max-width: 570px;
+		margin: 0px 10px;
+	}
 }
 
 .rssw-page.page-dashboard {
@@ -2179,7 +2186,11 @@ form {
 					}
 					
 					.result-property {
-						margin: 0px 4px;
+						margin: 0px 2px;
+					}
+					
+					.result-icon {
+						padding-left: 3px;
 					}
 				}
 			}
