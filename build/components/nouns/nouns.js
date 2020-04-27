@@ -61,6 +61,7 @@
 			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsEntity,
 			rsSystem.components.NounFieldsEffect,
+			rsSystem.components.NounFieldsPlayer,
 			rsSystem.components.NounFieldsWidget,
 			rsSystem.components.NounFieldsParty,
 			rsSystem.components.NounFieldsSkill,
