@@ -83,7 +83,7 @@
 		},
 		"methods": {
 			"roll": function(expression) {
-				var rolled = Dice.calculateDiceRoll(expression || this.state.expression);
+				var rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
 				rolled._expression = expression;
 				this.state.history.unshift(rolled);
 			},
@@ -97,7 +97,11 @@
 				Vue.set(this.state, "hideLabels", !this.state.hideLabels);
 			},
 			"clear": function() {
-				this.state.history.splice(0);
+				if(this.state.history.length) {
+					this.state.history.splice(0);
+				} else {
+					Vue.set(this.state, "expression", "");
+				}
 			},
 			"info": function() {
 				rsSystem.EventBus.$emit("display-info", this.state.knowledge || "knowledge:dice:playerbin");

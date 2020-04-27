@@ -2,7 +2,7 @@
 
 	<div class="expression">
 		<span>Roll:</span>
-		<input type="text" class="lined" v-model="state.expression" v-on:keyup.enter="roll(state.expression)"/>
+		<input type="text" class="lined" v-model="state.expression" v-on:keyup.enter="roll(state.expression)" v-on:keyup.esc="clear()"/>
 		<button class="lined roll" v-on:click="roll(state.expression)">
 			<span class="fas fa-dice"></span>
 		</button>

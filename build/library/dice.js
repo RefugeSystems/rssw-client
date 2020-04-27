@@ -7,6 +7,7 @@ var Dice = (function() {
 	
 	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|a|b|c|d|p|s|f)[ \+\/-]/g;
 	var calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/;
+	var dndStatCurve = true;
 	var tX;
 	
 	var rollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
@@ -17,6 +18,24 @@ var Dice = (function() {
 		["wis", "wisdom"],
 		["cha", "charisma"]
 	];
+	
+	var dndRollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
+   		["str", "strength"],
+		["dex", "dexterity"],
+		["con", "constitution"],
+		["int", "intelligence"],
+		["wis", "wisdom"],
+		["cha", "charisma"]
+	];
+	var swrpgRollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
+      	["bra", "brawn"],
+   		["agi", "agility"],
+   		["int", "intellect"],
+   		["cun", "cunning"],
+   		["wil", "willpower"],
+   		["pre", "pressence"]
+   	];
+	
 	var rollLevelMap = [ // TODO Consider against other classes or simplify expression? This is in theory a deprecated representation
 		["level","self"],
 		["barbarian","class:barbarian"],
@@ -40,7 +59,13 @@ var Dice = (function() {
 		["maxHealth", "maxHealth"],
 		["maxHP", "maxHealth"],
 		["armor", "armor"],
-		["ac", "armor"]
+		["ac", "armor"],
+		["brawn"],
+		["agility"],
+		["intellect"],
+		["cunning"],
+		["willpower"],
+		["pressence"]
 	];
 
 	var calculate = function(expression) {
@@ -151,32 +176,33 @@ var Dice = (function() {
 			expression = expression.replace(regex, sCasting);
 		}
 
+		// TODO: Improve property mapping
 		if(target) {
-			for(x=0; x<rollLevelMap.length; x++) {
-				regex = new RegExp("target\\." + rollLevelMap[x][0], "g");
-				expression = expression.replace(regex, target.level[rollLevelMap[x][1]] || 0);
-			}
 			for(x=0; x<rollMap.length; x++) {
 				regex = new RegExp("target\\." + rollMap[x][0], "g");
-				expression = expression.replace(regex, parseInt(Math.floor(((target.sheet?target.sheet:target)[rollMap[x][1]] || 0)/2) - 5));
+				if(dndStatCurve) {
+					expression = expression.replace(regex, parseInt(Math.floor((target[rollMap[x][1]] || 0)/2) - 5));
+				} else {
+					expression = expression.replace(regex, parseInt(target[rollMap[x][1]] || 0));
+				}
 			}
 			for(x=0; x<rollDirectMap.length; x++) {
 				regex = new RegExp("target\\." + rollDirectMap[x][0], "g");
-				expression = expression.replace(regex, parseInt( (target.sheet?target.sheet:target)[rollDirectMap[x][1]] ) );
+				expression = expression.replace(regex, parseInt(target[rollDirectMap[x][1] || rollDirectMap[x][0]] || 0));
 			}
 		}
 		if(source) {
-			for(x=0; x<rollLevelMap.length; x++) {
-				regex = new RegExp(rollLevelMap[x][0], "g");
-				expression = expression.replace(regex, source.level[rollLevelMap[x][1]] || 0);
-			}
 			for(x=0; x<rollMap.length; x++) {
 				regex = new RegExp(rollMap[x][0], "g");
-				expression = expression.replace(regex, parseInt(Math.floor(((source.sheet?source.sheet:source)[rollMap[x][1]] || 0)/2) - 5));
+				if(dndStatCurve) {
+					expression = expression.replace(regex, parseInt(Math.floor((source[rollMap[x][1]] || 0)/2) - 5));
+				} else {
+					expression = expression.replace(regex, parseInt(source[rollMap[x][1]] || 0));
+				}
 			}
 			for(x=0; x<rollDirectMap.length; x++) {
 				regex = new RegExp(rollDirectMap[x][0], "g");
-				expression = expression.replace(regex, parseInt( (source.sheet?source.sheet:source)[rollDirectMap[x][1]] ) );
+				expression = expression.replace(regex, parseInt(source[rollDirectMap[x][1] || rollDirectMap[x][0]] || 0));
 			}
 		}
 		expression = expression.replace(/ /g, "") + " ";
@@ -603,6 +629,16 @@ var Dice = (function() {
 		"reduceDiceRoll": reduceDiceRoll,
 		
 		
-		"rawDiceRoll": rawDiceRoll
+		"rawDiceRoll": rawDiceRoll,
+		
+		"setDnD": function() {
+			rollMap = dndRollMap;
+			dndStatCurve = true;
+		},
+		
+		"setSWRPG": function() {
+			rollMap = swrpgRollMap;
+			dndStatCurve = false;
+		}
 	};
 })();
