@@ -1929,6 +1929,7 @@ form {
 }
 .rs-component.rssw.component-character-skills .skill-list .skill * {
   vertical-align: middle;
+  white-space: nowrap;
 }
 .rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result {
   position: absolute;
