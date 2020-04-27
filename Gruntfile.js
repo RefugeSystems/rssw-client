@@ -98,6 +98,7 @@ var config = {
 				"Invasion",
 				"Anomaly",
 				"Random",
+				"Dice",
 				"_p",
 
 				"RSModifierAttributes",

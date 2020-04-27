@@ -11,6 +11,9 @@
 	content: "A";
 }
 
+.rsswx.rsswx-despair:before {
+	content: "B";
+}
 .rsswx.rsswx-dispair:before {
 	content: "B";
 }

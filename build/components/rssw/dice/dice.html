@@ -1,0 +1,40 @@
+<div class="rs-component rssw dice-bin">
+
+	<div class="expression">
+		<span>Roll:</span>
+		<input type="text" class="lined" v-model="state.expression" v-on:keyup.enter="roll(state.expression)"/>
+		<button class="lined roll" v-on:click="roll(state.expression)">
+			<span class="fas fa-dice"></span>
+		</button>
+		<button class="lined info" v-on:click="info()">
+			<span class="fas fa-info-circle"></span>
+		</button>
+		<button class="lined labels" v-on:click="toggleLabels()">
+			<span class="far" :class="state.hideLabels?'fa-align-slash':'fa-align-justify'"></span>
+		</button>
+		<button class="lined labels" v-on:click="toggleExpressions()">
+			<span class="far" :class="state.hideExpressions?'fa-sigma':'fa-function'"></span>
+		</button>
+		<button class="lined ending clear" v-on:click="clear()">
+			<span class="fas fa-ban"></span>
+		</button>
+	</div>
+
+	<div class="history">
+		<div class="rolled" v-for="(roll,$index) in state.history" v-if="roll" v-on:click.stop="dismiss($index)">
+			<div class="roll-property" v-if="roll.sum">
+				<span class="value">{{roll.sum}}</span>
+				<span class="info">=</span>
+				<span class="label" v-if="!state.hideLabels">Rolled</span>
+			</div>
+			<div class="roll-property" :class="rprop.property" v-for="rprop in rollProperties" v-if="roll[rprop.property] !== undefined">
+				<span class="value">{{roll[rprop.property]}}</span>
+				<span class="info" :class="rprop.icon"></span>
+				<span class="label" v-if="!state.hideLabels">{{rprop.label}}</span>
+			</div>
+			<div class="original" v-if="!state.hideExpressions">
+				({{roll._expression}})
+			</div>
+		</div>
+	</div>
+</div>

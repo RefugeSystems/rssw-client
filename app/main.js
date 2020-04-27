@@ -18249,6 +18249,7 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label>\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<label>\r\n\t\t\t<span>Hide Names</span>\r\n\t\t\t<input type=\"checkbox\" v-model=\"state.hideNames\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-drafting-compass\"></span>\r\n\t\t\t\t\t<span>Subskills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"subskill\" :existing=\"subSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"skillTouched(stat)\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Stat ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t</button>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"noIncrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\n\n\t<div class=\"report\" v-if=\"equipped.length\">\n\t\t<h3>Equipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"report\" v-if=\"items.length\">\n\t\t<h3>Unequipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getAttackDice(item)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll flex h\">\n\t\t\t\t\t<span class=\"dice\" v-for=\"die in getRangeBandDifficulty(item, band)\" :class=\"die\"></span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
+			case "components/rssw/dice.html": return "<div class=\"rs-component rssw dice-bin\">\r\n\r\n\t<div class=\"expression\">\r\n\t\t<span>Roll:</span>\r\n\t\t<input type=\"text\" class=\"lined\" v-model=\"state.expression\" v-on:keyup.enter=\"roll(state.expression)\"/>\r\n\t\t<button class=\"lined roll\" v-on:click=\"roll(state.expression)\">\r\n\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined info\" v-on:click=\"info()\">\r\n\t\t\t<span class=\"fas fa-info-circle\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined labels\" v-on:click=\"toggleLabels()\">\r\n\t\t\t<span class=\"far\" :class=\"state.hideLabels?'fa-align-slash':'fa-align-justify'\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined labels\" v-on:click=\"toggleExpressions()\">\r\n\t\t\t<span class=\"far\" :class=\"state.hideExpressions?'fa-sigma':'fa-function'\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined ending clear\" v-on:click=\"clear()\">\r\n\t\t\t<span class=\"fas fa-ban\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\r\n\t<div class=\"history\">\r\n\t\t<div class=\"rolled\" v-for=\"(roll,$index) in state.history\" v-if=\"roll\" v-on:click.stop=\"dismiss($index)\">\r\n\t\t\t<div class=\"roll-property\" v-if=\"roll.sum\">\r\n\t\t\t\t<span class=\"value\">{{roll.sum}}</span>\r\n\t\t\t\t<span class=\"info\">=</span>\r\n\t\t\t\t<span class=\"label\" v-if=\"!state.hideLabels\">Rolled</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll-property\" :class=\"rprop.property\" v-for=\"rprop in rollProperties\" v-if=\"roll[rprop.property] !== undefined\">\r\n\t\t\t\t<span class=\"value\">{{roll[rprop.property]}}</span>\r\n\t\t\t\t<span class=\"info\" :class=\"rprop.icon\"></span>\r\n\t\t\t\t<span class=\"label\" v-if=\"!state.hideLabels\">{{rprop.label}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"original\" v-if=\"!state.hideExpressions\">\r\n\t\t\t\t({{roll._expression}})\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex h\">\r\n\t\t<h3>Equipment</h3>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'short'\" class=\"slots flex h centered\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex v\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex h\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/entity/knowledge.html": return "<div class=\"rs-component rssw component-entity-knowledge\">\r\n\t<h2>\r\n\t\t<span>Knowledge</span>\r\n\t\t<button v-on:click=\"resetHeaders\" class=\"rs-light-blue rsbg-transparent flat\">\r\n\t\t\t<span class=\"far fa-sync\"></span>\r\n\t\t</button>\r\n\t</h2>\r\n\t<div class=\"knowledge-container\">\r\n\t\t<div class=\"controls flex h\">\r\n\t\t\t<rs-table-controls class=\"index\" :universe=\"universe\" :corpus=\"corpus\" :user=\"player\" :index=\"knowledge\" :state=\"state\" v-on:action=\"processAction\"></rs-table-controls>\r\n\t\t</div>\r\n\t\t<rs-table class=\"index\" :universe=\"universe\" :user=\"player\" :corpus=\"corpus\" :index=\"knowledge\" :headers=\"state.headers\" :state=\"state\" v-on:selected=\"showInfo($event, entity)\"></rs-table>\r\n\t\t<rs-table-paging class=\"index\" :universe=\"universe\" :user=\"player\" :index=\"knowledge\" :state=\"state\"></rs-table-paging>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/ship/inside.html": return "<div class=\"rs-component rssw component-entity-inside\">\r\n\t<h2 class=\"title-info\">\r\n\t\t<span>Entities Inside</span>\r\n\t\t<span v-if=\"entity.required_crew\" class=\"title-readout\" :class=\"getCountClass()\">\r\n\t\t\t<span class=\"rs-white\">(</span>\r\n\t\t\t<span>{{crew}}</span>\r\n\t\t\t<span class=\"rs-white\">/</span>\r\n\t\t\t<span title=\"Minimum number of Crew required to fully operate this ship\">{{entity.required_crew}}</span>\r\n\t\t\t<span v-if=\"entity.maximum_crew\">\r\n\t\t\t\t<span class=\"rs-white\">[</span>\r\n\t\t\t\t<span title=\"Maximum number of Crew that fit in this ship\">{{entity.maximum_crew}}</span>\r\n\t\t\t\t<span class=\"rs-white\">]</span>\r\n\t\t\t</span>\r\n\t\t\t\r\n\t\t\t<span class=\"rs-white\">)</span>\r\n\t\t</span>\r\n\t</h2>\r\n\t<div class=\"entitites\">\r\n\t\t<div class=\"flow flow-v\">\r\n\t\t\t<div class=\"entry flow-h\" v-for=\"entry in entities\">\r\n\t\t\t\t<button class=\"entity flow-h\" v-on:click=\"showInfo(entry)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</button>\r\n\t\t\t\t<span class=\"entity\" v-else>\r\n\t\t\t\t\t<span :class=\"entry.icon\"></span>\r\n\t\t\t\t\t<span>{{entry.name}}</span>\r\n\t\t\t\t</span>\r\n\t\t\t\t<button class=\"exit-ship flow-h\" v-on:click=\"moveEntity(entry.id, null)\" v-if=\"isOwner(entry)\">\r\n\t\t\t\t\t<span class=\"fas fa-sign-out-alt\"></span>\r\n\t\t\t\t\t<span>Exit Ship</span>\r\n\t\t\t\t</button>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"board\">\r\n\t\t<div class=\"label\">\r\n\t\t\tBring Entity on Board\r\n\t\t</div>\r\n\t\t<div>\r\n\t\t\t<select v-model=\"moving\" v-on:change=\"moveEntity(moving, entity.id)\">\r\n\t\t\t\t<option value=\"\">Select Entity...</option>\r\n\t\t\t\t<option v-for=\"e in availableEntities\" :value=\"e.id\">{{e.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -18290,6 +18291,606 @@ Vue.use(Templify);
  * @module Library
  * @main Library
  */
+/**
+ * 
+ * 
+ * 
+ */
+var Dice = (function() {
+	
+	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|a|b|c|d|p|s)[ \+\/-]/g;
+	var calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/;
+	var tX;
+	
+	var rollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
+		["str", "strength"],
+		["dex", "dexterity"],
+		["con", "constitution"],
+		["int", "intelligence"],
+		["wis", "wisdom"],
+		["cha", "charisma"]
+	];
+	var rollLevelMap = [ // TODO Consider against other classes or simplify expression? This is in theory a deprecated representation
+		["level","self"],
+		["barbarian","class:barbarian"],
+		["bard","class:bard"],
+		["cleric","class:cleric"],
+		["rogue","class:rogue"],
+		["ranger","class:ranger"],
+		["paladin", "class:paladin"],
+		["sorcerer", "class:sorcerer"],
+		["monk", "class:monk"],
+		["druid", "class:druid"],
+		["warlock", "class:warlock"],
+		["fighter", "class:fighter"],
+		["wizard","class:wizard"]
+	];
+	var rollDirectMap = [
+		["pro", "proficiency"], // TODO: Consider DnD proficiency against SWRPG proficiency dice 
+		["movement", "movement"],
+		["health", "health"],
+		["HP", "health"],
+		["maxHealth", "maxHealth"],
+		["maxHP", "maxHealth"],
+		["armor", "armor"],
+		["ac", "armor"]
+	];
+
+	var calculate = function(expression) {
+		if(expression && expression[0] === "+") { // Other operators would expressly be an issue
+			expression = expression.substring(1);
+		}
+
+		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+			try {
+				return parseInt(Math.floor(eval(expression)));
+			} catch(ignored) {
+				return expression;
+			}
+		} else {
+			return expression;
+		}
+	};
+
+	var diceSummed = [
+		"d4",
+		"d6",
+		"d8",
+		"d10",
+		"d12",
+		"d20",
+		"d100"
+	];
+	
+	var diceSummedCheck = {};
+	for(tX=0; tX<diceSummed.length; tX++) {
+		diceSummedCheck[diceSummed[tX]] = true;
+	}
+
+	var diceOrder = [
+		"d4",
+		"d6",
+		"d8",
+		"d10",
+		"d12",
+		"d20",
+		"d100",
+		"ability",
+		"dja",
+		"a",
+		"boost",
+		"djb",
+		"b",
+		"challenge",
+		"djc",
+		"c",
+		"difficulty",
+		"djd",
+		"d",
+		"proficiency",
+		"djp",
+		"p",
+		"setback",
+		"djs",
+		"s"
+	];
+
+	var diceRoll = function(dice) {
+		var roll = parseInt(parseInt(dice.substring(1)) * Math.random()) + 1;
+		return roll;
+	};
+
+	/**
+	 * Parses a string expression (e.g "con + 1d8") into an object for calculation or
+	 * display.
+	 * @method parseDiceRoll
+	 * @private
+	 * @param {String} expression
+	 * @param {AQCharacter} [source] Drives raw arguments for stats such as "str" and "wis".
+	 * @param {AQCharacter} [target] Drives 'target; arguments for stats such as "target.str"
+	 * 		and "target.wis".
+	 */
+	var parseDiceRoll = function(expression, source, target) {
+		var x, sCasting, tCasting, regex, buffer = [], dice = {};
+		if(!expression) {
+			return dice;
+		} else {
+			expression = expression.toString();
+		}
+
+		if(source) {
+			sCasting = source.castWith || "int";
+			sCasting = sCasting.substring(0, 3);
+		} else {
+			sCasting = "int";
+		}
+		if(target) {
+			tCasting = target.castWith || "int";
+			tCasting = tCasting.substring(0, 3);
+		} else {
+			tCasting = "int";
+		}
+
+		if(target && target.castWith && expression.indexOf("target.cast") !== -1) {
+			regex = new RegExp("target.cast", "g");
+			expression = expression.replace(regex, tCasting);
+		}
+
+		if(source && source.castWith && expression.indexOf("cast") !== -1) {
+			regex = new RegExp("cast", "g");
+			expression = expression.replace(regex, sCasting);
+		}
+
+		if(target) {
+			for(x=0; x<rollLevelMap.length; x++) {
+				regex = new RegExp("target\\." + rollLevelMap[x][0], "g");
+				expression = expression.replace(regex, target.level[rollLevelMap[x][1]] || 0);
+			}
+			for(x=0; x<rollMap.length; x++) {
+				regex = new RegExp("target\\." + rollMap[x][0], "g");
+				expression = expression.replace(regex, parseInt(Math.floor(((target.sheet?target.sheet:target)[rollMap[x][1]] || 0)/2) - 5));
+			}
+			for(x=0; x<rollDirectMap.length; x++) {
+				regex = new RegExp("target\\." + rollDirectMap[x][0], "g");
+				expression = expression.replace(regex, parseInt( (target.sheet?target.sheet:target)[rollDirectMap[x][1]] ) );
+			}
+		}
+		if(source) {
+			for(x=0; x<rollLevelMap.length; x++) {
+				regex = new RegExp(rollLevelMap[x][0], "g");
+				expression = expression.replace(regex, source.level[rollLevelMap[x][1]] || 0);
+			}
+			for(x=0; x<rollMap.length; x++) {
+				regex = new RegExp(rollMap[x][0], "g");
+				expression = expression.replace(regex, parseInt(Math.floor(((source.sheet?source.sheet:source)[rollMap[x][1]] || 0)/2) - 5));
+			}
+			for(x=0; x<rollDirectMap.length; x++) {
+				regex = new RegExp(rollDirectMap[x][0], "g");
+				expression = expression.replace(regex, parseInt( (source.sheet?source.sheet:source)[rollDirectMap[x][1]] ) );
+			}
+		}
+		expression = expression.replace(/ /g, "") + " ";
+		x = diceReductionRegEx.exec(expression);
+		while(x !== null) {
+			buffer.push(x[0]);
+			dice[x[2]] = dice[x[2]]?dice[x[2]] + "+" + x[1]:x[1];
+			x = diceReductionRegEx.exec(expression);
+		}
+		for(x=0; x<buffer.length; x++) {
+			expression = expression.replace(buffer[x], "");
+		}
+		dice.null = expression;
+//		console.log("Dice Expression: " + JSON.stringify(dice, null, 4));
+		for(x=0; x<diceOrder.length; x++) {
+			if(dice[diceOrder[x]]) {
+				dice[diceOrder[x]] = parseInt(calculate(dice[diceOrder[x]]));
+			}
+		}
+		return dice;
+	};
+
+	var rawDiceRoll = function(expression, source, target) {
+		var x, dice, add;
+		dice = parseDiceRoll(expression, source, target);
+		expression = calculate(dice.null);
+		for(x=0; x<diceOrder.length; x++) {
+			if(dice[diceOrder[x]]) {
+				add = parseInt(calculate(dice[diceOrder[x]]));
+				if(isNaN(add)) {
+					add = "(" + dice[diceOrder[x]] + ")" + diceOrder[x];
+				} else {
+					add = add + diceOrder[x];
+				}
+				if(expression) {
+					expression += " + " + add;
+				} else {
+					expression = add;
+				}
+			}
+		}
+		return expression;
+	};
+
+	var reduceDiceRoll = function(expression, source, target) {
+		var x, buffer, dice;
+		dice = parseDiceRoll(expression, source, target);
+		expression = calculate(dice.null);
+		for(x=0; x<diceOrder.length; x++) {
+			if(dice[diceOrder[x]]) {
+				if(expression) {
+					expression += " + " + (isNaN(buffer = parseInt(calculate(dice[diceOrder[x]])))?dice[diceOrder[x]]:buffer) + diceOrder[x];
+				} else {
+					expression = (isNaN(buffer = parseInt(calculate(dice[diceOrder[x]])))?dice[diceOrder[x]]:buffer) + diceOrder[x];
+				}
+			}
+		}
+		return expression;
+	};
+
+	var calculateDiceRoll = function(expression, source, target) {
+		var result = {},
+			dice,
+			d,
+			x;
+		
+		dice = parseDiceRoll(expression, source, target);
+		result.sum = parseInt(calculate(dice.null)) || 0;
+//		console.error(dice);
+//		console.warn(result);
+		for(d=0; d<diceOrder.length; d++) {
+			dice[diceOrder[d]] = parseInt(calculate(dice[diceOrder[d]]));
+//			console.log("Dice Count[" + diceOrder[d] + "]: " + dice[diceOrder[d]]);
+			for(x=0; x<dice[diceOrder[d]] && !isNaN(dice[diceOrder[d]]); x++) {
+//				console.log("Roll Dice[" + diceOrder[d] + "]: " + x + "/" + dice[diceOrder[d]]);
+				if(diceSummedCheck[diceOrder[d]]) {
+					result.sum += diceRoll(diceOrder[d]);
+				} else {
+					switch(diceOrder[d]) {
+						case "ability":
+						case "dja":
+						case "a":
+							rollStarWarsDice("ability", result);
+							break;
+						case "boost":
+						case "djb":
+						case "b":
+							rollStarWarsDice("boost", result);
+							break;
+						case "proficiency":
+						case "djp":
+						case "p":
+							rollStarWarsDice("proficiency", result);
+							break;
+						case "difficulty":
+						case "djd":
+						case "d":
+							rollStarWarsDice("difficulty", result);
+							break;
+						case "challenge":
+						case "djc":
+						case "c":
+							rollStarWarsDice("challenge", result);
+							break;
+						case "setback":
+						case "djs":
+						case "s":
+							rollStarWarsDice("setback", result);
+							break;
+						default:
+							console.warn("Unknown Dice: " + diceOrder[d]);
+					}
+				}
+			}
+		}
+		
+		return result;
+	};
+	
+	var starWarsMap = {
+		"ability": {
+			"dice": "d8",
+			"1": {
+				"advantage": 0,
+				"success": 0
+			},
+			"2": {
+				"advantage": 0,
+				"success": 1
+			},
+			"3": {
+				"advantage": 0,
+				"success": 1
+			},
+			"4": {
+				"advantage": 0,
+				"success": 2
+			},
+			"5": {
+				"advantage": 1,
+				"success": 0
+			},
+			"6": {
+				"advantage": 1,
+				"success": 0
+			},
+			"7": {
+				"advantage": 1,
+				"success": 1
+			},
+			"8": {
+				"advantage": 2,
+				"success": 0
+			}
+		},
+		"boost":  {
+			"dice": "d6",
+			"1": {
+				"advantage": 0,
+				"success": 0
+			},
+			"2": {
+				"advantage": 0,
+				"success": 0
+			},
+			"3": {
+				"advantage": 2,
+				"success": 0
+			},
+			"4": {
+				"advantage": 1,
+				"success": 0
+			},
+			"5": {
+				"advantage": 1,
+				"success": 1
+			},
+			"6": {
+				"advantage": 0,
+				"success": 2
+			}
+		},
+		"proficiency":  {
+			"dice": "d12",
+			"1": {
+				"advantage": 0,
+				"success": 0
+			},
+			"2": {
+				"advantage": 0,
+				"success": 1
+			},
+			"3": {
+				"advantage": 0,
+				"success": 1
+			},
+			"4": {
+				"advantage": 0,
+				"success": 2
+			},
+			"5": {
+				"advantage": 0,
+				"success": 2
+			},
+			"6": {
+				"advantage": 1,
+				"success": 0
+			},
+			"7": {
+				"advantage": 1,
+				"success": 1
+			},
+			"8": {
+				"advantage": 1,
+				"success": 1
+			},
+			"9": {
+				"advantage": 1,
+				"success": 1
+			},
+			"10": {
+				"advantage": 2,
+				"success": 0
+			},
+			"11": {
+				"advantage": 2,
+				"success": 0
+			},
+			"12": {
+				"advantage": 0,
+				"success": 0,
+				"triumph": 1
+			}
+		},
+		"difficulty":  {
+			"dice": "d8",
+			"1": {
+				"failure": 0,
+				"threat": 0
+			},
+			"2": {
+				"failure": 1,
+				"threat": 0
+			},
+			"3": {
+				"failure": 2,
+				"threat": 0
+			},
+			"4": {
+				"failure": 0,
+				"threat": 1
+			},
+			"5": {
+				"failure": 0,
+				"threat": 1
+			},
+			"6": {
+				"failure": 0,
+				"threat": 1
+			},
+			"7": {
+				"failure": 0,
+				"threat": 2
+			},
+			"8": {
+				"failure": 1,
+				"threat": 1
+			}
+		},
+		"setback":  {
+			"dice": "d6",
+			"1": {
+				"failure": 0,
+				"threat": 0
+			},
+			"2": {
+				"failure": 0,
+				"threat": 0
+			},
+			"3": {
+				"failure": 1,
+				"threat": 0
+			},
+			"4": {
+				"failure": 1,
+				"threat": 0
+			},
+			"5": {
+				"failure": 0,
+				"threat": 1
+			},
+			"6": {
+				"failure": 0,
+				"threat": 1
+			}
+		},
+		"challenge":  {
+			"dice": "d12",
+			"1": {
+				"failure": 0,
+				"threat": 0
+			},
+			"2": {
+				"failure": 1,
+				"threat": 0
+			},
+			"3": {
+				"failure": 1,
+				"threat": 0
+			},
+			"4": {
+				"failure": 2,
+				"threat": 0
+			},
+			"5": {
+				"failure": 2,
+				"threat": 0
+			},
+			"6": {
+				"failure": 0,	
+				"threat": 1
+			},
+			"7": {
+				"failure": 0,
+				"threat": 1
+			},
+			"8": {
+				"threat": 1,
+				"failure": 1
+			},
+			"9": {
+				"threat": 1,
+				"failure": 1
+			},
+			"10": {
+				"failure": 0,
+				"threat": 2
+			},
+			"11": {
+				"failure": 0,
+				"threat": 2
+			},
+			"12": {
+				"failure": 0,
+				"despair": 1,
+				"threat": 0
+			}
+		},
+		"force": {
+			"dice": "d12",
+			"1": {
+				"dark": 1
+			},
+			"2": {
+				"dark": 1
+			},
+			"3": {
+				"dark": 1
+			},
+			"4": {
+				"dark": 1
+			},
+			"5": {
+				"dark": 1
+			},
+			"6": {
+				"dark": 1
+			},
+			"7": {
+				"dark": 2
+			},
+			"8": {
+				"light": 1
+			},
+			"9": {
+				"light": 1
+			},
+			"10": {
+				"light": 2
+			},
+			"11": {
+				"light": 2
+			},
+			"12": {
+				"light": 2
+			}
+		}
+	};
+	
+	var rollStarWarsDice = function(roll, result) {
+		var roll = starWarsMap[roll],
+			keys,
+			x;
+			
+		if(roll) {
+			roll = roll[diceRoll(roll.dice)];
+			if(roll) {
+				keys = Object.keys(roll);
+				for(x=0; x<keys.length; x++) {
+					if(!result[keys[x]]) {
+						result[keys[x]] = 0;
+					}
+					result[keys[x]] += roll[keys[x]];
+				}
+			}
+		}
+		
+		return result;
+	};
+	
+	return {
+		
+		"calculateDiceRoll": calculateDiceRoll,
+		
+		
+		"parseDiceRoll": parseDiceRoll,
+		
+		
+		"reduceDiceRoll": reduceDiceRoll,
+		
+		
+		"rawDiceRoll": rawDiceRoll
+	};
+})();
 
 /**
  * General class for replicating event emission properties to have classes
@@ -32963,6 +33564,114 @@ rsSystem.component("rsswCharacterStats", {
 /**
  * 
  * 
+ * @class rsswDiceBin
+ * @constructor
+ * @module Components
+ */
+(function() {
+
+	var rollProperties = [{
+		"icon": "ra ra-bomb-explosion",
+		"property": "success",
+		"label": "Success"
+	}, {
+		"icon": "fad fa-jedi",
+		"property": "advantage",
+		"label": "Advantage"
+	}, {
+		"icon": "xwm xwing-miniatures-font-epic",
+		"property": "triumph",
+		"label": "Triumph"
+	}, {
+		"icon": "fal fa-triangle rot180",
+		"property": "failure",
+		"label": "Failure"
+	}, {
+		"icon": "rsswx rsswx-threat",
+		"property": "threat",
+		"label": "Threat"
+	}, {
+		"icon": "rsswx rsswx-despair",
+		"property": "despair",
+		"label": "Despair"
+	}];
+	
+	
+	rsSystem.component("rsswDiceBin", {
+		"inherit": true,
+		"mixins": [
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSCore
+		],
+		"props": {
+			"entity": {
+				"type": Object
+			},
+			"state": {
+				"type": Object
+			}
+		},
+		"data": function() {
+			var data = {};
+			
+			data.rollProperties = rollProperties;
+			data.bound = false;
+			
+			if(!this.state.expression) {
+				Vue.set(this.state, "expression", "");
+			}
+			if(!this.state.history) {
+				Vue.set(this.state, "history", []);
+			}
+			
+			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			
+			if(this.entity) {
+				this.entity.$on("modified", this.update);
+				Vue.set(this, "bound", true);
+				this.update();
+			}
+		},
+		"methods": {
+			"roll": function(expression) {
+				var rolled = Dice.calculateDiceRoll(expression || this.state.expression);
+				rolled._expression = expression;
+				this.state.history.unshift(rolled);
+			},
+			"dismiss": function(index) {
+				this.state.history.splice(index, 1);
+			},
+			"toggleExpressions": function() {
+				Vue.set(this.state, "hideExpressions", !this.state.hideExpressions);
+			},
+			"toggleLabels": function() {
+				Vue.set(this.state, "hideLabels", !this.state.hideLabels);
+			},
+			"clear": function() {
+				this.state.history.splice(0);
+			},
+			"info": function() {
+				rsSystem.EventBus.$emit("display-info", this.state.knowledge || "knowledge:dice:playerbin");
+			},
+			"update": function() {
+				
+			}
+		},
+		"beforeDestroy": function() {
+			if(this.bound) {
+				this.entity.$off("model:modified", this.update);
+			}
+		},
+		"template": Vue.templified("components/rssw/dice.html")
+	});
+})();
+
+/**
+ * 
+ * 
  * @class rsswEntityEquipment
  * @constructor
  * @module Components
@@ -35587,6 +36296,11 @@ rsSystem.component("RSSWCharacter", {
 				this.widgets.push({
 		            "declaration": "rsswCharacterStats",
 		            "sid": "entity:stats:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+		            "declaration": "rsswDiceBin",
+		            "sid": "entity:dice:" + this.entity.id,
 		            "enabled": true
 				});
 				this.widgets.push({

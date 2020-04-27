@@ -1838,6 +1838,58 @@ form {
 .rs-component.rssw.component-entity-weapons .roll .dice {
   margin: 0px 2px;
 }
+.rs-component.rssw.dice-bin .expression {
+  display: inline-flex;
+  line-height: 26px;
+  font-size: 26px;
+  margin: 3px;
+}
+.rs-component.rssw.dice-bin .expression input[type=text] {
+  padding: 0px 6px;
+  font-size: 16px;
+}
+.rs-component.rssw.dice-bin .expression .lined {
+  background: #EAEFF9;
+  min-width: 36px;
+  margin: 0px;
+}
+.rs-component.rssw.dice-bin .expression button.lined {
+  display: inline-block;
+  text-align: center;
+  background-color: #000000;
+  color: #EAEFF9;
+  font-size: 17px;
+  width: 35px;
+}
+.rs-component.rssw.dice-bin .expression .ending {
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.rs-component.rssw.dice-bin .history {
+  width: 100%;
+  max-height: 400px;
+  overflow: auto;
+}
+.rs-component.rssw.dice-bin .history .rolled {
+  display: inline-block;
+  border: 1px solid #617EB8;
+  margin: 3px;
+  padding: 3px;
+  vertical-align: top;
+}
+.rs-component.rssw.dice-bin .history .rolled .value {
+  display: inline-block;
+  min-width: 36px;
+  text-align: right;
+}
+.rs-component.rssw.dice-bin .history .rolled .info {
+  display: inline-block;
+  min-width: 24px;
+  text-align: center;
+}
+.rs-component.rssw.dice-bin .history .rolled .original {
+  text-align: center;
+}
 .rs-component.rssw.component-entity-equipment.short {
   width: 300px;
   overflow-x: auto;

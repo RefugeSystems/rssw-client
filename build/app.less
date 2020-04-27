@@ -2222,6 +2222,79 @@ form {
 		}
 	}
 }
+.rs-component.rssw.dice-bin {
+	
+	.expression {
+		display: inline-flex;
+		line-height: 26px;
+		font-size: 26px;
+		margin: 3px;
+		
+		input[type=text] {
+			padding: 0px 6px;
+			font-size: 16px;
+		}
+		
+		button {
+			
+		}
+		
+		.lined {
+			background: @rsWhite;
+			min-width: 36px;
+			margin: 0px;
+		}
+		
+		button.lined {
+			display: inline-block;
+			text-align: center;
+			background-color: @rsBlack;
+			color: @rsWhite;
+			font-size: 17px;
+			width: 35px;
+		}
+		
+		.ending {
+			border-bottom-right-radius: 6px;
+			border-top-right-radius: 6px;
+		}
+	}
+	
+	.history {
+		width: 100%;
+		max-height: 400px;
+		overflow: auto;
+	
+		.rolled {
+			display: inline-block;
+			border: 1px solid @rsBlue;
+			margin: 3px;
+			padding: 3px;
+			vertical-align: top;
+			
+			.value {
+				display: inline-block;
+				min-width: 36px;
+				text-align: right;
+			}
+			
+			.info {
+				display: inline-block;
+				min-width: 24px;
+				text-align: center;
+			}
+			
+			.label {
+				
+			}
+			
+			.original {
+				text-align: center;
+			}
+		}
+	}
+}
+
 .rs-component.rssw.component-entity-equipment {
 	
 	&.short {

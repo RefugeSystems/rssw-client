@@ -70,6 +70,11 @@ rsSystem.component("RSSWCharacter", {
 		            "enabled": true
 				});
 				this.widgets.push({
+		            "declaration": "rsswDiceBin",
+		            "sid": "entity:dice:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
 		            "declaration": "rsswEntityWeapons",
 		            "sid": "entity:weapons:" + this.entity.id,
 		            "enabled": true
