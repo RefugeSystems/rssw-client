@@ -5,7 +5,7 @@
  */
 var Dice = (function() {
 	
-	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|a|b|c|d|p|s)[ \+\/-]/g;
+	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|a|b|c|d|p|s|f)[ \+\/-]/g;
 	var calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/;
 	var tX;
 	
@@ -99,7 +99,10 @@ var Dice = (function() {
 		"p",
 		"setback",
 		"djs",
-		"s"
+		"s",
+		"force",
+		"djf",
+		"f"
 	];
 
 	var diceRoll = function(dice) {
@@ -282,6 +285,11 @@ var Dice = (function() {
 						case "djs":
 						case "s":
 							rollStarWarsDice("setback", result);
+							break;
+						case "force":
+						case "djf":
+						case "f":
+							rollStarWarsDice("force", result);
 							break;
 						default:
 							console.warn("Unknown Dice: " + diceOrder[d]);

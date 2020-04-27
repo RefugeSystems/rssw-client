@@ -1,14 +1,10 @@
 <div class="rs-component rssw component-character-skills flow-v" :class="{'no-names':state.hideNames}">
 	<div class="filter flow-v inline">
-		<label>
+		<label v-if="!state.hideFilter">
 			<span>Filter Skills</span>
 			<input type="text" v-model="state.search" />
 		</label>
-		<label>
-			<span>Hide Names</span>
-			<input type="checkbox" v-model="state.hideNames" />
-		</label>
-		<div class="leveling skill">
+		<div class="leveling skill" v-if="!state.hideLeveling">
 			<label>
 				<span>Level Skill</span>
 				<select v-model="leveling">

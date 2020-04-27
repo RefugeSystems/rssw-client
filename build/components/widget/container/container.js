@@ -52,6 +52,18 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+
+			if(this.$el) {
+				if(this.state.configuring) {
+					if(this.state.closed) {
+						this.$el.classList.add("configuring");
+					} else {
+						Vue.set(this.state, "configuring", false);
+					}
+				}
+			} else {
+				console.error("no el");
+			}
 		},
 		"methods": {
 			"getClasses": function() {
@@ -64,6 +76,8 @@
 			"toggle": function() {
 				if(this.$el) {
 					if(this.state.closed) {
+						Vue.set(this.state, "configuring", false);
+						this.$el.classList.remove("configuring");
 						this.$el.classList.remove("collapsed");
 					} else {
 						this.$el.classList.add("collapsed");

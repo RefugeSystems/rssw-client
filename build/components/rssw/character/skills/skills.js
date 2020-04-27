@@ -23,6 +23,9 @@
 			"character": {
 				"required": true,
 				"type": Object
+			},
+			"state": {
+				"type": Object
 			}
 		},
 		"data": function() {
@@ -31,28 +34,32 @@
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
 			data.leveling = "";
-			data.state = this.loadStorage(data.storageKeyID, {
-				"hideNames": false,
-				"search": ""
-			});
+//			data.state = this.loadStorage(data.storageKeyID, {
+//				"hideNames": false,
+//				"search": ""
+//			});
 
 			data.instance = instance++;
 			data.customSkills = [];
 			data.levelSkills = [];
 			data.subSkills = [];
 			
+			if(!this.state.rolls) {
+				Vue.set(this.state, "rolls", {});
+			}
+			
 			return data;
 		},
 		"watch": {
-			"state": {
-				"deep": true,
-				"handler": function() {
-					if(this.state.search !== this.state.search.toLowerCase()) {
-						Vue.set(this.state, "search", this.state.search.toLowerCase());
-					}
-					this.saveStorage(this.storageKeyID, this.state);
-				}
-			}
+//			"state": {
+//				"deep": true,
+//				"handler": function() {
+//					if(this.state.search !== this.state.search.toLowerCase()) {
+//						Vue.set(this.state, "search", this.state.search.toLowerCase());
+//					}
+//					this.saveStorage(this.storageKeyID, this.state);
+//				}
+//			}
 		},
 		"mounted": function() {
 			this.character.$on("modified", this.update);
@@ -64,7 +71,9 @@
 				this.showInfo(this.universe.indexes.skill.lookup[skill], this.entity);
 			},
 			"skillTouched": function(skill) {
-				if(this.leveling === skill.id) {
+				if(this.state.rollSkill) {
+					Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+				} else if(this.leveling === skill.id) {
 					this.viewSkill(skill.id);
 				}
 				Vue.set(this, "leveling", skill.id);
@@ -111,6 +120,23 @@
 						this.character.commit(change);
 					}
 				}
+			},
+			"getDiceExpression": function(skill) {
+				var roll = {},
+					s,
+					x;
+				
+				s = this.character[skill.propertyKey] || 0;
+				roll.b = this.character[skill.bonusKey] || 0;
+				if(this.character[skill.base] < s) {
+					roll.a = s - this.character[skill.base];
+					roll.p = this.character[skill.base];
+				} else {
+					roll.a = this.character[skill.base] - s;
+					roll.p = s;
+				}
+
+				return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
 			},
 			"getDice": function(skill) {
 				var roll = [], x;

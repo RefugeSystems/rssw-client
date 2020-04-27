@@ -414,6 +414,130 @@
 .rs-component .rs-transparent {
   color: transparent !important;
 }
+.system-component .rs-secondary-lightred,
+.rs-component .rs-secondary-lightred,
+.system-component .rs-secondary-light-red,
+.rs-component .rs-secondary-light-red {
+  --fa-secondary-color: #e43a3b !important;
+}
+.system-component .rs-secondary-red,
+.rs-component .rs-secondary-red {
+  --fa-secondary-color: #a91124 !important;
+}
+.system-component .rs-secondary-darkred,
+.rs-component .rs-secondary-darkred,
+.system-component .rs-secondary-dark-red,
+.rs-component .rs-secondary-dark-red {
+  --fa-secondary-color: #841213 !important;
+}
+.system-component .rs-secondary-lightOrange,
+.rs-component .rs-secondary-lightOrange,
+.system-component .rs-secondary-lightorange,
+.rs-component .rs-secondary-lightorange,
+.system-component .rs-secondary-light-orange,
+.rs-component .rs-secondary-light-orange {
+  --fa-secondary-color: #e0a65d !important;
+}
+.system-component .rs-secondary-orange,
+.rs-component .rs-secondary-orange {
+  --fa-secondary-color: #FF9560 !important;
+}
+.system-component .rs-secondary-darkOrange,
+.rs-component .rs-secondary-darkOrange,
+.system-component .rs-secondary-darkorange,
+.rs-component .rs-secondary-darkorange,
+.system-component .rs-secondary-dark-orange,
+.rs-component .rs-secondary-dark-orange {
+  --fa-secondary-color: #ac6530 !important;
+}
+.system-component .rs-secondary-lightyellow,
+.rs-component .rs-secondary-lightyellow,
+.system-component .rs-secondary-light-yellow,
+.rs-component .rs-secondary-light-yellow {
+  --fa-secondary-color: #e6df85 !important;
+}
+.system-component .rs-secondary-yellow,
+.rs-component .rs-secondary-yellow {
+  --fa-secondary-color: #b3b300 !important;
+}
+.system-component .rs-secondary-darkyellow,
+.rs-component .rs-secondary-darkyellow,
+.system-component .rs-secondary-dark-yellow,
+.rs-component .rs-secondary-dark-yellow {
+  --fa-secondary-color: #776f08 !important;
+}
+.system-component .rs-secondary-lightgreen,
+.rs-component .rs-secondary-lightgreen,
+.system-component .rs-secondary-light-green,
+.rs-component .rs-secondary-light-green {
+  --fa-secondary-color: #96FF99 !important;
+}
+.system-component .rs-secondary-green,
+.rs-component .rs-secondary-green {
+  --fa-secondary-color: #32b736 !important;
+}
+.system-component .rs-secondary-darkgreen,
+.rs-component .rs-secondary-darkgreen,
+.system-component .rs-secondary-dark-green,
+.rs-component .rs-secondary-dark-green {
+  --fa-secondary-color: #166118 !important;
+}
+.system-component .rs-secondary-lightBlue,
+.rs-component .rs-secondary-lightBlue,
+.system-component .rs-secondary-lightblue,
+.rs-component .rs-secondary-lightblue,
+.system-component .rs-secondary-light-blue,
+.rs-component .rs-secondary-light-blue {
+  --fa-secondary-color: #6f9bf5 !important;
+}
+.system-component .rs-secondary-blue,
+.rs-component .rs-secondary-blue {
+  --fa-secondary-color: #617EB8 !important;
+}
+.system-component .rs-secondary-darkblue,
+.rs-component .rs-secondary-darkblue,
+.system-component .rs-secondary-dark-blue,
+.rs-component .rs-secondary-dark-blue {
+  --fa-secondary-color: #0c3a96 !important;
+}
+.system-component .rs-secondary-lightpurple,
+.rs-component .rs-secondary-lightpurple,
+.system-component .rs-secondary-light-purple,
+.rs-component .rs-secondary-light-purple {
+  --fa-secondary-color: #b180f3 !important;
+}
+.system-component .rs-secondary-purple,
+.rs-component .rs-secondary-purple {
+  --fa-secondary-color: #cc00ff !important;
+}
+.system-component .rs-secondary-darkpurple,
+.rs-component .rs-secondary-darkpurple,
+.system-component .rs-secondary-dark-purple,
+.rs-component .rs-secondary-dark-purple {
+  --fa-secondary-color: #5a289e !important;
+}
+.system-component .rs-secondary-white,
+.rs-component .rs-secondary-white {
+  --fa-secondary-color: #EAEFF9 !important;
+}
+.system-component .rs-secondary-gray,
+.rs-component .rs-secondary-gray,
+.system-component .rs-secondary-grey,
+.rs-component .rs-secondary-grey {
+  --fa-secondary-color: #928282 !important;
+}
+.system-component .rs-secondary-black,
+.rs-component .rs-secondary-black {
+  --fa-secondary-color: #000000 !important;
+}
+.system-component .rs-secondary-black-visible,
+.rs-component .rs-secondary-black-visible {
+  --fa-secondary-color: #332f2f !important;
+}
+.system-component .rs-secondary-transparent,
+.rs-component .rs-secondary-transparent {
+  --fa-secondary-color: transparent !important;
+}
 .swg:before {
   font-size: 1.25em;
 }
@@ -546,6 +670,29 @@ form {
 .rs-page {
   padding: 0px !important;
   margin: 0px !important;
+}
+.rsswx-dice {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+}
+.rsswx-dice.force {
+  border-radius: 1em;
+  border-width: 2px;
+}
+.rsswx-dice.light {
+  border-color: #000000;
+  background: #EAEFF9;
+}
+.rsswx-dice.dark {
+  border-color: #EAEFF9;
+  background: #000000;
+}
+.light-side {
+  --fa-secondary-color: #000000;
+}
+.dark-side {
+  --fa-secondary-color: #EAEFF9;
 }
 .rs-page.page-about h1 {
   color: #EAEFF9;
@@ -1718,9 +1865,35 @@ form {
 .rs-component.rssw.component-character-skills .skill-list .skill * {
   vertical-align: middle;
 }
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  background: #000000;
+  color: #EAEFF9;
+  height: 0px;
+  transition: max-height 0.5s, border 0.5s;
+  z-index: 1;
+  cursor: pointer;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+  user-select: none;
+}
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result.show {
+  border: 1px solid #FF9560;
+  height: 100%;
+}
+.rs-component.rssw.component-character-skills .skill-list .skill .stats .roll-result .result-property {
+  margin: 0px 4px;
+}
 .rs-component.rssw.component-character-skills .skill-list .base {
   color: #FF9560;
   font-size: 0.8em;
+}
+.rs-component.rssw.component-character-skills .skill-list .stats {
+  position: relative;
 }
 .rs-component.rssw.component-character-skills .skill-list .stats .level {
   white-space: nowrap;
@@ -1890,6 +2063,9 @@ form {
   width: 22px;
   font-size: 18px;
   text-align: center;
+}
+.rs-component.rssw.component-entity-knowledge .controls .reset {
+  padding: 2px 8px;
 }
 .rs-component.rssw.component-entity-knowledge .table-record.name .table-content {
   text-align: left;

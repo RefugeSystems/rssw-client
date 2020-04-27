@@ -32,6 +32,14 @@
 		"icon": "rsswx rsswx-despair",
 		"property": "despair",
 		"label": "Despair"
+	}, {
+		"icon": "fad fa-circle rs-white rs-secondary-black",
+		"property": "light",
+		"label": "Light"
+	}, {
+		"icon": "fad fa-circle rs-black rs-secondary-white",
+		"property": "dark",
+		"label": "Dark"
 	}];
 	
 	

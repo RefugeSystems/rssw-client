@@ -106,7 +106,24 @@ rsSystem.component("RSSWCharacter", {
 					"title": "Skills",
 		            "declaration": "rsswCharacterSkills",
 		            "sid": "entity:skills:" + this.entity.id,
-		            "enabled": true
+		            "enabled": true,
+		            "configurations": [{
+		        		"label": "Hide Filter",
+		        		"property": "hideFilter",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Hide Names",
+		        		"property": "hideNames",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Hide Leveling",
+		        		"property": "hideLeveling",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Roll on Click",
+		        		"property": "rollSkill",
+		        		"type": "checkbox"
+		            }]
 				});
 				this.widgets.push({
 					"title": "Knowledge",

@@ -422,6 +422,78 @@
 	.rs-transparent {
 		color: transparent !important;
 	}
+	
+	.rs-secondary-lightred, .rs-secondary-light-red {
+		--fa-secondary-color: @rsLightRed !important;
+	}
+	.rs-secondary-red {
+		--fa-secondary-color: @rsRed !important;
+	}
+	.rs-secondary-darkred, .rs-secondary-dark-red {
+		--fa-secondary-color: @rsDarkRed !important;
+	}
+	.rs-secondary-lightOrange, .rs-secondary-lightorange, .rs-secondary-light-orange {
+		--fa-secondary-color: @rsLightOrange !important;
+	}
+	.rs-secondary-orange {
+		--fa-secondary-color: @rsOrange !important;
+	}
+	.rs-secondary-darkOrange, .rs-secondary-darkorange, .rs-secondary-dark-orange {
+		--fa-secondary-color: @rsDarkOrange !important;
+	}
+	.rs-secondary-lightyellow, .rs-secondary-light-yellow {
+		--fa-secondary-color: @rsLightYellow !important;
+	}
+	.rs-secondary-yellow {
+		--fa-secondary-color: @rsYellow !important;
+	}
+	.rs-secondary-darkyellow, .rs-secondary-dark-yellow {
+		--fa-secondary-color: @rsDarkYellow !important;
+	}
+	.rs-secondary-lightgreen, .rs-secondary-light-green {
+		--fa-secondary-color: @rsLightGreen !important;
+	}
+	.rs-secondary-green {
+		--fa-secondary-color: @rsGreen !important;
+	}
+	.rs-secondary-darkgreen, .rs-secondary-dark-green {
+		--fa-secondary-color: @rsDarkGreen !important;
+	}
+	.rs-secondary-lightBlue, .rs-secondary-lightblue, .rs-secondary-light-blue {
+		--fa-secondary-color: @rsLightBlue !important;
+	}
+	.rs-secondary-blue {
+		--fa-secondary-color: @rsBlue !important;
+	}
+	.rs-secondary-darkblue, .rs-secondary-dark-blue {
+		--fa-secondary-color: @rsDarkBlue !important;
+	}
+	.rs-secondary-lightpurple, .rs-secondary-light-purple {
+		--fa-secondary-color: @rsLightPurple !important;
+	}
+	.rs-secondary-purple {
+		--fa-secondary-color: @rsPurple !important;
+	}
+	.rs-secondary-darkpurple,.rs-secondary-dark-purple {
+		--fa-secondary-color: @rsDarkPurple !important;
+	}
+	
+	.rs-secondary-white {
+		--fa-secondary-color: @rsWhite !important;
+	}
+	.rs-secondary-gray, .rs-secondary-grey {
+		--fa-secondary-color: @rsGray !important;
+	}
+	.rs-secondary-black {
+		--fa-secondary-color: @rsBlack !important;
+	}
+	.rs-secondary-black-visible {
+		--fa-secondary-color: #332f2f !important;
+	}
+	
+	.rs-secondary-transparent {
+		--fa-secondary-color: transparent !important;
+	}
 }
 
 .swg:before {
@@ -572,6 +644,34 @@ form {
 	margin: 0px !important;
 }
 
+.rsswx-dice {
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+
+	&.force {
+		border-radius: 1em;
+		border-width: 2px;
+	}
+	
+	&.light {
+		border-color: @rsBlack;
+		background: @rsWhite;
+	}
+
+	&.dark {
+		border-color: @rsWhite;
+		background: @rsBlack;
+	}
+}
+
+.light-side {
+	--fa-secondary-color: @rsBlack;
+}
+
+.dark-side {
+	--fa-secondary-color: @rsWhite;
+}
 .rs-page.page-about {
 
 
@@ -2054,6 +2154,35 @@ form {
 			* {
 				vertical-align: middle;
 			}
+			
+			.stats {
+				
+				.roll-result {
+					position: absolute;
+					top: 0px;
+					left: 0px;
+					width: 100%;
+					background: @rsBlack;
+					color: @rsWhite;
+					height: 0px;
+					transition: max-height .5s, border .5s;
+					z-index: 1;
+					cursor: pointer;
+					padding: 0px;
+					border: 0px;
+					margin: 0px;
+					user-select: none;
+					
+					&.show {
+						border: 1px solid @rsOrange;
+						height: 100%;
+					}
+					
+					.result-property {
+						margin: 0px 4px;
+					}
+				}
+			}
 		}
 		
 		.base {
@@ -2062,6 +2191,7 @@ form {
 		}
 		
 		.stats {
+			position: relative;
 	
 			.level {
 				white-space: nowrap;
@@ -2308,6 +2438,11 @@ form {
 
 .rs-component.rssw.component-entity-knowledge {
 	
+	.controls {
+		.reset {
+			padding: 2px 8px;
+		}
+	}
 	
 	.table-record.name {
 	

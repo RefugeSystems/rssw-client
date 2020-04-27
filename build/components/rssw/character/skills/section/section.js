@@ -8,6 +8,32 @@
 (function() {
 	var levelBars = [0,1,2,3,4];
 	var instance = 0;
+
+	var rollProperties = [{
+		"icon": "ra ra-bomb-explosion",
+		"property": "success",
+		"label": "Success"
+	}, {
+		"icon": "fad fa-jedi",
+		"property": "advantage",
+		"label": "Advantage"
+	}, {
+		"icon": "xwm xwing-miniatures-font-epic",
+		"property": "triumph",
+		"label": "Triumph"
+	}, {
+		"icon": "fal fa-triangle rot180",
+		"property": "failure",
+		"label": "Failure"
+	}, {
+		"icon": "rsswx rsswx-threat",
+		"property": "threat",
+		"label": "Threat"
+	}, {
+		"icon": "rsswx rsswx-despair",
+		"property": "despair",
+		"label": "Despair"
+	}];
 	
 	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
@@ -26,7 +52,6 @@
 			},
 			"debug": {
 				"type": Boolean
-				
 			},
 			"named": {
 				"type": String
@@ -39,6 +64,7 @@
 		"data": function() {
 			var data = {};
 
+			data.rollProperties = rollProperties;
 			data.instance = instance++;
 			data.levelBars = levelBars;
 			data.skills = [];
@@ -51,6 +77,9 @@
 			this.update();
 		},
 		"methods": {
+			"clearRoll": function(skill) {
+				Vue.delete(this.state.rolls, skill);
+			},
 			"skillTouched": function(skill) {
 				this.$emit("touched", skill);
 			},
