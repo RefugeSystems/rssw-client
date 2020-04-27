@@ -39,11 +39,11 @@ rsSystem.component("rsCount", {
 		data.open = false;
 		data.operation = this.initial;
 		data.operations = {
-			"sub": {
-				"icon": "far fa-minus-square rs-orange"
-			},
 			"add": {
 				"icon": "far fa-plus-square rs-orange"
+			},
+			"sub": {
+				"icon": "far fa-minus-square rs-orange"
 			},
 			"sum": {
 				"icon": "far fa-sigma rs-orange"
