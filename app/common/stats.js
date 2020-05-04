@@ -44,7 +44,7 @@ rsSystem.component("RSSWStats", {
 				"icon": "fas fa-fist-raised"
 			},
 			"pressence": {
-				"name": "Pressence",
+				"name": "Presence",
 				"info": "",
 				"class": "rs-red",
 				"icon": "fas fa-fist-raised"
