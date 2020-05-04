@@ -48,6 +48,7 @@
 	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
 	invisibleKeys.is_shop = true;
+	invisibleKeys.no_rank = true;
 	invisibleKeys.alters = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.owners = true;
