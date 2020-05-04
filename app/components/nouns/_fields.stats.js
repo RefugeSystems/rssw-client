@@ -291,6 +291,19 @@
 				});
 			}
 			
+			data.fields.modifierstats.push({
+				"label": "Skill Boosts",
+				"property": "__skillboosts",
+				"type": "label"
+			});
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				data.fields.modifierstats.push({
+					"label": this.universe.indexes.skill.listing[x].name,
+					"property": "skill_bonuses_" + this.universe.indexes.skill.listing[x].propertyKey,
+					"type": "text"
+				});
+			}
+			
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, listSource);
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
 
