@@ -298,7 +298,7 @@
 			});
 			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 				data.fields.modifierstats.push({
-					"label": this.universe.indexes.skill.listing[x].name,
+					"label": this.universe.indexes.skill.listing[x].name + " (B)",
 					"property": "skill_bonuses_" + this.universe.indexes.skill.listing[x].propertyKey,
 					"type": "text"
 				});
