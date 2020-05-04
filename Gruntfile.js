@@ -2,7 +2,7 @@
 var fs = require("fs");
 var pkg = JSON.parse(fs.readFileSync("./package.json"));
 
-var seek = /^.*build[\/\\](components|pages|common)[\/\\]/;
+var seek = /^.*app[\/\\](components|pages|common)[\/\\]/;
 
 var config = {
 	"pkg": pkg,
@@ -140,15 +140,15 @@ var config = {
 		},
 		"app": [
 			"spec/app/**/*.js",
-			"build/**/*.js",
-			"build/*.js"
+			"app/**/*.js",
+			"app/*.js"
 		]
 	},
 	"connect": {
 		"app": {
 			"options": {
 				"port": 3082,
-				"base": "app/",
+				"base": "deploy/",
 				"hostname": "*",
 				"livereload": 3083,
 				"middleware": function(connect, options, middlewares) {
@@ -182,18 +182,18 @@ var config = {
 			"files": [
 				"Gruntfile.js",
 				"app/manifest.json",
-				"build/**/*.less",
-				"build/**/*.json",
-				"build/**/*.html",
-				"build/**/*.css",
-				"build/**/*.js",
+				"app/**/*.less",
+				"app/**/*.json",
+				"app/**/*.html",
+				"app/**/*.css",
+				"app/**/*.js",
 				"spec/**/*.js"
 			],
 			"tasks": ["build"]
 		},
 		"docs": {
 			"files": [
-				"build/**/*.js"
+				"app/**/*.js"
 			],
 			"tasks": ["yuidoc:app"]
 		}
@@ -215,45 +215,45 @@ var config = {
 				"node_modules/cytoscape-cola/cytoscape-cola.js",
 
 				"transient/templates.js",
-				"build/library/*.js",
-				"build/library/*/**/*.js",
+				"app/library/*.js",
+				"app/library/*/**/*.js",
 
-				"build/core/*.js",
-				"build/core/*/**/*.js",
+				"app/core/*.js",
+				"app/core/*/**/*.js",
 				
-				"build/common/*.js",
-				"build/common/*/**/*.js",
+				"app/common/*.js",
+				"app/common/*/**/*.js",
 				
-				"build/components/*.js",
-				"build/components/*/**/*.js",
+				"app/components/*.js",
+				"app/components/*/**/*.js",
 
-				"build/subcomponents/*.js",
-				"build/subcomponents/*/**/*.js",
+				"app/subcomponents/*.js",
+				"app/subcomponents/*/**/*.js",
 
-				"build/pages/*.js",
-				"build/pages/*/**/*.js",
+				"app/pages/*.js",
+				"app/pages/*/**/*.js",
 
-				"build/main/*/**/*.js",
-				"build/main/*.js"
+				"app/main/*/**/*.js",
+				"app/main/*.js"
 			],
-			"dest": "app/main.js"
+			"dest": "deploy/main.js"
 		},
 		"less": {
 			"src": [
-				"build/styles/*.less",
-				"build/styles/*/**/*.less",
-				"build/pages/**/*.less",
-				"build/common/**/*.less",
-				"build/components/**/*.less"
+				"app/styles/*.less",
+				"app/styles/*/**/*.less",
+				"app/pages/**/*.less",
+				"app/common/**/*.less",
+				"app/components/**/*.less"
 			],
-			"dest": "build/app.less"
+			"dest": "deploy/app.less"
 		}
 	},
 	"less": {
 		"app": {
 			"files": {
-				"app/main.css": [
-					"build/app.less"
+				"deploy/main.css": [
+					"deploy/app.less"
 				]
 			}
 		}
@@ -264,7 +264,7 @@ var config = {
 		},
 		"app": {
 			"templates": [{
-					"path": "build/**/*.html",
+					"path": "app/**/*.html",
 					"rewrite": function (name) {
 						var ex = seek.exec(name);
 						if(ex) {
@@ -304,7 +304,7 @@ var config = {
 			"options": {
 				"outdir": "./docs",
 				"paths": [
-					"./build/"
+					"./app/"
 				]
 			}
 		}
