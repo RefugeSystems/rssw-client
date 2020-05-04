@@ -31004,6 +31004,10 @@ rsSystem.component("rsCount", {
 	},
 	bases,
 	{
+		"label": "No Rank",
+		"property": "no_rank",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -33079,7 +33083,9 @@ class FieldDescriptor {
 				} else if(this.leveling === skill.id) {
 					this.viewSkill(skill.id);
 				}
-				Vue.set(this, "leveling", skill.id);
+				if(skill.can_rank) {
+					Vue.set(this, "leveling", skill.id);
+				}
 			},
 			"getXPCost": function(skill, direction) {
 				skill = this.universe.indexes.skill.lookup[skill];
@@ -33168,7 +33174,7 @@ class FieldDescriptor {
 				this.customSkills.splice(0);
 				this.levelSkills.splice(0);
 				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
-					if(this.universe.indexes.skill.listing[x].section) {
+					if(this.universe.indexes.skill.listing[x].section && !this.universe.indexes.skill.listing[x].no_rank) {
 						this.levelSkills.push(this.universe.indexes.skill.listing[x]);
 					}
 				}
@@ -33177,8 +33183,10 @@ class FieldDescriptor {
 						buffer = this.universe.indexes.skill.lookup[this.character.skill[x]];
 						if(buffer && !mapped[buffer.id]) {
 							this.customSkills.push(buffer);
-							this.levelSkills.push(buffer);
 							mapped[buffer.id] = true;
+							if(!buffer.no_rank) {
+								this.levelSkills.push(buffer);
+							}
 						}
 					}
 				}

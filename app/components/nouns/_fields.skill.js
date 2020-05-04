@@ -64,6 +64,10 @@
 	},
 	bases,
 	{
+		"label": "No Rank",
+		"property": "no_rank",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
