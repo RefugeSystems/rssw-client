@@ -74,6 +74,9 @@
 			data.activeEdges = [];
 			data.indexEdges = {};
 			
+			data.notFound = false;
+			data.searchText = "";
+			
 			return data;
 		},
 		"watch": {
@@ -156,6 +159,43 @@
 			this.sync();
 		},
 		"methods": {
+			"activity": function() {
+				if(this.notFound) {
+					Vue.set(this, "notFound", false);
+				}
+			},
+			"centerOnSearch": function() {
+				var search = this.searchText.toLowerCase(),
+					scape = this.getScape(),
+					found = false,
+					searching,
+					x;
+				
+				searching = function(el) {
+					var data = el.data();
+					if(data._search && data._search.indexOf(search) != -1) {
+						found = true;
+						el.addClass("highlight");
+						setTimeout(function() {
+							el.removeClass("highlight");
+						}, 1500);
+						return true;
+					}
+					return false;
+				};
+				
+				this.getScape().animate({
+					"duration": 500,
+					"center": {
+						"eles": scape.filter(searching)
+					}
+				});
+				
+				
+				if(!found) {
+					Vue.set(this, "notFound", true);
+				}
+			},
 			"addElement": function(element) {
 				cytoLookup[this.id].add(element);
 				this.runLayout();
@@ -193,7 +233,8 @@
 				return true;
 			},
 			"sync": function() {
-				var buffer,
+				var rerun = false,
+					buffer,
 					el,
 					x;
 				
@@ -213,11 +254,13 @@
 						};
 						this.indexNodes[this.nodes[x].id] = true;
 						cytoLookup[this.id].add(el);
+						rerun = true;
 					}
 				}
 				for(x=0; x<buffer.length; x++) {
 					this.removeElement(buffer[x]);
 					delete(this.indexNodes[buffer[x]]);
+					rerun = true;
 				}
 				
 
@@ -234,14 +277,18 @@
 						};
 						this.indexEdges[this.edges[x].id] = true;
 						cytoLookup[this.id].add(el);
+						rerun = true;
 					}
 				}
 				for(x=0; x<buffer.length; x++) {
 					this.removeElement(buffer[x]);
 					delete(this.indexEdges[buffer[x]]);
+					rerun = true;
 				}
 				
-				this.runLayout();
+				if(rerun) {
+					this.runLayout();
+				}
 			}
 		},
 		"template": Vue.templified("components/graph.html")

@@ -1,16 +1,30 @@
 .rs-component.rssw.component-character-improve-ability {
 
+	.archetypes {
+		border-bottom: 1px solid @rsWhite;
+	}
 
 	.select {
-		padding: 4px;
-		margin: 2px 4px;
+		padding: 6px 9px;
 		font-size: 18px;
 		color: @rsWhite;
 		transition: color .5s;
 		border: 1px solid @rsWhite;
+		border-bottom: 0px;
+		white-space: nowrap;
 		
 		&.selected {
 			color: @rsOrange;
+		}
+	}
+	
+	.select-container {
+		overflow:auto;
+	}
+	
+	.graph-container {
+		.highlight {
+			color: white;
 		}
 	}
 }

@@ -138,6 +138,18 @@
 .rs-component .grow-2 {
   flex-grow: 2;
 }
+.rs-component .grow-3 {
+  flex-grow: 3;
+}
+.rs-component .grow-4 {
+  flex-grow: 4;
+}
+.rs-component .grow-5 {
+  flex-grow: 5;
+}
+.rs-component .grow-10 {
+  flex-grow: 10;
+}
 .rs-component .shrink-0 {
   flex-shrink: 0;
 }
@@ -1317,6 +1329,41 @@ form {
   height: 100%;
   width: 100%;
 }
+.rs-component.rs-graph .graph-search {
+  position: absolute;
+  z-index: 1;
+  right: 0px;
+  top: 0px;
+  width: 150px;
+  height: 27px;
+  background-color: #EAEFF9;
+}
+.rs-component.rs-graph .graph-search.search-error {
+  background-color: #e43a3b;
+}
+.rs-component.rs-graph .graph-search input[type=text] {
+  line-height: 100%;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  background: transparent;
+  border: 0px;
+  margin: 0px;
+  padding: 3px;
+  font-size: 16px;
+}
+.rs-component.rs-graph .graph-search .search-center {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 27px;
+  height: 27px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 25px;
+  background-color: #617EB8;
+  color: #EAEFF9;
+}
 .rs-component.rs-image {
   width: 100%;
   text-align: center;
@@ -1720,16 +1767,26 @@ form {
   border: 0px;
   margin: 0px;
 }
+.rs-component.rssw.component-character-improve-ability .archetypes {
+  border-bottom: 1px solid #EAEFF9;
+}
 .rs-component.rssw.component-character-improve-ability .select {
-  padding: 4px;
-  margin: 2px 4px;
+  padding: 6px 9px;
   font-size: 18px;
   color: #EAEFF9;
   transition: color 0.5s;
   border: 1px solid #EAEFF9;
+  border-bottom: 0px;
+  white-space: nowrap;
 }
 .rs-component.rssw.component-character-improve-ability .select.selected {
   color: #FF9560;
+}
+.rs-component.rssw.component-character-improve-ability .select-container {
+  overflow: auto;
+}
+.rs-component.rssw.component-character-improve-ability .graph-container .highlight {
+  color: white;
 }
 .rs-component.rssw.component-character-board .container {
   min-width: 510px;
