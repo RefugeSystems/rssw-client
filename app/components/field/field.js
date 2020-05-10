@@ -44,7 +44,7 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			if(this.field.source_index.listing) {
+			if(this.field.source_index && this.field.source_index.listing) {
 				this.field.source_index.listing.sort(this.sortData);
 			}
 		},

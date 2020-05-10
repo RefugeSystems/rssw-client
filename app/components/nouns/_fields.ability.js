@@ -2,12 +2,30 @@
 (function() {
 	
 	var dataSource,
-		dependency,
+		dependencies,
+		archetypes,
+		knowledges,
 		attrs,
 		stats,
 		notes;
 
-	dependency = {
+	archetypes = {
+		"label": "Archetypes",
+		"property": "archetypes",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	knowledges = {
+		"label": "Knowledges",
+		"property": "knowledges",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	dependencies = {
 		"label": "Dependencies",
 		"property": "dependency",
 		"type": "multireference",
@@ -119,7 +137,9 @@
 			"id": "all"
 		}]
 	},
-	dependency,
+	archetypes,
+	dependencies,
+	knowledges,
 	attrs,
 	stats,
 	{
@@ -151,7 +171,9 @@
 			return data;
 		},
 		"mounted": function() {
-			dependency.source_index = this.universe.indexes.ability;
+			archetypes.source_index = this.universe.indexes.archetype;
+			dependencies.source_index = this.universe.indexes.ability;
+			knowledges.source_index = this.universe.indexes.knowledge;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			notes.source_index = this.universe.indexes.note;

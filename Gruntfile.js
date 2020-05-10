@@ -210,9 +210,12 @@ var config = {
 				"node_modules/jquery/dist/jquery.min.js",
 				"node_modules/vue-router/dist/vue-router.js",
 				
-				"node_modules/cytoscape/dist/cytoscape.js",
-				"node_modules/cytoscape-cola/cola.js",
-				"node_modules/cytoscape-cola/cytoscape-cola.js",
+//				"node_modules/cytoscape/dist/cytoscape.min.js",
+//				"node_modules/cytoscape-cola/src/cola.js",
+//				"node_modules/cytoscape-cola/cytoscape-cola.js",
+				"external/cytoscape.js",
+				"external/cola.js",
+				"external/cytoscape-cola.js",
 
 				"transient/templates.js",
 				"app/library/*.js",

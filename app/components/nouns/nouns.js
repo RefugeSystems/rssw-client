@@ -53,6 +53,7 @@
 
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsModifierAttrs,
+			rsSystem.components.NounFieldsArchetype,
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,

@@ -29,6 +29,7 @@
 			data.storageKeyID = storageKey + this.character.id;
 			
 			data.race = null;
+			data.displayAbilityTrees = false;
 			data.energy_consumption = 0;
 			data.energy_output = 0;
 			data.encumberance_max = 0;
@@ -100,6 +101,12 @@
 				entity.commit({
 					"entity": null
 				});
+			},
+			"closeAbilities": function() {
+				Vue.set(this, "displayAbilityTrees", false);
+			},
+			"openAbilities": function() {
+				Vue.set(this, "displayAbilityTrees", true);
 			},
 			"updateCharacter": function() {
 				if(!this.calculating) {

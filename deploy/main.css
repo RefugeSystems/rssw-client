@@ -284,6 +284,14 @@
 .rs-component {
   margin: 0px !important;
 }
+.rs-component.fill {
+  height: 100%;
+  width: 100%;
+}
+.rs-component .fill {
+  height: 100%;
+  width: 100%;
+}
 .rs-component .fields .full {
   display: block;
   width: 100%;
@@ -983,6 +991,9 @@ form {
   padding-top: 5px !important;
   margin-top: 5px !important;
 }
+.rs-page.page-test h1 {
+  color: #EAEFF9;
+}
 .rs-page.page-home {
   display: flex;
   align-items: center;
@@ -1295,6 +1306,16 @@ form {
   padding: 0px;
   border: 0px;
   margin: 0px;
+}
+.rs-component.rs-graph {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.rs-component.rs-graph .graph-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 .rs-component.rs-image {
   width: 100%;
@@ -1699,6 +1720,17 @@ form {
   border: 0px;
   margin: 0px;
 }
+.rs-component.rssw.component-character-improve-ability .select {
+  padding: 4px;
+  margin: 2px 4px;
+  font-size: 18px;
+  color: #EAEFF9;
+  transition: color 0.5s;
+  border: 1px solid #EAEFF9;
+}
+.rs-component.rssw.component-character-improve-ability .select.selected {
+  color: #FF9560;
+}
 .rs-component.rssw.component-character-board .container {
   min-width: 510px;
   justify-content: space-between;
@@ -1794,6 +1826,20 @@ form {
 }
 .rs-component.rssw.component-entity-history .entry .time {
   color: #FF9560;
+}
+.rs-component.rssw.component-character-info .ability-display {
+  position: absolute;
+  background-color: black;
+  overflow: hidden;
+  height: 0px;
+  width: 0px;
+  left: 0px;
+  top: 0px;
+  z-index: 50;
+}
+.rs-component.rssw.component-character-info .ability-display.display-open {
+  height: 100%;
+  width: 100%;
 }
 .rs-component.rssw.component-character-info a {
   cursor: pointer;

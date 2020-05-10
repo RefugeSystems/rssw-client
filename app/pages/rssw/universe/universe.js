@@ -133,7 +133,7 @@
 			if(data.state.paging === undefined) {
 				data.state.paging = {};
 				data.state.paging.per = 20;
-				data.state.paging.current = 1;
+				data.state.paging.current = 0;
 				data.state.paging.pages = 0;
 				data.state.paging.spread = 10;
 			}
@@ -179,21 +179,28 @@
 		"watch": {
 			"state": {
 				"deep": true,
-				"handler": function() {
+				"handler": function(nV, oV) {
 //					if(this.state.search !== this.state.search.toLowerCase()) {
 //						Vue.set(this.state.filter, "null", this.state.search.toLowerCase());
 //					}
+					console.log("New State:\n", nV.paging.current, "\n", oV.paging.current);
 					if(templateValues[this.state.filterTemplate] !== undefined) {
 						Vue.set(this.state.filter, "template", templateValues[this.state.filterTemplate]);
 					} else {
 						Vue.delete(this.state.filter, "template");
 					}
-					this.saveStorage(this.storageKeyID, this.state);
+					this.saveStorage(this.storageKeyID, nV);
 				}
 			}
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+
+			if(templateValues[this.state.filterTemplate] !== undefined) {
+				Vue.set(this.state.filter, "template", templateValues[this.state.filterTemplate]);
+			} else {
+				Vue.delete(this.state.filter, "template");
+			}
 			
 			this.universe.$on("universe:modified", this.updateListings);
 			this.updateListings();

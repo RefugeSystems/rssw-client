@@ -71,22 +71,22 @@
 		</textarea>
 	</div>
 	
-	<div v-if="field.type === 'multireference'" class="multireference">
-		<div v-if="!field.source_index">
-			<span class="fas fa-exclamation-triangle"></span>
-			<span>No Source Index</span>
-		</div>
+	<div v-if="field.type === 'multireference' && field.source_index" class="multireference">
 		<div class="referenced" v-for="(reference, $index) in root[field.property]">
 			<span class="reference-display">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:"Missing:" + reference}}</span>
 			<button class="info fas fa-info-circle" v-if="!field.noinfo" v-on:click="openReference(reference)"></button>
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 		</div>
 		<div class="referenced">
-			<select v-model="reference_value" v-on:change="addReference(reference_value)">
+			<select v-model="reference_value" v-if="field.source_index" v-on:change="addReference(reference_value)">
 				<option value="">Select To Add</option>
 				<option v-for="option in field.source_index.listing" v-if="optionAvailable(option)" :id="option.id" :value="option.id">{{option.name}}</option>
 			</select>
 		</div>
+	</div>
+	<div v-if="field.type === 'multireference' && !field.source_index">
+		<span class="fas fa-exclamation-triangle"></span>
+		<span>No Source Index</span>
 	</div>
 	
 	<div class="error" v-if="field.error">

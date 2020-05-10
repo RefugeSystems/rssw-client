@@ -15,19 +15,15 @@ rsSystem.component("RSSWDashboard", {
 	"data": function() {
 		var data = {};
 		
+		data.self = this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
 		data.selectedEntities = [];
 		data.owned = [];
 		
 		return data;
 	},
-	"computed": {
-		"self": function() {
-			return this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity];
-		}
-	},
 	"mounted": function() {
 		this.universe.$on("universe:modified", this.updateEntities);
-		this.universe.$on("model:modified", this.updateDisplay);
+		this.universe.$on("model:modified", this.updateEntities);
 		rsSystem.register(this);
 		
 		this.updateEntities();
@@ -48,8 +44,8 @@ rsSystem.component("RSSWDashboard", {
 			return this.selectedEntities.indexOf(record) !== -1;
 		},
 		"openDashboard": function(type, external) {
-			var primary = null,
-				eids = [].concat(this.selectedEntities),
+			var eids = [].concat(this.selectedEntities),
+				primary = null,
 				x;
 			
 			switch(type) {
@@ -101,9 +97,6 @@ rsSystem.component("RSSWDashboard", {
 					break;
 			}
 		},
-		"updateDisplay": function() {
-			this.$forceUpdate();
-		},
 		"updateEntities": function() {
 			var entities,
 				entity,
@@ -119,20 +112,20 @@ rsSystem.component("RSSWDashboard", {
 			for(x=0; x<entities.length; x++) {
 				entity = this.universe.nouns.entity[entities[x]];
 				if(entity && entity.owners && entity.owners.indexOf(this.player.id) !== -1) {
-					entity.$on("modified", this.updateDisplay);
+//					entity.$on("modified", this.updateDisplay);
 					owned.push(entity);
 				}
 			}
 			
+			Vue.set(this, "self", this.universe.nouns.entity[this.universe.nouns.player[this.user.id].entity]);
 			this.owned.splice(0);
 			this.owned.push.apply(this.owned, owned);
 			this.owned.sort(this.sortData);
-			this.$forceUpdate();
 		}
 	},
 	"beforeDestroy": function() {
 		this.universe.$off("universe:modified", this.updateEntities);
-		this.universe.$off("model:modified", this.updateDisplay);
+		this.universe.$off("model:modified", this.updateEntities);
 	},
 	"template": Vue.templified("pages/rssw/dashboard.html")
 });

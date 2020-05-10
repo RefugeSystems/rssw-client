@@ -1,4 +1,7 @@
 <div class="rs-component rssw component-character-info">
+	<div class="ability-display" :class="displayAbilityTrees?'display-open':'display-close'">
+		<rssw-character-improve-ability class="fill" v-on:close="closeAbilities()" v-if="displayAbilityTrees" :id="'abilities_' + character.id" :user="user" :state="state" :universe="universe" :character="character"></rssw-character-improve-ability>
+	</div>
 	<div class="property name">
 		<span class="icon fad fa-user"></span>
 		<span class="name">{{character.name}}</span>
@@ -32,7 +35,7 @@
 	</div>
 	<div class="property ability">
 		<span class="icon fad fa-jedi"></span>
-		<span class="label">Abilities:</span>
+		<span class="label" v-on:click="openAbilities()">Abilities:</span>
 		<button v-for="(ability, $index) in abilities" class="ability" v-on:click="showInfo(ability)">
 			<span class="divide" v-if="$index !== 0">,</span>
 			<span class="value">{{ability.name}}</span>

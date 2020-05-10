@@ -32,7 +32,6 @@ rsSystem.component("rsCount", {
 		}
 	},
 	"data": function() {
-		console.log("Data: ", this.value);
 		var data = {};
 		
 		data.expression = "";
