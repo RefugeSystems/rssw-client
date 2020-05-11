@@ -183,7 +183,6 @@
 //					if(this.state.search !== this.state.search.toLowerCase()) {
 //						Vue.set(this.state.filter, "null", this.state.search.toLowerCase());
 //					}
-					console.log("New State:\n", nV.paging.current, "\n", oV.paging.current);
 					if(templateValues[this.state.filterTemplate] !== undefined) {
 						Vue.set(this.state.filter, "template", templateValues[this.state.filterTemplate]);
 					} else {

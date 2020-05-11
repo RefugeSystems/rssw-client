@@ -105,9 +105,11 @@
 			 * @param {RSObject | Object | String} toView Something to identify the RSObject to view or the object itself.
 			 */
 			"displayRecord": function(toView) {
-				console.log("Info: ", toView);
+//				console.log("Info: ", toView);
+//				console.log("Current: ", this.viewing);
 				
 				if(toView && !(toView instanceof RSObject)) {
+					console.log("RS");
 					if(toView.record) {
 //						console.warn("Received View Record: ", toView);
 						Vue.set(this, "target", toView.target);
@@ -129,6 +131,7 @@
 				}
 				
 				if(toView) {
+//					console.log("Viewing: ", toView);
 					if(!this.viewing || toView.id !== this.viewing.id) {
 						if(this.viewing) {
 							if(!this.history.length || (this.viewing.id !== toView.id)) {

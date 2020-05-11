@@ -665,6 +665,7 @@
 				return link.class || link.icon;
 			},
 			"poiMenu": function(link) {
+//				console.log("Trigger View");
 				rsSystem.EventBus.$emit("display-info", link);
 			},
 			"minorUpdate": function() {

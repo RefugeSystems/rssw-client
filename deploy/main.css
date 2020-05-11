@@ -2868,6 +2868,8 @@ form {
 .rs-component.component-viewer .map .view .parchment .poi > * {
   color: inherit;
 }
+.rs-component.component-viewer .map .view .parchment .poi:active,
+.rs-component.component-viewer .map .view .parchment .poi:focus,
 .rs-component.component-viewer .map .view .parchment .poi:hover {
   background: rgba(18, 33, 146, 0.6);
   /*opacity: .5;*/
@@ -2879,25 +2881,36 @@ form {
 .rs-component.component-viewer .map .view .parchment .poi .readout {
   text-align: left;
 }
+.rs-component.component-viewer .map .view .parchment .poi .poi-icon {
+  min-width: 24px;
+  min-height: 24px;
+  line-height: 24px;
+}
 .rs-component.component-viewer .map .view .parchment .poi .labeling {
-  /* New Style */
-  position: absolute;
-  top: -2px;
-  left: calc(100% + -12px);
-  padding: 0px 15px;
+  /* V0.2 Style */
+  padding: 0px 6px;
   color: #EAEFF9;
   font-weight: 900;
-  background-color: black;
-  white-space: nowrap;
-  height: 100%;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
-  border-width: 2px;
-  border-style: outset;
-  border-color: buttonface;
-  border-left: 0px;
-  line-height: 24px;
-  /* Old Style
+  /* V0.1 Style
+						position: absolute;
+						top: -2px;
+						left: ~"calc(100% + -12px)";
+						padding: 0px 15px;
+						color: #EAEFF9;
+						font-weight: 900;
+						background-color: black;
+						white-space: nowrap;
+						height: 100%;
+						border-top-right-radius: 15px;
+						border-bottom-right-radius: 15px;
+						border-width: 2px;
+						border-style: outset;
+						border-color: buttonface;
+						border-left: 0px;
+						line-height: 24px;
+						z-index: 1;
+						*/
+  /* V0 Style
 						position: absolute;
 						top: 0px;
 						left: ~"calc(100% + 10px)";

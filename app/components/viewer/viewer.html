@@ -7,9 +7,9 @@
 			<!-- <div class="shadow"></div> -->
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
-					<button class="poi" v-if="poiVisible(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click="poiMenu(link)">
+					<button class="poi" v-if="poiVisible(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
+						<span class="poi-icon" :class="poiClass(link)"></span>
 						<span class="labeling" v-if="link.label && state.labels">{{link.label}}</span>
-						<span :class="poiClass(link)"></span>
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in coordinates" v-if="!coordinate.standalone">
