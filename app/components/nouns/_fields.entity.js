@@ -13,6 +13,7 @@
 		entity,
 		images,
 		owners,
+		parent,
 		attrs,
 		items,
 		notes,
@@ -34,6 +35,14 @@
 	entity = {
 		"label": "Inside",
 		"property": "inside", // Not "entity" as modifier inheritence is not wanted
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	parent = {
+		"label": "Parent",
+		"property": "parent", // Not "entity" as modifier inheritence is not wanted
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -211,13 +220,15 @@
 		"label": "ID",
 		"property": "id",
 		"type": "text"
-	}, {
-		"label": "Parent",
-		"property": "parent",
-		"type": "text"
-	}, {
+	},
+	parent,
+	{
 		"label": "Name",
 		"property": "name",
+		"type": "text"
+	}, {
+		"label": "Label",
+		"property": "label",
 		"type": "text"
 	}, {
 		"label": "Icon",
@@ -491,6 +502,7 @@
 			images.options = this.universe.indexes.image.listing;
 			images.options.sortBy("name");
 			entity.options = this.universe.indexes.entity.listing;
+			parent.options = entity.options;
 			entity.options.sortBy("name");
 			pilot.options = this.universe.indexes.entity.listing;
 			pilot.options.sortBy("name");

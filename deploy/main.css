@@ -120,6 +120,9 @@
 .rs-component .flex.v.inline {
   display: inline-flex;
 }
+.rs-component .flex.fill {
+  width: 100%;
+}
 .rs-component .flex .spacer {
   flex-grow: 10;
 }
@@ -1467,6 +1470,9 @@ form {
 .object-info .record-description table td:first-child {
   white-space: nowrap;
 }
+.object-info .record-description table td {
+  padding: 2px;
+}
 .object-info .record-description table tr:nth-child(odd) {
   background-color: #bcd9e2;
 }
@@ -1554,6 +1560,15 @@ form {
 .object-info .control button.action:hover {
   background-color: #e0aef7;
   color: #617EB8;
+}
+.object-info .control button.action.requirements {
+  color: #841213;
+  border: 1px solid #841213;
+  cursor: not-allowed;
+}
+.object-info .control button.action.requirements:hover {
+  background-color: #e43a3b;
+  color: #000000;
 }
 .rs-component.rssw.component-character-info a {
   cursor: pointer;
@@ -1892,6 +1907,7 @@ form {
   width: 0px;
   left: 0px;
   top: 0px;
+  /*transition: height .5s, width .5s;*/
   z-index: 50;
 }
 .rs-component.rssw.component-character-info .ability-display.display-open {
@@ -2823,7 +2839,7 @@ form {
 .rs-component.component-viewer .map .view .parchment {
   position: absolute;
   z-index: 1;
-  transition: width 0.5s, height 0.5s;
+  /*transition: width .5s, height .5s;*/
 }
 .rs-component.component-viewer .map .view .parchment img {
   position: absolute;
@@ -2855,6 +2871,7 @@ form {
 .rs-component.component-viewer .map .view .parchment .poi:hover {
   background: rgba(18, 33, 146, 0.6);
   /*opacity: .5;*/
+  z-index: 55;
 }
 .rs-component.component-viewer .map .view .parchment .poi a {
   text-decoration: none;
@@ -2863,13 +2880,32 @@ form {
   text-align: left;
 }
 .rs-component.component-viewer .map .view .parchment .poi .labeling {
+  /* New Style */
   position: absolute;
-  top: 0px;
-  left: calc(100% + 10px);
+  top: -2px;
+  left: calc(100% + -12px);
+  padding: 0px 15px;
   color: #EAEFF9;
   font-weight: 900;
   background-color: black;
   white-space: nowrap;
+  height: 100%;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-width: 2px;
+  border-style: outset;
+  border-color: buttonface;
+  border-left: 0px;
+  line-height: 24px;
+  /* Old Style
+						position: absolute;
+						top: 0px;
+						left: ~"calc(100% + 10px)";
+						color: @rsWhite;
+						font-weight: 900;
+						background-color: black;
+						white-space: nowrap;
+						*/
 }
 .rs-component.component-viewer .map .actions {
   position: absolute;
@@ -2966,7 +3002,7 @@ form {
   background: #000000;
   color: #EAEFF9;
 }
-.rs-component.component-viewer .menu button {
+.rs-component.component-viewer .menu button.control {
   background: transparent;
   border: 0px;
   padding: 0px;
@@ -2976,14 +3012,31 @@ form {
   flex-shrink: 0;
   color: inherit;
 }
-.rs-component.component-viewer .menu button:active,
-.rs-component.component-viewer .menu button:hover {
+.rs-component.component-viewer .menu button.control:active,
+.rs-component.component-viewer .menu button.control:hover {
   background-color: #EAEFF9;
   color: #000000;
   cursor: pointer;
 }
+.rs-component.component-viewer .menu button.control.action {
+  line-height: 30px;
+  height: 30px;
+  width: 30px;
+}
 .rs-component.component-viewer .menu .search {
   white-space: nowrap;
+}
+.rs-component.component-viewer .menu .search .text {
+  border-left: 2px solid black;
+  overflow: hidden;
+}
+.rs-component.component-viewer .menu .search .text input {
+  height: 100%;
+  padding: 3px;
+  transition: background-color 0.5s;
+}
+.rs-component.component-viewer .menu .search .text input.search-error {
+  background-color: #e43a3b;
 }
 .rs-component.component-viewer .menu.open {
   max-height: 500px;

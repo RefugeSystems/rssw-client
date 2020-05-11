@@ -9,6 +9,14 @@
 (function() {
 	var storageKey = "_rs_viewerComponentKey";
 
+	var generateLocationClassingMap = {
+		"star-system": "far fa-solar-system rotX60",
+		"planet": "fad fa-globe-europe",
+		"station": "ra ra-satellite",
+		"moon": "fas fa-moon",
+		"city": "fas fa-city"
+	};
+	
 	rsSystem.component("rsViewer", {
 		"inherit": true,
 		"mixins": [
@@ -28,6 +36,7 @@
 				"zoomStep": 1
 			});
 			
+			data.generateLocationClassingMap = generateLocationClassingMap;
 			if(!data.state.crosshairing) {
 				data.state.crosshairing = {
 					"icon": "fal fa-crosshairs",
@@ -37,9 +46,13 @@
 				};
 			}
 
+			data.state.generate_location = data.state.generate_location || "";
 			data.state.viewed_at = data.state.viewed_at || 0;
 			data.state.search = data.state.search || "";
 			data.state.alter = data.state.alter || "";
+			if(data.state.labels === undefined) {
+				data.state.labels = true;
+			}
 			if(data.state.image) {
 				data.image = data.state.image;
 			} else {
@@ -55,6 +68,13 @@
 				data.state.master_view = "";
 			}
 			
+			if(data.state.search) {
+				data.search_criteria = data.state.search.toLowerCase().split(" ");
+			} else {
+				data.search_criteria = [];
+			}
+			data.searchPrevious = data.state.search;
+			data.searchError = "";
 			data.original = {};
 			data.sourceImage = null;
 			data.parchment = null;
@@ -71,7 +91,7 @@
 			data.alter = "";
 			
 			data.menuOpen = false;
-			data.menuItems = [{
+			data.menuItems = [[{
 				"action": "zoomin",
 				"text": "Zoom",
 				"icon": "fas fa-plus-square"
@@ -79,12 +99,19 @@
 				"action": "zoomout",
 				"text": "Zoom",
 				"icon": "fas fa-minus-square"
-			}, {
+			}], {
 				"action": "reset",
 				"text": "Reset",
 				"icon": "far fa-refresh"
 			}];
 			
+			data.menuItems.generateLocation = {
+				"event": "generate-location"
+			};
+			data.menuItems.labelItem = {
+				"action": "labels",
+				"text": "Labels"
+			};
 			data.menuItems.followItem = {
 				"action": "follow",
 				"text": "Follow"
@@ -138,8 +165,116 @@
 			this.update();
 		},
 		"methods": {
-			"searchMap": function(search) {
-				console.log("Search Map: ", search);
+			"searchMap": function() {
+				console.log("Search Map: ", this.search_criteria);
+				var set = false,
+					buffer,
+					x;
+				
+				for(x=0; !set && x<this.pointsOfInterest.length; x++) {
+					buffer = this.pointsOfInterest[x];
+					console.log("Preview: " + this.testSearchCriteria(buffer._search, this.search_criteria));
+					if(buffer.x && buffer.y && this.testSearchCriteria(buffer._search, this.search_criteria)) {
+						console.log("Center");
+						this.centerView(buffer);
+						set = true;
+					}
+				}
+				
+				if(!set) {
+					Vue.set(this, "searchError", "Not Found");
+				} else {
+					Vue.set(this, "searchError", "");
+				}
+			},
+			"centerView": function(location) {
+				var locX,
+					locY,
+					view,
+					x;
+				
+				if(location) {
+					locY = location.y/100 * this.image.height;
+					locX = location.x/100 * this.image.width;
+					view = this.getViewport();
+					locY -= view.height/2;
+					locX -= view.width/2;
+					this.apply({
+						"left": -1* locX,
+						"top": -1* locY
+					});
+				}
+			},
+			"getGeneratedClass": function() {
+				return generateLocationClassingMap[this.state.generate_location];
+			},
+			"idFromName": function(name) {
+				return "location:" + this.state.generate_location + ":" + name.toLowerCase().replace(/[ \._-]+/g, "");
+			},
+			"generateLocationNoun": function(x, y) {
+				var noun = {};
+				noun._type = "location";
+				noun.name = this.state.generate_location_name;
+				noun.label = this.state.generate_location_name;
+				noun.id = this.idFromName(noun.name);
+				noun.icon = this.getGeneratedClass();
+				noun.location = this.location.id;
+				noun.type = this.state.generate_location;
+				noun.x = x;
+				noun.y = y;
+				noun.master_note = "Generated @" + (new Date()).toString();
+				if(!this.universe.indexes.location.index[noun.id]) {
+					this.universe.send("modify:location", noun);
+				} else {
+					console.warn("Noun Already Exists: " + noun.id);
+				}
+			},
+			"clearSearch": function() {
+				Vue.set(this.state, "search", "");
+				Vue.set(this, "searchError", "");
+				this.search_criteria.splice(0);
+			},
+			"togglePOIFiltering": function() {
+				Vue.set(this.state, "poiFiltering", !this.state.poiFiltering);
+			},
+			"filterPOIs": function(text) {
+				console.log("Filter: " + text);
+				var buffer;
+				
+				if(text !== this.searchPrevious) {
+					Vue.set(this, "searchPrevious", text);
+					this.search_criteria.splice(0);
+					if(text) {
+						text = text.toLowerCase().split(" ");
+	
+						if(this.searchError) {
+							Vue.set(this, "searchError", "");
+						}
+						while(text.length) {
+							buffer = text.pop().trim();
+							if(buffer) {
+								this.search_criteria.push(buffer);
+							}
+						}
+					}
+				}
+			},
+			"testSearchCriteria": function(string, criteria) {
+				var x;
+				
+				if(criteria && criteria.length) {
+					if(!string) {
+						return false;
+					}
+					for(x=0; x<criteria.length; x++) {
+						if(string.indexOf(criteria[x]) === -1) {
+							return false;
+						}
+					}
+				}
+
+				console.log("Match");
+				return true;
 			},
 			"toggleMenu": function() {
 				Vue.set(this, "menuOpen", !this.menuOpen);
@@ -148,17 +283,26 @@
 //				console.log("Process Action: ", item);
 				switch(item.action) {
 					case "zoomin":
+						/*
 						this.image.zoom = this.image.zoom || 0;
 						this.image.zoom += this.state.zoomStep;
 						this.apply(this.image);
+						*/
+						this.zoomInOne();
 						break;
 					case "zoomout":
+						/*
 						this.image.zoom = this.image.zoom || 0;
 						this.image.zoom -= this.state.zoomStep;
 						this.apply(this.image);
+						*/
+						this.zoomOutOne();
 						break;
 					case "markings":
 						Vue.set(this.state, "markers", !this.state.markers);
+						break;
+					case "labels":
+						Vue.set(this.state, "labels", !this.state.labels);
 						break;
 					case "follow":
 						Vue.set(this.state, "follow", !this.state.follow);
@@ -181,7 +325,7 @@
 				Vue.set(this.actions, "open", false);
 			},
 			"fire": function(option, event) {
-//				console.log("Fire Option: ", option);
+				console.log("Fire Option: ", option);
 				var buffer;
 				
 				switch(option.event) {
@@ -232,6 +376,11 @@
 									"hash": "^#/map"
 								}
 							});
+						}
+						break;
+					case "generate-location":
+						if(this.player.master) {
+							this.generateLocationNoun(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						}
 						break;
 				}
@@ -331,10 +480,48 @@
 					this.dragY = event.pageY;
 				}
 			},
+			"getCenter": function() {
+				var view = this.getViewport(),
+					vh = view.height/2,
+					vw = view.width/2,
+					left,
+					top,
+					x;
+				
+				left = this.image.left - vw;
+				top = this.image.top - vh;
+				
+				return {
+					"x": -1* ((left/this.image.width) * 100).toFixed(3),
+					"y": -1* ((top/this.image.height) * 100).toFixed(3),
+					"left": left,
+					"top": top
+				};
+			},
 			"zoom": function(level) {
 				if(10 > level && level > -10) {
-					Vue.set(this.image, "zoom", level);
-					this.apply(this.image);
+					var targetHeight = this.original.height * (1 + .1 * level),
+						targetWidth = this.original.width * (1 + .1 * level),
+						view = this.getViewport(),
+						vh = view.height/2,
+						vw = view.width/2,
+						cenX,
+						cenY;
+
+					cenY = (this.image.top - vh) / this.image.height;
+					cenX = (this.image.left - vw) / this.image.width;
+					cenY *= targetHeight;
+					cenX *= targetWidth;
+					cenY += vh;
+					cenX += vw;
+					
+					this.apply({
+						"height": targetHeight,
+						"width": targetWidth,
+						"zoom": level,
+						"left": cenX,
+						"top": cenY
+					});
 				}
 			},
 			"pan": function(panned) {
@@ -374,12 +561,29 @@
 				});
 			},
 			"wheeling": function(event) {
-				console.log("wheel");
-				
+				console.log("wheel", event);
+				if(event.deltaY < 0) {
+					this.zoomInOne();
+				} else if(event.deltaY > 0) {
+					this.zoomOutOne();
+				}
+			},
+			"zoomOutOne": function() {
+				console.log("Zoom -1");
+				this.zoom(this.image.zoom - 1);
+			},
+			"zoomInOne": function() {
+				console.log("Zoom +1");
+				this.zoom(this.image.zoom + 1);
 			},
 			"apply": function(applying) {
 //				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
+					var targetHeight,
+						targetWidth,
+						deltaX,
+						deltaY;
+					
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
 					}
@@ -415,8 +619,20 @@
 				}
 			},
 			"poiVisible": function(link) {
+				var x;
+				
 				if(link.template || link.x === undefined || link.y === undefined) {
 					return false;
+				}
+				if(this.state.poiFiltering && this.search_criteria.length) {
+					if(!link._search) {
+						return false;
+					}
+					for(x=0; x<this.search_criteria.length; x++) {
+						if(link._search.indexOf(this.search_criteria[x]) === -1) {
+							return false;
+						}
+					}
 				}
 				
 				if(this.player.master && this.state.master_view === "master") {
@@ -470,14 +686,38 @@
 					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",
 						"event": "set-crosshair",
+						"text": "Mark: Orange",
+						"color": "orange"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
 						"text": "Mark: Green",
 						"color": "green"
 					});
 					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",
 						"event": "set-crosshair",
+						"text": "Mark: Yellow",
+						"color": "yellow"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
 						"text": "Mark: Blue",
 						"color": "blue"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Purple",
+						"color": "purple"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-crosshair",
+						"text": "Mark: Black",
+						"color": "black"
 					});
 					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",

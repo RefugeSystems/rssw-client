@@ -53,6 +53,10 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
+	},{
+		"label": "Renderer",
+		"property": "information_renderer",
+		"type": "text"
 	}, {
 		"label": "Order",
 		"property": "order",
@@ -68,10 +72,6 @@
 			"tertiary",
 			"custom"
 		]
-	},{
-		"label": "Renderer",
-		"property": "information_renderer",
-		"type": "text"
 	},{
 		"label": "Playable",
 		"property": "playable",

@@ -149,6 +149,9 @@
 			"openReference": function(reference) {
 				rsSystem.EventBus.$emit("display-info", reference);
 			},
+			"blurring": function() {
+				this.$emit("blur", this.field);
+			},
 			"checkField": function() {
 				if(!this.root[this.field.property]) {
 					return false;

@@ -86,6 +86,10 @@
 				white-space: nowrap;
 			}
 			
+			td {
+				padding: 2px;
+			}
+			
 			tr:nth-child(odd) {
 				background-color: #bcd9e2;
 			}
@@ -194,6 +198,17 @@
 			&:hover {
 				background-color: #e0aef7;
 				color: @rsBlue;
+			}
+			
+			&.requirements {
+				color: @rsDarkRed;
+				border: 1px solid @rsDarkRed;
+				cursor: not-allowed;
+			
+				&:hover {
+					background-color: @rsLightRed;
+					color: @rsBlack;
+				}
 			}
 		}
 	}

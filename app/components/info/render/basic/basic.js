@@ -8,7 +8,8 @@
  */
 (function() {
 	
-	var invisibleKeys = {};
+	var invisibleKeys = {},
+		referenceKeys = {};
 
 	invisibleKeys.property = true;
 	invisibleKeys.enhancementKey= true;
@@ -66,7 +67,6 @@
 	invisibleKeys.x = true;
 	invisibleKeys.y = true;
 	
-
 	invisibleKeys.coordinates = true;
 	invisibleKeys.shown_at = true;
 	invisibleKeys.profile = true;
@@ -74,12 +74,18 @@
 	invisibleKeys.viewed = true;
 	invisibleKeys.map = true;
 	
+	referenceKeys.requires_ability = "ability";
+	referenceKeys.requires_knowledge = "knowledge";
+	referenceKeys.archetypes = "archetype";
+	
 	var prettifyValues = {};
 	var prettifyNames = {};
 	var knowledgeLink = {};
 	var displayRaw = {};
-	
+
+	prettifyNames.dependency = "Dependencies";
 	prettifyNames.itemtype = "Item Types";
+	prettifyNames.xp_cost = "XP";
 	prettifyNames.entity = function(value, record) {
 		if(record._type === "entity") {
 			return "Pilot";
@@ -130,6 +136,21 @@
 		}
 		
 		return value;
+	};
+	
+	prettifyValues.activation = function(property, value, record, universe) {
+		if(value) {
+			return value.capitalize();
+		}
+		return "None";
+	};
+	
+	prettifyValues.archetypes = function(property, value, record, universe) {
+		
+	};
+	
+	prettifyValues.dependency = function(property, value, record, universe) {
+		
 	};
 	
 	prettifyValues.piloting = function(property, value, record, universe) {
@@ -231,6 +252,8 @@
 		"data": function() {
 			var data = {};
 			
+			data.referenceKeys = referenceKeys;
+			
 			data.collapsed = true;
 			data.relatedError = null;
 			data.calculatedEncumberance = 0;
@@ -329,6 +352,139 @@
 			},
 			"isArray": function(value) {
 				return value instanceof Array;
+			},
+			"hasLearnDependencies": function() {
+				switch(this.record._type) {
+					case "ability":
+						return (!this.record.requires_ability || !this.record.requires_ability.length || this.hasMapped("ability", this.record.requires_ability, this.record.dependency_type)) &&
+								(!this.record.requires_knowledge || !this.record.requires_knowledge.length || this.hasMapped("knowledge", this.record.requires_knowledge, this.record.dependency_type)) &&
+								(!this.record.archetypes || !this.record.archetypes.length || this.hasMapped("archetype", this.record.archetypes));
+				}
+				
+				return false;
+			},
+			"classByXP": function(cost) {
+				var x;
+				
+				if(this.base && this.base.xp && this.base.xp >= cost) {
+					return "meets-requirements";
+				}
+				
+				if(this.record.archetypes && this.record.archetypes.length) {
+					if(!this.base.archetype) {
+						return "requirements";
+					}
+					for(x=0; x<this.record.archetypes.length; x++) {
+						if(this.base.archetype.indexOf(this.record.archetypes[x]) !== -1) {
+							return "meets-requirements";
+						}
+					}
+				}
+				
+				return "requirements";
+			},
+			"classByRequirements": function() {
+				var buffer,
+					x;
+				
+				if(this.base) {
+					if(this.base.ability) {
+						for(x=0; x<this.base.ability.length; x++) {
+							buffer = this.universe.indexes.ability.index[this.base.ability[x]];
+							if(buffer) {
+								if(buffer.requires_ability && buffer.requires_ability.indexOf(this.record.id) !== -1) {
+									return "requirements";
+								}
+							} else {
+								console.warn("Requirement for Missing Ability[" + this.base.ability[x] + "] in Record[" + this.record.id + "]");
+							}
+						}
+					}
+					if(this.base.knowledge) {
+						for(x=0; x<this.base.knowledge.length; x++) {
+							buffer = this.universe.indexes.knowledge.index[this.base.knowledge[x]];
+							if(buffer) {
+								if(buffer.requires_knowledge && buffer.requires_knowledge.indexOf(this.record.id) !== -1) {
+									return "requirements";
+								}
+							} else {
+								console.warn("Requirement for Missing Knowledge[" + this.base.knowledge[x] + "] in Record[" + this.record.id + "]");
+							}
+						}
+					}
+				}
+				
+				return "meets-requirements";
+			},
+			"canForgetAbility": function() {
+				return this.hasLearnedAbility(); // Dependency requirements in classByRequirements
+			},
+			"hasMapped": function(reference, needs, type) {
+				var meets = 0,
+					x;
+				if(reference && needs && this.base && this.base[reference] && this.base[reference].length) {
+					for(x=0; x<this.base[reference].length; x++) {
+						if(needs.indexOf(this.base[reference][x]) !== -1) {
+							if(type === "any" || !type) {
+								return true;
+							} else {
+								meets++;
+							}
+						}
+					}
+				}
+				
+				if(meets === needs.length) {
+					return true;
+				}
+				
+				return false;
+			},
+			"canLearnAbility": function() {
+				return this.base && this.player && (this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
+						this.record._type === "ability" && !this.hasLearnedAbility() && this.hasLearnDependencies();
+			},
+			"hasLearnedAbility": function() {
+				return this.record && this.base && this.base.ability && this.base.ability.indexOf(this.record.id) !== -1;
+			},
+			"learnAbility": function() {
+				// TODO:
+				console.log("Learn: ", this.record.id);
+				var cost = parseInt(this.record.xp_cost) || 0,
+					abilities,
+					index;
+				
+				if(this.base && this.classByXP(cost) === "meets-requirements") {
+					abilities = this.base.ability || [];
+					index = abilities.indexOf(this.record.id);
+					if(index === -1) {
+						index = parseInt(this.base.xp - cost);
+						this.base.commit({
+							"ability": abilities.concat(this.record.id),
+							"xp": index
+						});
+					}
+				}
+			},
+			"forgetAbility": function() {
+				// TODO:
+				console.log("Forget: ", this.record.id);
+				var cost = parseInt(this.record.xp_cost) || 0,
+					abilities,
+					index;
+				
+				if(this.base && this.classByRequirements() === "meets-requirements") {
+					abilities = this.base.ability || [];
+					index = abilities.indexOf(this.record.id);
+					if(index !== -1) {
+						abilities.splice(index, 1);
+						index = parseInt(this.base.xp + cost);
+						this.base.commit({
+							"ability": abilities,
+							"xp": index
+						});
+					}
+				}
 			},
 			"canTransfer": function() {
 				var hold,

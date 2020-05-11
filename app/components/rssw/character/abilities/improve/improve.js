@@ -103,8 +103,8 @@
 					target = this.universe.indexes.ability.listing[x];
 					if(target && target.archetypes && target.archetypes.indexOf(archetype) !== -1) {
 						this.abilities.push(target);
-						for(y=0; target.dependency && y<target.dependency.length; y++) {
-							source = this.universe.indexes.ability.index[target.dependency[y]];
+						for(y=0; target.requires_ability && y<target.requires_ability.length; y++) {
+							source = this.universe.indexes.ability.index[target.requires_ability[y]];
 							if(source) {
 								this.dependencies.push({
 									"id": target.id + source.id,

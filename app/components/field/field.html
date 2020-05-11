@@ -17,7 +17,7 @@
 		<!-- Do Nothing Here -->
 	</span>
 	
-	<select :id="fid" v-if="field.type === 'select' && field.options && field.options.length" v-model="root[field.property]" v-on:change.stop="emitChanged()">
+	<select :id="fid" v-if="field.type === 'select' && field.options && field.options.length" v-model="root[field.property]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
 		<option v-if="root[field.property] === 'undefined' && !field.persistUnset" :value="root[field.property]">{{field.unset}}</option>
 		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
 		
@@ -35,10 +35,10 @@
 		<span class="far" :class="root[field.property]?'fa-check-square':'fa-square'"></span>
 	</button>
 	
-	<input :id="fid" :type="field.type" v-if="field.type === 'number'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
-	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
-	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
-	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="root[field.property]" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" />
+	<input :id="fid" :type="field.type" v-if="field.type === 'number'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
+	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="root[field.property]" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
 	
 	<span v-if="field.suffix" class="suffix">{{field.suffix}}</span>
 	
@@ -67,7 +67,7 @@
 	</table>
 	
 	<div v-if="field.type === 'textarea'" class="textarea">
-		<textarea :id="fid" v-model="root[field.property]" v-tab :placeholder="field.placeholder" v-on:input="emitChanged()">
+		<textarea :id="fid" v-model="root[field.property]" v-tab :placeholder="field.placeholder" v-on:input="emitChanged()" v-on:blur="blurring()">
 		</textarea>
 	</div>
 	

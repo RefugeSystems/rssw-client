@@ -19,12 +19,14 @@
 	
 	<div class="building">
 		<div class="simplified-editor" v-if="!state.advanced_editor">
-			<rs-field v-for="field in fields[state.current]" :root="state.building[state.current]" :field="field" v-on:changed="sync($event)" :key="field.property">
+			<rs-field v-for="field in fields[state.current]" :root="state.building[state.current]" :field="field" v-on:changed="sync($event)" v-on:blur="adjust(field.property)" :key="field.property">
 				<span slot="info">
 					<span v-if="field.property === 'icon'" :class="state.building[state.current].icon"></span>
 					<button class="info-link random-name fas fa-random" v-if="field.property === 'name' && hasGenerator()" v-on:click="randomizeName()" tabindex=2>
 					</button>
 					<button class="info-link random-name fas fa-sync" v-if="field.property === 'name' && hasGenerator()" v-on:click="pullRandomName()" tabindex=2>
+					</button>
+					<button class="info-link sync-id fas fa-id-card-alt" v-if="field.property === 'name'" v-on:click="syncID()" tabindex=2>
 					</button>
 					<button class="info-link fas fa-info-circle" v-if="field.knowledge" v-on:click="openKnowledge(field.knowledge)" tabindex=2>
 					</button>

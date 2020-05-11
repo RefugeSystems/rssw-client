@@ -19,15 +19,15 @@
 
 	knowledges = {
 		"label": "Knowledges",
-		"property": "knowledges",
+		"property": "requires_knowledge",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
 
 	dependencies = {
-		"label": "Dependencies",
-		"property": "dependency",
+		"label": "Abilities",
+		"property": "requires_ability",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -69,6 +69,10 @@
 		"label": "Icon",
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
+		"type": "text"
+	},{
+		"label": "Renderer",
+		"property": "information_renderer",
 		"type": "text"
 	}, {
 		"label": "XP Cost",
@@ -130,8 +134,11 @@
 		"optionValue": "id",
 		"optionLabel": "name",
 		"options": [{
-			"name": "Any",
+			"name": "Default (Any)",
 			"id": undefined
+		}, {
+			"name": "Any",
+			"id": "any"
 		}, {
 			"name": "All",
 			"id": "all"

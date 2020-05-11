@@ -48,6 +48,10 @@
 		"property": "name",
 		"type": "text"
 	}, {
+		"label": "Label",
+		"property": "label",
+		"type": "text"
+	}, {
 		"label": "Icon",
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",

@@ -9,7 +9,7 @@
 (function() {
 	var storageKey = "_rs_nounComponentKey";
 	
-	var spacing = / /g;
+	var spacing = /[ _\.-]/g;
 	
 	var byName = function(a, b) {
 		a = (a.name || "").toLowerCase();
@@ -264,6 +264,9 @@
 			this.universeUpdate();
 		},
 		"methods": {
+			"changeHandler": function(field) {
+				
+			},
 			"buildAvailableCopies": function() {
 				this.availableToCopy.splice(0);
 				this.availableToCopy.push.apply(this.availableToCopy, this.universe.indexes[this.state.current].listing);
@@ -336,6 +339,21 @@
 					rsSystem.EventBus.$emit("display-info", this.universe.index.index[id]);
 				} else {
 					console.warn("ID Not Found for Knowledge: ", id);
+				}
+			},
+			"getIDFromName": function(name) {
+				return this.state.current + ":" + this.models[this.state.current].name.toLowerCase().replace(spacing, "");
+			},
+			"syncID": function() {
+				Vue.set(this.state.building[this.state.current], "id", this.getIDFromName());
+			},
+			"adjust": function(field) {
+				switch(field) {
+					case "name":
+						if(this.models[this.state.current] && !this.models[this.state.current].id) {
+							Vue.set(this.state.building[this.state.current], "id", this.getIDFromName());
+						}
+						break;
 				}
 			},
 			"sync": function(event) {

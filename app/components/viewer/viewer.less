@@ -124,7 +124,7 @@
 			.parchment {
 				position: absolute;
 				z-index: 1;
-				transition: width .5s, height .5s;
+				/*transition: width .5s, height .5s;*/
 				
 				img {
 					position: absolute;
@@ -161,6 +161,7 @@
 					&:hover {
 						background: rgba(18, 33, 146, 0.6);
 						/*opacity: .5;*/
+						z-index: 55
 					}
 					
 					a {
@@ -172,6 +173,25 @@
 					}
 					
 					.labeling {
+						/* New Style */
+						position: absolute;
+						top: -2px;
+						left: ~"calc(100% + -12px)";
+						padding: 0px 15px;
+						color: #EAEFF9;
+						font-weight: 900;
+						background-color: black;
+						white-space: nowrap;
+						height: 100%;
+						border-top-right-radius: 15px;
+						border-bottom-right-radius: 15px;
+						border-width: 2px;
+						border-style: outset;
+						border-color: buttonface;
+						border-left: 0px;
+						line-height: 24px;
+						
+						/* Old Style
 						position: absolute;
 						top: 0px;
 						left: ~"calc(100% + 10px)";
@@ -179,6 +199,7 @@
 						font-weight: 900;
 						background-color: black;
 						white-space: nowrap;
+						*/
 					}
 					
 				}
@@ -302,7 +323,7 @@
 		background: @rsBlack;
 		color: @rsWhite;
 		
-		button {
+		button.control {
 			background: transparent;
 			border: 0px;
 			padding: 0px;
@@ -318,10 +339,31 @@
 				color: @rsBlack;
 				cursor: pointer;
 			}
+			
+			&.action {
+				line-height: 30px;
+				height: 30px;
+				width: 30px;
+			}
 		}
 		
 		.search {
 			white-space: nowrap;
+			
+			.text {
+				border-left: 2px solid black;
+				overflow: hidden;
+			
+				input {
+					height: 100%;
+					padding: 3px;
+					transition: background-color .5s;
+					
+					&.search-error {
+						background-color: @rsLightRed;
+					}
+				}
+			}
 		}
 		
 		&.open {

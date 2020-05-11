@@ -83,20 +83,69 @@
 			"setStat": function() {
 				
 			},
-			"update": function() {
+			"getEquippedDefensiveStats": function(type, results) {
 				var buffer,
+					keys,
+					x,
+					y;
+				
+				if(!type) {
+					throw new Error("No type specified for rsswCharacterBoard.getEquippedDefensiveStats");
+				}
+				
+				results = results || {};
+				results.general = results.general || 0;
+				results.melee = results.melee || 0;
+				results.range = results.range || 0;
+				
+				keys = Object.keys(this.character.equipped[type]);
+				for(x=0; x<keys.length; x++) {
+					for(y=0; y<this.character.equipped[type][keys[x]].length; y++) {
+						buffer = this.universe.indexes[type].index[this.character.equipped[type][keys[x]][y]];
+						if(buffer) {
+							if(buffer.defense_general && buffer.defense_general > results.general) {
+								results.general = buffer.defense_general;
+							}
+							if(buffer.defense_melee && buffer.defense_melee > results.melee) {
+								results.melee = buffer.defense_melee;
+							}
+							if(buffer.defense_range && buffer.defense_range > results.range) {
+								results.range = buffer.defense_range;
+							}
+						} else {
+							console.warn("Unknown Object[" + type + "] Specified in Character[" + this.character.id + " Equipped: " + this.character.equipped[type][keys[x]][y]);
+						}
+					}
+				}
+				
+				return results;
+			},
+			"update": function() {
+				var defense = {},
+					buffer,
 					x;
 				
 				for(x=0; x<keys.length; x++) {
 					Vue.set(this, keys[x], this.character[keys[x]] || 0);
 				}
 				
-				Vue.set(this, "soak", this.soak + this.character.brawn);
-				if(this.defense_general > this.defense_range) {
-					Vue.set(this, "defense_range", this.defense_general);
+				Vue.set(this, "soak", this.soak + (this.character.brawn || 0));
+				
+				if(this.character.equipped) {
+					if(this.character.equipped.item) {
+						this.getEquippedDefensiveStats("item", defense);
+					}
 				}
-				if(this.defense_general > this.defense_melee) {
-					Vue.set(this, "defense_melee", this.defense_general);
+				
+				if(defense.general > defense.range) {
+					Vue.set(this, "defense_range", defense.general);
+				} else {
+					Vue.set(this, "defense_range", defense.range);
+				}
+				if(defense.general > defense.melee) {
+					Vue.set(this, "defense_melee", defense.general);
+				} else {
+					Vue.set(this, "defense_melee", defense.melee);
 				}
 			}
 		},

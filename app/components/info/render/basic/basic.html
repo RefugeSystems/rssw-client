@@ -38,7 +38,7 @@
 	
 	<div class="properties">
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
-			<div class="direct" v-if="!universe.indexes[property]">
+			<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
 				<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']">
 					<a class="rendered-value" :data-id="knowledgeLink[property] || (property + '_quicklink')">{{prettifyPropertyName(property, record)}}</a>
 				</span>
@@ -49,26 +49,26 @@
 			</div>
 		</div>
 		<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
-			<div class="reference" v-if="universe.indexes[property]">
+			<div class="reference" v-if="universe.indexes[property] || referenceKeys[property]">
 				<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
 					<div class="reference-heading">{{prettifyPropertyName(property, record).pluralize(true)}}</div>
-					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].hidden">
+					<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord] && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].hidden">
 						<div class="reference-heading" v-if="!collapsed">
-							<span :class="universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].icon:''"></span>
-							<span>{{universe.indexes[property].lookup[subrecord._sourced || subrecord]?universe.indexes[property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>
+							<span :class="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]?universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].icon:''"></span>
+							<span>{{universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]?universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>
 						</div>
-						<rs-object-info v-if="!collapsed" :record="universe.indexes[property].lookup[subrecord._sourced || subrecord]" :universe="universe"></rs-object-info>
-						<a v-if="collapsed && universe.indexes[property].lookup[subrecord._sourced || subrecord] && !universe.indexes[property].lookup[subrecord._sourced || subrecord].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[subrecord._sourced || subrecord].id">{{universe.indexes[property].lookup[subrecord._sourced || subrecord].name}}</a>
-						<a v-if="collapsed && !universe.indexes[property].lookup[subrecord._sourced || subrecord]" class="rendered-value unknown">{{subrecord._sourced || subrecord}}[Unknown]</a>
+						<rs-object-info v-if="!collapsed" :record="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed && universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord] && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].obscured" class="rendered-value" :data-id="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].id">{{universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].name}}</a>
+						<a v-if="collapsed && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]" class="rendered-value unknown">{{subrecord._sourced || subrecord}}[Unknown]</a>
 					</div>
 				</div>
 				<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
 					<div class="reference-heading">{{prettifyPropertyName(property, record).capitalize()}}</div>
 					<div class="subreference">
-						<div class="reference-heading" v-if="!collapsed">{{universe.indexes[property].lookup[record[property]]?universe.indexes[property].lookup[record[property]].name:record[property]}}</div>
-						<rs-object-info v-if="!collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured" :record="universe.indexes[property].lookup[record[property]]" :universe="universe"></rs-object-info>
-						<a v-if="collapsed && universe.indexes[property].lookup[record[property]] && !universe.indexes[property].lookup[record[property]].obscured" class="rendered-value" :data-id="universe.indexes[property].lookup[record[property]].id">{{universe.indexes[property].lookup[record[property]].name}}</a>
-						<a v-if="collapsed && !universe.indexes[property].lookup[record[property]]" class="rendered-value unknown" >{{record[property]}}[Unknown]</a>
+						<div class="reference-heading" v-if="!collapsed">{{universe.indexes[referenceKeys[property] || property].lookup[record[property]]?universe.indexes[referenceKeys[property] || property].lookup[record[property]].name:record[property]}}</div>
+						<rs-object-info v-if="!collapsed && universe.indexes[referenceKeys[property] || property].lookup[record[property]] && !universe.indexes[referenceKeys[property] || property].lookup[record[property]].obscured" :record="universe.indexes[referenceKeys[property] || property].lookup[record[property]]" :universe="universe"></rs-object-info>
+						<a v-if="collapsed && universe.indexes[referenceKeys[property] || property].lookup[record[property]] && !universe.indexes[referenceKeys[property] || property].lookup[record[property]].obscured" class="rendered-value" :data-id="universe.indexes[referenceKeys[property] || property].lookup[record[property]].id">{{universe.indexes[referenceKeys[property] || property].lookup[record[property]].name}}</a>
+						<a v-if="collapsed && !universe.indexes[referenceKeys[property] || property].lookup[record[property]]" class="rendered-value unknown" >{{record[property]}}[Unknown]</a>
 					</div>
 				</div>
 			</div>
@@ -127,6 +127,21 @@
 				</li>
 			</ul>
 		</div>
+	</div>
+	
+	<div v-if="record._type === 'ability'" class="control">
+		<button class="action direct" v-if="canLearnAbility()" v-on:click="learnAbility(record.id)" :class="classByXP(record.xp_cost)">
+			<span class="fad fa-globe-africa"></span>
+			<span>Learn Ability ( </span>
+			<span class="rs-darkorange">{{record.xp_cost}}</span>
+			<span>XP )</span>
+		</button>
+		<button class="action direct" v-if="canForgetAbility()" v-on:click="forgetAbility(record.id)" :class="classByRequirements()">
+			<span class="fad fa-globe-africa"></span>
+			<span>Forget Ability ( +</span>
+			<span class="rs-darkorange">{{record.xp_cost}}</span>
+			<span>XP )</span>
+		</button>
 	</div>
 	
 	<div v-if="record._type && canTransfer()">

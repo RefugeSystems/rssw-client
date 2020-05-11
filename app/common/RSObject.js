@@ -18,6 +18,17 @@ class RSObject extends EventEmitter {
 		this._coreData = {};
 		this._registered = {};
 		this._shadow = JSON.parse(JSON.stringify(details));
+		this._listeningParentCycle = 0;
+		this._listeningParent = () => {
+			var now = Date.now();
+			if(this.universe.initialized && this._listeningParentCycle < now) {
+				this._listeningParentCycle = now + 1000;
+				this.recalculateProperties();
+			}
+			if(this._listeningParentCycle >= now) {
+				console.log("Recycling: ", this);
+			}
+		};
 		
 		this._registered._marked = Date.now();
 		var keys = Object.keys(details),
@@ -50,18 +61,46 @@ class RSObject extends EventEmitter {
 	}
 	
 	get name() {
+		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
+		
 		if(this.hidden) {
-			return this.hiddenName || "Unknown";
+			if(this.hiddenName) {
+				return this.hiddenName;
+			} else if(parent && parent.hiddenName) {
+				return parent.hiddenName;
+			} else {
+				return "Unknown";
+			}
 		} else {
-			return this._coreData.name || this.id;
+			if(this._coreData.name) {
+				return this._coreData.name;
+			} else if(parent && parent.name){
+				return parent.name;
+			} else {
+				return this.id;
+			}
 		}
 	}
 	
 	get description() {
+		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
+		
 		if(this.hidden) {
-			return this.hiddenDescription;
+			if(this.hiddenDescription) {
+				return this.hiddenDescription;
+			} else if(parent && parent.hiddenDescription) {
+				return parent.hiddenDescription;
+			} else {
+				return "Mystery";
+			}
 		} else {
-			return this._coreData.description;
+			if(this._coreData.description) {
+				return this._coreData.description;
+			} else if(parent && parent.description){
+				return parent.description;
+			} else {
+				return "";
+			}
 		}
 	}
 	
@@ -309,6 +348,7 @@ class RSObject extends EventEmitter {
 			base = {},
 			tracking,
 			loading,
+			parent,
 			buffer,
 			index,
 			hold,
@@ -399,8 +439,50 @@ class RSObject extends EventEmitter {
 			}
 		}
 		this._modifiers.splice(0);
+
+		// Establish Base from Core Data Parent if any
+		if(this._coreData.parent && (parent = ((this._coreData._type && this.universe.indexes[this._coreData._type].index[this._coreData.parent]) || (!this._coreData._type && this.universe.index.index[this._coreData.parent])))) {
+			if(this._listeningToParent !== parent) {
+				if(this._listeningToParent) {
+					this._listeningToParent.$off("modified", this._listeningParent);
+				}
+				this._listeningToParent = parent;
+				parent.$on("modified", this._listeningParent);
+			}
+			keys = Object.keys(parent);
+			for(x=0; x<keys.length; x++) {
+				if(keys[x][0] !== "_" && keys[x] !== "universe" && !this._coreData[keys[x]] && !parent._statContributions[keys[x]]) {
+					if(debug) {
+						console.log("Checking Base Key: " + keys[x], this.universe);
+					}
+//					base[keys[x]] = this._coreData[keys[x]];
+					if(typeof(parent[keys[x]]) === "object") {
+						if(parent[keys[x]] === null) {
+							base[keys[x]] = null;
+						} else if(parent[keys[x]] instanceof Array) {
+							base[keys[x]] = [];
+							base[keys[x]].push.apply(base[keys[x]], parent[keys[x]]);
+						} else {
+							base[keys[x]] = Object.assign({}, parent[keys[x]]);
+						}
+					} else {
+						base[keys[x]] = parent[keys[x]];
+					}
+
+					if(!this.universe.nouns) {
+						// console.trace("Noun Failure: ", this);
+					}
+					// Isolate Reference Fields
+					if(this.universe.nouns && this.universe.nouns[keys[x]]) {
+						references.push(keys[x]);
+					}
+				}
+			}
+		} else if(this._listeningToParent) {
+			this._listeningToParent.$off("modified", this._listeningParent);
+		}
 		
-		// Establish Base from Core Data\
+		// Establish Base from Core Data
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_" && keys[x] !== "universe") {
@@ -425,7 +507,7 @@ class RSObject extends EventEmitter {
 					// console.trace("Noun Failure: ", this);
 				}
 				// Isolate Reference Fields
-				if(this.universe.nouns && this.universe.nouns[keys[x]]) {
+				if(this.universe.nouns && this.universe.nouns[keys[x]]) { // Prevent double reference from parent
 					references.push(keys[x]);
 				}
 			}
@@ -456,6 +538,12 @@ class RSObject extends EventEmitter {
 		}
 		if(this.description) {
 			this._search += this.description.toLowerCase();
+		}
+		if(this.type && this.type.toLowerCase) {
+			this._search += this.type.toLowerCase();
+		}
+		if(this.classification && this.classification.toLowerCase) {
+			this._search += this.classification.toLowerCase();
 		}
 		if(this.location && typeof(this.location) === "string") {
 			this._search += this.location.toLowerCase();

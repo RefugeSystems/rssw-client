@@ -1,14 +1,14 @@
 
 <div class="rs-component component-viewer" :class="renderState()">
 
-	<div class="map" v-if="location && sourceImage">
+	<div class="map" v-if="location && sourceImage" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
 		<!-- <div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" v-on:mouseleave="out($event)" v-pan="pan"> -->
 		<div class="view" onexit="true" v-pan="pan">
 			<!-- <div class="shadow"></div> -->
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
 					<button class="poi" v-if="poiVisible(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click="poiMenu(link)">
-						<span class="labeling" v-if="link.label">{{link.label}}</span>
+						<span class="labeling" v-if="link.label && state.labels">{{link.label}}</span>
 						<span :class="poiClass(link)"></span>
 					</button>
 				</div>
@@ -33,6 +33,12 @@
 							<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
 							<span>{{option.text}}</span>
 						</button>
+						<div class="generator flex h" v-if="state.generate_location">
+							<input type="text" v-model="state.generate_location_name" v-on:keyup.enter="fire(menuItems.generateLocation, $event)"/>
+							<button v-on:click="fire(menuItems.generateLocation, $event)" class="normal">
+								<span :class="getGeneratedClass()"></span>
+							</button>
+						</div>
 						<input type="text" v-model="state.alter" v-if="player.master"/>
 					</div>
 				</div>
@@ -43,36 +49,63 @@
 
 
 	<div class="menu" :class="menuOpen?'open':'closed'">
-		<button class="toggle" v-on:click="toggleMenu()">
+		<button class="control toggle" v-on:click="toggleMenu()">
 			<span class="fas" :class="menuOpen?'fa-caret-square-up':'fa-caret-square-down'"></span>
 		</button>
 		<div class="menu-items flow-v">
-			<div class="search">
-				<input type="text" v-model="state.search" v-on:keyup.enter="searchMap(state.search)"/>
-				<button class="control" v-on:click="searchMap(state.search)">
-					<span class="icon far fa-search"></span>
+			<div class="search flex h">
+				<div class="text" :title="searchError">
+					<input type="text" v-model="state.search" v-on:keyup.enter="searchMap(state.search)" v-on:keyup="filterPOIs(state.search)" v-on:keyup.escape="clearSearch()" v-on:keyup.esc="clearSearch()" :class="searchError?'search-error':''"/>
+				</div>
+				<button class="control action" v-on:click="togglePOIFiltering()" title="Hide locations that do not match from the display">
+					<span class="icon" :class="state.poiFiltering?'fas fa-map-marker-slash':'fas fa-map-marker'"></span>
+				</button>
+				<button class="control action" v-on:click="searchMap(state.search)" title="Center on the first matching location found">
+					<span class="icon far fa-search-location"></span>
 				</button>
 			</div>
-			<button class="control" v-on:click="processAction(menuItem)" v-for="menuItem in menuItems" :class="menuItem.action">
-				<span class="icon" :class="menuItem.icon"></span>
-				<span class="text">{{menuItem.text}}</span>
-			</button>
-			<button class="control follow" v-on:click="processAction(menuItems.markerItem)">
-				<span class="icon fal" :class="state.markers?'fa-check-square':'fa-square'"></span>
-				<span class="text">{{menuItems.markerItem.text}}</span>
-			</button>
-			<button class="control follow" v-on:click="processAction(menuItems.followItem)">
-				<span class="icon fal" :class="state.follow?'fa-check-square':'fa-square'"></span>
-				<span class="text">{{menuItems.followItem.text}}</span>
-			</button>
-			<button class="control follow" v-on:click="processAction(menuItems.fullscreen)">
-				<span class="icon fal" :class="state.fullscreen?'fa-check-square':'fa-square'"></span>
-				<span class="text">{{menuItems.fullscreen.text}}</span>
-			</button>
+			<div class="control-row flex h fill" v-for="row in menuItems">
+				<button class="control grow-3" v-if="!row.length && row.length !== 0" v-on:click="processAction(row)" :class="row.action">
+					<span class="icon" :class="row.icon"></span>
+					<span class="text">{{row.text}}</span>
+				</button>
+				<button class="control grow-3" v-if="row.length" v-for="menuItem in row" v-on:click="processAction(menuItem)" :class="menuItem.action">
+					<span class="icon" :class="menuItem.icon"></span>
+					<span class="text">{{menuItem.text}}</span>
+				</button>
+			</div>
+			<div class="flex h fill">
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.labelItem)">
+					<span class="icon fal" :class="state.labels?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.labelItem.text}}</span>
+				</button>
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.markerItem)">
+					<span class="icon fal" :class="state.markers?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.markerItem.text}}</span>
+				</button>
+			</div>
+			<div class="flex h fill">
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.followItem)">
+					<span class="icon fal" :class="state.follow?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.followItem.text}}</span>
+				</button>
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.fullscreen)">
+					<span class="icon fal" :class="state.fullscreen?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.fullscreen.text}}</span>
+				</button>
+			</div>
 			<select class="control master" v-model="state.master_view" v-if="player.master">
 				<option value="">Player Character</option>
 				<option value="master">Master</option>
 				<option v-for="entity in universe.indexes.entity.listing" :value="entity.id">{{entity.name}}</option>
+			</select>
+			<select class="control master" v-model="state.generate_location" v-if="player.master">
+				<option value="">Hide Creator</option>
+				<option value="star-system">Making Star Systems</option>
+				<option value="station">Making Stations</option>
+				<option value="planet">Making Planets</option>
+				<option value="moon">Making Moons</option>
+				<option value="city">Making Cities</option>
 			</select>
 		</div>
 	</div>

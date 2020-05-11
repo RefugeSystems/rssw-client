@@ -1,11 +1,11 @@
 /**
  * 
- * @class pinchin
+ * @class pinch
  * @module Common
  * @submodule Directives
  * @param {Function} handler The function to handle the pan event
  */
-Vue.directive("pinchin", {
+Vue.directive("pinch", {
 	"bind": function(el, binding) {
 		if (typeof binding.value === "function") {
 			var mc = new Hammer(el),

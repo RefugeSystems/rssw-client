@@ -7,6 +7,7 @@
 		itemtypes,
 		profiles,
 		entities,
+		parent,
 		attrs,
 		items,
 		notes,
@@ -17,6 +18,14 @@
 		"label": "Item Types",
 		"property": "itemtype",
 		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	parent = {
+		"label": "Parent",
+		"property": "parent", // Not "entity" as modifier inheritence is not wanted
+		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -97,11 +106,9 @@
 		"label": "ID",
 		"property": "id",
 		"type": "text"
-	}, {
-		"label": "Parent",
-		"property": "parent",
-		"type": "text"
-	}, {
+	},
+	parent,
+	{
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -250,6 +257,8 @@
 			skill.options.sortBy("name");
 			entities.options = this.universe.indexes.entity.listing;
 			entities.options.sortBy("name");
+			parent.options = this.universe.indexes.item.listing;
+			parent.options.sortBy("name");
 
 			cancontain.source_index = this.universe.indexes.itemtype;
 			itemtypes.source_index = this.universe.indexes.itemtype;

@@ -4,6 +4,7 @@
 	var dataSource,
 		profiles,
 		effects,
+		parent,
 		attrs,
 		stats,
 		notes;
@@ -11,6 +12,14 @@
 	profiles = {
 		"label": "Profile",
 		"property": "profile",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	parent = {
+		"label": "Parent",
+		"property": "parent", // Not "entity" as modifier inheritence is not wanted
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -52,7 +61,9 @@
 		"label": "ID",
 		"property": "id",
 		"type": "text"
-	}, {
+	},
+	parent,
+	{
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -98,6 +109,8 @@
 
 			profiles.options = this.universe.indexes.image.listing;
 			profiles.options.sortBy("name");
+			parent.options = this.universe.indexes.room.listing;
+			parent.options.sortBy("name");
 			
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
