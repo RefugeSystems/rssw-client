@@ -127,6 +127,10 @@ class RSCalculator {
 							return expression;
 						}
 						break;
+					case "starting":
+						// These are intentionally ignored as not used by the calculator
+						// TODO: Address startup stat calculation [#172779816]
+						break;
 					default:
 						console.warn("Calculator - Unknown variable root", expression, variables);
 						return expression;
