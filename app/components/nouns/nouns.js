@@ -125,6 +125,7 @@
 			"copy": function(value) {
 				if(value) {
 					var copy = this.universe.nouns[this.state.current][value],
+						buffer,
 						x;
 					
 //					if(!copy) {
@@ -135,30 +136,44 @@
 					
 					value = copy?JSON.stringify(copy, null, 4):"{}";
 					value = JSON.parse(value);
+					console.warn("Copying: ", value);
 					if(copy && copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
-						value.parent = value.id;
-						value.id += ":" + Date.now();
-						if(value.randomize_name) {
-							copy = this.getGenerator(value.race);
-							if(copy) {
-								value.name = copy.corpus[Random.integer(copy.corpus.length)].capitalize();
-								for(x=1; x<value.randomize_name; x++) {
-									value.name += " " + copy.corpus[Random.integer(copy.corpus.length)].capitalize();
+						console.log("> Template");
+						value = {};
+						value.parent = copy.id;
+						value.id = copy.id + ":" + Date.now();
+						value.name = "";
+						if(copy.randomize_name) {
+							if(copy.dataset) {
+								
+							} else if(copy.race) {
+								buffer = this.getGenerator(copy.race);
+							}
+							if(copy.randomize_name_prefix) {
+								value.name += copy.randomize_name_prefix + " ";
+							}
+							if(buffer) {
+								value.name += buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
+								for(x=1; x<copy.randomize_name; x++) {
+									value.name += " " + buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
 								}
 							}
+							if(copy.randomize_name_suffix) {
+								value.name += " " + copy.randomize_name_suffix;
+							}
 						}
-						delete(value.randomize_name);
-						delete(value.template);
-					}
-					if((!copy || (copy && !copy.template)) && this.$route.query.copy === "true") {
-						value.id += ":" + Date.now();
-					}
-					if(this.$route.query.values) {
-						try {
-							copy = JSON.parse(this.$route.query.values);
-							Object.assign(value, copy);
-						} catch(exception) {
-							console.warn("Failed to load values due to parse exception: ", exception);
+					} else {
+						console.log("> Original");
+						if((!copy || (copy && !copy.template)) && this.$route.query.copy === "true") {
+							value.id += ":" + Date.now();
+						}
+						if(this.$route.query.values) {
+							try {
+								copy = JSON.parse(this.$route.query.values);
+								Object.assign(value, copy);
+							} catch(exception) {
+								console.warn("Failed to load values due to parse exception: ", exception);
+							}
 						}
 					}
 					value = JSON.stringify(value, null, 4);

@@ -9,6 +9,7 @@
 		abilities,
 		location,
 		profiles,
+		datasets,
 		widgets,
 		entity,
 		images,
@@ -23,6 +24,19 @@
 		slots,
 		stats,
 		sexes;
+	
+	datasets = {
+		"label": "Name Dataset",
+		"property": "randomize_name_dataset",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"randomize_name": {
+				"operation": "exists"
+			}
+		}
+	};
 	
 	location = {
 		"label": "Location",
@@ -348,6 +362,24 @@
 		"property": "template",
 		"type": "checkbox"
 	}, {
+		"label": "Name Prefix",
+		"property": "randomize_name_prefix",
+		"type": "text",
+		"raw": true,
+		"condition": {
+			"template": true
+		}
+	}, {
+		"label": "Name Suffix",
+		"property": "randomize_name_suffix",
+		"type": "text",
+		"raw": true,
+		"condition": {
+			"template": true
+		}
+	},
+	datasets,
+	{
 		"label": "Random Name",
 		"property": "randomize_name",
 		"type": "select",
@@ -497,13 +529,15 @@
 		"mounted": function() {
 			location.options = this.universe.indexes.location.listing;
 			location.options.sortBy("name");
+			datasets.options = this.universe.indexes.dataset.listing;
+			datasets.options.sortBy("name");
 			profiles.options = this.universe.indexes.image.listing;
 			profiles.options.sortBy("name");
-			images.options = this.universe.indexes.image.listing;
-			images.options.sortBy("name");
 			entity.options = this.universe.indexes.entity.listing;
 			parent.options = entity.options;
 			entity.options.sortBy("name");
+			images.options = this.universe.indexes.image.listing;
+			images.options.sortBy("name");
 			pilot.options = this.universe.indexes.entity.listing;
 			pilot.options.sortBy("name");
 			races.options = this.universe.indexes.race.listing;
