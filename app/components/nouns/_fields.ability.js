@@ -5,10 +5,19 @@
 		dependencies,
 		archetypes,
 		knowledges,
+		parent,
 		attrs,
 		stats,
 		notes;
 
+	parent = {
+		"label": "Parent",
+		"property": "parent", // Not "entity" as modifier inheritence is not wanted
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
 	archetypes = {
 		"label": "Archetypes",
 		"property": "archetypes",
@@ -61,7 +70,9 @@
 		"label": "ID",
 		"property": "id",
 		"type": "text"
-	}, {
+	},
+	parent,
+	{
 		"label": "Name",
 		"property": "name",
 		"type": "text"
@@ -182,6 +193,9 @@
 			return data;
 		},
 		"mounted": function() {
+			parent.options = this.universe.indexes.ability.listing;
+			parent.options.sortBy("name");
+			
 			archetypes.source_index = this.universe.indexes.archetype;
 			dependencies.source_index = this.universe.indexes.ability;
 			knowledges.source_index = this.universe.indexes.knowledge;
