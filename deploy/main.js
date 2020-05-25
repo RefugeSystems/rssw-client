@@ -64472,6 +64472,10 @@ rsSystem.component("rsCount", {
 			"active"
 		]
 	}, {
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
+	}, {
 		"label": "Locked",
 		"property": "locked_ability",
 		"type": "checkbox"
@@ -68160,7 +68164,25 @@ class FieldDescriptor {
 				}
 			},
 			"getIDFromName": function(name) {
-				return this.state.current + ":" + this.models[this.state.current].name.toLowerCase().replace(spacing, "");
+				var model = this.models[this.state.current],
+					buffer,
+					root;
+				
+				root = this.state.current + ":" + model.name.toLowerCase().replace(spacing, "");
+				switch(this.state.current) {
+					case "ability":
+						if(model.archetypes && model.archetypes.length) {
+							if((model.archetypes instanceof Array && model.archetypes.length && (buffer = this.universe.indexes.archetype.index[model.archetypes[0]])) ||
+									(buffer = this.universe.indexes.archetype.index[model.archetypes])) {
+								root += ":" + buffer.name.toLowerCase().replace(spacing, "");
+							}
+						}
+						if(model.xp_cost) {
+							root += ":" + model.xp_cost;
+						}
+					default:
+						return root;
+				}
 			},
 			"syncID": function() {
 				Vue.set(this.state.building[this.state.current], "id", this.getIDFromName());
