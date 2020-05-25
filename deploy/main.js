@@ -62059,6 +62059,48 @@ rsSystem.component("rsCount", {
 				} else {
 					return {};
 				}
+			},
+			"sortData": function(a, b) {
+				var aName,
+					bName;
+				
+				if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
+					if(a.order < b.order) {
+						return -1;
+					} else if(a.order > b.order) {
+						return 1;
+					}
+				}
+				if((a.order === undefined || a.order === null) && b.order !== undefined && b.order !== null) {
+					return -1;
+				}
+				if((b.order === undefined || b.order === null) && a.order !== undefined && a.order !== null) {
+					return 1;
+				}
+
+				if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {
+					aName = a.name.toLowerCase();
+					bName = b.name.toLowerCase();
+					if(aName < bName) {
+						return -1;
+					} else if(aName > bName) {
+						return 1;
+					}
+				}
+				if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
+					return -1;
+				}
+				if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
+					return 1;
+				}
+
+				if(a.id < b.id) {
+					return -1;
+				} else if(a.id > b.id) {
+					return 1;
+				}
+				
+				return 0;
 			}
 		},
 		"template": Vue.templified("components/field.html")
@@ -67416,6 +67458,7 @@ rsSystem.component("rsCount", {
 	rsSystem.component("NounFieldsModifierStats", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSSWStats
 		],
 		"props": {
@@ -67496,6 +67539,7 @@ rsSystem.component("rsCount", {
 				"property": "__skills",
 				"type": "label"
 			});
+			this.universe.indexes.skill.listing.sort(this.sortData);
 			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 				data.fields.modifierstats.push({
 					"label": this.universe.indexes.skill.listing[x].name,

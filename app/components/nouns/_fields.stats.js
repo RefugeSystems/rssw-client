@@ -202,6 +202,7 @@
 	rsSystem.component("NounFieldsModifierStats", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSSWStats
 		],
 		"props": {
@@ -282,6 +283,7 @@
 				"property": "__skills",
 				"type": "label"
 			});
+			this.universe.indexes.skill.listing.sort(this.sortData);
 			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 				data.fields.modifierstats.push({
 					"label": this.universe.indexes.skill.listing[x].name,
