@@ -69,6 +69,8 @@
 				}
 				
 				if(this.character.ability && node && this.character.ability.indexOf(node.id) !== -1) {
+					styling["text-outline-color"] = "#000";
+					styling["background-color"] = "white";
 					styling["color"] = "white";
 				}
 				
