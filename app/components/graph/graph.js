@@ -115,14 +115,16 @@
 				}, {
 					"selector": "node",
 					"style": {
-						"width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
-						"height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+						"__width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+						"__height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+						"height": "30px",
+						"width": "30px",
 						"content": "data(name)",
 						"font-size": "12px",
 						"text-valign": "center",
 						"text-halign": "center",
 						"background-color": "#555",
-						"text-outline-color": "#555",
+						"text-outline-color": "#000",
 						"text-outline-width": "2px",
 						"text-max-width": "50px",
 						"text-wrap": "wrap",
@@ -242,16 +244,16 @@
 					el,
 					x;
 				
-				console.log("Syncing: ", this.nodes);
+//				console.log("Syncing: ", this.nodes);
 				
 				buffer = Object.keys(this.indexNodes);
 				for(x=0; x<this.nodes.length; x++) {
 					if(this.indexNodes[this.nodes[x].id]) {
-						console.log("Kept: ", this.nodes[x].id);
+//						console.log("Kept: ", this.nodes[x].id);
 						buffer.splice(buffer.indexOf(this.nodes[x].id), 1);
 						cytoLookup[this.id].getElementById(this.nodes[x].id).updateStyle();
 					} else {
-						console.log("Adding: ", this.nodes[x].id);
+//						console.log("Adding: ", this.nodes[x].id);
 						el = {
 							"group": "nodes",
 							"data": this.nodes[x],
@@ -278,10 +280,10 @@
 				buffer = Object.keys(this.indexEdges);
 				for(x=0; x<this.edges.length; x++) {
 					if(this.indexEdges[this.edges[x].id]) {
-						console.log("Kept: ", this.edges[x].id);
+//						console.log("Kept: ", this.edges[x].id);
 						buffer.splice(buffer.indexOf(this.edges[x].id), 1);
 					} else {
-						console.log("Adding: ", this.edges[x].id);
+//						console.log("Adding: ", this.edges[x].id);
 						el = {
 							"group": "edges",
 							"data": this.edges[x]

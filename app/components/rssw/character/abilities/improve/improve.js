@@ -60,7 +60,7 @@
 			data.filters = {};
 			data.filters.node = (node) => {
 //				console.log("Node[" + node.data.id + "]: ", node);
-				console.log("Node: ", node);
+//				console.log("Node: ", node);
 				var styling = {};
 				
 				if(!node.requires_ability || node.requires_ability.length === 0) {
@@ -72,6 +72,10 @@
 					styling["text-outline-color"] = "#000";
 					styling["background-color"] = "white";
 					styling["color"] = "white";
+				}
+				
+				if(node.activation === "active") {
+					styling["background-color"] = "#670505";
 				}
 				
 				return styling;

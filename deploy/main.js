@@ -62182,14 +62182,16 @@ rsSystem.component("rsCount", {
 				}, {
 					"selector": "node",
 					"style": {
-						"width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
-						"height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+						"__width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+						"__height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+						"height": "30px",
+						"width": "30px",
 						"content": "data(name)",
 						"font-size": "12px",
 						"text-valign": "center",
 						"text-halign": "center",
 						"background-color": "#555",
-						"text-outline-color": "#555",
+						"text-outline-color": "#000",
 						"text-outline-width": "2px",
 						"text-max-width": "50px",
 						"text-wrap": "wrap",
@@ -62309,16 +62311,16 @@ rsSystem.component("rsCount", {
 					el,
 					x;
 				
-				console.log("Syncing: ", this.nodes);
+//				console.log("Syncing: ", this.nodes);
 				
 				buffer = Object.keys(this.indexNodes);
 				for(x=0; x<this.nodes.length; x++) {
 					if(this.indexNodes[this.nodes[x].id]) {
-						console.log("Kept: ", this.nodes[x].id);
+//						console.log("Kept: ", this.nodes[x].id);
 						buffer.splice(buffer.indexOf(this.nodes[x].id), 1);
 						cytoLookup[this.id].getElementById(this.nodes[x].id).updateStyle();
 					} else {
-						console.log("Adding: ", this.nodes[x].id);
+//						console.log("Adding: ", this.nodes[x].id);
 						el = {
 							"group": "nodes",
 							"data": this.nodes[x],
@@ -62345,10 +62347,10 @@ rsSystem.component("rsCount", {
 				buffer = Object.keys(this.indexEdges);
 				for(x=0; x<this.edges.length; x++) {
 					if(this.indexEdges[this.edges[x].id]) {
-						console.log("Kept: ", this.edges[x].id);
+//						console.log("Kept: ", this.edges[x].id);
 						buffer.splice(buffer.indexOf(this.edges[x].id), 1);
 					} else {
-						console.log("Adding: ", this.edges[x].id);
+//						console.log("Adding: ", this.edges[x].id);
 						el = {
 							"group": "edges",
 							"data": this.edges[x]
@@ -68413,7 +68415,7 @@ class FieldDescriptor {
 			data.filters = {};
 			data.filters.node = (node) => {
 //				console.log("Node[" + node.data.id + "]: ", node);
-				console.log("Node: ", node);
+//				console.log("Node: ", node);
 				var styling = {};
 				
 				if(!node.requires_ability || node.requires_ability.length === 0) {
@@ -68425,6 +68427,10 @@ class FieldDescriptor {
 					styling["text-outline-color"] = "#000";
 					styling["background-color"] = "white";
 					styling["color"] = "white";
+				}
+				
+				if(node.activation === "active") {
+					styling["background-color"] = "#670505";
 				}
 				
 				return styling;
