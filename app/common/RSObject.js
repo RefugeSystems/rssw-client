@@ -528,6 +528,10 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
+		
+		if(this.name && !this.label) {
+			this.label = this.name;
+		}
 
 		// TODO: Listen for changes on references
 		
