@@ -13,7 +13,7 @@ class RSItem extends RSObject {
 	}
 	
 	recalculatePrefetch() {
-		if(this._coreData.no_modifiers) {
+		if(this._coreData.no_modifiers || this.no_modifiers) {
 			this._replacedReferences.item = [];
 		} else {
 			this._replacedReferences.item = false;

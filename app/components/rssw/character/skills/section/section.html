@@ -1,7 +1,7 @@
 
 <table>
-	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)" v-on:click="skillTouched(skill)">
-		<td class="name aligned-right flow-v">
+	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)">
+		<td class="name aligned-right flow-v" v-on:click="skillNameTouched(skill)">
 			<span class="naming">
 				<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
 				{{skill.name}}
@@ -13,7 +13,7 @@
 		<td class="icon">
 			<span :class="skill.icon"></span>
 		</td>
-		<td class="stats">
+		<td class="stats" v-on:click="skillRollTouched(skill)">
 			<button class="roll-result flex h center" :class="state && state.rolls && state.rolls[skill.id]?'show':''" v-on:click.stop="clearRoll(skill.id)">
 				<span class="result-property flex h center" v-for="result in rollProperties" v-if="state && state.rolls && state.rolls[skill.id] && state.rolls[skill.id][result.property] !== undefined">
 					<span>{{state.rolls[skill.id][result.property]}}</span>

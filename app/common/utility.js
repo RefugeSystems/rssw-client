@@ -15,7 +15,8 @@
 	dice.challenge = "fas fa-dice-d12 rs-red";
 	dice.difficulty = "fas fa-dice-d8 rs-purple";
 	dice.setback = "fas fa-dice-d6 rs-black";
-	dice.setforward = "fas fa-dice-d6 rs-white";
+	dice.force = "fas fa-dice-d12 rs-white";
+	dice.wash = "fal fa-dice-d6 rs-white";
 	
 	/**
 	 * Listed in render order
@@ -31,7 +32,8 @@
 		"challenge",
 		"difficulty",
 		"setback",
-		"setforward"
+		"wash",
+		"force"
 	];
 	
 	rsSystem.component("RSComponentUtility", {
@@ -69,6 +71,7 @@
 				roll.difficulty = 0;
 				roll.setback = 0;
 				roll.setfoward = 0;
+				roll.force = 0;
 				
 				entity = entity || this.entity;
 				if(typeof(entity) === "string") {
@@ -93,9 +96,9 @@
 				
 				return roll;
 			},
-			"renderRoll": function(roll) {
-				var rendering = [],
-					r,
+			"renderRoll": function(roll, rendering) {
+				rendering = rendering || [];
+				var r,
 					x;
 
 				for(r=0; r<diceTypes.length; r++) {

@@ -144,8 +144,8 @@
 						value.id = copy.id + ":" + Date.now();
 						value.name = "";
 						if(copy.randomize_name) {
-							if(copy.dataset) {
-								
+							if(copy.dataset && (buffer = this.universe.indexes.dataset.index[copy.dataset])) {
+								buffer = new NameGenerator(buffer.set);
 							} else if(copy.race) {
 								buffer = this.getGenerator(copy.race);
 							}
@@ -279,6 +279,12 @@
 			this.universeUpdate();
 		},
 		"methods": {
+			"viewParentInfo": function() {
+				rsSystem.EventBus.$emit("display-info", this.state.building[this.state.current].parent);
+			},
+			"activeCopying": function() {
+				return this.$route.query.copy === "true";
+			},
 			"changeHandler": function(field) {
 				
 			},

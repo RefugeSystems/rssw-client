@@ -9,7 +9,7 @@
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
 					<button class="poi" v-if="poiVisible(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
 						<span class="poi-icon" :class="poiClass(link)"></span>
-						<span class="labeling" v-if="link.label && state.labels">{{link.label}}</span>
+						<span class="labeling" v-if="link.label" :class="link.label && state.labels?'shown':'hidden'">{{link.label}}</span>
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in coordinates" v-if="!coordinate.standalone">
@@ -106,6 +106,7 @@
 				<option value="planet">Making Planets</option>
 				<option value="moon">Making Moons</option>
 				<option value="city">Making Cities</option>
+				<option value="marker">Making Marker</option>
 			</select>
 		</div>
 	</div>

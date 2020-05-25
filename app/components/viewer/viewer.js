@@ -14,7 +14,8 @@
 		"planet": "fad fa-globe-europe",
 		"station": "ra ra-satellite",
 		"moon": "fas fa-moon",
-		"city": "fas fa-city"
+		"city": "fas fa-city",
+		"marker": "fas fa-map-marker"
 	};
 	
 	rsSystem.component("rsViewer", {
@@ -579,11 +580,6 @@
 			"apply": function(applying) {
 //				console.log("apply: ", applying, this.parchment);
 				if(this.parchment && this.parchment.length) {
-					var targetHeight,
-						targetWidth,
-						deltaX,
-						deltaY;
-					
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
 					}
@@ -621,7 +617,7 @@
 			"poiVisible": function(link) {
 				var x;
 				
-				if(link.template || link.x === undefined || link.y === undefined) {
+				if(link.template || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
 					return false;
 				}
 				if(this.state.poiFiltering && this.search_criteria.length) {

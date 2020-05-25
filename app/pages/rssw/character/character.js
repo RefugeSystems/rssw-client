@@ -108,6 +108,14 @@ rsSystem.component("RSSWCharacter", {
 		        		"label": "Hide Expression",
 		        		"property": "hideExpressions",
 		        		"type": "checkbox"
+		            }, {
+		        		"label": "Sticky",
+		        		"property": "sticky_widget",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Entity Roller",
+		        		"property": "entityRollListener",
+		        		"type": "checkbox"
 		            }]
 				});
 				this.widgets.push({
@@ -143,8 +151,16 @@ rsSystem.component("RSSWCharacter", {
 		        		"property": "hideLeveling",
 		        		"type": "checkbox"
 		            }, {
+		        		"label": "Open Info",
+		        		"property": "infoSkill",
+		        		"type": "checkbox"
+		            }, {
 		        		"label": "Roll on Click",
 		        		"property": "rollSkill",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Send Roll",
+		        		"property": "emitSkillRoll",
 		        		"type": "checkbox"
 		            }]
 				});

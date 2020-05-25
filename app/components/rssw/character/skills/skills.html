@@ -37,7 +37,7 @@
 					<span class="fas fa-tools"></span>
 					<span>General Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="general" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="general" :state="state" :user="user" v-on:touched="skillTouched($event)" v-on:rolltouched="skillRollTouched($event)" v-on:nametouched="skillNameTouched($event)"></rssw-skill-section>
 			</div>
 		</div>
 		
@@ -47,7 +47,7 @@
 					<span class="fas fa-swords"></span>
 					<span>Combat Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="combat" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="combat" :state="state" :user="user" v-on:touched="skillTouched($event)" v-on:rolltouched="skillRollTouched($event)" v-on:nametouched="skillNameTouched($event)"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list ship flow-v">
@@ -55,7 +55,7 @@
 					<span class="fad fa-location-arrow"></span>
 					<span>Piloting Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="piloting" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="piloting" :state="state" :user="user" v-on:touched="skillTouched($event)" v-on:rolltouched="skillRollTouched($event)" v-on:nametouched="skillNameTouched($event)"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list knowledge flow-v">
@@ -63,7 +63,7 @@
 					<span class="fas fa-brain"></span>
 					<span>Knowledge Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="knowledge" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="knowledge" :state="state" :user="user" v-on:touched="skillTouched($event)" v-on:rolltouched="skillRollTouched($event)" v-on:nametouched="skillNameTouched($event)"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list custom flow-v">
@@ -71,7 +71,7 @@
 					<span class="fas fa-cogs"></span>
 					<span>Custom Skills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="custom" :existing="customSkills" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="custom" :existing="customSkills" :state="state" :user="user" v-on:touched="skillTouched($event)" v-on:rolltouched="skillRollTouched($event)" v-on:nametouched="skillNameTouched($event)"></rssw-skill-section>
 			</div>
 			
 			<div class="skill-list custom flow-v">
@@ -79,7 +79,7 @@
 					<span class="fas fa-drafting-compass"></span>
 					<span>Subskills</span>
 				</h3>
-				<rssw-skill-section :universe="universe" :character="character" named="subskill" :existing="subSkills" :state="state" :user="user" v-on:touched="skillTouched($event)"></rssw-skill-section>
+				<rssw-skill-section :universe="universe" :character="character" named="subskill" :existing="subSkills" :state="state" :user="user" v-on:touched="skillTouched($event)" v-on:rolltouched="skillRollTouched($event)" v-on:nametouched="skillNameTouched($event)"></rssw-skill-section>
 			</div>
 		</div>
 	</div>

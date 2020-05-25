@@ -451,9 +451,9 @@ class RSObject extends EventEmitter {
 			}
 			keys = Object.keys(parent);
 			for(x=0; x<keys.length; x++) {
-				if(keys[x][0] !== "_" && keys[x] !== "universe" && !this._coreData[keys[x]] && !parent._statContributions[keys[x]]) {
+				if(keys[x][0] !== "_" && keys[x] !== "template" && keys[x] !== "universe" && !parent._statContributions[keys[x]]) {
 					if(debug) {
-						console.log("Checking Base Key: " + keys[x], this.universe);
+						console.log("Checking Parent Base Key: " + keys[x], this.universe);
 					}
 //					base[keys[x]] = this._coreData[keys[x]];
 					if(typeof(parent[keys[x]]) === "object") {
@@ -485,7 +485,7 @@ class RSObject extends EventEmitter {
 		// Establish Base from Core Data
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
-			if(keys[x][0] !== "_" && keys[x] !== "universe") {
+			if(keys[x][0] !== "_" && keys[x] !== "universe" && this._coreData[keys[x]] !== undefined && this._coreData[keys[x]] !== null) {
 				if(debug) {
 					console.log("Checking Base Key: " + keys[x], this.universe);
 				}

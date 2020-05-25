@@ -169,6 +169,7 @@
 			return createElement("div", {
 				"class": {
 					"rs-component rs-widget": true,
+					"sticky": !!this.state.sticky_widget,
 					"collapsed": this.state.closed
 				}
 			}, [contents]);

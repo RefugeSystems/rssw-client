@@ -23,4 +23,27 @@ class RSLocation extends RSObject {
 			this.showing = details.showing;
 		}
 	}
+	
+	recalculateHook() {
+		var scanning = [this.id],
+			searchString = "",
+			target,
+			next,
+			x,
+			y;
+		
+		if(this.location) { // Exclude Top Level Location
+			for(y=0; y<scanning.length; y++) {
+				target = scanning[y];
+				for(x=0; x<this.universe.indexes.location.listing.length; x++) {
+					next = this.universe.indexes.location.listing[x];
+					if(next && next.location === target) {
+						scanning.push(next.id);
+						searchString += next._search;
+					}
+				}
+			}
+			this._search += " ||| " + searchString;
+		}
+	}
 }

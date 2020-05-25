@@ -68,7 +68,19 @@
 		},
 		"methods": {
 			"viewSkill": function(skill) {
-				this.showInfo(this.universe.indexes.skill.lookup[skill], this.entity);
+				if(this.state.infoSkill) {
+					this.showInfo(this.universe.indexes.skill.lookup[skill], this.entity);
+				}
+			},
+			"skillNameTouched": function(skill) {
+				this.viewSkill(skill.id);
+			},
+			"skillRollTouched": function(skill) {
+				if(this.state.emitSkillRoll) {
+					this.character.$emit("roll-skill", skill);
+				} else if(this.state.rollSkill) {
+					Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+				}
 			},
 			"skillTouched": function(skill) {
 				if(this.state.rollSkill) {

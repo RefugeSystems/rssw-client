@@ -129,7 +129,8 @@ class RSCalculator {
 						break;
 					case "starting":
 						// These are intentionally ignored as not used by the calculator
-						// TODO: Address startup stat calculation [#172779816]
+						// TODO: Address startup stat calculation [#172779816] 
+						processed = processed.replace(variables[0], 0);
 						break;
 					default:
 						console.warn("Calculator - Unknown variable root", expression, variables);

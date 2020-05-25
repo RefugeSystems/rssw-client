@@ -80,6 +80,12 @@
 			"clearRoll": function(skill) {
 				Vue.delete(this.state.rolls, skill);
 			},
+			"skillNameTouched": function(skill) {
+				this.$emit("nametouched", skill);
+			},
+			"skillRollTouched": function(skill) {
+				this.$emit("rolltouched", skill);
+			},
 			"skillTouched": function(skill) {
 				this.$emit("touched", skill);
 			},

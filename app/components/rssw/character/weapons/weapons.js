@@ -111,6 +111,9 @@
 			this.update();
 		},
 		"methods": {
+			"rollDice": function(item) {
+				console.log("Roll Item Dice: ", item);
+			},
 			"getAttackDice": function(item) {
 				var pool = this.getSkillRoll(item.skill_check);
 
@@ -127,7 +130,7 @@
 				}
 				return damage;
 			},
-			"getRangeBandDifficulty": function(item, band) {
+			"getRangeBandDifficultyRoll": function(item, band) {
 				var pool = Object.assign({}, rangeBandDifficulty[band]),
 					x,
 					y;
@@ -153,7 +156,10 @@
 						break;
 				}
 
-				return this.renderRoll(pool);
+				return pool;
+			},
+			"getRangeBandDifficulty": function(item, band) {
+				return this.renderRoll(this.getRangeBandDifficultyRoll(item, band));
 			},
 			"update": function() {
 				var mapped = {},

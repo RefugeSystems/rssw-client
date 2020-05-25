@@ -133,11 +133,14 @@
 				}
 				
 				.poi {
+					display: flex;
 					position: absolute;
 					margin-left: -10px;
 					border-radius: 40px;
 					z-index: 50;
 					padding: 3px;
+					flex-direction: row;
+					align-items: center;
 					
 					min-height: 30px;
 					min-width: 30px;
@@ -185,6 +188,15 @@
 						padding: 0px 6px;
 						color: #EAEFF9;
 						font-weight: 900;
+						overflow: hidden;
+						max-width: 300px;
+						transition: max-width .5s, padding .5s;
+						white-space: nowrap;
+						
+						&.hidden {
+							max-width: 0px;
+							padding: 0px;
+						}
 					
 						/* V0.1 Style
 						position: absolute;
@@ -217,6 +229,12 @@
 						*/
 					}
 					
+					&:active .labeling,
+					&:focus .labeling,
+					&:hover .labeling {
+						padding: 0px 6px;
+						max-width: 300px;
+					}
 				}
 			}
 		}

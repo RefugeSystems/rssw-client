@@ -6,13 +6,11 @@
 			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
 				<span :class="item.icon"></span>
 			</div>
-			<div class="pool band flex v element" v-on:click="showInfo('knowledge:skillchecks:dice')">
+			<div class="pool band flex v element" v-on:click="rollDice(item)">
 				<div class="name align-center">
 					<span class="fas fa-dice"></span>
 				</div>
-				<div class="roll flex h">
-					<span class="dice" v-for="die in getAttackDice(item)" :class="die"></span>
-				</div>
+				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :skill="item.skill_check" />
 			</div>
 			<div class="damage band flex v element">
 				<div class="name align-center">
@@ -26,9 +24,7 @@
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>
-				<div class="roll flex h">
-					<span class="dice" v-for="die in getRangeBandDifficulty(item, band)" :class="die"></span>
-				</div>
+				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" />
 			</div>
 		</div>
 	</div>
@@ -43,9 +39,7 @@
 				<div class="name align-center">
 					<span class="fas fa-dice"></span>
 				</div>
-				<div class="roll flex h">
-					<span class="dice" v-for="die in getAttackDice(item)" :class="die"></span>
-				</div>
+				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :skill="item.skill_check" />
 			</div>
 			<div class="damage band flex v element">
 				<div class="name align-center">
@@ -59,9 +53,7 @@
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>
-				<div class="roll flex h">
-					<span class="dice" v-for="die in getRangeBandDifficulty(item, band)" :class="die"></span>
-				</div>
+				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" />
 			</div>
 		</div>
 	</div>

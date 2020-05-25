@@ -1,10 +1,10 @@
 .rs-component.rs-widget {
 	position: relative;
-	padding: 0px;
+	padding: 10px;
 	margin: 0px;
 	max-width: 550px;
 	/*border: 1px solid white;*/
-	border-radius: 6px;
+	/*border-radius: 6px;*/
 	/*padding: 8px;*/
 	transition: min-height .5s;
 	min-height: 60px;
@@ -21,6 +21,16 @@
 		.rs-containment {
 			max-height: 0px;
 		}
+	}
+	
+	&.sticky {
+		position: sticky;
+		top: 0px;
+		bottom: 0px;
+		background: black;
+		z-index: 10;
+		/* padding: 10px 0px; */
+		/*padding: 0px;*/
 	}
 }
 
