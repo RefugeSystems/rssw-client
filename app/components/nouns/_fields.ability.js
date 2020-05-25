@@ -131,6 +131,10 @@
 			"active"
 		]
 	}, {
+		"label": "Template",
+		"property": "template",
+		"type": "checkbox"
+	}, {
 		"label": "Locked",
 		"property": "locked_ability",
 		"type": "checkbox"
