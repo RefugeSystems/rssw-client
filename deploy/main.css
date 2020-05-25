@@ -1806,8 +1806,8 @@ form {
 .rs-component.rssw.component-character-improve-ability .select-container {
   overflow: auto;
 }
-.rs-component.rssw.component-character-improve-ability .graph-container .highlight {
-  color: white;
+.rs-component.rssw.component-character-improve-ability .highlight {
+  color: blue !important;
 }
 .rs-component.rssw.component-character-board .container {
   min-width: 510px;

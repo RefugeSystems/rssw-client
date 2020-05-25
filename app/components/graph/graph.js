@@ -115,8 +115,8 @@
 				}, {
 					"selector": "node",
 					"style": {
-						"__width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
-						"__height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+//						"__width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+//						"__height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
 						"height": "30px",
 						"width": "30px",
 						"content": "data(name)",
@@ -177,16 +177,27 @@
 					x;
 				
 				searching = function(el) {
+					console.log("Searching: ", el);
 					var data = el.data();
-					if(data._search && data._search.indexOf(search) != -1) {
-						found = true;
-						el.addClass("highlight");
-						setTimeout(function() {
+					if(search) {
+						if(data._search && data._search.indexOf(search) != -1) {
+							found = true;
+							el.addClass("highlight");
+							el.style("border-color", "#00ff00");
+							el.style("border-width", "4px");
+							el.updateStyle();
+							return true;
+						} else {
 							el.removeClass("highlight");
-						}, 1500);
+							el.removeStyle("border-color");
+							el.removeStyle("border-width");
+							el.updateStyle();
+							return false;
+						}
+					} else {
+						found = true;
 						return true;
 					}
-					return false;
 				};
 				
 				this.getScape().animate({
