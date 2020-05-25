@@ -55,6 +55,25 @@
 //				"hideNames": false,
 //				"search": ""
 //			});
+			
+			
+			data.filters = {};
+			data.filters.node = (node) => {
+//				console.log("Node[" + node.data.id + "]: ", node);
+				console.log("Node: ", node);
+				var styling = {};
+				
+				if(!node.requires_ability || node.requires_ability.length === 0) {
+					styling["text-outline-color"] = "#000";
+					styling["background-color"] = "#0e57ea";
+				}
+				
+				if(this.character.ability && node && this.character.ability.indexOf(node.id) !== -1) {
+					styling["color"] = "white";
+				}
+				
+				return styling;
+			};
 
 			data.instance = instance++;
 			data.customSkills = [];

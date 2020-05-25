@@ -11,5 +11,5 @@
 			<span>Close</span>
 		</button>
 	</div>
-	<rs-graph :id="character.id" :nodes="abilities" :edges="dependencies" v-on:node="showInfo($event, character)"></rs-graph>
+	<rs-graph :id="character.id" :nodes="abilities" :edges="dependencies" :filters="filters" v-on:node="showInfo($event, character)"></rs-graph>
 </div>

@@ -34,6 +34,9 @@
 			rsSystem.components.RSComponentUtility
 		],
 		"props": {
+			"filters": {
+				"type": Object
+			},
 			"id": {
 				"default": "graph_component",
 				"type": String
@@ -235,6 +238,7 @@
 			"sync": function() {
 				var rerun = false,
 					buffer,
+					style,
 					el,
 					x;
 				
@@ -250,8 +254,15 @@
 						console.log("Adding: ", this.nodes[x].id);
 						el = {
 							"group": "nodes",
-							"data": this.nodes[x]
+							"data": this.nodes[x],
+							"style": {}
 						};
+						if(this.filters && this.filters.node && typeof(this.filters.node) === "function") {
+							style = this.filters.node(this.nodes[x]);
+							if(style) {
+								Object.assign(el.style, style);
+							}
+						}
 						this.indexNodes[this.nodes[x].id] = true;
 						cytoLookup[this.id].add(el);
 						rerun = true;
