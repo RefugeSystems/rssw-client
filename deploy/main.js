@@ -64685,6 +64685,38 @@ rsSystem.component("rsCount", {
 		"property": "name",
 		"type": "text"
 	}, {
+		"label": "Charges and Recharging",
+		"property": "__charges",
+		"type": "label"
+	}, {
+		"label": "Max Charges",
+		"property": "charges_max",
+		"type": "number"
+	}, {
+		"label": "Session Gain",
+		"property": "charges_gain_session",
+		"type": "number"
+	}, {
+		"label": "Session Rate",
+		"property": "charges_rate_session",
+		"type": "number"
+	}, {
+		"label": "Long Gain",
+		"property": "charges_gain_long",
+		"type": "number"
+	}, {
+		"label": "Long Rate",
+		"property": "charges_rate_long",
+		"type": "number"
+	}, {
+		"label": "Short Gain",
+		"property": "charges_gain_short",
+		"type": "number"
+	}, {
+		"label": "Short Rate",
+		"property": "charges_rate_short",
+		"type": "number"
+	}, {
 		"label": "Career Skill Flag",
 		"property": "__enhanced",
 		"type": "label"
@@ -67436,6 +67468,38 @@ rsSystem.component("rsCount", {
 	}, {
 		"label": "Hardpoints",
 		"property": "hardpoints",
+		"type": "text"
+	}, {
+		"label": "Charges and Recharging",
+		"property": "__charges",
+		"type": "label"
+	}, {
+		"label": "Max Charges",
+		"property": "charges_max",
+		"type": "text"
+	}, {
+		"label": "Session Gain",
+		"property": "charges_gain_session",
+		"type": "text"
+	}, {
+		"label": "Session Rate",
+		"property": "charges_rate_session",
+		"type": "text"
+	}, {
+		"label": "Long Gain",
+		"property": "charges_gain_long",
+		"type": "text"
+	}, {
+		"label": "Long Rate",
+		"property": "charges_rate_long",
+		"type": "text"
+	}, {
+		"label": "Short Gain",
+		"property": "charges_gain_short",
+		"type": "text"
+	}, {
+		"label": "Short Rate",
+		"property": "charges_rate_short",
 		"type": "text"
 	}];
 	

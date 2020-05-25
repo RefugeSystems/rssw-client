@@ -13,6 +13,38 @@
 		"property": "name",
 		"type": "text"
 	}, {
+		"label": "Charges and Recharging",
+		"property": "__charges",
+		"type": "label"
+	}, {
+		"label": "Max Charges",
+		"property": "charges_max",
+		"type": "number"
+	}, {
+		"label": "Session Gain",
+		"property": "charges_gain_session",
+		"type": "number"
+	}, {
+		"label": "Session Rate",
+		"property": "charges_rate_session",
+		"type": "number"
+	}, {
+		"label": "Long Gain",
+		"property": "charges_gain_long",
+		"type": "number"
+	}, {
+		"label": "Long Rate",
+		"property": "charges_rate_long",
+		"type": "number"
+	}, {
+		"label": "Short Gain",
+		"property": "charges_gain_short",
+		"type": "number"
+	}, {
+		"label": "Short Rate",
+		"property": "charges_rate_short",
+		"type": "number"
+	}, {
 		"label": "Career Skill Flag",
 		"property": "__enhanced",
 		"type": "label"

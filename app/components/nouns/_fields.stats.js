@@ -181,6 +181,38 @@
 		"label": "Hardpoints",
 		"property": "hardpoints",
 		"type": "text"
+	}, {
+		"label": "Charges and Recharging",
+		"property": "__charges",
+		"type": "label"
+	}, {
+		"label": "Max Charges",
+		"property": "charges_max",
+		"type": "text"
+	}, {
+		"label": "Session Gain",
+		"property": "charges_gain_session",
+		"type": "text"
+	}, {
+		"label": "Session Rate",
+		"property": "charges_rate_session",
+		"type": "text"
+	}, {
+		"label": "Long Gain",
+		"property": "charges_gain_long",
+		"type": "text"
+	}, {
+		"label": "Long Rate",
+		"property": "charges_rate_long",
+		"type": "text"
+	}, {
+		"label": "Short Gain",
+		"property": "charges_gain_short",
+		"type": "text"
+	}, {
+		"label": "Short Rate",
+		"property": "charges_rate_short",
+		"type": "text"
 	}];
 	
 	listSource = [
