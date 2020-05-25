@@ -161,6 +161,13 @@
 			"getRangeBandDifficulty": function(item, band) {
 				return this.renderRoll(this.getRangeBandDifficultyRoll(item, band));
 			},
+			"getItemIcon": function(item) {
+				var icon = item.icon;
+				if(this.entity._relatedErrors[item.id]) {
+					icon += " rs-light-red";
+				}
+				return icon;
+			},
 			"update": function() {
 				var mapped = {},
 					buffer,

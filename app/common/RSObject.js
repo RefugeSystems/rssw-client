@@ -392,25 +392,37 @@ class RSObject extends EventEmitter {
 //							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
 							for(z=0; z<hold.length; z++) {
 								// If you have it (Item/Room) or it is inside you (Entity)
-								if(((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))
-										// And you have slots for it
-										&& this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
-									if(debug || this.debug || this.universe.debug) {
-										console.log(" > Record is slot valid: " + hold[z]);
-									}
-									switch(keys[x]) {
-										case "item":
-										case "room":
-											base._overrides[keys[x]].push(hold[z]);
-											break;
+								if((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id)) {
+									// And you have slots for it
+									if(this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
+										if(debug || this.debug || this.universe.debug) {
+											console.log(" > Record is slot valid: " + hold[z]);
+										}
+										switch(keys[x]) {
+											case "item":
+											case "room":
+												base._overrides[keys[x]].push(hold[z]);
+												break;
+										}
+									} else {
+										if(debug || this.debug || this.universe.debug) {
+											console.log(" > Record is not slot valid: " + hold[z]);
+										}
+										this._relatedErrors[hold[z]] = {
+											"type": "error",
+											"message": "Not enough slots left",
+											"calculated": Date.now(),
+											"contents": hold[z],
+											"slot": buffer[y]
+										};
 									}
 								} else {
 									if(debug || this.debug || this.universe.debug) {
-										console.log(" > Record is not slot valid: " + hold[z]);
+										console.log(" > Record is not held valid: " + hold[z]);
 									}
 									this._relatedErrors[hold[z]] = {
 										"type": "error",
-										"message": "Not enough slots left",
+										"message": "Item no longer in possession",
 										"calculated": Date.now(),
 										"contents": hold[z],
 										"slot": buffer[y]

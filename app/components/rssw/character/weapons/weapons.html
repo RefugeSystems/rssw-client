@@ -4,7 +4,7 @@
 		<h3>Equipped Weapons</h3>
 		<div class="weapon-report flex h" v-for="item in equipped">
 			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
-				<span :class="item.icon"></span>
+				<span :class="getItemIcon(item)"></span>
 			</div>
 			<div class="pool band flex v element" v-on:click="rollDice(item)">
 				<div class="name align-center">

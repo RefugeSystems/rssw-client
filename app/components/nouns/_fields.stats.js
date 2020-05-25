@@ -78,18 +78,17 @@
 		"property": "strain_max",
 		"type": "text"
 	}, {
-		"label": "Range",
-		"property": "range",
-		"type": "text"
-	}, {
 		"label": "Damage",
 		"property": "damage",
+		"type": "text"
+	}, {
+		"label": "Crit. Bonus",
+		"property": "critical_damage_bonus",
 		"type": "text"
 	}, {
 		"label": "Pierce",
 		"property": "pierce_damage",
 		"type": "text"
-			
 	}, {
 		"label": "General Defense",
 		"property": "defense_general",

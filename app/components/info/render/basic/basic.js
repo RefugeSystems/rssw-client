@@ -429,7 +429,7 @@
 				return "meets-requirements";
 			},
 			"canForgetAbility": function() {
-				return this.hasLearnedAbility(); // Dependency requirements in classByRequirements
+				return !this.record.locked_ability && this.hasLearnedAbility(); // Dependency requirements in classByRequirements
 			},
 			"hasMapped": function(reference, needs, type) {
 				var meets = 0,
@@ -453,48 +453,48 @@
 				return false;
 			},
 			"canLearnAbility": function() {
-				return this.base && this.player && (this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
+				return !this.record.locked_ability && this.base && this.player && (this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
 						this.record._type === "ability" && !this.hasLearnedAbility() && this.hasLearnDependencies();
 			},
 			"hasLearnedAbility": function() {
 				return this.record && this.base && this.base.ability && this.base.ability.indexOf(this.record.id) !== -1;
 			},
 			"learnAbility": function() {
-				// TODO:
-				console.log("Learn: ", this.record.id);
-				var cost = parseInt(this.record.xp_cost) || 0,
-					abilities,
-					index;
-				
-				if(this.base && this.classByXP(cost) === "meets-requirements") {
-					abilities = this.base.ability || [];
-					index = abilities.indexOf(this.record.id);
-					if(index === -1) {
-						index = parseInt(this.base.xp - cost);
-						this.base.commit({
-							"ability": abilities.concat(this.record.id),
-							"xp": index
-						});
+				if(!this.record.locked_ability) {
+					var cost = parseInt(this.record.xp_cost) || 0,
+						abilities,
+						index;
+					
+					if(this.base && this.classByXP(cost) === "meets-requirements") {
+						abilities = this.base.ability || [];
+						index = abilities.indexOf(this.record.id);
+						if(index === -1) {
+							index = parseInt(this.base.xp - cost);
+							this.base.commit({
+								"ability": abilities.concat(this.record.id),
+								"xp": index
+							});
+						}
 					}
 				}
 			},
 			"forgetAbility": function() {
-				// TODO:
-				console.log("Forget: ", this.record.id);
-				var cost = parseInt(this.record.xp_cost) || 0,
-					abilities,
-					index;
-				
-				if(this.base && this.classByRequirements() === "meets-requirements") {
-					abilities = this.base.ability || [];
-					index = abilities.indexOf(this.record.id);
-					if(index !== -1) {
-						abilities.splice(index, 1);
-						index = parseInt(this.base.xp + cost);
-						this.base.commit({
-							"ability": abilities,
-							"xp": index
-						});
+				if(!this.record.locked_ability) {
+					var cost = parseInt(this.record.xp_cost) || 0,
+						abilities,
+						index;
+					
+					if(this.base && this.classByRequirements() === "meets-requirements") {
+						abilities = this.base.ability || [];
+						index = abilities.indexOf(this.record.id);
+						if(index !== -1) {
+							abilities.splice(index, 1);
+							index = parseInt(this.base.xp + cost);
+							this.base.commit({
+								"ability": abilities,
+								"xp": index
+							});
+						}
 					}
 				}
 			},
@@ -865,6 +865,9 @@
 				
 				this.keys.splice(0);
 				this.keys.push.apply(this.keys, Object.keys(this.record));
+				if(this.record.name && this.record.label && this.record.name === this.record.label) {
+					this.keys.splice(this.keys.indexOf("label"), 1);
+				}
 				
 				this.partiesPresent.splice(0);
 				map = {};

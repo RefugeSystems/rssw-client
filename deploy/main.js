@@ -52965,7 +52965,7 @@ Templify.install = function(Vue, options) {
 			case "components/connect.html": return "<div class=\"rs-component connect-component\">\r\n\t<div class=\"heading\">\r\n\t\t<span class=\"heading-icon\"></span>\r\n\t\t<span>Login</span>\r\n\t</div>\r\n\t<div class=\"fields\">\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Username</span>\r\n\t\t\t<input type=\"text\" v-enter=\"connect\" v-model=\"store.username\" />\r\n\t\t</label>\r\n\t\t<label class=\"full\">\r\n\t\t\t<span class=\"field-text\">Address</span>\r\n\t\t\t<input type=\"text\" v-enter=\"connect\" v-model=\"store.address\" />\r\n\t\t</label>\r\n\t\t<div class=\"actions\">\r\n\t\t\t<button class=\"primary-action\" v-on:click=\"connect()\">\r\n\t\t\t\t<span class=\"action-icon fas fa-sign-in\"></span>\r\n\t\t\t\t<span class=\"action-text\">Connect</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"toggle-action\" v-on:click=\"store.secure = !store.secure\">\r\n\t\t\t\tSecure?\r\n\t\t\t\t<span class=\"far\" :class=\"store.secure?'fa-check-square':'fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/count.html": return "<div class=\"system-component component-count\">\r\n\t<div class=\"modeling\">\r\n\t\t<input v-if=\"editable\" v-model.number=\"shadow\" />\r\n\t\t<span v-if=\"!editable\">{{value}}</span>\r\n\t</div>\r\n\r\n\t<div class=\"op-controls rsbg-black\" :class=\"open?'open':'closed'\">\r\n\t\t<button class=\"op-ctrl op-toggle rsbg-black\" v-on:click=\"nextOp()\">\r\n\t\t\t<span :class=\"operations[operation].icon\"></span>\r\n\t\t</button>\r\n\t\t<div class=\"op-bar flex h center rsbg-black\">\r\n\t\t\t<input class=\"op-expression\" v-model=\"expression\" v-on:keyup.enter=\"complete()\" v-on:keyup.esc=\"cancel()\" />\r\n\t\t\t<button class=\"op-ctrl\" v-on:click=\"complete()\">\r\n\t\t\t\t<span :class=\"open?'fas fa-equals rs-orange':operations[initial].icon\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>";
 			case "components/field/autocomplete.html": return "<div class=\"rs-field rs-autocomplete\">\r\n\t<input class=\"autocomplete-field\" type=\"text\" v-model=\"modeling\" />\r\n\t<div class=\"corpus\" :class=\"{'open':matched.length}\">\r\n\t\t<div class=\"option\" v-for=\"option in matched\">\r\n\t\t\t{{option}}\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
-			case "components/field.html": return "\r\n<div class=\"rs-component rs-field\" :class=\"field.type + ' property-' + field.property\" v-if=\"isVisible()\">\r\n\t<label :for=\"fid\">\r\n\t\t<span>{{field.label}}</span>\r\n\t</label>\r\n\t<span v-if=\"field.error\">\r\n\t\t<h3>\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>Error</span>\r\n\t\t</h3>\r\n\t\t<p>\r\n\t\t\t{{field.error | JSON}}\r\n\t\t</p>\r\n\t</span>\r\n\t\r\n\t<span v-if=\"field.type === 'label'\">\r\n\t\t<!-- Do Nothing Here -->\r\n\t</span>\r\n\t\r\n\t<select :id=\"fid\" v-if=\"field.type === 'select' && field.options && field.options.length\" v-model=\"root[field.property]\" v-on:change.stop=\"emitChanged()\" v-on:blur=\"blurring()\">\r\n\t\t<option v-if=\"root[field.property] === 'undefined' && !field.persistUnset\" :value=\"root[field.property]\">{{field.unset}}</option>\r\n\t\t<option v-if=\"field.persistUnset\" value=undefined>{{field.unset || \"Select...\"}}</option>\r\n\t\t\r\n\t\t<option v-if=\"field.raw\" v-for=\"option in field.options\" :value=\"option\">{{option}}</option>\r\n\t\t<option v-if=\"!field.raw && !field.optionValue && !field.optionLabel\" v-for=\"option in field.options\" :value=\"option.value\" :title=\"option[field.optionDescription] || option.description || ''\">{{option.label}}</option>\r\n\t\t<option v-if=\"!field.raw && field.optionValue && field.optionLabel\" v-for=\"option in field.options\" :value=\"option[field.optionValue]\" :title=\"option[field.optionDescription] || option.description || ''\">{{option[field.optionLabel]}}</option>\r\n\t</select>\r\n\t\r\n\t<span v-if=\"field.type === 'select' && (!field.options || !field.options.length)\">\r\n\t\t<span class=\"fas fa-spinner fa-pulse\"></span>\r\n\t\t<span>Loading...</span>\r\n\t</span>\r\n\t\r\n\t<button :id=\"fid\" v-if=\"field.type === 'checkbox'\" :disabled=\"field.disable?field.disable():false\" v-on:click=\"set(!root[field.property])\" class=\"flat\">\r\n\t\t<span class=\"far\" :class=\"root[field.property]?'fa-check-square':'fa-square'\"></span>\r\n\t</button>\r\n\t\r\n\t<input :id=\"fid\" :type=\"field.type\" v-if=\"field.type === 'number'\" v-model.number=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t<input :id=\"fid\" type=\"text\" v-if=\"field.type === 'rawnumber'\" v-model.number=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t<input :id=\"fid\" :type=\"field.type\" v-if=\"field.follow_type\" v-model=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t<input :id=\"fid\" type=\"text\" v-if=\"field.type === 'text'\" v-model=\"root[field.property]\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t\r\n\t<span v-if=\"field.suffix\" class=\"suffix\">{{field.suffix}}</span>\r\n\t\r\n\t<span v-if=\"field.computed\" class=\"computed\" :class=\"field.computed.class?field.computed.class():{}\">{{field.computed.method()}}</span>\r\n\t<span v-if=\"field.computed && field.computed.suffix\" class=\"computed-suffix\">{{field.computed.suffix}}</span>\r\n\t<button v-if=\"field.info\" class=\"info fas fa-info-circle\" v-on:click.stop=\"field.info(root[field.property])\"></button>\r\n\t<button v-if=\"field.validation\" class=\"validation fas\" :class=\"{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}\" v-on:click.stop=\"field.validation.feedback(field, root[field.property], checkField())\"></button>\r\n\r\n\t<slot name=\"info\">\r\n\t</slot>\r\n\t\r\n\t<table :id=\"fid\" v-if=\"field.type === 'grid-select'\" class=\"grid-select\">\r\n\t\t<tr>\r\n\t\t\t<td></td>\r\n\t\t\t<td class=\"col label\" v-for=\"col in field.columns\">\r\n\t\t\t\t{{col.label}}\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t\t<tr v-for=\"row in field.rows\">\r\n\t\t\t<td class=\"row label\">{{row.label}}</td>\r\n\t\t\t<td v-for=\"col in field.columns\">\r\n\t\t\t\t<!-- button class=\"far option\" :class=\"{'fa-square': row.value !== _row || col.value !== _col, 'fa-square-check': row.value === _row && col.value === _col}\" v-on:click.stop=\"set((field.compose || compose)(col.value, row.value))\"></button -->\r\n\t\t\t\t<button class=\"far option\" :class=\"{'fa-square': !tracking[row.value][col.value], 'fa-check-square': tracking[row.value][col.value]}\" v-on:click.stop=\"set(compose(row.value, col.value))\"></button>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</table>\r\n\t\r\n\t<div v-if=\"field.type === 'textarea'\" class=\"textarea\">\r\n\t\t<textarea :id=\"fid\" v-model=\"root[field.property]\" v-tab :placeholder=\"field.placeholder\" v-on:input=\"emitChanged()\" v-on:blur=\"blurring()\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"field.type === 'multireference' && field.source_index\" class=\"multireference\">\r\n\t\t<div class=\"referenced\" v-for=\"(reference, $index) in root[field.property]\">\r\n\t\t\t<span class=\"reference-display\">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:\"Missing:\" + reference}}</span>\r\n\t\t\t<button class=\"info fas fa-info-circle\" v-if=\"!field.noinfo\" v-on:click=\"openReference(reference)\"></button>\r\n\t\t\t<button class=\"remove fas fa-times-square\" v-on:click=\"dismissReference($index)\"></button>\r\n\t\t</div>\r\n\t\t<div class=\"referenced\">\r\n\t\t\t<select v-model=\"reference_value\" v-if=\"field.source_index\" v-on:change=\"addReference(reference_value)\">\r\n\t\t\t\t<option value=\"\">Select To Add</option>\r\n\t\t\t\t<option v-for=\"option in field.source_index.listing\" v-if=\"optionAvailable(option)\" :id=\"option.id\" :value=\"option.id\">{{option.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n\t<div v-if=\"field.type === 'multireference' && !field.source_index\">\r\n\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t<span>No Source Index</span>\r\n\t</div>\r\n\t\r\n\t<div class=\"error\" v-if=\"field.error\">\r\n\t\t<span>Error:</span>\r\n\t\t<p>{{field.error.message || field.error.text || field.error}}</p>\r\n\t</div>\r\n</div>\r\n";
+			case "components/field.html": return "\r\n<div class=\"rs-component rs-field\" :class=\"field.type + ' property-' + field.property\" v-if=\"isVisible()\">\r\n\t<label :for=\"fid\">\r\n\t\t<span>{{field.label}}</span>\r\n\t</label>\r\n\t<span v-if=\"field.error\">\r\n\t\t<h3>\r\n\t\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t\t<span>Error</span>\r\n\t\t</h3>\r\n\t\t<p>\r\n\t\t\t{{field.error | JSON}}\r\n\t\t</p>\r\n\t</span>\r\n\t\r\n\t<span v-if=\"field.type === 'label'\">\r\n\t\t<!-- Do Nothing Here -->\r\n\t</span>\r\n\t\r\n\t<select :id=\"fid\" v-if=\"field.type === 'select' && field.options && field.options.length\" v-model=\"root[field.property]\" v-on:change.stop=\"emitChanged()\" v-on:blur=\"blurring()\">\r\n\t\t<option v-if=\"root[field.property] === 'undefined' && !field.persistUnset\" :value=\"root[field.property]\">{{field.unset}}</option>\r\n\t\t<option v-if=\"field.persistUnset\" value=undefined>{{field.unset || \"Select...\"}}</option>\r\n\t\t\r\n\t\t<option v-if=\"field.raw\" v-for=\"option in field.options\" :value=\"option\">{{option}}</option>\r\n\t\t<option v-if=\"!field.raw && !field.optionValue && !field.optionLabel\" v-for=\"option in field.options\" :value=\"option.value\" :title=\"option[field.optionDescription] || option.description || ''\">{{option.label}}</option>\r\n\t\t<option v-if=\"!field.raw && field.optionValue && field.optionLabel\" v-for=\"option in field.options\" :value=\"option[field.optionValue]\" :title=\"option[field.optionDescription] || option.description || ''\">{{option[field.optionLabel]}}</option>\r\n\t</select>\r\n\t\r\n\t<span v-if=\"field.type === 'select' && (!field.options || !field.options.length)\">\r\n\t\t<span class=\"fas fa-spinner fa-pulse\"></span>\r\n\t\t<span>Loading...</span>\r\n\t</span>\r\n\t\r\n\t<button :id=\"fid\" v-if=\"field.type === 'checkbox'\" :disabled=\"field.disable?field.disable():false\" v-on:click=\"set(!root[field.property])\" class=\"flat\">\r\n\t\t<span class=\"far\" :class=\"root[field.property]?'fa-check-square':'fa-square'\"></span>\r\n\t</button>\r\n\t\r\n\t<input :id=\"fid\" :type=\"field.type\" v-if=\"field.type === 'number'\" v-model.number=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t<input :id=\"fid\" type=\"text\" v-if=\"field.type === 'rawnumber'\" v-model.number=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t<input :id=\"fid\" :type=\"field.type\" v-if=\"field.follow_type\" v-model=\"root[field.property]\" :min=\"field.min\" :max=\"field.max\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t<input :id=\"fid\" type=\"text\" v-if=\"field.type === 'text'\" v-model=\"root[field.property]\" :placeholder=\"field.placeholder\" :disabled=\"field.disable?field.disable():false\" v-on:input.stop=\"emitChanged()\" v-on:blur=\"blurring()\" />\r\n\t\r\n\t<span v-if=\"field.suffix\" class=\"suffix\">{{field.suffix}}</span>\r\n\t\r\n\t<span v-if=\"field.computed\" class=\"computed\" :class=\"field.computed.class?field.computed.class():{}\">{{field.computed.method()}}</span>\r\n\t<span v-if=\"field.computed && field.computed.suffix\" class=\"computed-suffix\">{{field.computed.suffix}}</span>\r\n\t<button v-if=\"field.info\" class=\"info fas fa-info-circle\" v-on:click.stop=\"field.info(root[field.property])\"></button>\r\n\t<button v-if=\"field.validation\" class=\"validation fas\" :class=\"{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}\" v-on:click.stop=\"field.validation.feedback(field, root[field.property], checkField())\"></button>\r\n\r\n\t<slot name=\"info\">\r\n\t</slot>\r\n\t\r\n\t<table :id=\"fid\" v-if=\"field.type === 'grid-select'\" class=\"grid-select\">\r\n\t\t<tr>\r\n\t\t\t<td></td>\r\n\t\t\t<td class=\"col label\" v-for=\"col in field.columns\">\r\n\t\t\t\t{{col.label}}\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t\t<tr v-for=\"row in field.rows\">\r\n\t\t\t<td class=\"row label\">{{row.label}}</td>\r\n\t\t\t<td v-for=\"col in field.columns\">\r\n\t\t\t\t<!-- button class=\"far option\" :class=\"{'fa-square': row.value !== _row || col.value !== _col, 'fa-square-check': row.value === _row && col.value === _col}\" v-on:click.stop=\"set((field.compose || compose)(col.value, row.value))\"></button -->\r\n\t\t\t\t<button class=\"far option\" :class=\"{'fa-square': !tracking[row.value][col.value], 'fa-check-square': tracking[row.value][col.value]}\" v-on:click.stop=\"set(compose(row.value, col.value))\"></button>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</table>\r\n\t\r\n\t<div v-if=\"field.type === 'textarea'\" class=\"textarea\">\r\n\t\t<textarea :id=\"fid\" v-model=\"root[field.property]\" v-tab :placeholder=\"field.placeholder\" v-on:input=\"emitChanged()\" v-on:blur=\"blurring()\">\r\n\t\t</textarea>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"field.type === 'multireference' && field.source_index\" class=\"multireference\">\r\n\t\t<div class=\"referenced\" v-for=\"(reference, $index) in root[field.property]\">\r\n\t\t\t<span class=\"reference-display\">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:\"Missing:\" + reference}}</span>\r\n\t\t\t<button class=\"info fas fa-info-circle\" v-if=\"!field.noinfo\" v-on:click=\"openReference(reference)\"></button>\r\n\t\t\t<button class=\"remove fas fa-times-square\" v-on:click=\"dismissReference($index)\"></button>\r\n\t\t</div>\r\n\t\t<div class=\"referenced\">\r\n\t\t\t<select v-model=\"reference_value\" v-if=\"field.source_index\" v-on:change=\"addReference(reference_value)\">\r\n\t\t\t\t<option value=\"\">Select To Add</option>\r\n\t\t\t\t<option v-for=\"option in field.source_index.listing\" v-if=\"optionAvailable(option)\" :id=\"option.id\" :value=\"option.id\" :title=\"option.id\">{{option.name}}</option>\r\n\t\t\t</select>\r\n\t\t</div>\r\n\t</div>\r\n\t<div v-if=\"field.type === 'multireference' && !field.source_index\">\r\n\t\t<span class=\"fas fa-exclamation-triangle\"></span>\r\n\t\t<span>No Source Index</span>\r\n\t</div>\r\n\t\r\n\t<div class=\"error\" v-if=\"field.error\">\r\n\t\t<span>Error:</span>\r\n\t\t<p>{{field.error.message || field.error.text || field.error}}</p>\r\n\t</div>\r\n</div>\r\n";
 			case "components/graph.html": return "<div class=\"rs-component rs-graph\" v-if=\"isVisible()\">\r\n\t<div class=\"graph-search\" :class=\"notFound?'search-error':''\">\r\n\t\t<input type=\"text\" v-on:keyup.enter=\"centerOnSearch()\" v-model=\"searchText\" v-on:change=\"activity()\">\r\n\t\t<button class=\"search-center\" v-on:click=\"centerOnSearch()\">\r\n\t\t\t<span class=\"fas fa-search\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\t<div class=\"graph-container\" :id=\"id\"></div>\r\n</div>\r\n";
 			case "components/gyroscope.html": return "";
 			case "components/image.html": return "<div class=\"rs-component rs-image\" :class=\"classes()\">\r\n\t<router-link v-if=\"link\" :to=\"link\">\r\n\t\t<img class=\"image\" :src=\"uri\" draggable=\"false\"/>\r\n\t</router-link>\r\n\t<img v-else class=\"image\" :src=\"uri\" draggable=\"false\"/>\r\n</div>\r\n";
@@ -52988,7 +52988,7 @@ Templify.install = function(Vue, options) {
 			case "components/rssw/character/skills/section.html": return "\r\n<table>\r\n\t<tr class=\"skill\" v-for=\"skill in skills\" v-if=\"isVisible(skill)\">\r\n\t\t<td class=\"name aligned-right flow-v\" v-on:click=\"skillNameTouched(skill)\">\r\n\t\t\t<span class=\"naming\">\r\n\t\t\t\t<span v-if=\"enhancedSkill(skill)\" class=\"rs-green fas fa-check\"></span>\r\n\t\t\t\t{{skill.name}}\r\n\t\t\t</span>\r\n\t\t\t<span class=\"naming base\">\r\n\t\t\t\t{{(skill.base?skill.base:\"\").capitalize()}}\r\n\t\t\t</span>\r\n\t\t</td>\r\n\t\t<td class=\"icon\">\r\n\t\t\t<span :class=\"skill.icon\"></span>\r\n\t\t</td>\r\n\t\t<td class=\"stats\" v-on:click=\"skillRollTouched(skill)\">\r\n\t\t\t<button class=\"roll-result flex h center\" :class=\"state && state.rolls && state.rolls[skill.id]?'show':''\" v-on:click.stop=\"clearRoll(skill.id)\">\r\n\t\t\t\t<span class=\"result-property flex h center\" v-for=\"result in rollProperties\" v-if=\"state && state.rolls && state.rolls[skill.id] && state.rolls[skill.id][result.property] !== undefined\">\r\n\t\t\t\t\t<span>{{state.rolls[skill.id][result.property]}}</span>\r\n\t\t\t\t\t<span class=\"result-icon\" :class=\"result.icon\"></span>\r\n\t\t\t\t</span>\r\n\t\t\t</button>\r\n\t\t\t<div class=\"level\">\r\n\t\t\t\t<div class=\"level-block\" v-for=\"level in levelBars\" :class=\"{'acquired':level < character[skill.propertyKey], 'first':level === 0}\"></div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll\">\r\n\t\t\t\t<span class=\"dice\" v-for=\"die in getDice(skill)\" :class=\"die\"></span>\r\n\t\t\t</div>\r\n\t\t</td>\r\n\t</tr>\r\n</table>";
 			case "components/rssw/character/skills.html": return "<div class=\"rs-component rssw component-character-skills flow-v\" :class=\"{'no-names':state.hideNames}\">\r\n\t<div class=\"filter flow-v inline\">\r\n\t\t<label v-if=\"!state.hideFilter\">\r\n\t\t\t<span>Filter Skills</span>\r\n\t\t\t<input type=\"text\" v-model=\"state.search\" />\r\n\t\t</label>\r\n\t\t<div class=\"leveling skill\" v-if=\"!state.hideLeveling\">\r\n\t\t\t<label>\r\n\t\t\t\t<span>Level Skill</span>\r\n\t\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Skill ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t\t<option v-for=\"skill in levelSkills\" :value=\"skill.id\">{{skill.name}}</option>\r\n\t\t\t\t</select>\r\n\t\t\t</label>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level up\" v-on:click=\"levelSkill(leveling, 1)\" v-if=\"leveling\" :disabled=\"getXPCost(leveling, 1) > character.xp\">\r\n\t\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t\t</button>\r\n\t\t\t<button class=\"level down\" v-on:click=\"levelSkill(leveling, -1)\" v-if=\"leveling\">\r\n\t\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div class=\"skill-container flow-h\">\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list general flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-tools\"></span>\r\n\t\t\t\t\t<span>General Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"general\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\" v-on:rolltouched=\"skillRollTouched($event)\" v-on:nametouched=\"skillNameTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class=\"skill-container\">\r\n\t\t\t<div class=\"skill-list combat flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-swords\"></span>\r\n\t\t\t\t\t<span>Combat Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"combat\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\" v-on:rolltouched=\"skillRollTouched($event)\" v-on:nametouched=\"skillNameTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list ship flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fad fa-location-arrow\"></span>\r\n\t\t\t\t\t<span>Piloting Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"piloting\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\" v-on:rolltouched=\"skillRollTouched($event)\" v-on:nametouched=\"skillNameTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list knowledge flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-brain\"></span>\r\n\t\t\t\t\t<span>Knowledge Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"knowledge\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\" v-on:rolltouched=\"skillRollTouched($event)\" v-on:nametouched=\"skillNameTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-cogs\"></span>\r\n\t\t\t\t\t<span>Custom Skills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"custom\" :existing=\"customSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\" v-on:rolltouched=\"skillRollTouched($event)\" v-on:nametouched=\"skillNameTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div class=\"skill-list custom flow-v\">\r\n\t\t\t\t<h3 class=\"titling\">\r\n\t\t\t\t\t<span class=\"fas fa-drafting-compass\"></span>\r\n\t\t\t\t\t<span>Subskills</span>\r\n\t\t\t\t</h3>\r\n\t\t\t\t<rssw-skill-section :universe=\"universe\" :character=\"character\" named=\"subskill\" :existing=\"subSkills\" :state=\"state\" :user=\"user\" v-on:touched=\"skillTouched($event)\" v-on:rolltouched=\"skillRollTouched($event)\" v-on:nametouched=\"skillNameTouched($event)\"></rssw-skill-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/character/stats.html": return "<div class=\"rs-component rssw component-character-stats\">\r\n\t<div class=\"stats\">\r\n\t\t<div class=\"stat\" v-for=\"stat in characterStats\" :key=\"stat\" v-on:click=\"skillTouched(stat)\">\r\n\t\t\t<div class=\"bubble\">\r\n\t\t\t\t<div class=\"value\">\r\n\t\t\t\t\t{{character[stat]}}\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"label\">\r\n\t\t\t\t{{entityStats[stat].name}}\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"leveling stat\">\r\n\t\t<label>\r\n\t\t\t<span>Level Stat</span>\r\n\t\t\t<select v-model=\"leveling\">\r\n\t\t\t\t\t<option value=\"\">{{leveling === \"\"?\"[ Select a Stat ]\":\"Clear\"}}</option>\r\n\t\t\t\t\t<option value=\"_\" disabled>----------</option>\r\n\t\t\t\t<option v-for=\"stat in characterStats\" :value=\"stat\">{{entityStats[stat].name}}</option>\r\n\t\t\t</select>\r\n\t\t</label>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"viewSkill(leveling)\">\r\n\t\t\t<span class=\"fas fa-info-circle rs-light-blue\"></span>\r\n\t\t</button>\r\n\t\t<button v-if=\"leveling\" v-on:click=\"leveling = ''\">\r\n\t\t\t<span class=\"fas fa-ban rs-light-red\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"level up\" v-on:click=\"levelStat(leveling, 1)\" v-if=\"leveling\" :disabled=\"noIncrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-plus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, 1)}}</span>\r\n\t\t</button>\r\n\t\t<button class=\"level down\" v-on:click=\"levelStat(leveling, -1)\" v-if=\"leveling\" :disabled=\"canDecrease(leveling)\">\r\n\t\t\t<span class=\"fas fa-minus-square\"></span>\r\n\t\t\t<span>XP: {{getXPCost(leveling, -1)}}</span>\r\n\t\t</button>\r\n\t</div>\r\n</div>\r\n";
-			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\n\n\t<div class=\"report\" v-if=\"equipped.length\">\n\t\t<h3>Equipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"rollDice(item)\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :universe=\"universe\" :entity=\"entity\" :skill=\"item.skill_check\" />\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :roll=\"getRangeBandDifficultyRoll(item, band)\" :universe=\"universe\" :entity=\"entity\" />\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"report\" v-if=\"items.length\">\n\t\t<h3>Unequipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :universe=\"universe\" :entity=\"entity\" :skill=\"item.skill_check\" />\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :roll=\"getRangeBandDifficultyRoll(item, band)\" :universe=\"universe\" :entity=\"entity\" />\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
+			case "components/rssw/character/weapons.html": return "<div class=\"rs-component rssw component-entity-weapons\">\n\n\t<div class=\"report\" v-if=\"equipped.length\">\n\t\t<h3>Equipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in equipped\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"getItemIcon(item)\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"rollDice(item)\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :universe=\"universe\" :entity=\"entity\" :skill=\"item.skill_check\" />\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :roll=\"getRangeBandDifficultyRoll(item, band)\" :universe=\"universe\" :entity=\"entity\" />\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"report\" v-if=\"items.length\">\n\t\t<h3>Unequipped Weapons</h3>\n\t\t<div class=\"weapon-report flex h\" v-for=\"item in items\">\n\t\t\t<div class=\"icon flex v element center centered middled\" v-on:click=\"showInfo(item)\">\n\t\t\t\t<span :class=\"item.icon\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"pool band flex v element\" v-on:click=\"showInfo('knowledge:skillchecks:dice')\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"fas fa-dice\"></span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :universe=\"universe\" :entity=\"entity\" :skill=\"item.skill_check\" />\n\t\t\t</div>\n\t\t\t<div class=\"damage band flex v element\">\n\t\t\t\t<div class=\"name align-center\">\n\t\t\t\t\t<span class=\"ra ra-explosion\"></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"roll align-center\">\n\t\t\t\t\t{{getWeaponDamage(item)}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"range band flex v element\" v-for=\"(band, index) in rangeBands\" v-if=\"(index === 0 || isRanged[item.id]) && index < item.range\" v-on:click=\"showInfo('knowledge:combat:rangebands:' + band)\">\n\t\t\t\t<div class=\"name\">\n\t\t\t\t\t<span>{{band.substring(0,2).capitalize()}}</span>\n\t\t\t\t</div>\n\t\t\t\t<rssw-dice-view class=\"roll\" :roll=\"getRangeBandDifficultyRoll(item, band)\" :universe=\"universe\" :entity=\"entity\" />\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
 			case "components/rssw/dice.html": return "<div class=\"rs-component rssw dice-bin\">\r\n\r\n\t<div class=\"expression\">\r\n\t\t<span>Roll:</span>\r\n\t\t<input type=\"text\" class=\"lined\" v-model=\"state.expression\" v-on:keyup.enter=\"roll(state.expression)\" v-on:keyup.esc=\"clear()\"/>\r\n\t\t<button class=\"lined roll\" v-on:click=\"roll(state.expression)\">\r\n\t\t\t<span class=\"fas fa-dice\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined info\" v-on:click=\"info()\">\r\n\t\t\t<span class=\"fas fa-info-circle\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined labels\" v-on:click=\"toggleLabels()\">\r\n\t\t\t<span class=\"far\" :class=\"state.hideLabels?'fa-align-slash':'fa-align-justify'\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined labels\" v-on:click=\"toggleExpressions()\">\r\n\t\t\t<span class=\"far\" :class=\"state.hideExpressions?'fa-sigma':'fa-function'\"></span>\r\n\t\t</button>\r\n\t\t<button class=\"lined ending clear\" v-on:click=\"clear()\">\r\n\t\t\t<span class=\"fas fa-ban\"></span>\r\n\t\t</button>\r\n\t</div>\r\n\r\n\t<div class=\"history\">\r\n\t\t<div class=\"rolled\" v-for=\"(roll,$index) in state.history\" v-if=\"roll\" v-on:click.stop=\"dismiss($index)\">\r\n\t\t\t<div class=\"roll-property\" v-if=\"roll.sum\">\r\n\t\t\t\t<span class=\"value\">{{roll.sum}}</span>\r\n\t\t\t\t<span class=\"info\">=</span>\r\n\t\t\t\t<span class=\"label\" v-if=\"!state.hideLabels\">Rolled</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"roll-property\" :class=\"rprop.property\" v-for=\"rprop in rollProperties\" v-if=\"roll[rprop.property] !== undefined\">\r\n\t\t\t\t<span class=\"value\">{{roll[rprop.property]}}</span>\r\n\t\t\t\t<span class=\"info\" :class=\"rprop.icon\"></span>\r\n\t\t\t\t<span class=\"label\" v-if=\"!state.hideLabels\">{{rprop.label}}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"original\" v-if=\"!state.hideExpressions\">\r\n\t\t\t\t({{roll._expression}})\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
 			case "components/rssw/diceview.html": return "<div class=\"rssw-dice-view flex h\" v-on:click=\"sendToDiceBin()\">\r\n\t<div class=\"rssw-dice\" v-for=\"die in dice\" :class=\"die\"></div>\r\n</div>";
 			case "components/rssw/entity/equipped.html": return "<div class=\"rs-component rssw component-entity-equipment\" :class=\"getModeClassing()\">\r\n\t<div v-if=\"mode === 'short'\" class=\"slots flex h centered\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<h3>Equipment</h3>\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex v\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t<div v-if=\"mode === 'long'\" class=\"slots flex v\">\r\n\t\t<div v-if=\"slotKeys.length === 0\">\r\n\t\t\t<span>No Slots</span>\r\n\t\t</div>\r\n\t\t<div class=\"slot flex h\" v-for=\"slot in slotKeys\">\r\n\t\t\t<button class=\"icon rs-white\" v-on:click=\"showInfo(slots[slot], entity)\">\r\n\t\t\t\t<span :class=\"slots[slot]?slots[slot].icon || 'far fa-square':'far fa-square'\"></span>\r\n\t\t\t</button>\r\n\t\t\t\r\n\t\t\t<button class=\"icon\" :class=\"getSlotClass(slots[slot], equipment, index)\" v-if=\"slotMapping[slot]\" v-for=\"(equipment, index) in slotMapping[slot]\" v-on:click=\"showInfo(equipment, entity, slots[slot])\">\r\n\t\t\t\t<span :class=\"equipment?equipment.icon || 'fab fa-xbox':'fab fa-xbox'\"></span>\r\n\t\t\t</button>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n";
@@ -57518,25 +57518,37 @@ class RSObject extends EventEmitter {
 //							hold = this.equipped[keys[x]][buffer[y]]; // Things equipped to this slot. Always array.
 							for(z=0; z<hold.length; z++) {
 								// If you have it (Item/Room) or it is inside you (Entity)
-								if(((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id))
-										// And you have slots for it
-										&& this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
-									if(debug || this.debug || this.universe.debug) {
-										console.log(" > Record is slot valid: " + hold[z]);
-									}
-									switch(keys[x]) {
-										case "item":
-										case "room":
-											base._overrides[keys[x]].push(hold[z]);
-											break;
+								if((this[keys[x]] && this[keys[x]].indexOf(hold[z]) !== -1) || (this.universe.indexes[keys[x]] && this.universe.indexes[keys[x]][hold[z]] && this.universe.indexes[keys[x]][hold[z]].inside === this.id)) {
+									// And you have slots for it
+									if(this.consumeSlotsFor(this.universe.index.lookup[hold[z]], buffer[y], tracking)) {
+										if(debug || this.debug || this.universe.debug) {
+											console.log(" > Record is slot valid: " + hold[z]);
+										}
+										switch(keys[x]) {
+											case "item":
+											case "room":
+												base._overrides[keys[x]].push(hold[z]);
+												break;
+										}
+									} else {
+										if(debug || this.debug || this.universe.debug) {
+											console.log(" > Record is not slot valid: " + hold[z]);
+										}
+										this._relatedErrors[hold[z]] = {
+											"type": "error",
+											"message": "Not enough slots left",
+											"calculated": Date.now(),
+											"contents": hold[z],
+											"slot": buffer[y]
+										};
 									}
 								} else {
 									if(debug || this.debug || this.universe.debug) {
-										console.log(" > Record is not slot valid: " + hold[z]);
+										console.log(" > Record is not held valid: " + hold[z]);
 									}
 									this._relatedErrors[hold[z]] = {
 										"type": "error",
-										"message": "Not enough slots left",
+										"message": "Item no longer in possession",
 										"calculated": Date.now(),
 										"contents": hold[z],
 										"slot": buffer[y]
@@ -63200,7 +63212,7 @@ rsSystem.component("rsCount", {
 				return "meets-requirements";
 			},
 			"canForgetAbility": function() {
-				return this.hasLearnedAbility(); // Dependency requirements in classByRequirements
+				return !this.record.locked_ability && this.hasLearnedAbility(); // Dependency requirements in classByRequirements
 			},
 			"hasMapped": function(reference, needs, type) {
 				var meets = 0,
@@ -63224,48 +63236,48 @@ rsSystem.component("rsCount", {
 				return false;
 			},
 			"canLearnAbility": function() {
-				return this.base && this.player && (this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
+				return !this.record.locked_ability && this.base && this.player && (this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
 						this.record._type === "ability" && !this.hasLearnedAbility() && this.hasLearnDependencies();
 			},
 			"hasLearnedAbility": function() {
 				return this.record && this.base && this.base.ability && this.base.ability.indexOf(this.record.id) !== -1;
 			},
 			"learnAbility": function() {
-				// TODO:
-				console.log("Learn: ", this.record.id);
-				var cost = parseInt(this.record.xp_cost) || 0,
-					abilities,
-					index;
-				
-				if(this.base && this.classByXP(cost) === "meets-requirements") {
-					abilities = this.base.ability || [];
-					index = abilities.indexOf(this.record.id);
-					if(index === -1) {
-						index = parseInt(this.base.xp - cost);
-						this.base.commit({
-							"ability": abilities.concat(this.record.id),
-							"xp": index
-						});
+				if(!this.record.locked_ability) {
+					var cost = parseInt(this.record.xp_cost) || 0,
+						abilities,
+						index;
+					
+					if(this.base && this.classByXP(cost) === "meets-requirements") {
+						abilities = this.base.ability || [];
+						index = abilities.indexOf(this.record.id);
+						if(index === -1) {
+							index = parseInt(this.base.xp - cost);
+							this.base.commit({
+								"ability": abilities.concat(this.record.id),
+								"xp": index
+							});
+						}
 					}
 				}
 			},
 			"forgetAbility": function() {
-				// TODO:
-				console.log("Forget: ", this.record.id);
-				var cost = parseInt(this.record.xp_cost) || 0,
-					abilities,
-					index;
-				
-				if(this.base && this.classByRequirements() === "meets-requirements") {
-					abilities = this.base.ability || [];
-					index = abilities.indexOf(this.record.id);
-					if(index !== -1) {
-						abilities.splice(index, 1);
-						index = parseInt(this.base.xp + cost);
-						this.base.commit({
-							"ability": abilities,
-							"xp": index
-						});
+				if(!this.record.locked_ability) {
+					var cost = parseInt(this.record.xp_cost) || 0,
+						abilities,
+						index;
+					
+					if(this.base && this.classByRequirements() === "meets-requirements") {
+						abilities = this.base.ability || [];
+						index = abilities.indexOf(this.record.id);
+						if(index !== -1) {
+							abilities.splice(index, 1);
+							index = parseInt(this.base.xp + cost);
+							this.base.commit({
+								"ability": abilities,
+								"xp": index
+							});
+						}
 					}
 				}
 			},
@@ -63636,6 +63648,9 @@ rsSystem.component("rsCount", {
 				
 				this.keys.splice(0);
 				this.keys.push.apply(this.keys, Object.keys(this.record));
+				if(this.record.name && this.record.label && this.record.name === this.record.label) {
+					this.keys.splice(this.keys.indexOf("label"), 1);
+				}
 				
 				this.partiesPresent.splice(0);
 				map = {};
@@ -64379,6 +64394,10 @@ rsSystem.component("rsCount", {
 			"passive",
 			"active"
 		]
+	}, {
+		"label": "Locked",
+		"property": "locked_ability",
+		"type": "checkbox"
 	}, {
 		"label": "Hidden",
 		"property": "hidden",
@@ -67249,18 +67268,17 @@ rsSystem.component("rsCount", {
 		"property": "strain_max",
 		"type": "text"
 	}, {
-		"label": "Range",
-		"property": "range",
-		"type": "text"
-	}, {
 		"label": "Damage",
 		"property": "damage",
+		"type": "text"
+	}, {
+		"label": "Crit. Bonus",
+		"property": "critical_damage_bonus",
 		"type": "text"
 	}, {
 		"label": "Pierce",
 		"property": "pierce_damage",
 		"type": "text"
-			
 	}, {
 		"label": "General Defense",
 		"property": "defense_general",
@@ -70102,6 +70120,13 @@ rsSystem.component("rsswCharacterStats", {
 			"getRangeBandDifficulty": function(item, band) {
 				return this.renderRoll(this.getRangeBandDifficultyRoll(item, band));
 			},
+			"getItemIcon": function(item) {
+				var icon = item.icon;
+				if(this.entity._relatedErrors[item.id]) {
+					icon += " rs-light-red";
+				}
+				return icon;
+			},
 			"update": function() {
 				var mapped = {},
 					buffer,
@@ -72714,7 +72739,10 @@ rsSystem.component("rsWidgetConfigure", {
 		"data": function() {
 			var data = {};
 			
-			data.storageID = storageKey + (this.contents.sid || this.contents.id || this.contents._sourced); 
+			data.storageID = storageKey + (this.contents.sid || this.contents.id || this.contents._sourced);
+			if(this.entity) {
+				data.storageID += this.entity.id;
+			}
 			data.state = this.loadStorage(data.storageID, {
 				"closed": false
 			});

@@ -35,7 +35,10 @@
 		"data": function() {
 			var data = {};
 			
-			data.storageID = storageKey + (this.contents.sid || this.contents.id || this.contents._sourced); 
+			data.storageID = storageKey + (this.contents.sid || this.contents.id || this.contents._sourced);
+			if(this.entity) {
+				data.storageID += this.entity.id;
+			}
 			data.state = this.loadStorage(data.storageID, {
 				"closed": false
 			});

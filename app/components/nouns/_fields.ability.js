@@ -120,6 +120,10 @@
 			"active"
 		]
 	}, {
+		"label": "Locked",
+		"property": "locked_ability",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"

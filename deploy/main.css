@@ -1760,6 +1760,10 @@ form {
 .rs-component.component-nouns .advanced-editor textarea.overlay {
   color: rgba(0, 0, 0, 0.4);
 }
+.rs-component.component-nouns .rs-field .multireference {
+  max-height: 300px;
+  overflow: auto;
+}
 .rs-component.rssw.component-character-info .property {
   margin: 3px;
 }
