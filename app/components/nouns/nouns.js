@@ -144,9 +144,10 @@
 						value.id = copy.id + ":" + Date.now();
 						value.name = "";
 						if(copy.randomize_name) {
-							if(copy.dataset && (buffer = this.universe.indexes.dataset.index[copy.dataset])) {
+							if(copy.randomize_name_dataset && (buffer = this.universe.indexes.dataset.index[copy.randomize_name_dataset])) {
 								buffer = new NameGenerator(buffer.set);
 							} else if(copy.race) {
+								console.log("Copying by Race");
 								buffer = this.getGenerator(copy.race);
 							}
 							if(copy.randomize_name_prefix) {
@@ -155,7 +156,10 @@
 							if(buffer) {
 								value.name += buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
 								for(x=1; x<copy.randomize_name; x++) {
-									value.name += " " + buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
+									if(copy.randomize_name_spacing) {
+										value.name += " ";
+									}
+									value.name += buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
 								}
 							}
 							if(copy.randomize_name_suffix) {

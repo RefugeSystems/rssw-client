@@ -57654,6 +57654,10 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
+		
+		if(this.name && !this.label) {
+			this.label = this.name;
+		}
 
 		// TODO: Listen for changes on references
 		
@@ -62782,12 +62786,17 @@ rsSystem.component("rsCount", {
 	invisibleKeys.enhancementKey= true;
 	invisibleKeys.propertyKey = true;
 	invisibleKeys.bonusKey= true;
+
+	invisibleKeys.randomize_name_spacing = true;
+	invisibleKeys.randomize_name_dataset = true;
+	invisibleKeys.randomize_name_prefix = true;
+	invisibleKeys.randomize_name_suffix = true;
+	invisibleKeys.randomize_name = true;
 	
 	invisibleKeys.information_renderer = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.locked_attunement = true;
 	invisibleKeys.source_template = true;
-	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true; 
 	invisibleKeys.no_modifiers = true;
@@ -65248,6 +65257,10 @@ rsSystem.component("rsCount", {
 			"template": true
 		},
 		"options": [0,1,2,3,4,5,6]
+	}, {
+		"label": "Name Spacing",
+		"property": "randomize_name_spacing",
+		"type": "checkbox"
 	}, {
 		"label": "Hidden",
 		"property": "hidden",
@@ -67742,9 +67755,10 @@ class FieldDescriptor {
 						value.id = copy.id + ":" + Date.now();
 						value.name = "";
 						if(copy.randomize_name) {
-							if(copy.dataset && (buffer = this.universe.indexes.dataset.index[copy.dataset])) {
+							if(copy.randomize_name_dataset && (buffer = this.universe.indexes.dataset.index[copy.randomize_name_dataset])) {
 								buffer = new NameGenerator(buffer.set);
 							} else if(copy.race) {
+								console.log("Copying by Race");
 								buffer = this.getGenerator(copy.race);
 							}
 							if(copy.randomize_name_prefix) {
@@ -67753,7 +67767,10 @@ class FieldDescriptor {
 							if(buffer) {
 								value.name += buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
 								for(x=1; x<copy.randomize_name; x++) {
-									value.name += " " + buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
+									if(copy.randomize_name_spacing) {
+										value.name += " ";
+									}
+									value.name += buffer.corpus[Random.integer(buffer.corpus.length)].capitalize();
 								}
 							}
 							if(copy.randomize_name_suffix) {

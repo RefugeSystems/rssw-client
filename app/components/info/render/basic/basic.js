@@ -15,12 +15,17 @@
 	invisibleKeys.enhancementKey= true;
 	invisibleKeys.propertyKey = true;
 	invisibleKeys.bonusKey= true;
+
+	invisibleKeys.randomize_name_spacing = true;
+	invisibleKeys.randomize_name_dataset = true;
+	invisibleKeys.randomize_name_prefix = true;
+	invisibleKeys.randomize_name_suffix = true;
+	invisibleKeys.randomize_name = true;
 	
 	invisibleKeys.information_renderer = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.locked_attunement = true;
 	invisibleKeys.source_template = true;
-	invisibleKeys.randomize_name = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true; 
 	invisibleKeys.no_modifiers = true;

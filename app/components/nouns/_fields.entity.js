@@ -389,6 +389,10 @@
 		},
 		"options": [0,1,2,3,4,5,6]
 	}, {
+		"label": "Name Spacing",
+		"property": "randomize_name_spacing",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
