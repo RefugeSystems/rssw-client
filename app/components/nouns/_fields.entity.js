@@ -11,6 +11,7 @@
 		profiles,
 		datasets,
 		widgets,
+		effects,
 		entity,
 		images,
 		owners,
@@ -123,6 +124,14 @@
 		"condition": {
 			"classification": "character"
 		}
+	};
+	
+	effects = {
+		"label": "Effects",
+		"property": "effect",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	widgets = {
@@ -487,6 +496,7 @@
 	},
 	attrs,
 	stats,
+	effects,
 	knowledges,
 	archetypes,
 	abilities,
@@ -556,6 +566,7 @@
 			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			abilities.source_index = this.universe.indexes.ability;
+			effects.source_index = this.universe.indexes.effect;
 			widgets.source_index = this.universe.indexes.widget;
 			owners.source_index = this.universe.indexes.player;
 			notes.source_index = this.universe.indexes.note;

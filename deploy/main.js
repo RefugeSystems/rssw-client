@@ -57638,6 +57638,10 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
+		
+		if(base.name && !base.label) {
+			base.label = base.name;
+		}
 
 		if(debug || this.debug || this.universe.debug) {
 			console.log("Core Data: ", _p(this._coreData));
@@ -57653,10 +57657,6 @@ class RSObject extends EventEmitter {
 					console.log("Reference[" + references[x] + "]: ", _p(base));
 				}
 			}
-		}
-		
-		if(this.name && !this.label) {
-			this.label = this.name;
 		}
 
 		// TODO: Listen for changes on references
@@ -63106,18 +63106,25 @@ rsSystem.component("rsCount", {
 		},
 		"methods": {
 			"highlight": function() {
-				var el = $(this.$el).find(".displayed-id");
+				var el = $(this.$el).find(".displayed-id"),
+					text;
 				if(el[0]) {
 					el[0].select();
 					document.execCommand("copy");
 					el.css({"background-color": "#63b35d"});
 					if (window.getSelection) {
-						this.$emit("copying", window.getSelection().toString());
+						text = window.getSelection().toString();
 						window.getSelection().removeAllRanges();
 					} else if (document.selection) {
-						this.$emit("copying", document.selection.toString());
+						text = document.selection.toString();
 						document.selection.empty();
 					}
+					
+					if(text) {
+						rsSystem.EventBus.$emit("copied-id", text);
+						this.$emit("copying", text);
+					}
+					
 					setTimeout(function() {
 						el.css({"background-color": "transparent"});
 					}, 5000);
@@ -64880,6 +64887,7 @@ rsSystem.component("rsCount", {
 		profiles,
 		datasets,
 		widgets,
+		effects,
 		entity,
 		images,
 		owners,
@@ -64992,6 +65000,14 @@ rsSystem.component("rsCount", {
 		"condition": {
 			"classification": "character"
 		}
+	};
+	
+	effects = {
+		"label": "Effects",
+		"property": "effect",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	widgets = {
@@ -65356,6 +65372,7 @@ rsSystem.component("rsCount", {
 	},
 	attrs,
 	stats,
+	effects,
 	knowledges,
 	archetypes,
 	abilities,
@@ -65425,6 +65442,7 @@ rsSystem.component("rsCount", {
 			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			abilities.source_index = this.universe.indexes.ability;
+			effects.source_index = this.universe.indexes.effect;
 			widgets.source_index = this.universe.indexes.widget;
 			owners.source_index = this.universe.indexes.player;
 			notes.source_index = this.universe.indexes.note;
@@ -71971,12 +71989,16 @@ rsSystem.component("rsswCharacterStats", {
 		"mounted": function() {
 			Vue.set(this, "element", $(this.$el));
 			rsSystem.register(this);
+			rsSystem.EventBus.$on("copied-id", this.setMenuID);
 			this.universe.$on("universe:modified", this.update);
 			this.universe.$on("model:modified", this.update);
 			this.location.$on("modified", this.update);
 			this.update();
 		},
 		"methods": {
+			"setMenuID": function(id) {
+				Vue.set(this.state, "alter", id);
+			},
 			"searchMap": function() {
 				console.log("Search Map: ", this.search_criteria);
 				var set = false,
@@ -72607,6 +72629,7 @@ rsSystem.component("rsswCharacterStats", {
 			}
 		},
 		"beforeDestroy": function() {
+			rsSystem.EventBus.$off("copied-id", this.setMenuID);
 			this.universe.$off("universe:modified", this.update);
 			this.universe.$off("model:modified", this.update);
 			this.location.$off("modified", this.update);

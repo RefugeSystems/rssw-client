@@ -512,6 +512,10 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
+		
+		if(base.name && !base.label) {
+			base.label = base.name;
+		}
 
 		if(debug || this.debug || this.universe.debug) {
 			console.log("Core Data: ", _p(this._coreData));
@@ -527,10 +531,6 @@ class RSObject extends EventEmitter {
 					console.log("Reference[" + references[x] + "]: ", _p(base));
 				}
 			}
-		}
-		
-		if(this.name && !this.label) {
-			this.label = this.name;
 		}
 
 		// TODO: Listen for changes on references

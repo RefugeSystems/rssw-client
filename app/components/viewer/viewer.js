@@ -160,12 +160,16 @@
 		"mounted": function() {
 			Vue.set(this, "element", $(this.$el));
 			rsSystem.register(this);
+			rsSystem.EventBus.$on("copied-id", this.setMenuID);
 			this.universe.$on("universe:modified", this.update);
 			this.universe.$on("model:modified", this.update);
 			this.location.$on("modified", this.update);
 			this.update();
 		},
 		"methods": {
+			"setMenuID": function(id) {
+				Vue.set(this.state, "alter", id);
+			},
 			"searchMap": function() {
 				console.log("Search Map: ", this.search_criteria);
 				var set = false,
@@ -796,6 +800,7 @@
 			}
 		},
 		"beforeDestroy": function() {
+			rsSystem.EventBus.$off("copied-id", this.setMenuID);
 			this.universe.$off("universe:modified", this.update);
 			this.universe.$off("model:modified", this.update);
 			this.location.$off("modified", this.update);

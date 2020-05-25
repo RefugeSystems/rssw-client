@@ -335,18 +335,25 @@
 		},
 		"methods": {
 			"highlight": function() {
-				var el = $(this.$el).find(".displayed-id");
+				var el = $(this.$el).find(".displayed-id"),
+					text;
 				if(el[0]) {
 					el[0].select();
 					document.execCommand("copy");
 					el.css({"background-color": "#63b35d"});
 					if (window.getSelection) {
-						this.$emit("copying", window.getSelection().toString());
+						text = window.getSelection().toString();
 						window.getSelection().removeAllRanges();
 					} else if (document.selection) {
-						this.$emit("copying", document.selection.toString());
+						text = document.selection.toString();
 						document.selection.empty();
 					}
+					
+					if(text) {
+						rsSystem.EventBus.$emit("copied-id", text);
+						this.$emit("copying", text);
+					}
+					
 					setTimeout(function() {
 						el.css({"background-color": "transparent"});
 					}, 5000);
