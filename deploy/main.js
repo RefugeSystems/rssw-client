@@ -65724,6 +65724,10 @@ rsSystem.component("rsCount", {
 		"property": "damage",
 		"type": "text"
 	}, {
+		"label": "Cumberance",
+		"property": "cumberance",
+		"type": "number"
+	}, {
 		"label": "Encumberance",
 		"property": "encumberance",
 		"type": "number"
@@ -67462,6 +67466,10 @@ rsSystem.component("rsCount", {
 	}, {
 		"label": "Mass",
 		"property": "mass",
+		"type": "text"
+	}, {
+		"label": "Cumberance",
+		"property": "cumberance",
 		"type": "text"
 	}, {
 		"label": "Encumberance",

@@ -126,6 +126,10 @@
 		"property": "damage",
 		"type": "text"
 	}, {
+		"label": "Cumberance",
+		"property": "cumberance",
+		"type": "number"
+	}, {
 		"label": "Encumberance",
 		"property": "encumberance",
 		"type": "number"
