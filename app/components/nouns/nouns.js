@@ -9,7 +9,9 @@
 (function() {
 	var storageKey = "_rs_nounComponentKey";
 	
-	var spacing = /[ _\.-]/g;
+	var spacing = /[ _-]/g;
+
+	var toColon = /[^a-zA-Z0-9]+/g;
 	
 	var byName = function(a, b) {
 		a = (a.name || "").toLowerCase();
@@ -371,7 +373,7 @@
 					buffer,
 					root;
 				
-				root = this.state.current + ":" + model.name.toLowerCase().replace(spacing, "");
+				root = this.state.current + ":" + model.name.toLowerCase().replace(spacing, "").replace(toColon, ":");
 				switch(this.state.current) {
 					case "ability":
 						if(model.archetypes && model.archetypes.length) {
