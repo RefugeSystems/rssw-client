@@ -284,6 +284,10 @@
 		"property": "credits",
 		"type": "number"
 	}, {
+		"label": "Cost",
+		"property": "cost",
+		"type": "number"
+	}, {
 		"label": "Silhouette",
 		"property": "silhouette",
 		"type": "select",

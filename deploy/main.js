@@ -65295,6 +65295,10 @@ rsSystem.component("rsCount", {
 		"property": "credits",
 		"type": "number"
 	}, {
+		"label": "Cost",
+		"property": "cost",
+		"type": "number"
+	}, {
 		"label": "Silhouette",
 		"property": "silhouette",
 		"type": "select",
@@ -65719,10 +65723,6 @@ rsSystem.component("rsCount", {
 		"label": "Price",
 		"property": "price",
 		"type": "number"
-	}, {
-		"label": "Damage",
-		"property": "damage",
-		"type": "text"
 	}, {
 		"label": "Cumbersome",
 		"property": "Cumbersome",

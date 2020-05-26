@@ -122,10 +122,6 @@
 		"property": "price",
 		"type": "number"
 	}, {
-		"label": "Damage",
-		"property": "damage",
-		"type": "text"
-	}, {
 		"label": "Cumbersome",
 		"property": "Cumbersome",
 		"type": "number"
