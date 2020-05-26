@@ -703,6 +703,7 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
+		/*
 		if(this.universe.index) {
 			for(x=0; x<rsSystem.listingNouns.length; x++) {
 				if(this._coreData[rsSystem.listingNouns[x]]) {
@@ -722,6 +723,35 @@ class RSObject extends EventEmitter {
 						}
 					} else if(this._coreData[rsSystem.listingNouns[x]]) {
 						buffer = this.universe.index.lookup[this._coreData[rsSystem.listingNouns[x]]._sourced || this._coreData[rsSystem.listingNouns[x]]];
+						if(buffer) {
+							buffer.performModifications(base, this.id);
+						} else {
+							console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
+						}
+					}
+				}
+			}
+		}
+		*/
+		if(this.universe.index) {
+			for(x=0; x<rsSystem.listingNouns.length; x++) {
+				if(this[rsSystem.listingNouns[x]]) {
+					if(this.debug || this.universe.debug) {
+						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
+					}
+					if(this[rsSystem.listingNouns[x]] instanceof Array) {
+						for(y=0; y<this[rsSystem.listingNouns[x]].length; y++) {
+							if(this[rsSystem.listingNouns[x]][y]) {
+								buffer = this.universe.index.lookup[this[rsSystem.listingNouns[x]][y]._sourced || this[rsSystem.listingNouns[x]][y]];
+								if(buffer) {
+									buffer.performModifications(base, this.id);
+								} else {
+									console.warn("Missing Reference[" + this[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
+								}
+							}
+						}
+					} else if(this[rsSystem.listingNouns[x]]) {
+						buffer = this.universe.index.lookup[this[rsSystem.listingNouns[x]]._sourced || this[rsSystem.listingNouns[x]]];
 						if(buffer) {
 							buffer.performModifications(base, this.id);
 						} else {
