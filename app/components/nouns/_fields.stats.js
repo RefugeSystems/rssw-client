@@ -158,8 +158,8 @@
 		"property": "mass",
 		"type": "text"
 	}, {
-		"label": "Cumberance",
-		"property": "cumberance",
+		"label": "Cumbersome",
+		"property": "cumbersome",
 		"type": "text"
 	}, {
 		"label": "Encumberance",
