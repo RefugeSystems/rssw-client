@@ -22,7 +22,7 @@ self.addEventListener("install", function(event) {
 //				"/projects/rsswx/app/fonts/rpg-awesome.css",
 //				"/projects/rsswx/app/webfonts/all.css",
 //				"/projects/rsswx/app/fonts/rsswx.css",
-//				"/projects/rsswx/app/external.js",
+//				"/projects/rsswx/app/externals.js",
 //				"/projects/rsswx/app/main.js"
 				"./",
 				"./index.html",
@@ -32,7 +32,7 @@ self.addEventListener("install", function(event) {
 				"./fonts/rpg-awesome.css",
 				"./webfonts/all.css",
 				"./fonts/rsswx.css",
-				"./external.js",
+				"./externals.js",
 				"./main.js"
 			])
 			.then(function() {
