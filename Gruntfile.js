@@ -278,7 +278,7 @@ var config = {
 				"reserved": ["rsSystem"]
 			},
 			"files": {
-				"deploy/app.js": [
+				"deploy/main.js": [
 					"node_modules/hammerjs/hammer.js",
 					"node_modules/showdown/dist/showdown.min.js",
 					"node_modules/vue/dist/vue.js",
