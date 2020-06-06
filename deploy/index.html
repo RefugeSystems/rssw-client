@@ -57,7 +57,7 @@
 		<script type="text/javascript">
 			if(navigator.serviceWorker) {
 				navigator.serviceWorker.register("./worker.js", {
-					scope: "/"
+					scope: "/projects/rsswx/app/"
 				}).then(function(registration) {
 					console.log("Service Worker Registered: ", registration);
 				}).catch(function(error) {

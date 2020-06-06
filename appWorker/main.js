@@ -14,16 +14,26 @@ self.addEventListener("install", function(event) {
 	var result = caches.open(cacheID)
 		.then(function(cache) {
 			return cache.addAll([
-				"/projects/rsswx/app/",
-				"/projects/rsswx/app/index.html",
-				"/projects/rsswx/app/main.css",
-				"/projects/rsswx/app/fonts/starwars-glyphicons.css",
-				"/projects/rsswx/app/fonts/xwing-miniatures.css",
-				"/projects/rsswx/app/fonts/rpg-awesome.css",
-				"/projects/rsswx/app/webfonts/all.css",
-				"/projects/rsswx/app/fonts/rsswx.css",
-				"/projects/rsswx/app/external.js",
-				"/projects/rsswx/app/main.js"
+//				"/projects/rsswx/app/",
+//				"/projects/rsswx/app/index.html",
+//				"/projects/rsswx/app/main.css",
+//				"/projects/rsswx/app/fonts/starwars-glyphicons.css",
+//				"/projects/rsswx/app/fonts/xwing-miniatures.css",
+//				"/projects/rsswx/app/fonts/rpg-awesome.css",
+//				"/projects/rsswx/app/webfonts/all.css",
+//				"/projects/rsswx/app/fonts/rsswx.css",
+//				"/projects/rsswx/app/external.js",
+//				"/projects/rsswx/app/main.js"
+				"./",
+				"./index.html",
+				"./main.css",
+				"./fonts/starwars-glyphicons.css",
+				"./fonts/xwing-miniatures.css",
+				"./fonts/rpg-awesome.css",
+				"./webfonts/all.css",
+				"./fonts/rsswx.css",
+				"./external.js",
+				"./main.js"
 			])
 			.then(function() {
 				self.skipWaiting();
