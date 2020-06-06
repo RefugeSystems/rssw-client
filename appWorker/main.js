@@ -14,16 +14,16 @@ self.addEventListener("install", function(event) {
 	var result = caches.open(cacheID)
 		.then(function(cache) {
 			return cache.addAll([
-				"/",
-				"/index.html",
-				"/main.css",
-				"/fonts/starwars-glyphicons.css",
-				"/fonts/xwing-miniatures.css",
-				"/fonts/rpg-awesome.css",
-				"/webfonts/all.css",
-				"/fonts/rsswx.css",
-				"/external.js",
-				"/main.js"
+				"./",
+				"./index.html",
+				"./main.css",
+				"./fonts/starwars-glyphicons.css",
+				"./fonts/xwing-miniatures.css",
+				"./fonts/rpg-awesome.css",
+				"./webfonts/all.css",
+				"./fonts/rsswx.css",
+				"./external.js",
+				"./main.js"
 			])
 			.then(function() {
 				self.skipWaiting();
