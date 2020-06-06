@@ -1,2 +1,62 @@
-var version="0.0.1",cacheID="rsswx_"+version,cacheOptions={ignoreSearch:!0};self.addEventListener("install",function(n){var e=caches.open(cacheID).then(function(n){return n.addAll(["/","/index.html","/main.css","/fonts/starwars-glyphicons.css","/fonts/xwing-miniatures.css","/fonts/rpg-awesome.css","/webfonts/all.css","/fonts/rsswx.css","/external.js","/main.js"]).then(function(){self.skipWaiting()}).catch(function(n){console.error("Install Fault: ",n)})});n.waitUntil(e)}),self.addEventListener("fetch",function(n){var e=caches.open(cacheID).then(function(e){return e.match(n.request,cacheOptions)}).then(function(e){return e||fetch(n.request)}).catch(function(n){console.error("Fetch Fault: ",n)});n.respondWith(e)});
-//# sourceMappingURL=worker.js.map
+/**
+ * 
+ * @class RSSWXServiceWorker
+ * @constructor
+ * @see https://github.com/GoogleChromeLabs/airhorn/blob/master/app/sw.js
+ */
+var version = "0.0.1",
+	cacheID = "rsswx_" + version,
+	cacheOptions = {
+		"ignoreSearch": true
+	};
+
+self.addEventListener("install", function(event) {
+	var result = caches.open(cacheID)
+		.then(function(cache) {
+			return cache.addAll([
+//				"/projects/rsswx/app/",
+//				"/projects/rsswx/app/index.html",
+//				"/projects/rsswx/app/main.css",
+//				"/projects/rsswx/app/fonts/starwars-glyphicons.css",
+//				"/projects/rsswx/app/fonts/xwing-miniatures.css",
+//				"/projects/rsswx/app/fonts/rpg-awesome.css",
+//				"/projects/rsswx/app/webfonts/all.css",
+//				"/projects/rsswx/app/fonts/rsswx.css",
+//				"/projects/rsswx/app/externals.js",
+//				"/projects/rsswx/app/main.js"
+				"./",
+				"./index.html",
+				"./main.css",
+				"./fonts/starwars-glyphicons.css",
+				"./fonts/xwing-miniatures.css",
+				"./fonts/rpg-awesome.css",
+				"./webfonts/all.css",
+				"./fonts/rsswx.css",
+				"./externals.js",
+				"./main.js"
+			])
+			.then(function() {
+				self.skipWaiting();
+			})
+			.catch(function(error) {
+				console.error("Install Fault: ", error);
+			});
+		});
+	
+	event.waitUntil(result);
+});
+
+self.addEventListener("fetch", function(event) {
+	var result = caches.open(cacheID)
+		.then(function(cached) {
+			return cached.match(event.request, cacheOptions)
+		})
+		.then(function(response) {
+			return response || fetch(event.request);
+		})
+		.catch(function(error) {
+			console.error("Fetch Fault: ", error);
+		});
+	
+	event.respondWith(result);
+});

@@ -1163,6 +1163,19 @@ form {
   border-radius: 6px;
   padding: 8px;
 }
+.rs-component.connect-component input {
+  min-width: 200px;
+  padding: 5px;
+  font-size: 17px;
+}
+.rs-component.connect-component button {
+  padding: 3px 8px;
+  font-size: 17px;
+  border-radius: 7px;
+}
+.rs-component.connect-component button span {
+  font-size: inherit;
+}
 .system-component.component-count {
   display: inline-flex;
   flex-direction: row;

@@ -189,7 +189,7 @@ var config = {
 				"app/**/*.js",
 				"spec/**/*.js"
 			],
-			"tasks": ["build"]
+			"tasks": ["development"]
 		},
 		"docs": {
 			"files": [
@@ -402,5 +402,6 @@ module.exports = function (grunt) {
 	grunt.initConfig(config);
 
 	grunt.registerTask("build", ["eslint", "templify:app","uglify:worker","uglify:externals","uglify:app","concat:less","less:app"]);
-	grunt.registerTask("default", ["build","concat:worker","concat:externals","connect:app","open:app", "watch:app"]);
+	grunt.registerTask("development", ["eslint", "templify:app","concat:worker","concat:externals","concat:app","concat:less","less:app"]);
+	grunt.registerTask("default", ["development","concat:worker","concat:externals","connect:app","open:app", "watch:app"]);
 };

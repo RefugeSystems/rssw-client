@@ -4,14 +4,38 @@
 		<span>Login</span>
 	</div>
 	<div class="fields">
-		<label class="full">
-			<span class="field-text">Username</span>
-			<input type="text" v-enter="connect" v-model="store.username" />
-		</label>
-		<label class="full">
-			<span class="field-text">Address</span>
-			<input type="text" v-enter="connect" v-model="store.address" />
-		</label>
+		<table>
+			<tr>
+				<td>
+					<label class="full align-right" for="login-username">
+						<span class="field-text">Username</span>
+					</label>
+				</td>
+				<td>
+					<input id="login-username" type="text" v-enter="connect" v-model="store.username" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="full align-right" for="login-passcode">
+						<span class="field-text">Passcode</span>
+					</label>
+				</td>
+				<td>
+					<input id="login-passcode" type="password" v-enter="connect" v-model="store.passcode" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="full align-right" for="login-address">
+						<span class="field-text">Address</span>
+					</label>
+				</td>
+				<td>
+					<input id="login-address" type="text" v-enter="connect" v-model="store.address" />
+				</td>
+			</tr>
+		</table>
 		<div class="actions">
 			<button class="primary-action" v-on:click="connect()">
 				<span class="action-icon fas fa-sign-in"></span>
@@ -22,5 +46,6 @@
 				<span class="far" :class="store.secure?'fa-check-square':'fa-square'"></span>
 			</button>
 		</div>
+		
 	</div>
 </div>
