@@ -309,7 +309,7 @@ var config = {
 				]
 			}
 		},
-		"external": {
+		"externals": {
 			"files": {
 				"deploy/externals.js": [
 					"external/cytoscape.js",
