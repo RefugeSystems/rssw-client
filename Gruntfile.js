@@ -199,8 +199,31 @@ var config = {
 		}
 	},
 	"concat": {
+		// These files corrupt the sourcemap for main for whatever reason so they handled separately
+		"worker": {
+			"options": {
+				"sourceMap": false
+			},
+			"src": [
+				"appWorker/**/*.js",
+				"appWorker/*.js"
+			],
+			"dest": "deploy/worker.js"
+		},
+		"externals": {
+			"options": {
+				"sourceMap": true
+			},
+			"src": [
+				"external/cytoscape.js",
+				"external/cola.js",
+				"external/cytoscape-cola.js"
+			],
+			"dest": "deploy/externals.js"
+		},
 		"app": {
 			"options": {
+				"footer": "rsSystem.version=\"" + pkg.version + "\"",
 				"sourceMap": true
 			},
 			"src": [
@@ -209,13 +232,6 @@ var config = {
 				"node_modules/vue/dist/vue.js",
 				"node_modules/jquery/dist/jquery.min.js",
 				"node_modules/vue-router/dist/vue-router.js",
-				
-//				"node_modules/cytoscape/dist/cytoscape.min.js",
-//				"node_modules/cytoscape-cola/src/cola.js",
-//				"node_modules/cytoscape-cola/cytoscape-cola.js",
-				"external/cytoscape.js",
-				"external/cola.js",
-				"external/cytoscape-cola.js",
 
 				"transient/templates.js",
 				"app/library/*.js",
@@ -250,6 +266,65 @@ var config = {
 				"app/components/**/*.less"
 			],
 			"dest": "deploy/app.less"
+		}
+	},
+	"uglify": {
+		"options": {
+			"sourceMap": true
+		},
+		"app": {
+			"options": {
+				"footer": "rsSystem.version = \"" + pkg.version + "\"",
+				"reserved": ["rsSystem"]
+			},
+			"files": {
+				"deploy/app.js": [
+					"node_modules/hammerjs/hammer.js",
+					"node_modules/showdown/dist/showdown.min.js",
+					"node_modules/vue/dist/vue.js",
+					"node_modules/jquery/dist/jquery.min.js",
+					"node_modules/vue-router/dist/vue-router.js",
+
+					"transient/templates.js",
+					"app/library/*.js",
+					"app/library/*/**/*.js",
+
+					"app/core/*.js",
+					"app/core/*/**/*.js",
+					
+					"app/common/*.js",
+					"app/common/*/**/*.js",
+					
+					"app/components/*.js",
+					"app/components/*/**/*.js",
+
+					"app/subcomponents/*.js",
+					"app/subcomponents/*/**/*.js",
+
+					"app/pages/*.js",
+					"app/pages/*/**/*.js",
+
+					"app/main/*/**/*.js",
+					"app/main/*.js"
+				]
+			}
+		},
+		"external": {
+			"files": {
+				"deploy/externals.js": [
+					"external/cytoscape.js",
+					"external/cola.js",
+					"external/cytoscape-cola.js"
+				]
+			}
+		},
+		"worker": {
+			"files": {
+				"deploy/worker.js": [
+					"appWorker/**/*.js",
+					"appWorker/*.js"
+				]
+			}
 		}
 	},
 	"less": {
@@ -326,6 +401,6 @@ module.exports = function (grunt) {
 
 	grunt.initConfig(config);
 
-	grunt.registerTask("build", ["eslint", "templify:app","concat:app","concat:less","less:app"]);
-	grunt.registerTask("default", ["build","connect:app","open:app", "watch:app"]);
+	grunt.registerTask("build", ["eslint", "templify:app","uglify:worker","uglify:externals","uglify:app","concat:less","less:app"]);
+	grunt.registerTask("default", ["build","concat:worker","concat:externals","connect:app","open:app", "watch:app"]);
 };

@@ -670,6 +670,13 @@ button.flat {
 #game .maBot10 {
   margin-bottom: 10px;
 }
+html {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 body {
   background-image: linear-gradient(to bottom right, #171717, #171717, #2e2e2e);
   color: #EAEFF9;

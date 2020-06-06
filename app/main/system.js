@@ -4,8 +4,10 @@ var _p = function(x) {
 		return undefined;
 	} else if(x === null) {
 		return null;
-	} else {
+	} else if(typeof(x) === "object") {
 		return JSON.parse(JSON.stringify(x));
+	} else {
+		return x;
 	}
 };
 
