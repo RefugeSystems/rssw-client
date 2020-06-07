@@ -158,3 +158,76 @@ rsSystem.dismissError = function() {
 	anchor.empty();
 };
 
+
+/**
+ * Due to naming difficulty with browsers, this function handles determining
+ * name and version information. This is typically for display purposes as the
+ * user agent string should be used as the browser's ID essentially.
+ * @method getBrowserName
+ * @for rsSystem
+ * @see https://stackoverflow.com/questions/12489546/how-to-get-browsers-name-client-side
+ * @static
+ * @return {Object} With `name` and `version` keys.
+ */
+rsSystem.getBrowserName = function() {
+	var nVer = navigator.appVersion;
+	var nAgt = navigator.userAgent;
+	var browserName  = navigator.appName;
+	var fullVersion  = "" + parseFloat(navigator.appVersion); 
+	var majorVersion = parseInt(navigator.appVersion,10);
+	var nameOffset,verOffset,ix;
+
+	if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
+		// In Opera, the true version is after "Opera" or after "Version"
+		browserName = "Opera";
+		fullVersion = nAgt.substring(verOffset+6);
+		if ((verOffset=nAgt.indexOf("Version"))!=-1) {
+			fullVersion = nAgt.substring(verOffset+8);
+		}
+	} else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+		// In MSIE, the true version is after "MSIE" in userAgent
+		browserName = "Microsoft Internet Explorer";
+		fullVersion = nAgt.substring(verOffset+5);
+	} else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+		// In Chrome, the true version is after "Chrome"
+		browserName = "Chrome";
+		fullVersion = nAgt.substring(verOffset+7);
+	} else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+		// In Safari, the true version is after "Safari" or after "Version"
+		browserName = "Safari";
+		fullVersion = nAgt.substring(verOffset+7);
+		if ((verOffset=nAgt.indexOf("Version"))!=-1) {
+			fullVersion = nAgt.substring(verOffset+8);
+		}
+	} else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+		// In Firefox, the true version is after "Firefox"
+		browserName = "Firefox";
+		fullVersion = nAgt.substring(verOffset+8);
+	} else if ( (nameOffset=nAgt.lastIndexOf(" ")+1) < (verOffset=nAgt.lastIndexOf("/")) ) {
+		// In most other browsers, "name/version" is at the end of userAgent
+		browserName = nAgt.substring(nameOffset,verOffset);
+		fullVersion = nAgt.substring(verOffset+1);
+		if (browserName.toLowerCase()==browserName.toUpperCase()) {
+			browserName = navigator.appName;
+		}
+	}
+	
+	// trim the fullVersion string at semicolon/space if present
+	if ((ix=fullVersion.indexOf(";"))!=-1) {
+		fullVersion=fullVersion.substring(0,ix);
+	}
+	if ((ix=fullVersion.indexOf(" "))!=-1) {
+		fullVersion=fullVersion.substring(0,ix);
+	}
+
+	majorVersion = parseInt(""+fullVersion,10);
+	if (isNaN(majorVersion)) {
+		fullVersion  = ""+parseFloat(navigator.appVersion); 
+		majorVersion = parseInt(navigator.appVersion,10);
+	}
+
+	return {
+		"name": browserName,
+		"version": fullVersion
+	};
+};

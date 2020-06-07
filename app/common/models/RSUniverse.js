@@ -31,10 +31,13 @@ class RSUniverse extends RSObject {
 		this.connection.maxHistory = 100;
 		this.connection.authenticator = null;
 		this.connection.user = null;
+		this.connection.reconnectAttempts = 0;
+		this.connection.connectMark = 0;
 		this.connection.retries = 0;
 		this.connection.reconnecting = false;
 		this.connection.closing = false;
 		this.connection.master = false;
+		this.connection.lastError = false;
 		this.connection.history = [];
 		this.connection.entry = (entry) => {
 			if(typeof(entry) === "string") {
@@ -100,6 +103,7 @@ class RSUniverse extends RSObject {
 			
 			socket.onopen = (event) => {
 				this.closing = false;
+				this.connection.connectMark = Date.now();
 				this.connection.entry({
 					"message": "Connection Established",
 					"event": event
@@ -121,6 +125,8 @@ class RSUniverse extends RSObject {
 					"universe": this,
 					"error": event
 				});
+				this.connection.lastErrorAt = Date.now();
+				this.connection.lastError = "Connection Fault";
 				this.connection.socket = null;
 				if(!this.connection.reconnecting) {
 					this.connection.entry("Mitigating Lost Connection");
@@ -141,6 +147,8 @@ class RSUniverse extends RSObject {
 				});
 				if(!this.connection.closing && !this.connection.reconnecting) {
 					this.connection.entry("Mitigating Lost Connection");
+					this.connection.lastErrorAt = Date.now();
+					this.connection.lastError = "Connection Fault";
 					this.connection.reconnecting = true;
 					this.$emit("error", {
 						"message": "Connection Issues",
@@ -314,6 +322,7 @@ class RSUniverse extends RSObject {
 			rsSystem.log.warn("Possible Reconnect: ", event);
 			if((!event || event.code <4100) && this.connection.retries < 5) {
 				rsSystem.log.warn("Connection Retrying...\n", this);
+				this.connection.reconnectAttempts++;
 				this.connection.retries++;
 				this.connect(this.connection.user, this.connection.address);
 			} else {

@@ -317,39 +317,43 @@
 				switch(command) {
 					case "give":
 //						console.warn("Giving Items");
-						for(x=0; x<index.selection.length; x++) {
-							console.warn("Sending " + index.selection[x] + "...");
-							if(this.universe.nouns.item[index.selection[x]]) {
-								sending = {};
-								sending.item = index.selection[x];
-								sending.target = this.target;
-								this.universe.send("give:item", sending);
-							} else if(this.universe.nouns.room[index.selection[x]]) {
-								sending = {};
-								sending.room = index.selection[x];
-								sending.target = this.target;
-								this.universe.send("give:room", sending);
-							} else {
-								console.warn("Can only give item & room objects");
+						if(this.target) {
+							for(x=0; x<index.selection.length; x++) {
+								console.warn("Sending " + index.selection[x] + "...");
+								if(this.universe.nouns.item[index.selection[x]]) {
+									sending = {};
+									sending.item = index.selection[x];
+									sending.target = this.target;
+									this.universe.send("give:item", sending);
+								} else if(this.universe.nouns.room[index.selection[x]]) {
+									sending = {};
+									sending.room = index.selection[x];
+									sending.target = this.target;
+									this.universe.send("give:room", sending);
+								} else {
+									console.warn("Can only give item & room objects");
+								}
 							}
 						}
 						break;
 					case "take":
 //						console.warn("Taking Items");
-						for(x=0; x<index.selection.length; x++) {
-							console.warn("Sending " + index.selection[x] + "...");
-							if(this.universe.nouns.item[index.selection[x]]) {
-								sending = {};
-								sending.item = index.selection[x];
-								sending.target = this.target;
-								this.universe.send("take:item", sending);
-							} else if(this.universe.nouns.room[index.selection[x]]) {
-								sending = {};
-								sending.room = index.selection[x];
-								sending.target = this.target;
-								this.universe.send("take:room", sending);
-							} else {
-								console.warn("Can only take item & room objects");
+						if(this.target) {
+							for(x=0; x<index.selection.length; x++) {
+								console.warn("Sending " + index.selection[x] + "...");
+								if(this.universe.nouns.item[index.selection[x]]) {
+									sending = {};
+									sending.item = index.selection[x];
+									sending.target = this.target;
+									this.universe.send("take:item", sending);
+								} else if(this.universe.nouns.room[index.selection[x]]) {
+									sending = {};
+									sending.room = index.selection[x];
+									sending.target = this.target;
+									this.universe.send("take:room", sending);
+								} else {
+									console.warn("Can only take item & room objects");
+								}
 							}
 						}
 						break;

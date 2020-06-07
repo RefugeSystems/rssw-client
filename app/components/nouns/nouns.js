@@ -545,6 +545,7 @@
 				this.buildAvailableCopies();
 			},
 			"modify": function() {
+				var buffer;
 //				console.warn("modify: ", event);
 				
 				if(this.isValid) {
@@ -559,7 +560,12 @@
 					} else {
 //						console.warn("sync: ", this.state.building[this.state.current]);
 						this.state.building[this.state.current]._type = this.state.current;
-						this.universe.send("modify:" + this.state.current, completeItem(this.state.current, this.state.building[this.state.current]));
+						buffer = completeItem(this.state.current, this.state.building[this.state.current]);
+						if(buffer.passcode) {
+							buffer.passcode = buffer.passcode.sha256();
+						}
+						this.universe.send("modify:" + this.state.current, buffer);
+						delete(buffer.passcode);
 					}
 				}
 			}

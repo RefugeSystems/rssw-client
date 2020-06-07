@@ -728,8 +728,28 @@ form {
 .rs-page.page-about h1 {
   color: #EAEFF9;
 }
+.rs-page.page-account .information-container {
+  padding: 10px;
+}
 .rs-page.page-account h1 {
   color: #EAEFF9;
+}
+.rs-page.page-account .account-data {
+  font-size: 17px;
+}
+.rs-page.page-account .account-data button {
+  padding: 3px 7px;
+}
+.rs-page.page-account .account-data .actions .control {
+  display: inline-block;
+  text-align: center;
+  line-height: 40px;
+  min-height: 40px;
+  min-width: 48px;
+  font-size: 20px;
+}
+.rs-page.page-account .account-data .data input {
+  padding: 8px 13px;
 }
 .rs-page.page-home {
   display: flex;
@@ -989,6 +1009,9 @@ form {
   display: flex;
   flex-direction: row;
 }
+.rssw-page.page-universe .controls button.selections {
+  min-width: 48px;
+}
 .rssw-page.page-universe .control {
   display: inline-block;
   margin: 7px;
@@ -1020,8 +1043,21 @@ form {
   padding-top: 5px !important;
   margin-top: 5px !important;
 }
+.rs-page.page-system .information-container {
+  padding: 10px;
+}
 .rs-page.page-system h1 {
   color: #EAEFF9;
+}
+.rs-page.page-system .versions,
+.rs-page.page-system .browser {
+  margin: 0px 0px 15px 15px;
+}
+.rs-page.page-system .versions .align-right,
+.rs-page.page-system .browser .align-right {
+  color: #6f9bf5;
+  font-weight: 900;
+  font-size: 15px;
 }
 .rs-page.page-test h1 {
   color: #EAEFF9;
@@ -1460,6 +1496,7 @@ form {
   align-items: center;
   font-size: 22px;
   padding: 3px;
+  overflow: hidden;
 }
 .system-component.system-info .main-bar .titling .icon {
   margin-right: 3px;
@@ -2564,8 +2601,8 @@ form {
 .system-component.table-controls .filtering .search-icon {
   position: absolute;
   color: #000000;
-  right: 2px;
-  top: 2px;
+  right: 6px;
+  top: 6px;
   line-height: 24px;
   font-size: 22px;
   height: 22px;

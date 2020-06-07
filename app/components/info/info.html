@@ -2,7 +2,7 @@
 	<div class="main-bar">
 		<div class="titling">
 			<span v-if="viewing && viewing.icon" class="icon" :class="viewing.icon"></span>
-			<span class="text">{{viewing?viewing.name:"Information"}}</span>
+			<span class="text nowrap">{{viewing?viewing.name:"Information"}}</span>
 		</div>
 		<button class="control back" v-on:click="backOne()" v-if="history.length">
 			<span class="fas fa-step-backward"></span>

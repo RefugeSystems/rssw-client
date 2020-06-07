@@ -32,6 +32,10 @@
 		"label": "E-Mail",
 		"property": "email",
 		"type": "text"
+	}, {
+		"label": "Discord",
+		"property": "linked_discord",
+		"type": "text"
 	},
 	entity,
 	{

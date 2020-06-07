@@ -1,11 +1,76 @@
-<div class="rs-page page-system">
-	<h1>System Information</h1>
-
-	<div class="versions">
-		<p>System versions:</p>
-		<ul>
-			<li>Server: {{universe.version}}</li>
-			<li>UI: {{system.version}}</li>
-		</ul>
+<div class="rs-page rs-component page-system">
+	<div class="information-container">
+		<h1>System Information</h1>
+		<p>Overview of information regarding your system and the server to which you are connected.</p>
+		
+		<h2 class="flex h middled">
+			<span>Detected Browser Information</span>
+			<button class="make" v-on:click="makeIssue()" v-if="player.master && !knownErrors.navigator">
+				<span>Create</span>
+				<span class="fas fa-bug"></span>
+			</button>
+		</h2>
+		<table class="browser">
+			<tr>
+				<td class="align-right">Browser:</td>
+				<td>{{navigator.name}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Version:</td>
+				<td>{{navigator.version}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Issues:</td>
+				<td v-if="!knownErrors.navigator">None Known</td>
+				<td v-if="knownErrors.navigator">
+					<button class="rs-dark-red" v-on:click="showInfo(knownErrors.navigator)">
+						<span class="fas fa-exclamation-triangle"></span>
+						<span>Known Issues</span>
+					</button>
+				</td>
+			</tr>
+		</table>
+		
+		<h2>Connection Information</h2>
+		<table class="versions">
+			<tr>
+				<td class="align-right">Connected At:</td>
+				<td>{{getDate(universe.connection.connectMark)}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Last Message:</td>
+				<td>{{getDate(universe.connection.last)}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Server Address:</td>
+				<td>{{universe.connection.address}}</td>
+			</tr>
+			<tr v-if="universe.connection.lastError">
+				<td class="align-right">Last Error At:</td>
+				<td>
+					<span class="rs-light-red fas fa-exclamation-triangle"></span>
+					<span>{{getDate(universe.connection.lastErrorAt)}}</span>
+				</td>
+			</tr>
+			<tr v-if="universe.connection.lastError">
+				<td class="align-right">Server Error:</td>
+				<td>
+					<span class="rs-light-red fas fa-exclamation-triangle"></span>
+					<span>{{universe.connection.lastError}}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-right">Server Version:</td>
+				<td>{{universe.version}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">UI Version:</td>
+				<td>{{system.version}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Reconnects:</td>
+				<td>{{universe.connection.reconnectAttempts}}</td>
+			</tr>
+		</table>
 	</div>
 </div>
