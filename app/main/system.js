@@ -192,6 +192,12 @@ rsSystem.App = new Vue({
 				"path": "about",
 				"component": rsSystem.components.RSAbout
 			}, {
+				"path": "account",
+				"component": rsSystem.components.RSAccount
+			}, {
+				"path": "system",
+				"component": rsSystem.components.RSSystem
+			}, {
 				"path": "test",
 				"component": rsSystem.components.RSTest
 			}]

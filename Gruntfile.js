@@ -116,6 +116,7 @@ var config = {
 				"RSUniverse",
 				"RSModifier",
 				"RSAbility",
+				"RSSetting",
 				"RSHistory",
 				"RSDataset",
 				"RSLoadout",
@@ -181,6 +182,7 @@ var config = {
 			},
 			"files": [
 				"Gruntfile.js",
+				"appWorker/**/*.js",
 				"app/manifest.json",
 				"app/**/*.less",
 				"app/**/*.json",

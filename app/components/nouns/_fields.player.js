@@ -25,6 +25,10 @@
 		"property": "name",
 		"type": "text"
 	}, {
+		"label": "Passcode",
+		"property": "passcode",
+		"type": "text"
+	}, {
 		"label": "E-Mail",
 		"property": "email",
 		"type": "text"

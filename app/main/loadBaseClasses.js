@@ -10,6 +10,7 @@ rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSLocation, "location");
 rsSystem.registerNoun(RSPlaylist, "playlist");
 rsSystem.registerNoun(RSAbility, "ability");
+rsSystem.registerNoun(RSSetting, "setting");
 //rsSystem.registerNoun(RSHistory, "history");
 rsSystem.registerNoun(RSDataset, "dataset");
 rsSystem.registerNoun(RSLoadout, "loadout");

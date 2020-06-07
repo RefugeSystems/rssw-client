@@ -1,9 +1,8 @@
 <div class="rs-component connect-component">
 	<div class="heading">
 		<span class="heading-icon"></span>
-		<span>Login</span>
 	</div>
-	<div class="fields">
+	<form class="fields">
 		<table>
 			<tr>
 				<td>
@@ -22,7 +21,7 @@
 					</label>
 				</td>
 				<td>
-					<input id="login-passcode" type="password" v-enter="connect" v-model="store.passcode" />
+					<input id="login-passcode" type="password" v-enter="connect" v-model="passcode" :placeholder="getPasscodePlaceHolder()"/>
 				</td>
 			</tr>
 			<tr>
@@ -47,5 +46,5 @@
 			</button>
 		</div>
 		
-	</div>
+	</form>
 </div>

@@ -9,6 +9,11 @@
 		margin-left: 10px;
 		overflow: hidden;
 		
+		& > * {
+			max-height: 100%;
+			overflow: auto;
+		}
+		
 		.building {
 			width: 440px;
 		}
@@ -19,8 +24,6 @@
 			max-width: 400px;
 			width: 400px;
 			padding: 5px;
-			max-height: 100%;
-			overflow: auto;
 			
 			h1, h2, h3, h4 {
 				color: @rsBlack;

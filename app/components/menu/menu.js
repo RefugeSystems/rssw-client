@@ -102,6 +102,22 @@
 				"highlight": "/map"
 			});
 			
+			data.navigationItems.push(bufferItem);
+			data.navigationItems.push({
+				"icon": "far fa-user",
+				"action": "navigate",
+				"label": "Account",
+				"path": "/account",
+				"highlight": "/account"
+			});
+			data.navigationItems.push({
+				"icon": "far fa-server",
+				"action": "navigate",
+				"label": "System",
+				"path": "/system",
+				"highlight": "/system"
+			});
+			
 			data.generalItems = [];
 			data.shrinkItem = {
 				"icon": "far fa-text-width",

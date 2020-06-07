@@ -23,6 +23,7 @@ class RSUniverse extends RSObject {
 		this.initialized = false;
 		this.debugConnection = false;
 		this.index = new SearchIndex();
+		this.version = "Disconnected";
 		this.indexes = {};
 		this.nouns = {};
 		
@@ -84,6 +85,7 @@ class RSUniverse extends RSObject {
 			userInformation = rsSystem.AnonymousUser;
 		}
 
+		this.version = "Unknown";
 		this.connection.user = userInformation;
 		this.connection.address = address;
 		
@@ -94,7 +96,7 @@ class RSUniverse extends RSObject {
 				"address": address
 			});
 			
-			var socket = new WebSocket(address + "?authenticator=" + userInformation.token + "&username=" + userInformation.username + "&id=" + userInformation.id + "&name=" + userInformation.name);
+			var socket = new WebSocket(address + "?authenticator=" + userInformation.token + "&username=" + userInformation.username + "&id=" + userInformation.id + "&name=" + userInformation.name + "&passcode=" + userInformation.passcode);
 			
 			socket.onopen = (event) => {
 				this.closing = false;
@@ -161,6 +163,9 @@ class RSUniverse extends RSObject {
 					message = JSON.parse(message.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
+					if(message.version && message.version !== this.version) {
+						this.version = message.version;
+					}
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 					}

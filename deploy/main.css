@@ -728,6 +728,9 @@ form {
 .rs-page.page-about h1 {
   color: #EAEFF9;
 }
+.rs-page.page-account h1 {
+  color: #EAEFF9;
+}
 .rs-page.page-home {
   display: flex;
   align-items: center;
@@ -779,6 +782,10 @@ form {
   margin-left: 10px;
   overflow: hidden;
 }
+.rs-page.page-noun_controls .construction > * {
+  max-height: 100%;
+  overflow: auto;
+}
 .rs-page.page-noun_controls .construction .building {
   width: 440px;
 }
@@ -788,8 +795,6 @@ form {
   max-width: 400px;
   width: 400px;
   padding: 5px;
-  max-height: 100%;
-  overflow: auto;
 }
 .rs-page.page-noun_controls .construction .output h1,
 .rs-page.page-noun_controls .construction .output h2,
@@ -1014,6 +1019,9 @@ form {
   border-top: 2px solid #FF9560;
   padding-top: 5px !important;
   margin-top: 5px !important;
+}
+.rs-page.page-system h1 {
+  color: #EAEFF9;
 }
 .rs-page.page-test h1 {
   color: #EAEFF9;

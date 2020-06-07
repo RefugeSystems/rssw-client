@@ -101,9 +101,16 @@
 				"text": "Zoom",
 				"icon": "fas fa-minus-square"
 			}], {
+				"action": "up",
+				"text": "Up",
+				"conditional": () => {
+					return !!this.location.location;
+				},
+				"icon": "far fa-arrow-alt-square-up"
+			}, {
 				"action": "reset",
 				"text": "Reset",
-				"icon": "far fa-refresh"
+				"icon": "far fa-expand-wide"
 			}];
 			
 			data.menuItems.generateLocation = {
@@ -315,19 +322,27 @@
 					case "reset":
 						this.resetViewport();
 						break;
+					case "up":
+						if(this.location.location) {
+							this.$router.push("/map/" + this.location.location);
+						}
+						break;
 					case "fullscreen":
 						Vue.set(this.state, "fullscreen", !this.state.fullscreen);
 						break;
 				}
 			},
 			"openActions": function(event) {
-//				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
+				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
 				Vue.set(this.actions, "x", event.offsetX);
 				Vue.set(this.actions, "y", event.offsetY);
 				Vue.set(this.actions, "open", true);
 			},
 			"closeActions": function() {
 				Vue.set(this.actions, "open", false);
+			},
+			"getActionMenuStyle": function() {
+				return "left: " + this.actions.x + "px; top: " + this.actions.y + "px;";
 			},
 			"fire": function(option, event) {
 				console.log("Fire Option: ", option);

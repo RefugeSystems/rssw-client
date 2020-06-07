@@ -52,6 +52,14 @@ class UserInformation {
 		this.last = this.established;
 	}
 	
+	setPasscode(code) {
+		if(code) {
+			this.passcode = code;
+		} else {
+			delete(this.code);
+		}
+	}
+	
 	toString() {
 		return "User: " + this.username;
 	}
@@ -59,6 +67,7 @@ class UserInformation {
 	toJSON() {
 		return {
 			"username": this.username,
+			"passcode": this.passcode,
 			"established": this.established,
 			"age": this.last - this.established,
 			"last": this.last,

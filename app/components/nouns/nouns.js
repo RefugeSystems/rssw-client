@@ -61,6 +61,7 @@
 			rsSystem.components.NounFieldsLocation,
 			rsSystem.components.NounFieldsPlaylist,
 			rsSystem.components.NounFieldsAbility,
+			rsSystem.components.NounFieldsSetting,
 			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsEntity,
 			rsSystem.components.NounFieldsEffect,
@@ -368,25 +369,27 @@
 					console.warn("ID Not Found for Knowledge: ", id);
 				}
 			},
-			"getIDFromName": function(name) {
+			"getIDFromName": function() {
 				var model = this.models[this.state.current],
 					buffer,
 					root;
 				
-				root = this.state.current + ":" + model.name.toLowerCase().replace(spacing, "").replace(toColon, ":");
-				switch(this.state.current) {
-					case "ability":
-						if(model.archetypes && model.archetypes.length) {
-							if((model.archetypes instanceof Array && model.archetypes.length && (buffer = this.universe.indexes.archetype.index[model.archetypes[0]])) ||
-									(buffer = this.universe.indexes.archetype.index[model.archetypes])) {
-								root += ":" + buffer.name.toLowerCase().replace(spacing, "");
+				if(model.name) {
+					root = this.state.current + ":" + model.name.toLowerCase().replace(spacing, "").replace(toColon, ":");
+					switch(this.state.current) {
+						case "ability":
+							if(model.archetypes && model.archetypes.length) {
+								if((model.archetypes instanceof Array && model.archetypes.length && (buffer = this.universe.indexes.archetype.index[model.archetypes[0]])) ||
+										(buffer = this.universe.indexes.archetype.index[model.archetypes])) {
+									root += ":" + buffer.name.toLowerCase().replace(spacing, "");
+								}
 							}
-						}
-						if(model.xp_cost) {
-							root += ":" + model.xp_cost;
-						}
-					default:
-						return root;
+							if(model.xp_cost) {
+								root += ":" + model.xp_cost;
+							}
+						default:
+							return root;
+					}
 				}
 			},
 			"syncID": function() {

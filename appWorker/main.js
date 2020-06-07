@@ -60,3 +60,17 @@ self.addEventListener("fetch", function(event) {
 	
 	event.respondWith(result);
 });
+
+self.addEventListener("push", function(event) {
+	console.log("[Service Worker] Push Received.");
+	console.log("[Service Worker] Push had this data: ", event);
+
+	var title = "RSSWx";
+	var options = {
+		"body": "Notification",
+		"icon": "images/rook.green.png",
+		"badge": "images/rook.blue.png"
+	};
+
+	event.waitUntil(self.registration.showNotification(title, options));
+});

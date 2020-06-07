@@ -19,7 +19,7 @@
 				<div class="coordinate-dots">
 					<button class="dot" v-for="coordinate in coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button>
 				</div>
-				<div class="actions" v-if="actions.open" :style="'left: ' + actions.x + 'px; top: ' + actions.y + ';'">
+				<div class="actions" v-if="actions.open" :style="getActionMenuStyle()">
 					<div class="actions-header">
 						<span class="titling">
 							{{actions.header}}
@@ -65,7 +65,7 @@
 				</button>
 			</div>
 			<div class="control-row flex h fill" v-for="row in menuItems">
-				<button class="control grow-3" v-if="!row.length && row.length !== 0" v-on:click="processAction(row)" :class="row.action">
+				<button class="control grow-3" v-if="!row.length && row.length !== 0 && (!row.conditional || row.conditional())" v-on:click="processAction(row)" :class="row.action">
 					<span class="icon" :class="row.icon"></span>
 					<span class="text">{{row.text}}</span>
 				</button>
