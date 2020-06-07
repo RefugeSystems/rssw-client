@@ -28,24 +28,24 @@ self.addEventListener("install", function(event) {
 //				"/projects/rsswx/app/fonts/rsswx.css",
 //				"/projects/rsswx/app/externals.js",
 //				"/projects/rsswx/app/main.js"
-			"/",
-			"/index.html",
+			"./",
+			"./index.html",
 			
-			"/images/rook.blue.png",
-			"/images/rook.green.png",
-			"/images/rook.orange.png",
-			"/images/rook.red.png",
-			"/favicon.png",
+			"./images/rook.blue.png",
+			"./images/rook.green.png",
+			"./images/rook.orange.png",
+			"./images/rook.red.png",
+			"./favicon.png",
 			
-			"/fonts/starwars-glyphicons.css",
-			"/fonts/xwing-miniatures.css",
-			"/fonts/rpg-awesome.css",
-			"/webfonts/all.css",
-			"/fonts/rsswx.css",
-			"/main.css",
+			"./fonts/starwars-glyphicons.css",
+			"./fonts/xwing-miniatures.css",
+			"./fonts/rpg-awesome.css",
+			"./webfonts/all.css",
+			"./fonts/rsswx.css",
+			"./main.css",
 			
-			"/externals.js",
-			"/main.js"
+			"./externals.js",
+			"./main.js"
 		])
 		.then(function() {
 			self.skipWaiting();
