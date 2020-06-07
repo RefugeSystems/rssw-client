@@ -22,6 +22,10 @@
 		"property": "general",
 		"type": "checkbox"
 	}, {
+		"label": "Combat",
+		"property": "combat",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"

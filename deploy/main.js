@@ -31355,6 +31355,10 @@ rsSystem.component("rsCount", {
 		"property": "general",
 		"type": "checkbox"
 	}, {
+		"label": "Combat",
+		"property": "combat",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -39986,5 +39990,5 @@ rsSystem.App = new Vue({
 		
 	}
 });
-rsSystem.version="0.0.52"
+rsSystem.version="0.1.0"
 //# sourceMappingURL=main.js.map
