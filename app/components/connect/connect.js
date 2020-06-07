@@ -1,7 +1,6 @@
 
 /**
- * 
- * 
+ * Handles retrieving login information from the user.
  * @class rsConnect
  * @constructor
  * @module Components

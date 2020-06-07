@@ -22,8 +22,9 @@ var config = {
 				],
 				"comma-dangle": 2,
 				"quotes": [2, "double"],
-				"no-unused-vars": [2, {
-						"varsIgnorePattern": "^_?ignore"
+				"no-unused-vars": [1, {
+						"varsIgnorePattern": "^(_|[A-Z])",
+						"args": "after-used"
 					}
 				],
 				"block-scoped-var": 2,
@@ -32,8 +33,7 @@ var config = {
 				"max-depth": [1, {
 						"max": 10
 					}
-				],
-				"no-unused-vars": 1
+				]
 			},
 			"terminateOnCallback": false,
 			"callback": function (response) {
@@ -141,6 +141,8 @@ var config = {
 		},
 		"app": [
 			"spec/app/**/*.js",
+			"appWorker/**/*.js",
+			"appWorker/*.js",
 			"app/**/*.js",
 			"app/*.js"
 		]

@@ -354,4 +354,3 @@ String.prototype.sha256 = (function() {
 		return hex_sha256(this);
 	};
 })();
-console.log("hi");

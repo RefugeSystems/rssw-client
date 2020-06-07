@@ -19018,7 +19018,7 @@ String.prototype.sha256 = (function() {
 		return hex_sha256(this);
 	};
 })();
-console.log("hi");
+
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //name_generator.js
 //written and released to the public domain by drow <drow@bin.sh>
@@ -26272,8 +26272,7 @@ rsSystem.component("rsCards", {
 
 
 /**
- * 
- * 
+ * Handles retrieving login information from the user.
  * @class rsConnect
  * @constructor
  * @module Components
