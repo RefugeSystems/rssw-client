@@ -2330,6 +2330,20 @@ form {
 .rs-component.rssw.component-entity-knowledge .table-record.name .table-content {
   text-align: left;
 }
+.rs-component.rssw.component-party button.action,
+.rs-component.rssw.component-party button.info {
+  color: #EAEFF9;
+  padding: 4px 7px;
+  font-size: 16px;
+  margin: 3px;
+  background: transparent;
+  border-radius: 5px;
+  border: 1px solid #6f9bf5;
+}
+.rs-component.rssw.component-party button.action span,
+.rs-component.rssw.component-party button.info span {
+  color: inherit;
+}
 .rs-component.rssw.component-entity-inside .entities {
   border-top: 1px solid #EAEFF9;
   padding: 7px;

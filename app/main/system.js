@@ -183,6 +183,13 @@ rsSystem.App = new Vue({
 					}]
 				}]
 			}, {
+				"path": "party",
+				"component": rsSystem.components.RSSWPartyPage,
+				"children": [{
+					"path": ":oid",
+					"component": rsSystem.components.RSSWPartyPage
+				}]
+			}, {
 				"path": "nouns/:type?/:oid?",
 				"component": rsSystem.components.RSNounControls
 			}, {
@@ -207,7 +214,6 @@ rsSystem.App = new Vue({
 	"props": {
 	},
 	"created": function() {
-		var rssys = this;
 		
 	}
 });

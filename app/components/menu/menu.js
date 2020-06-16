@@ -101,6 +101,16 @@
 				"path": "/map",
 				"highlight": "/map"
 			});
+			data.navigationItems.push({
+				"icon": "fas fa-users",
+				"action": "navigate",
+				"label": "Party",
+				"path": "/party",
+				"highlight": "/party",
+				"conditionals": [{
+					"master": true
+				}]
+			});
 			
 			data.navigationItems.push(bufferItem);
 			data.navigationItems.push({
