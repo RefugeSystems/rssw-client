@@ -6,12 +6,12 @@
 	<div v-if="player.master">
 		<div class="list" v-if="record">
 			<div class="listed-party">
-				<rssw-party :record="record" :universe="universe" :player="player"></rssw-party>
+				<rssw-party :record="record" :universe="universe" :user="user"></rssw-party>
 			</div>
 		</div>
 		<div class="list" v-if="!record">
 			<div class="listed-party" v-for="party in universe.indexes.party.listing">
-				<rssw-party :record="party" :universe="universe" :player="player"></rssw-party>
+				<rssw-party :record="party" :universe="universe" :user="user"></rssw-party>
 			</div>
 		</div>
 	</div>

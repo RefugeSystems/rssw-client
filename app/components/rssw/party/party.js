@@ -14,7 +14,8 @@
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSComponentUtility,
-			rsSystem.components.RSShowdown
+			rsSystem.components.RSShowdown,
+			rsSystem.components.RSCore
 		],
 		"props": {
 			"universe": {
@@ -22,10 +23,6 @@
 				"type": Object
 			},
 			"record": {
-				"required": true,
-				"type": Object
-			},
-			"player": {
 				"required": true,
 				"type": Object
 			}
@@ -68,7 +65,7 @@
 		},
 		"methods": {
 			"toggleMembers": function() {
-				Vue.set(this.state, "hideMembers", !hideMembers);
+				Vue.set(this.state, "hideMembers", !this.state.hideMembers);
 			},
 			"giveXP": function(amount) {
 				var x;

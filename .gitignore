@@ -3,6 +3,7 @@ deploy/externals.js*
 deploy/worker.js*
 deploy/main.css*
 deploy/main.js*
+transient/*
 
 # Eclipse
 .project
