@@ -7,6 +7,9 @@
  * @module Components
  */
 (function() {
+	
+	var storageKey = "partystoragekey:";
+	
 	rsSystem.component("rsswParty", {
 		"inherit": true,
 		"mixins": [
@@ -28,10 +31,21 @@
 			}
 		},
 		"data": function() {
-			var data = {};
+			var data = {},
+				x;
+
+			data.xps = [-5];
+			for(x=0; x<=35; x++) {
+				data.xps.push(x);
+			}
+
+			data.storageKeyID = storageKey + this.record.id;
+			data.state = this.loadStorage(data.storageKeyID, {
+				"hideMembers": false
+			});
 			
-			data.grantXP = 0;
 			data.members = [];
+			data.grantXP = 0;
 			
 			return data;
 		},
@@ -39,6 +53,12 @@
 			"record": function(incoming, outgoing) {
 				outgoing.$off("modified", this.update);
 				incoming.$on("modified", this.update);
+			},
+			"state": {
+				"deep": true,
+				"handler": function() {
+					this.saveStorage(this.storageKeyID, this.state);
+				}
 			}
 		},
 		"mounted": function() {
@@ -47,6 +67,9 @@
 			this.update();
 		},
 		"methods": {
+			"toggleMembers": function() {
+				Vue.set(this.state, "hideMembers", !hideMembers);
+			},
 			"giveXP": function(amount) {
 				var x;
 				for(x=0; x<this.members.length; x++) {
@@ -55,6 +78,7 @@
 						"xp": this.members[x].xp + parseInt(amount)
 					});
 				}
+				Vue.set(this, "grantXP", 0);
 			},
 			"update": function() {
 				console.log("Party Update: ", this.record);

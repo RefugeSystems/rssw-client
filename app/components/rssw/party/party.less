@@ -1,8 +1,9 @@
 .rs-component.rssw.component-party {
 
 
-	button.action,
-	button.info {
+	.action,
+	.info {
+		display: inline-block;
 		color: @rsWhite;
 		padding: 4px 7px;
 		font-size: 16px;
@@ -13,6 +14,16 @@
 		
 		span {
 			color: inherit;
+		}
+	}
+	
+	.members {
+		overflow: auto;
+		max-height: 500px;
+		transition: max-height .5s;
+		
+		&.closed {
+			max-height: 0px;
 		}
 	}
 }

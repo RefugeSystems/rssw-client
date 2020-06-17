@@ -5,27 +5,31 @@
 				<span class="fas fa-info-circle rs-light-blue"></span>
 			</button>
 			<span>{{record.name}}</span>
+			<button class="info  rs-border one rsdb-light-blue" v-on:click="toggleMembers()">
+				<span class="far" :class="state.hideMembers?'fa-check-square':'fa-square'"></span>
+			</button>
 		</h3>
 	</div>
 	
 	<div class="controls">
 		<div class="ctrl experience">
-			<label>
-				Grant Experience to Party:
-				<input type="number" v-model.number="grantXP" placeholder="Enter XP Amount" />
-			</label>
-			<button class="action rs-border one rsdb-orange" v-on:click="giveXP(grantXP)">
+			<div class="action rs-border one rsdb-orange">
 				<span class="fas fa-plus rs-light-blue"></span>
+				<select v-model.number="grantXP" v-on:change="giveXP(grantXP)">
+					<option v-for="give in xps" :value="give">{{give === 0?"[Amount]":give}}</option>
+				</select>
 				<span class="">XP</span>
-			</button>
+			</div>
 		</div>
 	</div>
 	
-	<div class="member" v-for="member in members">
-		<span class="icon" :class="member.icon || 'fas fa-user'"></span>
-		<button class="info rs-border one rsdb-blue" v-on:click="showInfo(member)">
-			<span class="fas fa-info-circle rs-light-blue"></span>
-		</button>
-		<span class="name">{{member.name}}</span>
+	<div class="members" :class="state.hideMembers?'closed':'open'">
+		<div class="member" v-for="member in members">
+			<span class="icon" :class="member.icon || 'fas fa-user'"></span>
+			<button class="info rs-border one rsdb-blue" v-on:click="showInfo(member)">
+				<span class="fas fa-info-circle rs-light-blue"></span>
+			</button>
+			<span class="name">{{member.name}}</span>
+		</div>
 	</div>
 </div>
