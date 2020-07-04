@@ -1,0 +1,30 @@
+.rs-component.rssw.component-party {
+
+
+	.action,
+	.info {
+		display: inline-block;
+		color: @rsWhite;
+		padding: 4px 7px;
+		font-size: 16px;
+		margin: 3px;
+		background: transparent;
+		border-radius: 5px;
+		border: 1px solid @rsLightBlue;
+		
+		span {
+			color: inherit;
+		}
+	}
+	
+	.members {
+		display: inline-block;
+		overflow: auto;
+		max-height: 500px;
+		transition: max-height .5s;
+		
+		&.closed {
+			max-height: 0px;
+		}
+	}
+}
