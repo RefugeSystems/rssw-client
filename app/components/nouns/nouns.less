@@ -21,8 +21,10 @@
 		margin-top: 9px;
 		
 		.simplified-editor {
+			/*
 			max-height: ~"calc(100% - 100px)";
 			overflow: auto;
+			*/
 		}
 	}
 	
@@ -58,5 +60,22 @@
 			max-height: 300px;
 			overflow: auto;
 		}
+	}
+	
+	.selections {
+		display: flex;
+		position: sticky;
+		top: 0px;
+		flex-direction: column;
+		background: black;
+	}
+	
+	.actions {
+		display: flex;
+		position: sticky;
+		bottom: 0px;
+		flex-direction: row;
+		justify-content: space-between;
+		background: black;
 	}
 }

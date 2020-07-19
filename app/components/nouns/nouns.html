@@ -1,20 +1,21 @@
 <div class="rs-component component-nouns" v-save="modify">
-	<div class="selection">
-		<label class="">
-			<span>Noun:</span>
-			<select v-model="state.current" v-on:change="broadcastModel()">
-				<option v-for="type in nouns" :value="type">{{type}}</option>
-			</select>
-		</label>
-	</div>
-	
-	<div class="sourcing">
-		<label class="">
-			<span>Copy:</span>
-			<select v-model="copy">
-				<option v-for="object in availableToCopy" :value="object.id">{{labelNoun(object)}}</option>
-			</select>
-		</label>
+	<div class="selections">
+		<div class="selection">
+			<label class="">
+				<span>Noun:</span>
+				<select v-model="state.current" v-on:change="broadcastModel()">
+					<option v-for="type in nouns" :value="type">{{type}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="sourcing">
+			<label class="">
+				<span>Copy:</span>
+				<select v-model="copy">
+					<option v-for="object in availableToCopy" :value="object.id">{{labelNoun(object)}}</option>
+				</select>
+			</label>
+		</div>
 	</div>
 	
 	<div class="building">
@@ -52,7 +53,7 @@
 	<div class="actions">
 		<button class="primary-action" v-on:click="newObject()">
 			<span class="action-icon fas fa-file-plus"></span>
-			<span class="action-text">New Object</span>
+			<span class="action-text">New</span>
 		</button>
 		<button class="primary-action" v-on:click="modify()" :disabled="!isValid">
 			<span class="action-icon fas fa-cloud-upload"></span>
@@ -60,11 +61,11 @@
 		</button>
 		<button class="primary-action" v-on:click="dropObject()" v-if="this.state.building[state.current] && this.state.building[state.current].id">
 			<span class="action-icon fas fa-trash"></span>
-			<span class="action-text">Drop Object</span>
+			<span class="action-text">Drop</span>
 		</button>
 		<button class="primary-action" v-on:click="toggleEditMode()">
 			<span class="action-icon far" :class="state.advanced_editor?'fa-check-square':'fa-square'"></span>
-			<span class="action-text">Advanced Editor</span>
+			<span class="action-text">Advanced</span>
 		</button>
 	</div>
 </div>
