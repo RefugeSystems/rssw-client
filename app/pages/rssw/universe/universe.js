@@ -72,6 +72,41 @@
 		"only": true,
 		"out": false
 	};
+
+
+	var rollProperties = [{
+		"icon": "ra ra-bomb-explosion",
+		"property": "success",
+		"label": "Success"
+	}, {
+		"icon": "fad fa-jedi",
+		"property": "advantage",
+		"label": "Advantage"
+	}, {
+		"icon": "xwm xwing-miniatures-font-epic",
+		"property": "triumph",
+		"label": "Triumph"
+	}, {
+		"icon": "fal fa-triangle rot180",
+		"property": "failure",
+		"label": "Failure"
+	}, {
+		"icon": "rsswx rsswx-threat",
+		"property": "threat",
+		"label": "Threat"
+	}, {
+		"icon": "rsswx rsswx-despair",
+		"property": "despair",
+		"label": "Despair"
+	}, {
+		"icon": "fad fa-circle rs-white rs-secondary-black",
+		"property": "light",
+		"label": "Light"
+	}, {
+		"icon": "fad fa-circle rs-black rs-secondary-white",
+		"property": "dark",
+		"label": "Dark"
+	}];
 	
 	rsSystem.component("RSSWUniverse", {
 		"inherit": true,
@@ -152,7 +187,26 @@
 			data.target = "";
 			data.corpus = [];
 			
-			data.universeEntities = [];			
+			data.rollProperties = rollProperties;
+			data.universeEntities = [];
+			data.history = [];
+			data.rolling = {};
+			data.updated = "";
+			
+			data.difficulty = {};
+			data.difficulty.Easy = {"difficulty":1};
+			data.difficulty.Average = {"difficulty":2};
+			data.difficulty.Hard = {"difficulty":3};
+			data.difficulty.Daunting = {"difficulty":4};
+			data.difficulty.Formidable = {"difficulty":5};
+			data.difficulty.Challenge = {"challenge":1};
+			data.difficulty.Setback = {"setback":1};
+			
+			data.difficulties = Object.keys(data.difficulty);
+			data.count = {};
+			for(x=0; x<data.difficulties.length; x++) {
+				data.count[data.difficulties[x]] = 0;
+			}
 			
 			for(x=0; x<data.state.headers.length; x++) {
 				if(formatters[data.state.headers[x].field]) {
@@ -205,6 +259,49 @@
 			this.updateListings();
 		},
 		"methods": {
+			"clearRolling": function(object) {
+				var keys = Object.keys(object),
+					x;
+				
+				if(keys.length) {
+					this.history.push(JSON.parse(JSON.stringify(object)));
+				}
+				for(x=0; x<keys.length; x++) {
+					Vue.delete(object, keys[x]);
+				}
+			},
+			"dismissRolled": function(object) {
+				var index = this.history.indexOf(object);
+				if(index !== -1) {
+					this.history.splice(index, 1);
+				}
+			},
+			"rollDifficulty": function(difficulty) {
+				var expression = this.difficulty[difficulty],
+					result,
+					keys,
+					x;
+				
+				console.log("Roll: ", expression);
+				if(expression.difficulty) {
+					this.clearRolling(this.rolling);
+					for(x=0; x<this.difficulties.length; x++) {
+						Vue.set(this.count, this.difficulties[x], 0);
+					}
+				}
+				Vue.set(this.count, difficulty, this.count[difficulty] + 1);
+				result = Dice.calculateDiceRoll(expression);
+				keys = Object.keys(result);
+				for(x=0; x<keys.length; x++) {
+					if(result[keys[x]]) {
+						if(this.rolling[keys[x]]) {
+							Vue.set(this.rolling, keys[x], this.rolling[keys[x]] + result[keys[x]]);
+						} else {
+							Vue.set(this.rolling, keys[x], result[keys[x]]);
+						}
+					}
+				}
+			},
 			"updateListings": function(event) {
 				var mapped = {},
 					buffer,

@@ -50,6 +50,45 @@
 				margin: 5px 0px;
 			}
 		}
+		
+		button.roll-container {
+			display: block;
+			background: transparent;
+			color: @rsWhite;
+		}
+		
+		.roll-container {
+			border: 1px solid @rsBlue;
+			border-radius: 5px;
+			font-size: 18px;
+			padding: 10px;
+			margin: 6px;
+			
+			.dice-result {
+				display: inline-flex;
+			}
+		}
+		
+		.rssw-dice-result {
+			min-height: 64px;
+		}
+		
+		.view-label {
+			padding-right: 7px;
+		}
+		
+		.rolled {
+		}
+		
+		.rolling {
+			padding-right: 14px;
+		}
+		
+		.output {
+			.rolled.current {
+				border-color: @rsLightRed !important;
+			}
+		}
 	}
 	
 	.opened {

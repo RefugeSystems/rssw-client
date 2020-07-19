@@ -1,3 +1,4 @@
 <div class="rssw-dice-view flex h" v-on:click="sendToDiceBin()">
+	<div class="view-label" v-if="labeling">{{labeling}}</div>
 	<div class="rssw-dice" v-for="die in dice" :class="die"></div>
 </div>

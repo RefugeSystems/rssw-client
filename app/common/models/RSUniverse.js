@@ -19,13 +19,18 @@ class RSUniverse extends RSObject {
 		 * @property loggedOut
 		 * @type Boolean
 		 */
-		this.loggedOut = false;
-		this.initialized = false;
-		this.debugConnection = false;
 		this.index = new SearchIndex();
 		this.version = "Disconnected";
+		this.debugConnection = false;
+		this.initialized = false;
+		this.loggedOut = false;
+		
+		this.processEvent = {};
 		this.indexes = {};
+		this.echoed = {};
 		this.nouns = {};
+		
+		this.latency = 0;
 		
 		this.connection = {};
 		this.connection.maxHistory = 100;
@@ -71,6 +76,25 @@ class RSUniverse extends RSObject {
 			}
 			this.loadState(event);
 		});
+		
+		this.processEvent.ping = (event) => {
+			var latency = event.received - event.ping;
+			if(this.latency) {
+				this.latency = (this.latency + (latency/2))/2;
+			} else {
+				this.latency = latency/2;
+			}
+			this.latency = parseInt(this.latency);
+		};
+		
+		var ping = () => {
+			this.send("ping", {
+				"ping": Date.now()
+			});
+			setTimeout(ping, 60000);
+		};
+		
+		setTimeout(ping, 10000);
 	}
 	
 	/**
@@ -176,6 +200,8 @@ class RSUniverse extends RSObject {
 					}
 					if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
+						message.echo = this.echoed[message.echo];
+						delete(this.echoed[message.echo]);
 					}
 					if(this.debugConnection || this.debug) {
 						console.log("Connection - Received: ", message);
@@ -186,7 +212,11 @@ class RSUniverse extends RSObject {
 					if(this.debugConnection || this.debug) {
 						console.warn("Emission[" + message.type + ":complete]: ", message.event);
 					}
-					this.$emit(message.type + ":complete", message.event);
+					if(this.processEvent[message.type]) {
+						this.processEvent[message.type](message);
+					} else {
+						this.$emit(message.type + ":complete", message.event);
+					}
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);
 					this.$emit("warning", {
@@ -454,6 +484,7 @@ class RSUniverse extends RSObject {
 			if(this.debugConnection) {
 				console.log("Connection - Sending: ", data);
 			}
+			this.echoed[data.echo] = data;
 			this.connection.socket.send(JSON.stringify(data));
 			return data.data.echo;
 		} else {

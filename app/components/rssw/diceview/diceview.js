@@ -20,6 +20,9 @@
 			},
 			"skill": {
 			},
+			"labeling": {
+				"type": String
+			},
 			"roll": {
 				"type": Object,
 				"default": function() {
@@ -37,12 +40,17 @@
 				this.entity.$on("modified", this.update);
 			}
 			rsSystem.register(this);
+			if(this.roll) {
+				this.setRoll(this.roll);
+			}
 			this.update();
 		},
 		"methods": {
 			"sendToDiceBin": function() {
+				var expression = this.getRollExpression();
+				this.$emit("roll-expression", expression);
 				if(this.entity) {
-					this.entity.$emit("roll-expression", this.getRollExpression());
+					this.entity.$emit("roll-expression", expression);
 				}
 			},
 			"getRollExpression": function() {

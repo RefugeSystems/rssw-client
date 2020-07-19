@@ -5,6 +5,13 @@
 				<span class="fas fa-info-circle rs-light-blue"></span>
 			</button>
 			<span>{{record.name}}</span>
+			<span v-if="location">
+				<span>at</span>
+				<button class="info  rs-border one rsdb-light-blue" v-on:click="showInfo(location)">
+					<span :class="location.icon || 'fas fa-info-circle rs-light-blue'"></span>
+				</button>
+				<span>{{location.name}}</span>
+			</span>
 			<button class="info  rs-border one rsdb-light-blue" v-on:click="toggleMembers()">
 				<span class="far" :class="state.hideMembers?'fa-square':'fa-check-square'"></span>
 				Members
@@ -12,7 +19,7 @@
 		</h3>
 	</div>
 	
-	<div class="controls">
+	<div class="controls flex h wrap">
 		<div class="ctrl experience">
 			<div class="action rs-border one rsdb-orange">
 				<span class="fas fa-plus rs-light-blue"></span>
@@ -22,10 +29,44 @@
 				<span class="">XP</span>
 			</div>
 		</div>
+		<div class="ctrl credits">
+			<div class="action rs-border one rsdb-orange">
+				<span class="fas fa-plus rs-light-blue"></span>
+				<select v-model.number="grantCredit" v-on:change="giveCredits(grantCredit)">
+					<option v-for="give in credits" :value="give">{{give === 0?"[Amount]":give}}</option>
+				</select>
+				<span class="fas fa-coins"></span>
+			</div>
+		</div>
+		<div class="ctrl credits">
+			<div class="action rs-border one rsdb-orange">
+				<span class="fas fa-plus rs-light-blue"></span>
+				<select v-model="addingMember" v-on:change="addMember(addingMember)">
+					<option value=""></option>
+					<option v-for="option in entities" v-if="displayOption(option)" :value="option.id">{{option.name}}</option>
+				</select>
+				<span class="fas fa-user"></span>
+			</div>
+		</div>
+		<div class="ctrl location">
+			<div class="action rs-border one rsdb-orange">
+				<span class="fas fa-globe-stand rs-light-blue"></span>
+				<select v-model="move_location">
+					<option value=""></option>
+					<option v-for="option in universe.indexes.location.listing" :value="option.id">{{option.name}}</option>
+				</select>
+				<button class="info rs-border one rsdb-light-blue" v-on:click="setLocation()">
+					Set Location
+				</button>
+			</div>
+		</div>
 	</div>
 	
 	<div class="members" :class="state.hideMembers?'closed':'open'">
 		<div class="member" v-for="member in members">
+			<button class="info rs-border one rsdb-blue" v-on:click="removeMember(member.id)">
+				<span class="fas fa-times rs-light-red"></span>
+			</button>
 			<span class="icon" :class="member.icon || 'fas fa-user'"></span>
 			<button class="info rs-border one rsdb-blue" v-on:click="showInfo(member)">
 				<span class="fas fa-info-circle rs-light-blue"></span>

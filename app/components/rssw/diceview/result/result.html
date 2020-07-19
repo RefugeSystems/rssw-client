@@ -1,0 +1,7 @@
+<div class="rssw-dice-result flex v">
+	<div class="roll-property" :class="rprop.property" v-for="rprop in rollProperties" v-if="roll[rprop.property] !== undefined">
+		<span class="value">{{roll[rprop.property]}}</span>
+		<span class="info" :class="rprop.icon"></span>
+		<span class="label" v-if="!state.hideLabels">{{rprop.label}}</span>
+	</div>
+</div>
