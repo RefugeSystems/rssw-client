@@ -62,6 +62,7 @@
 				"hideMembers": false
 			});
 			
+			data.newOrder = 
 			data.move_location = "";
 			data.addingMember = "";
 			data.location = null;

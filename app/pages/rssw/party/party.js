@@ -15,6 +15,7 @@ rsSystem.component("RSSWPartyPage", {
 		var data = {};
 		
 		data.linked = null;
+		data.parties = [];
 		
 		return data;
 	},
@@ -37,10 +38,13 @@ rsSystem.component("RSSWPartyPage", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		
 		if(this.record && !this.linked) {
 			this.record.$on("modified", this.update);
 			Vue.set(this, "linked", this.record);
 		}
+
+		this.update();
 	},
 	"methods": {
 		/**
@@ -49,6 +53,13 @@ rsSystem.component("RSSWPartyPage", {
 		 */
 		"update": function(event) {
 			console.warn("Party Updated: ", event);
+			var x;
+			
+			this.parties.splice(0);
+			for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+				this.parties.push(this.universe.indexes.party.listing[x]);
+			}
+			this.parties.sort(this.sortData);
 		}
 	},
 	"beforeDestroy": function() {

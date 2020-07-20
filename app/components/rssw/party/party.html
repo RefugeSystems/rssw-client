@@ -16,6 +16,10 @@
 				<span class="far" :class="state.hideMembers?'fa-square':'fa-check-square'"></span>
 				Members
 			</button>
+			<select class="info  rs-border one rsdb-light-blue" v-on:change="changeOrder(newOrder)" v-model="newOrder">
+				<span class="far" :class="state.hideMembers?'fa-square':'fa-check-square'"></span>
+				Members
+			</button>
 		</h3>
 	</div>
 	

@@ -189,11 +189,13 @@
 			
 			data.rollProperties = rollProperties;
 			data.universeEntities = [];
+			data.maxLength = 20;
 			data.history = [];
 			data.rolling = {};
 			data.updated = "";
 			
 			data.difficulty = {};
+			data.difficulty.Blank = {"difficulty":0};
 			data.difficulty.Easy = {"difficulty":1};
 			data.difficulty.Average = {"difficulty":2};
 			data.difficulty.Hard = {"difficulty":3};
@@ -227,6 +229,9 @@
 			}
 			
 			data.state.filter.template = false;
+			if(!data.state.historyLength) {
+				data.state.historyLength = 5;
+			}
 			
 			return data;
 		},
@@ -263,8 +268,9 @@
 				var keys = Object.keys(object),
 					x;
 				
-				if(keys.length) {
-					this.history.push(JSON.parse(JSON.stringify(object)));
+				this.history.unshift(JSON.parse(JSON.stringify(object)));
+				if(this.state.historyLength < this.history.length) {
+					this.history.splice(this.state.historyLength);
 				}
 				for(x=0; x<keys.length; x++) {
 					Vue.delete(object, keys[x]);
@@ -276,14 +282,23 @@
 					this.history.splice(index, 1);
 				}
 			},
+			"clearRolls": function(step) {
+				if(step) {
+					this.clearRolling();
+				}
+				this.history.splice(0);
+			},
+			"clearRolls": function() {
+				this.history.splice(0);
+			},
 			"rollDifficulty": function(difficulty) {
 				var expression = this.difficulty[difficulty],
 					result,
 					keys,
 					x;
 				
-				console.log("Roll: ", expression);
-				if(expression.difficulty) {
+//				console.log("Roll[" + isNaN(expression.difficulty) + "]: ", expression.difficulty);
+				if(!isNaN(expression.difficulty)) {
 					this.clearRolling(this.rolling);
 					for(x=0; x<this.difficulties.length; x++) {
 						Vue.set(this.count, this.difficulties[x], 0);

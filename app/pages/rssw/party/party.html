@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="list" v-if="!record">
-			<div class="listed-party" v-for="party in universe.indexes.party.listing">
+			<div class="listed-party" v-for="party in parties">
 				<rssw-party :record="party" :universe="universe" :user="user"></rssw-party>
 			</div>
 		</div>

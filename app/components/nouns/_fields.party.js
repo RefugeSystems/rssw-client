@@ -60,6 +60,35 @@
 	location,
 	inside,
 	{
+		"label": "Order",
+		"property": "order",
+		"type": "select",
+		"raw": true,
+		"options": [
+			20,
+			19,
+			18,
+			17,
+			16,
+			15,
+			14,
+			13,
+			12,
+			11,
+			10,
+			9,
+			8,
+			7,
+			6,
+			5,
+			4,
+			3,
+			2,
+			1,
+			0
+		]
+	},
+	{
 		"label": "Active",
 		"property": "active",
 		"type": "checkbox"

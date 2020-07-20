@@ -1,4 +1,4 @@
-<div class="rs-component component-nouns" v-save="modify">
+<div class="rs-component component-nouns" v-save="modify" v-new="newObject">
 	<div class="selections">
 		<div class="selection">
 			<label class="">
@@ -57,7 +57,7 @@
 		</button>
 		<button class="primary-action" v-on:click="modify()" :disabled="!isValid">
 			<span class="action-icon fas fa-cloud-upload"></span>
-			<span class="action-text">Upload</span>
+			<span class="action-text">Save</span>
 		</button>
 		<button class="primary-action" v-on:click="dropObject()" v-if="this.state.building[state.current] && this.state.building[state.current].id">
 			<span class="action-icon fas fa-trash"></span>

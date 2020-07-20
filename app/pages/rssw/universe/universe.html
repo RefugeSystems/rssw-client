@@ -82,6 +82,12 @@
 				<button class="roll-container rolling" v-on:click="rollDifficulty(diff)" v-for="diff in difficulties">
 					<rssw-dice-view :universe="universe" :user="user" class="rolling-view" :roll="difficulty[diff]" :labeling="diff + ' [' + count[diff] + ']'"></rssw-dice-view>
 				</button>
+				<button class="roll-container rolling" v-on:click="clearRolls(true)">
+					Clear Rolls
+				</button>
+				<select class="roll-container rolling" v-model="state.historyLength">
+					<option v-for="len in maxLength" :value="len">{{len}}</option>
+				</select>
 			</div>
 		</div>
 	</div>
