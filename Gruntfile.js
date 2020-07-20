@@ -227,7 +227,7 @@ var config = {
 		},
 		"app": {
 			"options": {
-				"footer": "rsSystem.version=\"" + pkg.version + "\"",
+				"footer": "\nrsSystem.version=\"" + pkg.version + "\"",
 				"sourceMap": true
 			},
 			"src": [
@@ -278,7 +278,7 @@ var config = {
 		},
 		"app": {
 			"options": {
-				"footer": "rsSystem.version = \"" + pkg.version + "\"",
+				"footer": "\nrsSystem.version = \"" + pkg.version + "\"",
 				"reserved": ["rsSystem"]
 			},
 			"files": {
