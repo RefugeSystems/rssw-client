@@ -82,12 +82,14 @@
 	referenceKeys.requires_ability = "ability";
 	referenceKeys.requires_knowledge = "knowledge";
 	referenceKeys.archetypes = "archetype";
+	referenceKeys.slot_usage = "slot";
 	
 	var prettifyValues = {};
 	var prettifyNames = {};
 	var knowledgeLink = {};
 	var displayRaw = {};
 
+	prettifyNames.slot_usages = "Slots Used";
 	prettifyNames.dependency = "Dependencies";
 	prettifyNames.itemtype = "Item Types";
 	prettifyNames.xp_cost = "XP";

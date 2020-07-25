@@ -30,6 +30,9 @@
 			"contents": {
 				"required": true,
 				"type": Object
+			},
+			"index": {
+				"type": Number
 			}
 		},
 		"data": function() {
@@ -69,6 +72,9 @@
 			}
 		},
 		"methods": {
+			"showName": function() {
+				return this.entity && this.index === 0;
+			},
 			"getClasses": function() {
 				var classes = "";
 				if(this.borderColor) {
@@ -129,6 +135,15 @@
 					this.state.filter["null"] = "";
 				}
 				
+				if(this.contents && this.contents.defaults) {
+					keys = Object.keys(this.contents.defaults);
+					for(x=0; x<keys.length; x++) {
+						if(this.state[keys[x]] === undefined) {
+							Vue.set(this.state, keys[x], this.contents.defaults[keys[x]]);
+						}
+					}
+				}
+				
 				widget = {};
 				widget.props = {};
 				widget.props["storage_id"] = this.storageID;
@@ -136,6 +151,7 @@
 				widget.props["character"] = this.entity;
 				widget.props["entity"] = this.entity;
 				widget.props["sid"] = this.storageID;
+				widget.props["index"] = this.index;
 				widget.props["state"] = this.state;
 				widget.props["user"] = this.user;
 				widget.class = {};
@@ -147,6 +163,8 @@
 				widget.props["settings"] = this.contents.settings;
 				widget.props["universe"] = this.universe;
 				widget.props["contents"] = this.contents;
+				widget.props["entity"] = this.entity;
+				widget.props["index"] = this.index;
 				widget.props["state"] = this.state;
 				elements.push(createElement("rs-widget-configure", widget));
 				

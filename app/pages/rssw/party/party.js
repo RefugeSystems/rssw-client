@@ -53,16 +53,27 @@ rsSystem.component("RSSWPartyPage", {
 		 */
 		"update": function(event) {
 			console.warn("Party Updated: ", event);
-			var x;
+			var party,
+				x;
+			
+			for(x=0; x<this.parties.length; x++) {
+				this.parties[x].$off("modified", this.update);
+			}
 			
 			this.parties.splice(0);
 			for(x=0; x<this.universe.indexes.party.listing.length; x++) {
-				this.parties.push(this.universe.indexes.party.listing[x]);
+				party = this.universe.indexes.party.listing[x];
+				party.$on("modified", this.update);
+				this.parties.push(party);
 			}
 			this.parties.sort(this.sortData);
 		}
 	},
 	"beforeDestroy": function() {
+		for(var x=0; x<this.parties.length; x++) {
+			this.parties[x].$off("modified", this.update);
+		}
+		
 		if(this.linked) {
 			this.linked.$off("modified", this.update);
 		}

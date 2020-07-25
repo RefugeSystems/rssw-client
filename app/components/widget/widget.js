@@ -16,6 +16,15 @@ rsSystem.component("rsWidgetControl", {
 		"settings": {
 			"type": Object
 		},
+		"index": {
+			"type": Number
+		},
+		"record": {
+			"type": Object
+		},
+		"entity": {
+			"type": Object
+		},
 		"contents": {
 			"type": Object
 		},
@@ -33,6 +42,20 @@ rsSystem.component("rsWidgetControl", {
 		return data;
 	},
 	"methods": {
+		"showHeader": function() {
+			return this.state.showHeader;
+		},
+		"showName": function() {
+			return this.state.showName || (this.index === 0 && (this.entity || this.record));
+		},
+		"shownName": function() {
+			if(this.entity) {
+				return this.entity.name;
+			}
+			if(this.record) {
+				return this.record.name;
+			}
+		},
 		"getClasses": function() {
 			var classes = "";
 			if(this.borderColor) {

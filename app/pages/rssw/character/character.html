@@ -7,11 +7,9 @@
 	 -->
 	 
 	<div class="entity-column" v-if="entity">
-		<h2>{{entity.name}}</h2>
-		<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="widget in widgets" :key="widget.id"></rs-container>
+		<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="(widget, $index) in widgets" :key="widget.id" :index="$index"></rs-container>
 	</div>
 	<div class="entity-column" v-for="addchar in additional_characters">
-		<h2>{{addchar.name}}</h2>
-		<rs-container :entity="addchar" :user="user" :universe="universe" :contents="widget" v-for="widget in widgets" :key="widget.id"></rs-container>
+		<rs-container :entity="addchar" :user="user" :universe="universe" :contents="widget" v-for="(widget, $index) in widgets" :key="widget.id" :index="$index"></rs-container>
 	</div>
 </div>

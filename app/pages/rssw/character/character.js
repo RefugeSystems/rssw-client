@@ -100,7 +100,15 @@ rsSystem.component("RSSWCharacter", {
 		            "declaration": "rsswDiceBin",
 		            "sid": "entity:dice:" + this.entity.id,
 		            "enabled": true,
+		            "defaults": {
+		            	"entityRollListener": true,
+		            	"test": true
+		            },
 		            "configurations": [{
+		        		"label": "Show Name",
+		        		"property": "showName",
+		        		"type": "checkbox"
+		            }, {
 		        		"label": "Hide Lables",
 		        		"property": "hideLabels",
 		        		"type": "checkbox"
@@ -115,6 +123,10 @@ rsSystem.component("RSSWCharacter", {
 		            }, {
 		        		"label": "Entity Roller",
 		        		"property": "entityRollListener",
+		        		"type": "checkbox"
+		            }, {
+		        		"label": "Test",
+		        		"property": "test",
 		        		"type": "checkbox"
 		            }]
 				});
@@ -138,6 +150,10 @@ rsSystem.component("RSSWCharacter", {
 		            "declaration": "rsswCharacterSkills",
 		            "sid": "entity:skills:" + this.entity.id,
 		            "enabled": true,
+		            "defaults": {
+		            	"emitSkillRoll": true,
+		            	"infoSkill": true
+		            },
 		            "configurations": [{
 		        		"label": "Hide Filter",
 		        		"property": "hideFilter",

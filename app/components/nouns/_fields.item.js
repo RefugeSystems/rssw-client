@@ -12,6 +12,7 @@
 		items,
 		notes,
 		skill,
+		slots,
 		stats;
 	
 	itemtypes = {
@@ -50,6 +51,14 @@
 		"label": "Attunee",
 		"property": "attuned_to",
 		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	slots = {
+		"label": "Slot Usage",
+		"property": "slot_usage",
+		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -216,6 +225,7 @@
 		"property": "obscured",
 		"type": "checkbox"
 	},
+	slots,
 	cancontain,
 	itemtypes,
 	abilities,
@@ -265,6 +275,7 @@
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			abilities.source_index = this.universe.indexes.ability;
+			slots.source_index = this.universe.indexes.slot;
 			items.source_index = this.universe.indexes.item;
 			notes.source_index = this.universe.indexes.note;
 		},

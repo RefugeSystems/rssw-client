@@ -25,7 +25,7 @@ class RSObject extends EventEmitter {
 				this._listeningParentCycle = now + 1000;
 				this.recalculateProperties();
 			}
-			if(this._listeningParentCycle >= now) {
+			if(rsSystem.debug && this._listeningParentCycle >= now) {
 				console.log("Recycling: ", this);
 			}
 		};
