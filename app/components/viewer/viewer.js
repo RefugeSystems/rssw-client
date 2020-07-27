@@ -581,7 +581,7 @@
 				});
 			},
 			"wheeling": function(event) {
-				console.log("wheel", event);
+//				console.log("wheel", event);
 				if(event.deltaY < 0) {
 					this.zoomInOne();
 				} else if(event.deltaY > 0) {
@@ -589,11 +589,11 @@
 				}
 			},
 			"zoomOutOne": function() {
-				console.log("Zoom -1");
+//				console.log("Zoom -1");
 				this.zoom(this.image.zoom - 1);
 			},
 			"zoomInOne": function() {
-				console.log("Zoom +1");
+//				console.log("Zoom +1");
 				this.zoom(this.image.zoom + 1);
 			},
 			"apply": function(applying) {

@@ -7,14 +7,14 @@
 var storageKey = "_rs_connectComponentKey",
 	version = "0.0.1",
 	cacheID = "rsswx_" + version,
-	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1,
+	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
 	followUp,
 	cacheOptions = {
 		"ignoreSearch": true
 	};
 
 self.addEventListener("install", function(event) {
-	console.log("SW Install");
+//	console.log("SW Install");
 	var result = caches.open(cacheID);
 	result.then(function(cache) {
 		return cache.addAll([
@@ -88,7 +88,7 @@ self.addEventListener("push", function(event) {
 });
 
 followUp = function() {
-	console.log("Following Up...");
+//	console.log("Following Up...");
 	setTimeout(followUp, 1000000);
 };
 
