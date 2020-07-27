@@ -33,6 +33,15 @@
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
 			
+			data.bufferLoading = false;
+			data.bufferTimeout = null;
+			data.bufferMark = null;
+			if(this.field.type === "textarea") {
+				data.buffer = this.root[this.field.property];
+			} else {
+				data.buffer = "";
+			}
+			
 			if(this.field.filter) {
 				data.filterKeys = Object.keys(this.field.filter);
 			}
@@ -168,6 +177,25 @@
 				} else {
 					return true;
 				}
+			},
+			"bufferChangeProcess": function() {
+				if(this.bufferMark < Date.now()) {
+					Vue.set(this.root, this.field.property, this.buffer);
+					Vue.set(this, "bufferLoading", false);
+					this.emitChanged();
+				} else {
+					setTimeout(() => {
+						this.bufferChangeProcess();
+					}, 500);
+				}
+			},
+			"bufferChanged": function() {
+				Vue.set(this, "bufferMark", Date.now() + 500);
+				Vue.set(this, "bufferLoading", true);
+				setTimeout(() => {
+					this.bufferChangeProcess();
+				}, 500);
+				
 			},
 			"emitChanged": function() {
 				this.$emit("changed", {
