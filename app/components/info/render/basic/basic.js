@@ -808,6 +808,12 @@
 					}, 1000);
 				}
 			},
+			"showDirectProperties": function() {
+				return !this.record.hide_properties && !this.record.hide_stats;
+			},
+			"showInheritRelations": function() {
+				return !this.record.hide_relations && !this.record.hide_stats;
+			},
 			"update": function() {
 				var buffer,
 					hold,

@@ -328,6 +328,9 @@ class RSObject extends EventEmitter {
 		if(!this.id) {
 			return false;
 		}
+		if(this.suppressed) {
+			return false;
+		}
 		
 		if(this.recalculatePrefetch) {
 			this.recalculatePrefetch();
