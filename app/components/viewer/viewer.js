@@ -139,6 +139,8 @@
 			data.actions.options = [];
 			data.actions.menu = null;
 			
+			data.canvas = null;
+			
 			return data;
 		},
 		"watch": {
@@ -166,6 +168,13 @@
 		},
 		"mounted": function() {
 			Vue.set(this, "element", $(this.$el));
+			
+			this.canvasElement = $("canvas.map-paths");
+			if(this.canvasElement.length) {
+				this.canvasElement = this.canvasElement[0];
+				this.canvas = this.canvasElement.getContext("2d");
+			}
+			
 			rsSystem.register(this);
 			rsSystem.EventBus.$on("copied-id", this.setMenuID);
 			this.universe.$on("universe:modified", this.update);
@@ -622,6 +631,22 @@
 						this.image.width = this.original.width * (1 + .1 * applying.zoom);
 					}
 					
+					if(!this.canvas || !this.canvas.strokeRect) {
+						this.canvas = $("canvas.map-paths");
+						if(this.canvas.length) {
+							this.canvasElement = this.canvas[0];
+							this.canvas = this.canvasElement.getContext("2d");
+						} else {
+							this.canvasElement = null;
+							this.canvas = null;
+						}
+					}
+					if(this.canvas) {
+						this.canvasElement.height = applying.height;
+						this.canvasElement.width = applying.width;
+						this.redrawPaths();
+					}
+					
 					this.parchment.css({
 						"height": applying.height + "px",
 						"width": applying.width + "px",
@@ -631,6 +656,70 @@
 					
 					Object.assign(this.image, applying);
 					this.saveStorage(this.storageKeyID, this.state);
+				}
+			},
+			"redrawPaths": function() {
+				var path,
+					x;
+				
+				// Paint Grid
+				if(this.options && this.options.paintGrid) {
+					this.paintGrid();
+				}
+				
+				for(x=0; x<this.universe.indexes.locale.listing.length; x++) {
+					path = this.universe.indexes.locale.listing[x];
+					if(path.parent === this.location.id && path.values && path.values.length) {
+						this.drawPath(path);
+					}
+				}
+			},
+			"drawPath": function(path) {
+				var xc, yc;
+				this.canvas.strokeStyle = path.color || "#FFFFFF";
+				this.canvas.lineWidth = path.thickness;
+				this.canvas.globalAlpha = path.opacity;
+				this.canvas.beginPath();
+				this.canvas.moveTo(path.values[0][0] * this.image.width, path.values[0][1] * this.image.height);
+				for(var x=1; x<path.values.length; x++) {
+					if(path.curved) {
+						//this.canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+						xc = ((path.values[x-1][0] + path.values[x][0]) * this.image.width) / 2;
+						yc = ((path.values[x-1][1] + path.values[x][1]) * this.image.height) / 2;
+						this.canvas.quadraticCurveTo(xc, yc, path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+//						this.canvas.quadraticCurveTo(
+//							path.values[x-1][0] * this.image.width,
+//							path.values[x-1][1] * this.image.height,
+//							path.values[x][0] * this.image.width,
+//							path.values[x][1] * this.image.height);
+					} else {
+						this.canvas.lineTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+					}
+				}
+				this.canvas.stroke();
+			},
+			"paintGrid": function() {
+				this.paintGridV01();
+			},
+			"paintGridV01": function() {
+				this.canvas.strokeStyle = "#FFFFFF";
+				this.canvas.globalAlpha = 0.05;
+				var prefix,
+					bulk,
+					x;
+				
+				for(x=0; x<24; x++) {
+					// this.image.width * (1/23), this.image.height * (1/30) + x * this.image.height * (1/21), this.image.width * (1/23), this.image.height * (1/21));
+					this.canvas.moveTo(x * this.image.width * (1/23), 0);
+					this.canvas.lineTo(x * this.image.width * (1/23), this.image.height);
+					this.canvas.stroke();
+				}
+				for(x=0; x<22; x++) {
+					prefix = this.image.height * (1/32);
+					bulk = this.image.height - prefix;
+					this.canvas.moveTo(0, prefix + x * (bulk * 1/20));
+					this.canvas.lineTo(this.image.width, prefix + x * (bulk * 1/20));
+					this.canvas.stroke();
 				}
 			},
 			"poiVisible": function(link) {

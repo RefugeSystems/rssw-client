@@ -91,6 +91,11 @@
 								return false;
 							}
 							break;
+						case "!":
+							if(this.root[keys[x]]) {
+								return false;
+							}
+							break;
 						case "contains":
 							if(this.field.condition[keys[x]].values) {
 								for(v=0; v<this.field.condition[keys[x]].values.length; v++) {

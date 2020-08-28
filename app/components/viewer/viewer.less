@@ -330,7 +330,7 @@
 				
 				button.option:hover {
 					border-bottom: 3px solid blue;
-				}	
+				}
 			}
 		}
 	}
@@ -388,7 +388,7 @@
 				overflow: hidden;
 			
 				input {
-					height: 100%;
+					/*height: 100%;*/
 					padding: 3px;
 					transition: background-color .5s;
 					
@@ -403,5 +403,14 @@
 			max-height: 500px;
 			width: 200px;
 		}
+	}
+	
+	canvas.map-paths {
+		position: absolute;
+		touch-action: none;
+		user-select: none;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
 	}
 }
