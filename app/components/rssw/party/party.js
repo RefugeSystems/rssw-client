@@ -62,7 +62,7 @@
 				"hideMembers": false
 			});
 			
-			data.newOrder = 
+			data.newOrder = null;
 			data.move_location = "";
 			data.addingMember = "";
 			data.location = null;
@@ -99,6 +99,11 @@
 			"setLocation": function() {
 				this.record.setLocation(this.move_location);
 				Vue.set(this, "move_location", "");
+			},
+			"changeOrder": function(order) {
+				this.record.commit({
+					"order": order
+				});
 			},
 			"giveCredits": function(credits) {
 				var update = {},
@@ -154,6 +159,7 @@
 				this.members.sort(this.sortData);
 				
 				Vue.set(this, "location", this.universe.indexes.location.index[this.record.location]);
+				Vue.set(this, "newOrder", this.record.order);
 			}
 		},
 		"beforeDestroy": function() {

@@ -5,7 +5,6 @@
 	<div class="property name">
 		<span class="icon fad fa-user"></span>
 		<span class="name">{{character.name}}</span>
-		<span>( {{character.age}} Cycle old {{getSex(character)}} )</span>
 		<button class="recalculate" v-on:click="updateCharacter()">
 			<span class="far fa-sync" :class="calculating?'fa-spin':''"></span>
 		</button>

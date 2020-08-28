@@ -5,7 +5,10 @@
 		</button>
 	</div>
 	<div class="flex h center control-bar">
-		<span class="widget-title">{{contents.title || contents.declaration}}</span>
+		<span class="widget-title">
+			<span>{{contents.title || contents.declaration}}</span>
+			<span v-if="showName()">( {{shownName()}} )</span>
+		</span>
 		<button class="widget-ctrl config" v-on:click="config()" v-if="contents.configurations">
 			<span class="far fa-cogs"></span>
 		</button>

@@ -46,6 +46,7 @@
 	<span v-if="field.computed && field.computed.suffix" class="computed-suffix">{{field.computed.suffix}}</span>
 	<button v-if="field.info" class="info fas fa-info-circle" v-on:click.stop="field.info(root[field.property])"></button>
 	<button v-if="field.validation" class="validation fas" :class="{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}" v-on:click.stop="field.validation.feedback(field, root[field.property], checkField())"></button>
+	<span v-if="bufferLoading" class="far fa-pulse fa-spinner"></span>
 
 	<slot name="info">
 	</slot>
@@ -67,7 +68,7 @@
 	</table>
 	
 	<div v-if="field.type === 'textarea'" class="textarea">
-		<textarea :id="fid" v-model="root[field.property]" v-tab :placeholder="field.placeholder" v-on:input="emitChanged()" v-on:blur="blurring()">
+		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.placeholder" v-on:input="bufferChanged()" v-on:blur="blurring()">
 		</textarea>
 	</div>
 	
