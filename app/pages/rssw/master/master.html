@@ -17,25 +17,28 @@
 				<select v-on:change="setSession(trackSession)" v-model="trackSession">
 					<option v-for="session in sessions" :value="session.id">{{session.name}}</option>
 				</select>
-				<div class="sessions list-data minor">
-					<button class="listed entity navigation-button" v-for="session in sessions" v-if="!session.hidden && !session.obscured" v-on:click="showInfo(session)" :key="session.id">
-						<span class="link-icon" :class="session.icon || 'fab fa-old-republic'"></span>
-						<span class="link-label">{{session.name}}</span>
-					</button>
-				</div>
 				<div class="title">
-					<input class="filter" v-model="state.searchKnowledge" />
+					<input class="filter" v-model="state.searchKnowledge" placeholder="Filter Screen Knowledge..."/>
 				</div>
-				<div class="knowledge list-data">
+				<div class="knowledge list-data major">
 					<button class="listed entity navigation-button" v-for="knowledge in knowledges" v-if="!knowledge.hidden && (!state.searchKnowledge || (knowledge._search && knowledge._search.indexOf(state.searchKnowledge.toLowerCase()) !== -1))" v-on:click="showInfo(knowledge)" :key="knowledge.id">
 						<span class="link-icon" :class="knowledge.icon || 'fas fa-tablet'"></span>
 						<span class="link-label">{{knowledge.name}}</span>
 					</button>
 				</div>
+				<div class="title">
+					<input class="filter" v-model="state.searchSessions" placeholder="Filter Sessions..."/>
+				</div>
+				<div class="sessions list-data minor">
+					<button class="listed entity navigation-button" v-for="session in sessions" v-if="!session.hidden && !session.obscured && (!state.searchSessions || (session._search && session._search.indexOf(state.searchSessions.toLowerCase()) !== -1))" v-on:click="showInfo(session)" :key="session.id">
+						<span class="link-icon" :class="session.icon || 'fab fa-old-republic'"></span>
+						<span class="link-label">{{session.name}}</span>
+					</button>
+				</div>
 			</div>
 			<div class="control entity-list list">
 				<div class="title">
-					<input class="filter" v-model="state.search" />
+					<input class="filter" v-model="state.search" placeholder="Filter Entities..." />
 				</div>
 				<div class="entities list-data">
 					<button class="listed entity navigation-button" v-for="entity in universeEntities" :to="'/universe/' + entity.classification + '/' + entity.id" v-on:click="showInfo(entity)" :key="entity.id" v-if="filteredEntity(entity)">
@@ -50,7 +53,7 @@
 			</div>
 			<div class="control skill list">
 				<div class="title">
-					<input class="filter" v-model="state.skill_search" />
+					<input class="filter" v-model="state.skill_search" placeholder="Filter Skills..." />
 				</div>
 				<div class="skills list-data flex v">
 					<button class="listed skill" v-for="skill in skills" v-if="!state.skill_search || (skill._search && skill._search.indexOf(state.skill_search.toLowerCase()) !== -1)" v-on:click="showInfo(skill)" :key="skill.id">
