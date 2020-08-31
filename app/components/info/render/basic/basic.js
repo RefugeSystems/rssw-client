@@ -42,6 +42,7 @@
 	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
 //	invisibleKeys.indicators = true;
+	invisibleKeys.suppressed = true;
 	invisibleKeys.no_border = true;
 	invisibleKeys.condition = true;
 	invisibleKeys.exception = true;

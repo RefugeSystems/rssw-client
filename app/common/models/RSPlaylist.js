@@ -10,6 +10,5 @@
 class RSPlaylist extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
-		
 	}
 }
