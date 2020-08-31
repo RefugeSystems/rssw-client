@@ -3,6 +3,11 @@
 		<h1>System Information</h1>
 		<p>Overview of information regarding your system and the server to which you are connected.</p>
 		
+		<button class="" v-on:click="uncachedRefresh()">
+			<spna class="fas fa-eraser"></span>
+			<span>Cache Clearing Refresh</span>
+		</button>
+		
 		<h2 class="flex h middled">
 			<span>Detected Browser Information</span>
 			<button class="make" v-on:click="makeIssue()" v-if="player.master && !knownErrors.navigator">

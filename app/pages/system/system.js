@@ -35,6 +35,9 @@
 			"showInfo": function(record) {
 				rsSystem.EventBus.$emit("display-info", record);
 			},
+			"uncachedRefresh": function() {
+				location.reload(true);
+			},
 			"makeIssue": function() {
 				var buffer = {};
 				buffer.id = navigator.userAgent.sha256();
