@@ -38,6 +38,10 @@
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
+	}, {
+		"label": "Master Note",
+		"property": "master_note",
+		"type": "textarea"
 	}];
 	
 	rsSystem.component("NounFieldsSession", {
