@@ -9,6 +9,10 @@
 		left: 0px;
 		top: 0px;
 	}
+	
+	.rotational-icon {
+		transition: transform .5s; 
+	}
 
 	.map {
 		position: relative;
@@ -16,6 +20,7 @@
 		user-select: none;
 		width: 100%;
 		height: 100%;
+		font-size: inherit;
 	
 		.barrier {
 			background-color: transparent;
@@ -26,6 +31,11 @@
 			top: 0px;
 			z-index: 4;
 		}
+		
+		button.scaled,
+		span.scaled {
+			font-size: inherit !important;
+		}
 	
 		.view {
 			position: relative;
@@ -34,6 +44,7 @@
 			width: 100%;
 			height: 100%;
 			background: black;
+			font-size: inherit;
 			
 			.coordinates {
 				position: absolute;
@@ -73,7 +84,7 @@
 				background: transparent;
 				height: 100%;
 				width: 100%;
-				z-index: 6;
+				z-index: 15;
 					
 				.dot {
 					background-color: red;
@@ -90,6 +101,7 @@
 				position: absolute;
 				background: transparent;
 				z-index: 3;
+				font-size: inherit;
 				
 				&.x {
 					border-right: 1px solid red;
@@ -125,6 +137,7 @@
 				position: absolute;
 				z-index: 1;
 				/*transition: width .5s, height .5s;*/
+				font-size: inherit;
 				
 				img {
 					position: absolute;
@@ -149,16 +162,20 @@
 					margin-top: -17px;
 					color: @rsOrange;
 					text-align: center;
-					/*
-					margin-top: -10px;
-					opacity: .5;
-					background: red;
-					*/
 					
 					background-color: @rsBlack;
 
 					> * {
 						color: inherit;
+					}
+					
+					&.map-border {
+						
+					}
+					
+					&.no-border {
+						background-color: transparent !important;
+						border-color: transparent !important;
 					}
 
 					&:active,
@@ -389,13 +406,80 @@
 			
 				input {
 					/*height: 100%;*/
-					padding: 3px;
 					transition: background-color .5s;
+					height: 24px;
+					padding: 3px;
+					border: 0px;
 					
 					&.search-error {
 						background-color: @rsLightRed;
 					}
 				}
+			}
+		}
+		
+		&.open {
+			max-height: 500px;
+			width: 200px;
+		}
+	}
+
+	.legend {
+		position: absolute;
+		bottom: 5px;
+		right: 5px;
+		display: flex;
+		flex-direction: column;
+		width: 40px;
+		min-height: 40px;
+		max-height: 40px;
+		transition: width .5s, max-height .5s;
+		overflow: hidden;
+		z-index: 50;
+		
+		border: 1px solid @rsWhite;
+		border-radius: 5px;
+		background: @rsBlack;
+		color: @rsWhite;
+		
+		.legend-list {
+			max-height: 300px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			
+			button {
+				padding-left: 10px !important;
+				text-align: left;
+			}
+		}
+		
+		.icon {
+			display: inline-block;
+			text-align: center;
+			min-width: 16px; 
+		}
+		
+		button.control {
+			background: transparent;
+			border: 0px;
+			padding: 0px;
+			margin: 0px;
+			line-height: 40px;
+			height: 40px;
+			flex-shrink: 0;
+			color: inherit;
+			
+			&:active,
+			&:hover {
+				background-color: @rsWhite;
+				color: @rsBlack;
+				cursor: pointer;
+			}
+			
+			&.action {
+				line-height: 30px;
+				height: 30px;
+				width: 30px;
 			}
 		}
 		
