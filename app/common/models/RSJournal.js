@@ -14,4 +14,22 @@ class RSJournal extends RSObject {
 		super(details, universe);
 		this._alterationLookup = {};
 	}
+	
+	get name() {
+		if(this.hidden) {
+			if(this.hiddenName) {
+				return this.hiddenName;
+			} else {
+				return "Unknown";
+			}
+		} else {
+			if(this._coreData.name) {
+				return this._coreData.name;
+			} else if(this._coreData.session && this.universe.indexes.session && this.universe.indexes.session.index && this.universe.indexes.session.index[this._coreData.session]) {
+				return this.universe.indexes.session.index[this._coreData.session].name;
+			} else {
+				return this.id;
+			}
+		}
+	}
 }

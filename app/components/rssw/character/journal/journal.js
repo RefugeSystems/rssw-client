@@ -97,10 +97,11 @@
 				"label": "Sessions",
 				"property": "session",
 				"type": "select",
-				"optionValue": "id",
+				"unset": "No Session",
+				"persistUnset": true,
+				"options": data.sessions,
 				"optionLabel": "name",
-				"options": data.sessions
-				//"options": this.universe.indexes.session.listing
+				"optionValue": "id"
 			};
 			
 			data.entryField = {
@@ -244,6 +245,7 @@
 						data = {},
 						x;
 	
+					data.updated = Date.now();
 					data._type = "journal";
 					for(x=0; x<keys.length; x++) {
 						if(keys[x][0] !== "_" && keys[x] !== "universe") {
@@ -251,7 +253,6 @@
 						}
 					}
 					
-					console.log("Sync: ", data);
 					this.universe.send("update:journal", data);
 				}
 				
