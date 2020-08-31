@@ -387,7 +387,7 @@
 				
 				if(model.name) {
 					if(this.state.current === "session") {
-						buffer = model.name;
+						buffer = model.label;
 						while(buffer.length < 5) {
 							buffer = "0" + buffer;
 						}
