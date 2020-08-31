@@ -26,10 +26,12 @@
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.locked_attunement = true;
 	invisibleKeys.source_template = true;
+	invisibleKeys.path_exception = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true; 
 	invisibleKeys.no_modifiers = true;
 	invisibleKeys.restock_base = true;
+	invisibleKeys.render_name = true;
 	invisibleKeys.restock_max = true;
 	invisibleKeys.declaration = true;
 	invisibleKeys.description = true;
@@ -40,7 +42,9 @@
 	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
 //	invisibleKeys.indicators = true;
+	invisibleKeys.no_border = true;
 	invisibleKeys.condition = true;
+	invisibleKeys.exception = true;
 	invisibleKeys.singleton = true;
 	invisibleKeys.equipped = true;
 	invisibleKeys.obscured = true;
@@ -71,6 +75,30 @@
 	invisibleKeys.id = true;
 	invisibleKeys.x = true;
 	invisibleKeys.y = true;
+
+	invisibleKeys.label_shadow_color = true;
+	invisibleKeys.label_shadow_blur = true;
+	invisibleKeys.label_shadow = true;
+	invisibleKeys.label_shadow = true;
+	invisibleKeys.label_thickness = true;
+	invisibleKeys.fill_thickness = true;
+	invisibleKeys.label_opacity = true;
+	invisibleKeys.fill_opacity = true;
+	invisibleKeys.label_color = true;
+	invisibleKeys.fill_color = true;
+	invisibleKeys.thickness = true;
+	invisibleKeys.clickable = true;
+	invisibleKeys.show_name = true;
+	invisibleKeys.contained = true;
+	invisibleKeys.must_know = true;
+	invisibleKeys.has_path = true;
+	invisibleKeys.pathing = true;
+	invisibleKeys.opacity = true;
+	invisibleKeys.values = true;
+	invisibleKeys.curved = true;
+	invisibleKeys.pathed = true;
+	invisibleKeys.color = true;
+	invisibleKeys.path = true;
 	
 	invisibleKeys.coordinates = true;
 	invisibleKeys.shown_at = true;
@@ -125,6 +153,11 @@
 		return value;
 	};
 	
+	prettifyValues.date = function(property, value) {
+		value = new Date(value);
+		return value.toDateString();
+	};
+	
 	prettifyValues.related = function(property, value, record, universe) {
 		return "to " + (value?value.length:0) + " records";
 	};
@@ -161,8 +194,15 @@
 	};
 	
 	prettifyValues.piloting = function(property, value, record, universe) {
-		if(universe.indexes.entity[value]) {
-			return universe.indexes.entity[value].name;
+		if(universe.indexes.entity.index[value]) {
+			return universe.indexes.entity.index[value].name;
+		}
+		return value;
+	};
+	
+	prettifyValues.editor = function(property, value, record, universe) {
+		if(universe.indexes.entity.index[value]) {
+			return universe.indexes.entity.index[value].name;
 		}
 		return value;
 	};
@@ -611,6 +651,11 @@
 			"obscureRecord": function() {
 				this.record.commit({
 					"obscured": this.record.obscured?null:true
+				});
+			},
+			"knownRecord": function() {
+				this.record.commit({
+					"must_know": this.record.must_know?null:true
 				});
 			},
 			"prettifyKey": function(key) {

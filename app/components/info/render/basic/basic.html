@@ -253,6 +253,12 @@
 				<span>Obscured</span>
 			</button>
 		</div>
+		<div class="control">
+			<button class="action" v-on:click="knownRecord()">
+				<span class="icon" :class="record.must_know?'far fa-check-square':'far fa-square'"></span>
+				<span>Must Know</span>
+			</button>
+		</div>
 		
 		<div class="control flex h">
 			<button class="action direct" v-on:click="editRecord(false)">

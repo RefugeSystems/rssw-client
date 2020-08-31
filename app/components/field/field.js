@@ -36,11 +36,11 @@
 			data.bufferLoading = false;
 			data.bufferTimeout = null;
 			data.bufferMark = null;
-			if(this.field.type === "textarea") {
-				data.buffer = this.root[this.field.property];
-			} else {
-				data.buffer = "";
-			}
+			data.buffer = this.root[this.field.property];
+//			if(this.field.type === "textarea") {
+//			} else {
+//				data.buffer = "";
+//			}
 			
 			if(this.field.filter) {
 				data.filterKeys = Object.keys(this.field.filter);
@@ -56,6 +56,9 @@
 			if(this.field.source_index && this.field.source_index.listing) {
 				this.field.source_index.listing.sort(this.sortData);
 			}
+			this.$watch("root." + this.field.property, function(newValue, oldValue) {
+				Vue.set(this, "buffer", newValue);
+			});
 		},
 		"methods": {
 			"isVisible": function() {

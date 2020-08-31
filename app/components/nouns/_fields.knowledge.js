@@ -3,6 +3,7 @@
 	
 	var dataSource,
 		categories,
+		mentioned,
 		profiles,
 		related,
 		attrs,
@@ -69,6 +70,14 @@
 		"optionLabel": "name"
 	};
 	
+	mentioned = {
+		"label": "Mentioned",
+		"property": "mentioned",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
@@ -123,10 +132,7 @@
 			"active",
 			"completed"
 		]
-	},
-	profiles,
-	related,
-	{
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -135,6 +141,9 @@
 		"property": "obscured",
 		"type": "checkbox"
 	},
+	profiles,
+	related,
+	mentioned,
 	attrs,
 	stats,
 	{
@@ -172,6 +181,7 @@
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			notes.source_index = this.universe.indexes.note;
+			mentioned.source_index = this.universe.index;
 			related.source_index = this.universe.index;
 		},
 		"methods": {

@@ -1,64 +1,115 @@
 .rs-component.rssw.component-entity-journal {
+	overflow: hidden;
 
 	a {
 		cursor: pointer;
 	}
-
-	.property {
-		max-width: 550px;
-		color: @rsWhite;
-		margin: 3px;
-	}
 	
-	.divide {
-		color: @rsWhite;
-		margin: 0px 0px 0px 2px;
-	}
-	
-	.icon {
-		display: inline-block;
-		width: 20px;
-		text-align: center;
-	}
-	
-	.value {
-		color: @rsLightBlue;
-		font-size: 1.1em;
-	}
-	
-	.property-action {
-		color: @rsOrange;
-		font-size: .9em;
-	}
-	
-	.description {
-		min-height: 140px;
-		min-width: 360px;
-	}
-	
-	button {
-		background: transparent;
-		font-family: inherit;
-		font-size: inherit;
-		padding: 0px;
-		border: 0px;
-		margin: 0px;
-	}
-	
-	button.action {
-		color: white;
-	}
-	
-	.text-container {
-		max-height: 550px;
-		max-width: inherit;
-		overflow: auto;
+	.editor {
+		display: block;
+		width: 100%;
+		z-index: 2;
+		
+		.rs-field {
+			.textarea {
+				display: flex;
+			}
+		}
 		
 		textarea {
-			width: 510px;
-			height: 300px;
-			max-height: 550px;
-			max-width: inherit;
+			display: block;
+			flex-grow: 10;
+			margin: 1px;
+			padding: 5px 80px 5px 5px;
+			min-height: 230px;
+			min-width: 200px;
 		}
+			
+		&.tier-one textarea {
+			padding-right: 200px;
+		}
+	}
+	
+	.blocks {
+		position: absolute;
+		height: 100%;
+		top: 0px;
+		right: 0px;
+		z-index: 5;
+		
+		.block {
+			display: flex;
+			position: relative;
+			flex-direction: row;
+			overflow: hidden;
+			max-width: 26px;
+			transition: max-width .5s;
+			background-color: transparent;
+			
+			&.open-block {
+				max-width: 200px;
+			}
+		}
+		
+		.block-toggle {
+			position: relative;
+			padding: 3px;
+			margin: 0px;
+			border-left: 1px solid @rsOrange;
+			background-color: #4e0505;
+			color: @rsWhite;
+			height: ~"calc(100% - 4px)";
+			min-width: 26px;
+			width: 26px;
+			
+		}
+		
+		.toggle-label {
+			display: inline-block;
+			position: absolute;
+			left: 0px;
+			width: 100%;
+		}
+		
+		.block-content {
+			display: block;
+			position: relative;
+			background-color: black;
+			min-width: 100px;
+			
+			&.listing {
+				overflow-y: auto;
+				display: flex;
+				flex-direction: column
+			}
+			
+			.listed {
+				text-align: left;
+				padding: 3px 3px 3px 7px;
+				margin: 3px;
+				background-color: @rsBlack;
+				border: 1px solid @rsBlue;
+				border-radius: 5px;
+				font-size: 15px;
+				color: @rsWhite;
+				white-space: nowrap;
+				overflow: hidden;
+				
+				&.selected {
+					background-color: @rsBlue;
+				} 
+			}
+		}
+		
+		.rendering {
+			background-color: #EAEFF9;
+			padding: 4px;
+			overflow: hidden;
+			overflow-y: auto;
+		}
+	}
+	
+	.spinable {
+		transition: transform .5s;
 	}
 }

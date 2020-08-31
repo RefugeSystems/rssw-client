@@ -13,4 +13,8 @@ class RSSession extends RSObject {
 		super(details, universe);
 		this._alterationLookup = {};
 	}
+	
+	get name() {
+		return "Session " + this._coreData.name;
+	}
 }

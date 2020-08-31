@@ -259,9 +259,11 @@ class RSUniverse extends RSObject {
 					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
 					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
 					this.index.indexItem(this.nouns[event.type][event.id]);
+				}
+				setTimeout(() => {
 					this.$emit("universe:modified", this);
 					this.$emit("universe:modified:complete", this);
-				}
+				}, 0);
 			});
 			
 			this.$on("control", (event) => {

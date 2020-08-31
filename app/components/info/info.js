@@ -109,7 +109,6 @@
 //				console.log("Current: ", this.viewing);
 				
 				if(toView && !(toView instanceof RSObject)) {
-					console.log("RS");
 					if(toView.record) {
 //						console.warn("Received View Record: ", toView);
 						Vue.set(this, "target", toView.target);

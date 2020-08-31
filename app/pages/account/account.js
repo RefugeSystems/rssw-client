@@ -38,6 +38,12 @@
 				"email",
 				"linked_discord"
 			];
+			data.toggles = [
+				"allow_scripting"
+			];
+			data.title = {
+				"allow_scripting": "Allow Scripted HTML"
+			};
 
 			return data;
 		},
@@ -68,9 +74,16 @@
 					}
 				}, 0);
 			},
+			"toggle": function(field) {
+				Vue.set(this.modeling, field, null);
+				var buffer = {};
+				buffer[field] = !this.player[field];
+				this.player.commit(buffer);
+			},
 			"sendField": function(field, value) {
 				value = value || this.modeling[field];
 				Vue.set(this.editting, field, false);
+				Vue.set(this.modeling, field, null);
 				if(this.player[field] != value) {
 					var buffer;
 
@@ -100,6 +113,8 @@
 				Vue.set(this.modeling, "username", this.player.username);
 				Vue.set(this.modeling, "email", this.player.email);
 				Vue.set(this.modeling, "name", this.player.name);
+
+				Vue.set(this.modeling, "allow_scripting", this.player.allow_scripting);
 			}
 		},
 		"beforeDestroy": function() {

@@ -17,6 +17,8 @@ class RSObject extends EventEmitter {
 		this._relatedErrors = {};
 		this._coreData = {};
 		this._registered = {};
+		this._knownKeys = [];
+		this._known = {};
 		this._shadow = JSON.parse(JSON.stringify(details));
 		this._listeningParentCycle = 0;
 		this._listeningParent = () => {
@@ -605,6 +607,8 @@ class RSObject extends EventEmitter {
 			console.log("Assembled: ", _p(this), _p(base));
 		}
 		
+		this.rebuildKnown();
+		
 		if(this.recalculateHook) {
 			this.recalculateHook();
 		}
@@ -805,6 +809,60 @@ class RSObject extends EventEmitter {
 		this.recalculateProperties();
 		// Array properties not recalculating with one pass?
 		this.recalculateProperties();
+	}
+	
+	/**
+	 * Rebuilds the _known property to track what things in the universe
+	 * this object is aware of. This can be used as clarivoyance for what
+	 * has touched or used an inanimate object to a creature's actual knowledge
+	 * that it can share.
+	 * @method rebuildKnown
+	 */
+	rebuildKnown() {
+		var knowledge,
+			key,
+			x,
+			y;
+		
+		for(x=0; x<this._knownKeys.length; x++) {
+			delete(this._known[this._knownKeys[x]]);
+		}
+		
+		if(this.knowledge && this.knowledge.length) {
+			this._knownKeys.splice(0);
+			for(x=0; x<this.knowledge.length; x++) {
+				knowledge = this.universe.indexes.knowledge.index[this.knowledge[x]];
+				if(knowledge && knowledge.related && knowledge.related.length) {
+					for(y=0; y<knowledge.related.length; y++) {
+						key = knowledge.related[y];
+						if(!this._known[key]) {
+							this._known[key] = [];
+						}
+						this._known[key].push(knowledge.id);
+						this._knownKeys.push(key);
+					}
+				}
+			}
+		}
+	}
+	
+	knowsOf(thing, threshold, knowledge) {
+		if(knowledge && (!this.knowledge || this.knowledge.indexOf(knowledge.id || knowledge) === -1)) {
+			return false;
+		}
+		
+		if(thing) {
+			if(typeof(thing) === "object") {
+				return this._known[thing.id] && this._known[thing.id].length >= (thing.known_threshold || threshold || 1);
+			} else {
+				thing = thing.id || thing;
+				if(!threshold) {
+					threshold = 1;
+				}
+				return this._known[thing] && this._known[thing].length >= threshold;
+			}
+		}
+		return false;
 	}
 }
 

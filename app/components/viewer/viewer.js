@@ -47,6 +47,7 @@
 				};
 			}
 
+			data.viewingEntity = null;
 			data.state.generate_location = data.state.generate_location || "";
 			data.state.viewed_at = data.state.viewed_at || 0;
 			data.state.search = data.state.search || "";
@@ -68,12 +69,22 @@
 			if(data.state.master_view === undefined) {
 				data.state.master_view = "";
 			}
+			if(data.state.hidden_legend === undefined) {
+				data.state.hidden_legend = {};
+			}
+			if(data.state.path_fill === undefined) {
+				data.state.path_fill = "";
+			}
 			
 			if(data.state.search) {
 				data.search_criteria = data.state.search.toLowerCase().split(" ");
 			} else {
 				data.search_criteria = [];
 			}
+
+			data.baseFontSize = 13;
+			data.scaledSize = 0;
+			
 			data.searchPrevious = data.state.search;
 			data.searchError = "";
 			data.original = {};
@@ -85,11 +96,23 @@
 			data.isDragging = false;
 			data.dragX = null;
 			data.dragY = null;
-
+			
+			data.availableLocales = {};
 			data.pointsOfInterest = [];
 			data.coordinates = [];
+			data.locales = [];
 			data.pins = true;
 			data.alter = "";
+			
+			data.legendDisplayed = true;
+			data.legendOpen = false;
+			data.legendHidden = {};
+			
+			data.localeInfo = {
+				"event": "info-key",
+				"icon": "fas fa-info-circle",
+				"shown": false
+			};
 			
 			data.menuOpen = false;
 			data.menuItems = [[{
@@ -138,6 +161,18 @@
 			data.actions.header = "Location";
 			data.actions.options = [];
 			data.actions.menu = null;
+
+			data.addPointOption = {
+				"icon": "fas fa-code-commit",
+				"event": "add-point",
+				"text": "Add Point"
+			};
+
+			data.setNamePointOption = {
+				"icon": "fal fa-code-commit",
+				"event": "set-name-point",
+				"text": "Set Name Point"
+			};
 			
 			data.canvas = null;
 			
@@ -173,6 +208,15 @@
 			if(this.canvasElement.length) {
 				this.canvasElement = this.canvasElement[0];
 				this.canvas = this.canvasElement.getContext("2d");
+			}
+
+			if(this.state.master_view !== "master") {
+				if(this.state.master_view) {
+					Vue.set(this, "viewingEntity", this.universe.indexes.entity.index[this.state.master_view]);
+				}
+				if(!this.viewingEntity) {
+					Vue.set(this, "viewingEntity", this.universe.indexes.entity.index[this.player.entity]);
+				}
 			}
 			
 			rsSystem.register(this);
@@ -259,7 +303,7 @@
 				Vue.set(this.state, "poiFiltering", !this.state.poiFiltering);
 			},
 			"filterPOIs": function(text) {
-				console.log("Filter: " + text);
+//				console.log("Filter: " + text);
 				var buffer;
 				
 				if(text !== this.searchPrevious) {
@@ -294,11 +338,18 @@
 					}
 				}
 
-				console.log("Match");
+//				console.log("Match");
 				return true;
+			},
+			"toggleLegend": function() {
+				Vue.set(this, "legendOpen", !this.legendOpen);
 			},
 			"toggleMenu": function() {
 				Vue.set(this, "menuOpen", !this.menuOpen);
+			},
+			"toggleLocale": function(locale) {
+				Vue.set(this.state.hidden_legend, locale.id, !this.state.hidden_legend[locale.id]);
+				this.redrawPaths();
 			},
 			"processAction": function(item) {
 //				console.log("Process Action: ", item);
@@ -340,12 +391,46 @@
 						Vue.set(this.state, "fullscreen", !this.state.fullscreen);
 						break;
 				}
+				this.redrawPaths();
 			},
 			"openActions": function(event) {
-				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event, event);
-				Vue.set(this.actions, "x", event.offsetX);
-				Vue.set(this.actions, "y", event.offsetY);
-				Vue.set(this.actions, "open", true);
+				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event);
+				var xc = event.offsetX,
+					yc = event.offsetY,
+					buffer,
+					locale,
+					x;
+				
+				if(event.ctrlKey) {
+					this.appendPath(xc/this.image.width*100, yc/this.image.height*100);
+				} else if(event.shiftKey) {
+					this.setNamePoint(xc/this.image.width*100, yc/this.image.height*100);
+				} else {
+					this.localeInfo.id = undefined;
+					for(x=0; x<this.locales.length; x++) {
+						locale = this.locales[x];
+						if(locale.contained) {
+	//						console.log("Point Check[" + locale.id + " - " + xc + ", " + yc + " @ " + buffer.isPointInPath(xc, yc) + "]: ", buffer);
+							buffer = this.availableLocales[locale.id];
+							this.localeInfo.location = locale;
+							if(buffer && buffer.isPointInPath(xc, yc)) {
+								this.localeInfo.text = locale.name;
+								this.localeInfo.id = locale.id;
+							}
+						}
+					}
+					if(this.localeInfo.id && !this.localeInfo.shown) {
+						this.actions.options.unshift(this.localeInfo);
+						this.localeInfo.shown = true;
+					} else if(!this.localeInfo.id && this.localeInfo.shown) {
+						this.actions.options.shift();
+						this.localeInfo.shown = false;
+					}
+					
+					Vue.set(this.actions, "x", event.offsetX);
+					Vue.set(this.actions, "y", event.offsetY);
+					Vue.set(this.actions, "open", true);
+				}
 			},
 			"closeActions": function() {
 				Vue.set(this.actions, "open", false);
@@ -354,8 +439,9 @@
 				return "left: " + this.actions.x + "px; top: " + this.actions.y + "px;";
 			},
 			"fire": function(option, event) {
-				console.log("Fire Option: ", option);
-				var buffer;
+//				console.log("Fire Option: ", option);
+				var buffer,
+					path;
 				
 				switch(option.event) {
 					case "set-crosshair":
@@ -375,7 +461,7 @@
 							Vue.set(this.state.crosshairing, "text", "Crosshairs On");
 							Vue.set(this.state.crosshairing, "state", false);
 						} else {
-							Vue.set(this.state.crosshairing, "icon", "fal fa-slash");
+							Vue.set(this.state.crosshairing, "icon", "fal fa-location-slash");
 							Vue.set(this.state.crosshairing, "text", "Crosshairs Off");
 							Vue.set(this.state.crosshairing, "state", true);
 						}
@@ -396,6 +482,12 @@
 							});
 						}
 						break;
+					case "add-point":
+						this.appendPath(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
+						break;
+					case "set-name-point":
+						this.setNamePoint(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
+						break;
 					case "set-current":
 						if(this.player.master) {
 							this.universe.send("control", {
@@ -412,9 +504,36 @@
 							this.generateLocationNoun(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						}
 						break;
+					case "info-key":
+//						console.log("Show Info: ", option);
+						this.showInfo(option.location);
+						break;
 				}
 				
+				this.redrawPaths();
 				this.closeActions();
+			},
+			"appendPath": function(x, y) {
+				var buffer;
+				if(this.state.path_fill) {
+					buffer = this.universe.indexes.location.index[this.state.path_fill];
+					if(buffer && this.player.master) {
+						console.log("Update Path[" + buffer.id + "]: ", buffer);
+						buffer.appendPath(x, y);
+					}
+				}
+			},
+			"setNamePoint": function(x, y) {
+				var buffer;
+				if(this.state.path_fill) {
+					buffer = this.universe.indexes.location.index[this.state.path_fill];
+					if(buffer && this.player.master) {
+						buffer.commit({
+							"x": x,
+							"y": y
+						});
+					}
+				}
 			},
 			"dismissCoordinate": function(coordinate) {
 				var index = this.coordinates.indexOf(coordinate);
@@ -463,7 +582,7 @@
 
 			},
 			"down": function(event) {
-//				console.log("down:" + event.button, event);
+				console.log("down:" + event.button, event);
 				switch(event.button) {
 					case 0:
 						this.isDragging = true;
@@ -629,6 +748,7 @@
 					if(10 > applying.zoom && applying.zoom > -10) {
 						this.image.height = this.original.height * (1 + .1 * applying.zoom);
 						this.image.width = this.original.width * (1 + .1 * applying.zoom);
+						Vue.set(this, "scaledSize", this.baseFontSize + applying.zoom);
 					}
 					
 					if(!this.canvas || !this.canvas.strokeRect) {
@@ -662,41 +782,94 @@
 				var path,
 					x;
 				
+				this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+				
 				// Paint Grid
 				if(this.options && this.options.paintGrid) {
 					this.paintGrid();
 				}
 				
-				for(x=0; x<this.universe.indexes.locale.listing.length; x++) {
-					path = this.universe.indexes.locale.listing[x];
-					if(path.parent === this.location.id && path.values && path.values.length) {
-						this.drawPath(path);
+				for(x=0; x<this.locales.length; x++) {
+					path = this.locales[x];
+					if(path.location === this.location.id && path.values && path.values.length) {
+						this.availableLocales[path.id] = this.drawPath(path);
 					}
 				}
 			},
 			"drawPath": function(path) {
-				var xc, yc;
-				this.canvas.strokeStyle = path.color || "#FFFFFF";
-				this.canvas.lineWidth = path.thickness;
-				this.canvas.globalAlpha = path.opacity;
-				this.canvas.beginPath();
-				this.canvas.moveTo(path.values[0][0] * this.image.width, path.values[0][1] * this.image.height);
-				for(var x=1; x<path.values.length; x++) {
-					if(path.curved) {
-						//this.canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-						xc = ((path.values[x-1][0] + path.values[x][0]) * this.image.width) / 2;
-						yc = ((path.values[x-1][1] + path.values[x][1]) * this.image.height) / 2;
-						this.canvas.quadraticCurveTo(xc, yc, path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-//						this.canvas.quadraticCurveTo(
-//							path.values[x-1][0] * this.image.width,
-//							path.values[x-1][1] * this.image.height,
-//							path.values[x][0] * this.image.width,
-//							path.values[x][1] * this.image.height);
-					} else {
-						this.canvas.lineTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+				if(path && !this.state.hidden_legend[path.id]) {
+					var canvas = this.canvasElement.getContext("2d"),
+						xc,
+						yc,
+						x;
+					
+					canvas.strokeStyle = path.color || "#FFFFFF";
+					canvas.lineWidth = path.thickness;
+					if(path.opacity !== undefined) {
+						canvas.globalAlpha = path.opacity;
 					}
+					canvas.beginPath();
+					canvas.moveTo(path.values[0][0] * this.image.width, path.values[0][1] * this.image.height);
+					for(x=1; x<path.values.length; x++) {
+						if(path.curved) {
+							//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+							xc = ((path.values[x-1][0] + path.values[x][0]) * this.image.width) / 2;
+							yc = ((path.values[x-1][1] + path.values[x][1]) * this.image.height) / 2;
+							canvas.quadraticCurveTo(xc, yc, path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+//							canvas.quadraticCurveTo(
+//								path.values[x-1][0] * this.image.width,
+//								path.values[x-1][1] * this.image.height,
+//								path.values[x][0] * this.image.width,
+//								path.values[x][1] * this.image.height);
+						} else {
+							canvas.lineTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+						}
+					}
+					if(path.contained) {
+						canvas.closePath();
+						canvas.stroke();
+						canvas.fillStyle = path.fill_color || path.color || "#FFFFFF";
+						if(path.fill_opacity !== undefined) {
+							canvas.globalAlpha = path.fill_opacity;
+						}
+						canvas.beginPath();
+						canvas.moveTo(path.values[0][0] * this.image.width, path.values[0][1] * this.image.height);
+						for(x=1; x<path.values.length; x++) {
+							if(path.curved) {
+								//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+								xc = ((path.values[x-1][0] + path.values[x][0]) * this.image.width) / 2;
+								yc = ((path.values[x-1][1] + path.values[x][1]) * this.image.height) / 2;
+								canvas.quadraticCurveTo(xc, yc, path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+//								canvas.quadraticCurveTo(
+//									path.values[x-1][0] * this.image.width,
+//									path.values[x-1][1] * this.image.height,
+//									path.values[x][0] * this.image.width,
+//									path.values[x][1] * this.image.height);
+							} else {
+								canvas.lineTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+							}
+						}
+						canvas.closePath();
+						canvas.fill();
+						
+						if(this.state.labels && path.render_name && path._x !== undefined && path._y !== undefined) {
+							canvas.fillStyle = path.label_color || path.color || "#FFFFFF";
+							canvas.globalAlpha = path.label_opacity || 1;
+							canvas.font = "bold " + (12 + this.state.image.zoom) + "px Arial";
+							canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
+							canvas.shadowBlur = path.label_shadow_blur || 3;
+							canvas.shadowOffsetX = 0;
+							canvas.shadowOffsetY = 0;
+							canvas.fillText(path.label, path._x * this.image.width, path._y * this.image.height);
+						}
+					} else {
+						canvas.stroke();
+					}
+					
+					return canvas;
 				}
-				this.canvas.stroke();
+				
+				return null;
 			},
 			"paintGrid": function() {
 				this.paintGridV01();
@@ -722,12 +895,40 @@
 					this.canvas.stroke();
 				}
 			},
+			"elementVisible": function(element, entity) {
+				if(element.template || element.hidden || (element.obscured && !this.player.master)) {
+					return false;
+				}
+				
+				if(element.must_know && !this.player.master) {
+					
+				}
+			},
+			"localeVisible": function(locale) {
+				if(!this.elementVisible(locale)) {
+					return false;
+				}
+			},
+			"poiNamed": function(link) {
+				if(link.has_path && !link.show_name) {
+					return false;
+				}
+				
+				return this.poiVisible(link);
+			},
 			"poiVisible": function(link) {
-				var x;
+				var entity,
+					x;
 				
 				if(link.template || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
 					return false;
 				}
+				
+				//console.log("Link[" + link.id + " | " + link.must_know + "]: " + ( (!this.player.master || this.state.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) ), " | ", this.viewingEntity.knowsOf(link), "\n > ", this.viewingEntity);
+				if(link.must_know && ( (!this.player.master || this.state.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) )) {
+					return false;
+				}
+				
 				if(this.state.poiFiltering && this.search_criteria.length) {
 					if(!link._search) {
 						return false;
@@ -751,7 +952,7 @@
 					return true;
 				}
 				
-				var entity = this.universe.nouns.entity[this.player.entity];
+				entity = this.universe.nouns.entity[this.player.entity];
 				if(entity && (entity = this.universe.nouns.knowledge[entity.knowledge])) {
 					return !!entity[link.knowledge];
 				}
@@ -782,6 +983,17 @@
 				
 				this.actions.options.splice(0);
 				if(this.player.master) {
+					this.actions.options.push({
+						"icon": "fas fa-map",
+						"event": "set-map",
+						"text": "Set Location View"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-map-marked",
+						"event": "set-current",
+						"text": "Show Map"
+					});
+					
 					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",
 						"event": "set-crosshair",
@@ -830,6 +1042,12 @@
 						"text": "Mark: White",
 						"color": "white"
 					});
+
+//					this.actions.options.push({
+//						"icon": "fas fa-code-commit",
+//						"event": "add-point",
+//						"text": "Add Point"
+//					});
 					
 					this.actions.options.push(this.state.crosshairing);
 					
@@ -837,16 +1055,6 @@
 						"icon": "fas fa-chevron-double-right",
 						"event": "set-location",
 						"text": "Set Location"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-map",
-						"event": "set-map",
-						"text": "Set Location View"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-map-marked",
-						"event": "set-current",
-						"text": "Show Map"
 					});
 				}
 				
@@ -861,11 +1069,15 @@
 						buffer.$off("modified", this.minorUpdate);
 					}
 				}
+				this.locales.splice(0);
 				for(x=0; x<this.universe.indexes.location.listing.length; x++) {
 					buffer = this.universe.indexes.location.listing[x];
 					if(buffer.location === this.location.id) {
 						this.pointsOfInterest.push(buffer);
 						buffer.$on("modified", this.minorUpdate);
+						if(buffer.has_path) {
+							this.locales.push(buffer);
+						}
 					}
 				}
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
@@ -882,6 +1094,13 @@
 						buffer.$on("modified", this.minorUpdate);
 					}
 				}
+//				this.locales.splice(0);
+//				for(x=0; x<this.universe.indexes.locale.listing.length; x++) {
+//					buffer = this.universe.indexes.locale.listing[x];
+//					if(buffer.residence === this.location.id) {
+//						this.locales.push(buffer);
+//					}
+//				}
 				
 				if(this.location.image && this.universe.nouns.image[this.location.image]) {
 					Vue.set(this, "ready", false);

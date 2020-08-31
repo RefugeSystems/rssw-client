@@ -84,6 +84,18 @@ rsSystem.component("RSSWCharacter", {
 		            "enabled": true
 				});
 				this.widgets.push({
+					"title": "Description",
+		            "declaration": "rsswEntityDescription",
+		            "sid": "entity:description:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
+					"title": "Journal",
+		            "declaration": "rsswEntityJournal",
+		            "sid": "entity:journal:" + this.entity.id,
+		            "enabled": true
+				});
+				this.widgets.push({
 					"title": "Vitals",
 		            "declaration": "rsswCharacterBoard",
 		            "sid": "entity:board:" + this.entity.id,

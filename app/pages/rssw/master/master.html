@@ -1,0 +1,72 @@
+<div class="rssw-page page-master">
+	<div v-if="!player.master" class="party-info">
+		<h1>Forbidden</h1>
+		<p>Master Screen is for Game Masters only</p>
+	</div>
+	<div v-if="player.master" class="rs-component">
+		<div class="controls flex h">
+			<div class="session list flex v">
+				<div class="current" v-on:click="showInfo(currentSession)">
+					<h2>Current: {{currentSession?currentSession.name:"None"}}</h2>
+				</div>
+				<button class="next session" v-on:click="makeNextSession()">
+					<span v-if="lockMakeNew" class="fas fa-spinner fa-pulse"></span>
+					<span class="">To Next Session: {{nextSession}}</span>
+					<span v-if="!lockMakeNew" class="fas fa-arrow-alt-circle-right"></span>
+				</button>
+				<select v-on:change="setSession(trackSession)" v-model="trackSession">
+					<option v-for="session in sessions" :value="session.id">{{session.name}}</option>
+				</select>
+				<div class="sessions list-data">
+					<button class="listed entity navigation-button" v-for="session in sessions" v-if="!session.hidden && !session.obscured" v-on:click="showInfo(session)" :key="session.id">
+						<span class="link-icon" :class="session.icon || 'fab fa-old-republic'"></span>
+						<span class="link-label">{{session.name}}</span>
+					</button>
+				</div>
+			</div>
+			<div class="control entity-list list">
+				<div class="title">
+					<input class="filter" v-model="state.search" />
+				</div>
+				<div class="entities list-data">
+					<button class="listed entity navigation-button" v-for="entity in universeEntities" :to="'/universe/' + entity.classification + '/' + entity.id" v-on:click="showInfo(entity)" :key="entity.id" v-if="filteredEntity(entity)">
+						<span class="link-icon" :class="entity.icon || 'fas fa-user-circle'"></span>
+						<span class="link-label">{{entity.name}}</span>
+					</button>
+					<router-link class="entity navigation-button create-npc" to="/construct/character">
+						<span class="link-icon fas fa-user-plus"></span>
+						<span class="link-label">Construct NPC</span>
+					</router-link>
+				</div>
+			</div>
+			<div class="control skill list">
+				<div class="title">
+					<input class="filter" v-model="state.skill_search" />
+				</div>
+				<div class="skills list-data flex v">
+					<button class="listed skill" v-for="skill in skills" v-if="!state.skill_search || (skill._search && skill._search.indexOf(state.skill_search.toLowerCase()) !== -1)" v-on:click="showInfo(skill)" :key="skill.id">
+						<span :class="skill.icon"></span>
+						<span>{{skill.name}}</span>
+					</button>
+				</div>
+			</div>
+			<div class="control difficulty-dice">
+				<div class="output flex h wrap">
+					<rssw-dice-result :universe="universe" :user="user" class="roll-container rolled current" :roll="rolling"></rssw-dice-result>
+					<button class="roll-container rolled" v-for="rolled in history" v-on:click="dismissRolled(rolled)">
+						<rssw-dice-result :universe="universe" :user="user" class="rolling-viewed" :roll="rolled"></rssw-dice-result>
+					</button>
+				</div>
+				<button class="roll-container rolling" v-on:click="rollDifficulty(diff)" v-for="diff in difficulties">
+					<rssw-dice-view :universe="universe" :user="user" class="rolling-view" :roll="difficulty[diff]" :labeling="diff + ' [' + count[diff] + ']'"></rssw-dice-view>
+				</button>
+				<button class="roll-container rolling" v-on:click="clearRolls(true)">
+					Clear Rolls
+				</button>
+				<select class="roll-container rolling" v-model="state.historyLength">
+					<option v-for="len in maxLength" :value="len">{{len}}</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>

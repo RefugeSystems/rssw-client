@@ -184,6 +184,9 @@ rsSystem.App = new Vue({
 					}]
 				}]
 			}, {
+				"path": "master",
+				"component": rsSystem.components.RSSWMasterPage
+			}, {
 				"path": "party",
 				"component": rsSystem.components.RSSWPartyPage,
 				"children": [{

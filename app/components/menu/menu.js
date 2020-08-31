@@ -75,6 +75,16 @@
 				}]
 			});
 			data.navigationItems.push({
+				"icon": "far fa-desktop",
+				"action": "navigate",
+				"label": "Screen",
+				"path": "/master",
+				"highlight": "/master",
+				"conditionals": [{
+					"master": true
+				}]
+			});
+			data.navigationItems.push({
 				"icon": "fad fa-galaxy",
 				"action": "navigate",
 				"label": "Galaxy",

@@ -1,19 +1,45 @@
 <div class="rs-component rssw component-entity-journal">
-	<div class="property description">
-		<span class="icon fas fa-info-square"></span>
-		<span class="label">
-			<span>Description:</span>
-			<button class="action" v-on:click="toggleDescription()">
-				<span v-if="!state.viewing" class="fas fa-file-alt"></span>
-				<span v-if="state.viewing" class="fas fa-edit"></span>
+	<div class="editor" :class="editorClass()">
+		<rs-field :root="state.entry" :field="titleField" v-on:changed="sync($event)">
+		</rs-field>
+		<rs-field :root="state.entry" :field="sessionField" v-on:changed="sync($event)">
+		</rs-field>
+		<rs-field :root="state.entry" :field="entryField" v-on:changed="sync($event)" class="entry">
+		</rs-field>
+	</div>
+	
+	<div class="blocks flex h">
+		<div class="block" :class="blockClass('render')">
+			<button class="block-toggle" v-on:click="toggleBlock('render')">
+				<span class="toggle-label rot270">Rendering</span>
 			</button>
-		</span>
-		<div class="text-container">
-			<textarea class="description" v-if="!state.viewing" v-model="description" v-on:change="changed('description', description)"></textarea>
-			<div class="description rs-white object-info" v-if="state.viewing" v-html="mdDescription"></div>
-			<!--
-			<rs-rendered-text :text="description" :universe="universe" :entity="character"></rs-rendered-text>
-			-->
+			<rs-object-info class="rendering" v-on:click="processRequest($event)" :record="state.entry" :universe="universe" :player="player"></rs-object-info>
+			<!-- div class="block-content rendering rs-white object-info" v-html="rendering"></div -->
+		</div>		
+		<div class="block" :class="blockClass('entries')">
+			<button class="block-toggle" v-on:click="toggleBlock('entries')">
+				<span class="toggle-label rot270">Entries</span>
+			</button>
+			<div class="block-content listing entries">
+				<button :title="entry.name" class="listed entry" v-on:click="newEntry()" :class="getEntryClass()">
+					<span class="fas fa-spinner fa-pulse" v-if="syncTimeout && !universe.indexes.journal.index[state.entry.id]"></span>
+					<span class="entry-name">New Entry</span>
+				</button>
+				<button v-for="entry in entries" :title="entry.name" class="listed entry" v-on:click="editEntry(entry)" :class="getEntryClass(entry)">
+					<span class="fas fa-spinner fa-pulse" v-if="syncTimeout && state.entry.id === entry.id"></span>
+					<span class="entry-name">{{entry.name}}</span>
+				</button>
+			</div>
+		</div>
+		<div class="block" :class="blockClass('knowns')">
+			<button class="block-toggle" v-on:click="toggleBlock('knowns')">
+				<span class="toggle-label rot270">Knowns</span>
+			</button>
+			<div class="block-content listing knowns">
+				<button v-for="entry in knowns" :title="entry.name" class="listed known" v-on:click="toggleRelated(entry)" :class="getKnownClass(entry)">
+					<span class="entry-name">{{entry.name}}</span>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

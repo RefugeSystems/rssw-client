@@ -12,5 +12,14 @@
 class RSSetting extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		
+	}
+	
+	recalculateHook() {
+		if(this._shadow.value !== this.value) {
+			this.universe.$emit(this.id, this.value);
+			this._shadow.value = this.value;
+			this._updated = Date.now();
+		}
 	}
 }

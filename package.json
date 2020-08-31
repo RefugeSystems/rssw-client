@@ -1,6 +1,6 @@
 {
 	"name": "rs-gameui",
-	"version": "0.2.10",
+	"version": "0.2.20",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -24,7 +24,8 @@
 		"jquery": "^3.4.1",
 		"showdown": "^1.9.0",
 		"vue": "^2.6.10",
-		"vue-router": "^3.1.3"
+		"vue-router": "^3.1.3",
+		"xss": "^1.0.8"
 	},
 	"devDependencies": {
 		"grunt": "^1.0.4",

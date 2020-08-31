@@ -12,6 +12,27 @@
 	var converter = new showdown.Converter({
 		"tables": true
 	});
+	
+	var validTags = ["class", "style", "data", "data-id", "uri", "href", "src", "draggable", "value", "id"];
+	
+	var xssOptions = {
+		"whiteList": {
+			"span": validTags,
+			"img": validTags,
+			"div": validTags,
+			"h1": validTags,
+			"h2": validTags,
+			"h3": validTags,
+			"h4": validTags,
+			"h5": validTags,
+			"h6": validTags,
+			"ul": validTags,
+			"ol": validTags,
+			"li": validTags,
+			"p": validTags,
+			"a": validTags
+		}
+	};
 
 	var marking = {
 		"start": "${",
@@ -25,7 +46,8 @@
 	
 	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
 //		console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
-		var properties,
+		var player = universe.indexes.player.index[universe.user.username],
+			properties,
 			tracking,
 			element,
 			target,
@@ -117,6 +139,9 @@
 			index = sourceText.indexOf(marking.start, index + 1);
 		}
 		
+		if(player && !player.allow_scripting) {
+			return filterXSS(sourceText, xssOptions);
+		}
 		return sourceText;
 	};
 	

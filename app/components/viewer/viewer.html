@@ -1,15 +1,15 @@
 
 <div class="rs-component component-viewer" :class="renderState()">
 
-	<div class="map" v-if="location && sourceImage" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
+	<div class="map" v-if="location && sourceImage" :style="'font-size: ' + scaledSize + 'px;'" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
 		<!-- <div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" v-on:mouseleave="out($event)" v-pan="pan"> -->
 		<div class="view" onexit="true" v-pan="pan">
 			<!-- <div class="shadow"></div> -->
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
-					<button class="poi" v-if="poiVisible(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
-						<span class="poi-icon" :class="poiClass(link)"></span>
-						<span class="labeling" v-if="link.label" :class="link.label && state.labels?'shown':'hidden'">{{link.label}}</span>
+					<button class="scaled poi" :class="link.no_border?'no-border':'map-border'" v-if="poiNamed(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
+						<span class="poi-icon scaled" :class="poiClass(link)"></span>
+						<span class="labeling scaled" v-if="link.label" :class="link.label && state.labels?'shown':'hidden'">{{link.label}}</span>
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in coordinates" v-if="!coordinate.standalone">
@@ -19,9 +19,7 @@
 				<div class="coordinate-dots">
 					<button class="dot" v-for="coordinate in coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button>
 				</div>
-				<canvas class="map-paths">
-					
-				</canvas>
+				<canvas class="map-paths"></canvas>
 				<div class="actions" v-if="actions.open" :style="getActionMenuStyle()">
 					<div class="actions-header">
 						<span class="titling">
@@ -35,6 +33,14 @@
 						<button class="option normal" v-for="option in actions.options" v-on:click.stop.prevent="fire(option, $event)">
 							<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
 							<span>{{option.text}}</span>
+						</button>
+						<button class="option normal" v-if="state.path_fill" v-on:click.stop.prevent="fire(setNamePointOption, $event)">
+							<span class="fal fa-code-commit"></span>
+							<span>Set Name Point</span>
+						</button>
+						<button class="option normal" v-if="state.path_fill" v-on:click.stop.prevent="fire(addPointOption, $event)">
+							<span class="fas fa-code-commit"></span>
+							<span>Add Point</span>
 						</button>
 						<div class="generator flex h" v-if="state.generate_location">
 							<input type="text" v-model="state.generate_location_name" v-on:keyup.enter="fire(menuItems.generateLocation, $event)"/>
@@ -53,12 +59,13 @@
 
 	<div class="menu" :class="menuOpen?'open':'closed'">
 		<button class="control toggle" v-on:click="toggleMenu()">
-			<span class="fas" :class="menuOpen?'fa-caret-square-up':'fa-caret-square-down'"></span>
+			<!-- span class="rotational-icon fas fa-caret-square-down" :class="menuOpen?'fa-caret-square-up':'fa-caret-square-down'"></span -->
+			<span class="rotational-icon fas fa-caret-square-down" :class="menuOpen?'rot180':''"></span>
 		</button>
 		<div class="menu-items flow-v">
 			<div class="search flex h">
 				<div class="text" :title="searchError">
-					<input type="text" v-model="state.search" v-on:keyup.enter="searchMap(state.search)" v-on:keyup="filterPOIs(state.search)" v-on:keyup.escape="clearSearch()" v-on:keyup.esc="clearSearch()" :class="searchError?'search-error':''"/>
+					<input class="search-text" type="text" v-model="state.search" v-on:keyup.enter="searchMap(state.search)" v-on:keyup="filterPOIs(state.search)" v-on:keyup.escape="clearSearch()" v-on:keyup.esc="clearSearch()" :class="searchError?'search-error':''"/>
 				</div>
 				<button class="control action" v-on:click="togglePOIFiltering()" title="Hide locations that do not match from the display">
 					<span class="icon" :class="state.poiFiltering?'fas fa-map-marker-slash':'fas fa-map-marker'"></span>
@@ -111,6 +118,25 @@
 				<option value="city">Making Cities</option>
 				<option value="marker">Making Marker</option>
 			</select>
+			<select class="control master" v-model="state.path_fill" v-if="player.master">
+				<option value="">No Modify</option>
+				<option v-for="locale in locales" :value="locale.id">{{locale.name}}</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="legend" :class="legendOpen?'open':'closed'" v-if="legendDisplayed && locales.length">
+		<button class="control toggle" v-on:click="toggleLegend()">
+			<span class="rotational-icon fas fa-caret-square-up" :class="legendOpen?'rot180':''"></span>
+		</button>
+		<div class="menu-items flow-v">
+			<div class="legend-list flex v fill">
+				<button class="control follow grow-3" v-for="locale in locales" v-on:click="toggleLocale(locale)">
+					<span class="icon fal" :class="state.hidden_legend[locale.id]?'fa-square':'fa-check-square'"></span>
+					<span class="icon far" :class="locale.contained?'fa-draw-polygon':'fa-horizontal-rule'" :style="'color: ' + locale.color + ';'"></span>
+					<span class="text">{{locale.name}}</span>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

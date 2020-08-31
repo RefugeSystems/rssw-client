@@ -6,8 +6,8 @@
 		pathing;
 	
 	location = {
-		"label": "Parent",
-		"property": "parent",
+		"label": "Residence",
+		"property": "residence",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -35,6 +35,30 @@
 		"property": "name",
 		"type": "text"
 	}, {
+		"label": "Icon",
+		"property": "icon",
+		"type": "text"
+	}, {
+		"label": "Label Color",
+		"property": "label_color",
+		"type": "text"
+	}, {
+		"label": "Label Opacity",
+		"property": "label_opacity",
+		"type": "number"
+	}, {
+		"label": "X Coordinate",
+		"property": "x",
+		"type": "number"
+	}, {
+		"label": "Y Coordinate",
+		"property": "y",
+		"type": "number"
+	}, {
+		"label": "Order",
+		"property": "order",
+		"type": "number"
+	}, {
 		"label": "Color",
 		"property": "color",
 		"type": "text"
@@ -53,21 +77,34 @@
 		"property": "pathed",
 		"type": "checkbox"
 	}, {
+		"label": "Curved",
+		"property": "curved",
+		"type": "checkbox"
+	}, {
 		"label": "Contained",
 		"property": "contained",
 		"type": "checkbox"
 	}, {
-		"label": "Curved",
-		"property": "curved",
-		"type": "checkbox",
+		"label": "Fill Color",
+		"property": "fill_color",
+		"type": "text",
 		"condition": {
 			"contained": {
-				"operation": "!"
+				"operation": "exists"
+			}
+		}
+	}, {
+		"label": "Fill Opacity",
+		"property": "fill_opacity",
+		"type": "number",
+		"condition": {
+			"contained": {
+				"operation": "exists"
 			}
 		}
 	}, {
 		"label": "Show Name",
-		"property": "showName",
+		"property": "show_name",
 		"type": "checkbox"
 	}, {
 		"label": "Clickable",

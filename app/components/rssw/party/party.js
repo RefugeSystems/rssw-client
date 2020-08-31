@@ -141,7 +141,7 @@
 				Vue.set(this, "addingMember", 0);
 			},
 			"update": function() {
-				console.log("Party Update: ", this.record);
+//				console.log("Party Update: ", this.record);
 				var buffer,
 					x;
 				

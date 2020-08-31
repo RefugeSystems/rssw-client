@@ -62,8 +62,10 @@
 			rsSystem.components.NounFieldsLocation,
 			rsSystem.components.NounFieldsPlaylist,
 			rsSystem.components.NounFieldsAbility,
-			rsSystem.components.NounFieldsSetting,
 			rsSystem.components.NounFieldsDataset,
+			rsSystem.components.NounFieldsJournal,
+			rsSystem.components.NounFieldsSession,
+			rsSystem.components.NounFieldsSetting,
 			rsSystem.components.NounFieldsEntity,
 			rsSystem.components.NounFieldsEffect,
 			rsSystem.components.NounFieldsLocale,
@@ -141,7 +143,7 @@
 					
 					value = copy?JSON.stringify(copy, null, 4):"{}";
 					value = JSON.parse(value);
-					console.warn("Copying: ", value);
+//					console.warn("Copying: ", value);
 					if(copy && copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
 						console.log("> Template");
 						value = {};
@@ -172,7 +174,7 @@
 							}
 						}
 					} else {
-						console.log("> Original");
+//						console.log("> Original");
 						if((!copy || (copy && !copy.template)) && this.$route.query.copy === "true") {
 							value.id += ":" + Date.now();
 						}
@@ -314,9 +316,13 @@
 					|| (!race && this.universe.defaultDataset);
 			},
 			"pullRandomName": function(generator) {
-				generator = generator || this.getGenerator(this.state.building[this.state.current].race);
-				if(generator) {
-					Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+				if(this.state.current === "session") {
+					Vue.set(this.state.building[this.state.current], "name", new String(this.universe.indexes.session.listing.length + 1));
+				} else {
+					generator = generator || this.getGenerator(this.state.building[this.state.current].race);
+					if(generator) {
+						Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+					}
 				}
 			},
 			"randomizeName": function(generator) {
@@ -324,6 +330,9 @@
 				if(generator) {
 					Vue.set(this.state.building[this.state.current], "name", generator.create().capitalize() + " " + generator.create().capitalize());
 				}
+			},
+			"setDateNow": function(property) {
+				Vue.set(this.state.building[this.state.current], property, Date.now());
 			},
 			"getGenerator": function(race) {
 				var generator = null,
@@ -377,7 +386,15 @@
 					root;
 				
 				if(model.name) {
-					root = this.state.current + ":" + model.name.toLowerCase().replace(spacing, "").replace(toColon, ":");
+					if(this.state.current === "session") {
+						buffer = model.name;
+						while(buffer.length < 5) {
+							buffer = "0" + buffer;
+						}
+						root = this.state.current + ":" + (buffer.toLowerCase?buffer.toLowerCase().replace(spacing, "").replace(toColon, ":"):buffer);
+					} else {
+						root = this.state.current + ":" + (model.name.toLowerCase?model.name.toLowerCase().replace(spacing, "").replace(toColon, ":"):model.name);
+					}
 					switch(this.state.current) {
 						case "ability":
 							if(model.archetypes && model.archetypes.length) {
