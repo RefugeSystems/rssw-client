@@ -32,4 +32,18 @@ class RSJournal extends RSObject {
 			}
 		}
 	}
+	
+	recalculateHook() {
+		var buffer,
+			x;
+		
+		if(!this._search) {
+			this._search = "";
+		}
+		
+		buffer = this.universe.indexes.entity.index[this.editor];
+		if(buffer) {
+			this._search += " ||| " + buffer.name.toLowerCase();
+		}
+	}
 }
