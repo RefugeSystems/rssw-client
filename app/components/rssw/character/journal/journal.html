@@ -9,14 +9,14 @@
 	</div>
 	
 	<div class="blocks flex h">
-		<div class="block" :class="blockClass('render')">
+		<div class="block large" :class="blockClass('render')">
 			<button class="block-toggle" v-on:click="toggleBlock('render')">
 				<span class="toggle-label rot270">Rendering</span>
 			</button>
 			<rs-object-info class="rendering" v-on:click="processRequest($event)" :record="state.entry" :universe="universe" :player="player"></rs-object-info>
 			<!-- div class="block-content rendering rs-white object-info" v-html="rendering"></div -->
 		</div>		
-		<div class="block" :class="blockClass('entries')">
+		<div class="block small" :class="blockClass('entries')">
 			<button class="block-toggle" v-on:click="toggleBlock('entries')">
 				<span class="toggle-label rot270">Entries</span>
 			</button>
@@ -31,7 +31,7 @@
 				</button>
 			</div>
 		</div>
-		<div class="block" :class="blockClass('knowns')">
+		<div class="block small" :class="blockClass('knowns')">
 			<button class="block-toggle" v-on:click="toggleBlock('knowns')">
 				<span class="toggle-label rot270">Knowns</span>
 			</button>
