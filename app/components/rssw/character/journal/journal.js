@@ -275,8 +275,9 @@
 				}
 			},
 			"updateSession": function(session) {
-				console.log("Update Session: ", session);
-				Vue.set(this.state.entry, "session", session);
+				if(!this.universe.indexes.session.index[this.state.entry.id]) {
+					Vue.set(this.state.entry, "session", session);
+				}
 			},
 			"update": function() {
 				var buffer,
