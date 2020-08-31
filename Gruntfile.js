@@ -290,6 +290,7 @@ var config = {
 			},
 			"files": {
 				"deploy/main.js": [
+					"node_modules/xss/dist/xss.min.js",
 					"node_modules/hammerjs/hammer.js",
 					"node_modules/showdown/dist/showdown.min.js",
 					"node_modules/vue/dist/vue.js",
