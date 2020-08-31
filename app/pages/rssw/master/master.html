@@ -17,10 +17,19 @@
 				<select v-on:change="setSession(trackSession)" v-model="trackSession">
 					<option v-for="session in sessions" :value="session.id">{{session.name}}</option>
 				</select>
-				<div class="sessions list-data">
+				<div class="sessions list-data minor">
 					<button class="listed entity navigation-button" v-for="session in sessions" v-if="!session.hidden && !session.obscured" v-on:click="showInfo(session)" :key="session.id">
 						<span class="link-icon" :class="session.icon || 'fab fa-old-republic'"></span>
 						<span class="link-label">{{session.name}}</span>
+					</button>
+				</div>
+				<div class="title">
+					<input class="filter" v-model="state.searchKnowledge" />
+				</div>
+				<div class="knowledge list-data">
+					<button class="listed entity navigation-button" v-for="knowledge in knowledges" v-if="!knowledge.hidden && (!state.searchKnowledge || (knowledge._search && knowledge._search.indexOf(state.searchKnowledge.toLowerCase()) !== -1))" v-on:click="showInfo(knowledge)" :key="knowledge.id">
+						<span class="link-icon" :class="knowledge.icon || 'fas fa-tablet'"></span>
+						<span class="link-label">{{knowledge.name}}</span>
 					</button>
 				</div>
 			</div>

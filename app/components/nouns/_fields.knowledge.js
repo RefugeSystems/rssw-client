@@ -133,6 +133,10 @@
 			"completed"
 		]
 	}, {
+		"label": "Master Screen",
+		"property": "screen",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"

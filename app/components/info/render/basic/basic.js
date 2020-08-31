@@ -64,6 +64,7 @@
 	invisibleKeys.owners = true;
 	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;
+	invisibleKeys.screen = true;
 	invisibleKeys.class = true;
 	invisibleKeys.order = true;
 	invisibleKeys.name = true;

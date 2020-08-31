@@ -85,6 +85,7 @@
 			});
 			
 			data.lockMakeNew = false;
+			data.knowledges = [];
 			data.sessions = [];
 			data.skills = [];
 			
@@ -266,6 +267,15 @@
 					}
 				}
 				this.sessions.sort(sortSessions);
+
+				this.knowledges.splice(0);
+				for(x=0; x<this.universe.indexes.knowledge.listing.length; x++) {
+					buffer = this.universe.indexes.knowledge.listing[x];
+					if(buffer && buffer.screen) {
+						this.knowledges.push(buffer);
+					}
+				}
+				this.knowledges.sort(this.sortData);
 				
 				Vue.set(this, "nextSession", next + 1);
 			}
