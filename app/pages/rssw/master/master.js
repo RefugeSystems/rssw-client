@@ -56,6 +56,16 @@
 			return 0;
 		}
 	};
+	
+	var sortSessions = function(a, b) {
+		if(a.id < b.id) {
+			return -1;
+		} else if(a.id > b.id) {
+			return 1;
+		} else {
+			return 0;
+		}
+	};
 
 	rsSystem.component("RSSWMasterPage", {
 		"inherit": true,
@@ -255,7 +265,7 @@
 						this.sessions.push(buffer);
 					}
 				}
-				this.sessions.sort(this.sortData);
+				this.sessions.sort(sortSessions);
 				
 				Vue.set(this, "nextSession", next + 1);
 			}
