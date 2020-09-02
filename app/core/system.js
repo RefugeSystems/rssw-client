@@ -82,6 +82,8 @@ rsSystem.lookup = function(element) {
 	throw new Error("VueComponent not found.");
 };
 
+
+
 rsSystem.settings = {};
 rsSystem.settings.logging = {};
 rsSystem.settings.logging.default = false;

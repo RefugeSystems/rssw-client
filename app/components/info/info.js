@@ -92,6 +92,7 @@
 			};
 			
 			rsSystem.EventBus.$on("display-info", this.displayRecord);
+			rsSystem.EventBus.$on("key:escape", this.closeInfo);
 			this.universe.$on("universe:modified", this.update);
 		},
 		"methods": {
@@ -188,6 +189,7 @@
 		},
 		"beforeDestroy": function() {
 			this.universe.$off("universe:modified", this.update);
+			rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		},
 		"template": Vue.templified("components/info.html")
 	});
