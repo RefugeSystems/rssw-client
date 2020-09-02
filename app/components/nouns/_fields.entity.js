@@ -346,6 +346,26 @@
 			"classification": "character"
 		}
 	}, {
+		"label": "Ship Model",
+		"property": "model",
+		"type": "text",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["station", "ship"]
+			}
+		}
+	}, {
+		"label": "Building Model",
+		"property": "model",
+		"type": "text",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["building", "base"]
+			}
+		}
+	}, {
 		"label": "Required Crew",
 		"property": "required_crew",
 		"type": "number",
