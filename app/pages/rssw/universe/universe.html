@@ -44,7 +44,7 @@
 						<option value>All</option>
 						<option v-for="index in availableIndexes" :value="index">{{index}}</option>
 					</select>
-					<select v-model.number="state.paging.spread">
+					<select v-model.number="state.paging.per">
 						<option v-for="spread in getSpread()" :value="spread">{{spread}}</option>
 					</select>
 					<select v-model="state.filterTemplate">

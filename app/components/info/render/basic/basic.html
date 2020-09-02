@@ -273,6 +273,13 @@
 			</button>
 		</div>
 		
+		<div class="control flex h" v-if="record._type === 'session'">
+			<button class="action direct" v-on:click="setCurrentSession()">
+				<span class="fas fa-edit"></span>
+				<span>Set to this Session</span>
+			</button>
+		</div>
+		
 		<div class="control">
 			<button class="action direct" v-if="record.restock_base" v-on:click="restockLocation()">
 				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>

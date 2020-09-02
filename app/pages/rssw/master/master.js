@@ -88,6 +88,7 @@
 			data.knowledges = [];
 			data.sessions = [];
 			data.skills = [];
+			data.items = [];
 			
 			data.currentSession = null;
 			data.nextSession = null;
@@ -146,7 +147,6 @@
 				}
 			},
 			"makeNextSession": function() {
-				console.log("Make Next: ", this.nextSession);
 				var session = {
 					"_type": "session",
 					"name": "" + this.nextSession,
@@ -160,6 +160,11 @@
 				this.universe.send("modify:session", session);
 				Vue.set(this, "lockMakeNew", true);
 				setTimeout(() => {
+					if(this.universe.indexes.setting.index["setting:current:session"]) {
+						this.universe.indexes.setting.index["setting:current:session"].commit({
+							"value": session.id
+						});
+					}
 					Vue.set(this, "lockMakeNew", false);
 				}, 1000);
 			},
@@ -248,11 +253,20 @@
 					}
 				}
 				this.skills.sort(this.sortData);
+				
+				this.items.splice(0);
+				for(x=0; x<this.universe.indexes.item.listing.length; x++) {
+					buffer = this.universe.indexes.item.listing[x];
+					if(buffer && (buffer.template || buffer.screen)) {
+						this.items.push(buffer);
+					}
+				}
+				this.items.sort(this.sortData);
 
 				this.universeEntities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					buffer = this.universe.indexes.entity.listing[x];
-					if(buffer && !buffer.hidden && !buffer.obscured && !buffer.template) {
+					if(buffer && !buffer.template) {
 						this.universeEntities.push(buffer);
 					}
 				}

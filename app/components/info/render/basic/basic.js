@@ -645,6 +645,13 @@
 				}
 				Vue.set(this, "attach_target", "");
 			},
+			"setCurrentSession": function() {
+				if(this.universe.indexes.setting.index["setting:current:session"]) {
+					this.universe.indexes.setting.index["setting:current:session"].commit({
+						"value": this.record.id
+					});
+				}
+			},
 			"hideRecord": function() {
 				this.record.commit({
 					"hidden": this.record.hidden?null:true

@@ -117,6 +117,22 @@ class RSObject extends EventEmitter {
 		this.universe.send("modify:" + this._type, change);
 	}
 	
+	commitAdditions(change, set) {
+		set = set || {};
+		set._type = this._type;
+		set.id = this.id;
+		set.delta = change;
+		this.universe.send("modify:" + this._type + ":detail:additive", set);
+	}
+	
+	commitSubtractions(change, set) {
+		set = set || {};
+		set._type = this._type;
+		set.id = this.id;
+		set.delta = change;
+		this.universe.send("modify:" + this._type + ":detail:subtractive", set);
+	}
+	
 	/**
 	 * Set the learned property and add the knowledge entities.
 	 * @method learnKnowledge
@@ -142,12 +158,43 @@ class RSObject extends EventEmitter {
 		}
 		
 		if(updates) {
-			console.log("...");
 			this.commit({
 				"knowledge": this._shadow.knowledge,
 				"learned": this._shadow.learned
 			});
 		}
+	}
+	
+	learnOfObjects(objects) {
+		var x;
+
+		for(x=0; x<objects.length; x++) {
+			if(!this._shadow.learned[objects[x]]) {
+				this._shadow.learned[objects[x]] = Date.now();
+			}
+		}
+		
+		this.commitAdditions({
+			"known_objects": objects
+		},{
+			"learned": this._shadow.learned
+		});
+	}
+	
+	unlearnOfObjects(objects) {
+		var x;
+
+		for(x=0; x<objects.length; x++) {
+			if(!this._shadow.learned[objects[x]]) {
+				this._shadow.learned[objects[x]] = Date.now();
+			}
+		}
+		
+		this.commitSubtractions({
+			"known_objects": objects
+		}, {
+			"learned": this._shadow.learned
+		});
 	}
 	
 	/**
@@ -827,9 +874,19 @@ class RSObject extends EventEmitter {
 		for(x=0; x<this._knownKeys.length; x++) {
 			delete(this._known[this._knownKeys[x]]);
 		}
+		this._knownKeys.splice(0);
+
+		if(this.known_objects) {
+			for(x=0; x<this.known_objects.length; x++) {
+				if(!this._known[this.known_objects[x]]) {
+					this._known[this.known_objects[x]] = [];
+				}
+				this._known[this.known_objects[x]].push(this.id);
+				this._knownKeys.push(this.known_objects[x]);
+			}
+		}
 		
 		if(this.knowledge && this.knowledge.length) {
-			this._knownKeys.splice(0);
 			for(x=0; x<this.knowledge.length; x++) {
 				knowledge = this.universe.indexes.knowledge.index[this.knowledge[x]];
 				if(knowledge && knowledge.related && knowledge.related.length) {

@@ -399,11 +399,27 @@
 					possibles.push(x);
 				}
 
+
+				if(start > 100) {
+					possibles.unshift(100);
+				}
+				if(start > 50) {
+					possibles.unshift(50);
+				}
+				if(start > 20) {
+					possibles.unshift(20);
+				}
 				if(start > 10) {
 					possibles.unshift(10);
 				}
 				if(start > 2) {
 					possibles.unshift(2);
+				}
+				if(end < 10) {
+					possibles.push(10);
+				}
+				if(end < 20) {
+					possibles.push(20);
 				}
 				if(end < 50) {
 					possibles.push(50);
@@ -419,6 +435,7 @@
 					target = this.universe.index.lookup[this.target],
 					loading,
 					sending,
+					buffer,
 					item,
 					keys,
 					x;
@@ -513,20 +530,23 @@
 								keys = Object.keys(loading);
 								sending = {};
 								
-								for(x=0; x<keys.length; x++) {
-									if(keys[x] && keys[x][0] !== "_") {
-										sending[keys[x]] = loading[keys[x]];
-									}
-								}
+//								for(x=0; x<keys.length; x++) {
+//									if(keys[x] && keys[x][0] !== "_") {
+//										sending[keys[x]] = loading[keys[x]];
+//									}
+//								}
 								
 								sending.parent = loading.id;
 								sending.name = loading.name + " (New)";
-								sending.description = loading.description;
+//								sending.description = loading.description;
 								sending.id += ":" + Date.now();
 								sending.template = false;
 								sending._type = "entity";
-								if(this.target) {
+								if(this.target && this.universe.indexes.player.index[this.target]) {
 									sending.owners = [this.target];
+								}
+								if(this.target && this.universe.indexes.entity.index[this.target]) {
+									sending.inside = this.target;
 								}
 	
 								this.universe.send("modify:entity", sending);
@@ -544,23 +564,40 @@
 					case "grant-knowledge":
 						if(target) {
 							sending = [];
+							buffer = [];
 							for(x=0; x<index.selection.length; x++) {
 								if(this.universe.indexes.knowledge.lookup[index.selection[x]]) {
 									sending.push(index.selection[x]);
+								} else {
+									buffer.push(index.selection[x]);
 								}
 							}
-							target.learnKnowledge(sending);
+							console.log("Granting: ", sending, buffer);
+							if(sending.length) {
+								target.learnKnowledge(sending);
+							}
+							if(buffer.length) {
+								target.learnOfObjects(buffer);
+							}
 						}
 						break;
 					case "forget-knowledge":
 						if(target) {
 							sending = [];
+							buffer = [];
 							for(x=0; x<index.selection.length; x++) {
 								if(this.universe.indexes.knowledge.lookup[index.selection[x]]) {
 									sending.push(index.selection[x]);
+								} else {
+									buffer.push(index.selection[x]);
 								}
 							}
-							target.forgetKnowledge(sending);
+							if(sending.length) {
+								target.forgetKnowledge(sending);
+							}
+							if(buffer.length) {
+								target.unlearnOfObjects(buffer);
+							}
 						}
 						break;
 				}

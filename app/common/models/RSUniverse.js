@@ -44,14 +44,39 @@ class RSUniverse extends RSObject {
 		this.connection.master = false;
 		this.connection.lastError = false;
 		this.connection.history = [];
-		this.connection.entry = (entry) => {
-			if(typeof(entry) === "string") {
-				entry = {
-					"message":entry
-				};
+		/**
+		 * 
+		 * @method connection.entry
+		 * @param {String} message String as a short description
+		 * @param {Number} [level] See https://github.com/trentm/node-bunyan#levels. Default is 30
+		 * @param {Object} [data] Arguments attempt to allocate passed objects here.
+		 * @param {Object} [error] Information, is explicit about argument position. 
+		 */
+		this.connection.entry = (message, level, data, error) => {
+			var entry = {};
+			
+			if(typeof(message) === "object") {
+				data = message;
+				message = undefined;
+			} else if(typeof(message) === "number") {
+				level = message;
+				message = undefined;
 			}
+			
+			if(level === undefined) {
+				level = 30;
+			} else if(typeof(level) === "object") {
+				data = level;
+				level = 30;
+			}
+			
 			entry.user = this.connection.user.toJSON();
 			entry.time = Date.now();
+			entry.message = message;
+			entry.level = level;
+			entry.error = error;
+			entry.data = data;
+			
 			this.connection.history.unshift(entry);
 			if(this.connection.history.length > this.connection.maxHistory) {
 				this.connection.history.pop();
@@ -118,8 +143,7 @@ class RSUniverse extends RSObject {
 		
 		return new Promise((done, fail) => {
 			this.loggedOut = false;
-			this.connection.entry({
-				"message": "Connecting to Universe",
+			this.connection.entry("Connecting to Universe", {
 				"address": address
 			});
 			
@@ -128,10 +152,7 @@ class RSUniverse extends RSObject {
 			socket.onopen = (event) => {
 				this.closing = false;
 				this.connection.connectMark = Date.now();
-				this.connection.entry({
-					"message": "Connection Established",
-					"event": event
-				});
+				this.connection.entry("Connection Established", event);
 				if(this.connection.reconnecting) {
 					this.connection.reconnecting = false;
 					this.$emit("reconnected", this);
@@ -140,10 +161,7 @@ class RSUniverse extends RSObject {
 			};
 			
 			socket.onerror = (event) => {
-				this.connection.entry({
-					"message": "Connection Failure",
-					"event": event
-				});
+				this.connection.entry("Connection Failure", 50, event);
 				rsSystem.log.fatal({
 					"message": "Connection Failure",
 					"universe": this,
@@ -153,7 +171,7 @@ class RSUniverse extends RSObject {
 				this.connection.lastError = "Connection Fault";
 				this.connection.socket = null;
 				if(!this.connection.reconnecting) {
-					this.connection.entry("Mitigating Lost Connection");
+					this.connection.entry("Mitigating Lost Connection", 40);
 					this.connection.reconnecting = true;
 					this.$emit("error", {
 						"message": "Connection Issues",
@@ -165,12 +183,9 @@ class RSUniverse extends RSObject {
 			};
 			
 			socket.onclose = (event) => {
-				this.connection.entry({
-					"message": "Connection Closed",
-					"event": event
-				});
+				this.connection.entry("Connection Closed", 40, event);
 				if(!this.connection.closing && !this.connection.reconnecting) {
-					this.connection.entry("Mitigating Lost Connection");
+					this.connection.entry("Mitigating Lost Connection", 40);
 					this.connection.lastErrorAt = Date.now();
 					this.connection.lastError = "Connection Fault";
 					this.connection.reconnecting = true;
@@ -186,13 +201,14 @@ class RSUniverse extends RSObject {
 				this.connection.socket = null;
 			};
 			
-			socket.onmessage = (message) => {
-				this.connection.entry(message, "Message Received");
-				this.connection.syncMark = message.time;
+			socket.onmessage = (event) => {
+				var message;
+				
+				this.connection.syncMark = event.time;
 				this.connection.last = Date.now();
 				
 				try {
-					message = JSON.parse(message.data);
+					message = JSON.parse(event.data);
 					message.received = Date.now();
 					message.sent = parseInt(message.sent);
 					if(message.version && message.version !== this.version) {
@@ -208,7 +224,7 @@ class RSUniverse extends RSObject {
 					}
 					
 					this.$emit(message.type, message.event);
-					this.connection.entry(message, message.type);
+					this.connection.entry(message.type + " Message received", message.type === "error"?50:30, message);
 					if(this.debugConnection || this.debug) {
 						console.warn("Emission[" + message.type + ":complete]: ", message.event);
 					}
@@ -219,6 +235,7 @@ class RSUniverse extends RSObject {
 					}
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);
+					this.connection.entry("Error processing message", 50, event, exception);
 					this.$emit("warning", {
 						"message": {
 							"text": "Failed to parse AQ Connection message"
@@ -371,7 +388,7 @@ class RSUniverse extends RSObject {
 	 */
 	disconnect() {
 		if(!this.connection.socket) {
-			this.connection.entry("Unable to disconnect, Universe not connected");
+			this.connection.entry("Unable to disconnect, Universe not connected", 40);
 		} else {
 			this.connection.entry("Disconnecting");
 			this.connection.socket.close();

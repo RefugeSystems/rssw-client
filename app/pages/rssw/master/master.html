@@ -29,6 +29,8 @@
 				<div class="entities list-data">
 					<button class="listed entity navigation-button" v-for="entity in universeEntities" :to="'/universe/' + entity.classification + '/' + entity.id" v-on:click="showInfo(entity)" :key="entity.id" v-if="filteredEntity(entity)">
 						<span class="link-icon" :class="entity.icon || 'fas fa-user-circle'"></span>
+						<span class="far fa-eye-slash rs-lightblue" v-if="entity.hidden"></span>
+						<span class="far fa-ban rs-lightred" v-if="entity.obscured"></span>
 						<span class="link-label">{{entity.name}}</span>
 					</button>
 					<router-link class="entity navigation-button create-npc" to="/construct/character">
@@ -48,18 +50,36 @@
 					</button>
 				</div>
 			</div>
+			<div class="control item list">
+				<div class="title">
+					<input class="filter" v-model="state.item_search" placeholder="Filter Items..." />
+				</div>
+				<div class="items list-data flex v">
+					<button class="listed item" v-for="record in items" v-if="!record.skill_search || (record._search && record._search.indexOf(record.item_search.toLowerCase()) !== -1)" v-on:click="showInfo(record)" :key="record.id">
+						<span :class="record.icon"></span>
+						<span class="fas fa-sticky-note rs-green" v-if="record.screen"></span>
+						<span>{{record.name}}</span>
+					</button>
+				</div>
+			</div>
 			<div class="control session list flex v">
-				<div class="current" v-on:click="showInfo(currentSession)">
-					<h2>Current: {{currentSession?currentSession.name:"None"}}</h2>
+				<div class="current">
+					<!-- h2>Current: {{currentSession?currentSession.name:"None"}}</h2 -->
+					<h2>
+						<span v-on:click="showInfo(currentSession)">Current:</span>
+						<select v-on:change="setSession(trackSession)" v-model="trackSession">
+							<option v-for="session in sessions" :value="session.id">{{session.name}}</option>
+						</select>
+					</h2>
 				</div>
 				<button class="next session" v-on:click="makeNextSession()">
 					<span v-if="lockMakeNew" class="fas fa-spinner fa-pulse"></span>
 					<span class="">To Next Session: {{nextSession}}</span>
 					<span v-if="!lockMakeNew" class="fas fa-arrow-alt-circle-right"></span>
 				</button>
-				<select v-on:change="setSession(trackSession)" v-model="trackSession">
+				<!-- select v-on:change="setSession(trackSession)" v-model="trackSession">
 					<option v-for="session in sessions" :value="session.id">{{session.name}}</option>
-				</select>
+				</select -->
 				<div class="title">
 					<input class="filter" v-model="state.searchKnowledge" placeholder="Filter Screen Knowledge..."/>
 				</div>

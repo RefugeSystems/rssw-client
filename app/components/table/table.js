@@ -53,7 +53,7 @@
 		},
 		"watch": {
 			"index": function(newIndex, oldIndex) {
-				console.warn("Table Index Updated: ", oldIndex, "\n -> \n", newIndex);
+//				console.warn("Table Index Updated: ", oldIndex, "\n -> \n", newIndex);
 				oldIndex.$off("selection", this.update);
 				oldIndex.$off("indexed", this.update);
 				newIndex.$on("selection", this.update);
@@ -73,6 +73,11 @@
 						this.state.paging.tracked = nV;
 						this.update();
 					}
+				}
+			},
+			"state.paging.per": {
+				"handler": function() {
+					this.update();
 				}
 			}
 		},

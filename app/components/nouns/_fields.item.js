@@ -224,6 +224,10 @@
 		"label": "Obscured",
 		"property": "obscured",
 		"type": "checkbox"
+	}, {
+		"label": "Screen",
+		"property": "screen",
+		"type": "checkbox"
 	},
 	slots,
 	cancontain,
