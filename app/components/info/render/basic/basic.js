@@ -654,17 +654,17 @@
 			},
 			"hideRecord": function() {
 				this.record.commit({
-					"hidden": this.record.hidden?null:true
+					"hidden": this.record.hidden?false:true
 				});
 			},
 			"obscureRecord": function() {
 				this.record.commit({
-					"obscured": this.record.obscured?null:true
+					"obscured": this.record.obscured?false:true
 				});
 			},
 			"knownRecord": function() {
 				this.record.commit({
-					"must_know": this.record.must_know?null:true
+					"must_know": this.record.must_know?false:true
 				});
 			},
 			"prettifyKey": function(key) {
