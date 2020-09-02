@@ -668,6 +668,11 @@
 					"must_know": this.record.must_know?false:true
 				});
 			},
+			"screenRecord": function() {
+				this.record.commit({
+					"screen": this.record.screen?false:true
+				});
+			},
 			"prettifyKey": function(key) {
 			},
 			"prettifyPropertyName": function(property, record) {

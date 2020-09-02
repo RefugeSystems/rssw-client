@@ -259,6 +259,12 @@
 				<span>Must Know</span>
 			</button>
 		</div>
+		<div class="control">
+			<button class="action" v-on:click="screenRecord()">
+				<span class="icon" :class="record.screen?'far fa-check-square':'far fa-square'"></span>
+				<span>Screen</span>
+			</button>
+		</div>
 		
 		<div class="control flex h">
 			<button class="action direct" v-on:click="editRecord(false)">
