@@ -27,8 +27,9 @@
 	invisibleKeys.locked_attunement = true;
 	invisibleKeys.source_template = true;
 	invisibleKeys.path_exception = true;
+	invisibleKeys.known_objects = true;
 	invisibleKeys.modifierstats = true;
-	invisibleKeys.modifierattrs = true; 
+	invisibleKeys.modifierattrs = true;
 	invisibleKeys.no_modifiers = true;
 	invisibleKeys.restock_base = true;
 	invisibleKeys.render_name = true;
