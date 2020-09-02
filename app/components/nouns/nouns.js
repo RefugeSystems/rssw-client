@@ -290,6 +290,37 @@
 			this.universeUpdate();
 		},
 		"methods": {
+			"nameRandomization": function(root, generator) {
+				var name = "",
+					x;
+				
+				if(root.randomize_name) {
+					if(!generator) {
+						if(root.randomize_name_dataset && (generator = this.universe.indexes.dataset.index[root.randomize_name_dataset])) {
+							generator = new NameGenerator(generator.set);
+						} else if(root.race) {
+							generator = this.getGenerator(root.race);
+						}
+					}
+					if(root.randomize_name_prefix) {
+						name += root.randomize_name_prefix + " ";
+					}
+					if(generator) {
+						name += generator.corpus[Random.integer(generator.corpus.length)].capitalize();
+						for(x=1; x<root.randomize_name; x++) {
+							if(root.randomize_name_spacing) {
+								name += " ";
+							}
+							name += generator.corpus[Random.integer(generator.corpus.length)].capitalize();
+						}
+					}
+					if(root.randomize_name_suffix) {
+						name += " " + root.randomize_name_suffix;
+					}
+				}
+				
+				return name;
+			},
 			"viewParentInfo": function() {
 				rsSystem.EventBus.$emit("display-info", this.state.building[this.state.current].parent);
 			},
@@ -311,11 +342,29 @@
 				}
 			},
 			"hasGenerator": function(race) {
+				race = race || this.models[this.state.current].race;
+				return (race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset)
+					|| (!race && this.universe.defaultDataset);
+				/*
 				race = race || this.state.building[this.state.current].race;
 				return (race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset)
 					|| (!race && this.universe.defaultDataset);
+					*/
 			},
 			"pullRandomName": function(generator) {
+				if(this.models[this.state.current].randomize_name) {
+					Vue.set(this.state.building[this.state.current], "name",this.nameRandomization(this.models[this.state.current], generator));
+				} else {
+					if(this.state.current === "session") {
+						Vue.set(this.state.building[this.state.current], "name", new String(this.universe.indexes.session.listing.length + 1));
+					} else {
+						generator = generator || this.getGenerator(this.state.building[this.state.current].race);
+						if(generator) {
+							Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+						}
+					}
+				}
+				/*
 				if(this.state.current === "session") {
 					Vue.set(this.state.building[this.state.current], "name", new String(this.universe.indexes.session.listing.length + 1));
 				} else {
@@ -324,12 +373,19 @@
 						Vue.set(this.state.building[this.state.current], "name", generator.corpus[Random.integer(generator.corpus.length)].capitalize() + " " + generator.corpus[Random.integer(generator.corpus.length)].capitalize());
 					}
 				}
+				*/
 			},
 			"randomizeName": function(generator) {
+				generator = generator || this.getGenerator(this.models[this.state.current].race);
+				if(generator) {
+					Vue.set(this.state.building[this.state.current], "name", generator.create().capitalize() + " " + generator.create().capitalize());
+				}
+				/*
 				generator = generator || this.getGenerator(this.state.building[this.state.current].race);
 				if(generator) {
 					Vue.set(this.state.building[this.state.current], "name", generator.create().capitalize() + " " + generator.create().capitalize());
 				}
+				*/
 			},
 			"setDateNow": function(property) {
 				Vue.set(this.state.building[this.state.current], property, Date.now());
@@ -356,7 +412,7 @@
 				} else if(this.universe.defaultDataset) {
 					if(!this.nameGenerators._default) {
 						if(!this.universe.defaultDataset.set) {
-							console.warn("UI[pdate: ", this.universe.defaultDataset);
+							console.warn("Update: ", this.universe.defaultDataset);
 							this.universe.defaultDataset.recalculateProperties();
 						}
 						generator = new NameGenerator(this.universe.defaultDataset.set);
