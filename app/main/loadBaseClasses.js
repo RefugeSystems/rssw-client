@@ -29,6 +29,7 @@ rsSystem.registerNoun(RSLogLevel, "loglevel");
 rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");
 rsSystem.registerNoun(RSModifierStats, "modifierstats");
 
+rsSystem.registerNoun(RSType, "type");
 rsSystem.registerNoun(RSNote, "note");
 
 rsSystem.registerNoun(RSParty, "party");

@@ -8,7 +8,8 @@
 		profiles,
 		pathing,
 		images,
-		notes;
+		notes,
+		types;
 	
 	pathing = {
 		"label": "Pathing",
@@ -17,6 +18,7 @@
 		"optionValue": "id",
 		"optionLabel": "name",
 		"condition": {
+			"has_path": true,
 			"pathed": {
 				"operation": "exists"
 			}
@@ -71,6 +73,14 @@
 		"optionLabel": "name"
 	};
 	
+	types = {
+		"label": "Types",
+		"property": "type",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -89,26 +99,26 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
-		"label": "Type",
-		"property": "type",
-		"type": "select",
-		"raw": true,
-		"options": [
-			"astroid",
-			"astroid-belt",
-			"astroid-field",
-			"building",
-			"city",
-			"marker",
-			"moon",
-			"phenomenon",
-			"planet",
-			"sector",
-			"star",
-			"star-system",
-			"station"
-		]
-	}, {
+//		"label": "Type",
+//		"property": "type",
+//		"type": "select",
+//		"raw": true,
+//		"options": [
+//			"astroid",
+//			"astroid-belt",
+//			"astroid-field",
+//			"building",
+//			"city",
+//			"marker",
+//			"moon",
+//			"phenomenon",
+//			"planet",
+//			"sector",
+//			"star",
+//			"star-system",
+//			"station"
+//		]
+//	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -320,11 +330,13 @@
 		"property": "path",
 		"type": "textarea",
 		"condition": {
+			"has_path": true,
 			"pathed": {
 				"operation": "!"
 			}
 		}
 	},
+	types,
 	playlists,
 	knowledges,
 	{
@@ -352,7 +364,6 @@
 			data.fields = this.fields || {};
 			data.fields.location = dataSource;
 			
-
 			return data;
 		},
 		"mounted": function() {
@@ -366,6 +377,7 @@
 			knowledges.source_index = this.universe.indexes.knowledge;
 			playlists.source_index = this.universe.indexes.playlist;
 			pathing.source_index = this.universe.indexes.location;
+			types.source_index = this.universe.indexes.type;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {

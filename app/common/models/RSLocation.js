@@ -11,6 +11,10 @@ class RSLocation extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 		
+		if(this.type && !(this.type instanceof Array)) {
+			this.type = [this.type];
+		}
+		
 		if(!this.coordinates) {
 			this.coordinates = [];
 		}

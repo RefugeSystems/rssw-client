@@ -13,7 +13,8 @@
 		notes,
 		skill,
 		slots,
-		stats;
+		stats,
+		types;
 	
 	itemtypes = {
 		"label": "Item Types",
@@ -106,6 +107,14 @@
 	notes = {
 		"label": "Notes",
 		"property": "note",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	types = {
+		"label": "Types",
+		"property": "type",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -213,6 +222,14 @@
 		"property": "needs_slot",
 		"type": "checkbox"
 	}, {
+		"label": "Ranged",
+		"property": "is_ranged",
+		"type": "checkbox"
+	}, {
+		"label": "Melee",
+		"property": "is_melee",
+		"type": "checkbox"
+	}, {
 		"label": "Template",
 		"property": "template",
 		"type": "checkbox"
@@ -232,6 +249,7 @@
 	slots,
 	cancontain,
 	itemtypes,
+	types,
 	abilities,
 	items,
 	attrs,

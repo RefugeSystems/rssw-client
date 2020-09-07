@@ -97,6 +97,7 @@
 			data.dragX = null;
 			data.dragY = null;
 			
+			data.availableCanvases = {};
 			data.availableLocales = {};
 			data.pointsOfInterest = [];
 			data.coordinates = [];
@@ -202,13 +203,8 @@
 			}
 		},
 		"mounted": function() {
-			Vue.set(this, "element", $(this.$el));
-			
 			this.canvasElement = $("canvas.map-paths");
-			if(this.canvasElement.length) {
-				this.canvasElement = this.canvasElement[0];
-				this.canvas = this.canvasElement.getContext("2d");
-			}
+			Vue.set(this, "element", $(this.$el));
 
 			if(this.state.master_view !== "master") {
 				if(this.state.master_view) {
@@ -394,7 +390,7 @@
 				this.redrawPaths();
 			},
 			"openActions": function(event) {
-				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event);
+//				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event);
 				var xc = event.offsetX,
 					yc = event.offsetY,
 					buffer,
@@ -410,15 +406,18 @@
 					for(x=0; x<this.locales.length; x++) {
 						locale = this.locales[x];
 						if(locale.contained) {
-	//						console.log("Point Check[" + locale.id + " - " + xc + ", " + yc + " @ " + buffer.isPointInPath(xc, yc) + "]: ", buffer);
 							buffer = this.availableLocales[locale.id];
 							this.localeInfo.location = locale;
+//							if(buffer) {
+//								console.log("Point Check[" + locale.id + " - " + xc + ", " + yc + " @ " + buffer.isPointInPath(xc, yc) + "]: ", buffer);
+//							}
 							if(buffer && buffer.isPointInPath(xc, yc)) {
 								this.localeInfo.text = locale.name;
 								this.localeInfo.id = locale.id;
 							}
 						}
 					}
+//					console.log("Test: ", this.localeInfo.id);
 					if(this.localeInfo.id && !this.localeInfo.shown) {
 						this.actions.options.unshift(this.localeInfo);
 						this.localeInfo.shown = true;
@@ -582,7 +581,7 @@
 
 			},
 			"down": function(event) {
-				console.log("down:" + event.button, event);
+//				console.log("down:" + event.button, event);
 				switch(event.button) {
 					case 0:
 						this.isDragging = true;
@@ -751,19 +750,14 @@
 						Vue.set(this, "scaledSize", this.baseFontSize + applying.zoom);
 					}
 					
-					if(!this.canvas || !this.canvas.strokeRect) {
-						this.canvas = $("canvas.map-paths");
-						if(this.canvas.length) {
-							this.canvasElement = this.canvas[0];
-							this.canvas = this.canvasElement.getContext("2d");
-						} else {
-							this.canvasElement = null;
-							this.canvas = null;
+					if(this.locales && this.locales.length && this.image._lastzoom !== applying.zoom) {
+						console.log("Apply Redraw: ", this.image._lastzoom, applying.zoom);
+						for(var x=0; x<this.locales.length; x++) {
+							if(this.availableCanvases[this.locales[x].id]) {
+								this.availableCanvases[this.locales[x].id].height = applying.height;
+								this.availableCanvases[this.locales[x].id].width = applying.width;
+							}
 						}
-					}
-					if(this.canvas) {
-						this.canvasElement.height = applying.height;
-						this.canvasElement.width = applying.width;
 						this.redrawPaths();
 					}
 					
@@ -775,125 +769,142 @@
 				    });
 					
 					Object.assign(this.image, applying);
+					this.image._lastzoom = applying.zoom;
 					this.saveStorage(this.storageKeyID, this.state);
 				}
 			},
 			"redrawPaths": function() {
-				var path,
+				var buffer,
+					path,
 					x;
 				
-				this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 				
 				// Paint Grid
-				if(this.options && this.options.paintGrid) {
-					this.paintGrid();
-				}
+//				if(this.options && this.options.paintGrid) {
+//					this.paintGrid();
+//				}
+
+				console.log("Redraw");
 				
 				for(x=0; x<this.locales.length; x++) {
 					path = this.locales[x];
-					if(path.location === this.location.id && path.values && path.values.length) {
-						this.availableLocales[path.id] = this.drawPath(path);
+					if(path.location === this.location.id && path.has_path) {
+						if(!this.availableLocales[path.id]) {
+							buffer = $("[data-id='locale:" + path.id + "']");
+							if(buffer.length) {
+								this.availableLocales[path.id] = buffer[0].getContext("2d");
+								this.availableCanvases[path.id] = buffer[0];
+							}
+						}
+
+						if(this.availableLocales[path.id]) {
+							this.availableLocales[path.id].clearRect(0, 0, this.availableCanvases[path.id].width, this.availableCanvases[path.id].height);
+							this.drawPath(this.availableLocales[path.id], path);
+						}
 					}
 				}
 			},
-			"drawPath": function(path) {
-				if(path && !this.state.hidden_legend[path.id]) {
-					var canvas = this.canvasElement.getContext("2d"),
-						xc,
-						yc,
+			"drawPath": function(canvas, path) {
+				if(path && path.has_path && !this.state.hidden_legend[path.id]) {
+					var points = [],
+						buffer,
+						point,
 						x;
 					
-					canvas.strokeStyle = path.color || "#FFFFFF";
-					canvas.lineWidth = path.thickness;
-					if(path.opacity !== undefined) {
-						canvas.globalAlpha = path.opacity;
+					if(path.pathed) {
+						for(x=0; x<path.pathing.length; x++) {
+							buffer = this.universe.indexes.location.index[path.pathing[x]];
+							if(buffer) {
+								point = [buffer.x/100 * this.image.width, buffer.y/100 * this.image.height];
+								points.push(point);
+							}
+						}
+					} else if(path.values && path.values.length) {
+						for(x=0; x<path.values.length; x++) {
+							point = [path.values[x][0] * this.image.width, path.values[x][1] * this.image.height];
+							points.push(point);
+						}
+					}
+					
+					if(points.length) {
+						this.renderPath(canvas, path, points);
+						return canvas;
+					}
+				}
+				
+				return null;
+			},
+			"renderPath": function(canvas, path, points) {
+//				console.log("Render Path[" + path.id + "]: ", points, path);
+				var xc,
+					yc,
+					x;
+				
+				canvas.locationID = path.id;
+				canvas.strokeStyle = path.color || "#FFFFFF";
+				canvas.lineWidth = path.thickness;
+				if(path.opacity !== undefined) {
+					canvas.globalAlpha = path.opacity;
+				}
+				canvas.beginPath();
+				canvas.moveTo(points[0][0], points[0][1]);
+				for(x=1; x<points.length; x++) {
+					if(path.curved) {
+						//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+						xc = (points[x-1][0] + points[x][0]) / 2;
+						yc = (points[x-1][1] + points[x][1]) / 2;
+						canvas.quadraticCurveTo(xc, yc, points[x][0], points[x][1]);
+//						canvas.quadraticCurveTo(
+//							path.values[x-1][0] * this.image.width,
+//							path.values[x-1][1] * this.image.height,
+//							path.values[x][0] * this.image.width,
+//							path.values[x][1] * this.image.height);
+					} else {
+						canvas.lineTo(points[x][0], points[x][1]);
+					}
+				}
+				if(path.contained) {
+					canvas.closePath();
+					canvas.stroke();
+					canvas.fillStyle = path.fill_color || path.color || "#FFFFFF";
+					if(path.fill_opacity !== undefined) {
+						canvas.globalAlpha = path.fill_opacity;
 					}
 					canvas.beginPath();
-					canvas.moveTo(path.values[0][0] * this.image.width, path.values[0][1] * this.image.height);
-					for(x=1; x<path.values.length; x++) {
+					canvas.moveTo(points[0][0], points[0][1]);
+					for(x=1; x<points.length; x++) {
 						if(path.curved) {
 							//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-							xc = ((path.values[x-1][0] + path.values[x][0]) * this.image.width) / 2;
-							yc = ((path.values[x-1][1] + path.values[x][1]) * this.image.height) / 2;
-							canvas.quadraticCurveTo(xc, yc, path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+							xc = (points[x-1][0] + points[x][0]) / 2;
+							yc = (points[x-1][1] + points[x][1]) / 2;
+							canvas.quadraticCurveTo(xc, yc, points[x][0], points[x][1]);
 //							canvas.quadraticCurveTo(
 //								path.values[x-1][0] * this.image.width,
 //								path.values[x-1][1] * this.image.height,
 //								path.values[x][0] * this.image.width,
 //								path.values[x][1] * this.image.height);
 						} else {
-							canvas.lineTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+							canvas.lineTo(points[x][0], points[x][1]);
 						}
 					}
-					if(path.contained) {
-						canvas.closePath();
-						canvas.stroke();
-						canvas.fillStyle = path.fill_color || path.color || "#FFFFFF";
-						if(path.fill_opacity !== undefined) {
-							canvas.globalAlpha = path.fill_opacity;
-						}
-						canvas.beginPath();
-						canvas.moveTo(path.values[0][0] * this.image.width, path.values[0][1] * this.image.height);
-						for(x=1; x<path.values.length; x++) {
-							if(path.curved) {
-								//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-								xc = ((path.values[x-1][0] + path.values[x][0]) * this.image.width) / 2;
-								yc = ((path.values[x-1][1] + path.values[x][1]) * this.image.height) / 2;
-								canvas.quadraticCurveTo(xc, yc, path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-//								canvas.quadraticCurveTo(
-//									path.values[x-1][0] * this.image.width,
-//									path.values[x-1][1] * this.image.height,
-//									path.values[x][0] * this.image.width,
-//									path.values[x][1] * this.image.height);
-							} else {
-								canvas.lineTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-							}
-						}
-						canvas.closePath();
-						canvas.fill();
-						
-						if(this.state.labels && path.render_name && path._x !== undefined && path._y !== undefined) {
-							canvas.fillStyle = path.label_color || path.color || "#FFFFFF";
-							canvas.globalAlpha = path.label_opacity || 1;
-							canvas.font = "bold " + (12 + this.state.image.zoom) + "px Arial";
-							canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
-							canvas.shadowBlur = path.label_shadow_blur || 3;
-							canvas.shadowOffsetX = 0;
-							canvas.shadowOffsetY = 0;
-							canvas.fillText(path.label, path._x * this.image.width, path._y * this.image.height);
-						}
-					} else {
-						canvas.stroke();
-					}
+					canvas.closePath();
+					canvas.fill();
 					
-					return canvas;
+					if(this.state.labels && path.render_name && path._x !== undefined && path._y !== undefined) {
+						canvas.fillStyle = path.label_color || path.color || "#FFFFFF";
+						canvas.font = "bold " + (12 + this.state.image.zoom) + "px Arial";
+						canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
+						canvas.shadowBlur = path.label_shadow_blur || 3;
+						canvas.globalAlpha = path.label_opacity || 1;
+						canvas.shadowOffsetX = 0;
+						canvas.shadowOffsetY = 0;
+						canvas.fillText(path.label, path._x * this.image.width, path._y * this.image.height);
+					}
+				} else {
+					canvas.stroke();
 				}
 				
-				return null;
-			},
-			"paintGrid": function() {
-				this.paintGridV01();
-			},
-			"paintGridV01": function() {
-				this.canvas.strokeStyle = "#FFFFFF";
-				this.canvas.globalAlpha = 0.05;
-				var prefix,
-					bulk,
-					x;
-				
-				for(x=0; x<24; x++) {
-					// this.image.width * (1/23), this.image.height * (1/30) + x * this.image.height * (1/21), this.image.width * (1/23), this.image.height * (1/21));
-					this.canvas.moveTo(x * this.image.width * (1/23), 0);
-					this.canvas.lineTo(x * this.image.width * (1/23), this.image.height);
-					this.canvas.stroke();
-				}
-				for(x=0; x<22; x++) {
-					prefix = this.image.height * (1/32);
-					bulk = this.image.height - prefix;
-					this.canvas.moveTo(0, prefix + x * (bulk * 1/20));
-					this.canvas.lineTo(this.image.width, prefix + x * (bulk * 1/20));
-					this.canvas.stroke();
-				}
+				return canvas;
 			},
 			"elementVisible": function(element, entity) {
 				if(element.template || element.hidden || (element.obscured && !this.player.master)) {
@@ -1120,6 +1131,7 @@
 				}
 				
 				this.$forceUpdate();
+				this.redrawPaths();
 			}
 		},
 		"beforeDestroy": function() {

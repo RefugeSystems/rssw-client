@@ -19,7 +19,9 @@
 				<div class="coordinate-dots">
 					<button class="dot" v-for="coordinate in coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button>
 				</div>
-				<canvas class="map-paths"></canvas>
+				<div class="map-paths">
+					<canvas v-for="loc in locales" :data-id="'locale:' + loc.id"></canvas>
+				</div>
 				<div class="actions" v-if="actions.open" :style="getActionMenuStyle()">
 					<div class="actions-header">
 						<span class="titling">

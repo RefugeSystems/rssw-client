@@ -141,6 +141,7 @@ var config = {
 				"RSRace",
 				"RSRoom",
 				"RSSlot",
+				"RSType",
 				"RSLog",
 				"RSSex"
 			]

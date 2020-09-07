@@ -78,6 +78,7 @@
 			rsSystem.components.NounFieldsRace,
 			rsSystem.components.NounFieldsRoom,
 			rsSystem.components.NounFieldsSlot,
+			rsSystem.components.NounFieldsType,
 			rsSystem.components.NounFieldsSex
 		],
 		"props": {
