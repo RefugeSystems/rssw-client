@@ -4,7 +4,7 @@
 		</rs-field>
 		<rs-field :root="state.entry" :field="sessionField" v-on:changed="sync($event)">
 		</rs-field>
-		<rs-field :root="state.entry" :field="entryField" v-on:changed="sync($event)" class="entry">
+		<rs-field :root="state.entry" :field="entryField" v-on:changed="sync($event)" v-on:changing="syncWait()" class="entry">
 		</rs-field>
 	</div>
 	
@@ -22,11 +22,11 @@
 			</button>
 			<div class="block-content listing entries">
 				<button :title="entry.name" class="listed entry" v-on:click="newEntry()" :class="getEntryClass()">
-					<span class="fas fa-spinner fa-pulse" v-if="syncTimeout && !universe.indexes.journal.index[state.entry.id]"></span>
+					<span class="fas fa-spinner fa-pulse" v-if="syncLock && !universe.indexes.journal.index[state.entry.id]"></span>
 					<span class="entry-name">New Entry</span>
 				</button>
 				<button v-for="entry in entries" :title="entry.name" class="listed entry" v-on:click="editEntry(entry)" :class="getEntryClass(entry)">
-					<span class="fas fa-spinner fa-pulse" v-if="syncTimeout && state.entry.id === entry.id"></span>
+					<span class="fas fa-spinner fa-pulse" v-if="syncLock && state.entry.id === entry.id"></span>
 					<span class="entry-name">{{entry.name}}</span>
 				</button>
 			</div>

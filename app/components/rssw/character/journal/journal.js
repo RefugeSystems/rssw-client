@@ -113,6 +113,7 @@
 
 			data.sessionField.options.sortBy("id");
 			data.syncTimeout = null;
+			data.syncLock = false;
 			
 			return data;
 		},
@@ -197,7 +198,7 @@
 				this.sync();
 			},
 			"newEntry": function() {
-				if(this.syncTimeout) {
+				if(this.syncLock) {
 					return null;
 				}
 				
@@ -228,7 +229,7 @@
 				}
 			},
 			"editEntry": function(entry) {
-				if(this.syncTimeout) {
+				if(this.syncLock) {
 					return null;
 				}
 				
@@ -245,12 +246,20 @@
 				}
 			},
 			"sync": function() {
+				if(!this.syncLock) {
+					Vue.set(this, "syncLock", true);
+				}
 				if(this.syncTimeout) {
 					clearTimeout(this.syncTimeout);
 				}
 				Vue.set(this, "syncTimeout", setTimeout(() => {
 					this.commitSync();
 				}, 500));
+			},
+			"syncWait": function() {
+				if(!this.syncLock) {
+					Vue.set(this, "syncLock", true);
+				}
 			},
 			"commitSync": function() {
 				if(this.state.entry.id) {
@@ -270,6 +279,7 @@
 				}
 				
 				Vue.set(this, "syncTimeout", null);
+				Vue.set(this, "syncLock", false);
 			},
 			"getEntryClass": function(entry) {
 				if(entry && this.state.entry.id === entry.id) {

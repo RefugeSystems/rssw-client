@@ -33,6 +33,7 @@
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
 			
+			data.bufferChanging = false;
 			data.bufferLoading = false;
 			data.bufferTimeout = null;
 			data.bufferMark = null;
@@ -192,6 +193,10 @@
 					Vue.set(this, "bufferLoading", false);
 					this.emitChanged();
 				} else {
+					if(!this.bufferChanging) {
+						Vue.set(this, "bufferChanging", true);
+						this.$emit("changing");
+					}
 					setTimeout(() => {
 						this.bufferChangeProcess();
 					}, 500);
@@ -215,6 +220,8 @@
 				if(this.field.onchange) {
 					this.field.onchange(this.root[this.field.property]);
 				}
+
+				Vue.set(this, "bufferChanging", false);
 			},
 			"set": function(value) {
 				Vue.set(this.root, this.field.property, value);
