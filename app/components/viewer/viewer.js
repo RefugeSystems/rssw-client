@@ -814,7 +814,7 @@
 					if(path.pathed) {
 						for(x=0; x<path.pathing.length; x++) {
 							buffer = this.universe.indexes.location.index[path.pathing[x]];
-							if(buffer) {
+							if(buffer && buffer.location === this.location.id) {
 								point = [buffer.x/100 * this.image.width, buffer.y/100 * this.image.height];
 								points.push(point);
 							}
