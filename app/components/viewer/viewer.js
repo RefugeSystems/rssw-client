@@ -108,6 +108,7 @@
 			data.legendDisplayed = true;
 			data.legendOpen = false;
 			data.legendHidden = {};
+			data.isMaster = null;
 			
 			data.localeInfo = {
 				"event": "info-key",
@@ -280,7 +281,7 @@
 				noun.id = this.idFromName(noun.name);
 				noun.icon = this.getGeneratedClass();
 				noun.location = this.location.id;
-				noun.type = this.state.generate_location;
+				noun.type = [this.state.generate_location];
 				noun.x = x;
 				noun.y = y;
 				noun.master_note = "Generated @" + (new Date()).toString();
@@ -725,6 +726,7 @@
 			},
 			"apply": function(applying) {
 //				console.log("apply: ", applying, this.parchment);
+//				console.log("apply");
 				if(this.parchment && this.parchment.length) {
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
@@ -750,8 +752,11 @@
 						Vue.set(this, "scaledSize", this.baseFontSize + applying.zoom);
 					}
 					
-					if(this.locales && this.locales.length && this.image._lastzoom !== applying.zoom) {
-						console.log("Apply Redraw: ", this.image._lastzoom, applying.zoom);
+					if(this.locales && this.locales.length && (this.image._lastzoom !== applying.zoom || this.image._lastlocation !== this.location.id)) {
+//						console.log("Apply Redraw: ", JSON.stringify(this.image, null, 4), JSON.stringify(applying, null, 4));
+//						console.log("Apply Redraw");
+						this.image._lastlocation = this.location.id;
+						this.image._lastzoom = applying.zoom;
 						for(var x=0; x<this.locales.length; x++) {
 							if(this.availableCanvases[this.locales[x].id]) {
 								this.availableCanvases[this.locales[x].id].height = applying.height;
@@ -759,6 +764,13 @@
 							}
 						}
 						this.redrawPaths();
+					} else {
+						if(this.image._lastlocation !== this.location.id) {
+							this.image._lastlocation = this.location.id;
+						}
+						if(this.image._lastzoom !== applying.zoom) {
+							this.image._lastzoom = applying.zoom;
+						}
 					}
 					
 					this.parchment.css({
@@ -769,7 +781,6 @@
 				    });
 					
 					Object.assign(this.image, applying);
-					this.image._lastzoom = applying.zoom;
 					this.saveStorage(this.storageKeyID, this.state);
 				}
 			},
@@ -784,16 +795,19 @@
 //					this.paintGrid();
 //				}
 
-				console.log("Redraw");
+//				console.log("Redraw");
 				
 				for(x=0; x<this.locales.length; x++) {
 					path = this.locales[x];
 					if(path.location === this.location.id && path.has_path) {
-						if(!this.availableLocales[path.id]) {
+						if(!this.availableLocales[path.id] || !this.availableLocales[path.id].parentNode) {
 							buffer = $("[data-id='locale:" + path.id + "']");
 							if(buffer.length) {
 								this.availableLocales[path.id] = buffer[0].getContext("2d");
 								this.availableCanvases[path.id] = buffer[0];
+
+								this.availableCanvases[path.id].height = this.image.height;
+								this.availableCanvases[path.id].width = this.image.width;
 							}
 						}
 
@@ -992,81 +1006,78 @@
 				var buffer,
 					x;
 				
-				this.actions.options.splice(0);
-				if(this.player.master) {
-					this.actions.options.push({
-						"icon": "fas fa-map",
-						"event": "set-map",
-						"text": "Set Location View"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-map-marked",
-						"event": "set-current",
-						"text": "Show Map"
-					});
-					
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Red",
-						"color": "red"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Orange",
-						"color": "orange"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Green",
-						"color": "green"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Yellow",
-						"color": "yellow"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Blue",
-						"color": "blue"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Purple",
-						"color": "purple"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: Black",
-						"color": "black"
-					});
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-crosshair",
-						"text": "Mark: White",
-						"color": "white"
-					});
-
-//					this.actions.options.push({
-//						"icon": "fas fa-code-commit",
-//						"event": "add-point",
-//						"text": "Add Point"
-//					});
-					
-					this.actions.options.push(this.state.crosshairing);
-					
-					this.actions.options.push({
-						"icon": "fas fa-chevron-double-right",
-						"event": "set-location",
-						"text": "Set Location"
-					});
+				if(this.isMaster !== this.player.master) {
+					Vue.set(this, "isMaster", this.player.master);
+					this.actions.options.splice(0);
+					if(this.player.master) {
+						this.actions.options.push({
+							"icon": "fas fa-map",
+							"event": "set-map",
+							"text": "Set Location View"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-map-marked",
+							"event": "set-current",
+							"text": "Show Map"
+						});
+						
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Red",
+							"color": "red"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Orange",
+							"color": "orange"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Green",
+							"color": "green"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Yellow",
+							"color": "yellow"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Blue",
+							"color": "blue"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Purple",
+							"color": "purple"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: Black",
+							"color": "black"
+						});
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-crosshair",
+							"text": "Mark: White",
+							"color": "white"
+						});
+						
+						this.actions.options.push(this.state.crosshairing);
+						
+						this.actions.options.push({
+							"icon": "fas fa-chevron-double-right",
+							"event": "set-location",
+							"text": "Set Location"
+						});
+					}
 				}
 				
 				this.coordinates.splice(0);
