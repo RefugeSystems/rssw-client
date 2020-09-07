@@ -391,7 +391,8 @@
 				this.redrawPaths();
 			},
 			"openActions": function(event) {
-//				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event);
+				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event);
+
 				var xc = event.offsetX,
 					yc = event.offsetY,
 					buffer,
@@ -408,11 +409,12 @@
 						locale = this.locales[x];
 						if(locale.contained) {
 							buffer = this.availableLocales[locale.id];
-							this.localeInfo.location = locale;
 //							if(buffer) {
 //								console.log("Point Check[" + locale.id + " - " + xc + ", " + yc + " @ " + buffer.isPointInPath(xc, yc) + "]: ", buffer);
 //							}
 							if(buffer && buffer.isPointInPath(xc, yc)) {
+								Vue.set(this.actions, "header", locale.name);
+								this.localeInfo.location = locale;
 								this.localeInfo.text = locale.name;
 								this.localeInfo.id = locale.id;
 							}
@@ -423,6 +425,7 @@
 						this.actions.options.unshift(this.localeInfo);
 						this.localeInfo.shown = true;
 					} else if(!this.localeInfo.id && this.localeInfo.shown) {
+						Vue.set(this.actions, "header", "Location");
 						this.actions.options.shift();
 						this.localeInfo.shown = false;
 					}
@@ -536,13 +539,14 @@
 				}
 			},
 			"dismissCoordinate": function(coordinate) {
-				var index = this.coordinates.indexOf(coordinate);
-//				console.log("Dismiss[" + index + "]: ", coordinate, this.coordinates);
-				if(index !== -1) {
-					this.coordinates.splice(index, 1);
-					this.location.commit({
-						"coordinates": this.coordinates
-					});
+				if(this.player.master) {
+					var index = this.coordinates.indexOf(coordinate);
+					if(index !== -1) {
+						this.coordinates.splice(index, 1);
+						this.location.commit({
+							"coordinates": this.coordinates
+						});
+					}
 				}
 			},
 			"resetViewport": function() {
@@ -933,6 +937,41 @@
 				if(!this.elementVisible(locale)) {
 					return false;
 				}
+			},
+			"poiStyling": function(link) {
+				if(!link) {
+					return "";
+				}
+				
+				var classStyle = "",
+					buffer,
+					x;
+				
+				if(this.search_criteria.length) {
+					if(!link._search) {
+						classStyle += " search-hidden";
+					} else {
+						buffer = true;
+						for(x=0; x<this.search_criteria.length; x++) {
+							if(link._search.indexOf(this.search_criteria[x]) === -1) {
+								classStyle += " search-hidden";
+								buffer = false;
+								break;
+							}
+						}
+						if(buffer) {
+							classStyle += " search-found";
+						}
+					}
+				}
+				
+				if(link.no_border) {
+					classStyle += " no-border";
+				} else {
+					classStyle += " map-border";
+				}
+				
+				return classStyle;
 			},
 			"poiNamed": function(link) {
 				if(link.has_path && !link.show_name) {

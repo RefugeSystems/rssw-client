@@ -36,7 +36,11 @@
 				rsSystem.EventBus.$emit("display-info", record);
 			},
 			"uncachedRefresh": function() {
-				location.reload(true);
+				// TODO: Align ServiceWorker versioning for cache tracking
+				caches.delete("rsswx_0.0.1")
+				.then(function() {
+					location.reload(true);
+				});
 			},
 			"makeIssue": function() {
 				var buffer = {};

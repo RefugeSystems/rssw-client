@@ -5,6 +5,7 @@
  * @see https://github.com/GoogleChromeLabs/airhorn/blob/master/app/sw.js
  */
 var storageKey = "_rs_connectComponentKey",
+	// TODO: Centralize ServiceWorker versioning for app control (Align with package version?)
 	version = "0.0.1",
 	cacheID = "rsswx_" + version,
 	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
@@ -14,7 +15,7 @@ var storageKey = "_rs_connectComponentKey",
 	};
 
 self.addEventListener("install", function(event) {
-//	console.log("SW Install");
+	console.log("SW Install");
 	var result = caches.open(cacheID);
 	result.then(function(cache) {
 		return cache.addAll([
@@ -85,6 +86,10 @@ self.addEventListener("push", function(event) {
 	};
 
 	event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("testing", function(event) {
+	console.log("Test Event: ", event);
 });
 
 followUp = function() {

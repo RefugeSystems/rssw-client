@@ -346,23 +346,13 @@
 			"classification": "character"
 		}
 	}, {
-		"label": "Ship Model",
+		"label": "Model",
 		"property": "model",
 		"type": "text",
 		"condition": {
 			"classification": {
 				"operation": "contains",
-				"oneof": ["station", "ship"]
-			}
-		}
-	}, {
-		"label": "Building Model",
-		"property": "model",
-		"type": "text",
-		"condition": {
-			"classification": {
-				"operation": "contains",
-				"oneof": ["building", "base"]
+				"oneof": ["station", "ship", "building", "base"]
 			}
 		}
 	}, {
@@ -424,6 +414,10 @@
 	}, {
 		"label": "Name Spacing",
 		"property": "randomize_name_spacing",
+		"type": "checkbox"
+	}, {
+		"label": "No Map Border",
+		"property": "no_border",
 		"type": "checkbox"
 	}, {
 		"label": "Hidden",

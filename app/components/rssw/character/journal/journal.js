@@ -79,6 +79,7 @@
 			}
 			data.editingMask = "";
 			data.editing = null;
+			data.addKnown = "";
 			 
 			data.sessions = [];
 			data.entries = [];
@@ -140,6 +141,17 @@
 			this.update();
 		},
 		"methods": {
+			"addKnownEntry": function(known) {
+				Vue.set(this, "addKnown", "");
+				this.toggleRelated(known);
+			},
+			"getRecordName": function(id) {
+				if(!this.universe.index.index[id] || (this.universe.index.index[id].must_know && !this.entity.knowsOf(this.universe.index.index[id]))) {
+					return "Unknown";
+				}
+				
+				return this.universe.index.index[id].name;
+			},
 			/**
 			 * Used to control padding with a control block open.
 			 * 
@@ -173,10 +185,11 @@
 				}
 			},
 			"toggleRelated": function(known) {
-				if(known && known.id) {
-					var index = this.state.entry.related.indexOf(known.id);
+				if(known) {
+					known = known.id || known;
+					var index = this.state.entry.related.indexOf(known);
 					if(index === -1) {
-						this.state.entry.related.push(known.id);
+						this.state.entry.related.push(known);
 					} else {
 						this.state.entry.related.splice(index, 1);
 					}

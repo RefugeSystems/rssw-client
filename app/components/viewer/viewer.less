@@ -246,11 +246,17 @@
 						*/
 					}
 					
+					&.search-found .labeling,
 					&:active .labeling,
 					&:focus .labeling,
 					&:hover .labeling {
 						padding: 0px .5em;
 						max-width: 300px;
+					}
+						
+					&.search-hidden .labeling {
+						max-width: 0px;
+						padding: 0px;
 					}
 				}
 			}
@@ -261,8 +267,11 @@
 			z-index: 100;
 			background-color: black;
 			border: 2px solid @rsOrange;
+			margin: 0px !important;
+			/*
 			border-bottom-right-radius: 5px;
 			border-bottom-left-radius: 5px;
+			*/
 			
 			button {
 				border: 0px;
@@ -304,7 +313,7 @@
 				
 				.titling {
 					font-size: 1.3em;
-					padding-left: 7px;
+					padding: 0px 7px;
 				}
 				
 				span {
@@ -323,6 +332,7 @@
 					font-size: 22px;
 					height: 26px;
 					width: 26px;
+					padding: 0px;
 				}
 			}
 			

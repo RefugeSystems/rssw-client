@@ -600,7 +600,7 @@ class RSObject extends EventEmitter {
 		// TODO: Listen for changes on references
 		
 		// Reform Search String
-		this._search = this.id.toLowerCase();
+		this._search = ""; //this.id.toLowerCase();
 		if(this.name) {
 			this._search += this.name.toLowerCase();
 		}

@@ -36,8 +36,13 @@
 				<span class="toggle-label rot270">Knowns</span>
 			</button>
 			<div class="block-content listing knowns">
-				<button v-for="entry in knowns" :title="entry.name" class="listed known" v-on:click="toggleRelated(entry)" :class="getKnownClass(entry)">
-					<span class="entry-name">{{entry.name}}</span>
+				<select v-model="addKnown" class="listed known" v-on:change="addKnownEntry(addKnown)">
+					<option value="">[ Choose to Add ]</option>
+					<option v-for="known in knowns" :value="known.id" v-if="state.entry.related.indexOf(known.id) === -1">{{known.name}}</option>
+				</select>
+				<!-- button v-for="entry in state.entry.related" :title="getRecordName(entry)" class="listed known" v-on:click="toggleRelated(entry)" :class="getKnownClass(entry)" -->
+				<button v-for="entry in state.entry.related" :title="getRecordName(entry)" class="listed known" v-on:click="toggleRelated(entry)">
+					<span class="entry-name">{{getRecordName(entry)}}</span>
 				</button>
 			</div>
 		</div>
