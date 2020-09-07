@@ -375,7 +375,7 @@ var Dice = (function() {
 			},
 			"2": {
 				"advantage": 0,
-				"success": 0
+				"success": 1
 			},
 			"3": {
 				"advantage": 2,
@@ -391,7 +391,7 @@ var Dice = (function() {
 			},
 			"6": {
 				"advantage": 0,
-				"success": 2
+				"success": 0
 			}
 		},
 		"proficiency":  {

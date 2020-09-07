@@ -9,6 +9,7 @@
 		<button class="lined info" v-on:click="info()">
 			<span class="fas fa-info-circle"></span>
 		</button>
+		<!--
 		<button class="lined labels" v-on:click="toggleLabels()">
 			<span class="far" :class="state.hideLabels?'fa-align-slash':'fa-align-justify'"></span>
 		</button>
@@ -18,10 +19,23 @@
 		<button class="lined ending clear" v-on:click="clear()">
 			<span class="fas fa-ban"></span>
 		</button>
+		-->
+		<button class="lined labels" v-on:click="addExpression('1a')">
+			<span class="rssw-dice fas fa-dice-d8 rs-green"></span>
+		</button>
+		<button class="lined labels" v-on:click="addExpression('1b')">
+			<span class="rssw-dice fas fa-dice-d6 rs-lightblue"></span>
+		</button>
+		<button class="lined labels" v-on:click="addExpression('1p')">
+			<span class="rssw-dice fas fa-dice-d12 rs-yellow"></span>
+		</button>
+		<button class="lined labels" v-on:click="addExpression('1f')">
+			<span class="rssw-dice fas fa-dice-d12 rs-white"></span>
+		</button>
 	</div>
 
 	<div class="history">
-		<div class="rolled" v-for="(roll,$index) in state.history" v-if="roll" v-on:click.stop="dismiss($index)">
+		<div class="rolled" :class="$index===0?'rsbd-green':''" v-for="(roll,$index) in state.history" v-if="roll" v-on:click.stop="dismiss($index)">
 			<div class="roll-property" v-if="roll.sum">
 				<span class="value">{{roll.sum}}</span>
 				<span class="info">=</span>
@@ -33,7 +47,15 @@
 				<span class="label" v-if="!state.hideLabels">{{rprop.label}}</span>
 			</div>
 			<div class="original" v-if="!state.hideExpressions">
-				({{roll._expression}})
+				<span v-if="roll._label">
+					{{roll._label}}
+					<span v-if="roll._suffix">
+						+ {{roll._suffix}}
+					</span>
+				</span>
+				<span v-if="!roll._label">
+					{{roll._expression}}
+				</span>
 			</div>
 		</div>
 	</div>

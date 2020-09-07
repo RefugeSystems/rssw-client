@@ -87,14 +87,41 @@
 			"rollSkill": function(skill) {
 				console.log("Rolling Skill: ", this.entity, skill);
 				if(this.state.entityRollListener) {
-					this.roll(this.getSkillDiceExpression(skill));
+					this.roll(this.getSkillDiceExpression(skill), skill.name);
 				}
 			},
-			"roll": function(expression) {
+			"roll": function(expression, name) {
 				console.log("Roll: " + expression);
 				var rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
 				rolled._expression = expression;
+				rolled._label = name;
 				this.state.history.unshift(rolled);
+			},
+			"addExpression": function(expression) {
+				var current = this.state.history[0],
+					roll,
+					keys,
+					x;
+				
+				if(!current) {
+					current = {};
+					current._expression = "";
+					this.state.history.unshift(current);
+				}
+				
+				roll = Dice.calculateDiceRoll(expression);
+				keys = Object.keys(roll);
+				if(current._label) {
+					if(current._suffix) {
+						Vue.set(current, "_suffix", Dice.reduceDiceRoll(current._suffix + " + " + expression));
+					} else {
+						Vue.set(current, "_suffix", expression);
+					}
+				}
+				Vue.set(current, "_expression", Dice.reduceDiceRoll(current._expression + " + " + expression));
+				for(x=0; x<keys.length; x++) {
+					Vue.set(current, keys[x], (current[keys[x]] || 0) + roll[keys[x]]);
+				}
 			},
 			"getSkillDiceExpression": function(skill) {
 				var roll = {},
