@@ -20,7 +20,7 @@
 		"cytoscape": "^3.10.1",
 		"cytoscape-cola": "^2.3.0",
 		"hammerjs": "^2.0.8",
-		"jquery": "^3.4.1",
+		"jquery": "^3.5.0",
 		"showdown": "^1.9.0",
 		"vue": "^2.6.10",
 		"vue-router": "^3.1.3"
