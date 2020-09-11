@@ -1,5 +1,5 @@
 {
-	"name": "rs-gameui",
+	"name": "rsswx-client",
 	"version": "0.0.51",
 	"description": "",
 	"main": "index.js",
@@ -8,14 +8,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/aetherwalker/GameUI.git"
+		"url": "git+https://github.com/RefugeSystems/rsswx-client.git"
 	},
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/aetherwalker/GameUI/issues"
+		"url": "https://github.com/RefugeSystems/rsswx-client/issues"
 	},
-	"homepage": "https://github.com/aetherwalker/GameUI#readme",
+	"homepage": "https://github.com/RefugeSystems/rsswx-client#readme",
 	"dependencies": {
 		"cytoscape": "^3.10.1",
 		"cytoscape-cola": "^2.3.0",
