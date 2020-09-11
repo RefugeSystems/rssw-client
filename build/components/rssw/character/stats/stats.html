@@ -1,0 +1,38 @@
+<div class="rs-component rssw component-character-stats">
+	<div class="stats">
+		<div class="stat" v-for="stat in characterStats" :key="stat" v-on:click="skillTouched(stat)">
+			<div class="bubble">
+				<div class="value">
+					{{character[stat]}}
+				</div>
+			</div>
+			<div class="label">
+				{{entityStats[stat].name}}
+			</div>
+		</div>
+	</div>
+	<div class="leveling stat">
+		<label>
+			<span>Level Stat</span>
+			<select v-model="leveling">
+					<option value="">{{leveling === ""?"[ Select a Stat ]":"Clear"}}</option>
+					<option value="_" disabled>----------</option>
+				<option v-for="stat in characterStats" :value="stat">{{entityStats[stat].name}}</option>
+			</select>
+		</label>
+		<button v-if="leveling" v-on:click="viewSkill(leveling)">
+			<span class="fas fa-info-circle rs-light-blue"></span>
+		</button>
+		<button v-if="leveling" v-on:click="leveling = ''">
+			<span class="fas fa-ban rs-light-red"></span>
+		</button>
+		<button class="level up" v-on:click="levelStat(leveling, 1)" v-if="leveling" :disabled="noIncrease(leveling)">
+			<span class="fas fa-plus-square"></span>
+			<span>XP: {{getXPCost(leveling, 1)}}</span>
+		</button>
+		<button class="level down" v-on:click="levelStat(leveling, -1)" v-if="leveling" :disabled="canDecrease(leveling)">
+			<span class="fas fa-minus-square"></span>
+			<span>XP: {{getXPCost(leveling, -1)}}</span>
+		</button>
+	</div>
+</div>

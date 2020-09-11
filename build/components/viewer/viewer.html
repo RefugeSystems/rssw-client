@@ -1,0 +1,79 @@
+
+<div class="rs-component component-viewer" :class="renderState()">
+
+	<div class="map" v-if="location && sourceImage">
+		<!-- <div class="view" onexit="true" v-on:mousemove.stop="dragging($event)" v-on:click.stop.prevent="clicking($event)" v-on:mousedown="down($event)" v-on:mouseup.stop.prevent="up($event)" v-on:mousewheel.stop.prevent="wheeling($event)" v-on:mouseleave="out($event)" v-pan="pan"> -->
+		<div class="view" onexit="true" v-pan="pan">
+			<!-- <div class="shadow"></div> -->
+			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)">
+				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
+					<button class="poi" v-if="poiVisible(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click="poiMenu(link)">
+						<span class="labeling" v-if="link.label">{{link.label}}</span>
+						<span :class="poiClass(link)"></span>
+					</button>
+				</div>
+				<div class="coordinates" v-for="coordinate in coordinates" v-if="!coordinate.standalone">
+					<span class="coordinate top left" :style="'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
+					<span class="coordinate bottom right" :style="'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
+				</div>
+				<div class="coordinate-dots">
+					<button class="dot" v-for="coordinate in coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button>
+				</div>
+				<div class="actions" v-if="actions.open" :style="'left: ' + actions.x + 'px; top: ' + actions.y + ';'">
+					<div class="actions-header">
+						<span class="titling">
+							{{actions.header}}
+						</span>
+						<button class="actions-close alert" v-on:click.stop.prevent="closeActions()">
+							<span class="fas fa-times"></span>
+						</button>
+					</div>
+					<div class="actions-options">
+						<button class="option normal" v-for="option in actions.options" v-on:click.stop.prevent="fire(option, $event)">
+							<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
+							<span>{{option.text}}</span>
+						</button>
+						<input type="text" v-model="state.alter" v-if="player.master"/>
+					</div>
+				</div>
+				<img :src="sourceImage" draggable="false" />
+			</div>
+		</div>
+	</div>
+
+
+	<div class="menu" :class="menuOpen?'open':'closed'">
+		<button class="toggle" v-on:click="toggleMenu()">
+			<span class="fas" :class="menuOpen?'fa-caret-square-up':'fa-caret-square-down'"></span>
+		</button>
+		<div class="menu-items flow-v">
+			<div class="search">
+				<input type="text" v-model="state.search" v-on:keyup.enter="searchMap(state.search)"/>
+				<button class="control" v-on:click="searchMap(state.search)">
+					<span class="icon far fa-search"></span>
+				</button>
+			</div>
+			<button class="control" v-on:click="processAction(menuItem)" v-for="menuItem in menuItems" :class="menuItem.action">
+				<span class="icon" :class="menuItem.icon"></span>
+				<span class="text">{{menuItem.text}}</span>
+			</button>
+			<button class="control follow" v-on:click="processAction(menuItems.markerItem)">
+				<span class="icon fal" :class="state.markers?'fa-check-square':'fa-square'"></span>
+				<span class="text">{{menuItems.markerItem.text}}</span>
+			</button>
+			<button class="control follow" v-on:click="processAction(menuItems.followItem)">
+				<span class="icon fal" :class="state.follow?'fa-check-square':'fa-square'"></span>
+				<span class="text">{{menuItems.followItem.text}}</span>
+			</button>
+			<button class="control follow" v-on:click="processAction(menuItems.fullscreen)">
+				<span class="icon fal" :class="state.fullscreen?'fa-check-square':'fa-square'"></span>
+				<span class="text">{{menuItems.fullscreen.text}}</span>
+			</button>
+			<select class="control master" v-model="state.master_view" v-if="player.master">
+				<option value="">Player Character</option>
+				<option value="master">Master</option>
+				<option v-for="entity in universe.indexes.entity.listing" :value="entity.id">{{entity.name}}</option>
+			</select>
+		</div>
+	</div>
+</div>

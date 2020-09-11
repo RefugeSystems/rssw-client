@@ -1,0 +1,17 @@
+.leveling {
+	margin: 3px 0px;
+
+	button {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border: 1ps solid @rsWhite;
+		transition: background-color .5s, color .5s, border;
+		cursor: pointer;
+		
+		&:disabled {
+			background-color: @rsDarkRed;
+			color: @rsWhite;
+			cursor: not-allowed;
+		}
+	}
+}

@@ -1,0 +1,127 @@
+<div class="rs-component rssw component-character-board">
+	<div class="container flow-h inline">
+		<div class="stat soak flow-v inline">
+			<div class="label" v-on:click="infoStat('injury')">
+				<span class="ra ra-bleeding-hearts"></span>
+				<span>Injury</span>
+			</div>
+			<div class="bubble solo flow-h center">
+				<div class="value">
+					<div class="display">
+						<select v-model.number="injury">
+							<option :value="0">None</option>
+							<option v-for="value in injuryValues" :value="value">{{value}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stat wounds flow-v inline">
+			<div class="label" v-if="character.classification == 'base'" v-on:click="infoStat('wounds:building')">
+				<span class="ra ra-cracked-shield"></span>
+				<span>Damage</span>
+			</div>
+			<div class="label" v-else v-on:click="infoStat('wounds:character')">
+				<span class="fas fa-heartbeat"></span>
+				<span>Wounds</span>
+			</div>
+			<div class="bubble pair flow-h inline">
+				<div class="value flow-v">
+					<div class="display">
+						<select v-model.number="wounds">
+							<option v-for="value in highValues" v-if="value <= wounds_max" :value="value">{{value}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="value paired flow-v inline">
+					<div class="display">
+						{{wounds_max}}
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stat wounds flow-v inline">
+			<div class="label" v-if="character.classification == 'base'" v-on:click="infoStat('strain:building')">
+				<span class="ra ra-reactor"></span>
+				<span>Strain</span>
+			</div>
+			<div class="label" v-else v-on:click="infoStat('strain:character')">
+				<span class="fas fa-brain"></span>
+				<span>Strain</span>
+			</div>
+			<div class="bubble pair flow-h inline">
+				<div class="value flow-v">
+					<div class="display">
+						<select v-model.number="strain">
+							<option v-for="value in highValues" v-if="value <= strain_max" :value="value">{{value}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="value paired flow-v inline">
+					<div class="display">
+						{{strain_max}}
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stat soak flow-v inline">
+			<div class="label" v-on:click="infoStat('soak')">
+				<span class="fas fa-shield"></span>
+				<span>Soak</span>
+			</div>
+			<div class="bubble solo flow-h center">
+				<div class="value">
+					<div class="display">
+						{{soak}}
+						<!--
+						<select v-model="soak">
+							<option v-for="value in lowValues" :value="value">{{value}}</option>
+						</select>
+						-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stat soak flow-v inline">
+			<div class="label" v-on:click="infoStat('defense:ranged')">
+				<span class="fas fa-user-shield"></span>
+				<span>Ranged</span>
+			</div>
+			<div class="bubble solo flow-h center">
+				<div class="value">
+					<div class="display">
+						{{defense_range}}
+						<!--
+						<select v-model="defense_range">
+							<option v-for="value in lowValues" :value="value">{{value}}</option>
+						</select>
+						-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stat soak flow-v inline">
+			<div class="label" v-on:click="infoStat('defense:melee')">
+				<span class="fas fa-user-shield"></span>
+				<span>Melee</span>
+			</div>
+			<div class="bubble solo flow-h center">
+				<div class="value">
+					<div class="display">
+						{{defense_melee}}
+						<!--
+						<select v-model="defense_melee">
+							<option v-for="value in lowValues" :value="value">{{value}}</option>
+						</select>
+						-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
