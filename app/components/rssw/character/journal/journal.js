@@ -128,11 +128,13 @@
 		"mounted": function() {
 			rsSystem.register(this);
 		
-			
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
 					rsSystem.EventBus.$emit("display-info", follow);
+					// NOTE: Without these stop measures, the display opens and immediately closes. Possibly needs investigation
+					event.stopPropagation();
+					event.preventDefault();
 				}
 			};
 
@@ -304,6 +306,7 @@
 			},
 			"update": function() {
 				var buffer,
+					track,
 					x;
 				
 				this.entries.splice(0);
@@ -316,14 +319,15 @@
 				this.entries.sort(this.sortData);
 				
 				this.knowns.splice(0);
+				track = {};
 				for(x=0; x<this.entity._knownKeys.length; x++) {
 					buffer = this.universe.index.index[this.entity._knownKeys[x]];
-					if(buffer && !buffer.obscured) {
+					if(buffer && !buffer.obscured && !track[buffer.id]) {
 						this.knowns.push(buffer);
+						track[buffer.id] = true;
 					}
 				}
 				this.knowns.sort(sortName);
-				
 				
 				this.sessions.splice(0);
 				for(x=0; x<this.universe.indexes.session.listing.length; x++) {

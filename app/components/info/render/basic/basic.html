@@ -32,16 +32,19 @@
 	</div>
 	
 	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
-	<div v-if="record.data" class="general-image">
+	<div v-if="record.data && record._class === 'image' && !record.linked" class="general-image">
 		<img :src="record.data" />
+	</div>
+	<div v-if="record.url && record._class === 'image' && record.linked" class="general-image">
+		<img :src="record.url" />
 	</div>
 	
 	<div class="properties">
 		<div class="direct-properties" v-if="showDirectProperties()">
 			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 				<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
-					<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index[property + '_quicklink']">
-						<a class="rendered-value" :data-id="knowledgeLink[property] || (property + '_quicklink')">{{prettifyPropertyName(property, record)}}</a>
+					<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index['knowledge:reference:' + property]">
+						<a class="rendered-value" :data-id="knowledgeLink[property] || ('knowledge:reference:' + property)">{{prettifyPropertyName(property, record)}}</a>
 					</span>
 					<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property, record)}}</span>
 					<span class="divide">:</span>
@@ -163,7 +166,7 @@
 	
 	<div v-if="canAttach()">
 		<h3>Pass To Item</h3>
-		<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} attachments of {{record.hardpoints}}</span>
+		<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} of {{record.hardpoints}} attachments</span>
 		<span v-if="record.contents_max">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>
 		<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
 			<option value=""></option>
@@ -279,6 +282,20 @@
 			</button>
 		</div>
 		
+		<div class="control flex h" v-if="record.template && record._class === 'entity'">
+			<button class="action direct" v-on:click="spawnEntity(record)">
+				<span class="fas fa-copy"></span>
+				<span>Copy</span>
+			</button>
+		</div>
+		
+		<div class="control flex h" v-if="!record.template && record.parent && !record.owner && (!record.owners || !record.owners.length)">
+			<button class="action direct" v-on:click="deleteRecord(record); $emit('close')">
+				<span class="fas fa-trash-alt"></span>
+				<span>Delete</span>
+			</button>
+		</div>
+		
 		<div class="control flex h" v-if="record._type === 'session'">
 			<button class="action direct" v-on:click="setCurrentSession()">
 				<span class="fas fa-edit"></span>
@@ -301,7 +318,16 @@
 				</select>
 			</label>
 		</div>
-		<div class="control" v-if="record._type === 'location' || record._type === 'entity'">
+		<div class="control" v-if="record._class === 'item' && record.template">
+			<label>
+				<span>Copy Item to Entity:</span>
+				<select v-model="copyToEntity" v-on:change="copyItemToEntity(record.id, copyToEntity)">
+					<option value="">Select Entity...</option>
+					<option v-for="e in availableEntities" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="!record.template && (record._type === 'location' || record._type === 'entity')">
 			<div>
 				<label>
 					<span>Move Party Here</span>

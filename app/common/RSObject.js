@@ -260,6 +260,9 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
+
+		json._class = this._class;
+		json._type = this._type;
 		
 		return json;
 	}
@@ -600,7 +603,13 @@ class RSObject extends EventEmitter {
 		// TODO: Listen for changes on references
 		
 		// Reform Search String
-		this._search = ""; //this.id.toLowerCase();
+		if(this.universe.indexes.player.index[this.universe.user.id].master) {
+			// Confusing for some searches like the "tion cluster" in location, but additional search criteria fixes this and ID allows master to search
+			this._search = this.id.toLowerCase();
+		} else {
+			// Users shouldn't be able to mine hints from the ID anyway
+			this._search = "";
+		}
 		if(this.name) {
 			this._search += this.name.toLowerCase();
 		}

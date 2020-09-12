@@ -186,6 +186,10 @@
 		"property": "hardpoints",
 		"type": "text"
 	}, {
+		"label": "Concealment",
+		"property": "concealment",
+		"type": "text"
+	}, {
 		"label": "Charges and Recharging",
 		"property": "__charges",
 		"type": "label"

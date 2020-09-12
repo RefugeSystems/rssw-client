@@ -115,7 +115,7 @@
 			"id": "ship"
 		}, {
 			"name": "Star System Ability",
-			"id": "system"
+			"id": "star_system"
 		}, {
 			"name": "Station Ability",
 			"id": "station"

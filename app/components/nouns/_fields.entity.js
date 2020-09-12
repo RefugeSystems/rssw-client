@@ -14,6 +14,7 @@
 		effects,
 		entity,
 		images,
+		knowns,
 		owners,
 		parent,
 		attrs,
@@ -24,7 +25,8 @@
 		rooms,
 		slots,
 		stats,
-		sexes;
+		sexes,
+		types;
 	
 	datasets = {
 		"label": "Name Dataset",
@@ -97,6 +99,17 @@
 		"label": "Races",
 		"property": "race",
 		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "character"
+		}
+	};
+	
+	knowns = {
+		"label": "Knowns",
+		"property": "known_objects",
+		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name",
 		"condition": {
@@ -205,6 +218,14 @@
 		"condition": {
 			"is_shop": true
 		}
+	};
+	
+	types = {
+		"label": "Entity Types",
+		"property": "types",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	knowledges = {
@@ -380,6 +401,7 @@
 	pilot,
 	races,
 	sexes,
+	types,
 	{
 		"label": "Template",
 		"property": "template",
@@ -516,6 +538,7 @@
 	stats,
 	effects,
 	knowledges,
+	knowns,
 	archetypes,
 	abilities,
 	items,
@@ -591,6 +614,7 @@
 			rooms.source_index = this.universe.indexes.room;
 			slots.source_index = this.universe.indexes.slot;
 			items.source_index = this.universe.indexes.item;
+			knowns.source_index = this.universe.index;
 		},
 		"methods": {
 			"update": function() {

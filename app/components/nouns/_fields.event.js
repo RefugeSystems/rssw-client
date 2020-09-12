@@ -2,21 +2,30 @@
 (function() {
 	
 	var dataSource,
-		attrs,
-		stats,
+		categories,
+		involved,
+		place,
 		notes;
+
+	categories = [
+		"combat",
+		"news",
+		"story"
+	];
+	categories.sort();
+	categories.push("custom");
 	
-	attrs = {
-		"label": "Attributes",
-		"property": "modifierattrs",
+	involved = {
+		"label": "Involved",
+		"property": "involved",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
 	
-	stats = {
-		"label": "Stats",
-		"property": "modifierstats",
+	place = {
+		"label": "Place",
+		"property": "place",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -39,21 +48,14 @@
 		"property": "name",
 		"type": "text"
 	}, {
-		"label": "Icon",
-		"property": "icon",
-		"knowledge": "knowledge:system:icons",
-		"type": "text"
+		"label": "Category",
+		"property": "category",
+		"type": "select",
+		"raw": true,
+		"options": categories
 	}, {
-		"label": "Order",
-		"property": "order",
-		"type": "number"
-	}, {
-		"label": "Ranged",
-		"property": "is_ranged",
-		"type": "checkbox"
-	}, {
-		"label": "Melee",
-		"property": "is_melee",
+		"label": "Master Screen",
+		"property": "screen",
 		"type": "checkbox"
 	}, {
 		"label": "Hidden",
@@ -64,20 +66,21 @@
 		"property": "obscured",
 		"type": "checkbox"
 	},
-	attrs,
-	stats,
-	notes,
+	involved,
+	place,
 	{
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
-	}, {
+	},
+	notes,
+	{
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"
 	}];
 	
-	rsSystem.component("NounFieldsType", {
+	rsSystem.component("NounFieldsEvent", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -88,13 +91,13 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.type = dataSource;
+			data.fields.event = dataSource;
 			
 			return data;
 		},
 		"mounted": function() {
-			attrs.source_index = this.universe.indexes.modifierattrs;
-			stats.source_index = this.universe.indexes.modifierstats;
+			involved.source_index = this.universe.indexes.entity;
+			place.source_index = this.universe.indexes.location;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {

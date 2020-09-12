@@ -126,10 +126,6 @@
 		},
 		"methods": {
 			"filteredEntity": function(entity) {
-				if(entity.template || entity.inactive) {
-					return false;
-				}
-				
 				return !this.state.search ||
 					(entity._search && entity._search.indexOf(this.state.search) !== -1) ||
 					entity.id.indexOf(this.state.search) !== -1 ||
@@ -233,7 +229,9 @@
 				
 				if(this.universe.indexes.setting.index["setting:current:session"]) {
 					Vue.set(this, "currentSession", this.universe.indexes.session.index[this.universe.indexes.setting.index["setting:current:session"].value]);
-					Vue.set(this, "trackSession", this.currentSession.id);
+					if(this.currentSession) {
+						Vue.set(this, "trackSession", this.currentSession.id);
+					}
 				}
 				
 				for(x=0; x<this.universe.indexes.session.listing.length; x++) {
@@ -266,7 +264,7 @@
 				this.universeEntities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					buffer = this.universe.indexes.entity.listing[x];
-					if(buffer && !buffer.template) {
+					if(buffer && (buffer.owner || (buffer.owners && buffer.owners.length) || buffer.screen)) {
 						this.universeEntities.push(buffer);
 					}
 				}

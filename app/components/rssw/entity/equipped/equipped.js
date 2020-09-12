@@ -82,9 +82,9 @@
 					return "rs-orange";
 				}
 				
-				if( (this.entity[slot.accepts] && this.entity[slot.accepts].indexOf(equipment.id) === -1)
-						|| !(slot.itemtype && slot.itemtype.length && equipment.itemtype && equipment.itemtype.length && this.sharesOne(slot.itemtype, equipment.itemtype))
-						|| (slot.accepts !== equipment._type)) {
+				if( (slot.itemtype && !slot.itemtype.hasCommon(equipment.itemtype) && slot.type && !slot.type.hasCommon(equipment.type))
+						|| (!slot.itemtype && slot.type && !slot.type.hasCommon(equipment.type))
+						|| (!slot.type && slot.itemtype && !slot.type.hasCommon(equipment.itemtype))) {
 					return "rs-light-red";
 				}
 				

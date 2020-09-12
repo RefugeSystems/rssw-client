@@ -1,5 +1,17 @@
 <div class="rs-page map rssw">
-
-	<rs-viewer :user="user" :player="player" :universe="universe" :location="location"></rs-viewer>
-	
+	<rs-viewer v-if="location" :user="user" :player="player" :universe="universe" :location="location"></rs-viewer>
+	<div class="top-warning" v-if="!location">
+		<div class="warning" v-if="!location && player.master">
+			<div>
+				<span class="fas fa-exclamation-triangle"></span>
+				<span>No Location Found with ID "location:universe"</span>
+			</div>
+			<router-link class="entity navigation-button action simple" to="/nouns/location/location:universe">
+				<span>Click to go to Editor</span>
+			</router-link>
+		</div>
+		<div class="warning" v-if="!location && !player.master">
+			<span>No Universe yet Defined</span>
+		</div>
+	</div>
 </div>

@@ -54,7 +54,11 @@
 		},
 		"methods": {
 			"update": function() {
-				Vue.set(this, "uri", this.image.data || this.image.url);
+				if(this.image.linked) {
+					Vue.set(this, "uri", this.image.url);
+				} else {
+					Vue.set(this, "uri", this.image.data);
+				}
 				if(this.linked) {
 					this.link = "/" + this.linked.linked + "/" + this.linked.id;
 				} else {

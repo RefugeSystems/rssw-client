@@ -6,6 +6,7 @@
 		accepts,
 		attrs,
 		stats,
+		types,
 		notes;
 	
 	accepts = {
@@ -29,6 +30,14 @@
 		"condition": {
 			"accepts": "item"
 		}
+	};
+	
+	types = {
+		"label": "Accepted Types",
+		"property": "type",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
 	};
 	
 	attrs = {
@@ -87,6 +96,7 @@
 	},
 	accepts,
 	itemtypes,
+	types,
 	attrs,
 	stats,
 	{
@@ -104,6 +114,10 @@
 	},
 	notes,
 	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"
@@ -129,6 +143,7 @@
 			stats.source_index = this.universe.indexes.modifierstats;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			notes.source_index = this.universe.indexes.note;
+			types.source_index = this.universe.indexes.type;
 		},
 		"methods": {
 			"update": function() {

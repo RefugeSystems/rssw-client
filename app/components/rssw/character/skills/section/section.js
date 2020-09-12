@@ -67,7 +67,9 @@
 			data.rollProperties = rollProperties;
 			data.instance = instance++;
 			data.levelBars = levelBars;
+			data.formulas = {};
 			data.skills = [];
+			data.rolls = {};
 
 			return data;
 		},
@@ -77,6 +79,12 @@
 			this.update();
 		},
 		"methods": {
+			"styleDiceDisplay": function(roll) {
+				if(roll.length > 5) {
+					return "font-size: " + (16 - (roll.length - 5) * 1.3) + "px";
+				}
+				return "";
+			},
 			"clearRoll": function(skill) {
 				Vue.delete(this.state.rolls, skill);
 			},
@@ -91,6 +99,21 @@
 			},
 			"isVisible": function(skill) {
 				return !this.state.search || skill._search.indexOf(this.state.search) !== -1;
+			},
+			"getRollFormula": function(skill) {
+				var result;
+				
+				if(this.character[skill.base] < this.character[skill.propertyKey]) {
+					result = (this.character[skill.base] || 0) + "proficiency + " + ((this.character[skill.propertyKey] || 0) - (this.character[skill.base] || 0)) + "ability + ";
+				} else {
+					result = (this.character[skill.propertyKey] || 0) + "proficiency + " + ((this.character[skill.base] || 0) - (this.character[skill.propertyKey] || 0)) + "ability + ";
+				}
+				result += (this.character[skill.bonusKey] || 0) + "boost";
+				if(this.character["adjusts_" + skill.propertyKey]) {
+					result += " + " + (this.character["adjusts_" + skill.propertyKey]);
+				}
+				
+				return Dice.parseDiceRoll(result);
 			},
 			"getDice": function(skill) {
 				var roll = [], x;
@@ -129,9 +152,15 @@
 						this.skills.push(this.existing[x]);
 					}
 				}
-				
+
 				this.uniqueByID(this.skills);
 				this.skills.sort(this.sortData);
+				
+				for(x=0; x<this.skills.length; x++) {
+					Vue.set(this.formulas, this.skills[x].id, this.getRollFormula(this.skills[x]));
+					Vue.set(this.rolls, this.skills[x].id, this.getDice(this.skills[x]));
+				}
+				
 				this.$forceUpdate();
 			}
 		},

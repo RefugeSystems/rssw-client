@@ -144,7 +144,6 @@
 		}
 	};
 
-	knowledgeLink.encumberance = "knowledge:item:encumberance";
 	knowledgeLink.critical = "knowledge:combat:critical";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 	
@@ -269,6 +268,7 @@
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.RSComponentUtility,
+			rsSystem.components.RSMasterControls,
 			rsSystem.components.RSShowdown
 		],
 		"props": {
@@ -320,6 +320,8 @@
 
 			data.availableTemplates = {};
 			data.availableTemplates.entity = [];
+			data.availableEntities = [];
+			data.copyToEntity = "";
 			data.copyToHere = "";
 			
 			data.transfer_targets = [];
@@ -980,6 +982,14 @@
 												hold = false;
 											}
 										}
+									} else if(buffer.type && buffer.type.length) {
+										hold = true;
+										for(y=0; hold && y<buffer.type.length; y++) {
+											if(this.record.cancontain.indexOf(buffer.type[y]) !== -1) {
+												this.attach_targets.push(buffer);
+												hold = false;
+											}
+										}
 									}
 								} else {
 									this.attach_targets.push(buffer);
@@ -1019,7 +1029,7 @@
 				if(this.base && this.base.slot && this.base.slot.length) {
 					for(x=0; x<this.base.slot.length; x++) {
 						hold = this.universe.indexes.slot.lookup[this.base.slot[x]];
-						if(hold && hold.accepts === this.record._type && this.availableSlots.indexOf(hold) === -1 && ((!hold.itemtype) || (this.record.itemtype && this.sharesOne(hold.itemtype, this.record.itemtype)))) {
+						if(hold && this.availableSlots.indexOf(hold) === -1 && ((!hold.itemtype || hold.itemtype.hasCommon(this.record.itemtype)) || (!hold.type || hold.type.hasCommon(this.record.type)))) {
 							this.availableSlots.push(hold);
 						}
 					}
@@ -1055,6 +1065,13 @@
 						if((buffer = this.universe.indexes.knowledge.lookup[this.base.knowledge[x]]) && buffer.related && buffer.related.indexOf(this.record.id) !== -1) {
 							this.relatedKnowledge.push(buffer);
 						}
+					}
+				}
+				
+				this.availableEntities.splice(0);
+				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+					if(this.universe.indexes.entity.listing[x] && (this.universe.indexes.entity.listing[x].screen || this.universe.indexes.entity.listing[x].owner || (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.length))) {
+						this.availableEntities.push(this.universe.indexes.entity.listing[x]);
 					}
 				}
 				

@@ -62,6 +62,10 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
+		"label": "Duration",
+		"property": "duration",
+		"type": "number"
+	}, {
 		"label": "Activation",
 		"property": "activation",
 		"type": "select",
@@ -71,6 +75,18 @@
 			"passive",
 			"active"
 		]
+	}, {
+		"label": "Debuff",
+		"property": "debuff",
+		"type": "checkbox"
+	}, {
+		"label": "Removable",
+		"property": "removable",
+		"type": "checkbox"
+	}, {
+		"label": "Addable",
+		"property": "addable",
+		"type": "checkbox"
 	}, {
 		"label": "Hidden",
 		"property": "hidden",

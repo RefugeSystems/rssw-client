@@ -228,16 +228,14 @@
 				Vue.set(this.state, "alter", id);
 			},
 			"searchMap": function() {
-				console.log("Search Map: ", this.search_criteria);
 				var set = false,
 					buffer,
 					x;
 				
 				for(x=0; !set && x<this.pointsOfInterest.length; x++) {
 					buffer = this.pointsOfInterest[x];
-					console.log("Preview: " + this.testSearchCriteria(buffer._search, this.search_criteria));
+					console.warn("Searching[" + buffer.id + "]: ", buffer);
 					if(buffer.x && buffer.y && this.testSearchCriteria(buffer._search, this.search_criteria)) {
-						console.log("Center");
 						this.centerView(buffer);
 						set = true;
 					}
@@ -323,12 +321,14 @@
 			},
 			"testSearchCriteria": function(string, criteria) {
 				var x;
-				
+
+				console.log(" > " + string);
 				if(criteria && criteria.length) {
 					if(!string) {
 						return false;
 					}
 					for(x=0; x<criteria.length; x++) {
+						console.log(" ?[" + (string.indexOf(criteria[x]) === -1) + "]: " + criteria[x]);
 						if(string.indexOf(criteria[x]) === -1) {
 							return false;
 						}
@@ -391,8 +391,6 @@
 				this.redrawPaths();
 			},
 			"openActions": function(event) {
-				console.log("Opening: " + event.offsetX + " x " + event.offsetY, event.x + " x " + event.y, event.pageX + " x " + event.pageY, event.layerX + " x " + event.layerY, event);
-
 				var xc = event.offsetX,
 					yc = event.offsetY,
 					buffer,
@@ -750,6 +748,9 @@
 //					applying.left = applying.left || this.image.left || 0;
 //					applying.top = applying.top || this.image.left || 0;
 
+					if(applying.zoom === undefined && this.image.zoom === undefined) {
+						applying.zoom = 0;
+					}
 					if(10 > applying.zoom && applying.zoom > -10) {
 						this.image.height = this.original.height * (1 + .1 * applying.zoom);
 						this.image.width = this.original.width * (1 + .1 * applying.zoom);
@@ -1163,10 +1164,14 @@
 //					}
 //				}
 				
-				if(this.location.image && this.universe.nouns.image[this.location.image]) {
+				if(this.location.image && (buffer = this.universe.nouns.image[this.location.image])) {
 					Vue.set(this, "ready", false);
-					Vue.set(this, "sourceImage", this.universe.nouns.image[this.location.image].data);
-					this.getDimensions(this.universe.nouns.image[this.location.image].data);
+					if(buffer.linked) {
+						Vue.set(this, "sourceImage", buffer.url);
+					} else {
+						Vue.set(this, "sourceImage", buffer.data);
+					}
+					this.getDimensions(this.sourceImage);
 				} else if(this.location.viewed !== this.sourceImage) {
 					Vue.set(this, "ready", false);
 					Vue.set(this, "sourceImage", this.location.viewed);
@@ -1188,7 +1193,9 @@
 			rsSystem.EventBus.$off("copied-id", this.setMenuID);
 			this.universe.$off("universe:modified", this.update);
 			this.universe.$off("model:modified", this.update);
-			this.location.$off("modified", this.update);
+			if(this.location) {
+				this.location.$off("modified", this.update);
+			}
 		},
 		"template": Vue.templified("components/viewer.html")
 	});

@@ -191,21 +191,25 @@ class RSEntity extends RSObject {
 		}
 		
 		if(slot.accepts && equip._type === slot.accepts) {
-			if(!this._equipBuffer[slot.accepts]) {
-				this._equipBuffer[slot.accepts] = {};
+			if((slot.itemtype && slot.itemtype.hasCommon(equip.itemtype)) || (slot.type && slot.type.hasCommon(equip.type))) {
+				if(!this._equipBuffer[slot.accepts]) {
+					this._equipBuffer[slot.accepts] = {};
+				}
+				if(!this._equipBuffer[slot.accepts][slot.id]) {
+					this._equipBuffer[slot.accepts][slot.id] = [];
+				}
+				this._equipBuffer[slot.accepts][slot.id].push(equip.id);
+				
+				this.commit({
+					"equipped": this._equipBuffer
+				});
+			} else {
+				console.warn("Slot[" + slot.id + "] does not accept that equipment type");
 			}
-			if(!this._equipBuffer[slot.accepts][slot.id]) {
-				this._equipBuffer[slot.accepts][slot.id] = [];
-			}
-			this._equipBuffer[slot.accepts][slot.id].push(equip.id);
-			
-			this.commit({
-				"equipped": this._equipBuffer
-			});
 		} else if(!slot.accepts) {
 			console.warn("Slot[" + slot.id + "] accepts no records");
-		} else if(slot.accepts !== equip._type) {
-			console.warn("Slot[" + slot.id + "] does not accept that equipment type[" + equip._type + "@" + equip.id + "]");
+		} else if(slot.accepts !== equip._class) {
+			console.warn("Slot[" + slot.id + "] does not accept that equipment class[" + equip._class + "@" + equip.id + "]");
 		}
 	}
 	

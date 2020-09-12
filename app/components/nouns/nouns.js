@@ -53,6 +53,7 @@
 			rsSystem.components.StorageManager,
 			rsSystem.components.DataManager,
 
+			rsSystem.components.NounFieldsWidgetConfiguration,
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsModifierAttrs,
 			rsSystem.components.NounFieldsArchetype,
@@ -71,6 +72,8 @@
 			rsSystem.components.NounFieldsLocale,
 			rsSystem.components.NounFieldsPlayer,
 			rsSystem.components.NounFieldsWidget,
+			rsSystem.components.NounFieldsEvent,
+			rsSystem.components.NounFieldsImage,
 			rsSystem.components.NounFieldsParty,
 			rsSystem.components.NounFieldsSkill,
 			rsSystem.components.NounFieldsItem,
@@ -130,10 +133,11 @@
 			return data;
 		},
 		"watch": {
-			"copy": function(value) {
-				if(value) {
-					var copy = this.universe.nouns[this.state.current][value],
+			"copy": function(copyID) {
+				if(copyID) {
+					var copy = this.universe.nouns[this.state.current][copyID],
 						buffer,
+						value,
 						x;
 					
 //					if(!copy) {
@@ -145,7 +149,9 @@
 					value = copy?JSON.stringify(copy, null, 4):"{}";
 					value = JSON.parse(value);
 //					console.warn("Copying: ", value);
-					if(copy && copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
+					if(!copy) {
+						value.id = copyID;
+					} else if(copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
 						console.log("> Template");
 						value = {};
 						value.parent = copy.id;
@@ -426,7 +432,6 @@
 				return generator;
 			},
 			"broadcastModel": function() {
-				console.warn("New Model: ", this.state.current, this.models[this.state.current]);
 				this.$emit("model", this.models[this.state.current]);
 				this.models[this.state.current].recalculateProperties();
 			},

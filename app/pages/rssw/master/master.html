@@ -12,9 +12,11 @@
 						<rssw-dice-result :universe="universe" :user="user" class="rolling-viewed" :roll="rolled"></rssw-dice-result>
 					</button>
 				</div>
-				<button class="roll-container rolling" v-on:click="rollDifficulty(diff)" v-for="diff in difficulties">
-					<rssw-dice-view :universe="universe" :user="user" class="rolling-view" :roll="difficulty[diff]" :labeling="diff + ' [' + count[diff] + ']'"></rssw-dice-view>
-				</button>
+				<div class="roll-options flex h wrap">
+					<button class="roll-container rolling" :class="count[diff]?'rsbd-light-red rs-border two':''" v-on:click="rollDifficulty(diff)" v-for="diff in difficulties">
+						<rssw-dice-view :universe="universe" :user="user" class="rolling-view" :roll="difficulty[diff]" :labeling="diff + ' [' + count[diff] + ']'" :stacked="true"></rssw-dice-view>
+					</button>
+				</div>
 				<button class="roll-container rolling" v-on:click="clearRolls(true)">
 					Clear Rolls
 				</button>
@@ -31,6 +33,8 @@
 						<span class="link-icon" :class="entity.icon || 'fas fa-user-circle'"></span>
 						<span class="far fa-eye-slash rs-lightblue" v-if="entity.hidden"></span>
 						<span class="far fa-ban rs-lightred" v-if="entity.obscured"></span>
+						<span class="fas fa-sticky-note rs-green" v-if="entity.screen"></span>
+						<span class="fas fa-copy rs-yellow" v-if="entity.template"></span>
 						<span class="link-label">{{entity.name}}</span>
 					</button>
 					<router-link class="entity navigation-button create-npc" to="/construct/character">

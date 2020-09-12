@@ -1,34 +1,107 @@
 .rs-component {
 	.rs-border {
 		border-style: solid;
+		
+		&.one {
+			border-width: 1px !important;
+		}
+		&.two {
+			border-width: 2px !important;
+		}
+		&.three {
+			border-width: 3px !important;
+		}
 	}
 	.rs-dashed {
-		border-style: ;
+		border-style: dashed;
+		
+		&.one {
+			border-width: 1px !important;
+		}
+		&.two {
+			border-width: 2px !important;
+		}
+		&.three {
+			border-width: 3px !important;
+		}
 	}
-	.rs-border.one {
-		border-width: 1px;
+	
+	.rsbd-light-red,
+	.rsbd-lightRed {
+		border-color: @rsLightRed !important;
 	}
-	.rs-border.two {
-		border-width: 2px;
+	.rsbd-red {
+		border-color: @rsRed !important;
 	}
-	.rs-border.three {
-		border-width: 3px;
+	.rsbd-dark-red,
+	.rsbd-darkRed {
+		border-color: @rsDarkRed !important;
+	}
+	
+	.rsbd-light-orange,
+	.rsbd-lightOrange {
+		border-color: @rsLightOrange !important;
 	}
 	.rsbd-orange {
 		border-color: @rsOrange !important;
 	}
+	.rsbd-dark-orange,
 	.rsbd-darkOrange {
 		border-color: @rsDarkOrange !important;
+	}
+	
+	.rsbd-light-yellow,
+	.rsbd-lightYellow {
+		border-color: @rsLightYellow !important;
+	}
+	.rsbd-yellow {
+		border-color: @rsYellow !important;
+	}
+	.rsbd-dark-yellow,
+	.rsbd-darkYellow {
+		border-color: @rsDarkYellow !important;
+	}
+	
+	.rsbd-light-green,
+	.rsbd-lightGreen {
+		border-color: @rsLightGreen !important;
+	}
+	.rsbd-green {
+		border-color: @rsGreen !important;
+	}
+	.rsbd-dark-green,
+	.rsbd-darkGreen {
+		border-color: @rsDarkGreen !important;
+	}
+	
+	.rsbd-light-blue,
+	.rsbd-lightBlue {
+		border-color: @rsLightBlue !important;
 	}
 	.rsbd-blue {
 		border-color: @rsBlue !important;
 	}
-	.rsbd-lightBlue {
-		border-color: @rsLightBlue !important;
+	.rsbd-dark-blue,
+	.rsbd-darkBlue {
+		border-color: @rsDarkBlue !important;
 	}
+	
 	.rsbd-indigo {
 		border-color: @rsLightBlue !important;
 	}
+	
+	.rsbd-light-purple,
+	.rsbd-lightPurple {
+		border-color: @rsLightPurple !important;
+	}
+	.rsbd-purple {
+		border-color: @rsPurple !important;
+	}
+	.rsbd-dark-purple,
+	.rsbd-darkPurple {
+		border-color: @rsDarkPurple !important;
+	}
+	
 	.rsbd-white {
 		border-color: @rsWhite !important;
 	}

@@ -46,7 +46,16 @@ class RSModifierAttributes extends RSModifier {
 						case "boolean":
 						case "string":
 						case "number":
-							if(RSModifierAttributes._appendedProperties[keys[x]]) {
+							if(rsSystem.debug) {
+								console.log("Applying[" + this.id + " @ " + keys[x] + "]: " + this._coreData[keys[x]], this);
+							}
+							if(keys[x].indexOf("adjust") !== -1) {
+								if(base[keys[x]]) {
+									base[keys[x]] = base[keys[x]] + " + " + this._coreData[keys[x]];
+								} else {
+									base[keys[x]] = this._coreData[keys[x]];
+								}
+							} else if(RSModifierAttributes._appendedProperties[keys[x]]) {
 								base[keys[x]] = base[keys[x]] + this._coreData[keys[x]];
 							} else {
 								base[keys[x]] = this._coreData[keys[x]];

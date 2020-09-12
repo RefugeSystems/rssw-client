@@ -219,7 +219,7 @@ class RSUniverse extends RSObject {
 						message.echo = this.echoed[message.echo];
 						delete(this.echoed[message.echo]);
 					}
-					if(this.debugConnection || this.debug) {
+					if(this.debugConnection || this.debug || rsSystem.debug) {
 						console.log("Connection - Received: ", message);
 					}
 					

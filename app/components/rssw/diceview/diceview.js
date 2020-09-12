@@ -28,6 +28,15 @@
 				"default": function() {
 					return {};
 				}
+			},
+			"rollName": {
+				"type": String
+			},
+			"emit": {
+				"type": Boolean
+			},
+			"stacked": {
+				"type": Boolean
 			}
 		},
 		"data": function() {
@@ -47,10 +56,19 @@
 		},
 		"methods": {
 			"sendToDiceBin": function() {
-				var expression = this.getRollExpression();
-				this.$emit("roll-expression", expression);
-				if(this.entity) {
-					this.entity.$emit("roll-expression", expression);
+				if(this.emit) {
+					this.$emit("touched");
+				} else {
+					var expression = {
+						"expression": this.getRollExpression()
+					};
+					if(this.rollName) {
+						expression._label = this.rollName;
+					}
+					this.$emit("roll-expression", expression);
+					if(this.entity) {
+						this.entity.$emit("roll-expression", expression);
+					}
 				}
 			},
 			"getRollExpression": function() {
@@ -58,7 +76,7 @@
 					x;
 				
 				for(x=0; x<this.diceTypes.length; x++) {
-					if(this.roll[this.diceTypes[x]]) {
+					if(this.roll[this.diceTypes[x]] || this.roll[this.diceTypes[x][0]]) {
 						if(expression) {
 							expression = this.roll[this.diceTypes[x]] + this.diceTypes[x][0];
 						} else {

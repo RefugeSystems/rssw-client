@@ -102,6 +102,7 @@ var config = {
 				"Dice",
 				"_p",
 
+				"RSWidgetConfiguration",
 				"RSModifierAttributes",
 				"UserInformation",
 				"RSModifierStats",

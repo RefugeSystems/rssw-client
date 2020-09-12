@@ -1,7 +1,31 @@
+
+button {
 	
-button.flat {
-	padding: 0px;
-	margin: 0px;
-	border: 0px;
-	font-size: 1em;
+	&.flat {
+		padding: 0px;
+		margin: 0px;
+		border: 0px;
+		font-size: 1em;
+	}
+	
+	&.simple {
+		border: 1px solid @rsLightBlue;
+		border-radius: 5px;
+		font-size: 18px;
+		padding: 10px;
+		margin: 6px;
+	}
+}
+
+a {
+	text-decoration: none;
+
+	&.action {
+		display: inline-block;
+		border: 1px solid @rsLightBlue;
+		color: @rsLightBlue;
+		border-radius: 4px;
+		padding: 4px;
+		margin:4px;
+	}
 }

@@ -1,7 +1,16 @@
 
 (function() {
 	
-	var dataSource;
+	var dataSource,
+		configurations;
+	
+	configurations = {
+		"label": "Configurations",
+		"property": "configurations",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "label"
+	};
 
 	dataSource = [{
 		"label": "ID",
@@ -40,7 +49,9 @@
 		"label": "Obscured",
 		"property": "obscured",
 		"type": "checkbox"
-	}, {
+	},
+	configurations,
+	{
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
@@ -66,6 +77,7 @@
 			return data;
 		},
 		"mounted": function() {
+			configurations.source_index = this.universe.indexes.widgetconfiguration;
 		},
 		"methods": {
 			"update": function() {

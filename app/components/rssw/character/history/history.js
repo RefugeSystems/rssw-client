@@ -91,6 +91,23 @@
 			"copyRecord": function(record) {
 				return Object.assign({}, record);
 			},
+			"getPrevious": function(entry) {
+				if(this.universe.indexes[entry.modified]) {
+					return this.universe.indexes[entry.modified].index[entry.previous];
+				}
+			},
+			"getCurrent": function(entry) {
+				if(this.universe.indexes[entry.modified]) {
+					return this.universe.indexes[entry.modified].index[entry.current];
+				}
+			},
+			"getGeneral": function(id, type) {
+				if(type) {
+					return this.universe.indexes[type].index[id];
+				} else {
+					return this.universe.index.index[id];
+				}
+			},
 			"update": function() {
 				var max = 0,
 					buffer,

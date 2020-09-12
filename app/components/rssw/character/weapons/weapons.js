@@ -9,9 +9,6 @@
 (function() {
 	var storageKey = "_rs_weaponsComponentKey:";
 
-	var rangeType = "itemtype:rangedweapon",
-		meleeType = "itemtype:meleeweapon";
-
 	var rangeBands = [
 		"engaged",
 		"short",
@@ -144,13 +141,13 @@
 				}
 
 				// TODO: Compute?
-				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
+				if(band !== "engaged" && !item.is_ranged) {
 					return [];
 				}
 
 				switch(band) {
 					case "engaged":
-						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
+						if(!item.is_melee) {
 							pool.difficulty = (pool.difficulty || 0) + 2;
 						}
 						break;
@@ -195,11 +192,7 @@
 								if(item && !mapped[item.id]) {
 									item.$on("modified", this.update);
 									this.equipped.push(item);
-									if(item.itemtype) {
-										this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
-									} else {
-										this.isRanged[item.id] = false;
-									}
+									this.isRanged[item.id] = item.is_ranged;
 									mapped[item.id] = true;
 								} else {
 									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
@@ -217,11 +210,7 @@
 						if(item && item.damage && !mapped[item.id]) {
 							item.$on("modified", this.update);
 							this.items.push(item);
-							if(item.itemtype) {
-								this.isRanged[item.id] = item.itemtype.indexOf(rangeType) !== -1;
-							} else {
-								this.isRanged[item.id] = false;
-							}
+							this.isRanged[item.id] = item.is_ranged;
 						}
 					}
 				}

@@ -39,6 +39,12 @@
 	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
 	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
 	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="root[field.property]" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
+	<span class="indicator" v-if="field.type === 'file'">
+		<span class="rs-light-blue">[</span>
+		<span class="" v-if="root[field.property]">Present</span>
+		<span class="" v-if="!root[field.property]">Empty</span>
+		<span class="rs-light-blue">]</span>
+	</span>
 	
 	<span v-if="field.suffix" class="suffix">{{field.suffix}}</span>
 	
@@ -66,6 +72,10 @@
 			</td>
 		</tr>
 	</table>
+	
+	<div v-if="field.type === 'file'" class="file-select">
+		<input :id="fid" type="file" :accept="field.accept || '*'" v-on:change="selectFile($event)" v-on:blur="blurring()" />
+	</div>
 	
 	<div v-if="field.type === 'textarea'" class="textarea">
 		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.placeholder" v-on:input="bufferChanged()" v-on:blur="blurring()">

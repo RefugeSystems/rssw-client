@@ -299,6 +299,7 @@
 			abilities.source_index = this.universe.indexes.ability;
 			slots.source_index = this.universe.indexes.slot;
 			items.source_index = this.universe.indexes.item;
+			types.source_index = this.universe.indexes.type;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {

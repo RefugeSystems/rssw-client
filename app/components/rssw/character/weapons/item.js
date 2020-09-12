@@ -9,9 +9,6 @@
 (function() {
 	var storageKey = "_rs_weaponitemComponentKey:";
 
-	var rangeType = "itemtype:rangedweapon",
-		meleeType = "itemtype:meleeweapon";
-
 	var rangeBands = [
 		"engaged",
 		"short",
@@ -140,13 +137,13 @@
 				}
 
 				// TODO: Compute?
-				if(band !== "engaged" && (!item.itemtype || !item.itemtype.length || item.itemtype.indexOf(rangeType) === -1)) {
+				if(band !== "engaged" && !item.is_ranged) {
 					return [];
 				}
 
 				switch(band) {
 					case "engaged":
-						if(item.itemtype && item.itemtype.length && item.itemtype.indexOf(rangeType) !== -1) {
+						if(!item.is_melee) {
 							pool.difficulty = (pool.difficulty || 0) + 2;
 						}
 						break;

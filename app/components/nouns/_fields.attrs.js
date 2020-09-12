@@ -9,9 +9,35 @@
 		"property": "id",
 		"type": "text"
 	}, {
+		"label": "Engagement Flags",
+		"property": "__engagement",
+		"type": "label"
+	}, {
 		"label": "Name",
 		"property": "name",
 		"type": "text"
+	}, {
+		"label": "Weapon",
+		"property": "is_weapon",
+		"type": "checkbox"
+	}, {
+		"label": "Ranged",
+		"property": "is_ranged",
+		"type": "checkbox",
+		"condition": {
+			"is_weapon": {
+				"operation": "exists"
+			}
+		}
+	}, {
+		"label": "Melee",
+		"property": "is_melee",
+		"type": "checkbox",
+		"condition": {
+			"is_weapon": {
+				"operation": "exists"
+			}
+		}
 	}, {
 		"label": "Charges and Recharging",
 		"property": "__charges",
@@ -90,6 +116,7 @@
 			data.fields.modifierattrs.push.apply(data.fields.modifierattrs, commonSource);
 			*/
 			
+			
 			return data;
 		},
 		"mounted": function() {
@@ -100,6 +127,18 @@
 					"label": this.universe.indexes.skill.listing[x].name,
 					"property": "skill_enhanced_" + this.universe.indexes.skill.listing[x].property,
 					"type": "checkbox"
+				});
+			}
+			this.fields.modifierattrs.push({
+				"label": "Skill Adjustments",
+				"property": "__skilladjustments",
+				"type": "label"
+			});
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				this.fields.modifierattrs.push({
+					"label": this.universe.indexes.skill.listing[x].name + " (Σ)",
+					"property": "adjusts_skill_" + this.universe.indexes.skill.listing[x].property,
+					"type": "text"
 				});
 			}
 			

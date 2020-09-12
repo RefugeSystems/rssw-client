@@ -90,6 +90,7 @@
 						this.$el.classList.remove("collapsed");
 					} else {
 						this.$el.classList.add("collapsed");
+						Vue.set(this.state, "configuring", false);
 					}
 					Vue.set(this.state, "closed", !this.state.closed);
 				} else {
@@ -143,20 +144,6 @@
 						}
 					}
 				}
-				
-				widget = {};
-				widget.props = {};
-				widget.props["storage_id"] = this.storageID;
-				widget.props["universe"] = this.universe;
-				widget.props["character"] = this.entity;
-				widget.props["entity"] = this.entity;
-				widget.props["sid"] = this.storageID;
-				widget.props["index"] = this.index;
-				widget.props["state"] = this.state;
-				widget.props["user"] = this.user;
-				widget.class = {};
-				widget.class["rs-containment"] = true;
-				elements.push(createElement(this.contents.declaration, widget));
 
 				widget = {};
 				widget.props = {};
@@ -172,6 +159,20 @@
 				widget.on.toggle = this.toggle;
 				widget.on.config = this.config;
 				elements.push(createElement("rs-widget-control", widget));
+				
+				widget = {};
+				widget.props = {};
+				widget.props["storage_id"] = this.storageID;
+				widget.props["universe"] = this.universe;
+				widget.props["character"] = this.entity;
+				widget.props["entity"] = this.entity;
+				widget.props["sid"] = this.storageID;
+				widget.props["index"] = this.index;
+				widget.props["state"] = this.state;
+				widget.props["user"] = this.user;
+				widget.class = {};
+				widget.class["rs-containment"] = true;
+				elements.push(createElement(this.contents.declaration, widget));
 			} else {
 				elements.push(createElement("div"));
 			}

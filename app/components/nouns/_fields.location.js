@@ -156,10 +156,10 @@
 			"gigantic",
 			"city",
 			"mountainous",
-			"enormouos",
+			"enormous",
 			"planetary",
+			"inter_planetary",
 			"star_system",
-			"inter-planetary",
 			"galactic"
 		]
 	}, {

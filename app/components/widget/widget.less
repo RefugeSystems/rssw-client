@@ -1,7 +1,7 @@
 .rs-component.widget-controls {
 	position: absolute;
 	height: 30px;
-	width: 30px;
+	width: 100%;
 	right: 0px;
 	top: 0px;
 	overflow: hidden;
@@ -48,6 +48,24 @@
 		
 		span {
 			transition: transform .5s;
+		}
+	}
+}
+
+.configuring {
+	.widget-ctrl.config {
+		color: @rsWhite;
+	}
+}
+
+.sticky {
+	.rs-component.widget-controls {
+		width: 30px;
+	}
+	
+	&.configuring {
+		.configuration {
+			padding-top: 30px !important;
 		}
 	}
 }

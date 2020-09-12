@@ -222,6 +222,34 @@ if(!Array.prototype.union) {
 	};
 }
 
+/**
+ * 
+ * @method hasCommon
+ * @for Array
+ * @param {Array} withArray
+ * @return {Boolean} The intersection of this array with the source array
+ */
+if(!Array.prototype.hasCommon) {
+	Array.prototype.hasCommon = function(withArray) {
+		if(this.length && withArray && withArray.length) {
+			var trace = {},
+				i;
+			for(i=0; i<this.length; i++) {
+				if(this[i]) {
+					trace[this[i].id || this[i]] = this[i];
+				}
+			}
+			for(i=0; i<withArray.length; i++) {
+				if(withArray[i] && trace[withArray[i].id || withArray[i]]) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	};
+}
+
 (function() {
 	var sortBySorters = {};
 	

@@ -136,10 +136,6 @@ rsSystem.component("RSSWCharacter", {
 		        		"label": "Entity Roller",
 		        		"property": "entityRollListener",
 		        		"type": "checkbox"
-		            }, {
-		        		"label": "Test",
-		        		"property": "test",
-		        		"type": "checkbox"
 		            }]
 				});
 				this.widgets.push({

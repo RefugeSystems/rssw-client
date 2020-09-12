@@ -85,14 +85,19 @@
 		},
 		"methods": {
 			"rollSkill": function(skill) {
-				console.log("Rolling Skill: ", this.entity, skill);
+//				console.log("Rolling Skill: ", this.entity, skill);
 				if(this.state.entityRollListener) {
 					this.roll(this.getSkillDiceExpression(skill), skill.name);
 				}
 			},
 			"roll": function(expression, name) {
-				console.log("Roll: " + expression);
-				var rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
+//				console.log("Roll: ", expression);
+				var rolled;
+				if(typeof(expression) === "object") {
+					name = name || expression._label || expression.label || expression._name || expression.name;
+					expression = expression.expression;
+				}
+				rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
 				rolled._expression = expression;
 				rolled._label = name;
 				this.state.history.unshift(rolled);

@@ -23,9 +23,10 @@
 			<div class="level">
 				<div class="level-block" v-for="level in levelBars" :class="{'acquired':level < character[skill.propertyKey], 'first':level === 0}"></div>
 			</div>
-			<div class="roll">
-				<span class="dice" v-for="die in getDice(skill)" :class="die"></span>
-			</div>
+			<!-- div class="roll" :style="styleDiceDisplay(rolls[skill.id])">
+				<span class="dice" v-for="die in rolls[skill.id]" :class="die"></span>
+			</div-->
+			<rssw-dice-view class="roll" :style="styleDiceDisplay(rolls[skill.id])" :roll="formulas[skill.id]" :universe="universe" :entity="character" :emit="true" />
 		</td>
 	</tr>
 </table>

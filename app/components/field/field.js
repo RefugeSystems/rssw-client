@@ -12,7 +12,8 @@
 	rsSystem.component("rsField", {
 		"inherit": true,
 		"mixins": [
-			rsSystem.components.RSComponentUtility
+			rsSystem.components.RSComponentUtility,
+			rsSystem.components.DataManager
 		],
 		"props": {
 			"root": {
@@ -222,6 +223,28 @@
 				}
 
 				Vue.set(this, "bufferChanging", false);
+			},
+			"selectFile": function(event) {
+				var input = $(this.$el).find("[id='" + this.fid + "']"),
+					value,
+					keys,
+					x;
+
+				console.warn("File Search: ", event);
+				if(input && input.length && input[0].files.length) {
+					console.warn("Set Data");
+					this.encodeFile(input[0].files[0])
+					.then((result) => {
+						value = result.data;
+						Vue.set(this.root, this.field.property, value);
+//						result.name = result.name.substring(0, result.name.lastIndexOf("."));
+//						value.id = "image:" + result.name.replace(/\./g, ":");
+//						value.name = result.name;
+//						Vue.set(this, "rawValue", JSON.stringify(value, null, 4));
+//						input[0].value = null;
+//						console.warn("New Value: ", value);
+					});
+				}
 			},
 			"set": function(value) {
 				Vue.set(this.root, this.field.property, value);

@@ -10,7 +10,7 @@
 				<div class="name align-center">
 					<span class="fas fa-dice"></span>
 				</div>
-				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :skill="item.skill_check" />
+				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :skill="item.skill_check" :roll-name="item.name"/>
 			</div>
 			<div class="damage band flex v element">
 				<div class="name align-center">
@@ -24,7 +24,7 @@
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>
-				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" />
+				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" :roll-name="item.name + '@' + band" />
 			</div>
 		</div>
 	</div>
@@ -53,7 +53,7 @@
 				<div class="name">
 					<span>{{band.substring(0,2).capitalize()}}</span>
 				</div>
-				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" />
+				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" :roll-name="item.name + '@' + band" />
 			</div>
 		</div>
 	</div>

@@ -2,7 +2,7 @@
 rsSystem.registerNoun(RSAbility, "ability");
 rsSystem.registerNoun(RSArchetype, "archetype");
 
-rsSystem.registerNoun(RSBook, "book");
+//rsSystem.registerNoun(RSBook, "book");
 
 rsSystem.registerNoun(RSCondition, "condition");
 
@@ -22,9 +22,7 @@ rsSystem.registerNoun(RSJournal, "journal");
 rsSystem.registerNoun(RSKnowledge, "knowledge");
 
 rsSystem.registerNoun(RSLoadout, "loadout");
-rsSystem.registerNoun(RSLocale, "locale");
 rsSystem.registerNoun(RSLocation, "location");
-rsSystem.registerNoun(RSLogLevel, "loglevel");
 
 rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");
 rsSystem.registerNoun(RSModifierStats, "modifierstats");
@@ -46,6 +44,7 @@ rsSystem.registerNoun(RSSlot, "slot");
 rsSystem.registerNoun(RSSkill, "skill");
 rsSystem.registerNoun(RSStreamURL, "streamurl");
 
+rsSystem.registerNoun(RSWidgetConfiguration, "widgetconfiguration");
 rsSystem.registerNoun(RSWidget, "widget");
 
 //rsSystem.registerNoun(RSHistory, "history");

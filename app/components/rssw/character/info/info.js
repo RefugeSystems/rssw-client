@@ -51,6 +51,7 @@
 			data.abilities = [];
 			data.inventory = [];
 			data.loadout = [];
+			data.effects = [];
 			data.items = [];
 			data.rooms = [];
 			
@@ -209,6 +210,16 @@
 					}
 				}
 				Vue.set(this, "encumberance", hold);
+				
+				this.effects.splice(0);
+				if(this.character.effect) {
+					for(x=0; x<this.character.effect.length; x++) {
+						buffer = this.universe.nouns.effect[this.character.effect[x]];
+						if(buffer) {
+							this.effects.push(buffer);
+						}
+					}
+				}
 			},
 			"update": function() {
 				var buffer,

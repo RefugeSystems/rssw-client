@@ -486,6 +486,34 @@
 							}
 						}
 						break;
+					case "effect":
+						console.warn("Adding Effects");
+						if(this.target && (buffer = this.universe.indexes.entity.index[this.target])) {
+							loading = {
+								"effect": []
+							};
+							for(x=0; x<index.selection.length; x++) {
+								if(this.universe.nouns.effect[index.selection[x]]) {
+									loading.effect.push(index.selection[x]);
+								}
+							}
+							console.warn(" > Commiting: ", loading);
+							buffer.commitAdditions(loading);
+						}
+						break;
+					case "uneffect":
+						if(this.target && (buffer = this.universe.indexes.entity.index[this.target])) {
+							loading = {
+								"effect": []
+							};
+							for(x=0; x<index.selection.length; x++) {
+								if(this.universe.nouns.effect[index.selection[x]]) {
+									loading.effect.push(index.selection[x]);
+								}
+							}
+							buffer.commitSubtractions(loading);
+						}
+						break;
 					case "obscure":
 //						console.warn("Taking Items");
 						for(x=0; x<index.selection.length; x++) {
@@ -526,7 +554,7 @@
 					case "spawn":
 						for(x=0; x<index.selection.length; x++) {
 							loading = index.selected[index.selection[x]];
-							if(loading.template && loading._type === "entity") {
+							if(loading.template && loading._class === "entity") {
 								keys = Object.keys(loading);
 								sending = {};
 								
