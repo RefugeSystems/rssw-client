@@ -24,7 +24,8 @@
 				<div class="flex v">
 					<div class="control">
 						<button class="flat simple" v-on:click="newRound()">
-							Next Round ({{event.state.round?event.state.round + 1:1}})
+							<span v-if="event.state.round">To Next Round {{event.state.round + 1}}</span>
+							<span v-if="!event.state.round">Start Round 1</span>
 						</button>
 						<button class="flat simple" v-on:click="nextTurn()">
 							<span>To Next:</span>

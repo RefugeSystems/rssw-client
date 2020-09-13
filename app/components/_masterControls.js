@@ -41,6 +41,9 @@ rsSystem.component("RSMasterControls", {
 				sending.active = true;
 				sending.screen = true;
 				sending.master_note = "Generated " + category + " event.\n\n";
+				sending.state = {};
+				sending.order = {};
+				sending.dice = {};
 				switch(category) {
 					case "combat":
 						sending.icon = "fas fa-swords";
@@ -66,6 +69,9 @@ rsSystem.component("RSMasterControls", {
 			sending.category = "combat";
 			sending.active = true;
 			sending.screen = true;
+			sending.state = {};
+			sending.order = {};
+			sending.dice = {};
 			sending.master_note = "Generated combat event from master screen.\n\n";
 
 			this.universe.send("modify:event", sending);

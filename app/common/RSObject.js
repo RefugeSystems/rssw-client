@@ -169,6 +169,10 @@ class RSObject extends EventEmitter {
 	learnOfObjects(objects) {
 		var x;
 
+		if(!this._shadow.learned) {
+			this._shadow.learned = {};
+		}
+		
 		for(x=0; x<objects.length; x++) {
 			if(!this._shadow.learned[objects[x]]) {
 				this._shadow.learned[objects[x]] = Date.now();
@@ -184,6 +188,10 @@ class RSObject extends EventEmitter {
 	
 	unlearnOfObjects(objects) {
 		var x;
+		
+		if(!this._shadow.learned) {
+			this._shadow.learned = {};
+		}
 
 		for(x=0; x<objects.length; x++) {
 			if(!this._shadow.learned[objects[x]]) {

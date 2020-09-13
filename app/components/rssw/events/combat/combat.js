@@ -126,13 +126,19 @@
 			data.message = "";
 			
 			if(!this.event.state) {
-				this.event.state = {};
+				this.event.commit({
+					"state": {}
+				});
 			}
 			if(!this.event.order) {
-				this.event.order = {};
+				this.event.commit({
+					"order": {}
+				});
 			}
 			if(!this.event.dice) {
-				this.event.dice = {};
+				this.event.commit({
+					"dice": {}
+				});
 			}
 			
 			return data;
@@ -161,7 +167,7 @@
 					}
 					
 					if(this.event.state.round === undefined) {
-						this.event.state.round = 0; 
+						this.event.state.round = 1; 
 					} else {
 						this.event.state.round++;
 					}
@@ -277,8 +283,10 @@
 			"getEntityStyling": function(entity) {
 				var classes = "";
 				
-				if(this.event.state.current === entity.id) {
-					classes += " current";
+				if(this.event.state) {
+					if(this.event.state.current === entity.id) {
+						classes += " current";
+					}
 				}
 				
 				return classes;
@@ -310,16 +318,18 @@
 					this.involved[x].$off("roll-expression", this.traceRoll);
 					this.involved[x].$off("roll-skill", this.traceRoll);
 				}
-				for(x=0; x<this.event.involved.length; x++) {
-					buffer = this.universe.indexes.entity.index[this.event.involved[x]];
-					if(buffer) {
-						buffer.$on("roll-expression", this.traceRoll);
-						buffer.$on("roll-skill", this.traceRoll);
-						this.involved.push(buffer);
-						track[buffer.id] = true;
+				if(this.event.involved) {
+					for(x=0; x<this.event.involved.length; x++) {
+						buffer = this.universe.indexes.entity.index[this.event.involved[x]];
+						if(buffer) {
+							buffer.$on("roll-expression", this.traceRoll);
+							buffer.$on("roll-skill", this.traceRoll);
+							this.involved.push(buffer);
+							track[buffer.id] = true;
+						}
 					}
+					this.involved.sort(this.sortInvolved);
 				}
-				this.involved.sort(this.sortInvolved);
 				
 				for(x=0; x<this.selected.length; x++) {
 					if(!track[this.selected[x].id]) {

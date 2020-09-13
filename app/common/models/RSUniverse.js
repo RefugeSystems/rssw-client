@@ -469,6 +469,13 @@ class RSUniverse extends RSObject {
 				}
 			}
 			
+			for(i=0; i<rsSystem.listingNouns.length; i++) {
+				if(!this.nouns[rsSystem.listingNouns[i]]) {
+					this.indexes[rsSystem.listingNouns[i]] = new SearchIndex();
+					this.nouns[rsSystem.listingNouns[i]] = {};
+				}
+			}
+			
 			if(!this.initialized) {
 				this.initialized = true;
 				this.$emit("initialized", this);
