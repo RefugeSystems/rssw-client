@@ -187,12 +187,15 @@ rsSystem.App = new Vue({
 				"path": "master",
 				"component": rsSystem.components.RSSWMasterPage
 			}, {
-				"path": "party",
-				"component": rsSystem.components.RSSWPartyPage,
+				"path": "combat",
+				"component": rsSystem.components.RSSWMasterCombatPage,
 				"children": [{
 					"path": ":oid",
-					"component": rsSystem.components.RSSWPartyPage
+					"component": rsSystem.components.RSSWMasterCombatPage
 				}]
+			}, {
+				"path": "party/:oid?",
+				"component": rsSystem.components.RSSWPartyPage
 			}, {
 				"path": "nouns/:type?/:oid?",
 				"component": rsSystem.components.RSNounControls

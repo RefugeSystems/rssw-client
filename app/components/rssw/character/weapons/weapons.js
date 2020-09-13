@@ -52,6 +52,12 @@
 			rsSystem.components.RSCore
 		],
 		"props": {
+			"limited": {
+				"type": String
+			},
+			"compact": {
+				"type": Boolean
+			},
 			"entity": {
 				"required": true,
 				"type": Object

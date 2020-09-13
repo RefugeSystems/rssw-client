@@ -110,13 +110,13 @@
 		"label": "Indicators",
 		"property": "indicators",
 		"type": "textarea"
-	}, {
-		"label": "Description",
-		"property": "description",
-		"type": "textarea"
 	},
 	notes,
 	{
+		"label": "Description",
+		"property": "description",
+		"type": "textarea"
+	}, {
 		"label": "Master Note",
 		"property": "master_note",
 		"type": "textarea"

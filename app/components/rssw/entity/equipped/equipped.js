@@ -39,6 +39,9 @@
 				"required": true,
 				"type": Object
 			},
+			"initial": {
+				"type": String
+			},
 			"state": {
 				"type": Object
 			}
@@ -46,7 +49,7 @@
 		"data": function() {
 			var data = {};
 
-			data.mode = this.state?this.state.mode:"short";
+			data.mode = this.state?this.state.mode:this.initial || "short";
 			
 			data.slotMapping = {};
 			data.slotCounts = {};

@@ -33,6 +33,7 @@
 	invisibleKeys.no_modifiers = true;
 	invisibleKeys.restock_base = true;
 	invisibleKeys.render_name = true;
+	invisibleKeys.auto_nearby = true;
 	invisibleKeys.restock_max = true;
 	invisibleKeys.declaration = true;
 	invisibleKeys.description = true;
@@ -59,7 +60,6 @@
 	invisibleKeys.learned = true;
 	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
-	invisibleKeys.is_shop = true;
 	invisibleKeys.no_rank = true;
 	invisibleKeys.alters = true;
 	invisibleKeys.linked = true;
@@ -79,6 +79,10 @@
 	invisibleKeys.x = true;
 	invisibleKeys.y = true;
 
+	invisibleKeys.is_hostile= true;
+	invisibleKeys.is_public = true;
+	invisibleKeys.is_shop = true;
+	
 	invisibleKeys.label_shadow_color = true;
 	invisibleKeys.label_shadow_blur = true;
 	invisibleKeys.label_shadow = true;
@@ -97,9 +101,10 @@
 	invisibleKeys.has_path = true;
 	invisibleKeys.pathing = true;
 	invisibleKeys.opacity = true;
-	invisibleKeys.values = true;
+	invisibleKeys.active = true;
 	invisibleKeys.curved = true;
 	invisibleKeys.pathed = true;
+	invisibleKeys.values = true;
 	invisibleKeys.color = true;
 	invisibleKeys.path = true;
 	
@@ -112,8 +117,11 @@
 	
 	referenceKeys.requires_ability = "ability";
 	referenceKeys.requires_knowledge = "knowledge";
+	referenceKeys.ship_active_abilities = "ability";
 	referenceKeys.archetypes = "archetype";
 	referenceKeys.slot_usage = "slot";
+	referenceKeys.involved = "entity";
+	referenceKeys.members = "entity";
 	
 	var prettifyValues = {};
 	var prettifyNames = {};
@@ -321,7 +329,9 @@
 			data.availableTemplates = {};
 			data.availableTemplates.entity = [];
 			data.availableEntities = [];
+			data.eventToReference = "";
 			data.copyToEntity = "";
+			data.partyToAdd = "";
 			data.copyToHere = "";
 			
 			data.transfer_targets = [];
@@ -345,6 +355,8 @@
 			data.parties = [];
 			data.entityToMove = "";
 			data.partyToMove = "";
+			
+			data.activeEvents = [];
 			
 			data.equipped = [];
 			
@@ -870,11 +882,37 @@
 					}, 1000);
 				}
 			},
+			"openCombatEvent": function(new_window, stay) {
+				var new_location = location.pathname.replace("?", "") + "#/combat/" + this.record.id;
+				if(new_window) {
+					window.open(new_location, "event");
+					if(stay) {
+						window.focus();
+					}
+				} else {
+					window.location = new_location;
+				}
+			},
 			"showDirectProperties": function() {
 				return !this.record.hide_properties && !this.record.hide_stats;
 			},
 			"showInheritRelations": function() {
 				return !this.record.hide_relations && !this.record.hide_stats;
+			},
+			"amendEventWithParty": function(partyToAdd) {
+				Vue.set(this, "partyToAdd", "");
+				partyToAdd = this.universe.indexes.party.index[partyToAdd];
+				console.log("Adding Party: ", partyToAdd);
+				this.record.commitAdditions({
+					"involved": partyToAdd.entity
+				});
+			},
+			"addEntityToEvent": function(eventToReference) {
+				Vue.set(this, "eventToReference", "");
+				eventToReference = this.universe.indexes.event.index[eventToReference];
+				eventToReference.commitAdditions({
+					"involved": this.id
+				});
 			},
 			"update": function() {
 				var buffer,
@@ -1092,6 +1130,14 @@
 						}
 					}
 				}
+				
+				this.activeEvents.splice(0);
+				for(x=0; x<this.universe.indexes.event.listing.length; x++) {
+					if(this.universe.indexes.event.listing[x] && this.universe.indexes.event.listing[x].active) {
+						this.activeEvents.push(this.universe.indexes.event.listing[x]);
+					}
+				}
+				this.activeEvents.sort(this.sortData);
 				
 				if(this.base && this.base._relatedErrors && this.base._relatedErrors[this.record.id]) {
 					Vue.set(this, "relatedError", this.rsshowdown(this.base._relatedErrors[this.record.id].message || this.base._relatedErrors[this.record.id], this.record, this.base, this.target));

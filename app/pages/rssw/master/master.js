@@ -70,12 +70,13 @@
 	rsSystem.component("RSSWMasterPage", {
 		"inherit": true,
 		"mixins": [
+			// TOFIX: This causes missing prop errors due to player coming from computed.
+			// This will be resolved by moving this page to a "proper" instance of assembled components rather than it acting like a component
+			rsSystem.components.RSMasterControls,
 			rsSystem.components.RSCore
 		],
 		"data": function() {
 			var data = {},
-				entities,
-				entity,
 				x;
 
 			data.storageKeyID = storageKey;
@@ -83,19 +84,25 @@
 				"historyLength": 10,
 				"search": ""
 			});
+			if(!data.state.searching) {
+				data.state.searching = {};
+			}
 			
 			data.lockMakeNew = false;
+			data.active_events = [];
 			data.knowledges = [];
 			data.sessions = [];
+			data.events = [];
 			data.skills = [];
 			data.items = [];
 			
 			data.currentSession = null;
-			data.nextSession = null;
 			data.trackSession = null;
+			data.nextSession = null;
 			
 			data.rollProperties = rollProperties;
 			data.universeEntities = [];
+			data.eventCategory = "";
 			data.maxLength = 20;
 			data.history = [];
 			data.rolling = {};
@@ -164,6 +171,10 @@
 					Vue.set(this, "lockMakeNew", false);
 				}, 1000);
 			},
+			"createEvent": function(category) {
+				Vue.set(this, "eventCategory", "");
+				this.generateEvent(category);
+			},
 			"clearRolling": function(object) {
 				var keys = Object.keys(object),
 					x;
@@ -217,6 +228,19 @@
 					}
 				}
 			},
+			
+			"isVisible": function(record, search) {
+				if(!search) {
+					return true;
+				}
+				
+				if(!record._search) {
+					return false;
+				}
+				
+				search = search.toLowerCase();
+				return record._search.indexOf(search) !== -1;
+			},
 			/**
 			 * 
 			 * @method update
@@ -233,15 +257,18 @@
 						Vue.set(this, "trackSession", this.currentSession.id);
 					}
 				}
-				
+
+				this.sessions.splice(0);
 				for(x=0; x<this.universe.indexes.session.listing.length; x++) {
 					session = this.universe.indexes.session.listing[x];
-					if(session && session._coreData.name && session._coreData.name == (buffer = parseInt(session._coreData.name))) {
-						if(buffer > next) {
+					if(session) {
+						this.sessions.push(session);
+						if(session._coreData.name && session._coreData.name == (buffer = parseInt(session._coreData.name)) && buffer > next) {
 							next = buffer;
 						}
 					}
 				}
+				this.sessions.sort(sortSessions);
 				
 				this.skills.splice(0);
 				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
@@ -271,15 +298,6 @@
 				this.universeEntities.sort(this.sortData);
 //				this.universeEntities.sort(sortEntities);
 
-				this.sessions.splice(0);
-				for(x=0; x<this.universe.indexes.session.listing.length; x++) {
-					buffer = this.universe.indexes.session.listing[x];
-					if(buffer) {
-						this.sessions.push(buffer);
-					}
-				}
-				this.sessions.sort(sortSessions);
-
 				this.knowledges.splice(0);
 				for(x=0; x<this.universe.indexes.knowledge.listing.length; x++) {
 					buffer = this.universe.indexes.knowledge.listing[x];
@@ -288,6 +306,16 @@
 					}
 				}
 				this.knowledges.sort(this.sortData);
+				
+				this.active_events.splice(0);
+				this.events.splice(0);
+				for(x=0; x<this.universe.indexes.event.listing.length; x++) {
+					if(this.universe.indexes.event.listing[x].active) {
+						this.active_events.push(this.universe.indexes.event.listing[x]);
+					} else if(this.universe.indexes.event.listing[x].screen) {
+						this.events.push(this.universe.indexes.event.listing[x]);
+					}
+				}
 				
 				Vue.set(this, "nextSession", next + 1);
 			}

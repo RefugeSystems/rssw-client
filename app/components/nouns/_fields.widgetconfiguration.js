@@ -22,8 +22,9 @@
 		"type": "select",
 		"raw": true,
 		"options": [
-			"text",
-			"checkbox"
+			"checkbox",
+			"number",
+			"text"
 		]
 	}];
 	

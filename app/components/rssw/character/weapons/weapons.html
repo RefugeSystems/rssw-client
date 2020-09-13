@@ -1,8 +1,9 @@
 <div class="rs-component rssw component-entity-weapons">
 
-	<div class="report" v-if="equipped.length">
-		<h3>Equipped Weapons</h3>
-		<div class="weapon-report flex h" v-for="item in equipped">
+	<div class="titling" v-if="compact">Equipped</div>
+	<div class="report" v-if="equipped.length && limited !== 'unequipped'" :class="compact?'compacted':'expanded'">
+		<h3 class="titling" v-if="!compact">Equipped Weapons</h3>
+		<div class="weapon-report flex" v-for="item in equipped" :class="compact?'v':'h'">
 			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
 				<span :class="getItemIcon(item)"></span>
 			</div>
@@ -29,9 +30,10 @@
 		</div>
 	</div>
 
-	<div class="report" v-if="items.length">
-		<h3>Unequipped Weapons</h3>
-		<div class="weapon-report flex h" v-for="item in items">
+	<div class="titling" v-if="compact">Unequipped</div>
+	<div class="report" v-if="items.length && limited !== 'equipped'" :class="compact?'compacted':'expanded'">
+		<h3 class="titling" v-if="!compact">Unequipped Weapons</h3>
+		<div class="weapon-report flex" v-for="item in items" :class="compact?'v':'h'">
 			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
 				<span :class="item.icon"></span>
 			</div>

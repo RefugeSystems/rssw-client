@@ -1,0 +1,67 @@
+<div class="rs-component rs-combat-view">
+	<div class="view-details flush height flex v">
+		<h2>
+			<span>{{event.name}}</span>
+			<button class="flat fas fa-info-circle rs-light-blue" v-on:click="showInfo(event)"></button>
+		</h2>
+		
+		<div class="involved flex h spacer">
+			<div class="entity-list">
+				<div class="entity-control flex h" v-for="entity in involved" :class="getEntityStyling(entity)">
+					<div class="current-indicator flex h center" v-on:click="setCurrent(entity)">
+						<span class="icon" :class="getIndicatorStyling(entity)"></span>
+					</div>
+					<select class="order" v-model.number="event.order[entity.id]" v-on:change="reorderInvolved()">
+						<option v-for="i in event.involved.length" :value="i">{{i}}</option>
+					</select>
+					<rssw-entity-summary v-on:selected="selectEntity(entity)" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-summary>
+					<button class="state" v-on:click="toggleEntity(entity.id)">
+						<span class="far" :class="event.state[entity.id]?'fa-check-square':'fa-square'"></span>
+					</button>
+				</div>
+			</div>
+			<div class="selected-details">
+				<div class="flex v">
+					<div class="control">
+						<button class="flat simple" v-on:click="newRound()">
+							Next Round ({{event.state.round?event.state.round + 1:1}})
+						</button>
+						<button class="flat simple" v-on:click="nextTurn()">
+							<span>To Next:</span>
+							<span v-if="upNext" :class="upNext.is_hostile?'rs-light-red':'rs-light-orange'">{{upNext.name}}</span>
+							<span v-if="event.involved && event.state && event.state.turn >= event.involved.length - 1">(Round Ended)</span>
+						</button>
+						<button class="flat simple" v-if="event.active" v-on:click="finishEvent()">
+							<span>Finish Event</span>
+						</button>
+						<button class="flat simple" v-if="!event.active" v-on:click="openEvent()">
+							<span>Event Finished</span>
+						</button>
+						<button class="flat simple" v-on:click="markAll()">
+							<span class="far fa-check-square rs-green"></span>
+						</button>
+						<button class="flat simple" v-on:click="unmarkAll()">
+							<span class="far fa-square rs-yellow"></span>
+						</button>
+					</div>
+					<div class="messaging" v-if="message">
+						<span class="rs-light-red fas fa-exclamation-triangle"></span>
+						<span class="message">{{message}}</span>
+					</div>
+					<rssw-dice-bin :state="event.dice || state" :universe="universe" :user="user" :emitter="collater" :full-display="true"></rssw-dice-bin>
+					<div class="flex h">
+						<rssw-entity-brief v-for="entity in selected" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-brief>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="details flex h">
+			<div class="description">
+				<h3>Event Description</h3>
+				<div v-html="description"></div>
+			</div>
+			<rs-field :root="tracing" v-for="field in fields" :field="field" v-on:changed="sync($event)" :key="field.property"></rs-field>
+		</div>
+	</div>
+</div>

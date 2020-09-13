@@ -27,11 +27,11 @@
 							<span :class="editingPilot?'fas fa-check':'fas fa-edit'"></span>
 						</button>
 					</div>
-					<div class="name">
+					<div class="name flex h">
 						<input type="text" v-model="properties.name" v-on:change="updated('name')" />
 					</div>
 				</div>
-				<div class="alliance flow-v">
+				<div class="skill">
 					<span v-if="!pilot" class="icon fab fa-android"></span>
 					<span v-if="pilot" class="icon" :class="pilot.allegiance || pilot.icon"></span>
 				</div>

@@ -16,6 +16,7 @@ rsSystem.registerNoun(RSImage, "image");
 rsSystem.registerNoun(RSInventory, "inventory");
 rsSystem.registerNoun(RSItem, "item");
 rsSystem.registerNoun(RSItemType, "itemtype");
+rsSystem.registerNoun(RSManeuver, "maneuver");
 
 rsSystem.registerNoun(RSJournal, "journal");
 
@@ -26,6 +27,9 @@ rsSystem.registerNoun(RSLocation, "location");
 
 rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");
 rsSystem.registerNoun(RSModifierStats, "modifierstats");
+
+rsSystem.registerNoun(RSDatapoint, "datapoint");
+rsSystem.registerNoun(RSDatausage, "datausage");
 
 rsSystem.registerNoun(RSType, "type");
 rsSystem.registerNoun(RSNote, "note");

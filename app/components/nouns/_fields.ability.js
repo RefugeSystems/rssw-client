@@ -2,6 +2,10 @@
 (function() {
 	
 	var dataSource,
+		
+		chargesOnIndex,
+		chargesOn,
+	
 		dependencies,
 		archetypes,
 		knowledges,
@@ -9,6 +13,38 @@
 		attrs,
 		stats,
 		notes;
+	
+	chargesOnIndex = new SearchIndex();
+	chargesOnIndex.indexItem({
+		"name": "Session Start",
+		"id": "game:session_start"
+	});
+	chargesOnIndex.indexItem({
+		"name": "Long Rest",
+		"id": "entity:long_rest"
+	});
+	chargesOnIndex.indexItem({
+		"name": "Short Rest",
+		"id": "entity:short_rest"
+	});
+	chargesOnIndex.indexItem({
+		"name": "Meditation",
+		"id": "entity:meditation"
+	});
+	chargesOnIndex.indexItem({
+		"name": "Top of Round",
+		"id": "entity:round_start"
+	});
+	
+	chargesOn = {
+		"label": "Charges On",
+		"property": "charges_on",
+		"type": "multireference",
+		"source_index": chargesOnIndex,
+		"optionValue": "id",
+		"optionLabel": "name",
+		"uniquely": true
+	};
 
 	parent = {
 		"label": "Parent",
@@ -90,6 +126,12 @@
 		"property": "xp_cost",
 		"type": "text"
 	}, {
+		"label": "Charge After",
+		"property": "charge_after",
+		"type": "text"
+	},
+	chargesOn,
+	{
 		"label": "Type",
 		"property": "type",
 		"type": "select",

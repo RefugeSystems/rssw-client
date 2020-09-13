@@ -18,7 +18,7 @@
 					</button>
 				</div>
 				<button class="roll-container rolling" v-on:click="clearRolls(true)">
-					Clear Rolls
+					Clear Past Rolls
 				</button>
 				<select class="roll-container rolling" v-model="state.historyLength">
 					<option v-for="len in maxLength" :value="len">{{len}}</option>
@@ -66,9 +66,19 @@
 					</button>
 				</div>
 			</div>
+			<div class="control list">
+				<div class="title">
+					<input class="filter" v-model="state.searchKnowledge" placeholder="Filter Screen Knowledge..."/>
+				</div>
+				<div class="knowledge list-data">
+					<button class="listed entity navigation-button" v-for="knowledge in knowledges" v-if="!knowledge.hidden && (!state.searchKnowledge || (knowledge._search && knowledge._search.indexOf(state.searchKnowledge.toLowerCase()) !== -1))" v-on:click="showInfo(knowledge)" :key="knowledge.id">
+						<span class="link-icon" :class="knowledge.icon || 'fas fa-tablet'"></span>
+						<span class="link-label">{{knowledge.name}}</span>
+					</button>
+				</div>
+			</div>
 			<div class="control session list flex v">
 				<div class="current">
-					<!-- h2>Current: {{currentSession?currentSession.name:"None"}}</h2 -->
 					<h2>
 						<span v-on:click="showInfo(currentSession)">Current:</span>
 						<select v-on:change="setSession(trackSession)" v-model="trackSession">
@@ -81,16 +91,32 @@
 					<span class="">To Next Session: {{nextSession}}</span>
 					<span v-if="!lockMakeNew" class="fas fa-arrow-alt-circle-right"></span>
 				</button>
-				<!-- select v-on:change="setSession(trackSession)" v-model="trackSession">
-					<option v-for="session in sessions" :value="session.id">{{session.name}}</option>
-				</select -->
-				<div class="title">
-					<input class="filter" v-model="state.searchKnowledge" placeholder="Filter Screen Knowledge..."/>
+				<div class="current">
+					<span>Make Event:</span>
+					<select v-on:change="createEvent(eventCategory)" v-model="eventCategory">
+						<option value="">[ Select Type ]</option>
+						<option value="combat">Combat</option>
+						<option value="story">Story</option>
+						<option value="news">News</option>
+						<option value="custom">Custom</option>
+					</select>
 				</div>
-				<div class="knowledge list-data major">
-					<button class="listed entity navigation-button" v-for="knowledge in knowledges" v-if="!knowledge.hidden && (!state.searchKnowledge || (knowledge._search && knowledge._search.indexOf(state.searchKnowledge.toLowerCase()) !== -1))" v-on:click="showInfo(knowledge)" :key="knowledge.id">
-						<span class="link-icon" :class="knowledge.icon || 'fas fa-tablet'"></span>
-						<span class="link-label">{{knowledge.name}}</span>
+				<div class="title">
+					<input class="filter" v-model="state.searching.active_events" placeholder="Filter Active Events..."/>
+				</div>
+				<div class="sessions list-data minor">
+					<button class="listed entity navigation-button" v-for="event in active_events" v-if="isVisible(event, state.searching.active_events)" v-on:click="showInfo(event)" :key="event.id">
+						<span class="link-icon" :class="event.icon || 'fas fa-newspaper'"></span>
+						<span class="link-label">{{event.name}}</span>
+					</button>
+				</div>
+				<div class="title">
+					<input class="filter" v-model="state.searching.events" placeholder="Filter Events..."/>
+				</div>
+				<div class="sessions list-data minor">
+					<button class="listed entity navigation-button" v-for="event in events" v-if="isVisible(event, state.searching.events)" v-on:click="showInfo(event)" :key="event.id">
+						<span class="link-icon" :class="event.icon"></span>
+						<span class="link-label">{{event.name}}</span>
 					</button>
 				</div>
 				<div class="title">

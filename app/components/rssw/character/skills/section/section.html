@@ -1,14 +1,16 @@
 
 <table>
 	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)">
-		<td class="name aligned-right flow-v" v-on:click="skillNameTouched(skill)">
-			<span class="naming">
-				<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
-				{{skill.name}}
-			</span>
-			<span class="naming base">
-				{{(skill.base?skill.base:"").capitalize()}}
-			</span>
+		<td class="name aligned-right" v-on:click="skillNameTouched(skill)">
+			<div class="skill-name flex v">
+				<span class="naming">
+					<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
+					{{skill.name}}
+				</span>
+				<span class="naming base">
+					{{(skill.base?skill.base:"").capitalize()}}
+				</span>
+			</div>
 		</td>
 		<td class="icon">
 			<span :class="skill.icon"></span>
@@ -26,7 +28,7 @@
 			<!-- div class="roll" :style="styleDiceDisplay(rolls[skill.id])">
 				<span class="dice" v-for="die in rolls[skill.id]" :class="die"></span>
 			</div-->
-			<rssw-dice-view class="roll" :style="styleDiceDisplay(rolls[skill.id])" :roll="formulas[skill.id]" :universe="universe" :entity="character" :emit="true" />
+			<rssw-dice-view class="roll"v-if="skill.base && !skill.no_roll" :style="styleDiceDisplay(rolls[skill.id])" :roll="formulas[skill.id]" :universe="universe" :entity="character" :emit="true" />
 		</td>
 	</tr>
 </table>

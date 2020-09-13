@@ -1,0 +1,45 @@
+<div class="rs-component rs-entity-summary">
+	<button class="flat naming" v-on:click="emitClicked()" :class="entity.is_hostile?'rs-light-red':'rs-white'">
+		<span class="main-icon" :class="entity.icon"></span>
+		<span>{{entity.name}}</span>
+	</button>
+	<div class="stats flex h wrap" v-if="player.master || (!entity.hidden && viewing && vieiwng.knowsOf(entity))">
+		<div class="stat">
+			<span class="icon fas fa-heartbeat"></span>
+			<span class="value">{{entity.wounds || 0}}</span>
+		</div>
+		<div class="stat">
+			<span class="icon fas fa-brain"></span>
+			<span class="value">{{entity.strain || 0}}</span>
+		</div>
+		<div class="stat">
+			<span class="icon ra ra-bleeding-hearts"></span>
+			<span class="value">{{entity.injury || 0}}</span>
+		</div>
+		
+		<div class="stat">
+			<span class="icon fas fa-shield"></span>
+			<span class="value">{{entity.soak || 0}}</span>
+		</div>
+		<div class="stat">
+			<span class="fas fas fa-user-shield"></span>
+			<span class="far fa-sword"></span>
+			<span class="value">{{entity.defense_melee || 0}}</span>
+		</div>
+		<div class="stat">
+			<span class="icon fas fa-brain"></span>
+				<span class="fas fas fa-user-shield"></span>
+				<span class="far fa-bow-arrow"></span>
+			<span class="value">{{entity.defense_range || 0}}</span>
+		</div>
+		
+		<div class="stat" v-if="player.master">
+			<span class="icon fas fa-coins"></span>
+			<span class="value">{{entity.credits || 0}}</span>
+		</div>
+		<div class="stat" v-if="player.master">
+			<span class="icon fas fa-users" :class="!entity.owners || !entity.owners.length?'rs-light-red':'rs-light-blue'"></span>
+			<span class="value">{{entity.owners && entity.owners.length?entity.owners.join(", "):(entity.owner?entity.owner:"NPC")}}</span>
+		</div>
+	</div>
+</div>

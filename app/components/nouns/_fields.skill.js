@@ -68,6 +68,10 @@
 		"property": "no_rank",
 		"type": "checkbox"
 	}, {
+		"label": "No Roll",
+		"property": "no_roll",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"

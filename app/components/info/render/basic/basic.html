@@ -288,6 +288,12 @@
 				<span>Copy</span>
 			</button>
 		</div>
+		<div class="control flex h" v-if="record._class === 'event' && record.category === 'combat'">
+			<button class="action direct" v-on:click="openCombatEvent()">
+				<span class="fas fa-swords"></span>
+				<span>View Combat Event</span>
+			</button>
+		</div>
 		
 		<div class="control flex h" v-if="!record.template && record.parent && !record.owner && (!record.owners || !record.owners.length)">
 			<button class="action direct" v-on:click="deleteRecord(record); $emit('close')">
@@ -327,7 +333,7 @@
 				</select>
 			</label>
 		</div>
-		<div class="control" v-if="!record.template && (record._type === 'location' || record._type === 'entity')">
+		<div class="control" v-if="!record.template && (record._class === 'location' || record._class === 'entity')">
 			<div>
 				<label>
 					<span>Move Party Here</span>
@@ -346,6 +352,24 @@
 					</select>
 				</label>
 			</div>
+		</div>
+		<div class="control" v-if="!record.template && record._class === 'event' && parties.length">
+			<label>
+				<span>Add Party to this Event</span>
+				<select v-model="partyToAdd" v-on:change="amendEventWithParty(partyToAdd)">
+					<option value="">[ Select Party ]</option>
+					<option v-for="p in parties" :value="p.id">{{p.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="!record.template && record._class === 'entity' && activeEvents.length">
+			<label>
+				<span>Reference in Event:</span>
+				<select v-model="eventToReference" v-on:change="addEntityToEvent(eventToReference)">
+					<option value="">[ Select Event ]</option>
+					<option v-for="e in activeEvents" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
 		</div>
 		
 		<div class="info-section" v-if="partiesPresent.length">

@@ -1,0 +1,96 @@
+<div class="rs-component rs-entity-brief">
+	<div class="naming" v-on:click="showInfo(entity)">
+		<span>{{entity.name}}</span>
+		<button class="flat fas fa-info-circle rs-light-blue"></button>
+	</div>
+	<div class="vitals flex h">
+		<div class="vital flex v">
+			<div class="icon fas fa-heartbeat"></div>
+			<select v-on:change="setStat(wounds.current, 'wounds')" v-model.number="wounds.current">
+				<option :value="0">0</option>
+				<option :value="n" v-for="n in wounds.max">{{n}}</option>
+			</select>
+		</div>
+		<div class="vital flex v">
+			<div class="icon fas fa-brain"></div>
+			<select v-on:change="setStat(strain.current, 'strain')" v-model.number="strain.current">
+				<option :value="0">0</option>
+				<option :value="n" v-for="n in strain.max">{{n}}</option>
+			</select>
+		</div>
+		<div class="vital flex v">
+			<div class="icon ra ra-bleeding-hearts"></div>
+			<select v-on:change="setStat(injury, 'injury')" v-model.number="injury">
+				<option :value="0">None</option>
+				<option v-for="value in injuryValues" :value="value">{{value}}</option>
+			</select>
+		</div>
+	</div>
+	<div class="vitals flex h">
+		<div class="vital flex v">
+			<div class="icon fas fa-shield"></div>
+			<div class="value">{{entity.soak || 0}}</div>
+		</div>
+		<div class="vital flex v">
+			<div class="icon">
+				<span class="fas fas fa-user-shield"></span>
+				<span class="far fa-sword"></span>
+			</div>
+			<div class="value">{{entity.defense_melee || 0}}</div>
+		</div>
+		<div class="vital flex v">
+			<div class="icon">
+				<span class="fas fas fa-user-shield"></span>
+				<span class="far fa-bow-arrow"></span>
+			</div>
+			<div class="value">{{entity.defense_range || 0}}</div>
+		</div>
+	</div>
+	<div class="roll-skill">
+		<select v-model="rollSkill" v-on:change="rollEntitySkill(rollSkill)">
+			<option value="">Roll Skill...</option>
+			<option v-for="skill in universe.indexes.skill.listing" v-if="skill.base && !skill.no_roll" :value="skill.id">{{skill.name}}</option>
+		</select>
+	</div>
+	<div class="positional">
+		<div class="titling">Location:</div>
+		<div class="position" v-if="location">
+			<span :class="location.icon"></span>
+			<span>{{location.name}}</span>
+		</div>
+		<div class="position" v-if="!location">
+			<span class="far fa-ban"></span>
+			<span>No Location</span>
+		</div>
+		
+		<div class="titling">Inside:</div>
+		<div class="position" v-if="inside">
+			<span :class="inside.icon"></span>
+			<span>{{inside.name}}</span>
+		</div>
+		<div class="position" v-if="!inside">
+			<span class="far fa-ban"></span>
+			<span>Not Inside an Entity</span>
+		</div>
+		
+		<div class="titling" v-if="piloting">Piloting:</div>
+		<div class="position" v-if="piloting">
+			<span :class="piloting.icon"></span>
+			<span>{{piloting.name}}</span>
+		</div>
+	</div>
+	<div class="titling" v-if="effects.length">Effects:</div>
+	<div class="points effects flex h wrap">
+		<button class="flat point effect" v-for="effect in effects" v-on:click="showInfo(effect, entity)">
+			<span :class="effect.icon"></span>
+		</button>
+	</div>
+	<div class="titling" v-if="effects.length">Abilities:</div>
+	<div class="points abilities flex h wrap">
+		<button class="flat point ability" v-for="ability in abilities" v-on:click="showInfo(ability, entity)">
+			<span :class="ability.icon"></span>
+		</button>
+	</div>
+	<rssw-entity-equipment :entity="entity" :universe="universe" :user="user" initial="long"></rssw-entity-equipment>
+	<rssw-entity-weapons :entity="entity" :universe="universe" :user="user" :compact="true" ></rssw-entity-weapons>
+</div>

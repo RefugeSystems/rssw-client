@@ -50,7 +50,13 @@
 			rsSystem.components.RSCore
 		],
 		"props": {
+			"fullDisplay": {
+				"type": Boolean
+			},
 			"entity": {
+				"type": Object
+			},
+			"emitter": {
 				"type": Object
 			},
 			"state": {
@@ -78,29 +84,41 @@
 			if(this.entity) {
 				this.entity.$on("roll-expression", this.roll);
 				this.entity.$on("roll-skill", this.rollSkill);
-				this.entity.$on("modified", this.update);
 				Vue.set(this, "bound", true);
-				this.update();
+			}
+			if(this.emitter) {
+				this.emitter.$on("roll-expression", this.roll);
+				Vue.set(this, "bound", true);
 			}
 		},
 		"methods": {
-			"rollSkill": function(skill) {
+			"rollSkill": function(skill, entity) {
 //				console.log("Rolling Skill: ", this.entity, skill);
 				if(this.state.entityRollListener) {
-					this.roll(this.getSkillDiceExpression(skill), skill.name);
+					this.roll(this.getSkillDiceExpression(skill, entity), skill.name);
 				}
 			},
 			"roll": function(expression, name) {
-//				console.log("Roll: ", expression);
 				var rolled;
-				if(typeof(expression) === "object") {
-					name = name || expression._label || expression.label || expression._name || expression.name;
-					expression = expression.expression;
+				
+				if(expression) {
+					if(expression.skill && expression.entity) {
+						this.roll(this.getSkillDiceExpression(expression.skill, expression.entity), expression.skill.name);
+					} else {
+						if(typeof(expression) === "object") {
+							name = name || expression._label || expression.label || expression._name || expression.name;
+							expression = expression.expression;
+						}
+						rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
+						rolled._expression = expression;
+						rolled._label = name;
+						this.state.history.unshift(rolled);
+						
+						if(this.emitter) {
+							this.$forceUpdate();
+						}
+					}
 				}
-				rolled = Dice.calculateDiceRoll(expression || this.state.expression, this.entity);
-				rolled._expression = expression;
-				rolled._label = name;
-				this.state.history.unshift(rolled);
 			},
 			"addExpression": function(expression) {
 				var current = this.state.history[0],
@@ -127,26 +145,37 @@
 				for(x=0; x<keys.length; x++) {
 					Vue.set(current, keys[x], (current[keys[x]] || 0) + roll[keys[x]]);
 				}
-			},
-			"getSkillDiceExpression": function(skill) {
-				var roll = {},
-					s,
-					x;
 				
-				s = this.entity[skill.propertyKey] || 0;
-				roll.b = this.entity[skill.bonusKey] || 0;
-				if(this.entity[skill.base] < s) {
-					roll.a = s - this.entity[skill.base];
-					roll.p = this.entity[skill.base];
-				} else {
-					roll.a = this.entity[skill.base] - s;
-					roll.p = s;
+				if(this.emitter) {
+					this.$forceUpdate();
 				}
-
-				return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
+			},
+			"getSkillDiceExpression": function(skill, entity) {
+				if(entity = entity || this.entity) {
+					var roll = {},
+						s,
+						x;
+					
+					s = entity[skill.propertyKey] || 0;
+					roll.b = entity[skill.bonusKey] || 0;
+					if(entity[skill.base] < s) {
+						roll.a = s - entity[skill.base];
+						roll.p = entity[skill.base];
+					} else {
+						roll.a = entity[skill.base] - s;
+						roll.p = s;
+					}
+	
+					return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
+				}
+				
+				return "";
 			},
 			"dismiss": function(index) {
 				this.state.history.splice(index, 1);
+				if(this.emitter) {
+					this.$forceUpdate();
+				}
 			},
 			"toggleExpressions": function() {
 				Vue.set(this.state, "hideExpressions", !this.state.hideExpressions);
@@ -160,6 +189,10 @@
 				} else {
 					Vue.set(this.state, "expression", "");
 				}
+				
+				if(this.emitter) {
+					this.$forceUpdate();
+				}
 			},
 			"info": function() {
 				rsSystem.EventBus.$emit("display-info", this.state.knowledge || "knowledge:dice:playerbin");
@@ -170,9 +203,13 @@
 		},
 		"beforeDestroy": function() {
 			if(this.bound) {
-				this.entity.$off("model:modified", this.update);
-				this.entity.$off("roll-skill", this.rollSkill);
-				this.entity.$off("roll-expression", this.roll);
+				if(this.entity) {
+					this.entity.$off("roll-skill", this.rollSkill);
+					this.entity.$off("roll-expression", this.roll);
+				}
+				if(this.emitter) {
+					this.emitter.$off("roll-expression", this.roll);
+				}
 			}
 		},
 		"template": Vue.templified("components/rssw/dice.html")

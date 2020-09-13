@@ -8,6 +8,7 @@
 		profiles,
 		pathing,
 		images,
+		locals,
 		notes,
 		types;
 	
@@ -45,6 +46,14 @@
 		"label": "Image",
 		"property": "image",
 		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	locals = {
+		"label": "Locals",
+		"property": "locals",
+		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
@@ -98,7 +107,8 @@
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
-	}, {
+	},
+//	{
 //		"label": "Type",
 //		"property": "type",
 //		"type": "select",
@@ -118,7 +128,8 @@
 //			"star-system",
 //			"station"
 //		]
-//	}, {
+//	},
+	{
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
@@ -131,6 +142,12 @@
 		"property": "must_know",
 		"type": "checkbox"
 	}, {
+		"label": "Auto Near-By",
+		"property": "auto_nearby",
+		"type": "checkbox"
+	},
+	locals,
+	{
 		"label": "X Coordinate",
 		"property": "x",
 		"type": "number"
@@ -377,6 +394,7 @@
 			knowledges.source_index = this.universe.indexes.knowledge;
 			playlists.source_index = this.universe.indexes.playlist;
 			pathing.source_index = this.universe.indexes.location;
+			locals.source_index = this.universe.indexes.entity;
 			types.source_index = this.universe.indexes.type;
 			notes.source_index = this.universe.indexes.note;
 		},

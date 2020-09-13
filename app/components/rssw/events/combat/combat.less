@@ -1,0 +1,45 @@
+.rs-component.rs-combat-view {
+
+	.entity-list {
+		height: 100%;
+		width: 270px;
+		flex-shrink: 0;
+		overflow-y: auto;
+		padding-right: 3px;
+		border-right: 1px solid white;
+		margin-right: 3px;
+	}
+	
+	.messaging {
+		padding: 6px;
+	}
+	
+	.message {
+		border-bottom: 1px solid @rsLightRed;
+	}
+	
+	.current-indicator {
+		flex-shrink: 0;
+		width: 30px;
+		
+		.icon {
+			transition: color .5s;
+			font-size: 24px;
+		}
+	}
+	
+	.current .current-indicator .icon {
+		color: @rsOrange;
+	}
+
+	.selected-details {
+		overflow: auto;
+	}
+
+	.rs-field {
+		.multireference {
+			width: initial !important;
+			margin: 0px 3px;
+		}
+	}
+}

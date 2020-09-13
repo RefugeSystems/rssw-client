@@ -505,16 +505,20 @@ class SearchIndex extends EventEmitter {
 	 * that are part of this index.
 	 * @method translate
 	 * @param {Array} source Array of IDs to search.
+	 * @param {Array} [into] Optional array into which to push the results instead of a new Array.
 	 * @return {Array} A new array that is the referenced data within this index. Elements
 	 * 		of the array that do not belong are skipped by default.
 	 */
-	translate(source) {
-		var result = [],
-			x;
+	translate(source, result) {
+		if(!result) {
+			result = [];
+		}
 		
-		for(x=0; x<source.length; x++) {
-			if(this.lookup[source[x]]) {
-				result.push(this.lookup[source[x]]);
+		if(source) {
+			for(var x=0; x<source.length; x++) {
+				if(this.lookup[source[x]]) {
+					result.push(this.lookup[source[x]]);
+				}
 			}
 		}
 		

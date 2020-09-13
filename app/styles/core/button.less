@@ -1,11 +1,13 @@
 
 button {
+	cursor: pointer;
 	
 	&.flat {
 		padding: 0px;
 		margin: 0px;
 		border: 0px;
 		font-size: 1em;
+		background: transparent;
 	}
 	
 	&.simple {
@@ -14,6 +16,12 @@ button {
 		font-size: 18px;
 		padding: 10px;
 		margin: 6px;
+		color: @rsWhite;
+		transition: border-color .5s;
+		
+		&:hover {
+			border-color: @rsOrange;
+		}
 	}
 }
 

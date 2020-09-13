@@ -1,0 +1,17 @@
+<div class="rssw-page page-combat">
+	<div v-if="!player.master" class="party-info">
+		<h1>Forbidden</h1>
+		<p>Master Screen is for Game Masters only</p>
+	</div>
+	<div v-if="player.master" class="rs-component component-container">
+		<div class="control-panel flex h flush height">
+			<div class="event-list flex v flush height">
+				<h2>Combat Events</h2>
+				<rs-listing class="" :list="events" :universe="universe" :user="user" :emit="true" :active="$route.params.oid" placeholder="Filter Events..." v-on:open="openEvent($event)"></rs-listing>
+			</div>
+			<div v-if="event" class="event-details">
+				<rssw-combat-view class="flush height" :event="event" :universe="universe" :user="user"></rssw-combat-view>
+			</div>
+		</div>
+	</div>
+</div>

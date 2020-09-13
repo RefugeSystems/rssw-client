@@ -9,6 +9,39 @@
 (function() {
 	var storageKey = "_rs_fieldComponentKey";
 	
+	var offset = (new Date()).getTimezoneOffset() * 60 * 1000;
+	
+	var dateToString = function(time) {
+		if(!time) {
+			return "";
+		}
+		
+		var date = new Date(),
+			loading,
+			result;
+		
+		date.setTime(time);
+		result = date.getFullYear();
+		
+		loading = date.getMonth() + 1;
+		if(loading<10) {
+			result += "-0";
+		} else {
+			result += "-";
+		}
+		result += loading;
+		
+		loading = date.getDate();
+		if(loading<10) {
+			result += "-0";
+		} else {
+			result += "-";
+		}
+		result += loading;
+		
+		return result;
+	};
+	
 	rsSystem.component("rsField", {
 		"inherit": true,
 		"mixins": [
@@ -38,7 +71,17 @@
 			data.bufferLoading = false;
 			data.bufferTimeout = null;
 			data.bufferMark = null;
-			data.buffer = this.root[this.field.property];
+			switch(this.field.type) {
+				case "date":
+					if(this.root[this.field.property]) {
+						data.buffer = dateToString(this.root[this.field.property]);
+					} else {
+						data.buffer = "";
+					}
+					break;
+				default:
+					data.buffer = this.root[this.field.property];
+			}
 //			if(this.field.type === "textarea") {
 //			} else {
 //				data.buffer = "";
@@ -59,7 +102,13 @@
 				this.field.source_index.listing.sort(this.sortData);
 			}
 			this.$watch("root." + this.field.property, function(newValue, oldValue) {
-				Vue.set(this, "buffer", newValue);
+				switch(this.field.type) {
+					case "date":
+						Vue.set(this, "buffer", dateToString(newValue));
+						break;
+					default:
+						Vue.set(this, "buffer", newValue);
+				}
 			});
 		},
 		"methods": {
@@ -187,6 +236,9 @@
 				} else {
 					return true;
 				}
+			},
+			"processDate": function() {
+				Vue.set(this.root, this.field.property, new Date(this.buffer).getTime() + offset);
 			},
 			"bufferChangeProcess": function() {
 				if(this.bufferMark < Date.now()) {

@@ -20,8 +20,26 @@
 		font-size: 30px;
 	}
 	
-	.band {
-		border-left: 3px solid @rsWhite;
+	.expanded {
+		.band {
+			border-left: 3px solid @rsWhite;
+		}
+	}
+	
+	.report.compacted {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.compacted {
+		.band {
+			border-top: 3px solid @rsWhite;
+		}
+		
+		.weapon-report {
+			width: 70px;
+			margin: 2px;
+		}
 	}
 		
 	.roll {

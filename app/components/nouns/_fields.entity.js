@@ -210,8 +210,8 @@
 	};
 
 	itemtypes = {
-		"label": "Available Item Types",
-		"property": "itemtype",
+		"label": "Available Shop Types",
+		"property": "soldtypes",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name",
@@ -308,6 +308,20 @@
 		"label": "Cost",
 		"property": "cost",
 		"type": "number"
+	},
+	types,
+	{
+		"label": "Classification",
+		"property": "classification",
+		"type": "select",
+		"raw": true,
+		"options": [
+			"base",
+			"building",
+			"character",
+			"ship",
+			"station"
+		]
 	}, {
 		"label": "Silhouette",
 		"property": "silhouette",
@@ -346,18 +360,6 @@
 			80,
 			90,
 			100
-		]
-	}, {
-		"label": "Classification",
-		"property": "classification",
-		"type": "select",
-		"raw": true,
-		"options": [
-			"base",
-			"building",
-			"character",
-			"ship",
-			"station"
 		]
 	}, {
 		"label": "Pilot Skill",
@@ -401,7 +403,6 @@
 	pilot,
 	races,
 	sexes,
-	types,
 	{
 		"label": "Template",
 		"property": "template",
@@ -448,6 +449,10 @@
 	}, {
 		"label": "Obscured",
 		"property": "obscured",
+		"type": "checkbox"
+	}, {
+		"label": "Screen",
+		"property": "screen",
 		"type": "checkbox"
 	},
 	slots,
@@ -498,8 +503,15 @@
 		"label": "Inactivated",
 		"property": "inactive",
 		"type": "checkbox"
-	},
-	{
+	}, {
+		"label": "Is Hostile",
+		"property": "is_hostile",
+		"type": "checkbox"
+	}, {
+		"label": "Is Public",
+		"property": "is_public",
+		"type": "checkbox"
+	}, {
 		"label": "Is Shop",
 		"property": "is_shop",
 		"type": "checkbox"
@@ -605,14 +617,15 @@
 			archetypes.source_index = this.universe.indexes.archetype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
-			itemtypes.source_index = this.universe.indexes.itemtype;
 			abilities.source_index = this.universe.indexes.ability;
 			effects.source_index = this.universe.indexes.effect;
 			widgets.source_index = this.universe.indexes.widget;
+			itemtypes.source_index = this.universe.indexes.type;
 			owners.source_index = this.universe.indexes.player;
 			notes.source_index = this.universe.indexes.note;
 			rooms.source_index = this.universe.indexes.room;
 			slots.source_index = this.universe.indexes.slot;
+			types.source_index = this.universe.indexes.type;
 			items.source_index = this.universe.indexes.item;
 			knowns.source_index = this.universe.index;
 		},

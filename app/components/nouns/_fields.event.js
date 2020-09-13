@@ -4,6 +4,7 @@
 	var dataSource,
 		categories,
 		involved,
+		inside,
 		place,
 		notes;
 
@@ -18,6 +19,14 @@
 	involved = {
 		"label": "Involved",
 		"property": "involved",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	inside = {
+		"label": "Inside",
+		"property": "inside",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -48,11 +57,23 @@
 		"property": "name",
 		"type": "text"
 	}, {
+		"label": "Icon",
+		"property": "icon",
+		"type": "text"
+	}, {
+		"label": "Date",
+		"property": "date",
+		"type": "date"
+	}, {
 		"label": "Category",
 		"property": "category",
 		"type": "select",
 		"raw": true,
 		"options": categories
+	}, {
+		"label": "Active",
+		"property": "active",
+		"type": "checkbox"
 	}, {
 		"label": "Master Screen",
 		"property": "screen",
@@ -68,6 +89,7 @@
 	},
 	involved,
 	place,
+	inside,
 	{
 		"label": "Description",
 		"property": "description",
@@ -97,6 +119,7 @@
 		},
 		"mounted": function() {
 			involved.source_index = this.universe.indexes.entity;
+			inside.source_index = this.universe.indexes.entity;
 			place.source_index = this.universe.indexes.location;
 			notes.source_index = this.universe.indexes.note;
 		},

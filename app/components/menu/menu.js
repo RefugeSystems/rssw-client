@@ -121,6 +121,16 @@
 					"master": true
 				}]
 			});
+			data.navigationItems.push({
+				"icon": "fas fa-swords",
+				"action": "navigate",
+				"label": "Combat",
+				"path": "/combat",
+				"highlight": "/combat",
+				"conditionals": [{
+					"master": true
+				}]
+			});
 			
 			data.navigationItems.push(bufferItem);
 			data.navigationItems.push({

@@ -28,8 +28,47 @@ rsSystem.component("RSMasterControls", {
 
 	},
 	"methods": {
-		"startCombat": function() {
-			
+		"generateEvent": function(category) {
+			if(this.player.master) {
+				var sending = {};
+	
+				sending._class = "event";
+				sending._type = "event";
+				sending.name = category.capitalize() + " (New)";
+				sending.id = "event:" + category + ":" + Date.now();
+				sending.date = Date.now();
+				sending.category = category;
+				sending.active = true;
+				sending.screen = true;
+				sending.master_note = "Generated " + category + " event.\n\n";
+				switch(category) {
+					case "combat":
+						sending.icon = "fas fa-swords";
+						break;
+					case "story":
+						sending.icon = "far fa-book-open";
+						break;
+					default:
+						sending.icon = "fas fa-newspaper";
+				}
+	
+				this.universe.send("modify:event", sending);
+			}
+		},
+		"startNewCombat": function() {
+			var sending = {};
+
+			sending._class = "event";
+			sending._type = "event";
+			sending.name = "Combat (New)";
+			sending.id = "event:combat:" + Date.now();
+			sending.date = Date.now();
+			sending.category = "combat";
+			sending.active = true;
+			sending.screen = true;
+			sending.master_note = "Generated combat event from master screen.\n\n";
+
+			this.universe.send("modify:event", sending);
 		},
 		"addRecordToCombat": function(record) {
 			
@@ -37,7 +76,7 @@ rsSystem.component("RSMasterControls", {
 		"removeRecordToCombat": function(record) {
 			
 		},
-		"stopCombat": function() {
+		"stopCombat": function(event) {
 			
 		},
 		"deleteRecord": function(record) {

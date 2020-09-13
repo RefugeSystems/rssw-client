@@ -375,9 +375,9 @@ class RSObject extends EventEmitter {
 	 * @param {Object} [replacedProperties] Defaults to this._replacedProperties.
 	 */
 	recalculateProperties(replacedReferences, debug) {
-		if(debug || this.universe.debug) {
-			console.error("Recalculating Object: " + this.name + " [ " + this.id + " ]");
-		}
+//		if(debug || this.universe.debug) {
+//			console.error("Recalculating Object: " + this.name + " [ " + this.id + " ]");
+//		}
 		if(!this.id) {
 			return false;
 		}
@@ -425,9 +425,9 @@ class RSObject extends EventEmitter {
 		base._calculated = []; // Track calculated fields
 		base._overrides = {}; // Tracks slot like modifications where certain types should be overriden in modifier application
 		base._mods = [];
-		if(debug || this.debug || this.universe.debug) {
-			console.log("Initial Base Data:\n > This: ", _p(this.equipped), _p(this._equipped), "\n > Core: ", _p(this._coreData), "\n > Base: ", _p(base));
-		}
+//		if(debug || this.debug || this.universe.debug) {
+//			console.log("Initial Base Data:\n > This: ", _p(this.equipped), _p(this._equipped), "\n > Core: ", _p(this._coreData), "\n > Base: ", _p(base));
+//		}
 		
 		keys = Object.keys(this._relatedErrors);
 		for(x=0; x<keys.length; x++) {
@@ -592,13 +592,13 @@ class RSObject extends EventEmitter {
 			this._listeningParent = null;
 		}
 
-		if(debug || this.debug || this.universe.debug) {
-			console.warn("Parental Report");
-			console.log("Core Data: ", _p(this._coreData));
-			console.log("Base: ", _p(base));
-			console.log("Base Overrides: ", base._overrides);
-			console.log("References: ", references);
-		}
+//		if(debug || this.debug || this.universe.debug) {
+//			console.warn("Parental Report");
+//			console.log("Core Data: ", _p(this._coreData));
+//			console.log("Base: ", _p(base));
+//			console.log("Base Overrides: ", base._overrides);
+//			console.log("References: ", references);
+//		}
 		
 		// Establish Base from Core Data
 		keys = Object.keys(this._coreData);
@@ -612,10 +612,10 @@ class RSObject extends EventEmitter {
 					if(this._coreData[keys[x]] === null) {
 						base[keys[x]] = null;
 					} else if(this._coreData[keys[x]] instanceof Array) {
-						if(!base[keys[x]]) {
+						if(!base[keys[x]] || this._coreData[keys[x]].length) {
 							base[keys[x]] = [];
+							base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
 						}
-						base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
 					} else {
 						base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
 					}
@@ -637,13 +637,13 @@ class RSObject extends EventEmitter {
 			base.label = base.name;
 		}
 
-		if(debug || this.debug || this.universe.debug) {
-			console.warn("Intermediate Report");
-			console.log("Core Data: ", _p(this._coreData));
-			console.log("Base: ", _p(base));
-			console.log("Base Overrides: ", base._overrides);
-			console.log("References: ", references);
-		}
+//		if(debug || this.debug || this.universe.debug) {
+//			console.warn("Intermediate Report");
+//			console.log("Core Data: ", _p(this._coreData));
+//			console.log("Base: ", _p(base));
+//			console.log("Base Overrides: ", base._overrides);
+//			console.log("References: ", references);
+//		}
 		
 		if(references  && references.length) {
 			buffer = {};
@@ -659,21 +659,23 @@ class RSObject extends EventEmitter {
 					}
 				}
 			}
-			if(debug || this.debug || this.universe.debug) {
-				console.warn("References Loaded");
-			}
+//			if(debug || this.debug || this.universe.debug) {
+//				console.warn("References Loaded");
+//			}
 		}
 
-		if(debug || this.debug || this.universe.debug) {
-			console.warn("Reference Report");
-			console.log("Base: ", _p(base));
-		}
+//		if(debug || this.debug || this.universe.debug) {
+//			console.warn("Reference Report");
+//			console.log("Base: ", _p(base));
+//		}
 		
 		if(base.modifierstats) {
-			base._mods.push.apply(base._mods, base.modifierstats);
+//			base._mods.push.apply(base._mods, base.modifierstats);
+			base._mods = base._mods.concat(base.modifierstats);
 		}
 		if(base.modifierattrs) {
-			base._mods.push.apply(base._mods, base.modifierattrs);
+//			base._mods.push.apply(base._mods, base.modifierattrs);
+			base._mods = base._mods.concat(base.modifierattrs);
 		}
 		for(x=0; x<base._mods.length; x++) {
 			buffer = this.universe.indexes.modifierattrs.index[base._mods[x]] || this.universe.indexes.modifierstats.index[base._mods[x]];
@@ -749,9 +751,9 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(debug || this.debug || this.universe.debug) {
-			console.log("Assembled: ", _p(this), _p(base));
-		}
+//		if(debug || this.debug || this.universe.debug) {
+//			console.log("Assembled: ", _p(this), _p(base));
+//		}
 		
 		this.rebuildKnown();
 		
@@ -766,9 +768,9 @@ class RSObject extends EventEmitter {
 //		}
 		this._mods = base._mods;
 		
-		if(debug || this.debug || this.universe.debug) {
-			console.log("Recalculated: " + this.id + "\n > Base: ", _p(base), "\n > This: ", _p(this));
-		}
+//		if(debug || this.debug || this.universe.debug) {
+//			console.log("Recalculated: " + this.id + "\n > Base: ", _p(base), "\n > This: ", _p(this));
+//		}
 		
 		/**
 		 * 
@@ -799,9 +801,9 @@ class RSObject extends EventEmitter {
 				reference = base[noun];
 			}
 			
-			if(debug || this.debug || this.universe.debug) {
-				console.log("Check Noun Load[" + noun + " -> " + this.id + "]: ", reference);
-			}
+//			if(debug || this.debug || this.universe.debug) {
+//				console.log("Check Noun Load[" + noun + " -> " + this.id + "]: ", reference);
+//			}
 			
 			if(reference instanceof Array) {
 				for(x=0; x<reference.length; x++) {
@@ -813,19 +815,20 @@ class RSObject extends EventEmitter {
 //							base._mods.push.apply(base._mods, buffer.modifierattrs);
 //						}
 						if(buffer._mods) {
-							if(debug) {
-								console.log(" > Load Mods[" + buffer.id + "]: ", buffer._mods);
-							}
-							base._mods.push.apply(base._mods, buffer._mods);
+//							if(debug) {
+//								console.log(" > Load Mods[" + buffer.id + "]: ", buffer._mods);
+//							}
+//							base._mods.push.apply(base._mods, buffer._mods);
+							base._mods = base._mods.concat(buffer._mods);
 						}
 						if(!this._registered[buffer.id]) {
 							buffer.$on("modified", this.dependencyFired, this);
 							this._registered[buffer.id] = buffer;
 						}
-						if(debug || this.debug || this.universe.debug) {
-							console.log(" > Performed[" + reference[x] + "]: ", base._mods);
-							console.log(" > From: ", buffer);
-						}
+//						if(debug || this.debug || this.universe.debug) {
+//							console.log(" > Performed[" + reference[x] + "]: ", base._mods);
+//							console.log(" > From: ", buffer);
+//						}
 					}
 					/*
 					if(debug || this.debug || this.universe.debug) {
@@ -849,19 +852,20 @@ class RSObject extends EventEmitter {
 					buffer.performModifications(base, this.id, debug);
 					*/
 					if(buffer._mods) {
-						if(debug) {
-							console.log(" > Load Mods[" + buffer.id + "]: ", buffer._mods);
-						}
-						base._mods.push.apply(base._mods, buffer._mods);
+//						if(debug) {
+//							console.log(" > Load Mods[" + buffer.id + "]: ", buffer._mods);
+//						}
+//						base._mods.push.apply(base._mods, buffer._mods);
+						base._mods = base._mods.concat(buffer._mods);
 					}
 					if(!this._registered[buffer.id]) {
 						buffer.$on("modified", this.dependencyFired, this);
 						this._registered[buffer.id] = buffer;
 					}
-					if(debug || this.debug || this.universe.debug) {
-						console.log(" > Performed[" + reference + "]: ", base._mods);
-						console.log(" > From: ", buffer);
-					}
+//					if(debug || this.debug || this.universe.debug) {
+//						console.log(" > Performed[" + reference + "]: ", base._mods);
+//						console.log(" > From: ", buffer);
+//					}
 				}
 			}
 		}
@@ -875,9 +879,9 @@ class RSObject extends EventEmitter {
 	 */
 	performModifications(base, origin, finalize) {
 		if(this.needs_slot && !this.inSlot(base._equipped)) {
-			if(this.debug || this.universe.debug) {
-				console.error(" ! Mod Aborted for Slot[" + origin + "]: " + this.id);
-			}
+//			if(this.debug || this.universe.debug) {
+//				console.error(" ! Mod Aborted for Slot[" + origin + "]: " + this.id);
+//			}
 			return false;
 		}
 		
@@ -888,9 +892,9 @@ class RSObject extends EventEmitter {
 			x,
 			y;
 		
-		if(this.debug || this.universe.debug) {
-			console.error("Perform Mod[" + origin + "]: " + this.id);
-		}
+//		if(this.debug || this.universe.debug) {
+//			console.error("Perform Mod[" + origin + "]: " + this.id);
+//		}
 		
 		for(x=0; this.condition && x < this.condition.length; x++) {
 			buffer = this.universe.index.lookup[this.condition[x]];
@@ -932,9 +936,9 @@ class RSObject extends EventEmitter {
 		if(this.universe.index) {
 			for(x=0; x<rsSystem.listingNouns.length; x++) {
 				if(this[rsSystem.listingNouns[x]]) {
-					if(this.debug || this.universe.debug) {
-						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
-					}
+//					if(this.debug || this.universe.debug) {
+//						console.warn(" ! Perform Cross Check[" + rsSystem.listingNouns[x] + "]: " + this.id);
+//					}
 					if(this[rsSystem.listingNouns[x]] instanceof Array) {
 						for(y=0; y<this[rsSystem.listingNouns[x]].length; y++) {
 							if(this[rsSystem.listingNouns[x]][y]) {
@@ -967,9 +971,9 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(this.debug || this.universe.debug) {
-			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
-		}
+//		if(this.debug || this.universe.debug) {
+//			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
+//		}
 		
 		return true;
 	}

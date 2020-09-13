@@ -8,6 +8,7 @@
 		effects,
 		skills,
 		ranges,
+		slots,
 		dice;
 	
 	ranges = [
@@ -32,6 +33,14 @@
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+	
+	slots = {
+		"label": "Slots",
+		"property": "slot",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -226,7 +235,8 @@
 	listSource = [
 		abilities,
 		effects,
-		skills
+		skills,
+		slots
 	];
 	
 	commonSource = [{
@@ -347,14 +357,14 @@
 			
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, listSource);
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
-
-			abilities.source_index = this.universe.indexes.ability;
-			effects.source_index = this.universe.indexes.effect;
-			skills.source_index = this.universe.indexes.skill;
 			
 			return data;
 		},
 		"mounted": function() {
+			abilities.source_index = this.universe.indexes.ability;
+			effects.source_index = this.universe.indexes.effect;
+			skills.source_index = this.universe.indexes.skill;
+			slots.source_index = this.universe.indexes.slot;
 		},
 		"methods": {
 			"update": function() {

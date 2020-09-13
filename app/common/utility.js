@@ -128,7 +128,9 @@
 					return true;
 				}
 				
-				if(record.owner === this.player.id) {
+				if(record.is_public) {
+					
+				} else if(record.owner === this.player.id) {
 					return true;
 				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
 					return true;
@@ -210,11 +212,27 @@
 						return 1;
 					}
 				}
-				if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
-					return -1;
-				}
-				if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
-					return 1;
+
+				if(a.date || b.date) {
+					if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
+						return -1;
+					}
+					if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
+						return 1;
+					}
+					
+					if((a.date === undefined || a.date === null) && b.date !== undefined && b.date !== null) {
+						return -1;
+					}
+					if((b.date === undefined || b.date === null) && a.date !== undefined && a.date !== null) {
+						return 1;
+					}
+					
+					if(a.date < b.date) {
+						return -1;
+					} else if(a.date > b.date) {
+						return 1;
+					}
 				}
 
 				if(a.id < b.id) {

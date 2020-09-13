@@ -39,6 +39,7 @@
 	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
 	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
 	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="root[field.property]" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
+	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" :disabled="field.disable?field.disable():false" v-on:change.stop="processDate()" v-on:blur="blurring()" />
 	<span class="indicator" v-if="field.type === 'file'">
 		<span class="rs-light-blue">[</span>
 		<span class="" v-if="root[field.property]">Present</span>
