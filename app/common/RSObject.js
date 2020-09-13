@@ -19,6 +19,7 @@ class RSObject extends EventEmitter {
 		this._registered = {};
 		this._knownKeys = [];
 		this._known = {};
+		this._mods = [];
 		this._shadow = JSON.parse(JSON.stringify(details));
 		this._listeningParentCycle = 0;
 		this._listeningParent = () => {
@@ -423,6 +424,7 @@ class RSObject extends EventEmitter {
 		base._contributions = this._statContributions; // TODO: Track what item/entity/room contributed to the property
 		base._calculated = []; // Track calculated fields
 		base._overrides = {}; // Tracks slot like modifications where certain types should be overriden in modifier application
+		base._mods = [];
 		if(debug || this.debug || this.universe.debug) {
 			console.log("Initial Base Data:\n > This: ", _p(this.equipped), _p(this._equipped), "\n > Core: ", _p(this._coreData), "\n > Base: ", _p(base));
 		}
@@ -487,7 +489,7 @@ class RSObject extends EventEmitter {
 						}
 					}
 				}
-			} else {
+			} else if(this.universe.indexes.slot) {
 				for(x=0; x<this.slot.length; x++) {
 					buffer = this.universe.indexes.slot.index[this.slot[x]];
 					if(buffer && !base._overrides[buffer.accepts] && (buffer.accepts === "item" || buffer.accepts === "room")) {
@@ -516,24 +518,62 @@ class RSObject extends EventEmitter {
 				this._listeningToParent = parent;
 				parent.$on("modified", this._listeningParent);
 			}
-			keys = Object.keys(parent);
+			
+//			keys = Object.keys(parent);
+//			for(x=0; x<keys.length; x++) {
+//				if(keys[x][0] !== "_" && keys[x] !== "template" && keys[x] !== "universe" && !parent._statContributions[keys[x]]) {
+//					if(debug) {
+//						console.log("Checking Parent Base Key: " + keys[x], parent[keys[x]]);
+//					}
+//					if(typeof(parent[keys[x]]) === "object") {
+//						if(parent[keys[x]] === null) {
+//							base[keys[x]] = null;
+//						} else if(parent[keys[x]] instanceof Array) {
+//							if(!base[keys[x]]) {
+//								base[keys[x]] = [];
+//							}
+//							base[keys[x]].push.apply(base[keys[x]], parent[keys[x]]);
+//						} else {
+//							base[keys[x]] = Object.assign({}, parent[keys[x]]);
+//						}
+//					} else {
+//						base[keys[x]] = parent[keys[x]];
+//					}
+//
+//					if(!this.universe.nouns) {
+//						// console.trace("Noun Failure: ", this);
+//					}
+//					// Isolate Reference Fields
+//					if(this.universe.nouns && this.universe.nouns[keys[x]]) {
+//						references.push(keys[x]);
+//					}
+//				}
+//			}
+			
+			keys = Object.keys(parent._coreData);
 			for(x=0; x<keys.length; x++) {
-				if(keys[x][0] !== "_" && keys[x] !== "template" && keys[x] !== "universe" && !parent._statContributions[keys[x]]) {
+				if(keys[x][0] !== "_" && keys[x] !== "template" && keys[x] !== "universe") {
 					if(debug) {
-						console.log("Checking Parent Base Key: " + keys[x], this.universe);
+						console.log("Checking Parent Base Key: " + keys[x], parent._coreData[keys[x]]);
+						console.log(" > Current: ", parent[keys[x]]);
 					}
-//					base[keys[x]] = this._coreData[keys[x]];
-					if(typeof(parent[keys[x]]) === "object") {
-						if(parent[keys[x]] === null) {
+					if(!base._contributions[keys[x]]) {
+						base._contributions[keys[x]] = {};
+					}
+					base._contributions[keys[x]][parent.id] = true;
+					if(typeof(parent._coreData[keys[x]]) === "object") {
+						if(parent._coreData[keys[x]] === null) {
 							base[keys[x]] = null;
-						} else if(parent[keys[x]] instanceof Array) {
-							base[keys[x]] = [];
-							base[keys[x]].push.apply(base[keys[x]], parent[keys[x]]);
+						} else if(parent._coreData[keys[x]] instanceof Array) {
+							if(!base[keys[x]]) {
+								base[keys[x]] = [];
+							}
+							base[keys[x]].push.apply(base[keys[x]], parent._coreData[keys[x]]);
 						} else {
-							base[keys[x]] = Object.assign({}, parent[keys[x]]);
+							base[keys[x]] = Object.assign({}, parent._coreData[keys[x]]);
 						}
 					} else {
-						base[keys[x]] = parent[keys[x]];
+						base[keys[x]] = parent._coreData[keys[x]];
 					}
 
 					if(!this.universe.nouns) {
@@ -545,8 +585,19 @@ class RSObject extends EventEmitter {
 					}
 				}
 			}
+			
+			
 		} else if(this._listeningToParent) {
 			this._listeningToParent.$off("modified", this._listeningParent);
+			this._listeningParent = null;
+		}
+
+		if(debug || this.debug || this.universe.debug) {
+			console.warn("Parental Report");
+			console.log("Core Data: ", _p(this._coreData));
+			console.log("Base: ", _p(base));
+			console.log("Base Overrides: ", base._overrides);
+			console.log("References: ", references);
 		}
 		
 		// Establish Base from Core Data
@@ -554,14 +605,16 @@ class RSObject extends EventEmitter {
 		for(x=0; x<keys.length; x++) {
 			if(keys[x][0] !== "_" && keys[x] !== "universe" && this._coreData[keys[x]] !== undefined && this._coreData[keys[x]] !== null) {
 				if(debug) {
-					console.log("Checking Base Key: " + keys[x], this.universe);
+					console.log("Checking Base Key: " + keys[x], this._coreData[keys[x]]);
 				}
 //				base[keys[x]] = this._coreData[keys[x]];
 				if(typeof(this._coreData[keys[x]]) === "object") {
 					if(this._coreData[keys[x]] === null) {
 						base[keys[x]] = null;
 					} else if(this._coreData[keys[x]] instanceof Array) {
-						base[keys[x]] = [];
+						if(!base[keys[x]]) {
+							base[keys[x]] = [];
+						}
 						base[keys[x]].push.apply(base[keys[x]], this._coreData[keys[x]]);
 					} else {
 						base[keys[x]] = Object.assign({}, this._coreData[keys[x]]);
@@ -580,11 +633,12 @@ class RSObject extends EventEmitter {
 			}
 		}
 		
-		if(base.name && !base.label) {
+		if(base.name && (base.label === undefined || base.label === null)) {
 			base.label = base.name;
 		}
 
 		if(debug || this.debug || this.universe.debug) {
+			console.warn("Intermediate Report");
 			console.log("Core Data: ", _p(this._coreData));
 			console.log("Base: ", _p(base));
 			console.log("Base Overrides: ", base._overrides);
@@ -592,12 +646,48 @@ class RSObject extends EventEmitter {
 		}
 		
 		if(references  && references.length) {
+			buffer = {};
 			for(x=0; x<references.length; x++) {
-				this.loadNounReferenceModifications(references[x], base, debug);
-				if(debug || this.debug || this.universe.debug) {
-					console.log("Reference[" + references[x] + "]: ", _p(base));
+				if(!buffer[references[x]]) {
+					buffer[references[x]] = true;
+					if(debug || this.debug || this.universe.debug) {
+						console.error("Reference Start[" + references[x] + "]: ", _p(base));
+					}
+					this.loadNounReferenceModifications(references[x], base, debug);
+					if(debug || this.debug || this.universe.debug) {
+						console.log("Reference End[" + references[x] + "]: ", _p(base));
+					}
 				}
 			}
+			if(debug || this.debug || this.universe.debug) {
+				console.warn("References Loaded");
+			}
+		}
+
+		if(debug || this.debug || this.universe.debug) {
+			console.warn("Reference Report");
+			console.log("Base: ", _p(base));
+		}
+		
+		if(base.modifierstats) {
+			base._mods.push.apply(base._mods, base.modifierstats);
+		}
+		if(base.modifierattrs) {
+			base._mods.push.apply(base._mods, base.modifierattrs);
+		}
+		for(x=0; x<base._mods.length; x++) {
+			buffer = this.universe.indexes.modifierattrs.index[base._mods[x]] || this.universe.indexes.modifierstats.index[base._mods[x]];
+			if(debug || this.debug) {
+				console.log("Process Modification: ", buffer);
+			}
+			if(buffer) {
+				buffer.performModifications(base, this.id);
+			}
+		}
+
+		if(debug || this.debug || this.universe.debug) {
+			console.warn("Modified Report");
+			console.log("Base: ", _p(base));
 		}
 
 		// TODO: Listen for changes on references
@@ -669,6 +759,13 @@ class RSObject extends EventEmitter {
 			this.recalculateHook();
 		}
 		
+//		try {
+//			this._mods.splice(0);
+//			this._mods.push.apply(base._mods);
+//		} catch(e) {
+//		}
+		this._mods = base._mods;
+		
 		if(debug || this.debug || this.universe.debug) {
 			console.log("Recalculated: " + this.id + "\n > Base: ", _p(base), "\n > This: ", _p(this));
 		}
@@ -699,7 +796,7 @@ class RSObject extends EventEmitter {
 			} else if(base && base._replacedReferences && base._replacedReferences[noun]) {
 				reference = base._replacedReferences[noun];
 			} else {
-				reference = this[noun];
+				reference = base[noun];
 			}
 			
 			if(debug || this.debug || this.universe.debug) {
@@ -708,6 +805,29 @@ class RSObject extends EventEmitter {
 			
 			if(reference instanceof Array) {
 				for(x=0; x<reference.length; x++) {
+					if(reference[x] && (buffer = this.universe.nouns[noun][reference[x]._sourced || reference[x]])) {
+//						if(buffer.modifierstats) {
+//							base._mods.push.apply(base._mods, buffer.modifierstats);
+//						}
+//						if(buffer.modifierattrs) {
+//							base._mods.push.apply(base._mods, buffer.modifierattrs);
+//						}
+						if(buffer._mods) {
+							if(debug) {
+								console.log(" > Load Mods[" + buffer.id + "]: ", buffer._mods);
+							}
+							base._mods.push.apply(base._mods, buffer._mods);
+						}
+						if(!this._registered[buffer.id]) {
+							buffer.$on("modified", this.dependencyFired, this);
+							this._registered[buffer.id] = buffer;
+						}
+						if(debug || this.debug || this.universe.debug) {
+							console.log(" > Performed[" + reference[x] + "]: ", base._mods);
+							console.log(" > From: ", buffer);
+						}
+					}
+					/*
 					if(debug || this.debug || this.universe.debug) {
 						console.log("Perform Noun Load[" + noun + " -> " + this.id + "]: ", reference[x]);
 					}
@@ -721,13 +841,26 @@ class RSObject extends EventEmitter {
 						}
 						buffer.performModifications(base, this.id, debug);
 					}
+					*/
 				}
 			} else {
 				if(reference && (buffer = this.universe.nouns[noun][reference._sourced || reference])) {
+					/*
 					buffer.performModifications(base, this.id, debug);
+					*/
+					if(buffer._mods) {
+						if(debug) {
+							console.log(" > Load Mods[" + buffer.id + "]: ", buffer._mods);
+						}
+						base._mods.push.apply(base._mods, buffer._mods);
+					}
 					if(!this._registered[buffer.id]) {
 						buffer.$on("modified", this.dependencyFired, this);
 						this._registered[buffer.id] = buffer;
+					}
+					if(debug || this.debug || this.universe.debug) {
+						console.log(" > Performed[" + reference + "]: ", base._mods);
+						console.log(" > From: ", buffer);
 					}
 				}
 			}
@@ -818,7 +951,7 @@ class RSObject extends EventEmitter {
 						if(buffer) {
 							buffer.performModifications(base, this.id);
 						} else {
-							console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
+							//console.warn("Missing Reference[" + this._coreData[rsSystem.listingNouns[x]] + "] in object[" + this.id + "]");
 						}
 					}
 				}
@@ -862,8 +995,6 @@ class RSObject extends EventEmitter {
 			this.loadDeltaHook(delta);
 		}
 		
-		this.recalculateProperties();
-		// Array properties not recalculating with one pass?
 		this.recalculateProperties();
 	}
 	
