@@ -512,6 +512,10 @@
 		"property": "is_public",
 		"type": "checkbox"
 	}, {
+		"label": "Is Private",
+		"property": "is_private",
+		"type": "checkbox"
+	}, {
 		"label": "Is Shop",
 		"property": "is_shop",
 		"type": "checkbox"

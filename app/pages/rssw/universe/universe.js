@@ -448,7 +448,7 @@
 //						console.warn("Giving Items");
 						if(this.target) {
 							for(x=0; x<index.selection.length; x++) {
-								console.warn("Sending " + index.selection[x] + "...");
+//								console.warn("Sending " + index.selection[x] + "...");
 								if(this.universe.nouns.item[index.selection[x]]) {
 									sending = {};
 									sending.item = index.selection[x];
@@ -469,7 +469,7 @@
 //						console.warn("Taking Items");
 						if(this.target) {
 							for(x=0; x<index.selection.length; x++) {
-								console.warn("Sending " + index.selection[x] + "...");
+//								console.warn("Sending " + index.selection[x] + "...");
 								if(this.universe.nouns.item[index.selection[x]]) {
 									sending = {};
 									sending.item = index.selection[x];
@@ -487,7 +487,7 @@
 						}
 						break;
 					case "effect":
-						console.warn("Adding Effects");
+//						console.warn("Adding Effects");
 						if(this.target && (buffer = this.universe.indexes.entity.index[this.target])) {
 							loading = {
 								"effect": []
@@ -497,7 +497,7 @@
 									loading.effect.push(index.selection[x]);
 								}
 							}
-							console.warn(" > Commiting: ", loading);
+//							console.warn(" > Commiting: ", loading);
 							buffer.commitAdditions(loading);
 						}
 						break;

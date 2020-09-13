@@ -50,7 +50,7 @@
 					</div>
 					<rssw-dice-bin :state="event.dice || state" :universe="universe" :user="user" :emitter="collater" :full-display="true"></rssw-dice-bin>
 					<div class="flex h">
-						<rssw-entity-brief v-for="entity in selected" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-brief>
+						<rssw-entity-brief v-for="entity in selected" v-on:close="selectEntity(entity)" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-brief>
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,7 @@
 <div class="rs-component rs-entity-brief">
+	<button class="flat close rsbg-dark-red" v-on:click="close(entity)">
+		<span class="fas fa-times rs-gray"></span>
+	</button>
 	<div class="naming" v-on:click="showInfo(entity)">
 		<span>{{entity.name}}</span>
 		<button class="flat fas fa-info-circle rs-light-blue"></button>

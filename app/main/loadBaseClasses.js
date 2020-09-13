@@ -13,7 +13,7 @@ rsSystem.registerNoun(RSEntity, "entity");
 rsSystem.registerNoun(RSEvent, "event");
 
 rsSystem.registerNoun(RSImage, "image");
-rsSystem.registerNoun(RSInventory, "inventory");
+//rsSystem.registerNoun(RSInventory, "inventory");
 rsSystem.registerNoun(RSItem, "item");
 rsSystem.registerNoun(RSItemType, "itemtype");
 rsSystem.registerNoun(RSManeuver, "maneuver");
@@ -22,7 +22,7 @@ rsSystem.registerNoun(RSJournal, "journal");
 
 rsSystem.registerNoun(RSKnowledge, "knowledge");
 
-rsSystem.registerNoun(RSLoadout, "loadout");
+//rsSystem.registerNoun(RSLoadout, "loadout");
 rsSystem.registerNoun(RSLocation, "location");
 
 rsSystem.registerNoun(RSModifierAttributes, "modifierattrs");

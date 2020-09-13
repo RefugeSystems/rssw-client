@@ -58,6 +58,9 @@
 			this.update();
 		},
 		"methods": {
+			"close": function() {
+				this.$emit("close", this.entity);
+			},
 			"setStat": function(amount, stat) {
 				var send = {};
 				send[stat] = amount;

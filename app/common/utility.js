@@ -129,7 +129,9 @@
 				}
 				
 				if(record.is_public) {
-					
+					return true;
+				} else if(record.is_private) {
+					return false;
 				} else if(record.owner === this.player.id) {
 					return true;
 				} else if(record.owners && record.owners.indexOf(this.player.id) !== -1) {
