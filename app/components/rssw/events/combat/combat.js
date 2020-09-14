@@ -219,8 +219,11 @@
 			},
 			"markAll": function() {
 				for(var x=0; x<this.involved.length; x++) {
-					Vue.set(this.event.state, this.involved[x].id, true);
+					this.event.state[this.involved[x].id] = true;
 				}
+				this.event.commit({
+					"state": this.event.state
+				});
 				this.$forceUpdate();
 			},
 			"finishEvent": function() {
@@ -238,10 +241,11 @@
 				}
 			},
 			"toggleEntity": function(id) {
-				Vue.set(this.event.state, id, !this.event.state[id]);
+				this.event.state[id] = !this.event.state[id];
 				this.event.commit({
 					"state": this.event.state
 				});
+				this.$forceUpdate();
 			},
 			"selectEntity": function(entity) {
 				if(this.tracking[entity.id]) {
@@ -275,7 +279,7 @@
 				return 0;
 			},
 			"setCurrent": function(entity) {
-				Vue.set(this.event.state, "current", entity.id);
+				this.event.state.current = entity.id;
 				this.event.commit({
 					"state": this.event.state
 				});

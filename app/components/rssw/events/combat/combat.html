@@ -49,7 +49,7 @@
 						<span class="rs-light-red fas fa-exclamation-triangle"></span>
 						<span class="message">{{message}}</span>
 					</div>
-					<rssw-dice-bin :state="event.dice || state" :universe="universe" :user="user" :emitter="collater" :full-display="true"></rssw-dice-bin>
+					<rssw-dice-bin :state="state" :universe="universe" :user="user" :emitter="collater" :full-display="true"></rssw-dice-bin>
 					<div class="flex h">
 						<rssw-entity-brief v-for="entity in selected" v-on:close="selectEntity(entity)" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-brief>
 					</div>
