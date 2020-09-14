@@ -10,7 +10,7 @@
 	var storageKey = "_rs_viewerComponentKey";
 
 	var generateLocationClassingMap = {
-		"star-system": "far fa-solar-system rotX60",
+		"star_system": "far fa-solar-system rotX60",
 		"planet": "fad fa-globe-europe",
 		"station": "ra ra-satellite",
 		"moon": "fas fa-moon",
