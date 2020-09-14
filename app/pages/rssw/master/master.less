@@ -1,6 +1,14 @@
 .rssw-page.page-master {
 	position: relative;
 	display: block;
+	
+	&.constrained {
+		overflow: hidden;
+	}
+	
+	button.constrain {
+		font-size: 30px;
+	}
 
 	.title {
 		font-size: 20px;
@@ -91,6 +99,19 @@
 		}
 	}
 	
+	.control.rolls {
+		max-width: 450px;
+		min-width: 300px;
+		
+		.control.difficulty-dice {
+			
+		}
+		
+		.control.results {
+			overflow: auto;
+		}
+	}
+	
 	.control {
 		display: inline-block;
 		margin: 0px 7px;
@@ -109,7 +130,7 @@
 		}
 		
 		button.roll-container {
-			display: block;
+			display: inline-block;
 			background: transparent;
 			color: @rsWhite;
 		}

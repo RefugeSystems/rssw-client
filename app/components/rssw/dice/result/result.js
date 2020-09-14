@@ -88,6 +88,9 @@
 			"dismiss": function() {
 				this.$emit("dismiss", this.roll);
 			},
+			"menu": function() {
+				this.$emit("menu", this.roll);
+			},
 			"update": function() {
 			}
 		},

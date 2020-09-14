@@ -91,7 +91,7 @@
 				this.$emit("selecting", roll);
 			},
 			
-			"clearRoll": function(entity, index) {
+			"dismissRoll": function(entity, index) {
 				if(entity && this.state.seen[entity.id] && index !== undefined) {
 					this.state.seen[entity.id].splice(index, 1);
 				}

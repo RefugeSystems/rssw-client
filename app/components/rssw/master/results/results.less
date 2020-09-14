@@ -1,5 +1,10 @@
 .rs-component.rs-master-results {
-	overflow: auto;
+
+	.rssw-entity-summary,
+	.rs-entity-summary {
+		max-width: 200px;
+		min-width: 200px;
+	}
 
 	.rssw-dice-result {
 		border: 1px solid @rsBlue;
@@ -8,8 +13,7 @@
 		margin: 2px;
 	}
 	
-	.rssw-entity-summary,
-	.rs-entity-summary {
-		max-width: 200px;
+	.rolls {
+		overflow-x: auto;
 	}
 }

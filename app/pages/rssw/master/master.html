@@ -1,11 +1,11 @@
-<div class="rssw-page page-master">
+<div class="rssw-page page-master" :class="state.constrained?'constrained':''">
 	<div v-if="!player.master" class="party-info">
 		<h1>Forbidden</h1>
 		<p>Master Screen is for Game Masters only</p>
 	</div>
 	<div v-if="player.master" class="rs-component">
 		<div class="controls flex h">
-			<div class="flex v">
+			<div class="control list rolls">
 				<div class="control difficulty-dice">
 					<div class="output flex h wrap">
 						<rssw-dice-result :universe="universe" :user="user" class="roll-container rolled current" :roll="rolling"></rssw-dice-result>
@@ -24,6 +24,7 @@
 					<select class="roll-container rolling" v-model="state.historyLength">
 						<option v-for="len in maxLength" :value="len">{{len}}</option>
 					</select>
+					<button class="flat rs-yellow far constrain" :class="state.constrained?'fa-check-square':'fa-square'" v-on:click="toggleConstrained()"></button>
 				</div>
 				<div class="control results fill">
 					<rssw-master-results v-on:selecting="receiveRoll($event)" :universe="universe" :user="user" :player="player"></rssw-master-results>

@@ -1,4 +1,4 @@
-<div class="rssw-dice-result" v-on:click.stop="dismiss()">
+<div class="rssw-dice-result" v-on:click.stop="dismiss()" v-on:contextmenu.stop.prevent="menu()">
 	<div class="roll-property" v-if="roll.sum">
 		<span class="value">{{roll.sum}}</span>
 		<span class="info">=</span>

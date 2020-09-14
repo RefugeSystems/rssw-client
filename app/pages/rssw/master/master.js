@@ -87,6 +87,9 @@
 			if(!data.state.searching) {
 				data.state.searching = {};
 			}
+			if(data.state.constrained === undefined) {
+				data.state.constrained = true;
+			}
 			
 			data.lockMakeNew = false;
 			data.active_events = [];
@@ -133,6 +136,9 @@
 			this.update();
 		},
 		"methods": {
+			"toggleConstrained": function() {
+				Vue.set(this.state, "constrained", !this.state.constrained);
+			},
 			"filteredEntity": function(entity) {
 				return !this.state.search ||
 					(entity._search && entity._search.indexOf(this.state.search) !== -1) ||
