@@ -116,6 +116,6 @@
 				this.entity.$off("modified", this.update);
 			}
 		},
-		"template": Vue.templified("components/rssw/diceview.html")
+		"template": Vue.templified("components/rssw/dice/view.html")
 	});
 })();

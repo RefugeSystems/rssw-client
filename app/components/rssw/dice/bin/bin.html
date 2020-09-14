@@ -1,0 +1,73 @@
+<div class="rs-component rssw dice-bin">
+
+	<div class="expression">
+		<span>Roll:</span>
+		<input type="text" class="lined" v-model="state.expression" v-on:keyup.enter="roll(state.expression)" v-on:keyup.esc="clear()"/>
+		<button class="lined roll" v-on:click="roll(state.expression)">
+			<span class="fas fa-dice"></span>
+		</button>
+		<button class="lined info" v-if="!fullDisplay" v-on:click="info()">
+			<span class="fas fa-info-circle"></span>
+		</button>
+		<!--
+		<button class="lined labels" v-on:click="toggleLabels()">
+			<span class="far" :class="state.hideLabels?'fa-align-slash':'fa-align-justify'"></span>
+		</button>
+		<button class="lined labels" v-on:click="toggleExpressions()">
+			<span class="far" :class="state.hideExpressions?'fa-sigma':'fa-function'"></span>
+		</button>
+		<button class="lined ending clear" v-on:click="clear()">
+			<span class="fas fa-ban"></span>
+		</button>
+		-->
+		<button class="lined labels" v-on:click="addExpression('1a')">
+			<span class="rssw-dice fas fa-dice-d8 rs-green"></span>
+		</button>
+		<button class="lined labels" v-on:click="addExpression('1b')">
+			<span class="rssw-dice fas fa-dice-d6 rs-lightblue"></span>
+		</button>
+		<button class="lined labels" v-on:click="addExpression('1p')">
+			<span class="rssw-dice fas fa-dice-d12 rs-yellow"></span>
+		</button>
+		
+		<button class="lined labels" v-if="fullDisplay" v-on:click="addExpression('1d')">
+			<span class="rssw-dice fas fa-dice-d8 rs-purple"></span>
+		</button>
+		<button class="lined labels" v-if="fullDisplay" v-on:click="addExpression('1s')">
+			<span class="rssw-dice fas fa-dice-d6 rs-black"></span>
+		</button>
+		<button class="lined labels" v-if="fullDisplay" v-on:click="addExpression('1c')">
+			<span class="rssw-dice fas fa-dice-d12 rs-light-red"></span>
+		</button>
+		
+		<button class="lined labels" v-on:click="addExpression('1f')">
+			<span class="rssw-dice fas fa-dice-d12 rs-white"></span>
+		</button>
+	</div>
+
+	<div class="history">
+		<div class="rolled" :class="$index===0?'rsbd-green':''" v-for="(roll,$index) in state.history" v-if="roll" v-on:click.stop="dismiss($index)">
+			<div class="roll-property" v-if="roll.sum">
+				<span class="value">{{roll.sum}}</span>
+				<span class="info">=</span>
+				<span class="label" v-if="!state.hideLabels">Rolled</span>
+			</div>
+			<div class="roll-property" :class="rprop.property" v-for="rprop in rollProperties" v-if="roll[rprop.property] !== undefined">
+				<span class="value">{{roll[rprop.property]}}</span>
+				<span class="info" :class="rprop.icon"></span>
+				<span class="label" v-if="!state.hideLabels">{{rprop.label}}</span>
+			</div>
+			<div class="original" v-if="!state.hideExpressions">
+				<span v-if="roll._label">
+					{{roll._label}}
+					<span v-if="roll._suffix">
+						+ {{roll._suffix}}
+					</span>
+				</span>
+				<span v-if="!roll._label">
+					{{roll._expression}}
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<div class="rssw-dice-result" v-on:click.stop="dismiss()">
+	<div class="roll-property" v-if="roll.sum">
+		<span class="value">{{roll.sum}}</span>
+		<span class="info">=</span>
+		<span class="label" v-if="!options.hide_names">Rolled</span>
+	</div>
+	<div class="roll-property" :class="rprop.property" v-for="rprop in rollProperties" v-if="roll[rprop.property] !== undefined">
+		<span class="value">{{roll[rprop.property]}}</span>
+		<span class="info" :class="rprop.icon"></span>
+		<span class="label" v-if="!options.hide_names">{{rprop.name}}</span>
+	</div>
+	<div class="roll-details">
+		<span class="roll-label" v-if="roll._label && !options.hide_label">
+			<span>{{roll._label}}</span>
+			<span v-if="roll._suffix">+ {{roll._suffix}}</span>
+		</span>
+		<span class="roll-expression" v-if="!options.hide_expression">{{roll._expression}}</span>
+	</div>
+</div>

@@ -5,41 +5,52 @@
  * @class rsswDiceResult
  * @constructor
  * @module Components
+ * @param {Object} roll Data to be rendered.
+ * @param {Object} [options] Can map to a state object or a simple object to provide optional control flags.
+ * @param {Boolean} [options.hide_expression] Hides the roll expression (ie. "3p + 2a").
+ * @param {Boolean} [options.hide_label] Hides the roll label (ie. "Coordination + 3b").
+ * @param {Boolean} [options.hide_names] Hides the roll result name (ie. "Advantage"). 
  */
 (function() {
 
+	/**
+	 * 
+	 * @property rollProperties
+	 * @type Object
+	 * @static
+	 */
 	var rollProperties = [{
 		"icon": "ra ra-bomb-explosion",
 		"property": "success",
-		"label": "Success"
+		"name": "Success"
 	}, {
 		"icon": "fad fa-jedi",
 		"property": "advantage",
-		"label": "Advantage"
+		"name": "Advantage"
 	}, {
 		"icon": "xwm xwing-miniatures-font-epic",
 		"property": "triumph",
-		"label": "Triumph"
+		"name": "Triumph"
 	}, {
 		"icon": "fal fa-triangle rot180",
 		"property": "failure",
-		"label": "Failure"
+		"name": "Failure"
 	}, {
 		"icon": "rsswx rsswx-threat",
 		"property": "threat",
-		"label": "Threat"
+		"name": "Threat"
 	}, {
 		"icon": "rsswx rsswx-despair",
 		"property": "despair",
-		"label": "Despair"
+		"name": "Despair"
 	}, {
 		"icon": "fad fa-circle rs-white rs-secondary-black",
 		"property": "light",
-		"label": "Light"
+		"name": "Light"
 	}, {
 		"icon": "fad fa-circle rs-black rs-secondary-white",
 		"property": "dark",
-		"label": "Dark"
+		"name": "Dark"
 	}];
 	
 	rsSystem.component("rsswDiceResult", {
@@ -51,17 +62,15 @@
 			"universe": {
 				"type": Object
 			},
-			"state": {
+			"options": {
 				"type": Object,
 				"default": function() {
 					return {};
 				}
 			},
 			"roll": {
-				"type": Object,
-				"default": function() {
-					return {};
-				}
+				"required": true,
+				"type": Object
 			}
 		},
 		"data": function() {
@@ -76,11 +85,14 @@
 			this.update();
 		},
 		"methods": {
+			"dismiss": function() {
+				this.$emit("dismiss", this.roll);
+			},
 			"update": function() {
 			}
 		},
 		"beforeDestroy": function() {
 		},
-		"template": Vue.templified("components/rssw/diceview/result.html")
+		"template": Vue.templified("components/rssw/dice/result.html")
 	});
 })();

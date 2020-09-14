@@ -255,6 +255,8 @@
 					this.tracking[entity.id] = true;
 					this.selected.push(entity);
 				}
+				// Force children to update to new selection data as they may not respond to a higher level event
+				this.$forceUpdate();
 			},
 			"reorderInvolved": function() {
 				this.event.commit({

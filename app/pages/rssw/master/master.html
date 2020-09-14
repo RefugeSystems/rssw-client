@@ -5,24 +5,29 @@
 	</div>
 	<div v-if="player.master" class="rs-component">
 		<div class="controls flex h">
-			<div class="control difficulty-dice">
-				<div class="output flex h wrap">
-					<rssw-dice-result :universe="universe" :user="user" class="roll-container rolled current" :roll="rolling"></rssw-dice-result>
-					<button class="roll-container rolled" v-for="rolled in history" v-on:click="dismissRolled(rolled)">
-						<rssw-dice-result :universe="universe" :user="user" class="rolling-viewed" :roll="rolled"></rssw-dice-result>
+			<div class="flex v">
+				<div class="control difficulty-dice">
+					<div class="output flex h wrap">
+						<rssw-dice-result :universe="universe" :user="user" class="roll-container rolled current" :roll="rolling"></rssw-dice-result>
+						<button class="roll-container rolled" v-for="rolled in history" v-on:click="dismissRolled(rolled)">
+							<rssw-dice-result v-on:dismiss="dismissRolled(rolled)" :universe="universe" :user="user" class="rolling-viewed" :roll="rolled"></rssw-dice-result>
+						</button>
+					</div>
+					<div class="roll-options flex h wrap">
+						<button class="roll-container rolling" :class="count[diff]?'rsbd-light-red rs-border two':''" v-on:click="rollDifficulty(diff)" v-for="diff in difficulties">
+							<rssw-dice-view :universe="universe" :user="user" class="rolling-view" :roll="difficulty[diff]" :labeling="diff + ' [' + count[diff] + ']'" :stacked="true"></rssw-dice-view>
+						</button>
+					</div>
+					<button class="roll-container rolling" v-on:click="clearRolls(true)">
+						Clear Past Rolls
 					</button>
+					<select class="roll-container rolling" v-model="state.historyLength">
+						<option v-for="len in maxLength" :value="len">{{len}}</option>
+					</select>
 				</div>
-				<div class="roll-options flex h wrap">
-					<button class="roll-container rolling" :class="count[diff]?'rsbd-light-red rs-border two':''" v-on:click="rollDifficulty(diff)" v-for="diff in difficulties">
-						<rssw-dice-view :universe="universe" :user="user" class="rolling-view" :roll="difficulty[diff]" :labeling="diff + ' [' + count[diff] + ']'" :stacked="true"></rssw-dice-view>
-					</button>
+				<div class="control results fill">
+					<rssw-master-results v-on:selecting="receiveRoll($event)" :universe="universe" :user="user" :player="player"></rssw-master-results>
 				</div>
-				<button class="roll-container rolling" v-on:click="clearRolls(true)">
-					Clear Past Rolls
-				</button>
-				<select class="roll-container rolling" v-model="state.historyLength">
-					<option v-for="len in maxLength" :value="len">{{len}}</option>
-				</select>
 			</div>
 			<div class="control entity-list list">
 				<div class="title">

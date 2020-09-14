@@ -5,6 +5,10 @@
  * @class rsswEntitySummary
  * @constructor
  * @module Components
+ * 
+ * @param {Object} selected Maps IDs to a truthy/falsy value to indicate what entities
+ * 		should be "flagged" as active. Used here to indicate in the summary if an entity
+ * 		is active for visual feedback.
  */
 (function() {
 	
@@ -18,6 +22,9 @@
 		"props": {
 			"entity": {
 				"required": true,
+				"type": Object
+			},
+			"selected": {
 				"type": Object
 			},
 			"viewing": {
@@ -36,6 +43,9 @@
 			this.update();
 		},
 		"methods": {
+			"isActive": function() {
+				return this.selected && this.selected[this.entity.id];
+			},
 			"emitClicked": function() {
 				this.$emit("selected", this);
 			},

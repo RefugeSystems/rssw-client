@@ -14,7 +14,7 @@
 					<select class="order" v-model.number="event.order[entity.id]" v-on:change="reorderInvolved()">
 						<option v-for="i in event.involved.length" :value="i">{{i}}</option>
 					</select>
-					<rssw-entity-summary v-on:selected="selectEntity(entity)" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-summary>
+					<rssw-entity-summary v-on:selected="selectEntity(entity)" :selected="tracking" :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-summary>
 					<button class="state" v-on:click="toggleEntity(entity.id)">
 						<span class="far" :class="event.state[entity.id]?'fa-check-square':'fa-square'"></span>
 					</button>

@@ -79,12 +79,27 @@
 				if(this.state.emitSkillRoll) {
 					this.character.$emit("roll-skill", skill);
 				} else if(this.state.rollSkill) {
-					Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+					console.log("Rolling Skill");
+					var expression = this.getDiceExpression(skill),
+						roll = Dice.calculateDiceRoll(expression);
+					roll.id = this.character.id;
+					roll._expression = expression;
+					roll._label = skill.name;
+					Vue.set(this.state.rolls, skill.id, roll);
+					this.universe.send("entity:rolled", roll);
+					
+					//Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
 				}
 			},
 			"skillTouched": function(skill) {
 				if(this.state.rollSkill) {
-					Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+					console.log("Rolling Skill");
+					var expression = this.getDiceExpression(skill),
+						roll = Dice.calculateDiceRoll(expression);
+					roll._expression = expression;
+					roll._label = skill.name;
+					Vue.set(this.state.rolls, skill.id, roll);
+					this.universe.send("entity:rolled", roll);
 				} else if(this.leveling === skill.id) {
 					this.viewSkill(skill.id);
 				}

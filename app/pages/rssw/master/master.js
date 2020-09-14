@@ -101,6 +101,7 @@
 			data.nextSession = null;
 			
 			data.rollProperties = rollProperties;
+			data.rollReceiveFlag = false;
 			data.universeEntities = [];
 			data.eventCategory = "";
 			data.maxLength = 20;
@@ -175,6 +176,23 @@
 				Vue.set(this, "eventCategory", "");
 				this.generateEvent(category);
 			},
+			"receiveRoll": function(result) {
+				console.log("Receiving Roll: ", result);
+				var keys = Object.keys(result),
+					x;
+				
+				Vue.set(this, "rollReceiveFlag", true);
+				this.clearRolling(this.rolling);
+				for(x=0; x<this.difficulties.length; x++) {
+					Vue.set(this.count, this.difficulties[x], 0);
+				}
+				
+				for(x=0; x<keys.length; x++) {
+					if(result[keys[x]]) {
+						Vue.set(this.rolling, keys[x], result[keys[x]]);
+					}
+				}
+			},
 			"clearRolling": function(object) {
 				var keys = Object.keys(object),
 					x;
@@ -209,12 +227,16 @@
 					x;
 				
 //				console.log("Roll[" + isNaN(expression.difficulty) + "]: ", expression.difficulty);
-				if(!isNaN(expression.difficulty)) {
+				if(!isNaN(expression.difficulty) && !this.rollReceiveFlag) {
 					this.clearRolling(this.rolling);
 					for(x=0; x<this.difficulties.length; x++) {
 						Vue.set(this.count, this.difficulties[x], 0);
 					}
 				}
+				if(this.rollReceiveFlag) {
+					Vue.set(this, "rollReceiveFlag", false);
+				}
+				
 				Vue.set(this.count, difficulty, this.count[difficulty] + 1);
 				result = Dice.calculateDiceRoll(expression);
 				keys = Object.keys(result);

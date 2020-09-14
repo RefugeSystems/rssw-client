@@ -1,5 +1,6 @@
 <div class="rs-component rs-entity-summary">
 	<button class="flat naming" v-on:click="emitClicked()" :class="entity.is_hostile?'rs-light-red':'rs-white'">
+		<span class="fas fa-check rs-light-green" v-if="isActive()"></span>
 		<span class="main-icon" :class="entity.icon"></span>
 		<span>{{entity.name}}</span>
 	</button>
