@@ -9,13 +9,13 @@
 		"property": "id",
 		"type": "text"
 	}, {
-		"label": "Engagement Flags",
-		"property": "__engagement",
-		"type": "label"
-	}, {
 		"label": "Name",
 		"property": "name",
 		"type": "text"
+	}, {
+		"label": "Engagement Flags",
+		"property": "__engagement",
+		"type": "label"
 	}, {
 		"label": "Weapon",
 		"property": "is_weapon",

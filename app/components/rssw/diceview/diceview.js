@@ -78,12 +78,14 @@
 				for(x=0; x<this.diceTypes.length; x++) {
 					if(this.roll[this.diceTypes[x]] || this.roll[this.diceTypes[x][0]]) {
 						if(expression) {
-							expression = this.roll[this.diceTypes[x]] + this.diceTypes[x][0];
+							expression += " + " + this.roll[this.diceTypes[x]] + this.diceTypes[x][0];
 						} else {
-							expression += " " + this.roll[this.diceTypes[x]] + this.diceTypes[x][0];
+							expression += this.roll[this.diceTypes[x]] + this.diceTypes[x][0];
 						}
 					}
 				}
+				
+				console.log("Roll Expression: " + expression);
 				
 				return expression;
 			},

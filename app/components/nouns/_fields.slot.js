@@ -104,6 +104,10 @@
 		"property": "combat_slot",
 		"type": "checkbox"
 	}, {
+		"label": "No Inheritance",
+		"property": "no_inheritance",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"

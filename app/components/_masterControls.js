@@ -41,9 +41,13 @@ rsSystem.component("RSMasterControls", {
 				sending.active = true;
 				sending.screen = true;
 				sending.master_note = "Generated " + category + " event.\n\n";
-				sending.state = {};
+				sending.state = {
+				};
 				sending.order = {};
-				sending.dice = {};
+				sending.dice = {
+					"expression": "",
+					"history": []
+				};
 				switch(category) {
 					case "combat":
 						sending.icon = "fas fa-swords";
