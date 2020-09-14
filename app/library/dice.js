@@ -453,30 +453,38 @@ var Dice = (function() {
 				"threat": 0
 			},
 			"2": {
+				"success": -1,
 				"failure": 1,
 				"threat": 0
 			},
 			"3": {
+				"success": -2,
 				"failure": 2,
 				"threat": 0
 			},
 			"4": {
 				"failure": 0,
+				"advantage": -1,
 				"threat": 1
 			},
 			"5": {
 				"failure": 0,
+				"advantage": -1,
 				"threat": 1
 			},
 			"6": {
 				"failure": 0,
+				"advantage": -1,
 				"threat": 1
 			},
 			"7": {
 				"failure": 0,
+				"advantage": -2,
 				"threat": 2
 			},
 			"8": {
+				"success": -1,
+				"advantage": -1,
 				"failure": 1,
 				"threat": 1
 			}
@@ -492,18 +500,22 @@ var Dice = (function() {
 				"threat": 0
 			},
 			"3": {
+				"success": -1,
 				"failure": 1,
 				"threat": 0
 			},
 			"4": {
+				"success": -1,
 				"failure": 1,
 				"threat": 0
 			},
 			"5": {
+				"advantage": -1,
 				"failure": 0,
 				"threat": 1
 			},
 			"6": {
+				"advantage": -1,
 				"failure": 0,
 				"threat": 1
 			}
@@ -515,46 +527,59 @@ var Dice = (function() {
 				"threat": 0
 			},
 			"2": {
+				"success": -1,
 				"failure": 1,
 				"threat": 0
 			},
 			"3": {
+				"success": -1,
 				"failure": 1,
 				"threat": 0
 			},
 			"4": {
+				"success": -2,
 				"failure": 2,
 				"threat": 0
 			},
 			"5": {
+				"success": -2,
 				"failure": 2,
 				"threat": 0
 			},
 			"6": {
-				"failure": 0,	
+				"failure": 0,
+				"advantage": -1,	
 				"threat": 1
 			},
 			"7": {
 				"failure": 0,
+				"advantage": -1,
 				"threat": 1
 			},
 			"8": {
+				"success": -1,
+				"advantage": -1,
 				"threat": 1,
 				"failure": 1
 			},
 			"9": {
+				"success": -1,
+				"advantage": -1,
 				"threat": 1,
 				"failure": 1
 			},
 			"10": {
 				"failure": 0,
+				"advantage": -2,
 				"threat": 2
 			},
 			"11": {
+				"advantage": -2,
 				"failure": 0,
 				"threat": 2
 			},
 			"12": {
+				"triumph": -1,
 				"failure": 0,
 				"despair": 1,
 				"threat": 0
@@ -563,24 +588,31 @@ var Dice = (function() {
 		"force": {
 			"dice": "d12",
 			"1": {
+				"light": -1,
 				"dark": 1
 			},
 			"2": {
+				"light": -1,
 				"dark": 1
 			},
 			"3": {
+				"light": -1,
 				"dark": 1
 			},
 			"4": {
+				"light": -1,
 				"dark": 1
 			},
 			"5": {
+				"light": -1,
 				"dark": 1
 			},
 			"6": {
+				"light": -1,
 				"dark": 1
 			},
 			"7": {
+				"light": -2,
 				"dark": 2
 			},
 			"8": {
