@@ -24,6 +24,8 @@
 				<span slot="info">
 					<span v-if="field.property === 'id' && activeCopying()" class="fas fa-link rs-light-red" title="Editor is set to always copy, creating new IDs even when selections are made"></span>
 					<span v-if="field.property === 'icon'" :class="state.building[state.current].icon"></span>
+					<button class="info-link ctrl-link copy-parent fas fa-copy" v-if="field.property !== 'parent' && state.building[state.current].parent && universe.indexes[state.current].index[state.building[state.current].parent] && universe.indexes[state.current].index[state.building[state.current].parent][field.property]" v-on:click="copyParent(field.property)" tabindex=2>
+					</button>
 					<button class="info-link ctrl-link random-name fas fa-random" v-if="field.property === 'name' && state.current !== 'session' && hasGenerator()" v-on:click="randomizeName()" tabindex=2>
 					</button>
 					<button class="info-link ctrl-link random-name fas fa-sync" v-if="field.property === 'name' && hasGenerator()" v-on:click="pullRandomName()" tabindex=2>
