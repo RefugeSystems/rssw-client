@@ -1,14 +1,14 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSSWUniverse
  * @constructor
  * @module Pages
  */
 (function() {
 	var storageKey = "_rssw_universeComponentKey";
-	
+
 	var formatters = {
 		"icon": function(icon) {
 			return "<span class='" + icon + "'></span>";
@@ -65,8 +65,8 @@
 			return 0;
 		}
 	};
-	
-	
+
+
 	var templateValues = {
 		"shown": undefined,
 		"only": true,
@@ -107,7 +107,7 @@
 		"property": "dark",
 		"label": "Dark"
 	}];
-	
+
 	rsSystem.component("RSSWUniverse", {
 		"inherit": true,
 		"mixins": [
@@ -119,7 +119,7 @@
 				entities,
 				entity,
 				x;
-			
+
 			data.storageKeyID = storageKey;
 			data.state = this.loadStorage(data.storageKeyID, {
 				"search": ""
@@ -172,28 +172,34 @@
 				data.state.paging.pages = 0;
 				data.state.paging.spread = 10;
 			}
-			
+			if(data.state.filterTemplate === undefined) {
+				data.state.filterTemplate = "shown";
+			}
+			if(data.state.activeIndex === undefined) {
+				data.state.activeIndex = "";
+			}
+
 			data.availableIndexes = Object.keys(this.universe.indexes);
 			data.availableIndexes.sort();
-			
+
 			data.listing = {};
 			data.listing.entity = [];
 			data.listing.player = [];
 			data.listing.item = [];
 			data.listing.room = [];
 			data.listingKeys = Object.keys(data.listing);
-			
+
 			data.command = "";
 			data.target = "";
 			data.corpus = [];
-			
+
 			data.rollProperties = rollProperties;
 			data.universeEntities = [];
 			data.maxLength = 20;
 			data.history = [];
 			data.rolling = {};
 			data.updated = "";
-			
+
 			data.difficulty = {};
 			data.difficulty.Blank = {"difficulty":0};
 			data.difficulty.Easy = {"difficulty":1};
@@ -203,13 +209,13 @@
 			data.difficulty.Formidable = {"difficulty":5};
 			data.difficulty.Challenge = {"challenge":1};
 			data.difficulty.Setback = {"setback":1};
-			
+
 			data.difficulties = Object.keys(data.difficulty);
 			data.count = {};
 			for(x=0; x<data.difficulties.length; x++) {
 				data.count[data.difficulties[x]] = 0;
 			}
-			
+
 			for(x=0; x<data.state.headers.length; x++) {
 				if(formatters[data.state.headers[x].field]) {
 					data.state.headers[x].formatter = formatters[data.state.headers[x].field];
@@ -227,12 +233,12 @@
 					}
 				}
 			}
-			
+
 			data.state.filter.template = false;
 			if(!data.state.historyLength) {
 				data.state.historyLength = 5;
 			}
-			
+
 			return data;
 		},
 		"watch": {
@@ -259,7 +265,7 @@
 			} else {
 				Vue.delete(this.state.filter, "template");
 			}
-			
+
 			this.universe.$on("universe:modified", this.updateListings);
 			this.updateListings();
 		},
@@ -267,7 +273,7 @@
 			"clearRolling": function(object) {
 				var keys = Object.keys(object),
 					x;
-				
+
 				this.history.unshift(JSON.parse(JSON.stringify(object)));
 				if(this.state.historyLength < this.history.length) {
 					this.history.splice(this.state.historyLength);
@@ -296,7 +302,7 @@
 					result,
 					keys,
 					x;
-				
+
 //				console.log("Roll[" + isNaN(expression.difficulty) + "]: ", expression.difficulty);
 				if(!isNaN(expression.difficulty)) {
 					this.clearRolling(this.rolling);
@@ -322,7 +328,7 @@
 					buffer,
 					x,
 					y;
-				
+
 				this.universeEntities.splice(0);
 				for(x=0; x<this.listingKeys.length; x++) {
 					this.listing[this.listingKeys[x]].splice(0);
@@ -342,7 +348,7 @@
 					}
 					this.listing[this.listingKeys[x]].sort(this.sortData);
 				}
-				
+
 				this.universeEntities.sort(this.sortData);
 			},
 			"showCommands": function() {
@@ -394,7 +400,7 @@
 					start = Math.max(this.state.paging.spread-5, 2),
 					end = this.state.paging.spread+5,
 					x;
-				
+
 				for(x=start; x<end; x++) {
 					possibles.push(x);
 				}
@@ -427,7 +433,7 @@
 				if(end < 100) {
 					possibles.push(100);
 				}
-				
+
 				return possibles;
 			},
 			"processCommand": function(command) {
@@ -439,10 +445,10 @@
 					item,
 					keys,
 					x;
-				
+
 //				command = command.split(",");
 //				console.warn("Table Command: ", command, index);
-				
+
 				switch(command) {
 					case "give":
 //						console.warn("Giving Items");
@@ -557,13 +563,13 @@
 							if(loading.template && loading._class === "entity") {
 								keys = Object.keys(loading);
 								sending = {};
-								
+
 //								for(x=0; x<keys.length; x++) {
 //									if(keys[x] && keys[x][0] !== "_") {
 //										sending[keys[x]] = loading[keys[x]];
 //									}
 //								}
-								
+
 								sending.parent = loading.id;
 								sending.name = loading.name + " (New)";
 //								sending.description = loading.description;
@@ -576,7 +582,7 @@
 								if(this.target && this.universe.indexes.entity.index[this.target]) {
 									sending.inside = this.target;
 								}
-	
+
 								this.universe.send("modify:entity", sending);
 							} else {
 								console.warn("Skipping Selection: ", loading);
@@ -586,7 +592,7 @@
 					case "dashboard-ships":
 						var primary = index.selection[0],
 							ships = index.selection.slice(1);
-						
+
 						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + ships.join(","), "dashboard");
 						break;
 					case "grant-knowledge":
@@ -629,19 +635,19 @@
 						}
 						break;
 				}
-				
-				
+
+
 				Vue.set(this, "command", "");
 			},
 			"processAction": function(action) {
 				console.warn("Table Action: ", action);
-				
+
 			},
 			"filtered": function(entity) {
 				if(entity.template || entity.inactive) {
 					return false;
 				}
-				
+
 				return !this.state.search ||
 					(entity._search && entity._search.indexOf(this.state.search) !== -1) ||
 					entity.id.indexOf(this.state.search) !== -1 ||

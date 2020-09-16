@@ -1,15 +1,15 @@
 <div class="rssw-page page-universe">
-	<div v-if="!$route.params.oid">
+	<div v-if="!$route.params.oid" class="universe-contents">
 		<div class="title">
 			Galactic Index
 			<button class="fas fa-sync" v-on:click="resetHeaders()">Headers</button>
 		</div>
-		
+
 		<div class="controls rs-component flex h wrap">
 			<div class="rs-component index">
 				<div class="controls">
 					<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" v-on:action="processAction"></rs-table-controls>
-					
+
 					<select v-model="target">
 						<option value="">No Target</option>
 						<option disabled value="div">-- Entity Divide --</option>
@@ -42,9 +42,9 @@
 						<option disabled value="div">-- Clean --</option>
 						<option value="drop">Delete Objects</option>
 					</select>
-					
+
 					<select v-model="state.activeIndex">
-						<option value>All</option>
+						<option value="">All</option>
 						<option v-for="index in availableIndexes" :value="index">{{index}}</option>
 					</select>
 					<select v-model.number="state.paging.per">
@@ -59,7 +59,8 @@
 				<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state"></rs-table>
 				<rs-table-paging class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state"></rs-table-paging>
 			</div>
-		
+
+			<!--
 			<div class="control entity-list">
 				<div class="title">
 					<input class="filter" v-model="state.search" />
@@ -92,8 +93,9 @@
 					<option v-for="len in maxLength" :value="len">{{len}}</option>
 				</select>
 			</div>
+			-->
 		</div>
 	</div>
-	
+
 	<router-view class="system-view opened" :universe="universe" :user="player" :class="$route.params.oid?'loaded':''"></router-view>
 </div>

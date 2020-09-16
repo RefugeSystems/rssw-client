@@ -2,15 +2,19 @@
 	position: relative;
 	display: block;
 
+	.universe-contents {
+		margin-left: 3px;
+	}
+
 	.title {
 		font-size: 20px;
 		margin-bottom: 7px;
 	}
-	
+
 	.navigation-button {
 		text-decoration: none;
 		color: @rsOrange;
-		
+
 		&:active,
 		&:hover {
 			color: @rsBlue;
@@ -21,76 +25,76 @@
 		margin: 7px;
 		font-size: 17px;
 	}
-	
+
 	.controls {
 		display: flex;
 		flex-direction: row;
-		
+
 		button.selections {
 			min-width: 48px;
 		}
 	}
-	
+
 	.control {
 		display: inline-block;
 		margin: 7px;
 		min-width: 240px;
-		
+
 		.title {
 			.filter {
 				width: 100%;
 			}
 		}
-		
+
 		.entities {
 			display: flex;
 			flex-direction: column;
-			
+
 			.entity {
 				margin: 5px 0px;
 			}
 		}
-		
+
 		button.roll-container {
 			display: block;
 			background: transparent;
 			color: @rsWhite;
 		}
-		
+
 		.roll-container {
 			border: 1px solid @rsBlue;
 			border-radius: 5px;
 			font-size: 18px;
 			padding: 10px;
 			margin: 6px;
-			
+
 			.dice-result {
 				display: inline-flex;
 			}
 		}
-		
+
 		.rssw-dice-result {
 			min-height: 64px;
 		}
-		
+
 		.view-label {
 			padding-right: 7px;
 		}
-		
+
 		.rolled {
 		}
-		
+
 		.rolling {
 			padding-right: 14px;
 		}
-		
+
 		.output {
 			.rolled.current {
 				border-color: @rsLightRed !important;
 			}
 		}
 	}
-	
+
 	.opened {
 		position: absolute;
 		display: block;
@@ -98,12 +102,12 @@
 		left: 100%;
 		z-index: 5;
 		top: 0px;
-		
+
 		&.loaded {
 			left: 0px;
 		}
 	}
-	
+
 	.create-npc {
 		border-top: 2px solid @rsOrange;
 		padding-top: 5px !important;

@@ -1,28 +1,28 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsField
  * @constructor
  * @module Components
  */
 (function() {
 	var storageKey = "_rs_fieldComponentKey";
-	
+
 	var offset = (new Date()).getTimezoneOffset() * 60 * 1000;
-	
+
 	var dateToString = function(time) {
 		if(!time) {
 			return "";
 		}
-		
+
 		var date = new Date(),
 			loading,
 			result;
-		
+
 		date.setTime(time);
 		result = date.getFullYear();
-		
+
 		loading = date.getMonth() + 1;
 		if(loading<10) {
 			result += "-0";
@@ -30,7 +30,7 @@
 			result += "-";
 		}
 		result += loading;
-		
+
 		loading = date.getDate();
 		if(loading<10) {
 			result += "-0";
@@ -38,10 +38,10 @@
 			result += "-";
 		}
 		result += loading;
-		
+
 		return result;
 	};
-	
+
 	rsSystem.component("rsField", {
 		"inherit": true,
 		"mixins": [
@@ -66,7 +66,8 @@
 			}
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
-			
+			data.focused = false;
+
 			data.bufferChanging = false;
 			data.bufferLoading = false;
 			data.bufferTimeout = null;
@@ -86,15 +87,15 @@
 //			} else {
 //				data.buffer = "";
 //			}
-			
+
 			if(this.field.filter) {
 				data.filterKeys = Object.keys(this.field.filter);
 			}
-			
+
 			return data;
 		},
 		"watch": {
-			
+
 		},
 		"mounted": function() {
 			rsSystem.register(this);
@@ -116,12 +117,12 @@
 				if(!this.field.condition) {
 					return true;
 				}
-				
+
 				var keys = Object.keys(this.field.condition),
 					test,
 					x,
 					v;
-				
+
 				for(x=0; x<keys.length; x++) {
 					switch(this.field.condition[keys[x]].operation) {
 						case "<":
@@ -190,7 +191,7 @@
 							}
 					}
 				}
-				
+
 				return true;
 			},
 			"optionAvailable": function(option) {
@@ -201,7 +202,7 @@
 						}
 					}
 				}
-				
+
 				return true;
 			},
 			"dismissReference": function(index, record) {
@@ -221,6 +222,14 @@
 			},
 			"blurring": function() {
 				this.$emit("blur", this.field);
+				Vue.set(this, "focused", false);
+				if(!this.bufferLoading) {
+					this.$emit("complete", this.field);
+				}
+			},
+			"focusing": function() {
+				this.$emit("focus", this.field);
+				Vue.set(this, "focused", true);
 			},
 			"checkField": function() {
 				if(!this.root[this.field.property]) {
@@ -261,7 +270,7 @@
 				setTimeout(() => {
 					this.bufferChangeProcess();
 				}, 500);
-				
+
 			},
 			"emitChanged": function() {
 				this.$emit("changed", {
@@ -269,9 +278,13 @@
 					"property": this.field.property,
 					"time": Date.now()
 				});
-				
+
 				if(this.field.onchange) {
 					this.field.onchange(this.root[this.field.property]);
+				}
+
+				if(!this.focused) {
+					this.$emit("complete", this.field);
 				}
 
 				Vue.set(this, "bufferChanging", false);
@@ -324,7 +337,7 @@
 			"sortData": function(a, b) {
 				var aName,
 					bName;
-				
+
 				if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
 					if(a.order < b.order) {
 						return -1;
@@ -360,7 +373,7 @@
 				} else if(a.id > b.id) {
 					return 1;
 				}
-				
+
 				return 0;
 			}
 		},

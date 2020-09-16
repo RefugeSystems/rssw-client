@@ -1,18 +1,19 @@
 
 /**
- * 
- * 
+ *
+ * TODO: Collate editing fields and subscribe in someway to ensure save captures
+ * 		buffering fields.
  * @class rsNoun
  * @constructor
  * @module Components
  */
 (function() {
 	var storageKey = "_rs_nounComponentKey";
-	
+
 	var spacing = /[ _-]/g;
 
 	var toColon = /[^a-zA-Z0-9]+/g;
-	
+
 	var byName = function(a, b) {
 		a = (a.name || "").toLowerCase();
 		b = (b.name || "").toLowerCase();
@@ -24,7 +25,7 @@
 			return 0;
 		}
 	};
-	
+
 	/**
 	 * Fill out item to complete fields.
 	 * @method completeItem
@@ -38,15 +39,15 @@
 				item.id = type + ":" + item.name.toLowerCase().replace(spacing, "");
 			}
 		}
-		
+
 		item.id = item.id.toLowerCase().trim();
 		if(item.name) {
 			item.name = item.name.trim();
 		}
-		
+
 		return item;
 	};
-	
+
 	rsSystem.component("rsNouns", {
 		"inherit": true,
 		"mixins": [
@@ -115,11 +116,11 @@
 				"current": "player",
 				"building": {}
 			});
-//			console.log("Loaded Data[" + storageKey + "]: ", data.state);
+			// console.log("Loaded Data[" + storageKey + "]: ", _p(data.state));
 			if(this.$route.params.type) {
 				data.state.current = this.$route.params.type;
 			}
-			
+
 			for(x=0; x<data.nouns.length; x++) {
 				if(!data.state.building[data.nouns[x]]) {
 					data.state.building[data.nouns[x]] = {};
@@ -127,9 +128,9 @@
 				data.models[data.nouns[x]] = new rsSystem.availableNouns[data.nouns[x]](data.state.building[data.nouns[x]], this.universe);
 				data.models[data.nouns[x]]._coreData = data.state.building[data.nouns[x]];
 			}
-			
+
 			data.extra_properties = [];
-			
+
 			return data;
 		},
 		"watch": {
@@ -139,13 +140,13 @@
 						buffer,
 						value,
 						x;
-					
+
 //					if(!copy) {
 //						console.warn("Unable to find copy source[" + this.state.current + "]? " + value, copy);
 //					} else {
 //						console.warn("Copying source[" + this.state.current + "]? " + value, copy);
 //					}
-					
+
 					value = copy?JSON.stringify(copy, null, 4):"{}";
 					value = JSON.parse(value);
 //					console.warn("Copying: ", value);
@@ -207,13 +208,13 @@
 				} else {
 					Vue.set(this, "rawValue", {});
 				}
-				
+
 				this.buildAvailableCopies();
 			},
 			"state": {
 				"deep": true,
 				"handler": function() {
-//					console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
+					// console.warn("State Saving[" + this.storageKeyID + "]: ", this.state);
 					this.models[this.state.current].id = this.state.building[this.state.current].id;
 					this.models[this.state.current].recalculateProperties();
 					this.saveStorage(this.storageKeyID, this.state);
@@ -243,7 +244,7 @@
 						x;
 
 //					console.warn(" -- Parsed Raw Value Change[" + this.state.current + "]: ", parsed);
-					
+
 //					Vue.set(this.state.building, this.state.current, parsed);
 					keys = Object.keys(this.state.building[this.state.current]);
 					for(x=0; x<keys.length; x++) {
@@ -256,11 +257,11 @@
 					if(parsed instanceof Array) {
 						Vue.set(this.state.building[this.state.current], "length", parsed.length);
 					}
-					
+
 //					this.saveStorage(storageKey, this.state);
 					Vue.set(this, "message", null);
 					Vue.set(this, "isValid", true);
-					
+
 					if(this.built) {
 //						console.warn("Sync Built: ", this.built);
 						keys = Object.keys(this.built);
@@ -273,7 +274,7 @@
 						}
 					}
 //					console.warn(" -- Raw Value Changed");
-					
+
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
 					Vue.set(this, "isValid", false);
@@ -290,7 +291,7 @@
 			if(this.$route.params.oid) {
 				Vue.set(this, "copy", this.$route.params.oid);
 			}
-			
+
 			this.universe.$on("universe:modified", this.universeUpdate);
 			this.models[this.state.current].recalculateProperties();
 			this.$emit("model", this.models[this.state.current]);
@@ -300,7 +301,7 @@
 			"nameRandomization": function(root, generator) {
 				var name = "",
 					x;
-				
+
 				if(root.randomize_name) {
 					if(!generator) {
 						if(root.randomize_name_dataset && (generator = this.universe.indexes.dataset.index[root.randomize_name_dataset])) {
@@ -325,7 +326,7 @@
 						name += " " + root.randomize_name_suffix;
 					}
 				}
-				
+
 				return name;
 			},
 			"viewParentInfo": function() {
@@ -335,7 +336,7 @@
 				return this.$route.query.copy === "true";
 			},
 			"changeHandler": function(field) {
-				
+
 			},
 			"buildAvailableCopies": function() {
 				this.availableToCopy.splice(0);
@@ -401,7 +402,7 @@
 				var generator = null,
 					data,
 					x;
-				
+
 				if(race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset) {
 					if(!this.nameGenerators[race]) {
 						data = "";
@@ -428,7 +429,7 @@
 						generator = this.nameGenerators._default;
 					}
 				}
-				
+
 				return generator;
 			},
 			"broadcastModel": function() {
@@ -446,7 +447,7 @@
 				var model = this.models[this.state.current],
 					buffer,
 					root;
-				
+
 				if(model.name) {
 					if(this.state.current === "session") {
 						buffer = model.label;
@@ -477,6 +478,15 @@
 				Vue.set(this.state.building[this.state.current], "id", this.getIDFromName());
 			},
 			"adjust": function(field) {
+				switch(field) {
+					case "name":
+						// if(this.models[this.state.current] && !this.models[this.state.current].id) {
+						// 	Vue.set(this.state.building[this.state.current], "id", this.getIDFromName());
+						// }
+						break;
+				}
+			},
+			"completed": function(field) {
 				switch(field) {
 					case "name":
 						if(this.models[this.state.current] && !this.models[this.state.current].id) {
@@ -517,7 +527,7 @@
 						Vue.delete(this.state.building[this.state.current], keys[x]);
 					}
 				}
-				
+
 				if(this.$route.query.values) {
 					Vue.set(this, "rawValue", this.$route.query.values);
 				} else {
@@ -542,7 +552,7 @@
 					value,
 					keys,
 					x;
-				
+
 				if(this.state.current === "image" && input && input.length && input[0].files.length) {
 //					console.warn("Set Image");
 					if(this.state.building[this.state.current]) {
@@ -558,7 +568,7 @@
 							}
 						}
 					}
-					
+
 					value = {};
 					this.encodeFile(input[0].files[0])
 					.then((result) => {
@@ -576,7 +586,7 @@
 				var parsed,
 					keys,
 					x;
-				
+
 				if(this.state.advanced_editor) {
 					try {
 						parsed = JSON.parse(this.rawValue);
@@ -584,7 +594,7 @@
 						for(x=0; x<keys.length; x++) {
 							Vue.delete(this.state.building[this.state.current], keys[x]);
 						}
-						
+
 						keys = Object.keys(parsed);
 						for(x=0; x<keys.length; x++) {
 							Vue.set(this.state.building[this.state.current], keys[x], parsed[keys[x]]);
@@ -609,13 +619,13 @@
 				var result = {},
 					keys = Object.keys(source),
 					x;
-				
+
 				for(x=0; x<keys.length; x++) {
 					if(keys[x] && keys[x][0] !== "_") {
 						result[keys[x]] = source[keys[x]];
 					}
 				}
-				
+
 				return result;
 			},
 			"saveEvent": function(event) {
@@ -634,7 +644,7 @@
 			"modify": function() {
 				var buffer;
 //				console.warn("modify: ", event);
-				
+
 				if(this.isValid) {
 //					console.log("valid");
 					if(this.state.building[this.state.current] instanceof Array || (this.state.building[this.state.current]["0"] && this.state.building[this.state.current].length)) {

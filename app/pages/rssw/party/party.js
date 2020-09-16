@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSSWPartyPage
  * @constructor
  * @module Pages
@@ -13,10 +13,10 @@ rsSystem.component("RSSWPartyPage", {
 	],
 	"data": function() {
 		var data = {};
-		
+
 		data.linked = null;
 		data.parties = [];
-		
+
 		return data;
 	},
 	"computed": {
@@ -38,7 +38,7 @@ rsSystem.component("RSSWPartyPage", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
+
 		if(this.record && !this.linked) {
 			this.record.$on("modified", this.update);
 			Vue.set(this, "linked", this.record);
@@ -48,18 +48,17 @@ rsSystem.component("RSSWPartyPage", {
 	},
 	"methods": {
 		/**
-		 * 
+		 *
 		 * @method update
 		 */
 		"update": function(event) {
-			console.warn("Party Updated: ", event);
 			var party,
 				x;
-			
+
 			for(x=0; x<this.parties.length; x++) {
 				this.parties[x].$off("modified", this.update);
 			}
-			
+
 			this.parties.splice(0);
 			for(x=0; x<this.universe.indexes.party.listing.length; x++) {
 				party = this.universe.indexes.party.listing[x];
@@ -73,7 +72,7 @@ rsSystem.component("RSSWPartyPage", {
 		for(var x=0; x<this.parties.length; x++) {
 			this.parties[x].$off("modified", this.update);
 		}
-		
+
 		if(this.linked) {
 			this.linked.$off("modified", this.update);
 		}

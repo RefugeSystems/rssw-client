@@ -1,8 +1,14 @@
 <div class="rs-page page-home">
 	<div class="login prompt" v-if="state === 0">
 		<div class="boxed">
-			<div class="message" v-if="message">{{message}}</div>
 			<rs-connect v-on:connect="connect"></rs-connect>
+			<div class="message-content system-component" v-if="message">
+				<div class="message-heading" v-if="messageHeading">
+					<span :class="messageIcon" v-if="messageIcon"></span>
+					<span>{{messageHeading}}</span>
+				</div>
+				<div class="message-text">{{message}}</div>
+			</div>
 		</div>
 	</div>
 	<div class="login waiting" v-if="0 < state && state < 10">

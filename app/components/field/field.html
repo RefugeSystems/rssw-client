@@ -12,46 +12,46 @@
 			{{field.error | JSON}}
 		</p>
 	</span>
-	
+
 	<span v-if="field.type === 'label'">
 		<!-- Do Nothing Here -->
 	</span>
-	
+
 	<select :id="fid" v-if="field.type === 'select' && field.options && field.options.length" v-model="root[field.property]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
 		<option v-if="root[field.property] === 'undefined' && !field.persistUnset" :value="root[field.property]">{{field.unset}}</option>
 		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
-		
+
 		<option v-if="field.raw" v-for="option in field.options" :value="option">{{option}}</option>
 		<option v-if="!field.raw && !field.optionValue && !field.optionLabel" v-for="option in field.options" :value="option.value" :title="option[field.optionDescription] || option.description || ''">{{option.label}}</option>
 		<option v-if="!field.raw && field.optionValue && field.optionLabel" v-for="option in field.options" :value="option[field.optionValue]" :title="option[field.optionDescription] || option.description || ''">{{option[field.optionLabel]}}</option>
 	</select>
-	
+
 	<span v-if="field.type === 'select' && (!field.options || !field.options.length)">
 		<span class="fas fa-spinner fa-pulse"></span>
 		<span>Loading...</span>
 	</span>
-	
+
 	<button :id="fid" v-if="field.type === 'checkbox'" :disabled="field.disable?field.disable():false" v-on:click="set(!root[field.property])" class="flat">
 		<span class="far" :class="root[field.property]?'fa-check-square':'fa-square'"></span>
 	</button>
-	
-	<input :id="fid" :type="field.type" v-if="field.type === 'number'" v-model.lazy.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
-	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.lazy.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
-	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" />
 
-	<!-- <input :id="fid" type="text" v-if="field.type === 'text'" v-model.lazy="root[field.property]" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:blur="blurring()" /> -->
-	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="buffer" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="bufferChanged()" v-on:blur="blurring()" />
-	
-	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" :disabled="field.disable?field.disable():false" v-on:change.stop="processDate()" v-on:blur="blurring()" />
+	<input :id="fid" :type="field.type" v-if="field.type === 'number'" v-model.lazy.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.lazy.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+
+	<input :id="fid" type="password" v-if="field.type === 'password'" v-model="buffer" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="buffer" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+
+	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" :disabled="field.disable?field.disable():false" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" />
 	<span class="indicator" v-if="field.type === 'file'">
 		<span class="rs-light-blue">[</span>
 		<span class="" v-if="root[field.property]">Present</span>
 		<span class="" v-if="!root[field.property]">Empty</span>
 		<span class="rs-light-blue">]</span>
 	</span>
-	
+
 	<span v-if="field.suffix" class="suffix">{{field.suffix}}</span>
-	
+
 	<span v-if="field.computed" class="computed" :class="field.computed.class?field.computed.class():{}">{{field.computed.method()}}</span>
 	<span v-if="field.computed && field.computed.suffix" class="computed-suffix">{{field.computed.suffix}}</span>
 	<button v-if="field.info" class="info fas fa-info-circle" v-on:click.stop="field.info(root[field.property])"></button>
@@ -60,7 +60,7 @@
 
 	<slot name="info">
 	</slot>
-	
+
 	<table :id="fid" v-if="field.type === 'grid-select'" class="grid-select">
 		<tr>
 			<td></td>
@@ -76,16 +76,16 @@
 			</td>
 		</tr>
 	</table>
-	
+
 	<div v-if="field.type === 'file'" class="file-select">
-		<input :id="fid" type="file" :accept="field.accept || '*'" v-on:change="selectFile($event)" v-on:blur="blurring()" />
+		<input :id="fid" type="file" :accept="field.accept || '*'" v-on:change="selectFile($event)" v-on:focus="focusing()" v-on:blur="blurring()" />
 	</div>
-	
+
 	<div v-if="field.type === 'textarea'" class="textarea">
-		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.placeholder" v-on:input="bufferChanged()" v-on:blur="blurring()">
+		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.placeholder" v-on:input="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()">
 		</textarea>
 	</div>
-	
+
 	<div v-if="field.type === 'multireference' && field.source_index" class="multireference">
 		<div class="referenced" v-for="(reference, $index) in root[field.property]">
 			<span class="reference-display">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:"Missing:" + reference}}</span>
@@ -103,7 +103,7 @@
 		<span class="fas fa-exclamation-triangle"></span>
 		<span>No Source Index</span>
 	</div>
-	
+
 	<div class="error" v-if="field.error">
 		<span>Error:</span>
 		<p>{{field.error.message || field.error.text || field.error}}</p>

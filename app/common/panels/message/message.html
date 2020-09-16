@@ -1,12 +1,12 @@
 <div class="system-component rs-component message-panel">
-	<div class="message-container flow-h centered" v-for="entry in messages">
+	<div class="message-container flex h center" v-for="entry in messages">
 		<div class="control visibility">
 			<button class="interactability" v-on:click="dismissMessage(entry)">
 				X
 			</button>
 		</div>
 		<div class="iconography visibility">
-			<span class="fas fa-exclamation-triangle"></span>
+			<span class="fas fa-exclamation-triangle" :class="entry.error?'rs-light-red':'rs-yellow'"></span>
 		</div>
 		<div class="message visibility">
 			<p>{{entry.message}}</p>

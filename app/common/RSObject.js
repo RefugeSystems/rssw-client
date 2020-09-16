@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @class RSObject
  * @extends EventEmitter
  * @constructor
@@ -32,25 +32,25 @@ class RSObject extends EventEmitter {
 				console.log("Recycling: ", this);
 			}
 		};
-		
+
 		this._registered._marked = Date.now();
 		var keys = Object.keys(details),
 			x;
-		
+
 //		console.log("Key set for " + details.id + ": ", keys);
 		for(x=0; x<keys.length; x++) {
 			if(keys[x] !== "name" && keys[x] !== "description" && keys[x] !== "echo") {
 				this._coreData[keys[x]] = details[keys[x]];
 			}
 		}
-		
+
 //		this.name = details.name;
 //		console.log("Final Core Set for " + details.id + ": ", _p(this._coreData), _p(details));
 		this._coreData.description = details.description;
 		this._coreData.name = details.name;
 		this._modifiers = [];
 		this.id = details.id;
-		
+
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
 				if(event && event.id === this.id) {
@@ -59,13 +59,30 @@ class RSObject extends EventEmitter {
 					}
 					this.loadDelta(event.modification);
 				}
+				this.$emit("model:modified:complete", this);
+			});
+			this.universe.$on("model:added", (event) => {
+				if(event && event.id === this.id) {
+					if(this.debug || this.universe.debug) {
+						console.log("Object Processing Modification: ", this, event);
+					}
+					this.loadAddDelta(event.modification);
+				}
+			});
+			this.universe.$on("model:subtract", (event) => {
+				if(event && event.id === this.id) {
+					if(this.debug || this.universe.debug) {
+						console.log("Object Processing Modification: ", this, event);
+					}
+					this.loadSubDelta(event.modification);
+				}
 			});
 		}
 	}
-	
+
 	get name() {
 		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
-		
+
 		if(this.hidden) {
 			if(this.hiddenName) {
 				return this.hiddenName;
@@ -84,10 +101,10 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
 	get description() {
 		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
-		
+
 		if(this.hidden) {
 			if(this.hiddenDescription) {
 				return this.hiddenDescription;
@@ -106,9 +123,9 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method commit
 	 * @param {Object} change
 	 */
@@ -117,7 +134,7 @@ class RSObject extends EventEmitter {
 		change.id = this.id;
 		this.universe.send("modify:" + this._type, change);
 	}
-	
+
 	commitAdditions(change, set) {
 		set = set || {};
 		set._type = this._type;
@@ -125,7 +142,7 @@ class RSObject extends EventEmitter {
 		set.delta = change;
 		this.universe.send("modify:" + this._type + ":detail:additive", set);
 	}
-	
+
 	commitSubtractions(change, set) {
 		set = set || {};
 		set._type = this._type;
@@ -133,7 +150,7 @@ class RSObject extends EventEmitter {
 		set.delta = change;
 		this.universe.send("modify:" + this._type + ":detail:subtractive", set);
 	}
-	
+
 	/**
 	 * Set the learned property and add the knowledge entities.
 	 * @method learnKnowledge
@@ -149,7 +166,7 @@ class RSObject extends EventEmitter {
 		if(!this._shadow.knowledge) {
 			this._shadow.knowledge = [];
 		}
-		
+
 		for(x=0; x<knowledge.length; x++) {
 			if(!this._shadow.learned[knowledge[x]]) {
 				this._shadow.learned[knowledge[x]] = Date.now();
@@ -157,7 +174,7 @@ class RSObject extends EventEmitter {
 				updates = true;
 			}
 		}
-		
+
 		if(updates) {
 			this.commit({
 				"knowledge": this._shadow.knowledge,
@@ -165,30 +182,30 @@ class RSObject extends EventEmitter {
 			});
 		}
 	}
-	
+
 	learnOfObjects(objects) {
 		var x;
 
 		if(!this._shadow.learned) {
 			this._shadow.learned = {};
 		}
-		
+
 		for(x=0; x<objects.length; x++) {
 			if(!this._shadow.learned[objects[x]]) {
 				this._shadow.learned[objects[x]] = Date.now();
 			}
 		}
-		
+
 		this.commitAdditions({
 			"known_objects": objects
 		},{
 			"learned": this._shadow.learned
 		});
 	}
-	
+
 	unlearnOfObjects(objects) {
 		var x;
-		
+
 		if(!this._shadow.learned) {
 			this._shadow.learned = {};
 		}
@@ -198,14 +215,14 @@ class RSObject extends EventEmitter {
 				this._shadow.learned[objects[x]] = Date.now();
 			}
 		}
-		
+
 		this.commitSubtractions({
 			"known_objects": objects
 		}, {
 			"learned": this._shadow.learned
 		});
 	}
-	
+
 	/**
 	 * Clears the learned property and removes the knowledge entities.
 	 * @method forgetKnowledge
@@ -215,10 +232,10 @@ class RSObject extends EventEmitter {
 		if(!this.learned || !this.knowledge) {
 			return false;
 		}
-		
+
 		var updates,
 			x;
-		
+
 		for(x=0; x<knowledge.length; x++) {
 			if(this._shadow.learned[knowledge[x]]) {
 				delete(this._shadow.learned[knowledge[x]]);
@@ -226,7 +243,7 @@ class RSObject extends EventEmitter {
 				this._shadow.knowledge.splice(updates, 1);
 			}
 		}
-		
+
 		if(updates) {
 			this.commit({
 				"knowledge": this._shadow.knowledge,
@@ -236,7 +253,7 @@ class RSObject extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method toJSON
 	 * @return {Object}
 	 */
@@ -245,7 +262,7 @@ class RSObject extends EventEmitter {
 			json = {},
 			value,
 			x;
-		
+
 		for(x=0; x<keys.length; x++) {
 			// Fields matching ^[_\$\#] are for data handling and should not be considered in stringification and other conversions
 			// Universe field is reserved property and shouldn't come out either
@@ -272,10 +289,10 @@ class RSObject extends EventEmitter {
 
 		json._class = this._class;
 		json._type = this._type;
-		
+
 		return json;
 	}
-	
+
 	cleanCurrentData() {
 		var keys = Object.keys(this);
 		for(var x=0; x<keys.length; x++) {
@@ -284,22 +301,22 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
 	inSlot(equipment) {
 		if(this.universe.debug) {
 			console.debug("Check Slot[" + this.id + "]: ", equipment);
 		}
-		
+
 		if(!equipment || !equipment.item) {
 			if(this.universe.debug) {
 				console.debug("No Equipment Slot[" + this.id + "]");
 			}
 			return false;
 		}
-		
+
 		var keys = Object.keys(equipment.item),
 			x;
-		
+
 		for(x=0; x<keys.length; x++) {
 			if(this.universe.debug) {
 				console.debug("Check Slot[" + keys[x] + " for " + this.id + "]");
@@ -308,14 +325,14 @@ class RSObject extends EventEmitter {
 				return true;
 			}
 		}
-		
+
 		if(this.universe.debug) {
 			console.debug("Failed Slot Check[" + this.id + "]");
 		}
-		
+
 		return false;
 	}
-	
+
 	unregisterListeners() {
 //		rsSystem.log.debug("RSObject[" + this.id + "] Cleaning Reference Listeners");
 		var keys,
@@ -333,13 +350,13 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
 	dependencyFired(event) {
 		this.recalculateProperties();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method consumeSlotsFor
 	 * @param {RSObject} record The record to check.
 	 * @param {String} id The ID of the slot that is to be used.
@@ -351,24 +368,24 @@ class RSObject extends EventEmitter {
 		if(!record || !id || !slots || !slots.length) {
 			return false;
 		}
-		
+
 		var indexes = [],
 			index = -2,
 			need;
-		
+
 		if(record.slots_used > 1) {
 			need = record.slots_used;
 		} else {
 			need = 1;
 		}
-		
+
 		while(index !== -1 && indexes.length < need) {
 			index = slots.indexOf(id, index);
 			if(index !== -1) {
 				indexes.push(index);
 			}
 		}
-		
+
 		if(indexes.length === need) {
 			for()
 		} else {
@@ -376,9 +393,9 @@ class RSObject extends EventEmitter {
 		}
 		*/
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method recalculateProperties
 	 * @param {Object} [replacedProperties] Defaults to this._replacedProperties.
 	 */
@@ -392,20 +409,20 @@ class RSObject extends EventEmitter {
 		if(this.suppressed) {
 			return false;
 		}
-		
+
 		if(this.recalculatePrefetch) {
 			this.recalculatePrefetch();
 		}
-		
+
 		replacedReferences = replacedReferences || this._replacedReferences;
 		if(debug || this.debug || this.universe.debug) {
 			console.warn("replacedReferences: ",replacedReferences);
 		}
-		
+
 		if(60000 < Date.now() - this._registered._marked) {
 			this.unregisterListeners();
 		}
-		
+
 		// Establish Base
 		var selfReference = this,
 			references = [],
@@ -421,7 +438,7 @@ class RSObject extends EventEmitter {
 			x,
 			y,
 			z;
-		
+
 		keys = Object.keys(this._statContributions);
 		for(x=0; x<keys.length; x++) {
 			delete(this._statContributions[keys[x]]);
@@ -436,7 +453,7 @@ class RSObject extends EventEmitter {
 //		if(debug || this.debug || this.universe.debug) {
 //			console.log("Initial Base Data:\n > This: ", _p(this.equipped), _p(this._equipped), "\n > Core: ", _p(this._coreData), "\n > Base: ", _p(base));
 //		}
-		
+
 		keys = Object.keys(this._relatedErrors);
 		for(x=0; x<keys.length; x++) {
 			delete(this._relatedErrors[keys[x]]);
@@ -506,7 +523,7 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
-		
+
 		// Stop listening for changes to known modifiers and clear
 		for(x=0; x<this._modifiers.length; x++) {
 			if(debug) {
@@ -526,7 +543,7 @@ class RSObject extends EventEmitter {
 				this._listeningToParent = parent;
 				parent.$on("modified", this._listeningParent);
 			}
-			
+
 //			keys = Object.keys(parent);
 //			for(x=0; x<keys.length; x++) {
 //				if(keys[x][0] !== "_" && keys[x] !== "template" && keys[x] !== "universe" && !parent._statContributions[keys[x]]) {
@@ -557,7 +574,7 @@ class RSObject extends EventEmitter {
 //					}
 //				}
 //			}
-			
+
 			keys = Object.keys(parent._coreData);
 			for(x=0; x<keys.length; x++) {
 				if(keys[x][0] !== "_" && keys[x] !== "template" && keys[x] !== "universe") {
@@ -593,8 +610,8 @@ class RSObject extends EventEmitter {
 					}
 				}
 			}
-			
-			
+
+
 		} else if(this._listeningToParent) {
 			this._listeningToParent.$off("modified", this._listeningParent);
 			this._listeningParent = null;
@@ -607,7 +624,7 @@ class RSObject extends EventEmitter {
 //			console.log("Base Overrides: ", base._overrides);
 //			console.log("References: ", references);
 //		}
-		
+
 		// Establish Base from Core Data
 		keys = Object.keys(this._coreData);
 		for(x=0; x<keys.length; x++) {
@@ -640,7 +657,7 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
-		
+
 		if(base.name && (base.label === undefined || base.label === null)) {
 			base.label = base.name;
 		}
@@ -652,7 +669,7 @@ class RSObject extends EventEmitter {
 //			console.log("Base Overrides: ", base._overrides);
 //			console.log("References: ", references);
 //		}
-		
+
 		if(references  && references.length) {
 			buffer = {};
 			for(x=0; x<references.length; x++) {
@@ -676,7 +693,7 @@ class RSObject extends EventEmitter {
 //			console.warn("Reference Report");
 //			console.log("Base: ", _p(base));
 //		}
-		
+
 		if(base.modifierstats) {
 //			base._mods.push.apply(base._mods, base.modifierstats);
 			base._mods = base._mods.concat(base.modifierstats);
@@ -701,7 +718,7 @@ class RSObject extends EventEmitter {
 		}
 
 		// TODO: Listen for changes on references
-		
+
 		// Reform Search String
 		if(this.universe.indexes.player.index[this.universe.user.id].master) {
 			// Confusing for some searches like the "tion cluster" in location, but additional search criteria fixes this and ID allows master to search
@@ -728,7 +745,7 @@ class RSObject extends EventEmitter {
 				this._search += this.universe.index.lookup[this.location].name.toLowerCase();
 			}
 		}
-		
+
 		if(this.universe.calculator) {
 			load = {};
 			for(x=0; x<base._calculated.length; x++) {
@@ -744,7 +761,7 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
-		
+
 		//console.log("Final: ", base);
 		keys = Object.keys(this);
 		for(x=0; x<keys.length; x++) {
@@ -758,30 +775,30 @@ class RSObject extends EventEmitter {
 				this[keys[x]] = base[keys[x]];
 			}
 		}
-		
+
 //		if(debug || this.debug || this.universe.debug) {
 //			console.log("Assembled: ", _p(this), _p(base));
 //		}
-		
+
 		this.rebuildKnown();
-		
+
 		if(this.recalculateHook) {
 			this.recalculateHook();
 		}
-		
+
 //		try {
 //			this._mods.splice(0);
 //			this._mods.push.apply(base._mods);
 //		} catch(e) {
 //		}
 		this._mods = base._mods;
-		
+
 //		if(debug || this.debug || this.universe.debug) {
 //			console.log("Recalculated: " + this.id + "\n > Base: ", _p(base), "\n > This: ", _p(this));
 //		}
-		
+
 		/**
-		 * 
+		 *
 		 * @event modified
 		 * @param {RSObject} source The object that was modified.
 		 */
@@ -789,7 +806,7 @@ class RSObject extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method loadNounReferenceModifications
 	 * @param {String} noun
 	 * @param {Object} base
@@ -800,7 +817,7 @@ class RSObject extends EventEmitter {
 			var reference,
 				buffer,
 				x;
-			
+
 			if(base && base._overrides && base._overrides[noun]) {
 				reference = base._overrides[noun];
 			} else if(base && base._replacedReferences && base._replacedReferences[noun]) {
@@ -808,11 +825,11 @@ class RSObject extends EventEmitter {
 			} else {
 				reference = base[noun];
 			}
-			
+
 //			if(debug || this.debug || this.universe.debug) {
 //				console.log("Check Noun Load[" + noun + " -> " + this.id + "]: ", reference);
 //			}
-			
+
 			if(reference instanceof Array) {
 				for(x=0; x<reference.length; x++) {
 					if(reference[x] && (buffer = this.universe.nouns[noun][reference[x]._sourced || reference[x]])) {
@@ -880,7 +897,7 @@ class RSObject extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method performModifications
 	 * @param {Object} base
 	 * @return {Boolean} Whether the modification was performed or not.
@@ -892,25 +909,25 @@ class RSObject extends EventEmitter {
 //			}
 			return false;
 		}
-		
+
 		var buffer,
 			keys,
 			mod,
 			m,
 			x,
 			y;
-		
+
 //		if(this.debug || this.universe.debug) {
 //			console.error("Perform Mod[" + origin + "]: " + this.id);
 //		}
-		
+
 		for(x=0; this.condition && x < this.condition.length; x++) {
 			buffer = this.universe.index.lookup[this.condition[x]];
 			if(buffer && buffer.evaluate && !buffer.evaluate(base, this.id)) {
 				return false;
 			}
 		}
-		
+
 		/*
 		if(this.universe.index) {
 			for(x=0; x<rsSystem.listingNouns.length; x++) {
@@ -969,7 +986,7 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
-		
+
 		if(base._calculated) {
 			this._calculated = {};
 			for(x=0; x<base._calculated.length; x++) {
@@ -978,38 +995,156 @@ class RSObject extends EventEmitter {
 				}
 			}
 		}
-		
+
 //		if(this.debug || this.universe.debug) {
 //			console.log("RSObject Root Finished[" + this.id + "]: ", _p(base));
 //		}
-		
+
 		return true;
 	}
 
 	/**
-	 * 
+	 *
 	 * @method loadDelta
 	 * @param {Object} delta
 	 */
 	loadDelta(delta) {
-		this._lastDelta = _p(delta);
-		
+		if(this.debug || rsSystem.debug) {
+			this._lastDelta = _p(delta);
+		}
+
 		var keys = Object.keys(delta),
 			x;
-		
+
 		for(x=0; x<keys.length; x++) {
-			if(typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
+			if(keys[x] !== "delta" && keys[x] !== "_delta" && typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
 				this._coreData[keys[x]] = delta[keys[x]];
 			}
 		}
-		
+
 		if(this.loadDeltaHook) {
 			this.loadDeltaHook(delta);
 		}
-		
+
 		this.recalculateProperties();
 	}
-	
+
+	/**
+	 *
+	 * @method loadAddDelta
+	 * @param {Object} data
+	 */
+	loadAddDelta(data) {
+		if(this.debug || rsSystem.debug) {
+			this._lastDelta = _p(delta);
+		}
+
+		var delta = data.delta || data._delta,
+			keys,
+			x;
+
+		if(delta) {
+			keys = Object.keys(delta);
+			for(x=0; x<keys.length; x++) {
+				this._coreData[keys[x]] = this.processAsAdditive(this._coreData[keys[x]], delta[keys[x]]);
+			}
+		}
+
+		this.loadDelta(data);
+	}
+
+	/**
+	 *
+	 * @method loadSubDelta
+	 * @param {Object} data
+	 */
+	loadSubDelta(data) {
+		if(this.debug || rsSystem.debug) {
+			this._lastDelta = _p(delta);
+		}
+
+		var delta = data.delta || data._delta,
+			keys,
+			x;
+
+		if(delta) {
+			keys = Object.keys(delta);
+			for(x=0; x<keys.length; x++) {
+				this._coreData[keys[x]] = this.processAsSubtractive(this._coreData[keys[x]], delta[keys[x]]);
+			}
+		}
+
+		this.loadDelta(data);
+	}
+
+	/**
+	 *
+	 * @method processAsAdditive
+	 * @param {Number | Array} a Value from the referenced record
+	 * @param {Number | Array | Object} b Value coming in on which to update
+	 * @return {Number | Array} The resulting value from the subtraction process.
+	 */
+	processAsAdditive(a, b) {
+		if(!a) {
+			if(typeof(b) === "number") {
+				return parseFloat(b.toFixed(2));
+			}
+			return b;
+		}
+
+		if(typeof(a) === "number") {
+			return parseFloat((a + (b || 0)).toFixed(2));
+		} else if(a instanceof Array) {
+			if(b instanceof Array) {
+				a.push.apply(a, b);
+			} else {
+				a.push(b);
+			}
+			return a;
+		} else if(typeof(a) === "string") {
+			return a + b;
+		}
+	}
+
+	/**
+	 *
+	 * @method processAsSubtractive
+	 * @param {Number | Array} a Value from the referenced record
+	 * @param {Number | Array | Object} b Value coming in on which to update
+	 * @return {Number | Array} The resulting value from the subtraction process.
+	 */
+	processAsSubtractive(a, b) {
+		var index,
+			x;
+
+		if(typeof(a) === "number") {
+			return parseFloat((a - b).toFixed(2));
+		} else if(a instanceof Array) {
+			if(b instanceof Array) {
+				for(x=0; x<b.length; x++) {
+					index = a.indexOf(b[x]);
+					if(index !== -1) {
+						a.splice(index, 1);
+					}
+				}
+			} else {
+				index = a.indexOf(b);
+				if(index !== -1) {
+					a.splice(index, 1);
+				}
+			}
+			return a;
+		} else if(typeof(a) === "string" && typeof(b) === "string") {
+			index = a.indexOf(b);
+			if(index !== -1) {
+				a = a.substring(0, index) + a.substring(index + b.length);
+			}
+			return a;
+		} else if(!a && typeof(b) === "number") {
+			return -1 * parseFloat(b.toFixed(2));
+		}
+	}
+
 	/**
 	 * Rebuilds the _known property to track what things in the universe
 	 * this object is aware of. This can be used as clarivoyance for what
@@ -1022,7 +1157,7 @@ class RSObject extends EventEmitter {
 			key,
 			x,
 			y;
-		
+
 		for(x=0; x<this._knownKeys.length; x++) {
 			delete(this._known[this._knownKeys[x]]);
 		}
@@ -1037,7 +1172,7 @@ class RSObject extends EventEmitter {
 				this._knownKeys.push(this.known_objects[x]);
 			}
 		}
-		
+
 		if(this.knowledge && this.knowledge.length) {
 			for(x=0; x<this.knowledge.length; x++) {
 				knowledge = this.universe.indexes.knowledge.index[this.knowledge[x]];
@@ -1054,12 +1189,12 @@ class RSObject extends EventEmitter {
 			}
 		}
 	}
-	
+
 	knowsOf(thing, threshold, knowledge) {
 		if(knowledge && (!this.knowledge || this.knowledge.indexOf(knowledge.id || knowledge) === -1)) {
 			return false;
 		}
-		
+
 		if(thing) {
 			if(typeof(thing) === "object") {
 				return this._known[thing.id] && this._known[thing.id].length >= (thing.known_threshold || threshold || 1);
@@ -1076,7 +1211,7 @@ class RSObject extends EventEmitter {
 }
 
 /**
- * 
+ *
  * @method consumeSlotsFor
  * @param {RSObject} record The record to check.
  * @param {String} id The ID of the slot that is to be used.
@@ -1088,25 +1223,25 @@ RSObject.consumeSlotsFor = function(record, id, slots) {
 	}
 
 //	console.warn("Start Slot Check: " + record.id, record, id, slots);
-	
+
 	var indexes = [],
 		index = -1,
 		need;
-	
+
 	if(record.slots_used > 1) {
 		need = record.slots_used;
 	} else {
 		need = 1;
 	}
-	
+
 	while((index = slots.indexOf(id, index + 1)) !== -1 && indexes.length < need) {
 		if(index !== -1) {
 			indexes.push(index);
 		}
 	}
-	
+
 //	console.warn("Check Slots[" + need + "]: ", record, id, slots, indexes);
-	
+
 	if(indexes.length === need) {
 		for(index=indexes.length-1; 0 <= index; index--) {
 			slots.splice(indexes[index], 1);

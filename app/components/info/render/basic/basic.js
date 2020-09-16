@@ -1,13 +1,13 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsObjectInfoBasic
  * @constructor
  * @module Components
  */
 (function() {
-	
+
 	var invisibleKeys = {},
 		referenceKeys = {};
 
@@ -21,7 +21,7 @@
 	invisibleKeys.randomize_name_prefix = true;
 	invisibleKeys.randomize_name_suffix = true;
 	invisibleKeys.randomize_name = true;
-	
+
 	invisibleKeys.information_renderer = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.locked_attunement = true;
@@ -51,6 +51,7 @@
 	invisibleKeys.singleton = true;
 	invisibleKeys.equipped = true;
 	invisibleKeys.obscured = true;
+	invisibleKeys.passcode = true;
 	invisibleKeys.property = true;
 	invisibleKeys.universe = true;
 	invisibleKeys.playable = true;
@@ -82,7 +83,7 @@
 	invisibleKeys.is_hostile= true;
 	invisibleKeys.is_public = true;
 	invisibleKeys.is_shop = true;
-	
+
 	invisibleKeys.label_shadow_color = true;
 	invisibleKeys.label_shadow_blur = true;
 	invisibleKeys.label_shadow = true;
@@ -107,14 +108,14 @@
 	invisibleKeys.values = true;
 	invisibleKeys.color = true;
 	invisibleKeys.path = true;
-	
+
 	invisibleKeys.coordinates = true;
 	invisibleKeys.shown_at = true;
 	invisibleKeys.profile = true;
 	invisibleKeys.showing = true;
 	invisibleKeys.viewed = true;
 	invisibleKeys.map = true;
-	
+
 	referenceKeys.requires_ability = "ability";
 	referenceKeys.requires_knowledge = "knowledge";
 	referenceKeys.ship_active_abilities = "ability";
@@ -122,7 +123,7 @@
 	referenceKeys.slot_usage = "slot";
 	referenceKeys.involved = "entity";
 	referenceKeys.members = "entity";
-	
+
 	var prettifyValues = {};
 	var prettifyNames = {};
 	var knowledgeLink = {};
@@ -139,7 +140,7 @@
 			return value;
 		}
 	};
-	
+
 	var byName = function(a, b) {
 		a = (a.name || "").toLowerCase();
 		b = (b.name || "").toLowerCase();
@@ -154,7 +155,7 @@
 
 	knowledgeLink.critical = "knowledge:combat:critical";
 	knowledgeLink.range = "knowledge:combat:rangebands";
-	
+
 	prettifyValues.category = function(property, value, record, universe) {
 		var index;
 		if(value && (index = value.indexOf(":")) !== -1) {
@@ -162,21 +163,21 @@
 		}
 		return value;
 	};
-	
+
 	prettifyValues.date = function(property, value) {
 		value = new Date(value);
 		return value.toDateString();
 	};
-	
+
 	prettifyValues.related = function(property, value, record, universe) {
 		return "to " + (value?value.length:0) + " records";
 	};
-	
+
 	prettifyValues.range = function(property, value, record, universe) {
 		if(record.is_attachment) {
 			return value;
 		}
-		
+
 		switch(value) {
 			case 1: return "Engaged (1)";
 			case 2: return "Short (2)";
@@ -184,43 +185,43 @@
 			case 4: return "Long (4)";
 			case 5: return "Extreme (5)";
 		}
-		
+
 		return value;
 	};
-	
+
 	prettifyValues.activation = function(property, value, record, universe) {
 		if(value) {
 			return value.capitalize();
 		}
 		return "None";
 	};
-	
+
 	prettifyValues.archetypes = function(property, value, record, universe) {
-		
+
 	};
-	
+
 	prettifyValues.dependency = function(property, value, record, universe) {
-		
+
 	};
-	
+
 	prettifyValues.piloting = function(property, value, record, universe) {
 		if(universe.indexes.entity.index[value]) {
 			return universe.indexes.entity.index[value].name;
 		}
 		return value;
 	};
-	
+
 	prettifyValues.editor = function(property, value, record, universe) {
 		if(universe.indexes.entity.index[value]) {
 			return universe.indexes.entity.index[value].name;
 		}
 		return value;
 	};
-	
+
 	prettifyValues.allegiance = function(property, value, record, universe) {
 		return "<span class=\"" + value + "\"></span>";
 	};
-	
+
 	prettifyValues.inside = function(property, value, record, universe) {
 		var entity = universe.indexes.entity.lookup[value];
 		if(entity) {
@@ -228,7 +229,7 @@
 		}
 		return "Unknown[" + value + "]";
 	};
-	
+
 	prettifyValues.accepts = function(property, value, record, universe) {
 		if(value) {
 			switch(value) {
@@ -240,20 +241,20 @@
 		}
 		return value;
 	};
-	
+
 	prettifyValues.skill_check = function(property, value, record, universe) {
 		if(!value || !universe.indexes.skill || !universe.indexes.skill.lookup) {
 			return value;
 		}
-		
+
 		var buffer = universe.indexes.skill.lookup[value] || universe.indexes.skill.lookup["skill:" + value];
 		if(!buffer) {
 			return value;
 		}
-		
+
 		return buffer.name;
 	};
-	
+
 	prettifyValues.indicators = function(property, value, record, universe) {
 		if(value && value.length) {
 			if(value.length < 10) {
@@ -266,12 +267,12 @@
 		}
 		return "";
 	};
-	
-	var prettifyPropertyPattern = /_([a-z])/ig, 
+
+	var prettifyPropertyPattern = /_([a-z])/ig,
 		prettifyPropertyName = function(full, match) {
 			return " " + match.capitalize();
 		};
-	
+
 	rsSystem.component("rsObjectInfoBasic", {
 		"inherit": true,
 		"mixins": [
@@ -309,9 +310,9 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.referenceKeys = referenceKeys;
-			
+
 			data.collapsed = true;
 			data.relatedError = null;
 			data.calculatedEncumberance = 0;
@@ -333,36 +334,36 @@
 			data.copyToEntity = "";
 			data.partyToAdd = "";
 			data.copyToHere = "";
-			
+
 			data.transfer_targets = [];
 			data.transfer_target = "";
-			
+
 			data.attach_targets = [];
 			data.attach_target = "";
-			
+
 			data.locations = [];
-			
+
 			data.entities = [];
 			data.hiddenEntities = [];
-			
+
 			data.movableEntities = [];
 			data.movingEntity = "";
-			
+
 			data.availableSlots = [];
 			data.equipToSlot = "";
-			
+
 			data.partiesPresent = [];
 			data.parties = [];
 			data.entityToMove = "";
 			data.partyToMove = "";
-			
+
 			data.activeEvents = [];
-			
+
 			data.equipped = [];
-			
+
 			data.relatedKnowledge = [];
 			data.keys = [];
-			
+
 			return data;
 		},
 		"watch": {
@@ -407,12 +408,12 @@
 						text = document.selection.toString();
 						document.selection.empty();
 					}
-					
+
 					if(text) {
 						rsSystem.EventBus.$emit("copied-id", text);
 						this.$emit("copying", text);
 					}
-					
+
 					setTimeout(function() {
 						el.css({"background-color": "transparent"});
 					}, 5000);
@@ -431,16 +432,16 @@
 								(!this.record.requires_knowledge || !this.record.requires_knowledge.length || this.hasMapped("knowledge", this.record.requires_knowledge, this.record.dependency_type)) &&
 								(!this.record.archetypes || !this.record.archetypes.length || this.hasMapped("archetype", this.record.archetypes));
 				}
-				
+
 				return false;
 			},
 			"classByXP": function(cost) {
 				var x;
-				
+
 				if(this.base && this.base.xp && this.base.xp >= cost) {
 					return "meets-requirements";
 				}
-				
+
 				if(this.record.archetypes && this.record.archetypes.length) {
 					if(!this.base.archetype) {
 						return "requirements";
@@ -451,13 +452,13 @@
 						}
 					}
 				}
-				
+
 				return "requirements";
 			},
 			"classByRequirements": function() {
 				var buffer,
 					x;
-				
+
 				if(this.base) {
 					if(this.base.ability) {
 						for(x=0; x<this.base.ability.length; x++) {
@@ -484,7 +485,7 @@
 						}
 					}
 				}
-				
+
 				return "meets-requirements";
 			},
 			"canForgetAbility": function() {
@@ -504,11 +505,11 @@
 						}
 					}
 				}
-				
+
 				if(meets === needs.length) {
 					return true;
 				}
-				
+
 				return false;
 			},
 			"canLearnAbility": function() {
@@ -523,7 +524,7 @@
 					var cost = parseInt(this.record.xp_cost) || 0,
 						abilities,
 						index;
-					
+
 					if(this.base && this.classByXP(cost) === "meets-requirements") {
 						abilities = this.base.ability || [];
 						index = abilities.indexOf(this.record.id);
@@ -542,7 +543,7 @@
 					var cost = parseInt(this.record.xp_cost) || 0,
 						abilities,
 						index;
-					
+
 					if(this.base && this.classByRequirements() === "meets-requirements") {
 						abilities = this.base.ability || [];
 						index = abilities.indexOf(this.record.id);
@@ -560,11 +561,11 @@
 			"canTransfer": function() {
 				var hold,
 					x;
-				
+
 				if(this.record.untradable) {
 					return false;
 				}
-				
+
 				for(x=0; this.base && this.base.item && x<this.base.item.length; x++) {
 					hold = this.universe.indexes.item.index[this.base.item[x]];
 					if(hold && hold.item &&  hold.item.indexOf(this.record.id) !== -1) {
@@ -573,7 +574,7 @@
 						console.warn("Invalid Item? " + this.base.item[x], hold);
 					}
 				}
-				
+
 				return this.base && ((this.base.item && this.base.item.indexOf(this.record.id) !== -1)
 						|| (this.base.inventory && this.base.inventory.indexOf(this.record.id) !== -1));
 			},
@@ -698,7 +699,7 @@
 							return this.record._prettifyName[property];
 						}
 				}
-				
+
 				if(prettifyNames[property]) {
 					switch(typeof(prettifyNames[property])) {
 						case "string":
@@ -713,7 +714,7 @@
 			"prettifyPropertyValue": function(property, value, record, universe) {
 				var suffix = "",
 					buffer;
-				
+
 				if(this.record._calculated && this.record._calculated[property]) {
 					buffer = this.universe.calculateExpression(value, this.record, this.base, this.target);
 //					console.warn("Display: ", property, value, this.universe.calculateExpression(value, this.record, this.base, this.target));
@@ -722,7 +723,7 @@
 						value = buffer;
 					}
 				}
-				
+
 				switch(typeof(this.record._prettifyValue)) {
 					case "function":
 						value = this.record._prettifyValue(property, value, record, universe || this.universe);
@@ -733,7 +734,7 @@
 						}
 						break;
 				}
-				
+
 				if(prettifyValues[property]) {
 					switch(typeof(prettifyValues[property])) {
 						case "string":
@@ -744,20 +745,20 @@
 							break;
 					}
 				}
-				
+
 				if(value instanceof Array) {
-					
+
 				} else {
 					switch(typeof(value)) {
 						case "object":
 							value = (value.hidden_name || value.name || value.id || value.description);
 						default:
 							if(this.universe.indexes[property]) {
-								
+
 							}
 					}
 				}
-				
+
 				return value + suffix;
 			},
 			"copyEntityHere": function(id) {
@@ -765,10 +766,10 @@
 				Vue.set(this, "copyToHere", "");
 			},
 			"prettifyReferenceValue": function(reference, property, value) {
-				
+
 			},
 			"displayInfo": function(record) {
-				
+
 			},
 			"canDashboard": function() {
 				return (this.record._type === "entity" && this.record.classification && this.isOwner(this.record));
@@ -825,7 +826,7 @@
 				var update = {},
 					hold,
 					x;
-				
+
 				switch(this.record._type) {
 					case "entity":
 						update.inside = this.record.id;
@@ -833,7 +834,7 @@
 					default:
 						update[this.record._type] = this.record.id;
 				}
-				
+
 				party = this.universe.indexes.party.index[party];
 				if(party) {
 					party.commit(update);
@@ -844,14 +845,14 @@
 						}
 					}
 				}
-				
+
 				Vue.set(this, "partyToMove", "");
 			},
 			"moveEntityHere": function(entity) {
 				var update = {},
 					hold,
 					x;
-				
+
 				switch(this.record._type) {
 					case "entity":
 						update.inside = this.record.id;
@@ -860,7 +861,7 @@
 						update[this.record._type] = this.record.id;
 				}
 
-				
+
 				entity = this.universe.indexes.entity.index[entity];
 				if(entity) {
 					entity.commit(update);
@@ -872,11 +873,11 @@
 			"restockLocation": function() {
 				if(!this.restocking) {
 					Vue.set(this, "restocking", true);
-					
+
 					this.universe.send("location:restock", {
 						"id": this.record.id
 					});
-					
+
 					setTimeout(() => {
 						Vue.set(this, "restocking", false);
 					}, 1000);
@@ -922,7 +923,7 @@
 					x,
 					y,
 					z;
-				
+
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {
 //					console.log("Shifting");
@@ -937,7 +938,7 @@
 //					console.log("Setting");
 					Vue.set(this, "id", this.record.id);
 				}
-				
+
 				if(this.record.description) {
 					Vue.set(this, "description", this.rsshowdown(this.record.description, this.record, this.base, this.target));
 //					if(this.holdDescription !== this.record.description) {
@@ -948,7 +949,7 @@
 					Vue.set(this, "holdDescription", null);
 					Vue.set(this, "description", null);
 				}
-				
+
 				if(this.record.master_note) {
 					if(this.holdNote !== this.record.master_note) {
 						Vue.set(this, "holdNote", this.record.master_note);
@@ -958,25 +959,25 @@
 					Vue.set(this, "holdNote", null);
 					Vue.set(this, "note", null);
 				}
-				
+
 				if(this.record.image && this.universe.nouns.image[this.record.image]) {
 					Vue.set(this, "image", this.universe.nouns.image[this.record.image]);
 				} else {
 					Vue.set(this, "image", null);
 				}
-				
+
 				if(this.record.profile && this.universe.nouns.image[this.record.profile]) {
 					Vue.set(this, "profile", this.universe.nouns.image[this.record.profile]);
 				} else {
 					Vue.set(this, "profile", null);
 				}
-				
+
 				this.keys.splice(0);
 				this.keys.push.apply(this.keys, Object.keys(this.record));
 				if(this.record.name && this.record.label && this.record.name === this.record.label) {
 					this.keys.splice(this.keys.indexOf("label"), 1);
 				}
-				
+
 				this.partiesPresent.splice(0);
 				map = {};
 				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
@@ -1006,7 +1007,7 @@
 						}
 					}
 					this.transfer_targets.sort(byName);
-					
+
 					if(this.record.hardpoints || this.record.contents_max) {
 						for(x=0; this.base.item && x<this.base.item.length; x++) {
 							buffer = this.universe.indexes.item.lookup[this.base.item[x]];
@@ -1037,7 +1038,7 @@
 					}
 					this.attach_targets.sort(byName);
 				}
-				
+
 				buffer = this.player?this.player.id:null;
 				this.availableTemplates.entity.splice(0);
 				this.movableEntities.splice(0);
@@ -1062,7 +1063,7 @@
 						}
 					}
 				}
-				
+
 				this.availableSlots.splice(0);
 				if(this.base && this.base.slot && this.base.slot.length) {
 					for(x=0; x<this.base.slot.length; x++) {
@@ -1072,7 +1073,7 @@
 						}
 					}
 				}
-				
+
 				hold = 0;
 				if(this.record.item && this.record.item.length) {
 					for(x=0; x<this.record.item.length; x++) {
@@ -1089,14 +1090,14 @@
 					}
 					Vue.set(this, "calculatedEncumberance", hold);
 				}
-				
+
 				this.parties.splice(0);
 				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
 					if(this.universe.indexes.party.listing[x].active) {
 						this.parties.push(this.universe.indexes.party.listing[x]);
 					}
 				}
-				
+
 				this.relatedKnowledge.splice(0);
 				if(this.base && this.base.knowledge) {
 					for(x=0; x<this.base.knowledge.length; x++) {
@@ -1105,14 +1106,14 @@
 						}
 					}
 				}
-				
+
 				this.availableEntities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					if(this.universe.indexes.entity.listing[x] && (this.universe.indexes.entity.listing[x].screen || this.universe.indexes.entity.listing[x].owner || (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.length))) {
 						this.availableEntities.push(this.universe.indexes.entity.listing[x]);
 					}
 				}
-				
+
 				this.equipped.splice(0);
 				if(this.record.equipped) {
 					buffer = Object.keys(this.record.equipped);
@@ -1130,7 +1131,7 @@
 						}
 					}
 				}
-				
+
 				this.activeEvents.splice(0);
 				for(x=0; x<this.universe.indexes.event.listing.length; x++) {
 					if(this.universe.indexes.event.listing[x] && this.universe.indexes.event.listing[x].active) {
@@ -1138,13 +1139,13 @@
 					}
 				}
 				this.activeEvents.sort(this.sortData);
-				
+
 				if(this.base && this.base._relatedErrors && this.base._relatedErrors[this.record.id]) {
 					Vue.set(this, "relatedError", this.rsshowdown(this.base._relatedErrors[this.record.id].message || this.base._relatedErrors[this.record.id], this.record, this.base, this.target));
 				} else {
 					Vue.set(this, "relatedError", null);
 				}
-				
+
 				this.$forceUpdate();
 			}
 		},
