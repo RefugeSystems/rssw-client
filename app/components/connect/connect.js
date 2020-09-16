@@ -7,7 +7,7 @@
  */
 (function() {
 	var storageKey = "_rs_connectComponentKey";
-	
+
 	rsSystem.component("rsConnect", {
 		"inherit": true,
 		"mixins": [
@@ -21,7 +21,7 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.passcode = "";
 			data.store = this.loadStorage(storageKey, {
 				"secure": false,
@@ -29,11 +29,16 @@
 				"username": "",
 				"address": ""
 			});
-			
+
 			return data;
 		},
 		"methods": {
+			"toggleSecure": function() {
+				console.log("togg");
+				Vue.set(this.store, "secure", !this.store.secure);
+			},
 			"getPasscodePlaceHolder": function() {
+				console.log("code");
 				if(this.store.passcode) {
 					return " < Saved Passcode > ";
 				} else {
@@ -41,10 +46,11 @@
 				}
 			},
 			"connect": function() {
+				console.log("conn");
 				if(this.passcode) {
 					Vue.set(this.store, "passcode", this.passcode.sha256());
 				}
-				
+
 				this.saveStorage(storageKey, this.store);
 				var event = {};
 				event.user = new UserInformation(this.store.username, this.store.username);

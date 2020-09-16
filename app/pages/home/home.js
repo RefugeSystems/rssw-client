@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSHome
  * @constructor
  * @module Pages
@@ -15,18 +15,19 @@ rsSystem.component("RSHome", {
 	},
 	"data": function() {
 		var data = {};
-		
+
 		data.message = "";
 		data.state = 0;
-		
+
 		// Track Connection Information
 		data.universe = null;
 		data.user = null;
-		
+
 		return data;
 	},
 	"methods": {
 		"connect": function(event) {
+			console.log("connecting");
 			if(this.universe && this.universe.loggedOut) {
 				console.warn("Logged out, blocking reconnection and clearing");
 				this.universe.loggedOut = false;
@@ -34,7 +35,7 @@ rsSystem.component("RSHome", {
 				Vue.set(this, "state", 1);
 				Vue.set(this, "universe", new RSUniverse({}));
 				Vue.set(this, "user", event.user);
-				
+
 				this.universe.$on("disconnected", () => {
 					Vue.set(this, "message", "Disconnected");
 					Vue.set(this, "state", 0);

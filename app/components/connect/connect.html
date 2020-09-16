@@ -2,7 +2,7 @@
 	<div class="heading">
 		<span class="heading-icon"></span>
 	</div>
-	<form class="fields">
+	<form class="fields" action="javascript:void(0);">
 		<table>
 			<tr>
 				<td>
@@ -40,11 +40,11 @@
 				<span class="action-icon fas fa-sign-in"></span>
 				<span class="action-text">Connect</span>
 			</button>
-			<button class="toggle-action" v-on:click="store.secure = !store.secure">
+			<button class="toggle-action" v-on:click="toggleSecure()">
 				Secure?
 				<span class="far" :class="store.secure?'fa-check-square':'fa-square'"></span>
 			</button>
 		</div>
-		
+
 	</form>
 </div>
