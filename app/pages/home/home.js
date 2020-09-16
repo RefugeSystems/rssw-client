@@ -27,7 +27,6 @@ rsSystem.component("RSHome", {
 	},
 	"methods": {
 		"connect": function(event) {
-			console.log("connecting");
 			if(this.universe && this.universe.loggedOut) {
 				console.warn("Logged out, blocking reconnection and clearing");
 				this.universe.loggedOut = false;

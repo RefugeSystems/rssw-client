@@ -34,11 +34,9 @@
 		},
 		"methods": {
 			"toggleSecure": function() {
-				console.log("togg");
 				Vue.set(this.store, "secure", !this.store.secure);
 			},
 			"getPasscodePlaceHolder": function() {
-				console.log("code");
 				if(this.store.passcode) {
 					return " < Saved Passcode > ";
 				} else {
@@ -46,7 +44,6 @@
 				}
 			},
 			"connect": function() {
-				console.log("conn");
 				if(this.passcode) {
 					Vue.set(this.store, "passcode", this.passcode.sha256());
 				}
