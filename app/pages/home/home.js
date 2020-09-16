@@ -48,6 +48,7 @@ rsSystem.component("RSHome", {
 					Vue.set(this, "state", 0);
 				});
 				this.universe.$on("badlogin", () => {
+					this.universe.loggedOut = true;
 					Vue.set(this, "messageIcon", "fas fa-exclamation-triangle rs-light-red");
 					Vue.set(this, "messageHeading", "Login Failed");
 					Vue.set(this, "message", "Bad Username or Passcode");
