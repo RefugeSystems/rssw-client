@@ -270,6 +270,45 @@
 			this.updateListings();
 		},
 		"methods": {
+			"getActiveIndex": function() {
+				return this.state.activeIndex?this.universe.indexes[this.state.activeIndex]:this.universe.index;
+			},
+			"exportUniverse": function(selected) {
+				var appendTo = $(this.$el).find("#anchors")[0],
+					anchor = document.createElement("a"),
+					exporting,
+					index,
+					x;
+
+				exporting = {};
+				if(selected) {
+					index = this.getActiveIndex();
+					for(x=0; x<index.selection.length; x++) {
+						if(!exporting[index.selected[index.selection[x]]._class]) {
+							exporting[index.selected[index.selection[x]]._class] = [];
+						}
+						exporting[index.selected[index.selection[x]]._class].push(index.selected[index.selection[x]]);
+					}
+				} else {
+					for(x=0; x<rsSystem.listingNouns.length; x++) {
+						if(this.universe.indexes[rsSystem.listingNouns[x]] && this.universe.indexes[rsSystem.listingNouns[x]].listing.length) {
+							exporting[rsSystem.listingNouns[x]] = this.universe.indexes[rsSystem.listingNouns[x]].listing;
+						}
+					}
+				}
+
+				appendTo.appendChild(anchor);
+				anchor.href = URL.createObjectURL(new Blob([JSON.stringify(exporting, null, "\t")]));
+				if(selected) {
+					anchor.download = "universe_filtered." + Date.now() + ".json";
+				} else {
+					anchor.download = "universe_complete." + Date.now() + ".json";
+				}
+
+				anchor.click();
+				URL.revokeObjectURL(anchor.href);
+				appendTo.removeChild(anchor);
+			},
 			"clearRolling": function(object) {
 				var keys = Object.keys(object),
 					x;
@@ -594,6 +633,9 @@
 							ships = index.selection.slice(1);
 
 						window.open(location.pathname + "#/dashboard/ship/" + primary + "?ships=" + ships.join(","), "dashboard");
+						break;
+					case "export":
+						this.exportUniverse(true);
 						break;
 					case "grant-knowledge":
 						if(target) {

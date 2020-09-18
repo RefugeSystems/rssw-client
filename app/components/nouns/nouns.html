@@ -36,6 +36,8 @@
 					</button>
 					<button class="info-link ctrl-link fas fa-info-circle" v-if="field.knowledge" v-on:click="openKnowledge(field.knowledge)" tabindex=2>
 					</button>
+					<button class="info-link ctrl-link fas fa-question-circle" v-if="field.property === 'parent' && state.current === 'archetype'" v-on:click="openKnowledge('knowledge:reference:noun:archetype')" tabindex=2>
+					</button>
 					<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearField(field)" v-if="field.type !== 'label'" tabindex=2>
 					</button>
 					<button class="info-link ctrl-link random-name far fa-calendar-day" v-if="field.property === 'date' || field.property === 'created' || field.property === 'updated'" v-on:click="setDateNow(field.property)" tabindex=2>

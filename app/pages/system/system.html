@@ -2,12 +2,12 @@
 	<div class="information-container">
 		<h1>System Information</h1>
 		<p>Overview of information regarding your system and the server to which you are connected.</p>
-		
+
 		<button class="" v-on:click="uncachedRefresh()">
 			<span class="fas fa-eraser"></span>
 			<span>Cache Clearing Refresh</span>
 		</button>
-		
+
 		<h2 class="flex h middled">
 			<span>Detected Browser Information</span>
 			<button class="make" v-on:click="makeIssue()" v-if="player.master && !knownErrors.navigator">
@@ -35,7 +35,7 @@
 				</td>
 			</tr>
 		</table>
-		
+
 		<h2>Connection Information</h2>
 		<table class="versions">
 			<tr>
@@ -81,5 +81,57 @@
 				<td>{{universe.connection.reconnectAttempts}}</td>
 			</tr>
 		</table>
+
+		<div class="data" v-if="player.master">
+			<h2>Universe Data</h2>
+			<div id="anchors"></div>
+			<table>
+				<tr>
+					<td class="align-right">Export Data</td>
+					<td>
+						<button class="flat simple fas fa-download" v-on:click="exportUniverse()">
+							<span>Export Universe</span>
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-right">
+						<span v-if="!importing">Import Data</span>
+						<span v-if="importing">Importing</span>
+					</td>
+					<td>
+						<input type="file" class="flat simple" v-if="!importing" id="importFileSelection" accept="application/json" v-on:change="checkImportSelection()"/>
+						<div class="pad-aligned" v-if="importing">
+							<span class="fas fa-spinner fa-pulse"></span>
+							<span>(</span>
+							<span>{{imported}}</span>
+							<span>/</span>
+							<span>{{toImport}}</span>
+							<span>)</span>
+						</div>
+					</td>
+				</tr>
+				<tr v-if="importMessage">
+					<td class="align-right">
+						<span>{{importMessageType}}</span>
+					</td>
+					<td>
+						<div class="pad-aligned">
+							<span :class="importIcon"></span>
+							<span>{{importMessage}}</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					</td>
+					<td>
+						<button class="flat simple fas fa-upload" v-on:click="importUniverse()" v-if="importSelection && !importing">
+							<span>Import Universe</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </div>

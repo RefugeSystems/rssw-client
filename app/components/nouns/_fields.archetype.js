@@ -2,6 +2,7 @@
 (function() {
 
 	var dataSource,
+		parent,
 		attrs,
 		stats,
 		sort;
@@ -23,7 +24,15 @@
 			return 0;
 		}
 	};
-	
+
+	parent = {
+		"label": "Parent",
+		"property": "parent",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
@@ -31,7 +40,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	stats = {
 		"label": "Stats",
 		"property": "modifierstats",
@@ -61,7 +70,9 @@
 		"label": "Order",
 		"property": "order",
 		"type": "number"
-	}, {
+	},
+	parent,
+	{
 		"label": "Classifications",
 		"property": "classification",
 		"type": "select",
@@ -113,6 +124,9 @@
 			return data;
 		},
 		"mounted": function() {
+			parent.options = this.universe.indexes.archetype.listing;
+			// parent.options.sort(this.sortDate);
+
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 		},

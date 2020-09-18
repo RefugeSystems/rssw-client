@@ -302,12 +302,6 @@
 					.then((result) => {
 						value = result.data;
 						Vue.set(this.root, this.field.property, value);
-//						result.name = result.name.substring(0, result.name.lastIndexOf("."));
-//						value.id = "image:" + result.name.replace(/\./g, ":");
-//						value.name = result.name;
-//						Vue.set(this, "rawValue", JSON.stringify(value, null, 4));
-//						input[0].value = null;
-//						console.warn("New Value: ", value);
 					});
 				}
 			},

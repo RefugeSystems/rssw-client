@@ -64,6 +64,7 @@
 	invisibleKeys.no_rank = true;
 	invisibleKeys.alters = true;
 	invisibleKeys.linked = true;
+	invisibleKeys.loaded = true;
 	invisibleKeys.owners = true;
 	invisibleKeys.parent = true;
 	invisibleKeys.hidden = true;

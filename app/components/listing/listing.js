@@ -1,21 +1,21 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsListing
  * @constructor
  * @module Components
  */
 (function() {
 	/**
-	 * 
+	 *
 	 * @property storageKey
 	 * @type String
 	 * @private
 	 * @static
 	 */
 	var storageKey = "_rs_listingComponentKey:";
-	
+
 	rsSystem.component("rsListing", {
 		"inherit": true,
 		"mixins": [
@@ -29,6 +29,9 @@
 			},
 			"checker": {
 				"type": Function
+			},
+			"empty": {
+				"type": String
 			},
 			"placeholder": {
 				"default": "Filter List...",
@@ -52,7 +55,7 @@
 			data.state = this.loadStorage(data.storageKeyID, {
 				"search": ""
 			});
-			
+
 			return data;
 		},
 		"watch": {
@@ -89,7 +92,7 @@
 				}
 			},
 			"sync": function() {
-				
+
 			}
 		},
 		"template": Vue.templified("components/listing.html")

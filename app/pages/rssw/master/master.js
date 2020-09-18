@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSSWMasterPage
  * @constructor
  * @module Pages
@@ -42,7 +42,7 @@
 		"property": "dark",
 		"label": "Dark"
 	}];
-	
+
 	var sortEntities = function(a, b) {
 		if(a.classification < b.classification) {
 			return -1;
@@ -56,7 +56,7 @@
 			return 0;
 		}
 	};
-	
+
 	var sortSessions = function(a, b) {
 		if(a.id < b.id) {
 			return 1;
@@ -90,7 +90,7 @@
 			if(data.state.constrained === undefined) {
 				data.state.constrained = true;
 			}
-			
+
 			data.lockMakeNew = false;
 			data.active_events = [];
 			data.knowledges = [];
@@ -98,11 +98,11 @@
 			data.events = [];
 			data.skills = [];
 			data.items = [];
-			
+
 			data.currentSession = null;
 			data.trackSession = null;
 			data.nextSession = null;
-			
+
 			data.rollProperties = rollProperties;
 			data.rollReceiveFlag = false;
 			data.universeEntities = [];
@@ -111,7 +111,7 @@
 			data.history = [];
 			data.rolling = {};
 			data.updated = "";
-			
+
 			data.difficulty = {};
 			data.difficulty.Blank = {"difficulty":0};
 			data.difficulty.Easy = {"difficulty":1};
@@ -121,13 +121,13 @@
 			data.difficulty.Formidable = {"difficulty":5};
 			data.difficulty.Challenge = {"challenge":1};
 			data.difficulty.Setback = {"setback":1};
-			
+
 			data.difficulties = Object.keys(data.difficulty);
 			data.count = {};
 			for(x=0; x<data.difficulties.length; x++) {
 				data.count[data.difficulties[x]] = 0;
 			}
-			
+
 			return data;
 		},
 		"mounted": function() {
@@ -186,13 +186,13 @@
 				console.log("Receiving Roll: ", result);
 				var keys = Object.keys(result),
 					x;
-				
+
 				Vue.set(this, "rollReceiveFlag", true);
 				this.clearRolling(this.rolling);
 				for(x=0; x<this.difficulties.length; x++) {
 					Vue.set(this.count, this.difficulties[x], 0);
 				}
-				
+
 				for(x=0; x<keys.length; x++) {
 					if(result[keys[x]]) {
 						Vue.set(this.rolling, keys[x], result[keys[x]]);
@@ -202,7 +202,7 @@
 			"clearRolling": function(object) {
 				var keys = Object.keys(object),
 					x;
-				
+
 				this.history.unshift(JSON.parse(JSON.stringify(object)));
 				if(this.state.historyLength < this.history.length) {
 					this.history.splice(this.state.historyLength);
@@ -231,7 +231,7 @@
 					result,
 					keys,
 					x;
-				
+
 //				console.log("Roll[" + isNaN(expression.difficulty) + "]: ", expression.difficulty);
 				if(!isNaN(expression.difficulty) && !this.rollReceiveFlag) {
 					this.clearRolling(this.rolling);
@@ -242,7 +242,7 @@
 				if(this.rollReceiveFlag) {
 					Vue.set(this, "rollReceiveFlag", false);
 				}
-				
+
 				Vue.set(this.count, difficulty, this.count[difficulty] + 1);
 				result = Dice.calculateDiceRoll(expression);
 				keys = Object.keys(result);
@@ -256,21 +256,21 @@
 					}
 				}
 			},
-			
+
 			"isVisible": function(record, search) {
 				if(!search) {
 					return true;
 				}
-				
+
 				if(!record._search) {
 					return false;
 				}
-				
+
 				search = search.toLowerCase();
 				return record._search.indexOf(search) !== -1;
 			},
 			/**
-			 * 
+			 *
 			 * @method update
 			 */
 			"update": function() {
@@ -278,7 +278,7 @@
 					session,
 					buffer,
 					x;
-				
+
 				if(this.universe.indexes.setting.index["setting:current:session"]) {
 					Vue.set(this, "currentSession", this.universe.indexes.session.index[this.universe.indexes.setting.index["setting:current:session"].value]);
 					if(this.currentSession) {
@@ -297,7 +297,7 @@
 					}
 				}
 				this.sessions.sort(sortSessions);
-				
+
 				this.skills.splice(0);
 				for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 					buffer = this.universe.indexes.skill.listing[x];
@@ -306,7 +306,7 @@
 					}
 				}
 				this.skills.sort(this.sortData);
-				
+
 				this.items.splice(0);
 				for(x=0; x<this.universe.indexes.item.listing.length; x++) {
 					buffer = this.universe.indexes.item.listing[x];
@@ -334,7 +334,7 @@
 					}
 				}
 				this.knowledges.sort(this.sortData);
-				
+
 				this.active_events.splice(0);
 				this.events.splice(0);
 				for(x=0; x<this.universe.indexes.event.listing.length; x++) {
@@ -344,7 +344,7 @@
 						this.events.push(this.universe.indexes.event.listing[x]);
 					}
 				}
-				
+
 				Vue.set(this, "nextSession", next + 1);
 			}
 		},

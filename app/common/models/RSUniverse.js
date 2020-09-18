@@ -26,6 +26,7 @@ class RSUniverse extends RSObject {
 		this.loggedOut = false;
 
 		this.processEvent = {};
+		this.timeouts = {};
 		this.indexes = {};
 		this.echoed = {};
 		this.nouns = {};
@@ -214,7 +215,8 @@ class RSUniverse extends RSObject {
 			};
 
 			socket.onmessage = (event) => {
-				var message;
+				var message,
+					fulfill;
 
 				this.connection.syncMark = event.time;
 				this.connection.last = Date.now();
@@ -226,13 +228,19 @@ class RSUniverse extends RSObject {
 					if(message.version && message.version !== this.version) {
 						this.version = message.version;
 					}
-					if(message.echo && message.event && !message.event.echo) {
+					if(this.debugConnection || this.debug || rsSystem.debug) {
+						console.log("Connection - Received: ", _p(message), this.echoed[message.echo]);
+					}
+					if(message.echo && typeof(this.echoed[message.echo]) === "function") {
+						fulfill = this.echoed[message.echo];
+						clearTimeout(this.timeouts[message.echo]);
+						delete(this.timeouts[message.echo]);
+						delete(this.echoed[message.echo]);
+						fulfill(message);
+					} else if(message.echo && message.event && !message.event.echo) {
 						message.event.echo = message.echo;
 						message.echo = this.echoed[message.echo];
 						delete(this.echoed[message.echo]);
-					}
-					if(this.debugConnection || this.debug || rsSystem.debug) {
-						console.log("Connection - Received: ", message);
 					}
 
 					this.$emit(message.type, message.event);
@@ -261,16 +269,16 @@ class RSUniverse extends RSObject {
 			};
 
 			this.$on("model:deleted", (event) => {
-				var record = this.nouns[event.type][event.id];
+				var record = this.nouns[event._class || event.type][event.id];
 				if(record) {
 					if(this.debug || rsSystem.debug) {
-						console.warn("Deleting Record: " + event.type + " - " + event.id + ": ", event, record);
+						console.warn("Deleting Record: " + (event._class || event.type) + " - " + event.id + ": ", event, record);
 					}
 
 					this.index.unindexItem(record);
-					if(this.indexes[event.type]) {
-						this.indexes[event.type].unindexItem(record);
-						delete(this.nouns[event.type][event.id]);
+					if(this.indexes[event._class || event.type]) {
+						this.indexes[event._class || event.type].unindexItem(record);
+						delete(this.nouns[event._class || event.type][event.id]);
 					}
 
 					this.$emit("universe:modified", this);
@@ -279,23 +287,71 @@ class RSUniverse extends RSObject {
 			});
 
 			this.$on("model:modified", (event) => {
-//				console.log("Modifying: ", event);
-				var record = this.nouns[event.type][event.id];
-				if(!record) {
+				// console.info("Record Modification: ", event);
+				var record = this.nouns[event._class || event.type][event.id];
+				if(record) {
 					if(this.debug || rsSystem.debug) {
-						console.warn("Building new record: " + event.type + " - " + event.id + ": ", event);
+						console.info("Modifying Record: " + (event._class || event.type) + " - " + event.id + ": ", event);
 					}
-					if(!this.nouns[event.type]) {
-						this.nouns[event.type] = {};
+					record.loadDelta(event.modification);
+				} else {
+					if(this.debug || rsSystem.debug) {
+						console.warn("Building new record: " + (event._class || event.type) + " - " + event.id + ": ", event);
 					}
-					this.nouns[event.type][event.id] = new rsSystem.availableNouns[event.type](event.modification, this);
-					this.indexes[event.type].indexItem(this.nouns[event.type][event.id]);
-					this.index.indexItem(this.nouns[event.type][event.id]);
+					if(!this.nouns[event._class || event.type]) {
+						this.nouns[event._class || event.type] = {};
+					}
+					this.nouns[event._class || event.type][event.id] = new rsSystem.availableNouns[event._class || event.type](event.modification, this);
+					this.indexes[event._class || event.type].indexItem(this.nouns[event._class || event.type][event.id]);
+					this.index.indexItem(this.nouns[event._class || event.type][event.id]);
+					this.$emit("universe:built", this.nouns[event._class || event.type][event.id]);
 				}
-				setTimeout(() => {
-					this.$emit("universe:modified", this);
-					this.$emit("universe:modified:complete", this);
-				}, 0);
+				this.$emit("universe:modified", this);
+				this.$emit("universe:modified:complete", this);
+			});
+
+			// this.$on("model:added", (event) => {
+			// 	var record = this.nouns[event._class || event.type][event.id];
+			// 	if(record) {
+			// 		if(this.debug || rsSystem.debug) {
+			// 			console.info("Additive Record Modification: " + (event._class || event.type) + " - " + event.id + ": ", event);
+			// 		}
+			// 		record.loadAddDelta(event.modification);
+			// 	} else {
+			// 		rsSystem.log.error("Event Target Missing", event);
+			// 	}
+			// }
+			//
+			// this.$on("model:subtract", (event) => {
+			// 	var record = this.nouns[event._class || event.type][event.id];
+			// 	if(record) {
+			// 		if(this.debug || rsSystem.debug) {
+			// 			console.info("Subtractive Record Modification: " + (event._class || event.type) + " - " + event.id + ": ", event);
+			// 		}
+			// 		record.loadSubDelta(event.modification);
+			// 	} else {
+			// 		rsSystem.log.error("Event Target Missing", event);
+			// 	}
+			// });
+
+			this.$on("entity:rolled", (event) => {
+				var record = this.nouns.entity[event.id];
+				if(record) {
+					event.type = "rolled";
+					record.performActionEvent(event);
+				}
+			});
+
+			this.$on("entity:action", (event) => {
+				var record = this.nouns[event._class || event.type][event.id];
+				if(record) {
+					if(this.debug || rsSystem.debug) {
+						console.info("Entity Action Received: " + (event._class || event.type) + " - " + event.id + ": ", event);
+					}
+					record.performActionEvent(event.modification);
+				} else {
+					rsSystem.log.error("Event Target Missing", event);
+				}
 			});
 
 			this.$on("control", (event) => {
@@ -531,5 +587,45 @@ class RSUniverse extends RSObject {
 		} else {
 			// TODO: Buffer for connection restored
 		}
+	}
+
+	promisedSend(type, data) {
+		data = data || {};
+		var promised = new Promise((done, fail) => {
+			if(!type) {
+				fail(new Error("No Event Type Provided"));
+			} else if(this.connection.socket) {
+				if(typeof data !== "object") {
+					throw new Error("Only objects can be sent");
+				}
+				if(!data.echo) {
+					data.echo = Random.identifier("echo");
+				}
+				data = {
+					"sent": Date.now(),
+					"echo": data.echo,
+					"event": type,
+					"data": data
+				};
+				if(this.debugConnection) {
+					console.log("Connection - Sending: ", data);
+				}
+				this.echoed[data.echo] = done;
+				// this.echoed[data.echo] = (result) => {
+				// 	done(result);
+				// };
+				this.connection.socket.send(JSON.stringify(data));
+				this.timeouts[data.echo] = setTimeout(() => {
+					if(this.echoed[data.echo]) {
+						delete(this.echoed[data.echo]);
+						fail(new Error("Send Timedout"));
+					}
+				}, 10000);
+			} else {
+				// IDEA: Buffer for connection restored
+				fail(new Error("Connection not available"));
+			}
+		});
+		return promised;
 	}
 }

@@ -2,7 +2,11 @@
 	<div v-if="!$route.params.oid" class="universe-contents">
 		<div class="title">
 			Galactic Index
-			<button class="fas fa-sync" v-on:click="resetHeaders()">Headers</button>
+			<button class="flat simple fas fa-sync" v-on:click="resetHeaders()">Headers</button>
+			<button class="flat simple fas fa-download" v-on:click="exportUniverse()">Export Universe</button>
+		</div>
+
+		<div id="anchors">
 		</div>
 
 		<div class="controls rs-component flex h wrap">
@@ -39,8 +43,9 @@
 						<option disabled value="div">-- Records --</option>
 						<option value="obscure">Obscure Record</option>
 						<option value="unobscure">Unobscure Record</option>
-						<option disabled value="div">-- Clean --</option>
+						<option disabled value="div">-- Maintenance --</option>
 						<option value="drop">Delete Objects</option>
+						<option value="export">Export Selection</option>
 					</select>
 
 					<select v-model="state.activeIndex">

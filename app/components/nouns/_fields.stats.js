@@ -1,6 +1,6 @@
 
 (function() {
-	
+
 	var commonSource,
 		listSource,
 		dataSource,
@@ -10,7 +10,7 @@
 		ranges,
 		slots,
 		dice;
-	
+
 	ranges = [
 		"general",
 		"engaged",
@@ -19,7 +19,7 @@
 		"long",
 		"extreme"
 	];
-	
+
 	dice = [
 		"proficiency",
 		"ability",
@@ -29,7 +29,7 @@
 		"setback",
 		"setforward"
 	];
-	
+
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
@@ -37,7 +37,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	slots = {
 		"label": "Slots",
 		"property": "slot",
@@ -45,7 +45,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	effects = {
 		"label": "Effects",
 		"property": "effect",
@@ -53,7 +53,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	skills = {
 		"label": "Skills",
 		"property": "skill",
@@ -61,7 +61,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -85,6 +85,18 @@
 	}, {
 		"label": "Max Strain",
 		"property": "strain_max",
+		"type": "text"
+	}, {
+		"label": "Start Wound",
+		"property": "wounds_start",
+		"type": "text"
+	}, {
+		"label": "Start Strain",
+		"property": "strain_start",
+		"type": "text"
+	}, {
+		"label": "XP Start",
+		"property": "xp_start",
 		"type": "text"
 	}, {
 		"label": "Damage",
@@ -231,14 +243,14 @@
 		"property": "charges_rate_short",
 		"type": "text"
 	}];
-	
+
 	listSource = [
 		abilities,
 		effects,
 		skills,
 		slots
 	];
-	
+
 	commonSource = [{
 		"label": "Description",
 		"property": "description",
@@ -248,7 +260,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsModifierStats", {
 		"inherit": true,
 		"mixins": [
@@ -265,12 +277,12 @@
 			var data = {},
 				x,
 				y;
-			
+
 			data.fields = this.fields || {};
 			data.fields.modifierstats = [];
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, dataSource);
 
-			
+
 			// TODO: Build Fields for Skills and Stats Dynamically
 			data.fields.modifierstats.push({
 				"label": "Combat Range Bonuses",
@@ -291,7 +303,7 @@
 					});
 				}
 			}
-			
+
 			data.fields.modifierstats.push({
 				"label": "Attributes",
 				"property": "__attr",
@@ -327,7 +339,7 @@
 				"label": "Pressence",
 				"type": "text"
 			});
-			
+
 			data.fields.modifierstats.push({
 				"label": "Skills",
 				"property": "__skills",
@@ -341,7 +353,7 @@
 					"type": "text"
 				});
 			}
-			
+
 			data.fields.modifierstats.push({
 				"label": "Skill Boosts",
 				"property": "__skillboosts",
@@ -354,10 +366,10 @@
 					"type": "text"
 				});
 			}
-			
+
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, listSource);
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
-			
+
 			return data;
 		},
 		"mounted": function() {
@@ -368,11 +380,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

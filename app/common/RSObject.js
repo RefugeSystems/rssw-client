@@ -21,6 +21,8 @@ class RSObject extends EventEmitter {
 		this._known = {};
 		this._mods = [];
 		this._shadow = JSON.parse(JSON.stringify(details));
+		this._actionsRecent = [];
+		this._actionsLimit = 5;
 		this._listeningParentCycle = 0;
 		this._listeningParent = () => {
 			var now = Date.now();
@@ -51,6 +53,7 @@ class RSObject extends EventEmitter {
 		this._modifiers = [];
 		this.id = details.id;
 
+		/*
 		if(this.universe) {
 			this.universe.$on("model:modified", (event) => {
 				if(event && event.id === this.id) {
@@ -78,6 +81,7 @@ class RSObject extends EventEmitter {
 				}
 			});
 		}
+		*/
 	}
 
 	get name() {
@@ -1003,6 +1007,17 @@ class RSObject extends EventEmitter {
 		return true;
 	}
 
+	performActionEvent(event) {
+		this._actionsRecent.push(event);
+		if(this._actionsLimit < this._actionsRecent.length) {
+			this._actionsRecent.splice(this._actionsLimit);
+		}
+
+		// TODO: Flush out actions
+
+		this.$emit("acted:" + event.type, this);
+	}
+
 	/**
 	 *
 	 * @method loadDelta
@@ -1017,8 +1032,20 @@ class RSObject extends EventEmitter {
 			x;
 
 		for(x=0; x<keys.length; x++) {
-			if(keys[x] !== "delta" && keys[x] !== "_delta" && typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
-				this._coreData[keys[x]] = delta[keys[x]];
+			if(typeof(this[keys[x]]) !== "function" && keys[x] !== "echo") {
+				switch(keys[x]) {
+					case "+delta":
+						this.loadAddDelta(delta, delta[keys[x]]);
+						break;
+					case "-delta":
+						this.loadSubDelta(delta, delta[keys[x]]);
+						break;
+					case "_delta":
+					case "delta":
+						break;
+					default:
+						this._coreData[keys[x]] = delta[keys[x]];
+				}
 			}
 		}
 
@@ -1034,14 +1061,13 @@ class RSObject extends EventEmitter {
 	 * @method loadAddDelta
 	 * @param {Object} data
 	 */
-	loadAddDelta(data) {
-		if(this.debug || rsSystem.debug) {
-			this._lastDelta = _p(delta);
-		}
-
-		var delta = data.delta || data._delta,
-			keys,
+	loadAddDelta(data, delta) {
+		var keys,
 			x;
+
+		if(!delta) {
+			delta = data.delta || data._delta || data["+delta"];
+		}
 
 		if(delta) {
 			keys = Object.keys(delta);
@@ -1049,8 +1075,6 @@ class RSObject extends EventEmitter {
 				this._coreData[keys[x]] = this.processAsAdditive(this._coreData[keys[x]], delta[keys[x]]);
 			}
 		}
-
-		this.loadDelta(data);
 	}
 
 	/**
@@ -1058,14 +1082,13 @@ class RSObject extends EventEmitter {
 	 * @method loadSubDelta
 	 * @param {Object} data
 	 */
-	loadSubDelta(data) {
-		if(this.debug || rsSystem.debug) {
-			this._lastDelta = _p(delta);
-		}
-
-		var delta = data.delta || data._delta,
-			keys,
+	loadSubDelta(data, delta) {
+		var keys,
 			x;
+
+		if(!delta) {
+			delta = data.delta || data._delta || data["+delta"];
+		}
 
 		if(delta) {
 			keys = Object.keys(delta);
@@ -1073,8 +1096,6 @@ class RSObject extends EventEmitter {
 				this._coreData[keys[x]] = this.processAsSubtractive(this._coreData[keys[x]], delta[keys[x]]);
 			}
 		}
-
-		this.loadDelta(data);
 	}
 
 	/**

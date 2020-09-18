@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @class DataManager
  * @constructor
  */
@@ -12,8 +12,23 @@ rsSystem.component("DataManager", {
 	"mounted": function() {
 	},
 	"methods": {
+		"readFile": function(file) {
+			// console.warn("Read File: ", file);
+			return new Promise(function(done, fail) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					done({
+						"data": e.currentTarget.result,
+						"name": file.name,
+						"size": file.size
+					});
+				};
+				reader.onerror = fail;
+				reader.readAsText(file);
+			});
+		},
 		"encodeFile": function(file) {
-			console.warn("Encoding File: ", file);
+			// console.warn("Encoding File: ", file);
 			return new Promise(function(done, fail) {
 				var reader = new FileReader();
 				reader.onload = function (e) {
@@ -48,4 +63,4 @@ rsSystem.component("DataManager", {
 			return new Blob(byteArrays, { type: contentType });
 		}
 	}
-}); 
+});

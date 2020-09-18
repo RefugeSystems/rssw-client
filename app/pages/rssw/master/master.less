@@ -1,11 +1,12 @@
 .rssw-page.page-master {
 	position: relative;
 	display: block;
-	
+	overflow: auto;
+
 	&.constrained {
-		overflow: hidden;
+		overflow: hidden !important;
 	}
-	
+
 	button.constrain {
 		font-size: 30px;
 	}
@@ -14,15 +15,15 @@
 		font-size: 20px;
 		margin-bottom: 7px;
 	}
-	
+
 	.rs-component {
 		height: 100%;
 	}
-	
+
 	.navigation-button {
 		text-decoration: none;
 		color: @rsOrange;
-		
+
 		&:active,
 		&:hover {
 			color: @rsBlue;
@@ -33,7 +34,7 @@
 		margin: 7px;
 		font-size: 17px;
 	}
-	
+
 	.next.session {
 		border: 2px solid @rsBlue;
 		padding: 4px;
@@ -41,47 +42,47 @@
 		background-color: transparent;
 		color: @rsWhite;
 	}
-	
+
 	input[type=text],
 	select {
 		font-size: 15px;
 		padding: 4px;
 	}
-	
+
 	.controls {
 		display: flex;
 		flex-direction: row;
 		height: 100%;
-		
+
 		button.selections {
 			min-width: 48px;
 		}
-		
+
 		.list {
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			
+
 			button {
 				cursor: pointer;
 			}
-			
+
 			.list-data {
 				flex-grow: 10;
 				overflow-y: auto;
 				display: flex;
 				flex-direction: column;
-				
+
 				&.minor {
 					max-height: 300px;
 					flex-grow: 5;
 				}
-				
+
 				&.major {
 					flex-grow: 15;
 				}
 			}
-			
+
 			.listed {
 				background: transparent;
 				border: 0px;
@@ -91,79 +92,79 @@
 				color: @rsWhite;
 				text-align: left;
 				font-size: 16px;
-				
+
 				&:hover {
 					border-color: @rsOrange;
 				}
 			}
 		}
 	}
-	
+
 	.control.rolls {
 		max-width: 450px;
 		min-width: 300px;
-		
+
 		.control.difficulty-dice {
-			
+
 		}
-		
+
 		.control.results {
 			overflow: auto;
 		}
 	}
-	
+
 	.control {
 		display: inline-block;
 		margin: 0px 7px;
 		min-width: 240px;
-		
+
 		.title {
 			.filter {
 				width: 100%;
 			}
 		}
-		
+
 		.entities {
 			display: flex;
 			flex-direction: column;
-			
+
 		}
-		
+
 		button.roll-container {
 			display: inline-block;
 			background: transparent;
 			color: @rsWhite;
 		}
-		
+
 		.roll-container {
 			border: 1px solid @rsBlue;
 			border-radius: 5px;
 			font-size: 18px;
 			padding: 10px;
 			margin: 6px;
-			
+
 			transition: border-width .5s, border-color .5s;
-			
+
 			.dice-result {
 				display: inline-flex;
 			}
 		}
-		
+
 		.rssw-dice-result {
 			min-height: 64px;
 		}
-		
+
 		.view-label {
 			padding-right: 7px;
 		}
-		
+
 		.rolled {
 		}
-		
+
 		.rolling {
 			padding-right: 14px;
 		}
-		
+
 		.output {
 			border-bottom: 1px solid @rsRed;
 			.rolled.current {
@@ -171,12 +172,12 @@
 			}
 		}
 	}
-	
+
 	.roll-options,
 	.output {
 		max-width: 450px;
 	}
-	
+
 	.opened {
 		position: absolute;
 		display: block;
@@ -184,12 +185,12 @@
 		left: 100%;
 		z-index: 5;
 		top: 0px;
-		
+
 		&.loaded {
 			left: 0px;
 		}
 	}
-	
+
 	.create-npc {
 		border-top: 2px solid @rsOrange;
 		padding-top: 5px !important;
