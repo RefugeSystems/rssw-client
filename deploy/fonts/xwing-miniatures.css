@@ -9,7 +9,8 @@
 .xwm {
   font-family: XWing;
   font-style: normal;
-  font-size: 1.5em; }
+  display: inline-block;
+  margin-top: -13px; }
 
 .xwm.xwing-miniatures-font-agility:before {
   content: "^"; }

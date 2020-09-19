@@ -609,10 +609,16 @@
 					Vue.set(this.state, "advanced_editor", true);
 				}
 			},
+			"displayCopyFromParent": function(field) {
+				return this.state.building[this.state.current].parent && field.property !== "parent" &&
+					this.universe.indexes[this.state.current].index[this.state.building[this.state.current].parent] &&
+					this.universe.indexes[this.state.current].index[this.state.building[this.state.current].parent][field.property] &&
+					this.universe.indexes[this.state.current].index[this.state.building[this.state.current].parent][field.property].length;
+			},
 			"copyParent": function(field) {
 				var buffer;
 				if(this.state.building[this.state.current].parent && (buffer = this.universe.indexes[this.state.current].index[this.state.building[this.state.current].parent])) {
-					Vue.set(this.state.building[this.state.current], field, buffer[field]);
+					Vue.set(this.state.building[this.state.current], field, JSON.parse(JSON.stringify(buffer[field])));
 				}
 			},
 			"copyNoun": function(source) {
