@@ -139,30 +139,6 @@
 		"property": "slots_used",
 		"type": "number"
 	}, {
-		"label": "Required Crew",
-		"property": "required_crew",
-		"type": "text"
-	}, {
-		"label": "Bonus: Boost",
-		"property": "bonus_boost",
-		"type": "text"
-	}, {
-		"label": "Ship Shield",
-		"property": "shield",
-		"type": "text"
-	}, {
-		"label": "Ship Attack",
-		"property": "attack",
-		"type": "text"
-	}, {
-		"label": "Ship Evasion",
-		"property": "evasion",
-		"type": "text"
-	}, {
-		"label": "Ship Hull",
-		"property": "hull",
-		"type": "text"
-	}, {
 		"label": "Energy Output",
 		"property": "energy_out",
 		"type": "text"
@@ -209,6 +185,38 @@
 	}, {
 		"label": "Concealment",
 		"property": "concealment",
+		"type": "text"
+	}, {
+		"label": "Ship Specific Stats",
+		"property": "__charges",
+		"type": "label"
+	}, {
+		"label": "Required Crew",
+		"property": "required_crew",
+		"type": "text"
+	}, {
+		"label": "Ship Shield",
+		"property": "shield",
+		"type": "text"
+	}, {
+		"label": "Ship Attack",
+		"property": "attack",
+		"type": "text"
+	}, {
+		"label": "Ship Evasion",
+		"property": "evasion",
+		"type": "text"
+	}, {
+		"label": "Ship Hull",
+		"property": "hull",
+		"type": "text"
+	}, {
+		"label": "Bonus: Boost",
+		"property": "bonus_boost",
+		"type": "text"
+	}, {
+		"label": "Bonus: Speed",
+		"property": "bonus_ship_speed",
 		"type": "text"
 	}, {
 		"label": "Charges and Recharging",

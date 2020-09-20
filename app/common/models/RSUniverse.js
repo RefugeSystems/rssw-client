@@ -302,12 +302,17 @@ class RSUniverse extends RSObject {
 						this.nouns[event._class || event.type] = {};
 					}
 					this.nouns[event._class || event.type][event.id] = new rsSystem.availableNouns[event._class || event.type](event.modification, this);
+					this.nouns[event._class || event.type][event.id].recalculateProperties();
 					this.indexes[event._class || event.type].indexItem(this.nouns[event._class || event.type][event.id]);
 					this.index.indexItem(this.nouns[event._class || event.type][event.id]);
 					this.$emit("universe:built", this.nouns[event._class || event.type][event.id]);
 				}
 				this.$emit("universe:modified", this);
 				this.$emit("universe:modified:complete", this);
+				// setTimeout(() => {
+				// 	this.$emit("universe:modified", this);
+				// 	this.$emit("universe:modified:complete", this);
+				// }, 100);
 			});
 
 			// this.$on("model:added", (event) => {

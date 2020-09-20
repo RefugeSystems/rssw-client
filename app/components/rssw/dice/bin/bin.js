@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsswDiceBin
  * @constructor
  * @module Components
@@ -41,8 +41,8 @@
 		"property": "dark",
 		"label": "Dark"
 	}];
-	
-	
+
+
 	rsSystem.component("rsswDiceBin", {
 		"inherit": true,
 		"mixins": [
@@ -65,22 +65,22 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.rollProperties = rollProperties;
 			data.bound = false;
-			
+
 			if(!this.state.expression) {
 				Vue.set(this.state, "expression", "");
 			}
 			if(!this.state.history) {
 				Vue.set(this.state, "history", []);
 			}
-			
+
 			return data;
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			
+
 			if(this.entity) {
 				this.entity.$on("roll-expression", this.roll);
 				this.entity.$on("roll-skill", this.rollSkill);
@@ -100,7 +100,7 @@
 			},
 			"roll": function(expression, name) {
 				var rolled;
-				
+
 				if(expression) {
 					if(expression.skill && expression.entity) {
 						this.roll(this.getSkillDiceExpression(expression.skill, expression.entity), expression.skill.name);
@@ -113,16 +113,18 @@
 						rolled._expression = expression;
 						rolled._label = name;
 						this.state.history.unshift(rolled);
-						
+
 						if(this.emitter) {
 							this.$forceUpdate();
 						}
-						
+
 						if(this.entity) {
 							rolled.id = this.entity.id;
 							this.universe.send("entity:rolled", rolled);
 						}
 					}
+				} else {
+					this.state.history.unshift({});
 				}
 			},
 			"addExpression": function(expression) {
@@ -130,13 +132,13 @@
 					roll,
 					keys,
 					x;
-				
+
 				if(!current) {
 					current = {};
 					current._expression = "";
 					this.state.history.unshift(current);
 				}
-				
+
 				roll = Dice.calculateDiceRoll(expression);
 				keys = Object.keys(roll);
 				if(current._label) {
@@ -150,11 +152,11 @@
 				for(x=0; x<keys.length; x++) {
 					Vue.set(current, keys[x], (current[keys[x]] || 0) + roll[keys[x]]);
 				}
-				
+
 				if(this.emitter) {
 					this.$forceUpdate();
 				}
-				
+
 				if(this.entity) {
 					roll.id = this.entity.id;
 					this.universe.send("entity:rolled", current);
@@ -165,7 +167,7 @@
 					var roll = {},
 						s,
 						x;
-					
+
 					s = entity[skill.propertyKey] || 0;
 					roll.b = entity[skill.bonusKey] || 0;
 					if(entity[skill.base] < s) {
@@ -175,10 +177,10 @@
 						roll.a = entity[skill.base] - s;
 						roll.p = s;
 					}
-	
+
 					return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
 				}
-				
+
 				return "";
 			},
 			"dismiss": function(index) {
@@ -199,7 +201,7 @@
 				} else {
 					Vue.set(this.state, "expression", "");
 				}
-				
+
 				if(this.emitter) {
 					this.$forceUpdate();
 				}
@@ -208,7 +210,7 @@
 				rsSystem.EventBus.$emit("display-info", this.state.knowledge || "knowledge:dice:playerbin");
 			},
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {

@@ -1,10 +1,11 @@
 
 (function() {
-	
+
 	var dataSource,
 		shipAbilities,
 		knowledges,
 		archetypes,
+		maneuvers,
 		itemtypes,
 		abilities,
 		location,
@@ -27,7 +28,7 @@
 		stats,
 		sexes,
 		types;
-	
+
 	datasets = {
 		"label": "Name Dataset",
 		"property": "randomize_name_dataset",
@@ -40,7 +41,7 @@
 			}
 		}
 	};
-	
+
 	location = {
 		"label": "Location",
 		"property": "location",
@@ -48,7 +49,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	entity = {
 		"label": "Inside",
 		"property": "inside", // Not "entity" as modifier inheritence is not wanted
@@ -56,7 +57,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	parent = {
 		"label": "Parent",
 		"property": "parent", // Not "entity" as modifier inheritence is not wanted
@@ -64,7 +65,18 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
+	maneuvers = {
+		"label": "Maneuvers",
+		"property": "maneuver",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": "ship"
+		}
+	};
+
 	shipAbilities = {
 		"label": "Active Piloting Abilities",
 		"property": "ship_active_abilities",
@@ -75,7 +87,7 @@
 			"classification": "ship"
 		}
 	};
-	
+
 	pilot = {
 		"label": "Pilot",
 		"property": "entity",
@@ -86,7 +98,7 @@
 			"classification": "ship"
 		}
 	};
-	
+
 	profiles = {
 		"label": "Profile",
 		"property": "profile",
@@ -94,7 +106,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	races = {
 		"label": "Races",
 		"property": "race",
@@ -105,7 +117,7 @@
 			"classification": "character"
 		}
 	};
-	
+
 	knowns = {
 		"label": "Knowns",
 		"property": "known_objects",
@@ -116,7 +128,7 @@
 			"classification": "character"
 		}
 	};
-	
+
 	sexes = {
 		"label": "Sex",
 		"property": "sex",
@@ -127,7 +139,7 @@
 			"classification": "character"
 		}
 	};
-	
+
 	archetypes = {
 		"label": "Archetypes",
 		"property": "archetype",
@@ -138,7 +150,7 @@
 			"classification": "character"
 		}
 	};
-	
+
 	effects = {
 		"label": "Effects",
 		"property": "effect",
@@ -146,7 +158,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	widgets = {
 		"label": "Widgets",
 		"property": "widget",
@@ -154,7 +166,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	rooms = {
 		"label": "Rooms",
 		"property": "room",
@@ -168,7 +180,7 @@
 			}
 		}
 	};
-	
+
 	items = {
 		"label": "Items",
 		"property": "item",
@@ -176,7 +188,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
@@ -184,7 +196,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	owners = {
 		"label": "Owners",
 		"property": "owners",
@@ -192,7 +204,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	slots = {
 		"label": "Slots",
 		"property": "slot",
@@ -200,7 +212,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	images = {
 		"label": "Image",
 		"property": "image",
@@ -219,7 +231,7 @@
 			"is_shop": true
 		}
 	};
-	
+
 	types = {
 		"label": "Entity Types",
 		"property": "types",
@@ -227,7 +239,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	knowledges = {
 		"label": "Knowledge",
 		"property": "knowledge",
@@ -235,7 +247,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	attrs = {
 		"label": "Attribute Modifers",
 		"property": "modifierattrs",
@@ -243,7 +255,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	stats = {
 		"label": "Stat Modifers",
 		"property": "modifierstats",
@@ -251,7 +263,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	notes = {
 		"label": "Notes",
 		"property": "note",
@@ -259,7 +271,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -399,6 +411,7 @@
 			}
 		}
 	},
+	maneuvers,
 	shipAbilities,
 	pilot,
 	races,
@@ -580,7 +593,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsEntity", {
 		"inherit": true,
 		"props": {
@@ -593,7 +606,7 @@
 			var data = {};
 			data.fields = this.fields || {};
 			data.fields.entity = dataSource;
-			
+
 
 			return data;
 		},
@@ -621,6 +634,7 @@
 			archetypes.source_index = this.universe.indexes.archetype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
+			maneuvers.source_index = this.universe.indexes.maneuver;
 			abilities.source_index = this.universe.indexes.ability;
 			effects.source_index = this.universe.indexes.effect;
 			widgets.source_index = this.universe.indexes.widget;
@@ -635,11 +649,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

@@ -63,6 +63,7 @@
 			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,
 			rsSystem.components.NounFieldsPlaylist,
+			rsSystem.components.NounFieldsManeuver,
 			rsSystem.components.NounFieldsAbility,
 			rsSystem.components.NounFieldsDataset,
 			rsSystem.components.NounFieldsJournal,

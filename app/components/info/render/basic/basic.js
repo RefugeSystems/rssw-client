@@ -70,10 +70,12 @@
 	invisibleKeys.hidden = true;
 	invisibleKeys.screen = true;
 	invisibleKeys.class = true;
+	invisibleKeys.state = true;
 	invisibleKeys.order = true;
 	invisibleKeys.name = true;
 	invisibleKeys.icon = true;
 	invisibleKeys.data = true;
+	invisibleKeys.dice = true;
 	invisibleKeys.echo = true;
 	invisibleKeys.url = true;
 	invisibleKeys.sid = true;
