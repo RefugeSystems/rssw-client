@@ -156,6 +156,9 @@
 					}
 				}
 			},
+			"stopUniverse": function() {
+				this.universe.send("stop");
+			},
 			"makeIssue": function() {
 				var buffer = {};
 				buffer.id = navigator.userAgent.sha256();

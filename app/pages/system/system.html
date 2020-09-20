@@ -89,7 +89,8 @@
 				<tr>
 					<td class="align-right">Export Data</td>
 					<td>
-						<button class="flat simple fas fa-download" v-on:click="exportUniverse()">
+						<button class="flat simple" v-on:click="exportUniverse()">
+							<span class="fas fa-download"></span>
 							<span>Export Universe</span>
 						</button>
 					</td>
@@ -128,6 +129,18 @@
 					<td>
 						<button class="flat simple fas fa-upload" v-on:click="importUniverse()" v-if="importSelection && !importing">
 							<span>Import Universe</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+			<h2>Server Info</h2>
+			<table>
+				<tr>
+					<td class="align-right">State</td>
+					<td>
+						<button class="flat simple" v-on:click="stopUniverse()">
+							<span class="fas fa-power-off"></span>
+							<span>Stop Server</span>
 						</button>
 					</td>
 				</tr>
