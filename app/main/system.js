@@ -13,7 +13,7 @@ var _p = function(x) {
 
 
 /**
- * 
+ *
  * Specifically loaded last to trigger initialization.
  * @class App
  * @constructor
@@ -78,12 +78,8 @@ rsSystem.App = new Vue({
 					"component": rsSystem.components.RSSWBase
 				}]
 			}, {
-				"path": "inventory",
-				"component": rsSystem.components.RSSWInventory,
-				"children": [{
-					"path": ":oid",
-					"component": rsSystem.components.RSSWInventory
-				}]
+				"path": "shop/:oid/:cid?",
+				"component": rsSystem.components.RSSWShop
 			}, {
 				"path": "hangar",
 				"component": rsSystem.components.RSSWHangar,
@@ -221,6 +217,6 @@ rsSystem.App = new Vue({
 	"props": {
 	},
 	"created": function() {
-		
+
 	}
 });

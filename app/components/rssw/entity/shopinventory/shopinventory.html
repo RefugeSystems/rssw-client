@@ -1,0 +1,43 @@
+<div class="rs-component rssw-shop-inventory">
+	<div class="listing-container">
+		<div class="stats">
+			<div class="data">
+				<table class="data-table">
+					<tr class="stat">
+						<td class="stat-label align-right">({{state.selected.length}}) Price</td>
+						<td class="stat-value">{{cart.price}}</td>
+						<td class="stat-value" v-if="customer" :class="customer.credits >= cart.price?'rsbd-green':'rsbd-red'">{{customer.credits}}</td>
+					</tr>
+					<tr class="stat">
+						<td class="stat-label align-right">Encum.</td>
+						<td class="stat-value">{{cart.encumberance}}</td>
+						<td class="stat-value" v-if="customer" :class="customer.encumberance_max >= customer.encumberance + cart.encumberance?'rsbd-green':'rsbd-red'">{{customer.encumberance}} / {{customer.encumberance_max}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="readout">
+			<div class="names flex v center">
+				<div class="name shop flex h">
+					<span class="icon" :class="entity.icon || 'fas fa-warehouse'"></span>
+					<span>{{entity.name}}</span>
+				</div>
+				<div class="name user flex h" v-if="customer">
+					<span class="icon" :class="customer.icon || 'fas fa-user'"></span>
+					<span>{{customer.name}}</span>
+				</div>
+			</div>
+			<div class="flex h center">
+				<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="inventory" :state="state" v-on:action="processAction"></rs-table-controls>
+			</div>
+			<button class="simple flat" v-on:click="checkout()">
+				<span class="fas fa-cart"></span>
+				<span>Checkout</span>
+			</button>
+		</div>
+		<div class="inventory">
+			<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="inventory" :headers="headers" :state="state"></rs-table>
+			<rs-table-paging class="index" :universe="universe" :user="player" :index="inventory" :state="state"></rs-table-paging>
+		</div>
+	</div>
+</div>

@@ -141,7 +141,8 @@ class RSObject extends EventEmitter {
 
 	commitAdditions(change, set) {
 		set = set || {};
-		set._type = this._type;
+		set._type = this._class || this._type;
+		set._class = this._class;
 		set.id = this.id;
 		set.delta = change;
 		this.universe.send("modify:" + this._type + ":detail:additive", set);

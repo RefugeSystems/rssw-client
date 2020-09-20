@@ -27,10 +27,14 @@
 	rsSystem.component("rsswShipManeuver", {
 		"inherit": true,
 		"mixins": [
-			rsSystem.components.RSComponentUtility,
-			rsSystem.components.RSCore
+			// rsSystem.components.RSComponentUtility,
+			// rsSystem.components.RSCore
 		],
 		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			},
 			"entity": {
 				"required": true,
 				"type": Object
@@ -39,11 +43,9 @@
 				"default": "fas fa-angle-double-up",
 				"type": String
 			},
-			"settings": {
-				"type": Object,
-				"default": function() {
-					return {};
-				}
+			"display": {
+				"default": false,
+				"type": Boolean
 			}
 		},
 		"watch": {
@@ -74,15 +76,16 @@
 				Vue.set(this, "open", !this.open);
 			},
 			"selectManeuver": function(maneuver) {
-				// console.log("Select: ", maneuver);
-				Vue.set(this, "locked", maneuver);
-				Vue.set(this, "open", false);
+				if(!this.display) {
+					Vue.set(this, "locked", maneuver);
+					Vue.set(this, "open", false);
+				}
 			},
 			"getSpeedValue": function(maneuver) {
 				if(maneuver == idleManeuver) {
 					return "X";
 				}
-				
+
 				if(!maneuver.speed) {
 					return 0;
 				}

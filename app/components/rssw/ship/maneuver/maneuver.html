@@ -1,7 +1,7 @@
 <div class="rs-component rssw component-maneuvers">
 	<div class="backdrop" :style="maneuverStyleBackdrop()">
 	</div>
-	<div class="maneuver-speed">
+	<div class="maneuver-speed" v-if="!display">
 		<span>{{getSpeedValue(locked)}}</span>
 	</div>
 	<div class="maneuver" v-for="(maneuver, i) in maneuvers" :style="maneuverStyleContainer(i, maneuver)" :index="i" :maneuver="maneuver">

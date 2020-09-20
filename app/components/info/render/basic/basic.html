@@ -1,13 +1,13 @@
 <div class="general-information">
 	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
-	
+
 	<div v-if="record.is_shop">
 		<span class="fas fa-warehouse"></span>
 		<span>A Shop</span>
 	</div>
-	
+
 	<div v-if="description" v-html="description" class="record-description"></div>
-	
+
 	<div v-if="canDashboard(record)">
 		<div class="control flex h">
 			<button class="action direct" v-on:click="viewDashboard(false)">
@@ -22,7 +22,16 @@
 			</button>
 		</div>
 	</div>
-	
+	<div v-if="record.is_shop">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="viewShopInventory(false)">
+				<span class="far fa-boxes"></span>
+				<span>View Shop Inventory</span>
+				<span v-if="base">(As {{base.name}})</span>
+			</button>
+		</div>
+	</div>
+
 	<div v-if="relatedError" class="related-error">
 		<h3>
 			<span class="fas fa-exclamation-triangle rs-light-red"></span>
@@ -30,7 +39,7 @@
 		</h3>
 		<div class="rs-light-red" v-html="relatedError"></div>
 	</div>
-	
+
 	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
 	<div v-if="record.data && record._class === 'image' && !record.linked" class="general-image">
 		<img :src="record.data" />
@@ -38,7 +47,7 @@
 	<div v-if="record.url && record._class === 'image' && record.linked" class="general-image">
 		<img :src="record.url" />
 	</div>
-	
+
 	<div class="properties">
 		<div class="direct-properties" v-if="showDirectProperties()">
 			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
@@ -53,7 +62,16 @@
 				</div>
 			</div>
 		</div>
+
+
 		<div class="inherit-relations" v-if="showInheritRelations()">
+			<div class="section maneuver-dial" v-if="record.maneuver && record.maneuver.length">
+				<div class="reference-heading">Maneuver Dial</div>
+				<div class="subreference">
+					<rssw-ship-maneuver :universe="universe" :user="user" :entity="record" :display="true"></rssw-ship-maneuver>
+				</div>
+			</div>
+
 			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 				<div class="reference" v-if="universe.indexes[property] || referenceKeys[property]">
 					<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
@@ -81,7 +99,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="section" v-if="equipped.length">
 		<h3>Equipped Equipment</h3>
 		<div class="general-list">
@@ -94,7 +112,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="section" v-if="base && relatedKnowledge.length">
 		<h3>{{base.name}}'s Related Knowledge</h3>
 		<div class="general-list">
@@ -105,7 +123,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="section" v-if="record.related && record.related.length">
 		<h3>Related Data</h3>
 		<div class="general-list">
@@ -116,7 +134,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="section" v-if="(record._type === 'location' || record._type === 'entity') && entities.length">
 		<h3>Entities Here</h3>
 		<div class="general-list" v-if="player && player.master">
@@ -135,7 +153,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div v-if="record._type === 'ability'" class="control">
 		<button class="action direct" v-if="canLearnAbility()" v-on:click="learnAbility(record.id)" :class="classByXP(record.xp_cost)">
 			<span class="fad fa-globe-africa"></span>
@@ -150,7 +168,7 @@
 			<span>XP )</span>
 		</button>
 	</div>
-	
+
 	<div v-if="record._type && canTransfer()">
 		<h3>Transfer {{record._type.capitalize()}}</h3>
 		<select v-model="transfer_target" v-on:change="transferObject()">
@@ -163,7 +181,7 @@
 			<option value="drop">Drop</option>
 		</select>
 	</div>
-	
+
 	<div v-if="canAttach()">
 		<h3>Pass To Item</h3>
 		<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} of {{record.hardpoints}} attachments</span>
@@ -179,7 +197,7 @@
 			<span>No Viable Items</span>
 		</div>
 	</div>
-	
+
 	<div v-if="base && canMoveTo(base.id)">
 		<h3>Travel</h3>
 		<div class="control" v-if="canTravelTo(base.id)">
@@ -198,7 +216,7 @@
 			</label>
 		</div>
 	</div>
-	
+
 	<div v-if="canUnequip()">
 		<div class="control">
 			<button class="action direct" v-on:click="unequip()">
@@ -207,7 +225,7 @@
 			</button>
 		</div>
 	</div>
-	
+
 	<div v-if="canEquip() && !canUnequip()">
 		<h3>Equip To</h3>
 		<div class="control">
@@ -221,7 +239,7 @@
 			</label>
 		</div>
 	</div>
-	
+
 	<div v-if="note && player && player.master">
 		<div class="info-section" v-if="(record._type === 'location' || record._type === 'entity') && hiddenEntities.length">
 			<h3>Hidden or Obscured Here</h3>
@@ -231,19 +249,19 @@
 				</li>
 			</ul>
 		</div>
-	
+
 		<h3>Master Note</h3>
 		 <div v-html="note"></div>
 	</div>
-	
+
 	<div v-if="player && player.master && !options.noMaster" class="master-controls">
 		<h3>Master Controls</h3>
-	
+
 		<div class="record-id" v-on:click="highlight($event)">
 			<span>ID:</span>
 			<input class="displayed-id" :value="record.id" />
 		</div>
-		
+
 		<div class="control">
 			<button class="action" v-on:click="hideRecord()">
 				<span class="icon" :class="record.hidden?'far fa-check-square':'far fa-square'"></span>
@@ -268,7 +286,7 @@
 				<span>Screen</span>
 			</button>
 		</div>
-		
+
 		<div class="control flex h">
 			<button class="action direct" v-on:click="editRecord(false)">
 				<span class="fas fa-edit"></span>
@@ -281,7 +299,7 @@
 				<span class="fas fa-external-link-alt rot180"></span>
 			</button>
 		</div>
-		
+
 		<div class="control flex h" v-if="record.template && record._class === 'entity'">
 			<button class="action direct" v-on:click="spawnEntity(record)">
 				<span class="fas fa-copy"></span>
@@ -294,21 +312,21 @@
 				<span>View Combat Event</span>
 			</button>
 		</div>
-		
+
 		<div class="control flex h" v-if="!record.template && record.parent && !record.owner && (!record.owners || !record.owners.length)">
 			<button class="action direct" v-on:click="deleteRecord(record); $emit('close')">
 				<span class="fas fa-trash-alt"></span>
 				<span>Delete</span>
 			</button>
 		</div>
-		
+
 		<div class="control flex h" v-if="record._type === 'session'">
 			<button class="action direct" v-on:click="setCurrentSession()">
 				<span class="fas fa-edit"></span>
 				<span>Set to this Session</span>
 			</button>
 		</div>
-		
+
 		<div class="control">
 			<button class="action direct" v-if="record.restock_base" v-on:click="restockLocation()">
 				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>
@@ -371,7 +389,7 @@
 				</select>
 			</label>
 		</div>
-		
+
 		<div class="info-section" v-if="partiesPresent.length">
 			<h3>Parties Located Here</h3>
 			<ul class="general-list">
@@ -380,6 +398,6 @@
 				</li>
 			</ul>
 		</div>
-		
+
 	</div>
 </div>

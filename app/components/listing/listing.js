@@ -43,6 +43,9 @@
 			"emit": {
 				"type": Boolean
 			},
+			"infobase": {
+				"type": Object
+			},
 			"list": {
 				"required": true,
 				"type": Array
@@ -88,7 +91,7 @@
 				if(this.emit) {
 					this.$emit("open", record);
 				} else {
-					this.showInfo(record);
+					this.showInfo(record, this.infobase);
 				}
 			},
 			"sync": function() {

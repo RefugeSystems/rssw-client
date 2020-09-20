@@ -16,6 +16,11 @@
 	invisibleKeys.propertyKey = true;
 	invisibleKeys.bonusKey= true;
 
+	invisibleKeys["_delta"] = true;
+	invisibleKeys["+delta"] = true;
+	invisibleKeys["-delta"] = true;
+	invisibleKeys["delta"] = true;
+
 	invisibleKeys.randomize_name_spacing = true;
 	invisibleKeys.randomize_name_dataset = true;
 	invisibleKeys.randomize_name_prefix = true;
@@ -31,7 +36,6 @@
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
 	invisibleKeys.no_modifiers = true;
-	invisibleKeys.restock_base = true;
 	invisibleKeys.render_name = true;
 	invisibleKeys.auto_nearby = true;
 	invisibleKeys.restock_max = true;
@@ -39,8 +43,6 @@
 	invisibleKeys.description = true;
 	invisibleKeys.for_players = true;
 	invisibleKeys.master_note = true;
-	invisibleKeys.rarity_min = true;
-	invisibleKeys.rarity_max = true;
 	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
 //	invisibleKeys.indicators = true;
@@ -51,6 +53,7 @@
 	invisibleKeys.singleton = true;
 	invisibleKeys.equipped = true;
 	invisibleKeys.obscured = true;
+	invisibleKeys.maneuver = true;
 	invisibleKeys.passcode = true;
 	invisibleKeys.property = true;
 	invisibleKeys.universe = true;
@@ -87,6 +90,13 @@
 	invisibleKeys.is_public = true;
 	invisibleKeys.is_shop = true;
 
+	invisibleKeys.restock_clear = true;
+	invisibleKeys.restock_base = true;
+	invisibleKeys.restock_max = true;
+	invisibleKeys.rarity_mean = true;
+	invisibleKeys.rarity_min = true;
+	invisibleKeys.rarity_max = true;
+
 	invisibleKeys.label_shadow_color = true;
 	invisibleKeys.label_shadow_blur = true;
 	invisibleKeys.label_shadow = true;
@@ -119,13 +129,15 @@
 	invisibleKeys.viewed = true;
 	invisibleKeys.map = true;
 
-	referenceKeys.requires_ability = "ability";
-	referenceKeys.requires_knowledge = "knowledge";
 	referenceKeys.ship_active_abilities = "ability";
+	referenceKeys.requires_knowledge = "knowledge";
+	referenceKeys.requires_ability = "ability";
 	referenceKeys.archetypes = "archetype";
 	referenceKeys.slot_usage = "slot";
 	referenceKeys.involved = "entity";
 	referenceKeys.members = "entity";
+	referenceKeys.locals = "entity";
+	referenceKeys.soldtypes= "type";
 
 	var prettifyValues = {};
 	var prettifyNames = {};
@@ -136,6 +148,7 @@
 	prettifyNames.dependency = "Dependencies";
 	prettifyNames.itemtype = "Item Types";
 	prettifyNames.xp_cost = "XP";
+	prettifyNames.soldtypes = "Sold Types";
 	prettifyNames.entity = function(value, record) {
 		if(record._type === "entity") {
 			return "Pilot";
@@ -281,6 +294,7 @@
 		"mixins": [
 			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSMasterControls,
+			rsSystem.components.RSShopControls,
 			rsSystem.components.RSShowdown
 		],
 		"props": {
@@ -788,6 +802,14 @@
 					window.location = new_location;
 				}
 			},
+			"viewShopInventory": function() {
+				var new_location = location.pathname + "#/shop/" + this.record.id;
+				if(this.base) {
+					window.location = new_location + "/" + this.base.id;
+				} else {
+					window.location = new_location;
+				}
+			},
 			"canMoveTo": function(id) {
 				id = id || this.player.entity;
 				if((this.record._type === "location" || (this.record._type === "entity" && this.record.classification !== "character")) && id
@@ -877,9 +899,10 @@
 				if(!this.restocking) {
 					Vue.set(this, "restocking", true);
 
-					this.universe.send("location:restock", {
-						"id": this.record.id
-					});
+					// this.universe.send("location:restock", {
+					// 	"id": this.record.id
+					// });
+					this.restockShop(this.record);
 
 					setTimeout(() => {
 						Vue.set(this, "restocking", false);

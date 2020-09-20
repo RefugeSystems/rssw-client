@@ -27,7 +27,7 @@ class RSEntity extends RSObject {
 //		if(!this.history) {
 //			this.history = [];
 //		}
-//		
+//
 //		this._tracked = [
 //			"location",
 //			"credits",
@@ -39,7 +39,7 @@ class RSEntity extends RSObject {
 //			"pressence",
 //			"xp"
 //		];
-//		
+//
 //		this._trackedDiff = [
 //			"archetype",
 //			"knowledge",
@@ -47,9 +47,9 @@ class RSEntity extends RSObject {
 //			"item"
 //		];
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method assignEffect
 	 * @param {RSEffect} effect
 	 * @param {Object} [details]
@@ -65,25 +65,25 @@ class RSEntity extends RSObject {
 			"effect": this._effectBuffer
 		});
 	}
-	
-	
+
+
 	assignEffectIndicator(detail_id, indicator) {
 		detail_id = detail_id.id || detail_id;
-		
+
 		if(detail_id && this._effectBuffer.length) {
 			var index = -1,
 				x;
-			
+
 			if(!indicator) {
 				indicator = null;
 			}
-			
+
 			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
 				if(this._effectBuffer[x].id === detail_id) {
 					index = x;
 				}
 			}
-			
+
 			if(index !== -1) {
 				this._effectBuffer[index].indicator = indicator;
 				this.commit({
@@ -92,24 +92,24 @@ class RSEntity extends RSObject {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
-	
+
+
 	editEffect(detail_id, details) {
 		detail_id = detail_id.id || detail_id;
-		
+
 		if(detail_id && this._effectBuffer.length && details) {
 			var index = -1,
 				x;
-			
+
 			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
 				if(this._effectBuffer[x].id === detail_id) {
 					index = x;
 				}
 			}
-			
+
 			if(index !== -1) {
 				Object.assign(this._effectBuffer[index],  details);
 				this.commit({
@@ -122,17 +122,17 @@ class RSEntity extends RSObject {
 
 	dismissEffect(detail_id) {
 		detail_id = detail_id.id || detail_id;
-		
+
 		if(detail_id && this._effectBuffer.length) {
 			var index = -1,
 				x;
-			
+
 			for(x=0; index === -1 && x<this._effectBuffer.length; x++) {
 				if(this._effectBuffer[x].id === detail_id) {
 					index = x;
 				}
 			}
-			
+
 			if(index !== -1) {
 				this._effectBuffer.splice(index, 1);
 				this.commit({
@@ -141,15 +141,15 @@ class RSEntity extends RSObject {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	recalculateHook() {
 //		var pilot,
 //			stats,
 //			x;
-//		
+//
 //		if(this.pilot && (pilot = this.universe.indexes.entity.index[this.pilot])) {
 //			stats = [
 //				"evasion",
@@ -157,26 +157,37 @@ class RSEntity extends RSObject {
 //				"shield",
 //				"hull"
 //			];
-//			
+//
 //			for(x=0; x<stats.length; x++) {
 //				if(pilot["bonus_" + stats[x]]) {
 //					this[stats[x]] += pilot["bonus_" + stats[x]];
 //				}
 //			}
 //		}
+		var buffer,
+			x;
+
+		this.encumberance_max = (this.brawn || 0) + (this.encumberance_bonus || 0);
+		this.encumberance = 0;
+		buffer = this.universe.indexes.item.translate(this.item);
+		for(x=0; x<buffer.length; x++) {
+			if(buffer[x].encumberance) {
+				this.encumberance += buffer[x].encumberance;
+			}
+		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method setPilot
 	 * @param {RSEntity} pilot
 	 */
 	setPilot(pilot) {
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method equipSlot
 	 * @param {String | RSSlot} slot
 	 * @param {String | RSEntity | RSItem | RSRoom} equip
@@ -189,7 +200,7 @@ class RSEntity extends RSObject {
 		if(typeof(equip) === "string") {
 			equip = this.universe.index.lookup[equip];
 		}
-		
+
 		if(slot.accepts && equip._type === slot.accepts) {
 			if((slot.itemtype && slot.itemtype.hasCommon(equip.itemtype)) || (slot.type && slot.type.hasCommon(equip.type))) {
 				if(!this._equipBuffer[slot.accepts]) {
@@ -199,7 +210,7 @@ class RSEntity extends RSObject {
 					this._equipBuffer[slot.accepts][slot.id] = [];
 				}
 				this._equipBuffer[slot.accepts][slot.id].push(equip.id);
-				
+
 				this.commit({
 					"equipped": this._equipBuffer
 				});
@@ -212,16 +223,16 @@ class RSEntity extends RSObject {
 			console.warn("Slot[" + slot.id + "] does not accept that equipment class[" + equip._class + "@" + equip.id + "]");
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method unequipSlot
 	 * @param {String | RSSlot} slot
 	 * @param {String | RSEntity | RSItem | RSRoom} equip
 	 */
 	unequipSlot(slot, equip) {
 		var index;
-		
+
 		if(typeof(slot) === "string") {
 			slot = this.universe.index.lookup[slot];
 		}
@@ -229,10 +240,10 @@ class RSEntity extends RSObject {
 		if(typeof(equip) === "string") {
 			equip = this.universe.index.lookup[equip];
 		}
-		
+
 		if(slot.accepts && this._equipBuffer[slot.accepts] && this._equipBuffer[slot.accepts][slot.id] && (index = this._equipBuffer[slot.accepts][slot.id].indexOf(equip.id)) !== -1) {
 			this._equipBuffer[slot.accepts][slot.id].splice(index, 1);
-			
+
 			this.commit({
 				"equipped": this._equipBuffer
 			});
@@ -242,7 +253,7 @@ class RSEntity extends RSObject {
 			console.warn("Slot[" + slot.id + "] does not have that equipment[" + equip.id + "] equipped");
 		}
 	}
-	
+
 //	addHistory(event, delay) {
 //		this.history.unshift(event);
 //		if(this.history.length > 300) {
@@ -254,7 +265,7 @@ class RSEntity extends RSObject {
 //			});
 //		}
 //	}
-	
+
 //	loadDeltaHook(event) {
 //		if(this._trackHistory) {
 //			var commit = false,
@@ -263,7 +274,7 @@ class RSEntity extends RSObject {
 //				tests,
 //				x,
 //				y;
-//			
+//
 //			for(x=0; x<this._tracked.length; x++) {
 //				if(this._tracking[this._tracked[x]] === undefined || this._tracking[this._tracked[x]] === null) {
 //					this._tracking[this._tracked[x]] = this[this._tracked[x]];
@@ -278,7 +289,7 @@ class RSEntity extends RSObject {
 //					}, true);
 //				}
 //			}
-//			
+//
 //			for(x=0; x<this._trackedDiff.length; x++) {
 //				if(this._tracking[this._trackedDiff[x]] === undefined || this._tracking[this._trackedDiff[x]] === null) {
 //					this._tracking[this._trackedDiff[x]] = this[this._trackedDiff[x]];
@@ -286,7 +297,7 @@ class RSEntity extends RSObject {
 //					diffNew = {};
 //					diffOld = {};
 //					// TODO: Finish adding up IDs and then computing difference
-//					
+//
 //					for(y=0; y<this._trackedDiff[this._tracked].length; y++) {
 //						if(!diffOld[this._trackedDiff[this._tracked][y]]) {
 //							diffOld[this._trackedDiff[this._tracked][y]] = 1;
@@ -294,7 +305,7 @@ class RSEntity extends RSObject {
 //							diffOld[this._trackedDiff[this._tracked][y]]++;
 //						}
 //					}
-//					
+//
 //					commit = true;
 //					this.addHistory({
 //						"type": this._tracked,
@@ -305,7 +316,7 @@ class RSEntity extends RSObject {
 //					}, true);
 //				}
 //			}
-//			
+//
 //			if(commit) {
 //				this.commit({
 //					"history": this.history

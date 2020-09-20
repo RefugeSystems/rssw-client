@@ -1,0 +1,6 @@
+<div class="rssw-page page-dashboard page-shop">
+	<div class="message" v-if="!player.master && customer && customer.owner !== player.id && (!customer.owners || customer.owners.indexOf(player.id) === -1)">
+		<h2>Unable to Shop as an Entity you do not Control ({{customer.name}})</h2>
+	</div>
+	<rssw-shop-inventory v-else :entity="entity" :customer="customer" :universe="universe" :user="user" :player="player"></rssw-shop-inventory>
+</div>

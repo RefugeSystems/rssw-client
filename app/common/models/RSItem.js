@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @class RSItem
  * @extends RSObject
  * @constructor
@@ -11,7 +11,7 @@ class RSItem extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
-	
+
 	recalculatePrefetch() {
 		if(this._coreData.no_modifiers || this.no_modifiers) {
 			this._replacedReferences.item = [];
@@ -19,12 +19,12 @@ class RSItem extends RSObject {
 			this._replacedReferences.item = false;
 		}
 	}
-	
+
 	recalculateHook() {
 		var sum = 0,
 			buffer,
 			x;
-		
+
 		if(this.adds_encumberance && this.item && this.item.length) {
 			for(x=0; x<this.item.length; x++) {
 				buffer = this.universe.indexes.item.lookup[this.item[x]];
@@ -32,21 +32,25 @@ class RSItem extends RSObject {
 					sum += parseInt(buffer.encumberance) || 0;
 				}
 			}
-			
+
 			if(this.scaled_encumberance && this.contents_max) {
 				sum = parseInt(Math.ceil(this.scaled_encumberance * (sum / this.contents_max)));
 			}
 		}
-		
+
 		if(this.encumberance) {
 			this.encumberance += sum;
 		} else {
 			this.encumberance = sum;
 		}
+
+		if(this.type) {
+			this._search += this.type.join(" ||| ");
+		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @method performModifications
 	 */
 	performModifications(base, origin, debug) {

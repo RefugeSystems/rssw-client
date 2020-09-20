@@ -1,6 +1,6 @@
 
 (function() {
-	
+
 	var dataSource,
 		cancontain,
 		abilities,
@@ -15,7 +15,7 @@
 		slots,
 		stats,
 		types;
-	
+
 	itemtypes = {
 		"label": "Item Types",
 		"property": "itemtype",
@@ -23,7 +23,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	parent = {
 		"label": "Parent",
 		"property": "parent", // Not "entity" as modifier inheritence is not wanted
@@ -31,7 +31,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	cancontain = {
 		"label": "Limited To Holding These Types",
 		"property": "cancontain",
@@ -39,7 +39,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	abilities = {
 		"label": "Abilities",
 		"property": "ability",
@@ -47,7 +47,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	entities = {
 		"label": "Attunee",
 		"property": "attuned_to",
@@ -55,7 +55,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	slots = {
 		"label": "Slot Usage",
 		"property": "slot_usage",
@@ -63,7 +63,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	profiles = {
 		"label": "Profile",
 		"property": "profile",
@@ -71,7 +71,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	items = {
 		"label": "Attachments",
 		"property": "item",
@@ -79,7 +79,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	skill = {
 		"label": "Skill",
 		"property": "skill_check",
@@ -87,7 +87,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
@@ -95,7 +95,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	stats = {
 		"label": "Stats",
 		"property": "modifierstats",
@@ -103,7 +103,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	notes = {
 		"label": "Notes",
 		"property": "note",
@@ -111,7 +111,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	types = {
 		"label": "Types",
 		"property": "type",
@@ -119,7 +119,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -186,6 +186,10 @@
 	}, {
 		"label": "Attunement",
 		"property": "attunement",
+		"type": "checkbox"
+	}, {
+		"label": "Restricted",
+		"property": "restricted",
 		"type": "checkbox"
 	}, {
 		"label": "Untradable",
@@ -265,7 +269,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsItem", {
 		"inherit": true,
 		"props": {
@@ -278,7 +282,7 @@
 			var data = {};
 			data.fields = this.fields || {};
 			data.fields.item = dataSource;
-			
+
 
 			return data;
 		},
@@ -304,11 +308,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

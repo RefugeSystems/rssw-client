@@ -549,8 +549,29 @@
 			"is_shop": true
 		}
 	}, {
+		"label": "Restock Clear",
+		"property": "restock_clear",
+		"type": "checkbox",
+		"condition": {
+			"is_shop": true
+		}
+	}, {
+		"label": "Sells Restricted",
+		"property": "restock_restricted",
+		"type": "checkbox",
+		"condition": {
+			"is_shop": true
+		}
+	}, {
 		"label": "Rarity Min",
 		"property": "rarity_min",
+		"type": "number",
+		"condition": {
+			"is_shop": true
+		}
+	}, {
+		"label": "Rarity Mean",
+		"property": "rarity_mean",
 		"type": "number",
 		"condition": {
 			"is_shop": true
