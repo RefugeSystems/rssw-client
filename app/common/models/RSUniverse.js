@@ -244,6 +244,10 @@ class RSUniverse extends RSObject {
 					}
 
 					this.$emit(message.type, message.event);
+					if(message.echo) {
+						this.$emit("echoing", message);
+					}
+
 					this.connection.entry(message.type + " Message received", message.type === "error"?50:30, message);
 					if(this.debugConnection || this.debug) {
 						console.warn("Emission[" + message.type + ":complete]: ", message.event);
@@ -588,7 +592,7 @@ class RSUniverse extends RSObject {
 			}
 			this.echoed[data.echo] = data;
 			this.connection.socket.send(JSON.stringify(data));
-			return data.data.echo;
+			return data.echo;
 		} else {
 			// TODO: Buffer for connection restored
 		}

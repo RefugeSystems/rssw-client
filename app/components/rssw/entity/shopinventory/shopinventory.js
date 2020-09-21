@@ -127,15 +127,21 @@
 			data.stats = stats;
 			data.cart = {
 				"encumberance": 0,
-				"cost": 0
+				"price": 0
 			};
+
+			data.checkingOut = null;
+			data.toExpensive = false;
+			data.toHeavy = false;
 
 			return data;
 		},
 		"mounted": function() {
 			rsSystem.register(this);
 			this.inventory.$on("selection", this.selected);
-			this.entity.$on("modifier", this.update);
+			this.universe.$on("echo:response", this.receive);
+			this.universe.$on("echoing", this.receive);
+			this.entity.$on("modified", this.update);
 			this.update();
 		},
 		"methods": {
@@ -143,7 +149,21 @@
 				console.log("Process: ", action);
 			},
 			"checkout": function() {
-				console.log("Checkout: ", this.state.selected);
+				console.log("Checkout: ", this.state.selected, "\nShop: ", this.entity, "\nCustomer: ", this.customer);
+				if(this.customer) {
+					Vue.set(this, "checkingOut", this.universe.send("shop:checkout", {
+						"shop": this.entity.id,
+						"customer": this.customer.id,
+						"checkout": this.state.selected,
+						"price": this.cart.price
+					}));
+				}
+			},
+			"receive": function(message) {
+				console.log("Echo Receive: ", message);
+				if(this.checkingOut && message.echo === this.checkingOut) {
+					Vue.set(this, "checkingOut", null);
+				}
 			},
 			"selected": function() {
 				var load = {},
@@ -166,8 +186,17 @@
 					}
 				}
 
+				if(this.entity.no_cost) {
+					load.price = 0;
+				}
+
 				for(s=0; s<stats.length; s++) {
 					Vue.set(this.cart, stats[s].field, load[stats[s].field]);
+				}
+
+				if(this.customer) {
+					Vue.set(this, "toHeavy", this.customer.encumberance_max < this.customer.encumberance + load.encumberance);
+					Vue.set(this, "toExpensive", load.price > this.customer.credits);
 				}
 			},
 			"update": function() {
@@ -179,7 +208,8 @@
 		},
 		"beforeDestroy": function() {
 			this.inventory.$off("selection", this.selected);
-			this.entity.$off("modifier", this.update);
+			this.universe.$off("echoing", this.receive);
+			this.entity.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/entity/shopinventory.html")
 	});
