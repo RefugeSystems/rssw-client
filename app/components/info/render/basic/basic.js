@@ -9,7 +9,9 @@
 (function() {
 
 	var invisibleKeys = {},
-		referenceKeys = {};
+		referenceKeys = {},
+		
+		shownLength = 7;
 
 	invisibleKeys.property = true;
 	invisibleKeys.enhancementKey= true;
@@ -358,8 +360,10 @@
 			data.attach_targets = [];
 			data.attach_target = "";
 
+			data.shownLocations = [];
 			data.locations = [];
 
+			data.shownEntities = [];
 			data.entities = [];
 			data.hiddenEntities = [];
 
@@ -941,6 +945,16 @@
 					"involved": this.id
 				});
 			},
+			"showAllLocations": function() {
+				this.shownLocations.splice(0);
+				this.shownLocations.push.apply(this.shownLocations, this.entities);
+				this.$forceUpdate();
+			},
+			"showAllEntities": function() {
+				this.shownEntities.splice(0);
+				this.shownEntities.push.apply(this.shownEntities, this.entities);
+				this.$forceUpdate();
+			},
 			"update": function() {
 				var buffer,
 					hold,
@@ -1069,6 +1083,7 @@
 				this.availableTemplates.entity.splice(0);
 				this.movableEntities.splice(0);
 				this.hiddenEntities.splice(0);
+				this.shownEntities.splice(0);
 				this.entities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					if(((!this.universe.indexes.entity.listing[x].owners && !this.universe.indexes.entity.listing[x].owner)
@@ -1085,10 +1100,25 @@
 						if(this.universe.indexes.entity.listing[x].hidden || this.universe.indexes.entity.listing[x].obscured) {
 							this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
 						} else {
+							this.shownEntities.push(this.universe.indexes.entity.listing[x]);
 							this.entities.push(this.universe.indexes.entity.listing[x]);
 						}
 					}
 				}
+
+				this.shownLocations.splice(0);
+				this.locations.splice(0);
+				if(this.record._class === "location") {
+					for(x=0; (all || x < 7) && x<this.universe.indexes.location.listing.length; x++) {
+						if(this.universe.indexes.location.listing[x] && this.universe.indexes.location.listing[x].location === this.record.id) {
+							this.shownLocations.push(this.universe.indexes.location.listing[x]);
+							this.locations.push(this.universe.indexes.location.listing[x]);
+						}
+					}
+				}
+				
+				this.shownLocations.splice(shownLength);
+				this.shownEntities.splice(shownLength);
 
 				this.availableSlots.splice(0);
 				if(this.base && this.base.slot && this.base.slot.length) {
@@ -1137,15 +1167,6 @@
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					if(this.universe.indexes.entity.listing[x] && (this.universe.indexes.entity.listing[x].screen || this.universe.indexes.entity.listing[x].owner || (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.length))) {
 						this.availableEntities.push(this.universe.indexes.entity.listing[x]);
-					}
-				}
-
-				this.locations.splice(0);
-				if(this.record._class === "location") {
-					for(x=0; x<this.universe.indexes.location.listing.length; x++) {
-						if(this.universe.indexes.location.listing[x] && this.universe.indexes.location.listing[x].location === this.record.id) {
-							this.locations.push(this.universe.indexes.location.listing[x]);
-						}
 					}
 				}
 
