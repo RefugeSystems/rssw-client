@@ -135,34 +135,26 @@
 		</div>
 	</div>
 
-	<div class="section" v-if="record._class === 'location' && locations.length">
-		<h3>Locations Here</h3>
-		<div class="general-list">
-			<ul class="general-list">
-				<li v-for="location in locations">
-					<a class="rendered-value" v-if="isOwner(location)" :data-id="location.id">{{location.name}}</a>
-					<span class="data-value" v-else>{{location.name}}</span>
-				</li>
-			</ul>
+	<div class="reference-values">
+		<div class="reference-heading">Locations Here</div>
+		<div class="subreference" v-for="location in locations">
+			<a class="rendered-value" v-if="isOwner(location)" :data-id="location.id">{{location.name}}</a>
+			<span class="rendered-value" v-else>{{location.name}}</span>
 		</div>
 	</div>
 
-	<div class="section" v-if="(record._class === 'location' || record._class === 'entity') && entities.length">
-		<h3>Entities Here</h3>
-		<div class="general-list" v-if="player && player.master">
-			<ul class="general-list">
-				<li v-for="entity in entities">
-					<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
-				</li>
-			</ul>
+	<div class="reference-values">
+		<div class="reference-heading">Entities Here</div>
+		<div v-if="player && player.master">
+			<div class="subreference" v-for="entity in entities">
+				<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
+			</div>
 		</div>
-		<div class="general-list" v-if="!player || !player.master">
-			<ul class="general-list">
-				<li v-for="entity in entities">
-					<a class="rendered-value" v-if="isOwner(entity)" :data-id="entity.id">{{entity.name}}</a>
-					<span class="data-value" v-else>{{entity.name}}</span>
-				</li>
-			</ul>
+		<div v-if="!player || !player.master">
+			<div class="subreference" v-for="entity in entities">
+				<a class="rendered-value" v-if="isOwner(entity)" :data-id="entity.id">{{entity.name}}</a>
+				<span class="rendered-value" v-else>{{entity.name}}</span>
+			</div>
 		</div>
 	</div>
 
