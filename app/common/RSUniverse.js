@@ -167,7 +167,6 @@ class RSUniverse extends EventEmitter {
 				this.connection.entry("Connection Failure", 50, event);
 				rsSystem.log.fatal({
 					"message": "Connection Failure",
-					"universe": this,
 					"error": event
 				});
 				this.connection.lastErrorAt = Date.now();
@@ -178,7 +177,6 @@ class RSUniverse extends EventEmitter {
 					this.connection.reconnecting = true;
 					this.$emit("error", {
 						"message": "Connection Issues",
-						"universe": this,
 						"event": event
 					});
 				}
@@ -192,7 +190,6 @@ class RSUniverse extends EventEmitter {
 						// Player Not Found: Bad username or passcode
 						this.$emit("badlogin", {
 							"message": "Bad login",
-							"universe": this,
 							"event": event
 						});
 					//} else if(event.code === 1013) { // Universe still initializing (Use Reconnect)
@@ -203,7 +200,6 @@ class RSUniverse extends EventEmitter {
 						this.connection.reconnecting = true;
 						this.$emit("error", {
 							"message": "Connection Issues",
-							"universe": this,
 							"event": event
 						});
 						this.reconnect(event);
