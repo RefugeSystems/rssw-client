@@ -44,7 +44,7 @@ class RSItem extends RSObject {
 			this.encumberance = sum;
 		}
 
-		if(this.type) {
+		if(this.type && typeof(this.type.join) === "function") {
 			this._search += this.type.join(" ||| ");
 		}
 	}
