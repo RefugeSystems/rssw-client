@@ -735,6 +735,9 @@ class RSObject extends EventEmitter {
 		if(this.name) {
 			this._search += this.name.toLowerCase();
 		}
+		if(this.type && typeof(this.type.join) === "function") {
+			this._search += this.type.join(" ||| ");
+		}
 		if(this.description) {
 			this._search += this.description.toLowerCase();
 		}
