@@ -36,6 +36,9 @@
 			"toggleSecure": function() {
 				Vue.set(this.store, "secure", !this.store.secure);
 			},
+			"clearSaved": function() {
+				Vue.delete(this.store, "passcode");
+			},
 			"getPasscodePlaceHolder": function() {
 				if(this.store.passcode) {
 					return " < Saved Passcode > ";

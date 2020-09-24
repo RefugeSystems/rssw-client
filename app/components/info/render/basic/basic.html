@@ -135,7 +135,19 @@
 		</div>
 	</div>
 
-	<div class="section" v-if="(record._type === 'location' || record._type === 'entity') && entities.length">
+	<div class="section" v-if="record._class === 'location' && locations.length">
+		<h3>Locations Here</h3>
+		<div class="general-list">
+			<ul class="general-list">
+				<li v-for="location in locations">
+					<a class="rendered-value" v-if="isOwner(location)" :data-id="location.id">{{location.name}}</a>
+					<span class="data-value" v-else>{{location.name}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="section" v-if="(record._class === 'location' || record._class === 'entity') && entities.length">
 		<h3>Entities Here</h3>
 		<div class="general-list" v-if="player && player.master">
 			<ul class="general-list">
@@ -154,7 +166,7 @@
 		</div>
 	</div>
 
-	<div v-if="record._type === 'ability'" class="control">
+	<div v-if="record._class === 'ability'" class="control">
 		<button class="action direct" v-if="canLearnAbility()" v-on:click="learnAbility(record.id)" :class="classByXP(record.xp_cost)">
 			<span class="fad fa-globe-africa"></span>
 			<span>Learn Ability ( </span>
@@ -169,8 +181,8 @@
 		</button>
 	</div>
 
-	<div v-if="record._type && canTransfer()">
-		<h3>Transfer {{record._type.capitalize()}}</h3>
+	<div v-if="record._class && canTransfer()">
+		<h3>Transfer {{record._class.capitalize()}}</h3>
 		<select v-model="transfer_target" v-on:change="transferObject()">
 			<option value="">Choose Target...</option>
 			<option value="cancel">Cancel</option>
@@ -241,7 +253,7 @@
 	</div>
 
 	<div v-if="note && player && player.master">
-		<div class="info-section" v-if="(record._type === 'location' || record._type === 'entity') && hiddenEntities.length">
+		<div class="info-section" v-if="(record._class === 'location' || record._class === 'entity') && hiddenEntities.length">
 			<h3>Hidden or Obscured Here</h3>
 			<ul class="general-list">
 				<li v-for="entity in hiddenEntities">
@@ -320,20 +332,20 @@
 			</button>
 		</div>
 
-		<div class="control flex h" v-if="record._type === 'session'">
+		<div class="control flex h" v-if="record._class === 'session'">
 			<button class="action direct" v-on:click="setCurrentSession()">
 				<span class="fas fa-edit"></span>
 				<span>Set to this Session</span>
 			</button>
 		</div>
 
-		<div class="control">
+		<div class="control" v-if="record.is_shop">
 			<button class="action direct" v-if="record.restock_base" v-on:click="restockLocation()">
 				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>
 				<span>Restock Items</span>
 			</button>
 		</div>
-		<div class="control" v-if="record._type === 'location'">
+		<div class="control" v-if="record._class === 'location'">
 			<label>
 				<span>Copy Entity to Here</span>
 				<select v-model="copyToHere" v-on:change="copyEntityHere(copyToHere)">

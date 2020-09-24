@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsViewer
  * @constructor
  * @module Components
@@ -17,7 +17,7 @@
 		"city": "fas fa-city",
 		"marker": "fas fa-map-marker"
 	};
-	
+
 	rsSystem.component("rsViewer", {
 		"inherit": true,
 		"mixins": [
@@ -36,7 +36,7 @@
 			data.state = this.loadStorage(data.storageKeyID, {
 				"zoomStep": 1
 			});
-			
+
 			data.generateLocationClassingMap = generateLocationClassingMap;
 			if(!data.state.crosshairing) {
 				data.state.crosshairing = {
@@ -75,7 +75,7 @@
 			if(data.state.path_fill === undefined) {
 				data.state.path_fill = "";
 			}
-			
+
 			if(data.state.search) {
 				data.search_criteria = data.state.search.toLowerCase().split(" ");
 			} else {
@@ -84,7 +84,7 @@
 
 			data.baseFontSize = 13;
 			data.scaledSize = 0;
-			
+
 			data.searchPrevious = data.state.search;
 			data.searchError = "";
 			data.original = {};
@@ -92,11 +92,11 @@
 			data.parchment = null;
 			data.element = null;
 			data.ready = false;
-			
+
 			data.isDragging = false;
 			data.dragX = null;
 			data.dragY = null;
-			
+
 			data.availableCanvases = {};
 			data.availableLocales = {};
 			data.pointsOfInterest = [];
@@ -104,18 +104,18 @@
 			data.locales = [];
 			data.pins = true;
 			data.alter = "";
-			
+
 			data.legendDisplayed = true;
 			data.legendOpen = false;
 			data.legendHidden = {};
 			data.isMaster = null;
-			
+
 			data.localeInfo = {
 				"event": "info-key",
 				"icon": "fas fa-info-circle",
 				"shown": false
 			};
-			
+
 			data.menuOpen = false;
 			data.menuItems = [[{
 				"action": "zoomin",
@@ -137,7 +137,7 @@
 				"text": "Reset",
 				"icon": "far fa-expand-wide"
 			}];
-			
+
 			data.menuItems.generateLocation = {
 				"event": "generate-location"
 			};
@@ -157,7 +157,7 @@
 				"action": "fullscreen",
 				"text": "Fill Page"
 			};
-			
+
 			data.actions = {};
 			data.actions.open = false;
 			data.actions.header = "Location";
@@ -175,9 +175,9 @@
 				"event": "set-name-point",
 				"text": "Set Name Point"
 			};
-			
+
 			data.canvas = null;
-			
+
 			return data;
 		},
 		"watch": {
@@ -215,7 +215,7 @@
 					Vue.set(this, "viewingEntity", this.universe.indexes.entity.index[this.player.entity]);
 				}
 			}
-			
+
 			rsSystem.register(this);
 			rsSystem.EventBus.$on("copied-id", this.setMenuID);
 			this.universe.$on("universe:modified", this.update);
@@ -231,7 +231,7 @@
 				var set = false,
 					buffer,
 					x;
-				
+
 				for(x=0; !set && x<this.pointsOfInterest.length; x++) {
 					buffer = this.pointsOfInterest[x];
 					console.warn("Searching[" + buffer.id + "]: ", buffer);
@@ -240,7 +240,7 @@
 						set = true;
 					}
 				}
-				
+
 				if(!set) {
 					Vue.set(this, "searchError", "Not Found");
 				} else {
@@ -252,7 +252,7 @@
 					locY,
 					view,
 					x;
-				
+
 				if(location) {
 					locY = location.y/100 * this.image.height;
 					locX = location.x/100 * this.image.width;
@@ -269,7 +269,7 @@
 				return generateLocationClassingMap[this.state.generate_location];
 			},
 			"idFromName": function(name) {
-				return "location:" + this.state.generate_location + ":" + name.toLowerCase().replace(/[ \._-]+/g, "");
+				return "location:" + this.state.generate_location + ":" + name.toLowerCase().replace(/[^0-9a-zA-Z_]+/g, "");
 			},
 			"generateLocationNoun": function(x, y) {
 				var noun = {};
@@ -300,13 +300,13 @@
 			"filterPOIs": function(text) {
 //				console.log("Filter: " + text);
 				var buffer;
-				
+
 				if(text !== this.searchPrevious) {
 					Vue.set(this, "searchPrevious", text);
 					this.search_criteria.splice(0);
 					if(text) {
 						text = text.toLowerCase().split(" ");
-	
+
 						if(this.searchError) {
 							Vue.set(this, "searchError", "");
 						}
@@ -396,7 +396,7 @@
 					buffer,
 					locale,
 					x;
-				
+
 				if(event.ctrlKey) {
 					this.appendPath(xc/this.image.width*100, yc/this.image.height*100);
 				} else if(event.shiftKey) {
@@ -427,10 +427,14 @@
 						this.actions.options.shift();
 						this.localeInfo.shown = false;
 					}
-					
+
 					Vue.set(this.actions, "x", event.offsetX);
 					Vue.set(this.actions, "y", event.offsetY);
 					Vue.set(this.actions, "open", true);
+
+					setTimeout(() => {
+						$(this.$el).find("#viewgen").focus();
+					});
 				}
 			},
 			"closeActions": function() {
@@ -443,7 +447,7 @@
 //				console.log("Fire Option: ", option);
 				var buffer,
 					path;
-				
+
 				switch(option.event) {
 					case "set-crosshair":
 						this.coordinates.push({
@@ -510,7 +514,7 @@
 						this.showInfo(option.location);
 						break;
 				}
-				
+
 				this.redrawPaths();
 				this.closeActions();
 			},
@@ -550,7 +554,7 @@
 			"resetViewport": function() {
 				Object.assign(this.image, this.original);
 				var view = this.getViewport();
-				
+
 				this.image.zoom = 0;
 				this.image.left = view.width/2 - this.image.width/2;
 				this.image.top = view.height/2 - this.image.height/2;
@@ -615,12 +619,12 @@
 
 					left = parseInt(left.replace("px", ""));
 					top = parseInt(top.replace("px", ""));
-					
+
 					//console.log("drag: " + left + " x " + top + " - [" + this.dragX + ", " + this.dragY + "] d[" + dX + ", " + dY + "] @[" + event.pageX + ", " + event.pageY + "]");
-										
+
 					left -= dX;
 					top -= dY;
-					
+
 					this.apply({
 						"left": left,
 						"top": top
@@ -637,10 +641,10 @@
 					left,
 					top,
 					x;
-				
+
 				left = this.image.left - vw;
 				top = this.image.top - vh;
-				
+
 				return {
 					"x": -1* ((left/this.image.width) * 100).toFixed(3),
 					"y": -1* ((top/this.image.height) * 100).toFixed(3),
@@ -664,7 +668,7 @@
 					cenX *= targetWidth;
 					cenY += vh;
 					cenX += vw;
-					
+
 					this.apply({
 						"height": targetHeight,
 						"width": targetWidth,
@@ -682,7 +686,7 @@
 
 //				console.log("Panning[]: ", panned.velocityX, panned.velocityY);
 				left = parseInt(left.replace("px", ""));
-				top = parseInt(top.replace("px", ""));				
+				top = parseInt(top.replace("px", ""));
 
 //				console.log("Panning: ", panned);
 				if(this.isDragging) {
@@ -704,7 +708,7 @@
 					this.dragX = panned.deltaX;
 					this.dragY = panned.deltaY;
 				}
-				
+
 				this.apply({
 					"left": left,
 					"top": top
@@ -742,7 +746,7 @@
 					if(applying.top === undefined) {
 						applying.top = this.image.top;
 					}
-					
+
 //					applying.height = applying.height || this.image.height || 0;
 //					applying.width = applying.width || this.image.width || 0;
 //					applying.left = applying.left || this.image.left || 0;
@@ -756,7 +760,7 @@
 						this.image.width = this.original.width * (1 + .1 * applying.zoom);
 						Vue.set(this, "scaledSize", this.baseFontSize + applying.zoom);
 					}
-					
+
 					if(this.locales && this.locales.length && (this.image._lastzoom !== applying.zoom || this.image._lastlocation !== this.location.id)) {
 //						console.log("Apply Redraw: ", JSON.stringify(this.image, null, 4), JSON.stringify(applying, null, 4));
 //						console.log("Apply Redraw");
@@ -777,14 +781,14 @@
 							this.image._lastzoom = applying.zoom;
 						}
 					}
-					
+
 					this.parchment.css({
 						"height": applying.height + "px",
 						"width": applying.width + "px",
 						"left": applying.left + "px",
 						"top": applying.top + "px"
 				    });
-					
+
 					Object.assign(this.image, applying);
 					this.saveStorage(this.storageKeyID, this.state);
 				}
@@ -793,15 +797,15 @@
 				var buffer,
 					path,
 					x;
-				
-				
+
+
 				// Paint Grid
 //				if(this.options && this.options.paintGrid) {
 //					this.paintGrid();
 //				}
 
 //				console.log("Redraw");
-				
+
 				for(x=0; x<this.locales.length; x++) {
 					path = this.locales[x];
 					if(path.location === this.location.id && path.has_path) {
@@ -829,7 +833,7 @@
 						buffer,
 						point,
 						x;
-					
+
 					if(path.pathed) {
 						for(x=0; x<path.pathing.length; x++) {
 							buffer = this.universe.indexes.location.index[path.pathing[x]];
@@ -844,13 +848,13 @@
 							points.push(point);
 						}
 					}
-					
+
 					if(points.length) {
 						this.renderPath(canvas, path, points);
 						return canvas;
 					}
 				}
-				
+
 				return null;
 			},
 			"renderPath": function(canvas, path, points) {
@@ -858,7 +862,7 @@
 				var xc,
 					yc,
 					x;
-				
+
 				canvas.locationID = path.id;
 				canvas.strokeStyle = path.color || "#FFFFFF";
 				canvas.lineWidth = path.thickness;
@@ -908,7 +912,7 @@
 					}
 					canvas.closePath();
 					canvas.fill();
-					
+
 					if(this.state.labels && path.render_name && path._x !== undefined && path._y !== undefined) {
 						canvas.fillStyle = path.label_color || path.color || "#FFFFFF";
 						canvas.font = "bold " + (12 + this.state.image.zoom) + "px Arial";
@@ -922,16 +926,16 @@
 				} else {
 					canvas.stroke();
 				}
-				
+
 				return canvas;
 			},
 			"elementVisible": function(element, entity) {
 				if(element.template || element.hidden || (element.obscured && !this.player.master)) {
 					return false;
 				}
-				
+
 				if(element.must_know && !this.player.master) {
-					
+
 				}
 			},
 			"localeVisible": function(locale) {
@@ -943,11 +947,11 @@
 				if(!link) {
 					return "";
 				}
-				
+
 				var classStyle = "",
 					buffer,
 					x;
-				
+
 				if(this.search_criteria.length) {
 					if(!link._search) {
 						classStyle += " search-hidden";
@@ -965,35 +969,35 @@
 						}
 					}
 				}
-				
+
 				if(link.no_border) {
 					classStyle += " no-border";
 				} else {
 					classStyle += " map-border";
 				}
-				
+
 				return classStyle;
 			},
 			"poiNamed": function(link) {
 				if(link.has_path && !link.show_name) {
 					return false;
 				}
-				
+
 				return this.poiVisible(link);
 			},
 			"poiVisible": function(link) {
 				var entity,
 					x;
-				
+
 				if(link.template || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
 					return false;
 				}
-				
+
 				//console.log("Link[" + link.id + " | " + link.must_know + "]: " + ( (!this.player.master || this.state.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) ), " | ", this.viewingEntity.knowsOf(link), "\n > ", this.viewingEntity);
 				if(link.must_know && ( (!this.player.master || this.state.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) )) {
 					return false;
 				}
-				
+
 				if(this.state.poiFiltering && this.search_criteria.length) {
 					if(!link._search) {
 						return false;
@@ -1004,24 +1008,24 @@
 						}
 					}
 				}
-				
+
 				if(this.player.master && this.state.master_view === "master") {
 					return true;
 				}
-				
+
 				if(link.hidden || (link.obscured && !this.player.master)) {
 					return false;
 				}
-				
+
 				if(!link.required_knowledge) {
 					return true;
 				}
-				
+
 				entity = this.universe.nouns.entity[this.player.entity];
 				if(entity && (entity = this.universe.nouns.knowledge[entity.knowledge])) {
 					return !!entity[link.knowledge];
 				}
-				
+
 				return false;
 			},
 			"renderState": function() {
@@ -1045,7 +1049,7 @@
 //				console.warn("Update");
 				var buffer,
 					x;
-				
+
 				if(this.isMaster !== this.player.master) {
 					Vue.set(this, "isMaster", this.player.master);
 					this.actions.options.splice(0);
@@ -1060,7 +1064,7 @@
 							"event": "set-current",
 							"text": "Show Map"
 						});
-						
+
 						this.actions.options.push({
 							"icon": "fas fa-chevron-double-right",
 							"event": "set-crosshair",
@@ -1109,9 +1113,9 @@
 							"text": "Mark: White",
 							"color": "white"
 						});
-						
+
 						this.actions.options.push(this.state.crosshairing);
-						
+
 						this.actions.options.push({
 							"icon": "fas fa-chevron-double-right",
 							"event": "set-location",
@@ -1119,12 +1123,12 @@
 						});
 					}
 				}
-				
+
 				this.coordinates.splice(0);
 				if(this.location.coordinates && this.location.coordinates.length) {
 					this.coordinates.push.apply(this.coordinates, this.location.coordinates);
 				}
-				
+
 				while(this.pointsOfInterest.length !== 0) {
 					buffer = this.pointsOfInterest.pop();
 					if(buffer.$off) {
@@ -1163,7 +1167,7 @@
 //						this.locales.push(buffer);
 //					}
 //				}
-				
+
 				if(this.location.image && (buffer = this.universe.nouns.image[this.location.image])) {
 					Vue.set(this, "ready", false);
 					if(buffer.linked) {
@@ -1177,14 +1181,14 @@
 					Vue.set(this, "sourceImage", this.location.viewed);
 					this.getDimensions(this.location.viewed);
 				}
-				
+
 				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
 //					console.log("View State Sync: ", this.location, this.state);
 					Vue.set(this.state, "viewed_at", this.location.shown_at);
 					Object.assign(this.image, this.location.showing);
 					this.apply(this.image);
 				}
-				
+
 				this.$forceUpdate();
 				this.redrawPaths();
 			}

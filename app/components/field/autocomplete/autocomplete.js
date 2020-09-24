@@ -1,21 +1,21 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsAutocomplete
  * @constructor
  * @module Components
  * @param {Object} root The object to which the value should be modeled back
  * @param {Array} corpus The array of Strings on which autocompletion shouold recommend
- * @param {String} key The key for 
+ * @param {String} key The key for
  */
 (function() {
 	var storageKey = "_rs_autocompleteComponentKey";
-	
+
 	rsSystem.component("rsAutocomplete", {
 		"inherit": true,
 		"mixins": [
-			
+
 		],
 		"props": {
 			"value": {
@@ -28,10 +28,12 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.modeling = this.value;
-			data.matched = [];
-			
+			data.activeCompletion = null;
+			data.reference_value = "";
+			data.completions = [];
+
 			return data;
 		},
 		"mounted": function() {

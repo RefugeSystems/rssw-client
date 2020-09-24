@@ -1,6 +1,6 @@
 
 (function() {
-	
+
 	var dataSource,
 		knowledges,
 		playlists,
@@ -11,13 +11,14 @@
 		locals,
 		notes,
 		types;
-	
+
 	pathing = {
 		"label": "Pathing",
 		"property": "pathing",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name",
+		"autocomplete": true,
 		"condition": {
 			"has_path": true,
 			"pathed": {
@@ -25,7 +26,7 @@
 			}
 		}
 	};
-	
+
 	location = {
 		"label": "Resides In",
 		"property": "location",
@@ -33,7 +34,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	profiles = {
 		"label": "Profile",
 		"property": "profile",
@@ -41,7 +42,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	images = {
 		"label": "Image",
 		"property": "image",
@@ -49,7 +50,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	locals = {
 		"label": "Locals",
 		"property": "locals",
@@ -57,7 +58,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	knowledges = {
 		"label": "Knowledge",
 		"property": "knowledge",
@@ -73,7 +74,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	notes = {
 		"label": "Notes",
 		"property": "note",
@@ -81,7 +82,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	types = {
 		"label": "Types",
 		"property": "type",
@@ -89,7 +90,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -367,7 +368,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsLocation", {
 		"inherit": true,
 		"props": {
@@ -380,7 +381,7 @@
 			var data = {};
 			data.fields = this.fields || {};
 			data.fields.location = dataSource;
-			
+
 			return data;
 		},
 		"mounted": function() {
@@ -400,11 +401,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

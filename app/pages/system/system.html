@@ -8,7 +8,7 @@
 			<span>Cache Clearing Refresh</span>
 		</button>
 
-		<h2 class="flex h middled">
+		<h2 class="flex h">
 			<span>Detected Browser Information</span>
 			<button class="make" v-on:click="makeIssue()" v-if="player.master && !knownErrors.navigator">
 				<span>Create</span>
@@ -123,12 +123,17 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr v-if="importSelection && !importing">
 					<td>
 					</td>
 					<td>
-						<button class="flat simple fas fa-upload" v-on:click="importUniverse()" v-if="importSelection && !importing">
+						<button class="flat simple" v-on:click="importUniverse()">
+							<span class="fas fa-upload"></span>
 							<span>Import Universe</span>
+						</button>
+						<button class="flat simple" v-on:click="importOverwriteToggle()">
+							<span class="far" :class="importOverwrites?'fa-check-square':'fa-square'"></span>
+							<span>Overwrite</span>
 						</button>
 					</td>
 				</tr>

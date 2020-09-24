@@ -11,6 +11,8 @@
 
 	var offset = (new Date()).getTimezoneOffset() * 60 * 1000;
 
+	var autocompleteLength = 5;
+
 	var dateToString = function(time) {
 		if(!time) {
 			return "";
@@ -67,6 +69,9 @@
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
 			data.focused = false;
+
+			data.activeCompletion = null;
+			data.completions = [];
 
 			data.bufferChanging = false;
 			data.bufferLoading = false;
@@ -194,6 +199,9 @@
 
 				return true;
 			},
+			"deriveCompletions": function(event, reference) {
+				console.log("Derive: ", event, reference);
+			},
 			"optionAvailable": function(option) {
 				if(this.filterKeys) {
 					for(var x=0; x<this.filterKeys.length; x++) {
@@ -205,20 +213,96 @@
 
 				return true;
 			},
-			"dismissReference": function(index, record) {
+			"addReference": function(reference) {
+				if(!this.root[this.field.property]) {
+					Vue.set(this.root, this.field.property, []);
+				}
+				if(this.field.autocomplete) {
+					if(this.completions[this.activeCompletion]) {
+						this.root[this.field.property].push(this.completions[this.activeCompletion][this.field.optionValue]);
+						Vue.set(this, "reference_value", "");
+						this.completions.splice(0);
+					}
+				} else if(reference) {
+					if(!(this.root[this.field.property] instanceof Array)) {
+						Vue.set(this.root, this.field.property, []);
+					}
+					this.root[this.field.property].push(reference);
+					Vue.set(this, "reference_value", "");
+					this.emitChanged();
+				}
+			},
+			"selectCompletion": function(completion) {
+				if(!this.root[this.field.property]) {
+					Vue.set(this.root, this.field.property, []);
+				}
+				this.root[this.field.property].push(completion[this.field.optionValue]);
+				Vue.set(this, "reference_value", "");
+				this.completions.splice(0);
+			},
+			"editReference": function(index, reference) {
+				Vue.set(this, "reference_value", reference);
+				this.dismissReference(index);
+				// Search at time as it may hide/show from conditions
+				$(this.$el).find("#editreference").focus();
+			},
+			"dismissReference": function(index) {
 				this.root[this.field.property].splice(index, 1);
 				this.emitChanged();
 			},
-			"addReference": function(reference) {
-				if(!(this.root[this.field.property] instanceof Array)) {
-					Vue.set(this.root, this.field.property, []);
-				}
-				this.root[this.field.property].push(reference);
-				Vue.set(this, "reference_value", "");
-				this.emitChanged();
-			},
 			"openReference": function(reference) {
-				rsSystem.EventBus.$emit("display-info", reference);
+				if(reference) {
+					rsSystem.EventBus.$emit("display-info", reference);
+				}
+			},
+			/**
+			 *
+			 * @param  {KeyboardEvent} event
+			 * @return {Boolean} Indicating whether additional processing is needed.
+			 */
+			"adjustCompletions": function(event) {
+				switch(event.key) {
+					case "ArrowUp":
+						if(this.activeCompletion > 0) {
+							Vue.set(this, "activeCompletion", this.activeCompletion - 1);
+						}
+						return false;
+					case "ArrowDown":
+						if(this.activeCompletion < this.completions.length - 1) {
+							Vue.set(this, "activeCompletion", this.activeCompletion + 1);
+						}
+						return false;
+					case "Escape":
+						Vue.set(this, "reference_value", "");
+						Vue.set(this, "activeCompletion", 0);
+						this.completions.splice(0);
+						return false;
+				}
+
+				return true;
+			},
+			"deriveCompletions": function(reference, event) {
+				if(!event || this.adjustCompletions(event)) {
+					if(!reference) {
+						this.completions.splice(0);
+					} else {
+						reference = reference.toLowerCase();
+						var added = 0,
+							buffer,
+							x;
+
+						this.completions.splice(0);
+						if(this.field.source_index) {
+							for(x=0; x<this.field.source_index.listing.length && added < autocompleteLength; x++) {
+								if(this.field.source_index.listing[x].name && this.field.source_index.listing[x].name.toLowerCase().indexOf(reference) !== -1) {
+									this.completions.push(this.field.source_index.listing[x]);
+									added++;
+								}
+							}
+						}
+						Vue.set(this, "activeCompletion", 0);
+					}
+				}
 			},
 			"blurring": function() {
 				this.$emit("blur", this.field);

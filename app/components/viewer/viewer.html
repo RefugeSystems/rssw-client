@@ -30,6 +30,12 @@
 						</button>
 					</div>
 					<div class="actions-options">
+						<div class="generator flex h" v-if="state.generate_location">
+							<input type="text" id="viewgen" v-model="state.generate_location_name" v-on:keyup.enter="fire(menuItems.generateLocation, $event)"/>
+							<button v-on:click="fire(menuItems.generateLocation, $event)" class="normal">
+								<span :class="getGeneratedClass()"></span>
+							</button>
+						</div>
 						<button class="option normal" v-for="option in actions.options" v-on:click.stop.prevent="fire(option, $event)">
 							<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
 							<span>{{option.text}}</span>
@@ -42,12 +48,6 @@
 							<span class="fas fa-code-commit"></span>
 							<span>Add Point</span>
 						</button>
-						<div class="generator flex h" v-if="state.generate_location">
-							<input type="text" v-model="state.generate_location_name" v-on:keyup.enter="fire(menuItems.generateLocation, $event)"/>
-							<button v-on:click="fire(menuItems.generateLocation, $event)" class="normal">
-								<span :class="getGeneratedClass()"></span>
-							</button>
-						</div>
 						<input type="text" v-model="state.alter" v-if="player.master"/>
 					</div>
 				</div>
@@ -124,7 +124,7 @@
 			</select>
 		</div>
 	</div>
-	
+
 	<div class="legend" :class="legendOpen?'open':'closed'" v-if="legendDisplayed && locales.length">
 		<button class="control toggle" v-on:click="toggleLegend()">
 			<span class="rotational-icon fas fa-caret-square-up" :class="legendOpen?'rot180':''"></span>

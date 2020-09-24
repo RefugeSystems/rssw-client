@@ -167,7 +167,7 @@ class RSEntity extends RSObject {
 		var buffer,
 			x;
 
-		this.encumberance_max = (this.brawn || 0) + (this.encumberance_bonus || 0);
+		this.encumberance_max = 5 + (this.brawn || 0) + (this.encumberance_bonus || 0);
 		this.encumberance = 0;
 		buffer = this.universe.indexes.item.translate(this.item);
 		for(x=0; x<buffer.length; x++) {
@@ -200,6 +200,8 @@ class RSEntity extends RSObject {
 		if(typeof(equip) === "string") {
 			equip = this.universe.index.lookup[equip];
 		}
+
+		// TODO: Implement item.entity property for stat inheritance (uses entity:equip event)
 
 		if(slot.accepts && equip._type === slot.accepts) {
 			if((slot.itemtype && slot.itemtype.hasCommon(equip.itemtype)) || (slot.type && slot.type.hasCommon(equip.type))) {

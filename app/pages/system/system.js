@@ -23,13 +23,15 @@
 			data.system = rsSystem;
 			data.knownErrors = {};
 
+			data.importOverwrites = false;
 			data.importSelection = false;
 			data.importMessageType = "";
 			data.importMessage = null;
 			data.importIcon = null;
 			data.importing = false;
-			data.imported = 0;
 			data.toImport = 0;
+			data.imported = 0;
+			data.skipped = 0;
 
 			return data;
 		},
@@ -92,6 +94,9 @@
 				URL.revokeObjectURL(anchor.href);
 				appendTo.removeChild(anchor);
 			},
+			"importOverwriteToggle": function() {
+				Vue.set(this, "importOverwrites", !this.importOverwrites);
+			},
 			"importUniverse": function() {
 				if(!this.importing) {
 					Vue.set(this, "importMessage", null);
@@ -113,8 +118,9 @@
 							for(i=0; i<keys.length; i++) {
 								j += (value[keys[i]]?value[keys[i]].length:0) || 0;
 							}
-							Vue.set(this, "imported", 0);
 							Vue.set(this, "toImport", j);
+							Vue.set(this, "imported", 0);
+							Vue.set(this, "skipped", 0);
 
 							keys.forEach((key) => {
 								value[key].forEach((record) => {
@@ -130,17 +136,31 @@
 											}
 											Vue.set(this, "imported", this.imported + 1);
 										}).then(() => {
-											return this.universe.promisedSend("modify:" + record._class, record);
+											if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
+												return this.universe.promisedSend("modify:" + record._class, record);
+											} else {
+												Vue.set(this, "skipped", this.skipped + 1);
+												return null;
+											}
 										});
 									} else {
-										chain = this.universe.promisedSend("modify:" + record._class, record);
+										if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
+											chain = this.universe.promisedSend("modify:" + record._class, record);
+										} else {
+											Vue.set(this, "skipped", this.skipped + 1);
+											chain = new Promise((done) => {done();});
+										}
 									}
 								});
 								if(chain) {
 									chain.then(() => {
 										Vue.set(this, "importing", false);
 										Vue.set(this, "importIcon", "fas fa-check rs-light-green");
-										Vue.set(this, "importMessage", "Complete: Imported " + this.toImport);
+										if(this.importOverwrites) {
+											Vue.set(this, "importMessage", "Complete: Imported " + this.toImport);
+										} else {
+											Vue.set(this, "importMessage", "Complete: Imported " + this.toImport + " (Skipped: " + this.skipped + ")");
+										}
 										Vue.set(this, "importMessageType", "Success");
 									}).catch((error) => {
 										Vue.set(this, "importing", false);

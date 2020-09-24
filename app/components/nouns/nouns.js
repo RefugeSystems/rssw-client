@@ -58,6 +58,8 @@
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsModifierAttrs,
 			rsSystem.components.NounFieldsArchetype,
+			rsSystem.components.NounFieldsDatapoint,
+			rsSystem.components.NounFieldsDatausage,
 			rsSystem.components.NounFieldsKnowledge,
 			rsSystem.components.NounFieldsStreamURL,
 			rsSystem.components.NounFieldsItemType,

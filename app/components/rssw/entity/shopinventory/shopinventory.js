@@ -162,6 +162,8 @@
 			"receive": function(message) {
 				console.log("Echo Receive: ", message);
 				if(this.checkingOut && message.echo === this.checkingOut) {
+					Vue.set(this.cart, "encumberance", 0);
+					Vue.set(this.cart, "price", 0);
 					Vue.set(this, "checkingOut", null);
 				}
 			},

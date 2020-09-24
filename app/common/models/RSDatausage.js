@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @class RSDatausage
  * @extends RSObject
  * @constructor
@@ -10,5 +10,6 @@
 class RSDatausage extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
+		this.suppressed = true;
 	}
 }

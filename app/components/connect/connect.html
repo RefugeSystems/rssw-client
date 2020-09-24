@@ -44,6 +44,10 @@
 				Secure?
 				<span class="far" :class="store.secure?'fa-check-square':'fa-square'"></span>
 			</button>
+			<button class="toggle-action" v-on:click="clearSaved()" v-if="store.passcode">
+				<span class="fas fa-ban"></span>
+				<span>Passcode</span>
+			</button>
 		</div>
 	</div>
 </div>

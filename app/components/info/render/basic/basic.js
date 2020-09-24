@@ -1140,6 +1140,15 @@
 					}
 				}
 
+				this.locations.splice(0);
+				if(this.record._class === "location") {
+					for(x=0; x<this.universe.indexes.location.listing.length; x++) {
+						if(this.universe.indexes.location.listing[x] && this.universe.indexes.location.listing[x].location === this.record.id) {
+							this.locations.push(this.universe.indexes.location.listing[x]);
+						}
+					}
+				}
+
 				this.equipped.splice(0);
 				if(this.record.equipped) {
 					buffer = Object.keys(this.record.equipped);
