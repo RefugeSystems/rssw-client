@@ -135,21 +135,21 @@
 		</div>
 	</div>
 
-	<div class="reference-values" v-if="locations.length">
+	<div class="control reference-values" v-if="locations.length">
 		<div class="reference-heading">Locations Here</div>
-		<div class="subreference" v-for="location in locations">
+		<div class="subreference" v-for="location in shownLocations">
 			<a class="rendered-value" v-if="isOwner(location)" :data-id="location.id">{{location.name}}</a>
 			<span class="rendered-value" v-else>{{location.name}}</span>
 		</div>
-		<button class="flat simple" v-if="locations.length !== shownLocations.length" v-on:click="showAllLocations()">
+		<button class="action direct" v-if="locations.length !== shownLocations.length" v-on:click="showAllLocations()">
 			<span>Load Rest...</span>
 		</button>
 	</div>
 
-	<div class="reference-values" v-if="entities.length">
+	<div class="control reference-values" v-if="entities.length">
 		<div class="reference-heading">Entities Here</div>
 		<div v-if="player && player.master">
-			<div class="subreference" v-for="entity in entities">
+			<div class="subreference" v-for="entity in shownEntities">
 				<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
 			</div>
 		</div>
@@ -159,7 +159,7 @@
 				<span class="rendered-value" v-else>{{entity.name}}</span>
 			</div>
 		</div>
-		<button class="flat simple" v-if="entities.length !== shownEntities.length" v-on:click="showAllEntities()">
+		<button class="action direct" v-if="entities.length !== shownEntities.length" v-on:click="showAllEntities()">
 			<span>Load Rest...</span>
 		</button>
 	</div>
