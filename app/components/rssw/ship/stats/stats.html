@@ -92,6 +92,9 @@
 					</div>
 				</div>
 			</div>
+			<div class="maneuver selector flex h center">
+				<rssw-ship-maneuver :universe="universe" :user="user" :entity="ship" :settings="state.settings.maneuvers"></rssw-ship-maneuver>
+			</div>
 			<div class="data-list items" v-if="items.length">
 				<div class="readout">
 					<span>Encumberance:</span>
@@ -104,9 +107,6 @@
 						<span>{{item.name}}</span>
 					</button>
 				</div>
-			</div>
-			<div class="maneuver selector flex h center">
-				<rssw-ship-maneuver :universe="universe" :user="user" :entity="ship" :settings="state.settings.maneuvers"></rssw-ship-maneuver>
 			</div>
 		</div>
 		<div class="ship-effects">
