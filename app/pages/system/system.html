@@ -85,7 +85,7 @@
 		<div class="data" v-if="player.master">
 			<h2>Universe Data</h2>
 			<div id="anchors"></div>
-			<table>
+			<table class="versions">
 				<tr>
 					<td class="align-right">Export Data</td>
 					<td>
@@ -139,8 +139,8 @@
 				</tr>
 			</table>
 			<h2>Server Info</h2>
-			<table>
-				<tr>
+			<table class="versions">
+				<tr v-if="!universe.indexes.setting.index['setting:control:stop']">
 					<td class="align-right">State</td>
 					<td>
 						<button class="flat simple" v-on:click="stopUniverse()">
