@@ -947,13 +947,13 @@
 			},
 			"showAllLocations": function() {
 				this.shownLocations.splice(0);
-				for(var x=0; this.locations.length; x++) {
+				for(var x=0; x<this.locations.length; x++) {
 					this.shownLocations.push(this.locations[x]);
 				}
 			},
 			"showAllEntities": function() {
 				this.shownEntities.splice(0);
-				for(var x=0; this.entities.length; x++) {
+				for(var x=0; x<this.entities.length; x++) {
 					this.shownEntities.push(this.entities[x]);
 				}
 			},
