@@ -1109,7 +1109,7 @@
 				this.shownLocations.splice(0);
 				this.locations.splice(0);
 				if(this.record._class === "location") {
-					for(x=0; (all || x < 7) && x<this.universe.indexes.location.listing.length; x++) {
+					for(x=0; x<this.universe.indexes.location.listing.length; x++) {
 						if(this.universe.indexes.location.listing[x] && this.universe.indexes.location.listing[x].location === this.record.id) {
 							this.shownLocations.push(this.universe.indexes.location.listing[x]);
 							this.locations.push(this.universe.indexes.location.listing[x]);
