@@ -947,13 +947,15 @@
 			},
 			"showAllLocations": function() {
 				this.shownLocations.splice(0);
-				this.shownLocations.push.apply(this.shownLocations, this.entities);
-				this.$forceUpdate();
+				for(var x=0; this.locations.length; x++) {
+					this.shownLocations.push(this.locations[x]);
+				}
 			},
 			"showAllEntities": function() {
 				this.shownEntities.splice(0);
-				this.shownEntities.push.apply(this.shownEntities, this.entities);
-				this.$forceUpdate();
+				for(var x=0; this.entities.length; x++) {
+					this.shownEntities.push(this.entities[x]);
+				}
 			},
 			"update": function() {
 				var buffer,
