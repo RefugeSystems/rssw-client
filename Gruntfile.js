@@ -303,6 +303,7 @@ var config = {
 					"node_modules/vue/dist/vue.js",
 					"node_modules/jquery/dist/jquery.min.js",
 					"node_modules/vue-router/dist/vue-router.js",
+					"node_modules/d3/dist/d3.min.js",
 
 					"transient/templates.js",
 					"app/library/*.js",
