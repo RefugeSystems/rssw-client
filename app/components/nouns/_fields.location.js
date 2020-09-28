@@ -142,13 +142,13 @@
 		"label": "Must Know",
 		"property": "must_know",
 		"type": "checkbox"
-	}, {
-		"label": "Auto Near-By",
-		"property": "auto_nearby",
-		"type": "checkbox"
 	},
 	locals,
 	{
+		"label": "Include Present Entities in Locals",
+		"property": "auto_nearby",
+		"type": "checkbox"
+	}, {
 		"label": "X Coordinate",
 		"property": "x",
 		"type": "number"

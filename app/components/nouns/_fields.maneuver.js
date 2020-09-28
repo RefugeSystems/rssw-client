@@ -14,6 +14,7 @@
 	}, {
 		"label": "Icon",
 		"property": "icon",
+		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	}, {
 		"label": "Order",

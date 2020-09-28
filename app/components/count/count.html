@@ -9,7 +9,7 @@
 			<span :class="operations[operation].icon"></span>
 		</button>
 		<div class="op-bar flex h center rsbg-black">
-			<input class="op-expression" v-model="expression" v-on:keyup.enter="complete()" v-on:keyup.esc="cancel()" />
+			<input class="op-expression" v-model.number="expression" v-on:keyup.enter="complete()" v-on:keyup.esc="cancel()" />
 			<button class="op-ctrl" v-on:click="complete()">
 				<span :class="open?'fas fa-equals rs-orange':operations[initial].icon"></span>
 			</button>

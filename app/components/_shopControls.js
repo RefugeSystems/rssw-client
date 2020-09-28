@@ -80,21 +80,29 @@ rsSystem.component("RSShopControls", {
 		 */
 		"restockShop": function(shop) {
 			if(this.player.master) {
-				var stop = shop.restock_max || 2 * shop.restock_base,
+				var stop = shop.restock_max,
 					additions = [],
 					available = [],
 					rarities = {},
 					flip = true,
+					runs = 0,
 					gen = 0,
+					
+					invspread,
 					buffer,
 					count,
 					delta,
+					func,
 					mark,
 					mean,
 					high,
 					low,
+					min,
+					max,
 					x;
 
+				invspread = 1/shop.restock_spread;
+				
 				for(x=0; x<this.universe.indexes.item.listing.length; x++) {
 					buffer = this.universe.indexes.item.listing[x];
 					if( buffer.template && (!buffer.restricted || shop.restock_restricted) &&
@@ -110,11 +118,13 @@ rsSystem.component("RSShopControls", {
 
 				mean = shop.rarity_mean || shop.rarity_min || 0;
 				mark = mean;
+				mean = mean * shop.rarity_spread;
 				high = mark;
 				low = mark;
+				runs = 0;
 
-				while(additions.length < stop) {
-					count = Random.integer(shop.restock_base - 2 * (Math.abs(mark - mean)));
+				while(additions.length < stop && runs < stop) {
+					count = shop.restockFunction(mark); // Random.integer(shop.restock_base - 2 * (Math.abs(mark - mean)));
 					for(x=0; x<count; x++) {
 						if(rarities[mark]) {
 							buffer = this.copyItem(rarities[mark][Random.integer(rarities[mark].length)], gen++);
@@ -136,6 +146,7 @@ rsSystem.component("RSShopControls", {
 						mark = low;
 					}
 					flip = !flip;
+					runs++;
 				}
 
 				if(shop.restock_clear) {

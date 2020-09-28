@@ -39,6 +39,13 @@
 		</h3>
 		<div class="rs-light-red" v-html="relatedError"></div>
 	</div>
+	
+	<div v-if="player.master && options.noMaster && record.restock_base">
+		<h3>Restock Distribution Preview</h3>
+		<div class="restock-graph">
+			
+		</div>
+	</div>
 
 	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
 	<div v-if="record.data && record._class === 'image' && !record.linked" class="general-image">
@@ -290,6 +297,12 @@
 				<span>Must Know</span>
 			</button>
 		</div>
+		<div class="control" v-if="record._class === 'event' || record._class === 'party'">
+			<button class="action" v-on:click="activateRecord()">
+				<span class="icon" :class="record.active?'far fa-check-square':'far fa-square'"></span>
+				<span>Active</span>
+			</button>
+		</div>
 		<div class="control">
 			<button class="action" v-on:click="screenRecord()">
 				<span class="icon" :class="record.screen?'far fa-check-square':'far fa-square'"></span>
@@ -337,6 +350,17 @@
 			</button>
 		</div>
 
+	
+		<div class="control" v-if="record.restock_base">
+			<h3>Restock Distribution</h3>
+			<button class="action direct" v-if="!showDistribution" v-on:click="showRestockDistribution()">
+				<span class="fas fa-chart-bar"></span>
+				<span>Show Distribution</span>
+			</button>
+			<div v-if="showDistribution" class="restock-graph">
+				
+			</div>
+		</div>
 		<div class="control" v-if="record.is_shop">
 			<button class="action direct" v-if="record.restock_base" v-on:click="restockLocation()">
 				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>

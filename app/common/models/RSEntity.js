@@ -23,6 +23,7 @@ class RSEntity extends RSObject {
 		if(!details.location) {
 			details.location = "location:universe";
 		}
+		
 //		this._tracking = {};
 //		if(!this.history) {
 //			this.history = [];
@@ -175,6 +176,20 @@ class RSEntity extends RSObject {
 				this.encumberance += buffer[x].encumberance;
 			}
 		}
+		
+		if(this.is_shop) {
+			this.rarity_max = this.rarity_max || 5;
+			this.rarity_min = this.rarity_min || 0;
+			this.rarity_mean = this.rarity_mean || ( (this.rarity_max - this.rarity_min)/2 + this.rarity_min);
+			this.rarity_spread = this.rarity_spread || 1;
+			this.rarity_inverted = 1/this.rarity_spread;
+		}
+		
+		if(this.rarity_mean !== undefined && this.rarity_max < this.rarity_mean) {
+			this.rarity_mean = this.rarity_max;
+		} else if(this.rarity_mean !== undefined && this.rarity_mean < this.rarity_min) {
+			this.rarity_mean = this.rarity_min;
+		}
 	}
 
 	/**
@@ -184,6 +199,13 @@ class RSEntity extends RSObject {
 	 */
 	setPilot(pilot) {
 
+	}
+	
+	restockFunction(rarity) {
+		if(!this.is_shop || !this.restock_base) {
+			return 0;
+		}
+		return -1 * Math.pow(this.rarity_inverted * rarity - this.rarity_inverted * this.rarity_mean, 2) + this.restock_base;
 	}
 
 	/**

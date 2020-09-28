@@ -8,7 +8,7 @@
 		<div class="involved flex h spacer">
 			<div class="entity-list">
 				<div class="entity-control flex h" v-for="entity in involved" :class="getEntityStyling(entity)">
-					<div class="current-indicator flex h center" v-on:click="setCurrent(entity)">
+					<div class="current-indicator flex v center" v-on:click="setCurrent(entity)">
 						<span class="icon" :class="getIndicatorStyling(entity)"></span>
 					</div>
 					<select class="order" v-model.number="event.order[entity.id]" v-on:change="reorderInvolved()">

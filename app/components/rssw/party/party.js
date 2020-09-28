@@ -66,6 +66,7 @@
 			data.move_location = "";
 			data.addingMember = "";
 			data.location = null;
+			data.inside = null;
 			data.members = [];
 			data.grantCredit = 0;
 			data.grantXP = 0;
@@ -159,6 +160,7 @@
 				this.members.sort(this.sortData);
 				
 				Vue.set(this, "location", this.universe.indexes.location.index[this.record.location]);
+				Vue.set(this, "inside", this.universe.indexes.entity.index[this.record.inside]);
 				Vue.set(this, "newOrder", this.record.order);
 			}
 		},

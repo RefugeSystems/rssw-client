@@ -33,6 +33,10 @@
 		"property": "property",
 		"type": "text"
 	}, {
+		"label": "Section",
+		"property": "section",
+		"type": "text"
+	}, {
 		"label": "Order",
 		"property": "order",
 		"type": "number"
@@ -128,6 +132,10 @@
 	}, {
 		"label": "Primary Stat",
 		"property": "primary",
+		"type": "checkbox"
+	}, {
+		"label": "Inactive",
+		"property": "inactive",
 		"type": "checkbox"
 	}, {
 		"label": "Description",
