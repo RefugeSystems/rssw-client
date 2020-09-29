@@ -1,6 +1,6 @@
 
 /**
- * 
+ *
  * @class SearchIndex
  * @constructor
  */
@@ -41,7 +41,7 @@ class SearchIndex extends EventEmitter {
 					if(buffer[x] && buffer[x] != "undefined") {
 						this.lookup[buffer[x]] = dataSet[buffer[x]];
 						this.listing.push(this.lookup[buffer[x]]);
-					
+
 						buffer.name = this.lookup[buffer[x]].name && this.lookup[buffer[x]].name.toLowerCase?this.lookup[buffer[x]].name.toLowerCase():"";
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
@@ -55,12 +55,12 @@ class SearchIndex extends EventEmitter {
 //			rsSystem.log.warn("Emtpy Search Index");
 		}
 	}
-	
+
 	reindex() {
 		this.clearIndex();
 		this.indexSet(this.source);
 	}
-	
+
 	indexSet(dataSet) {
 		var x, buffer;
 		dataSet = dataSet || this.source;
@@ -85,7 +85,7 @@ class SearchIndex extends EventEmitter {
 					if(buffer[x] && buffer[x] != "undefined") {
 						this.lookup[buffer[x]] = dataSet[buffer[x]];
 						this.listing.push(this.lookup[buffer[x]]);
-					
+
 						buffer.name = this.lookup[buffer[x]].name && this.lookup[buffer[x]].name.toLowerCase?this.lookup[buffer[x]].name.toLowerCase():"";
 						buffer.id = buffer[x].toLowerCase();
 						this.index[buffer.id] = this.lookup[buffer[x]];
@@ -99,9 +99,9 @@ class SearchIndex extends EventEmitter {
 			rsSystem.log.warn("Emtpy Search Index");
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method select
 	 * @param {Array | Object | String} record Must refine to String IDs.
 	 * 		Selection must be in this index.
@@ -134,7 +134,7 @@ class SearchIndex extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method unselect
 	 * @param {Array | Object | String} record Must refine to String IDs.
 	 * 		Selection must be in this index.
@@ -164,22 +164,22 @@ class SearchIndex extends EventEmitter {
 			this.$emit("selection");
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method clearSelection
 	 */
 	clearSelection() {
 		this.unselect(this.selection);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method clearIndex
 	 */
 	clearIndex() {
 		var x, buffer;
-		
+
 		this.listing.splice(0, this.listing.length);
 		buffer = Object.keys(this.index);
 		for(x=0; x<buffer.length; x++){
@@ -188,13 +188,13 @@ class SearchIndex extends EventEmitter {
 			delete(this.index[buffer[x]]);
 			delete(this.named[buffer[x]]);
 		}
-		
+
 		this.source = null;
 		this.$emit("indexed");
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method toggleSelect
 	 * @param {Record} record
 	 * @return {Boolean} True if the record is now selected, false if not.
@@ -212,7 +212,7 @@ class SearchIndex extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method isSeelcted
 	 * @param {String | Object} record The record or it's ID
 	 * @return {Boolean}
@@ -229,9 +229,9 @@ class SearchIndex extends EventEmitter {
 	get selection() {
 		return Object.keys(this.selected);
 	}
-	
+
 	/*
-	 * 
+	 *
 	 * @method list
 	 * @param {String | Object} filter Defines how to filter against the _search string as a string or
 	 * 		how to compare object fields based on the properties present on the filter object where the
@@ -240,7 +240,7 @@ class SearchIndex extends EventEmitter {
 	 * @param {Boolean} order Sort. True for a-z, False for z-a. Takes priority over options.
 	 * @param {Number} limit Limit list results. Applied after sort. Takes priority over options.
 	 * @param {Object} [options] Pass in various configurations including order & limit.
-	 * 
+	 *
 	 * @param {Boolean} options.order Sort. True for a-z, False for z-a.
 	 * @param {Number} options.limit Limit list results. Applied after sort.
 	 * @param {Boolean} options.noInstances
@@ -258,9 +258,9 @@ class SearchIndex extends EventEmitter {
 	 * @param {Function} options.customFilter Passed a single record to check if the record is valid to include or not.
 	 * @parma {Array} list Optionally specified list to use
 	 */
-	
+
 	/**
-	 * 
+	 *
 	 * @method list
 	 * @param {Object} filter Defines how to filter against the _search string as a string or
 	 * 		how to compare object fields based on the properties present on the filter object where the
@@ -270,7 +270,7 @@ class SearchIndex extends EventEmitter {
 	 */
 	list(filter, state, list) {
 		var x, keys;
-		
+
 		if(filter /* null is technically an object */ && typeof filter === "object") {
 			var y, result;
 			keys = keys || Object.keys(filter);
@@ -338,7 +338,7 @@ class SearchIndex extends EventEmitter {
 		} else {
 			list.push.apply(list, this.listing);
 		}
-		
+
 		if(state.order !== undefined && state.sortKey) {
 			if(state.sorter) {
 //				console.log("Custom sort");
@@ -358,11 +358,11 @@ class SearchIndex extends EventEmitter {
 				});
 			}
 		}
-		
+
 		if(state.limit) {
 			list.splice(0, parseInt(state.limit));
 		}
-		
+
 		if(state.paging) {
 			state.paging.count = parseInt(Math.ceil(list.length / state.paging.per));
 			if(state.paging.current >= state.paging.count) {
@@ -374,10 +374,10 @@ class SearchIndex extends EventEmitter {
 			list.splice(state.paging.current * state.paging.per + state.paging.per);
 			list.splice(0, state.paging.current * state.paging.per);
 		}
-		
+
 		return state.paging;
 	}
-	
+
 	createSearchString(object) {
 		var string = "";
 		if(object.name && object.name.toLowerCase) {
@@ -409,9 +409,9 @@ class SearchIndex extends EventEmitter {
 		}
 		return string;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method get
 	 * @param {String} key The ID or Name of the object that should be retrieved.
 	 * @return {Object} An indexed item matching the key.
@@ -419,9 +419,9 @@ class SearchIndex extends EventEmitter {
 	get(key) {
 		return this.lookup[key] || this.named[key];
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method indexItem
 	 * @param {Object} item The object to add to the index. Uses "id" and "name".
 	 */
@@ -484,22 +484,39 @@ class SearchIndex extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method unindexItem
-	 * @param {String | Object} item The object to remove from the index. MUST have an id.
+	 * @param {Array | Object | String} item The object to remove from the index. MUST have an id.
 	 */
 	unindexItem(item) {
-		item = item.id || item;
-		if(item && this.lookup[item]) {
-			this.listing.splice(this.listing.indexOf(this.lookup[item]), 1);
-			delete(this.named[this.lookup[item].name]);
-			delete(this.index[this.lookup[item].name]);
-			delete(this.lookup[item]);
-			delete(this.index[item]);
+		var buffer,
+			i;
+
+		if(item instanceof Array || (item.constructor && item.constructor.name === "Array")) {
+			for(i=0; i<item.length; i++) {
+				buffer = item[i].id || item[i];
+				if(buffer && this.lookup[buffer]) {
+					this.listing.splice(this.listing.indexOf(this.lookup[buffer]), 1);
+					delete(this.named[this.lookup[buffer].name]);
+					delete(this.index[this.lookup[buffer].name]);
+					delete(this.lookup[buffer]);
+					delete(this.index[buffer]);
+				}
+			}
 			this.$emit("indexed");
+		} else {
+			item = item.id || item;
+			if(item && this.lookup[item]) {
+				this.listing.splice(this.listing.indexOf(this.lookup[item]), 1);
+				delete(this.named[this.lookup[item].name]);
+				delete(this.index[this.lookup[item].name]);
+				delete(this.lookup[item]);
+				delete(this.index[item]);
+				this.$emit("indexed");
+			}
 		}
 	}
-	
+
 	/**
 	 * Lookup the elements in the passed array and receive a new array containing the elements
 	 * that are part of this index.
@@ -513,7 +530,7 @@ class SearchIndex extends EventEmitter {
 		if(!result) {
 			result = [];
 		}
-		
+
 		if(source) {
 			for(var x=0; x<source.length; x++) {
 				if(this.lookup[source[x]]) {
@@ -521,7 +538,7 @@ class SearchIndex extends EventEmitter {
 				}
 			}
 		}
-		
+
 		return result;
 	}
 }

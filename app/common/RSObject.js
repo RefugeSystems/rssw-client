@@ -18,6 +18,7 @@ class RSObject extends EventEmitter {
 		this._coreData = {};
 		this._registered = {};
 		this._knownKeys = [];
+		this._owner = null;
 		this._known = {};
 		this._mods = [];
 		this._shadow = JSON.parse(JSON.stringify(details));
@@ -995,6 +996,13 @@ class RSObject extends EventEmitter {
 			}
 		}
 
+		if(!this._owner && this.owners && this.owners.length) {
+			this._owner = {};
+			for(x=0; x<this.owners.length; x++) {
+				this._owner[this.owners[x]] = true;
+			}
+		}
+
 		if(base._calculated) {
 			this._calculated = {};
 			for(x=0; x<base._calculated.length; x++) {
@@ -1030,6 +1038,13 @@ class RSObject extends EventEmitter {
 	loadDelta(delta) {
 		if(this.debug || rsSystem.debug) {
 			this._lastDelta = _p(delta);
+		}
+
+		if(delta.owners) {
+			this._owner = {};
+			for(x=0; x<delta.owners.length; x++) {
+				this._owner[delta.owners[x]] = true;
+			}
 		}
 
 		var keys = Object.keys(delta),
@@ -1078,6 +1093,12 @@ class RSObject extends EventEmitter {
 			for(x=0; x<keys.length; x++) {
 				this._coreData[keys[x]] = this.processAsAdditive(this._coreData[keys[x]], delta[keys[x]]);
 			}
+
+			if(delta.owners) {
+				for(x=0; x<delta.owners.length; x++) {
+					this._owner[delta.owners[x]] = true;
+				}
+			}
 		}
 	}
 
@@ -1098,6 +1119,12 @@ class RSObject extends EventEmitter {
 			keys = Object.keys(delta);
 			for(x=0; x<keys.length; x++) {
 				this._coreData[keys[x]] = this.processAsSubtractive(this._coreData[keys[x]], delta[keys[x]]);
+			}
+
+			if(delta.owners) {
+				for(x=0; x<delta.owners.length; x++) {
+					this._owner[delta.owners[x]] = false;
+				}
 			}
 		}
 	}
@@ -1170,6 +1197,16 @@ class RSObject extends EventEmitter {
 		}
 	}
 
+
+	isOwner(id) {
+		if(this._owner) {
+			return !!this._owner[id];
+		} else if(this.owners) {
+			return this.owners.indexOf(id) !== -1;
+		}
+		return false;
+	}
+
 	/**
 	 * Rebuilds the _known property to track what things in the universe
 	 * this object is aware of. This can be used as clarivoyance for what
@@ -1232,6 +1269,14 @@ class RSObject extends EventEmitter {
 			}
 		}
 		return false;
+	}
+
+	equal(compare) {
+		if(!compare) {
+			return false;
+		}
+
+		return this.id === compare.id;
 	}
 }
 

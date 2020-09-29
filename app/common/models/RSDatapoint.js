@@ -17,6 +17,15 @@ class RSDatapoint extends RSObject {
 	}
 
 	recalculateProperties() {
+		var keys = Object.keys(this._coreData),
+			x;
+
+		for(x=0; x<keys.length; x++) {
+			if(keys[x] !== "name" && keys[x] !== "description" && keys[x][0] !== "_" && typeof(this[keys[x]]) !== "function") {
+				this[keys[x]] = this._coreData[keys[x]];
+			}
+		}
+
 		if(!this.raw &&this.option_index) {
 			if(this.universe.indexes[this.option_index]) {
 				switch(this.type) {

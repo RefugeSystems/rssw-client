@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class systemMenu
  * @constructor
  * @module Components
@@ -14,7 +14,7 @@
 			"class": "buffer",
 			"label": ""
 		};
-	
+
 	rsSystem.component("systemMenu", {
 		"inherit": true,
 		"mixins": [
@@ -25,14 +25,15 @@
 		"data": function() {
 			var data = {};
 
-			data.storageID = storageKey; 
+			data.storageID = storageKey;
 			data.state = this.loadStorage(data.storageID, {
 				"labels": true
 			});
 			if(data.state.labels === undefined) {
 				data.state.labels = true;
 			}
-			
+
+			data.myentity = null;
 			data.navigationItems = [];
 			data.navigationItems.push({
 				"icon": "fas fa-jedi",
@@ -131,7 +132,7 @@
 					"master": true
 				}]
 			});
-			
+
 			data.navigationItems.push(bufferItem);
 			data.navigationItems.push({
 				"icon": "far fa-user",
@@ -147,7 +148,7 @@
 				"path": "/system",
 				"highlight": "/system"
 			});
-			
+
 			data.generalItems = [];
 			data.shrinkItem = {
 				"icon": "far fa-text-width",
@@ -161,7 +162,7 @@
 				"action": "logout",
 				"label": "Logout"
 			});
-			
+
 			return data;
 		},
 		"watch": {
@@ -176,6 +177,26 @@
 				"deep": true,
 				"handler": function(value) {
 					this.saveStorage(this.storageID, this.state);
+				}
+			},
+			"player": {
+				"deep": true,
+				"handler": function() {
+					if(this.player && this.player.entity && !this.myentity) {
+						Vue.set(this, "myentity", this.universe.indexes.entity.index[this.player.entity]);
+						this.navigationItems.unshift({
+							"icon": this.myentity.icon || "fas fa-dice-d20",
+							"action": "navigate",
+							"label": this.myentity.name,
+							"path": "/dashboard/" + this.myentity.classification + "/" + this.player.entity,
+							"conditionals": [{
+								"master": false
+							}]
+						});
+					} else if(this.myentity && (!this.player || !this.player.entity)) {
+						Vue.set(this, "myentity", null);
+						this.navigationItems.pop();
+					}
 				}
 			}
 		},
@@ -197,7 +218,7 @@
 			"evaluateConditional": function(condition) {
 				var keys = Object.keys(condition),
 					x;
-				
+
 				for(x=0; x<keys.length; x++) {
 					switch(keys[x]) {
 						case "master":

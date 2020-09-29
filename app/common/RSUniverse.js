@@ -308,6 +308,7 @@ class RSUniverse extends EventEmitter {
 					this.$emit("universe:built", this.nouns[event._class || event.type][event.id]);
 				}
 				this.$emit("universe:modified", this);
+				this.$emit("modified", this);
 				this.$emit("universe:modified:complete", this);
 				// setTimeout(() => {
 				// 	this.$emit("universe:modified", this);

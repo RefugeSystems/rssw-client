@@ -1,4 +1,4 @@
-<div class="general-information">
+<div class="general-information" v-if="record && record.id">
 	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
 
 	<div v-if="record.is_shop">
@@ -39,11 +39,11 @@
 		</h3>
 		<div class="rs-light-red" v-html="relatedError"></div>
 	</div>
-	
+
 	<div v-if="player.master && options.noMaster && record.restock_base">
 		<h3>Restock Distribution Preview</h3>
 		<div class="restock-graph">
-			
+
 		</div>
 	</div>
 
@@ -271,6 +271,13 @@
 		 <div v-html="note"></div>
 	</div>
 
+	<div class="control" v-if="record._class === 'location'">
+		<button class="action direct" v-on:click="openStarwarsFandom()">
+			<span class="fas fa-external-link"></span>
+			<span>View on Star Wars Fandom</span>
+		</button>
+	</div>
+
 	<div v-if="player && player.master && !options.noMaster" class="master-controls">
 		<h3>Master Controls</h3>
 
@@ -350,7 +357,7 @@
 			</button>
 		</div>
 
-	
+
 		<div class="control" v-if="record.restock_base">
 			<h3>Restock Distribution</h3>
 			<button class="action direct" v-if="!showDistribution" v-on:click="showRestockDistribution()">
@@ -358,7 +365,7 @@
 				<span>Show Distribution</span>
 			</button>
 			<div v-if="showDistribution" class="restock-graph">
-				
+
 			</div>
 		</div>
 		<div class="control" v-if="record.is_shop">

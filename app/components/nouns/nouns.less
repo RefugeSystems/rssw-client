@@ -1,4 +1,7 @@
 .rs-component.component-nouns {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 
 	.selection,
 	.sourcing {
@@ -16,9 +19,15 @@
 	}
 
 	.building {
-		border-top: 1px solid white;
+		border-width: 1px 0px;
+		border-style: solid;
+		border-color: @rsWhite;
+		overflow: auto;
+		flex-grow: 10;
+		/*
 		padding-top: 9px;
 		margin-top: 9px;
+		*/
 
 		.simplified-editor {
 			/*
@@ -66,19 +75,13 @@
 
 	.selections {
 		display: flex;
-		position: sticky;
-		top: 0px;
 		flex-direction: column;
-		background: black;
 	}
 
 	.actions {
 		display: flex;
-		position: sticky;
-		bottom: 0px;
 		flex-direction: row;
 		justify-content: space-between;
-		background: black;
 
 		button {
 			flex-grow: 5;

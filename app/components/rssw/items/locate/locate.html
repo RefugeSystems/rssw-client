@@ -1,0 +1,10 @@
+<div class="rs-component rs-items-locate">
+	<div class="flex h v-center">
+		<h2>Items</h2>
+		<rs-table-controls class="index flex h centered" :universe="universe" :corpus="corpus" :user="player" :index="inventory" :state="state" v-on:action="processAction"></rs-table-controls>
+	</div>
+	<div class="inventory">
+		<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="inventory" :headers="headers" :state="state"></rs-table>
+		<rs-table-paging class="index" :universe="universe" :user="player" :index="inventory" :state="state"></rs-table-paging>
+	</div>
+</div>

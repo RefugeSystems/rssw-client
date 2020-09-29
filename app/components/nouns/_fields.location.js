@@ -3,6 +3,7 @@
 
 	var dataSource,
 		knowledges,
+		background,
 		playlists,
 		location,
 		profiles,
@@ -46,6 +47,14 @@
 	images = {
 		"label": "Image",
 		"property": "image",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	background = {
+		"label": "Background",
+		"property": "background",
 		"type": "select",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -145,6 +154,10 @@
 	},
 	locals,
 	{
+		"label": "Include Child Location Present Entities in Locals",
+		"property": "auto_nearby_children",
+		"type": "checkbox"
+	}, {
 		"label": "Include Present Entities in Locals",
 		"property": "auto_nearby",
 		"type": "checkbox"
@@ -176,9 +189,11 @@
 			"mountainous",
 			"enormous",
 			"planetary",
-			"inter_planetary",
+			"interplanetary",
 			"star_system",
-			"galactic"
+			"interstellar",
+			"galactic",
+			"verse"
 		]
 	}, {
 		"label": "Link",
@@ -192,6 +207,7 @@
 	location,
 	profiles,
 	images,
+	background,
 	{
 		"label": "No Map Border",
 		"property": "no_border",
@@ -389,6 +405,7 @@
 			location.options.sortBy("name");
 			profiles.options = this.universe.indexes.image.listing;
 			profiles.options.sortBy("name");
+			background.options = this.universe.indexes.image.listing;
 			images.options = this.universe.indexes.image.listing;
 			images.options.sortBy("name");
 

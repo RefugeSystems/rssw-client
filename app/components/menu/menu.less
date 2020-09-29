@@ -2,44 +2,45 @@
 	display: block;
 	overflow: hidden;
 	transition: width .5s, left .5s, top .5s;
+	border-right: 2px solid @rsDarkOrange;
 	z-index: 10;
 	top: 0px;
 	height: 100%;
-		
+
 	&.docked {
 		position: absolute;
 	}
-	
+
 	&.docked.standard {
 		background-image: linear-gradient(to bottom right, #171717, #171717, #2e2e2e);
 		color: white;
 	}
-	
+
 	&.undocked {
 		position: relative;
 		background: transparent;
 		color: inherit;
 	}
-		
+
 	&.reduced {
 		width: 70px;
 	}
-	
+
 	&.full {
 		width: 140px;
 	}
-	
+
 	&.expanded {
 		width: 180px;
 	}
-		
+
 	&.collapsed {
 		width: 36px;
-	
+
 		.nav-label {
 			max-width: 0px !important;
 		}
-				
+
 		.nav-icon {
 			padding-right: 0px !important;
 		}
@@ -55,7 +56,7 @@
 		overflow-x: hidden;
 		color: inherit;
 		background: transparent;
-		
+
 		.navigation-item {
 			display: flex;
 			height: 36px;
@@ -65,24 +66,24 @@
 			font-size: 18px;
 			align-content: flex-start;
 			align-items: center;
-			
+
 			background: transparent;
 			border: 0px;
 			color: inherit;
 			text-align: left;
 			text-decoration: none;
-			
+
 			&.current {
 				background: @rsDarkOrange;
 				color: @rsWhite;
 			}
-			
+
 			.nav-label {
 				overflow: hidden;
 				max-width: 500px;
 				transition: max-width .5s;
 			}
-			
+
 			.navigation-contents {
 				display: flex;
 				align-content: flex-start;
@@ -100,12 +101,12 @@
 				flex-grow: 0;
 				font-size: 18px;
 				cursor: pointer;
-			
+
 				&:hover {
 					background: white;
 					color: black;
 				}
-			
+
 				.nav-icon {
 					padding-right: 10px;
 					text-align: center;
@@ -113,7 +114,7 @@
 				}
 			}
 		}
-		
+
 		.separator {
 			flex-grow: 100;
 		}

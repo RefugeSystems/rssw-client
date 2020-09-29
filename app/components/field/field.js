@@ -281,6 +281,9 @@
 
 				return true;
 			},
+			"validSelectionOption": function(value) {
+				return !this.field.uniqueness || !this.root[this.field.property] || this.root[this.field.property].indexOf(value) === -1;
+			},
 			"deriveCompletions": function(reference, event) {
 				if(!event || this.adjustCompletions(event)) {
 					if(!reference) {
@@ -294,7 +297,7 @@
 						this.completions.splice(0);
 						if(this.field.source_index) {
 							for(x=0; x<this.field.source_index.listing.length && added < autocompleteLength; x++) {
-								if(this.field.source_index.listing[x].name && this.field.source_index.listing[x].name.toLowerCase().indexOf(reference) !== -1) {
+								if(this.field.source_index.listing[x].name && this.field.source_index.listing[x].name.toLowerCase().indexOf(reference) !== -1 && this.validSelectionOption(this.field.source_index.listing[x])) {
 									this.completions.push(this.field.source_index.listing[x]);
 									added++;
 								}

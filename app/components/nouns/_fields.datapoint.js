@@ -55,6 +55,13 @@
 			"multireference"
 		]
 	}, {
+		"label": "Unique Values",
+		"property": "uniqueness",
+		"type": "checkbox",
+		"condition": {
+			"type": "select"
+		}
+	}, {
 		"label": "Raw Values",
 		"property": "raw",
 		"type": "checkbox",

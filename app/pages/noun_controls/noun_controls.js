@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSNounControls
  * @constructor
  * @module Pages
@@ -14,14 +14,14 @@ rsSystem.component("RSNounControls", {
 	],
 	"data": function() {
 		var data = {};
-		
+
 		data.infoOptions = {};
 		data.infoOptions.noMaster = true;
-		
+
 		data.modeling = null;
 		data.description = "";
 		data.built = {};
-		
+
 		return data;
 	},
 	"watch": {
@@ -38,6 +38,12 @@ rsSystem.component("RSNounControls", {
 			}
 		}
 		*/
+		// "modeling.icon": function() {
+		// 	this.$forceUpdate();
+		// },
+		// "modeling.name": function() {
+		// 	this.$forceUpdate();
+		// }
 	},
 	"mounted": function() {
 		rsSystem.register(this);
@@ -45,6 +51,9 @@ rsSystem.component("RSNounControls", {
 	"methods": {
 		"changeModel": function(modeling) {
 			Vue.set(this, "modeling", modeling);
+		},
+		"rerender": function() {
+			this.$forceUpdate();
 		}
 	},
 	"template": Vue.templified("pages/noun/controls.html")

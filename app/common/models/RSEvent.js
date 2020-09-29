@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @class RSEvent
  * @extends RSObject
  * @constructor

@@ -10,7 +10,7 @@
 
 	var invisibleKeys = {},
 		referenceKeys = {},
-		
+
 		shownLength = 7;
 
 	invisibleKeys.property = true;
@@ -30,6 +30,7 @@
 	invisibleKeys.randomize_name = true;
 
 	invisibleKeys.information_renderer = true;
+	invisibleKeys.auto_nearby_children = true;
 	invisibleKeys.invisibleProperties = true;
 	invisibleKeys.locked_attunement = true;
 	invisibleKeys.source_template = true;
@@ -346,7 +347,7 @@
 			data.profile = null;
 			data.image = null;
 			data.id = null;
-			
+
 			data.showDistribution = false;
 
 			data.availableTemplates = {};
@@ -394,7 +395,6 @@
 			"record": {
 				"deep": true,
 				"handler": function() {
-//					console.warn("Record Shift: ", this.record);
 					this.update();
 				}
 			}
@@ -1101,42 +1101,46 @@
 				this.hiddenEntities.splice(0);
 				this.shownEntities.splice(0);
 				this.entities.splice(0);
-				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
-					if(((!this.universe.indexes.entity.listing[x].owners && !this.universe.indexes.entity.listing[x].owner)
-							|| (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.indexOf(buffer) !== -1)
-							|| this.universe.indexes.entity.listing[x].owner === buffer)
-							&& this.universe.indexes.entity.listing[x].location !== this.record.id
-							&& this.universe.indexes.entity.listing[x].inside !== this.record.id){
-						this.movableEntities.push(this.universe.indexes.entity.listing[x]);
-					}
-					if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
-						this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
-					}
-					if(this.universe.indexes.entity.listing[x].location === this.record.id || this.universe.indexes.entity.listing[x].inside === this.record.id) {
-						if(this.universe.indexes.entity.listing[x].hidden || this.universe.indexes.entity.listing[x].obscured) {
-							this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
-						} else {
-							this.shownEntities.push(this.universe.indexes.entity.listing[x]);
-							this.entities.push(this.universe.indexes.entity.listing[x]);
-						}
-					}
-				}
 
 				this.shownLocations.splice(0);
 				this.locations.splice(0);
-				if(this.record._class === "location") {
-					for(x=0; x<this.universe.indexes.location.listing.length; x++) {
-						if(this.universe.indexes.location.listing[x] && this.universe.indexes.location.listing[x].location === this.record.id) {
-							this.shownLocations.push(this.universe.indexes.location.listing[x]);
-							this.locations.push(this.universe.indexes.location.listing[x]);
+
+				if(this.record && this.record.id && this.record._class === "location" || this.record._class === "entity") {
+					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+						if(((!this.universe.indexes.entity.listing[x].owners && !this.universe.indexes.entity.listing[x].owner)
+								|| (this.universe.indexes.entity.listing[x].owners && this.universe.indexes.entity.listing[x].owners.indexOf(buffer) !== -1)
+								|| this.universe.indexes.entity.listing[x].owner === buffer)
+								&& this.universe.indexes.entity.listing[x].location !== this.record.id
+								&& this.universe.indexes.entity.listing[x].inside !== this.record.id){
+							this.movableEntities.push(this.universe.indexes.entity.listing[x]);
+						}
+						if(this.record._type === "location" && this.universe.indexes.entity.listing[x].template) {
+							this.availableTemplates.entity.push(this.universe.indexes.entity.listing[x]);
+						}
+						if(this.universe.indexes.entity.listing[x].location === this.record.id || this.universe.indexes.entity.listing[x].inside === this.record.id) {
+							if(this.universe.indexes.entity.listing[x].hidden || this.universe.indexes.entity.listing[x].obscured) {
+								this.hiddenEntities.push(this.universe.indexes.entity.listing[x]);
+							} else {
+								this.shownEntities.push(this.universe.indexes.entity.listing[x]);
+								this.entities.push(this.universe.indexes.entity.listing[x]);
+							}
 						}
 					}
-					
-					if(this.record.pathing) {
-						for(x=0; x<this.record.pathing.length; x++) {
-							if(this.record.pathing[x] && this.loctions.indexOf(this.record.pathing[x]) === -1) {
-								this.shownLocations.push(this.record.pathing[x]);
-								this.locations.push(this.record.pathing[x]);
+
+					if(this.record._class === "location") {
+						for(x=0; x<this.universe.indexes.location.listing.length; x++) {
+							if(this.universe.indexes.location.listing[x] && this.universe.indexes.location.listing[x].location === this.record.id) {
+								this.shownLocations.push(this.universe.indexes.location.listing[x]);
+								this.locations.push(this.universe.indexes.location.listing[x]);
+							}
+						}
+
+						if(this.record.pathing) {
+							for(x=0; x<this.record.pathing.length; x++) {
+								if(this.record.pathing[x] && this.loctions.indexOf(this.record.pathing[x]) === -1) {
+									this.shownLocations.push(this.record.pathing[x]);
+									this.locations.push(this.record.pathing[x]);
+								}
 							}
 						}
 					}
@@ -1228,7 +1232,7 @@
 				} else {
 					Vue.set(this, "relatedError", null);
 				}
-				
+
 				if(this.record.restock_base && this.player.master) {
 					setTimeout(() => {
 						this.renderRestockDistribution();
@@ -1241,24 +1245,24 @@
 				var margin = {top: 10, right: 10, bottom: 50, left: 50},
 					width = 350 - margin.left - margin.right,
 					height = 300 - margin.top - margin.bottom,
-					
+
 					max = this.record.rarity_max || 5,
 					min = this.record.rarity_min || 0,
-					
+
 					mean = this.record.rarity_mean || ( (max - min)/2 + min),
 					spread = this.record.rarity_spread || 1,
 					base = this.record.restock_base,
 					invspread = 1/spread,
 					step = 1,
-					
+
 					mouseover,
 					mousemove,
 					mouseout,
 					bisect,
-					
+
 					histogram,
 					bins,
-					
+
 					focusText,
 					linefunc,
 					focus,
@@ -1269,14 +1273,14 @@
 					set,
 					svg,
 					y;
-				
+
 				func = function(x) {
 					if(this.record && typeof(this.record.restockFunction) === "function") {
 						return this.record.restockFunction(x);
 					}
 					return -1 * Math.pow(invspread * x - invspread * mean, 2) + base;
 				};
-				
+
 				linefunc = d3.line()
 				//.curve(d3.curveBasis)
 				.x(function(d) {
@@ -1285,7 +1289,7 @@
 				.y(function(d) {
 					return axisY(d.y);
 				});
-				
+
 				set = min;
 				data = [];
 				while(set <= max) {
@@ -1298,10 +1302,10 @@
 					}
 					set += step;
 				}
-				
+
 				svg = d3.select(".restock-graph");
 				svg.selectAll("*").remove();
-				
+
 				svg = d3.select(".restock-graph")
 				.append("svg")
 				.attr("width", width + margin.left + margin.right)
@@ -1327,19 +1331,19 @@
 				.attr("stroke", "black")
 				.attr("r", 8.5)
 				.style("opacity", 0);
-				
+
 				focusText = svg.append("g")
 				.append("text")
 				.style("opacity", 0)
 				.attr("text-anchor", "left")
 				.attr("alignment-baseline", "middle");
-				
+
 				svg = svg.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 				// What happens when the mouse move -> show the annotations at the right positions.
 				bisect = d3.bisector(function(d) { return d.x; }).left;
-				
+
 				mouseover = function() {
 					focusText.style("opacity",1);
 					focus.style("opacity", 1);
@@ -1350,11 +1354,11 @@
 					var x0 = axisX.invert(d3.mouse(this)[0]),
 						i = bisect(data, x0, 0),
 						selectedData = data[i];
-					
+
 					if(selectedData) {
 						focus.attr("cx", axisX(selectedData.x) + margin.left)
 						.attr("cy", axisY(selectedData.y) + margin.top);
-						
+
 						focusText.html("Rarity[" + parseInt(selectedData.x) + "]: " + parseInt(selectedData.y) + " Items")
 						.attr("x", margin.left + 10)
 						.attr("y", margin.top);
@@ -1362,7 +1366,7 @@
 //						.attr("y", axisY(selectedData.y) + margin.top);
 					}
 				};
-				
+
 				mouseout = function() {
 					focusText.style("opacity", 0);
 					focus.style("opacity", 0);
@@ -1376,38 +1380,38 @@
 				.on("mouseover", mouseover)
 				.on("mousemove", mousemove)
 				.on("mouseout", mouseout);
-				
+
 				// X scale and Axis
 				axisX = d3.scaleLinear()
 				.domain([min - 1, max + 1])
 				.range([0, width]);
-				
+
 				svg.append("g")
 				.attr("transform", "translate(0," + height + ")")
 				.call(d3.axisBottom(axisX));
-				
+
 				// X scale and Axis
 				axisY = d3.scaleLinear()
 				.domain([0, base + 1])
 				.range([height, 0]);
-				
+
 				svg.append("g")
 				.call(d3.axisLeft(axisY));
-				
+
 				svg.append("path")
 				.datum(data)
 				.attr("stroke", "steelblue")
 				.attr("stroke-width", 2)
 				.attr("fill", "none")
 				.attr("d", linefunc(data));
-				
+
 //				histogram = d3.histogram()
 //				.value(func)
 //				.domain(axisX.domain())
 //				.thresholds(axisX.ticks(1));
-//				
+//
 //				bins = histogram(data);
-//				
+//
 //				svg.selectAll("rect")
 //				.data(bins)
 //				.enter()
@@ -1417,6 +1421,9 @@
 //				.attr("width", function(d) {return axisX(d.x1) - axisX(d.x0) - 1;})
 //				.attr("height", function(d) {return height - axisY(d.length);})
 //				.attr("fill", "#2121ff");
+			},
+			"openStarwarsFandom": function() {
+				window.open("https://starwars.fandom.com/wiki/" + this.record.name);
 			}
 		},
 		"beforeDestroy": function() {

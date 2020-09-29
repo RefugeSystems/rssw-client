@@ -88,6 +88,7 @@
 			data.searchPrevious = data.state.search;
 			data.searchError = "";
 			data.original = {};
+			data.backgroundImage = null;
 			data.sourceImage = null;
 			data.parchment = null;
 			data.element = null;
@@ -1180,6 +1181,14 @@
 					Vue.set(this, "ready", false);
 					Vue.set(this, "sourceImage", this.location.viewed);
 					this.getDimensions(this.location.viewed);
+				}
+
+				if(this.location.background && (buffer = this.universe.nouns.image[this.location.background])) {
+					if(buffer.linked) {
+						Vue.set(this, "backgroundImage", buffer.url);
+					} else {
+						Vue.set(this, "backgroundImage", buffer.data);
+					}
 				}
 
 				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {

@@ -5,12 +5,12 @@
 				<div class="title">
 					{{player.name}} Overview
 				</div>
-				
-				<div class="self flex h center">
+
+				<div class="self flex h">
 					<button class="ctrl rs-light-blue" v-on:click="toggleSelect(self)">
 						<span class="far ctrl-icon" :class="isSelected(self)?'fa-check-square':'fa-square'"></span>
 					</button>
-					<router-link class="navigation-button" v-if="self" :to="'/dashboard/character/' + self.id">
+					<router-link class="navigation-button" v-if="self" :to="'/dashboard/' + self.classification + '/' + self.id">
 						<span class="link-icon" :class="self.icon || 'fas fa-user-circle'"></span>
 						<span class="link-label">{{self.name}}</span>
 					</router-link>
@@ -19,7 +19,7 @@
 						<span class="link-label">Make Yourself</span>
 					</router-link>
 				</div>
-				
+
 				<div class="control">
 					<div class="title">
 						Others
@@ -49,6 +49,6 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<router-view class="system-view opened" :universe="universe" :user="player" :class="$route.params.oid?'loaded':''"></router-view>
 </div>

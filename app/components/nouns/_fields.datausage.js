@@ -18,7 +18,8 @@
 		"type": "multireference",
 		"autocomplete": true,
 		"optionValue": "id",
-		"optionLabel": "property"
+		"optionLabel": "property",
+		"uniqueness": true
 	};
 
 	dataSource = [{

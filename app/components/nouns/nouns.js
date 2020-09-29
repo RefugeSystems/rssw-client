@@ -221,6 +221,7 @@
 					this.models[this.state.current].id = this.state.building[this.state.current].id;
 					this.models[this.state.current].recalculateProperties();
 					this.saveStorage(this.storageKeyID, this.state);
+					this.$emit("change");
 					this.$forceUpdate();
 				}
 			},
@@ -277,6 +278,7 @@
 						}
 					}
 //					console.warn(" -- Raw Value Changed");
+					this.$emit("change");
 
 				} catch(exception) {
 					Vue.set(this, "message", "Invalid: " + exception.message);
@@ -536,6 +538,8 @@
 				} else {
 					Vue.set(this, "rawValue", "{}");
 				}
+
+				this.broadcastModel();
 			},
 			"dropObject": function() {
 				this.state.building[this.state.current]._type = this.state.current;
@@ -635,6 +639,9 @@
 					}
 				}
 
+				setTimeout(() => {
+					this.$emit("change");
+				}, 1);
 				return result;
 			},
 			"saveEvent": function(event) {
