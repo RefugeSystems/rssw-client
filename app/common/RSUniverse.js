@@ -31,6 +31,7 @@ class RSUniverse extends EventEmitter {
 		this.echoed = {};
 		this.nouns = {};
 
+		this.indexes.all = this.index;
 		this.latency = 0;
 
 		this.connection = {};

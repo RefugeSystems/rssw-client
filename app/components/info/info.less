@@ -146,11 +146,16 @@
 		background-color: @rsBlack;
 	}
 
+	.calculated-value {
+		color: @rsDarkOrange;
+	}
+
 	.general-list {
 		margin: 0px;
 	}
 
 	a {
+		cursor: pointer;
 		color: #0055ff;
 	}
 
@@ -162,6 +167,16 @@
 		.displayed-id {
 			transition: background-color .5s;
 			max-width: 80%;
+		}
+	}
+
+	.contributions {
+		overflow: hidden;
+		max-height: 0px;
+		transition: max-height .5s;
+
+		&.open {
+			max-height: 300px;
 		}
 	}
 

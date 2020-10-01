@@ -1,6 +1,6 @@
 
 (function() {
-	
+
 	var dataSource,
 		categories,
 		mentioned,
@@ -15,14 +15,14 @@
 		"quest:task",
 		"quest:main",
 		"quest:seconary",
-		
+
 		"ideas",
 		"ideas:force",
 		"ideas:electronics",
 		"ideas:skill",
 		"ideas:ability",
 		"ideas:job",
-		
+
 		"things",
 		"things:army",
 		"things:ship",
@@ -30,7 +30,7 @@
 		"things:item",
 		"things:market",
 		"things:temple",
-		
+
 		"peoples",
 		"peoples:ancestry",
 		"peoples:character",
@@ -41,7 +41,7 @@
 		"peoples:empire",
 		"peoples:race",
 		"peoples:ruler",
-		
+
 		"locations",
 		"locations:starsystem",
 		"locations:planet",
@@ -61,23 +61,25 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	related = {
 		"label": "Related",
 		"property": "related",
 		"type": "multireference",
 		"optionValue": "id",
-		"optionLabel": "name"
+		"optionLabel": "name",
+		"autocomplete": true
 	};
-	
+
 	mentioned = {
 		"label": "Mentioned",
 		"property": "mentioned",
 		"type": "multireference",
 		"optionValue": "id",
-		"optionLabel": "name"
+		"optionLabel": "name",
+		"autocomplete": true
 	};
-	
+
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
@@ -85,7 +87,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	stats = {
 		"label": "Stats",
 		"property": "modifierstats",
@@ -93,7 +95,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	notes = {
 		"label": "Notes",
 		"property": "note",
@@ -101,7 +103,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -161,7 +163,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsKnowledge", {
 		"inherit": true,
 		"props": {
@@ -174,7 +176,7 @@
 			var data = {};
 			data.fields = this.fields || {};
 			data.fields.knowledge = dataSource;
-			
+
 
 			return data;
 		},
@@ -190,11 +192,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

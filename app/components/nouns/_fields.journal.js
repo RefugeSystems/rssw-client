@@ -1,11 +1,11 @@
 
 (function() {
-	
+
 	var dataSource,
 		related,
 		session,
 		editor;
-		
+
 	editor = {
 		"label": "Editor",
 		"property": "editor",
@@ -19,9 +19,10 @@
 		"property": "related",
 		"type": "multireference",
 		"optionValue": "id",
-		"optionLabel": "name"
+		"optionLabel": "name",
+		"autocomplete": true
 	};
-	
+
 	session = {
 		"label": "Session",
 		"property": "session",
@@ -29,7 +30,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -56,7 +57,7 @@
 		"property": "description",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsJournal", {
 		"inherit": true,
 		"props": {
@@ -77,16 +78,16 @@
 			editor.options.sortBy("name");
 			session.options = this.universe.indexes.session.listing;
 			session.options.sortBy("name");
-			
+
 			related.source_index = this.universe.index;
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

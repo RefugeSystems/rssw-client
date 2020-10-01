@@ -82,7 +82,7 @@
 				if(this.checker && this.player && !this.checker(record, this.player)) {
 					classes += "disabled";
 				}
-				if(record.id === this.active) {
+				if(this.active && (record.id === this.active || record.id === this.active.id)) {
 					classes += " active";
 				}
 				return classes;

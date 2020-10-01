@@ -102,7 +102,7 @@
 					<input type="text" v-model="reference_value" v-on:keydown.enter="addReference(reference_value, activeCompletion)" v-on:keyup="deriveCompletions(reference_value, $event)"/>
 				</div>
 				<div class="completions" v-if="completions.length">
-					<button class="completion" v-for="(completion,$cindex) in completions" :class="activeCompletion === $cindex?'active':''" v-on:click="selectCompletion(completion)">
+					<button class="completion" v-for="(completion,$cindex) in completions" :class="activeCompletion === $cindex?'active':''" v-on:click="selectCompletion(completion)" :title="completion.id">
 						{{completion[field.optionLabel]}}
 					</button>
 				</div>

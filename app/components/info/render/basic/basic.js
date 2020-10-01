@@ -46,6 +46,7 @@
 	invisibleKeys.description = true;
 	invisibleKeys.for_players = true;
 	invisibleKeys.master_note = true;
+	invisibleKeys.background = true;
 	invisibleKeys.cancontain = true;
 	invisibleKeys.properties = true;
 //	invisibleKeys.indicators = true;
@@ -76,6 +77,7 @@
 	invisibleKeys.hidden = true;
 	invisibleKeys.screen = true;
 	invisibleKeys.class = true;
+	invisibleKeys.label = true;
 	invisibleKeys.state = true;
 	invisibleKeys.order = true;
 	invisibleKeys.name = true;
@@ -140,14 +142,17 @@
 	referenceKeys.slot_usage = "slot";
 	referenceKeys.involved = "entity";
 	referenceKeys.members = "entity";
+	referenceKeys.soldtypes = "type";
 	referenceKeys.locals = "entity";
-	referenceKeys.soldtypes= "type";
+	referenceKeys.mentioned = "all";
 
+	var spaceBreaks = /[ _-]/;
 	var prettifyValues = {};
 	var prettifyNames = {};
 	var knowledgeLink = {};
 	var displayRaw = {};
 
+	prettifyNames.mentioned = "Mentions";
 	prettifyNames.slot_usages = "Slots Used";
 	prettifyNames.dependency = "Dependencies";
 	prettifyNames.itemtype = "Item Types";
@@ -288,6 +293,29 @@
 		return "";
 	};
 
+	prettifyValues.size = function(property, value, record, universe) {
+		if(!value) {
+			return "";
+		}
+		if(typeof(value) !== "string") {
+			return value;
+		}
+
+		var buffer = value.split(spaceBreaks),
+			x;
+
+		value = "";
+		for(x=0; x<buffer.length; x++) {
+			if(value) {
+				value += " " + buffer[x].capitalize();
+			} else {
+				value = buffer[x].capitalize();
+			}
+		}
+
+		return value;
+	};
+
 	var prettifyPropertyPattern = /_([a-z])/ig,
 		prettifyPropertyName = function(full, match) {
 			return " " + match.capitalize();
@@ -342,6 +370,7 @@
 			data.holdDescription = null;
 			data.restocking = false;
 			data.description = null;
+			data.calculated = {};
 			data.holdNote = null;
 			data.note = null;
 			data.profile = null;
@@ -349,6 +378,7 @@
 			data.id = null;
 
 			data.showDistribution = false;
+			data.showContributions = {};
 
 			data.availableTemplates = {};
 			data.availableTemplates.entity = [];
@@ -971,6 +1001,21 @@
 					this.renderRestockDistribution();
 				}, 0);
 			},
+			"toggleContributions": function(property) {
+				Vue.set(this.showContributions, property, !this.showContributions[property]);
+			},
+			"directPropertyClasses": function(property) {
+				if(this.calculated[property]) {
+					return "calculated-value";
+				}
+				return "";
+			},
+			"contributionClasses": function(property) {
+				if(this.showContributions[property]) {
+					return "open";
+				}
+				return "closed";
+			},
 			"update": function() {
 				var buffer,
 					hold,
@@ -1175,8 +1220,8 @@
 							});
 						}
 					}
-					Vue.set(this, "calculatedEncumberance", hold);
 				}
+				Vue.set(this, "calculatedEncumberance", hold);
 
 				this.parties.splice(0);
 				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
@@ -1231,6 +1276,32 @@
 					Vue.set(this, "relatedError", this.rsshowdown(this.base._relatedErrors[this.record.id].message || this.base._relatedErrors[this.record.id], this.record, this.base, this.target));
 				} else {
 					Vue.set(this, "relatedError", null);
+				}
+
+				if(!this.player.hide_contributed && this.record._calculated) {
+					for(x=0; x<this.record._calculated.length; x++) {
+						if(this.calculated[this.record._calculated[x]]) {
+							this.calculated[this.record._calculated[x]].involved.splice(0);
+						} else {
+							Vue.set(this.calculated, this.record._calculated[x], {
+								"result": 0,
+								"involved": []
+							});
+						}
+						Vue.set(this.calculated[this.record._calculated[x]], "result", this.universe.calculator.process(this.record[this.record._calculated[x]], this.record, this.base));
+						if(this.record._statContributions && this.record._statContributions[this.record._calculated[x]]) {
+							buffer = Object.keys(this.record._statContributions[this.record._calculated[x]]);
+							for(y=0; y<buffer.length; y++) {
+								// this.calculated[this.record._calculated[x]].involved.push(this.universe.indexes.all.index[buffer[y]]);
+								if(buffer[y] !== this.record.id && this.universe.indexes.all.index[buffer[y]] && (this.player.master || (!this.universe.indexes.all.index[buffer[y]].obscured && !this.universe.indexes.all.index[buffer[y]].template))) {
+									this.calculated[this.record._calculated[x]].involved.push(this.universe.indexes.all.index[buffer[y]]);
+								}
+							}
+							if(this.calculated[this.record._calculated[x]].result != this.record[this.record._calculated[x]]) {
+								this.calculated[this.record._calculated[x]].involved.push(this.base);
+							}
+						}
+					}
 				}
 
 				if(this.record.restock_base && this.player.master) {
@@ -1423,7 +1494,7 @@
 //				.attr("fill", "#2121ff");
 			},
 			"openStarwarsFandom": function() {
-				window.open("https://starwars.fandom.com/wiki/" + this.record.name);
+				window.open("https://starwars.fandom.com/wiki/" + this.record.name.replace("System", "system"));
 			}
 		},
 		"beforeDestroy": function() {

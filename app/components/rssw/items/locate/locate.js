@@ -142,7 +142,7 @@
 			"rebindEntity": function(entity) {
 				console.log("Rebind: ", entity);
 				if(!this.mapping[entity.id]) {
-					entity.$on("modified", this.updateEntity);
+					// entity.$on("modified", this.updateEntity);
 					Vue.set(this.mapping, entity.id, []);
 				}
 				this.updateEntity(entity);
@@ -181,12 +181,11 @@
 				console.log("Unbind: ", entity);
 				if(this.mapping[entity.id]) {
 					this.inventory.unindexItem(this.mapping[entity.id]);
-					entity.$off("modified", this.updateEntity);
+					// entity.$off("modified", this.updateEntity);
 					Vue.delete(this.mapping, entity.id);
 				}
 			},
 			"update": function() {
-				console.log("Update...");
 				var incoming,
 					outgoing,
 					listing,
@@ -205,8 +204,8 @@
 
 				incoming = listing.difference(this.entities);
 				outgoing = this.entities.difference(listing);
-				console.log("Incoming: ", incoming);
-				console.log("Outgoing: ", outgoing);
+				// console.log("Incoming: ", incoming);
+				// console.log("Outgoing: ", outgoing);
 
 				for(i=0; i<incoming.length; i++) {
 					this.rebindEntity(incoming[i]);
@@ -218,9 +217,9 @@
 		},
 		"beforeDestroy": function() {
 			this.universe.$off("modified", this.update);
-			for(var x=0; x<this.entities.length; x++) {
-				this.entities[x].$off(this.updateEntity);
-			}
+			// for(var x=0; x<this.entities.length; x++) {
+			// 	this.entities[x].$off(this.updateEntity);
+			// }
 		},
 		"template": Vue.templified("components/rssw/items/locate.html")
 	});

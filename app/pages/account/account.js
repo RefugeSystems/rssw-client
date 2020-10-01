@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSAccount
  * @constructor
  * @module Pages
@@ -17,7 +17,7 @@
 		"props": ["universe", "user"],
 		"data": function() {
 			var data = {};
-			
+
 			data.player = this.universe.indexes.player.index[this.user.id];
 			data.linked_discord = null;
 			data.mdDescription = null;
@@ -26,7 +26,7 @@
 			data.entity = null;
 			data.email = null;
 			data.name = null;
-			
+
 			data.editting = {};
 			data.labeling = {};
 			data.modeling = {};
@@ -39,9 +39,11 @@
 				"linked_discord"
 			];
 			data.toggles = [
+				// "hide_contributed",
 				"allow_scripting"
 			];
 			data.title = {
+				"hide_contributed": "Hide Contribution Toggle in Record Information",
 				"allow_scripting": "Allow Scripted HTML"
 			};
 
@@ -57,16 +59,16 @@
 				if(field === "passcode") {
 					return "[ Edit to set new passcode ]";
 				}
-				
+
 				return this.modeling[field];
 			},
 			"editField": function(field) {
 				Vue.set(this.editting, field, true);
-				
+
 				if(this.modeling[field] === "...") {
 					Vue.set(this.modeling, field, this.player[field]);
 				}
-				
+
 				setTimeout(function() {
 					field = document.getElementById("fieldinput-" + field);
 					if(field) {
@@ -99,7 +101,7 @@
 					} else {
 						Vue.set(this.modeling, field, "...");
 					}
-	
+
 					buffer = {};
 					buffer[field] = value;
 					this.player.commit(buffer);

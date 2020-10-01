@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class systemInfo
  * @constructor
  * @module Components
@@ -9,7 +9,7 @@
  */
 (function() {
 	var storageKey = "_rs_infoComponentKey";
-	
+
 	rsSystem.component("systemInfo", {
 		"inherit": true,
 		"mixins": [
@@ -33,15 +33,15 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			/**
-			 * 
+			 *
 			 * @property viewing
 			 * @type RSObject
 			 */
 			data.viewing = null;
 			/**
-			 * 
+			 *
 			 * @property open
 			 * @type Boolean
 			 */
@@ -64,7 +64,7 @@
 			 * @type Object
 			 */
 			data.base = null;
-			
+
 			return data;
 		},
 		"watch": {
@@ -90,25 +90,25 @@
 					rsSystem.EventBus.$emit("display-info", follow);
 				}
 			};
-			
+
 			rsSystem.EventBus.$on("display-info", this.displayRecord);
 			rsSystem.EventBus.$on("key:escape", this.closeInfo);
 			this.universe.$on("universe:modified", this.update);
 		},
 		"methods": {
-			
+
 			"getTabIndex": function() {
 				return this.open?5:-1;
 			},
 			/**
-			 * 
+			 *
 			 * @method displayRecord
 			 * @param {RSObject | Object | String} toView Something to identify the RSObject to view or the object itself.
 			 */
 			"displayRecord": function(toView) {
 //				console.log("Info: ", toView);
 //				console.log("Current: ", this.viewing);
-				
+
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
 //						console.warn("Received View Record: ", toView);
@@ -129,7 +129,7 @@
 						Vue.set(this, "base", undefined);
 					}
 				}
-				
+
 				if(toView) {
 //					console.log("Viewing: ", toView);
 					if(!this.viewing || toView.id !== this.viewing.id) {
@@ -143,10 +143,10 @@
 								this.viewing.$off("modified", this.update);
 							}
 						}
-						
+
 						Vue.set(this, "viewing", toView);
 						Vue.set(this, "open", true);
-	
+
 						if(this.viewing.$on) {
 							this.viewing.$on("modified", this.update);
 						}
@@ -154,13 +154,13 @@
 						this.closeInfo();
 					}
 				}
-				
+
 //				console.warn("Info View Updated: ", this);
 			},
-			
+
 			"processRequest": function(event) {
-				
-				
+
+
 			},
 			"backOne": function() {
 				if(this.history.length) {
@@ -171,16 +171,17 @@
 				}
 			},
 			/**
-			 * 
+			 *
 			 * @method closeInfo
 			 */
 			"closeInfo": function() {
+				rsSystem.EventBus.$emit("info:closed", this.viewing);
 				Vue.set(this, "viewing", null);
 				Vue.set(this, "open", false);
 				this.history.splice(0);
 			},
 			/**
-			 * 
+			 *
 			 * @method update
 			 */
 			"update": function() {

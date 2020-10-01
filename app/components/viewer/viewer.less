@@ -42,7 +42,8 @@
 
 		button.scaled,
 		span.scaled {
-			font-size: inherit !important;
+			font-size: inherit;
+			/*font-size: inherit !important;*/
 		}
 
 		.view {
@@ -178,12 +179,13 @@
 					}
 
 					&.map-border {
-
+						z-index: 50;
 					}
 
 					&.no-border {
 						background-color: transparent !important;
 						border-color: transparent !important;
+						z-index: 40;
 					}
 
 					&:active,
@@ -261,9 +263,14 @@
 					&.search-found .labeling,
 					&:active .labeling,
 					&:focus .labeling,
-					&:hover .labeling {
+					&:hover .labeling,
+					.poi-focused {
 						padding: 0px .5em;
 						max-width: 300px;
+					}
+
+					&.poi-focused {
+						border-color: @rsOrange !important;
 					}
 
 					&.search-hidden .labeling {

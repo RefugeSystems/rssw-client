@@ -17,7 +17,7 @@
 		types;
 
 	itemtypes = {
-		"label": "Item Types",
+		"label": "Item Types (Deprecated)",
 		"property": "itemtype",
 		"type": "multireference",
 		"optionValue": "id",
@@ -296,11 +296,11 @@
 			parent.options = this.universe.indexes.item.listing;
 			parent.options.sortBy("name");
 
-			cancontain.source_index = this.universe.indexes.itemtype;
-			itemtypes.source_index = this.universe.indexes.itemtype;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			abilities.source_index = this.universe.indexes.ability;
+			itemtypes.source_index = this.universe.indexes.itemtype;
+			cancontain.source_index = this.universe.indexes.type;
 			slots.source_index = this.universe.indexes.slot;
 			items.source_index = this.universe.indexes.item;
 			types.source_index = this.universe.indexes.type;

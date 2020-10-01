@@ -10,14 +10,14 @@
 		position: relative;
 		color: @rsWhite;
 		z-index: 6;
-		
+
 		&.bounded {
 			overflow: hidden;
 		}
-		
+
 		&.unbounded {
 			border-collapse: collapse;
-			
+
 			tbody {
 				tr {
 					padding: 6px 0px;
@@ -25,7 +25,7 @@
 				}
 			}
 		}
-			
+
 		button.table-content {
 			background: transparent;
 			margin: 0px;
@@ -37,38 +37,40 @@
 			position: relative;
 			display: block;
 			z-index: 5;
+			min-width: 1.8em;
+			min-height: 1em;
 		}
-		
+
 		th {
 			text-align: left;
 			background-color: @rsBlack;
 			white-space: nowrap;
 			color: inherit;
-			
+
 			* {
 				color: inherit;
 				position: relative;
 				z-index: 5;
 			}
 		}
-		
+
 		td {
 			position: relative;
 			color: inherit;
-			
+
 			&.notification {
 				color: @rsOrange;
 				font-size: 20px;
 			}
-			
+
 			* {
 				color: inherit;
 			}
-			
+
 			tbody {
 				overflow: hidden;
 			}
-			
+
 			.highlight {
 				position: absolute;
 				display: block;
@@ -78,7 +80,7 @@
 				top: 0px;
 				left: 0px;
 			}
-			
+
 			.highlight.starting:before {
 				position: absolute;
 				display: block;
@@ -92,7 +94,7 @@
 				opacity: .3;
 				z-index: 3;
 			}
-			
+
 			.highlight.ending:before {
 				position: absolute;
 				display: block;
@@ -106,7 +108,7 @@
 				opacity: .3;
 				z-index: 3;
 			}
-			
+
 			.crosshair {
 				position: absolute;
 				display: block;
@@ -117,12 +119,12 @@
 				top: 0px;
 				left: 0px;
 			}
-			
+
 			&:hover {
 				.crosshair {
 					z-index: 2;
 				}
-				
+
 				.crosshair:before {
 					position: absolute;
 					display: block;
@@ -137,7 +139,7 @@
 					opacity: inherit;
 					z-index: 2;
 				}
-				
+
 				.crosshair:after {
 					position: absolute;
 					display: block;
@@ -154,23 +156,23 @@
 				}
 			}
 		}
-		
+
 		tr.record-selected {
 			.crosshair:before {
 				background-image: linear-gradient(to right, transparent, @tableHighlight, transparent) !important;
 			}
-			
+
 			.crosshair:after {
 				background-image: linear-gradient(transparent, @tableHighlight, transparent) !important;
 			}
 		}
-	
+
 		.additional {
 			position: relative;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			
+
 			> * {
 				position: relative;
 				display: block;
@@ -178,7 +180,7 @@
 				margin-left: 7px !important;
 				padding: 5px;
 			}
-			
+
 			> *:hover {
 				z-index: 15;
 			}

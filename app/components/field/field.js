@@ -222,6 +222,7 @@
 						this.root[this.field.property].push(this.completions[this.activeCompletion][this.field.optionValue]);
 						Vue.set(this, "reference_value", "");
 						this.completions.splice(0);
+						this.emitChanged();
 					}
 				} else if(reference) {
 					if(!(this.root[this.field.property] instanceof Array)) {

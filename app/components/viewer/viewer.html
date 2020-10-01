@@ -1,11 +1,14 @@
 
 <div class="rs-component component-viewer" :class="renderState()">
 
-	<div class="map" v-if="location && sourceImage" :style="'font-size: ' + scaledSize + 'px;'" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
+	<div class="map" v-if="location && sourceImage" :style="" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
 		<div class="view" onexit="true" v-pan="pan">
-			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)">
+			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" :style="'font-size: ' + (baseFontSize + image.zoom) + 'px;'">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && state.markers">
-					<button class="scaled poi" :class="poiStyling(link)" v-if="poiNamed(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
+					<!--
+					<button class="scaled poi" :class="poiStyling(link)" v-if="poiNamed(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%; font-size: ' + ((link.label_sizing || baseFontSize) + image.zoom) + 'px;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
+					-->
+					<button class="scaled poi" :class="poiStyling(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
 						<span class="poi-icon scaled" :class="poiClass(link)"></span>
 						<span class="labeling scaled" v-if="link.label" :class="link.label && state.labels?'shown':'hidden'">{{link.label}}</span>
 					</button>

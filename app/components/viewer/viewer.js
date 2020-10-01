@@ -98,9 +98,11 @@
 			data.dragX = null;
 			data.dragY = null;
 
+			data.focusedLocation = null;
 			data.availableCanvases = {};
 			data.availableLocales = {};
 			data.pointsOfInterest = [];
+			data.availablePOIs = [];
 			data.coordinates = [];
 			data.locales = [];
 			data.pins = true;
@@ -218,6 +220,7 @@
 			}
 
 			rsSystem.register(this);
+			rsSystem.EventBus.$on("info:closed", this.clearSearch);
 			rsSystem.EventBus.$on("copied-id", this.setMenuID);
 			this.universe.$on("universe:modified", this.update);
 			this.universe.$on("model:modified", this.update);
@@ -225,6 +228,11 @@
 			this.update();
 		},
 		"methods": {
+			"clearSearch": function(record) {
+				if(record && this.focusedLocation === record.id) {
+					Vue.set(this, "focusedLocation", null);
+				}
+			},
 			"setMenuID": function(id) {
 				Vue.set(this.state, "alter", id);
 			},
@@ -233,19 +241,46 @@
 					buffer,
 					x;
 
-				for(x=0; !set && x<this.pointsOfInterest.length; x++) {
-					buffer = this.pointsOfInterest[x];
-					console.warn("Searching[" + buffer.id + "]: ", buffer);
-					if(buffer.x && buffer.y && this.testSearchCriteria(buffer._search, this.search_criteria)) {
-						this.centerView(buffer);
-						set = true;
+				Vue.set(this, "focusedLocation", null);
+				if(this.search_criteria[0] === "self") {
+					if((buffer = this.universe.indexes.entity.index[this.player.entity]) && (buffer = this.universe.indexes.location.index[buffer.location])) {
+						while(buffer && buffer.location !== this.location.id) {
+							buffer = this.universe.indexes.location.index[buffer.location];
+						}
+						if(buffer) {
+							Vue.set(this, "focusedLocation", buffer.id);
+							this.centerView(buffer);
+							set = true;
+						}
 					}
+				} else {
+					for(x=0; !set && x<this.availablePOIs.length; x++) {
+						buffer = this.availablePOIs[x];
+						console.warn("Searching[" + buffer.id + "]: ", buffer);
+						if(buffer.x && buffer.y && this.testSearchCriteria(buffer._search, this.search_criteria)) {
+							Vue.set(this, "focusedLocation", buffer.id);
+							this.centerView(buffer);
+							set = true;
+						}
+					}
+					this.determinePOIs();
 				}
 
 				if(!set) {
 					Vue.set(this, "searchError", "Not Found");
 				} else {
 					Vue.set(this, "searchError", "");
+				}
+			},
+			"determinePOIs": function() {
+				var buffer,
+					x;
+
+				this.pointsOfInterest.splice(0);
+				for(x=0; x<this.availablePOIs.length; x++) {
+					if(this.poiNamed(this.availablePOIs[x])) {
+						this.pointsOfInterest.push(this.availablePOIs[x]);
+					}
 				}
 			},
 			"centerView": function(location) {
@@ -291,6 +326,7 @@
 				}
 			},
 			"clearSearch": function() {
+				Vue.set(this, "focusedLocation", null);
 				Vue.set(this.state, "search", "");
 				Vue.set(this, "searchError", "");
 				this.search_criteria.splice(0);
@@ -303,6 +339,7 @@
 				var buffer;
 
 				if(text !== this.searchPrevious) {
+					Vue.set(this, "focusedLocation", null);
 					Vue.set(this, "searchPrevious", text);
 					this.search_criteria.splice(0);
 					if(text) {
@@ -319,6 +356,8 @@
 						}
 					}
 				}
+
+				this.determinePOIs();
 			},
 			"testSearchCriteria": function(string, criteria) {
 				var x;
@@ -762,7 +801,7 @@
 						Vue.set(this, "scaledSize", this.baseFontSize + applying.zoom);
 					}
 
-					if(this.locales && this.locales.length && (this.image._lastzoom !== applying.zoom || this.image._lastlocation !== this.location.id)) {
+					if(applying.zoom !== undefined && this.locales && this.locales.length && (this.image._lastzoom !== applying.zoom || this.image._lastlocation !== this.location.id)) {
 //						console.log("Apply Redraw: ", JSON.stringify(this.image, null, 4), JSON.stringify(applying, null, 4));
 //						console.log("Apply Redraw");
 						this.image._lastlocation = this.location.id;
@@ -859,7 +898,7 @@
 				return null;
 			},
 			"renderPath": function(canvas, path, points) {
-//				console.log("Render Path[" + path.id + "]: ", points, path);
+				// console.log("Render Path[" + path.id + "]: ", points, path);
 				var xc,
 					yc,
 					x;
@@ -914,7 +953,7 @@
 					canvas.closePath();
 					canvas.fill();
 
-					if(this.state.labels && path.render_name && path._x !== undefined && path._y !== undefined) {
+					if(/*this.state.labels &&*/ path.render_name && path._x !== undefined && path._y !== undefined) {
 						canvas.fillStyle = path.label_color || path.color || "#FFFFFF";
 						canvas.font = "bold " + (12 + this.state.image.zoom) + "px Arial";
 						canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
@@ -969,6 +1008,10 @@
 							classStyle += " search-found";
 						}
 					}
+				}
+
+				if(this.focusedLocation === link.id) {
+					classStyle += " search-found poi-focused";
 				}
 
 				if(link.no_border) {
@@ -1041,6 +1084,7 @@
 			},
 			"poiMenu": function(link) {
 //				console.log("Trigger View");
+				Vue.set(this, "focusedLocation", link.id);
 				rsSystem.EventBus.$emit("display-info", link);
 			},
 			"minorUpdate": function() {
@@ -1049,6 +1093,7 @@
 			"update": function() {
 //				console.warn("Update");
 				var buffer,
+					hold,
 					x;
 
 				if(this.isMaster !== this.player.master) {
@@ -1130,18 +1175,20 @@
 					this.coordinates.push.apply(this.coordinates, this.location.coordinates);
 				}
 
-				while(this.pointsOfInterest.length !== 0) {
-					buffer = this.pointsOfInterest.pop();
-					if(buffer.$off) {
-						buffer.$off("modified", this.minorUpdate);
-					}
-				}
+
+				this.availablePOIs.splice(0);
+				// while(this.pointsOfInterest.length !== 0) {
+				// 	buffer = this.pointsOfInterest.pop();
+				// 	if(buffer.$off) {
+				// 		buffer.$off("modified", this.minorUpdate);
+				// 	}
+				// }
 				this.locales.splice(0);
 				for(x=0; x<this.universe.indexes.location.listing.length; x++) {
 					buffer = this.universe.indexes.location.listing[x];
-					if(buffer.location === this.location.id) {
-						this.pointsOfInterest.push(buffer);
-						buffer.$on("modified", this.minorUpdate);
+					if(buffer.location === this.location.id || ((hold = this.universe.indexes.location.index[buffer.location]) && hold.location === this.location.id && hold.has_path)) {
+						this.availablePOIs.push(buffer);
+						// buffer.$on("modified", this.minorUpdate);
 						if(buffer.has_path) {
 							this.locales.push(buffer);
 						}
@@ -1150,15 +1197,15 @@
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 					buffer = this.universe.indexes.entity.listing[x];
 					if(buffer.location === this.location.id) {
-						this.pointsOfInterest.push(buffer);
-						buffer.$on("modified", this.minorUpdate);
+						this.availablePOIs.push(buffer);
+						// buffer.$on("modified", this.minorUpdate);
 					}
 				}
 				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
 					buffer = this.universe.indexes.party.listing[x];
 					if(buffer.location === this.location.id) {
-						this.pointsOfInterest.push(buffer);
-						buffer.$on("modified", this.minorUpdate);
+						this.availablePOIs.push(buffer);
+						// buffer.$on("modified", this.minorUpdate);
 					}
 				}
 //				this.locales.splice(0);
@@ -1198,11 +1245,13 @@
 					this.apply(this.image);
 				}
 
+				this.determinePOIs();
 				this.$forceUpdate();
 				this.redrawPaths();
 			}
 		},
 		"beforeDestroy": function() {
+			rsSystem.EventBus.$off("info:closed", this.clearSearch);
 			rsSystem.EventBus.$off("copied-id", this.setMenuID);
 			this.universe.$off("universe:modified", this.update);
 			this.universe.$off("model:modified", this.update);

@@ -85,14 +85,40 @@ class RSObject extends EventEmitter {
 		*/
 	}
 
+	get truename() {
+		if(this._coreData.name) {
+			return this._coreData.name;
+		}
+
+		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
+		if(parent) {
+			return parent.name;
+		}
+
+		return this.id;
+	}
+
+	get truedescription() {
+		if(this._coreData.description) {
+			return this._coreData.description;
+		}
+
+		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
+		if(parent) {
+			return parent.description;
+		}
+
+		return "";
+	}
+
 	get name() {
 		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
 
-		if(this.hidden) {
-			if(this.hiddenName) {
-				return this.hiddenName;
-			} else if(parent && parent.hiddenName) {
-				return parent.hiddenName;
+		if(this.hidden || this.must_know) {
+			if(this.hidden_name) {
+				return this.hidden_name;
+			} else if(parent && parent.hidden_name) {
+				return parent.hidden_name;
 			} else {
 				return "Unknown";
 			}
@@ -110,11 +136,11 @@ class RSObject extends EventEmitter {
 	get description() {
 		var parent = this._coreData.parent?this.universe.index.index[this._coreData.parent]:false;
 
-		if(this.hidden) {
-			if(this.hiddenDescription) {
-				return this.hiddenDescription;
-			} else if(parent && parent.hiddenDescription) {
-				return parent.hiddenDescription;
+		if(this.hidden || this.must_know) {
+			if(this.hidden_description) {
+				return this.hidden_description;
+			} else if(parent && parent.hidden_description) {
+				return parent.hidden_description;
 			} else {
 				return "Mystery";
 			}
@@ -800,6 +826,7 @@ class RSObject extends EventEmitter {
 //			this._mods.push.apply(base._mods);
 //		} catch(e) {
 //		}
+		this._calculated = base._calculated;
 		this._mods = base._mods;
 
 //		if(debug || this.debug || this.universe.debug) {
@@ -825,7 +852,9 @@ class RSObject extends EventEmitter {
 		if(this.universe.nouns) {
 			var reference,
 				buffer,
-				x;
+				stats,
+				x,
+				y;
 
 			if(base && base._overrides && base._overrides[noun]) {
 				reference = base._overrides[noun];
@@ -854,6 +883,15 @@ class RSObject extends EventEmitter {
 //							}
 //							base._mods.push.apply(base._mods, buffer._mods);
 							base._mods = base._mods.concat(buffer._mods);
+							if(buffer._statContributions && base._contributions) {
+								stats = Object.keys(buffer._statContributions);
+								for(y=0; y<stats.length; y++) {
+									if(!base._contributions[stats[y]]) {
+										base._contributions[stats[y]] = {};
+									}
+									Object.assign(base._contributions[stats[y]], buffer._statContributions[stats[y]]);
+								}
+							}
 						}
 						if(!this._registered[buffer.id]) {
 							buffer.$on("modified", this.dependencyFired, this);
@@ -891,6 +929,15 @@ class RSObject extends EventEmitter {
 //						}
 //						base._mods.push.apply(base._mods, buffer._mods);
 						base._mods = base._mods.concat(buffer._mods);
+						if(buffer._statContributions && base._contributions) {
+							stats = Object.keys(buffer._statContributions);
+							for(y=0; y<stats.length; y++) {
+								if(!base._contributions[stats[y]]) {
+									base._contributions[stats[y]] = {};
+								}
+								Object.assign(base._contributions[stats[y]], buffer._statContributions[stats[y]]);
+							}
+						}
 					}
 					if(!this._registered[buffer.id]) {
 						buffer.$on("modified", this.dependencyFired, this);

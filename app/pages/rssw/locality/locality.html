@@ -14,6 +14,11 @@
 			<span>{{activeLocation.name}}</span>
 			<button class="info flat fas fa-info-circle"></button>
 		</div>
+		<div class="subtitle" v-if="currentlyInside" v-on:click="showInfo(currentlyInside)">
+			<span :class="currentlyInside.icon"></span>
+			<span>{{currentlyInside.name}}</span>
+			<button class="info flat fas fa-info-circle"></button>
+		</div>
 		<div class="entity-container">
 			<rs-listing class="" :list="nearBy" :universe="universe" :user="user" :checker="isOwner" placeholder="Filter Near By..." :infobase="activeEntity"></rs-listing>
 		</div>

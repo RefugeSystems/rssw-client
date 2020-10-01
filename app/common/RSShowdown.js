@@ -1,7 +1,7 @@
 
 
 /**
- * 
+ *
  * @class RSShowdown
  * @constructor
  * @module Common
@@ -12,9 +12,9 @@
 	var converter = new showdown.Converter({
 		"tables": true
 	});
-	
+
 	var validTags = ["class", "style", "data", "data-id", "uri", "href", "src", "draggable", "value", "id"];
-	
+
 	var xssOptions = {
 		"whiteList": {
 			"span": validTags,
@@ -38,12 +38,12 @@
 		"start": "${",
 		"end": "}$"
 	};
-	
+
 	var notFound = {
 		"icon": "",
 		"id": ""
 	};
-	
+
 	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
 //		console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
 		var player = universe.indexes.player.index[universe.user.username],
@@ -62,7 +62,7 @@
 			tracking = sourceText.substring(index, end + 2);
 			target = sourceText.substring(index + 2, end);
 			properties = {};
-			
+
 			mark = target.indexOf(",");
 			if(mark === -1) {
 				value = target;
@@ -73,19 +73,19 @@
 					case 4:
 						base = universe.index.lookup[value[3]];
 					case 3:
-						properties.id = value[2];
+						properties.classes = value[2];
 					case 2:
-						properties.classes = value[1];
+						properties.id = value[1];
 					case 1:
 						value = value[0];
 				}
 			}
-			
+
 			if(value) {
 //				console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 				if(value[0] === "=") {
 					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
-					
+
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
 				} else if(value[0] === "~") {
 					value = value.substring(1).split(".");
@@ -132,19 +132,19 @@
 				if(properties.classes) {
 					element.css(properties.classes);
 				}
-				
+
 				sourceText = sourceText.replace(tracking, element[0].outerHTML);
 			}
-			
+
 			index = sourceText.indexOf(marking.start, index + 1);
 		}
-		
+
 		if(player && !player.allow_scripting) {
 			return filterXSS(sourceText, xssOptions);
 		}
 		return sourceText;
 	};
-	
+
 	rsSystem.component("RSShowdown", {
 		"inherit": true,
 		"props": {

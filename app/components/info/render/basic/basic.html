@@ -55,7 +55,7 @@
 		<img :src="record.url" />
 	</div>
 
-	<div class="properties">
+	<div class="properties" v-if="record._class !== 'datapoint' && record._class !== 'datausage'">
 		<div class="direct-properties" v-if="showDirectProperties()">
 			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
 				<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
@@ -64,8 +64,28 @@
 					</span>
 					<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property, record)}}</span>
 					<span class="divide">:</span>
-					<span class="value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
-					<span class="raw" v-if="displayRaw[property]">{{value}}</span>
+					<span v-if="!calculated[property] || !calculated[property].involved.length">
+						<span class="value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
+						<span class="raw" v-if="displayRaw[property]">{{value}}</span>
+					</span>
+					<button class="flat" v-if="calculated[property] && calculated[property].involved.length" v-on:click="toggleContributions(property)">
+						<span class="value calculated-value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
+						<span class="raw calculated-value" v-if="displayRaw[property]">{{value}}</span>
+						<span v-if="calculated[property].result != record[property]">
+							<span>(</span>
+							<span class="fas fa-sigma"></span>
+							<span class="calculated-value">{{calculated[property].result}}</span>
+							<span>)</span>
+						</span>
+					</button>
+				</div>
+				<div class="section contributions" :class="contributionClasses(property)" v-if="calculated[property] && calculated[property].involved">
+					<div class="subreference" v-for="involved in calculated[property].involved">
+						<a class="rendered-value" v-on:click="showInfo(involved, base)">
+							<span class="fad fa-layer-plus rs-secondary-dark-orange rs-secondary-solid"></span>
+							<span>{{involved.name}}</span>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -108,37 +128,27 @@
 	</div>
 
 	<div class="section" v-if="equipped.length">
-		<h3>Equipped Equipment</h3>
-		<div class="general-list">
-			<ul class="general-list">
-				<li v-for="equipped_equipment in equipped">
-					<a class="rendered-value" v-on:click="showInfo(equipped_equipment[1], base)">{{equipped_equipment[1].name}}</a>
-					<span>On</span>
-					<a class="rendered-value" v-on:click="showInfo(equipped_equipment[0], base)">{{equipped_equipment[0].name}}</a>
-				</li>
-			</ul>
+		<div class="reference-heading">Equipped Equipment</div>
+		<div class="subreference" v-for="equipped_equipment in equipped">
+			<a class="rendered-value" v-if="isOwner(equipped_equipment[1])" v-on:click="showInfo(equipped_equipment[1], record)">{{equipped_equipment[1].name}}</a>
+			<span class="rendered-value" v-else>{{equipped_equipment[1].name}}</span>
+			<span>To</span>
+			<a class="rendered-value" v-on:click="showInfo(equipped_equipment[0], record)">{{equipped_equipment[0].name}}</a>
 		</div>
 	</div>
 
 	<div class="section" v-if="base && relatedKnowledge.length">
-		<h3>{{base.name}}'s Related Knowledge</h3>
-		<div class="general-list">
-			<ul class="general-list">
-				<li v-for="knowledge in relatedKnowledge">
-					<a class="rendered-value" v-on:click="showInfo(knowledge, base)">{{knowledge.name}}</a>
-				</li>
-			</ul>
+		<div class="reference-heading">{{base.name}}'s Related Knowledge</div>
+		<div class="subreference" v-for="knowledge in relatedKnowledge">
+			<a class="rendered-value" v-on:click="showInfo(knowledge, base)">{{knowledge.name}}</a>
 		</div>
 	</div>
 
 	<div class="section" v-if="record.related && record.related.length">
-		<h3>Related Data</h3>
-		<div class="general-list">
-			<ul class="general-list">
-				<li v-for="data in record.related" v-if="universe.index.lookup[data]">
-					<a class="rendered-value" v-on:click="showInfo(universe.index.lookup[data], base)">{{universe.index.lookup[data].name}}</a>
-				</li>
-			</ul>
+		<div class="reference-heading">Related Data</div>
+		<div class="subreference" v-for="data in record.related" v-if="universe.index.lookup[data]">
+			<a class="rendered-value" v-if="isOwner(universe.index.lookup[data])" :data-id="data">{{universe.index.lookup[data].name}}</a>
+			<span class="rendered-value" v-else>{{universe.index.lookup[data].name}}</span>
 		</div>
 	</div>
 
@@ -220,7 +230,7 @@
 		<div class="control" v-if="canTravelTo(base.id)">
 			<button class="action direct" v-on:click="travelToHere(base.id)">
 				<span class="fad fa-globe-africa"></span>
-				<span>Travel Here</span>
+				<span>Travel Here as {{base.name}} </span>
 			</button>
 		</div>
 		<div class="control">

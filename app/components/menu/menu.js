@@ -148,6 +148,13 @@
 				"path": "/system",
 				"highlight": "/system"
 			});
+			data.navigationItems.push({
+				"icon": "far fa-question-square",
+				"action": "navigate",
+				"label": "About",
+				"path": "/about",
+				"highlight": "/about"
+			});
 
 			data.generalItems = [];
 			data.shrinkItem = {

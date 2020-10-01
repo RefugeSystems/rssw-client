@@ -4,7 +4,7 @@
 # Properties
 √ Flag to nullify item stat inheritance (For Bags)  
         + This should remove the need for inventory types and they'll simply be items
-+ [STARTED] History / Log 
+√ [STARTED] History / Log
 		√ Solve when to update history as all will trigger from other clients in "auto" mode
 				! Create new serverside class for entities
 				+ New class handles checking for tracked keys during updates and adding history
@@ -35,7 +35,7 @@
 + Archetype Field Set
 
 # UIs
-+ Shop Interface
+√ Shop Interface
 √ Bag Info Display
 √ Ship Display  
         + Passenger Manifest  
@@ -63,10 +63,10 @@
 		+ An info icon appears next to the selected skill for leveling
 √ Add custom skills to skill area widget for entities
 + Need UI for controling Entity widgets for display (Simple list, stores to entity)
-+ Roll Dice
+√ Roll Dice
 		+ Universe needs a way to specify its available dice configurations
 		+ Roller needs to be able to select from the available dice configurations
-+ Historical note taking Widget at a player level, maybe save to player itself
+√ Historical note taking Widget at a player level, maybe save to player itself
 		+ Has a "current" note
 		+ Has a scrolling collapsable list of previous notes
 		+ Clicking previous notes opens info tab
@@ -75,17 +75,17 @@
 		+ Listing has a filter that searches the `_search` key for deeper information
 
 # Functions
-+ Restock Shop
-+ Self check-out from shop view once created
+√ Restock Shop
+√ Self check-out from shop view once created
 √ Equip item to an item  
 		+ This should always require the item to be send takes a slot
 		+ Additionally the receiving item should have a free slot, but this should be a report on the display for now
 + Give room to entity
 + Universe Time
 √ Limit "Give" list of entities to current party AND entities that also have "inside" the same as the current source entity
-+ Display calculated "Dice" results more standardly through the calculator class
+√ Display calculated "Dice" results more standardly through the calculator class
 
-# Tweaks	
+# Tweaks
 √ Galaxy
         + Sort Targets by name ignoring case
         + Sort types by name

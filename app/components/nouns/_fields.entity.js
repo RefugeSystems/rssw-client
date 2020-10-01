@@ -234,7 +234,7 @@
 
 	types = {
 		"label": "Entity Types",
-		"property": "types",
+		"property": "type",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -456,9 +456,22 @@
 		"property": "no_border",
 		"type": "checkbox"
 	}, {
+		"label": "Must Know",
+		"property": "must_know",
+		"type": "checkbox"
+	}, {
 		"label": "Hidden",
 		"property": "hidden",
 		"type": "checkbox"
+	}, {
+		"label": "Hidden Name",
+		"property": "hidden_name",
+		"type": "text",
+		"condition": {
+			"hidden": {
+				"operation": "exists"
+			}
+		}
 	}, {
 		"label": "Obscured",
 		"property": "obscured",
@@ -610,6 +623,15 @@
 	rooms,
 	owners,
 	{
+		"label": "Hidden Description",
+		"property": "hidden_description",
+		"type": "textarea",
+		"condition": {
+			"hidden": {
+				"operation": "exists"
+			}
+		}
+	}, {
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"

@@ -113,6 +113,10 @@
 		"property": "label",
 		"type": "text"
 	}, {
+		"label": "Label Sizing",
+		"property": "label_sizing",
+		"type": "number"
+	}, {
 		"label": "Icon",
 		"property": "icon",
 		"knowledge": "knowledge:system:icons",
