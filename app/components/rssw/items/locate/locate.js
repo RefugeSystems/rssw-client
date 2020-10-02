@@ -137,6 +137,7 @@
 				indexed.location = indexed._location?indexed._location.name:"";
 				indexed.inside = indexed._inside?indexed._inside.name:"";
 				indexed.within = indexed._within?indexed._within.name:"";
+				indexed._search = indexed._search.toLowerCase();
 				return indexed;
 			},
 			"rebindEntity": function(entity) {
