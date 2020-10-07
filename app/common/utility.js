@@ -8,6 +8,9 @@
  */
 
 (function() {
+	var skipped = /[^a-zA-Z0-9]/g,
+		spacing = /[ _-]/g;
+	
 	var dice = {};
 	dice.proficiency = "fas fa-dice-d12 rs-yellow";
 	dice.ability = "fas fa-dice-d8 rs-green";
@@ -162,6 +165,45 @@
 				}
 				
 				return null;
+			},
+			"raceHasDataset": function(race) {
+				race = race || this.models[this.state.current].race;
+				return (race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset)
+					|| (!race && this.universe.defaultDataset);
+			},
+			"getRacialNameGenerator": function(race) {
+				var generator = null,
+					data,
+					x;
+
+				if(race && this.universe.indexes.race.index[race] && this.universe.indexes.race.index[race].dataset) {
+					data = "";
+					for(x=0; x<this.universe.indexes.race.index[race].dataset.length; x++) {
+						if(this.universe.indexes.dataset.index[this.universe.indexes.race.index[race].dataset[x]]) {
+							data += " " + this.universe.indexes.dataset.index[this.universe.indexes.race.index[race].dataset[x]].set;
+						}
+					}
+					generator = new NameGenerator(data);
+				} else if(this.universe.defaultDataset) {
+					if(!this.universe.defaultDataset.set) {
+						this.universe.defaultDataset.recalculateProperties();
+					}
+					generator = new NameGenerator(this.universe.defaultDataset.set);
+				}
+
+				return generator;
+			},
+			/**
+			 *  
+			 * @method idFromName
+			 * @param {String} name
+			 * @return {String} 
+			 */
+			"idFromName": function(name) {
+				if(name) {
+					return name.toLowerCase().replace(spacing, ":").replace(skipped, "");
+				}
+				return "";
 			},
 			/**
 			 * 

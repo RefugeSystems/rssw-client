@@ -27,6 +27,7 @@
 	rsSystem.component("RSSWCharacterBuilder", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.RSComponentUtility,
 			rsSystem.components.RSCorePage
 		],
 		"state": {
@@ -36,19 +37,8 @@
 			}
 		},
 		"data": function() {
-			var data = {};
-			
-			data.base = {};
-			data.base.species =[];
-			data.base.careers =[];
-			data.base.specializations = [];
-			
-			data.choices = [];
-	
-			data.building = {};
-			data.building.id = "character:" + this.user.id + ":" + Date.now();
-			
-			data.stage = 0;
+			var data = {},
+				x;
 			
 			data.storageKeyID = storageKey;
 			if(this.cid) {
@@ -56,6 +46,75 @@
 			}
 			data.state = this.loadStorage(data.storageKeyID, {
 			});
+			
+			data.racialNaming = null;
+			data.base = {};
+			data.base.species =[];
+			data.base.careers =[];
+			data.base.specializations = [];
+			
+			data.choices = [];
+			data.summary = {};
+			data.fields = {};
+			data.state.species = {
+				"raw": true
+			};
+			data.fields.species = [
+				"wounds_start",
+				"strain_start",
+				"xp_start",
+				
+				"brawn",
+				"agility",
+				"intellect",
+				"cunning",
+				"willpower",
+				"pressence"
+			];
+			data.summary.species = {
+				"wounds_start": "Starting Wounds",
+				"strain_start": "Starting Strain",
+				"xp_start": "Starting XP",
+				
+				"brawn": " Brawn",
+				"agility": "Agility",
+				"intellect": "Intellect",
+				"cunning": "Cunning",
+				"willpower": "Willpower",
+				"pressence": "Pressence"
+			};
+			
+
+			data.state.careers = {
+				"panel_descriptions": true,
+				"raw": true
+			};
+			data.fields.careers = [];
+			data.summary.careers = {};
+	
+			data.building = {};
+			data.building.id = "character:" + this.user.id + ":" + Date.now();
+			
+			data.stage = 0;
+			
+			data.base.species.splice(0);
+			for(x=0; x<this.universe.indexes.race.listing.length; x++) {
+				if(this.universe.indexes.race.listing[x].playable) {
+					data.base.species.push(this.universe.indexes.race.listing[x]);
+				}
+			}
+			
+			data.base.careers.splice(0);
+			for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+				if(this.universe.indexes.archetype.listing[x].classification === "primary" && this.universe.indexes.archetype.listing[x].playable) {
+					data.base.careers.push(this.universe.indexes.archetype.listing[x]);
+				} else {
+//					console.warn("Skip Archetype: ", _p(this.universe.indexes.archetype.listing[x]));
+				}
+			}
+			
+			data.base.species.sort(nameSort);
+			data.base.careers.sort(nameSort);
 			
 			return data;
 		},
@@ -136,16 +195,16 @@
 			},
 			"selected": function(record) {
 				switch(this.stage) {
-					case 0:
+					case 3:
 						this.forward();
 						break;
-					case 1:
+					case 0:
 						Vue.set(this.building, record._type, record.id);
 						this.choices.splice(0);
 						this.choices.push(record);
 						this.forward();
 						break;
-					case 2:
+					case 1:
 						this.building.archetype = [record.id];
 						if(!this.building[record._type]) {
 							Vue.set(this.building, record._type, []);
@@ -156,7 +215,7 @@
 						this.choices.push(record);
 						this.forward();
 						break;
-					case 3:
+					case 2:
 						this.building.archetype.splice(1);
 						this.building.archetype.push(record.id);
 						this.choices.splice(2);
@@ -230,7 +289,7 @@
 				switch(this.stage) {
 					case 2:
 						if(this.user.master) {
-							this.building.id = "entity:npc:" + this.reduceName(this.building.name) + ":" + Date.now();
+							this.building.id = "entity:npc:" + this.idFromName(this.building.name) + ":" + Date.now();
 						}
 						break;
 					case 3:
@@ -241,6 +300,16 @@
 			},
 			"reduceName": function(name) {
 				return name.toLowerCase().replace(spaces, "");
+			},
+			"randomName": function() {
+				if(this.racialNaming) {
+					Vue.set(this.building, "name", this.racialNaming.corpus[Random.integer(this.racialNaming.corpus.length)].capitalize() + " " + this.racialNaming.corpus[Random.integer(this.racialNaming.corpus.length)].capitalize());
+				}
+			},
+			"generateName": function() {
+				if(this.racialNaming) {
+					Vue.set(this.building, "name", this.racialNaming.create().capitalize() + " " + this.racialNaming.create().capitalize());
+				}
 			},
 			"update": function() {
 				var loading,
@@ -262,17 +331,20 @@
 					}
 				}
 				
-				if(this.stage > 2 && this.stage < 5) {
+				if(this.stage > 1 && this.stage < 5) {
 					this.base.specializations.splice(0);
 					for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
 						if(this.universe.indexes.archetype.listing[x].classification === "secondary" && this.universe.indexes.archetype.listing[x].parent === this.building.archetype[0]) {
 							this.base.specializations.push(this.universe.indexes.archetype.listing[x]);
 						}
 					}
+					
+					Vue.set(this, "racialNaming", this.getRacialNameGenerator(this.building.race));
 				}
 
-				this.base.careers.sort(nameSort);
 				this.base.species.sort(nameSort);
+				this.base.careers.sort(nameSort);
+				this.base.specializations.sort(nameSort);
 				
 				this.$forceUpdate();
 			}

@@ -37,6 +37,8 @@ rsSystem.component("RSCore", {
 			var follow = event.srcElement.attributes.getNamedItem("data-id");
 			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
 				rsSystem.EventBus.$emit("display-info", follow);
+				event.stopPropagation();
+				event.preventDefault();
 			}
 		};
 	},

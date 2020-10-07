@@ -10,6 +10,7 @@ rsSystem.registerNoun(RSDataset, "dataset");
 
 rsSystem.registerNoun(RSEffect, "effect");
 rsSystem.registerNoun(RSEntity, "entity");
+rsSystem.registerNoun(RSAction, "action");
 rsSystem.registerNoun(RSEvent, "event");
 
 rsSystem.registerNoun(RSImage, "image");

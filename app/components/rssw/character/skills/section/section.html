@@ -16,7 +16,7 @@
 			<span :class="skill.icon"></span>
 		</td>
 		<td class="stats" v-on:click="skillRollTouched(skill)">
-			<button class="roll-result flex h center" :class="state && state.rolls && state.rolls[skill.id]?'show':''" v-on:click.stop="clearRoll(skill.id)">
+			<button class="roll-result flex h centered" :class="state && state.rolls && state.rolls[skill.id]?'show':''" v-on:click.stop="clearRoll(skill.id)">
 				<span class="result-property flex h center" v-for="result in rollProperties" v-if="state && state.rolls && state.rolls[skill.id] && state.rolls[skill.id][result.property] !== undefined">
 					<span>{{state.rolls[skill.id][result.property]}}</span>
 					<span class="result-icon" :class="result.icon"></span>

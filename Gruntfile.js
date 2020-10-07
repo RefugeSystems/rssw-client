@@ -129,6 +129,7 @@ var config = {
 				"RSDataset",
 				"RSLoadout",
 				"RSSession",
+				"RSAction",
 				"RSPlayer",
 				"RSObject",
 				"RSEffect",

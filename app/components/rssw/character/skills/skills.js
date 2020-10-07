@@ -76,23 +76,25 @@
 				this.viewSkill(skill.id);
 			},
 			"skillRollTouched": function(skill) {
-				if(this.state.emitSkillRoll) {
-					this.character.$emit("roll-skill", skill);
-				} else if(this.state.rollSkill) {
-					console.log("Rolling Skill");
-					var expression = this.getDiceExpression(skill),
-						roll = Dice.calculateDiceRoll(expression);
-					roll.id = this.character.id;
-					roll._expression = expression;
-					roll._label = skill.name;
-					Vue.set(this.state.rolls, skill.id, roll);
-					this.universe.send("entity:rolled", roll);
-					
-					//Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+				if(!skill.no_roll) {
+					if(this.state.emitSkillRoll) {
+						this.character.$emit("roll-skill", skill);
+					} else if(this.state.rollSkill) {
+						console.log("Rolling Skill");
+						var expression = this.getDiceExpression(skill),
+							roll = Dice.calculateDiceRoll(expression);
+						roll.id = this.character.id;
+						roll._expression = expression;
+						roll._label = skill.name;
+						Vue.set(this.state.rolls, skill.id, roll);
+						this.universe.send("entity:rolled", roll);
+						
+						//Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
+					}
 				}
 			},
 			"skillTouched": function(skill) {
-				if(this.state.rollSkill) {
+				if(this.state.rollSkill && !skill.no_roll) {
 					console.log("Rolling Skill");
 					var expression = this.getDiceExpression(skill),
 						roll = Dice.calculateDiceRoll(expression);
