@@ -100,7 +100,7 @@
 	</div>
 	<div class="stage review" v-else-if="stage === 4">
 		<div class="heading">
-			<h1>Review Selections</h1>
+			<h1>Review Selections: <span class="rs-orange">{{building.name}}</span></h1>
 		</div>
 		<!-- <rs-cards v-on:selected="selected($event)" :corpus="choices" :state="state" :universe="universe" :user="player" selection="Confirm"></rs-cards> -->
 		<rs-panel-select v-on:selected="selected($event)" :corpus="choices" :summary="summary.careers" :state="state.careers" :universe="universe" :user="user" :fields="fields.careers">

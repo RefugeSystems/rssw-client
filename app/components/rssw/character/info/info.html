@@ -12,9 +12,9 @@
 	</div>
 	-->
 	<div class="property species" v-if="character.classification != 'base'">
-		<span class="icon fad fa-bug rot45"></span>
+		<span class="icon fab fa-reddit-alien"></span>
 		<span class="label">Species:</span>
-		<button v-for="(archetype, $index) in careers" class="value" v-on:click="showInfo(race)">
+		<button class="value" v-on:click="showInfo(race)">
 			{{race?race.name:"No Species"}}
 		</button>
 	</div>

@@ -1,5 +1,6 @@
 .rssw-page.character-builder {
-
+	display: flex;
+	flex-direction: column;
 
 	.stage {
 		display: flex;
@@ -7,20 +8,21 @@
 		overflow: auto;
 		height: 100%;
 		width: 100%;
-		
+
 		.heading {
 			flex-shrink: 0;
 		}
-		
+
 		.details {
 			display: flex;
 			flex-direction: column;
+			align-items: center;
 			overflow: auto;
 			height: 100%;
 			max-width: 100%;
 			padding-left: 7px;
 		}
-		
+
 		.text-block {
 			position: relative;
 			width: 300px;
@@ -29,17 +31,17 @@
 			align-content: stretch;
 			align-items: stretch;
 			margin-bottom: 17px;
-			
+
 			label {
 				font-size: 1.6em;
 				font-weight: 700;
 			}
-			
+
 			input[type=text] {
 				padding: 3px;
 				width: 100%;
 			}
-			
+
 			textarea {
 				padding: 3px;
 				min-height: 150px;
@@ -47,17 +49,17 @@
 			}
 		}
 	}
-	
+
 	.fill {
 		flex-grow: 5;
 	}
-	
+
 	.creating {
 		justify-content: center;
 		align-content: center;
 		align-items: center;
 	}
-	
+
 	.complete {
 		background-color: @rsDarkGreen;
 		color: @rsLightGreen;
@@ -65,7 +67,7 @@
 		flex-shrink: 0;
 		height: 50px;
 	}
-	
+
 	.regress {
 		background-color: @rsDarkRed;
 		color: @rsLightRed;
@@ -73,7 +75,7 @@
 		flex-shrink: 0;
 		height: 50px;
 	}
-	
+
 	.rs-panel-select {
 		.panel-container {
 			width: 460px;
