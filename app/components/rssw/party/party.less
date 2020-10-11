@@ -11,30 +11,35 @@
 		font-size: 16px;
 		color: @rsWhite;
 		margin: 3px;
-		
+
 		span {
 			color: inherit;
 		}
 	}
-	
+
 	.ctrl {
 		white-space: nowrap;
-		
+
 		select {
 			padding: 3px 10px;
 			font-size: 16px;
 			margin: 4px;
 		}
 	}
-	
+
 	.members {
 		display: inline-block;
 		overflow: auto;
 		max-height: 500px;
 		transition: max-height .5s;
-		
+
 		&.closed {
 			max-height: 0px;
+		}
+
+		.icon {
+			text-align: center;
+			width: 30px;
 		}
 	}
 }

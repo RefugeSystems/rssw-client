@@ -43,6 +43,7 @@
 	invisibleKeys.modifierattrs = true;
 	invisibleKeys.map_distance = true;
 	invisibleKeys.no_modifiers = true;
+	invisibleKeys.charges_max = true;
 	invisibleKeys.render_name = true;
 	invisibleKeys.auto_nearby = true;
 	invisibleKeys.restock_max = true;
@@ -73,6 +74,7 @@
 	invisibleKeys.updated = true;
 	invisibleKeys.widgets = true;
 	invisibleKeys.no_rank = true;
+	invisibleKeys.action = true;
 	invisibleKeys.alters = true;
 	invisibleKeys.linked = true;
 	invisibleKeys.loaded = true;
@@ -160,6 +162,7 @@
 	var prettifyValues = {};
 	var prettifyNames = {};
 	var knowledgeLink = {};
+	var classNames = {};
 	var displayRaw = {};
 
 	prettifyNames.mentioned = "Mentions";
@@ -198,6 +201,24 @@
 	knowledgeLink.slowfire = "ability:quality:slowfire";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 
+	classNames.charged = function(property, value, record, universe) {
+		if(!value) {
+			return "issue-property";
+		}
+	};
+	classNames.charges = function(property, value, record, universe) {
+		if(!value) {
+			return "issue-property";
+		}
+	};
+
+	prettifyValues.charges = function(property, value, record, universe) {
+		if(record.charges_max) {
+			return value + " / " + record.charges_max;
+		}
+		return value;
+	};
+
 	prettifyValues.category = function(property, value, record, universe) {
 		var index;
 		if(value && (index = value.indexOf(":")) !== -1) {
@@ -229,6 +250,14 @@
 		}
 
 		return value;
+	};
+
+	prettifyValues.targeted = function(property, value, record, universe) {
+		if(value) {
+			return value.join(", ");
+		}
+
+		return "No Target";
 	};
 
 	prettifyValues.activation = function(property, value, record, universe) {
@@ -378,6 +407,7 @@
 			var data = {};
 
 			data.referenceKeys = referenceKeys;
+			data.classNames = classNames;
 
 			data.collapsed = true;
 			data.relatedError = null;
@@ -430,6 +460,8 @@
 			data.partyToMove = "";
 
 			data.activeEvents = [];
+
+			data.actions = [];
 
 			data.equipped = [];
 
@@ -753,6 +785,11 @@
 					"active": this.record.active?false:true
 				});
 			},
+			"dischargeRecord": function() {
+				this.record.commit({
+					"charged": this.record.charged?false:true
+				});
+			},
 			"obscureRecord": function() {
 				this.record.commit({
 					"obscured": this.record.obscured?false:true
@@ -769,6 +806,12 @@
 				});
 			},
 			"prettifyKey": function(key) {
+			},
+			"nameClassing": function(property) {
+				if(this.classNames[property]) {
+					return this.classNames[property](property, this.record[property], this.record, this.universe);
+				}
+				return "";
 			},
 			"prettifyPropertyName": function(property, record) {
 				var buffer;
@@ -1052,8 +1095,19 @@
 				}
 				return "closed";
 			},
+			"fireAction": function(action, target) {
+				if(action) {
+					if(target !== "cancel") {
+						action.source.fire(this.base, this.record, target);
+					}
+					if(action.targets) {
+						Vue.set(action, "target", "");
+					}
+				}
+			},
 			"update": function() {
 				var buffer,
+					base,
 					hold,
 					slot,
 					map,
@@ -1137,9 +1191,21 @@
 					if(this.base.inside) {
 						map[this.base.inside] = true;
 					}
+
+					base = this.base;
+					if(base._class === "item") {
+						for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+							buffer = this.universe.indexes.entity.listing[x];
+							if((this.player.master || (buffer.owners && buffer.owners.indexOf(this.player.id) !== -1)) && buffer.item && buffer.item.indexOf(this.base.id) !== -1) {
+								this.transfer_targets.push(buffer);
+								base = buffer;
+								break;
+							}
+						}
+					}
 					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
 						buffer = this.universe.indexes.entity.listing[x];
-						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== this.base.id && (buffer.location === this.base.location || buffer.inside === this.base.inside || buffer.id === this.base.inside || buffer.inside === this.base.id || buffer.entity === this.base.id || buffer.id === this.base.entity || map[buffer.id])) {
+						if(!buffer.obscured && !buffer.mob && !buffer.template && buffer.id !== base.id && (buffer.location === base.location || buffer.inside === base.inside || buffer.id === base.inside || buffer.inside === base.id || buffer.entity === base.id || buffer.id === base.entity || map[buffer.id])) {
 							this.transfer_targets.push(buffer);
 						}
 					}
@@ -1149,25 +1215,14 @@
 						for(x=0; this.base.item && x<this.base.item.length; x++) {
 							buffer = this.universe.indexes.item.lookup[this.base.item[x]];
 							if(buffer.id !== this.record.id && !buffer.untradable) {
-								if(this.record.cancontain && this.record.cancontain.length) {
-									if(buffer.itemtype && buffer.itemtype.length) {
-										hold = true;
-										for(y=0; hold && y<buffer.itemtype.length; y++) {
-											if(this.record.cancontain.indexOf(buffer.itemtype[y]) !== -1) {
-												this.attach_targets.push(buffer);
-												hold = false;
-											}
-										}
-									} else if(buffer.type && buffer.type.length) {
-										hold = true;
-										for(y=0; hold && y<buffer.type.length; y++) {
-											if(this.record.cancontain.indexOf(buffer.type[y]) !== -1) {
-												this.attach_targets.push(buffer);
-												hold = false;
-											}
-										}
-									}
-								} else {
+								if(buffer.id !== this.record.id && !buffer.untradable
+										// And Can be contained
+										&& (!this.record.cancontain || !this.record.cancontain.length ||
+										(buffer.itemtype && buffer.itemtype.length && this.record.cancontain.hasCommon(buffer.itemtype)) ||
+										(buffer.type && buffer.type.length && this.record.cancontain.hasCommon(buffer.type)))
+										// And Is not forbidden
+										&& (!this.record.notcontain || !this.record.notcontain.length ||
+										(buffer.type && buffer.type.length && !this.record.notcontain.hasCommon(buffer.type)))) {
 									this.attach_targets.push(buffer);
 								}
 							}
@@ -1296,6 +1351,37 @@
 									}
 								}
 							}
+						}
+					}
+				}
+
+				this.actions.splice(0);
+				if(this.record.action && this.record.action.length) {
+					for(x=0; x<this.record.action.length; x++) {
+						buffer = this.universe.indexes.action.index[this.record.action[x]];
+						if(buffer) {
+							map = {};
+							map.name = buffer.label || buffer.name;
+							map.icon = buffer.icon || "fas fa-chart-network";
+							map.source = buffer;
+							if(map.source._targeted.length) {
+								map.target = "";
+								map.targets = [];
+								if(this.base) {
+									for(y=0; y<map.source._targeted.length; y++) {
+										if(this.base[map.source._targeted[y]] instanceof Array) {
+											map.targets.push.apply(map.targets, this.base[map.source._targeted[y]]);
+										} else {
+											map.targets.push(this.base[map.source._targeted[y]]);
+										}
+									}
+									map.targets = this.universe.index.translate(map.targets);
+									if(map.source.filterTargets) {
+										map.targets = map.source.filterTargets(map.targets);
+									}
+								}
+							}
+							this.actions.push(map);
 						}
 					}
 				}

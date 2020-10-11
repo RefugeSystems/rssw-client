@@ -219,7 +219,7 @@
 				if(this.entity.item && this.entity.item.length) {
 					for(x=0; x<this.entity.item.length; x++) {
 						item = this.universe.indexes.item.lookup[this.entity.item[x]];
-						if(item && item.damage && !mapped[item.id]) {
+						if(item && item.is_weapon && !mapped[item.id]) {
 							item.$on("modified", this.update);
 							this.items.push(item);
 							this.isRanged[item.id] = item.is_ranged;

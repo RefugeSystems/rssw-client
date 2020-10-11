@@ -131,12 +131,12 @@
 	<div class="property credits">
 		<span class="icon fad fa-coins"></span>
 		<span class="label">Credits:</span>
-		<rs-count class="experience" v-model="credits" v-on:change="changeEvent('credits', $event)"></rs-count>
+		<rs-count class="experience" :entity="character" v-model="credits" v-on:change="changeEvent('credits', $event)"></rs-count>
 	</div>
 	<div class="property level" v-if="character.classification != 'base'">
 		<span class="icon fad fa-user-plus"></span>
 		<span class="label">Experience:</span>
-		<rs-count class="experience" v-model="experience" v-on:change="changeEvent('xp', $event)"></rs-count>
+		<rs-count class="experience" :entity="character" v-model="experience" v-on:change="changeEvent('xp', $event)"></rs-count>
 	</div>
 	<!--
 	<div class="property description">

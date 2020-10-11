@@ -83,7 +83,7 @@
 			}
 
 			if(value) {
-				console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
+				// console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 				if(value[0] === "=") {
 					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
 
@@ -146,7 +146,7 @@
 					element.css(properties.classes);
 				}
 
-				console.log("Element: ", element);
+				// console.log("Element: ", element);
 				sourceText = sourceText.replace(tracking, element[0].outerHTML);
 			}
 

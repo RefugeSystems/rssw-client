@@ -5,7 +5,7 @@
 	font-size: inherit;
 	line-height: 2em;
 	height: 2em;
-	
+
 	.modeling {
 		padding: 0px .5em;
 		font-size: inherit;
@@ -15,54 +15,57 @@
 		position: relative;
 		z-index: 5;
 		line-height: 1.4em;
-		height: 1.4em;
-		width: 1.6em;
-		overflow: hidden;
+		height: 1.5em;
 		transition: width .5s;
 		font-size: inherit;
 		z-index: 5;
-		
+
 		.op-bar {
-			position: absolute;
-			height: 1.4em;
+			position: relative;
 			top: 0px;
 			right: 0px;
-			transition: padding .5s;
-			padding-right: 1.6em;
+			margin: 0px;
+			padding: 0px;
+			transition: max-width .5s;
+			max-width: 0px;
+			overflow: hidden;
 		}
-		
+
 		&.open {
-			width: 10.5em;
-			
+
+
 			.op-bar {
 				padding-right: 0px;
+				max-width: 11em;
 			}
 		}
-		
+
 		.op-ctrl {
 			display: inline-block;
-			padding: 0px .2em;
-			font-size: 1.4em;
-			z-index: 6;
-		}
-		
-		.op-toggle {
-			position: absolute;
-			padding: 0px;
-			z-index: 7;
-			left: 0px;
-			top: 0px;
-			font-size: 1.4em;
+			text-align: center;
+			line-height: 1.5em;
 			padding: 0px .15em;
+			margin: 0px .15em;
+			font-size: 1.4em;
 		}
-		
+
+		.op-toggle {
+			position: relative;
+			text-align: center;
+			line-height: 1.5em;
+			padding: 0px .15em;
+			margin: 0px .15em;
+			font-size: 1.4em;
+			width: 1.5em;
+		}
+
 		.op-expression {
 			display: inline-block;
-			width: 7em;
-			height: 1.4em;
-			line-height: 1.4em;
+			width: 5em;
+			height: 1.3em;
+			line-height: 1.3em;
 			font-size: inherit;
-			z-index: 6;
+			margin: .1em 3px;
 		}
 	}
 }

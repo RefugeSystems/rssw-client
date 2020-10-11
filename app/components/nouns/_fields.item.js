@@ -3,10 +3,12 @@
 
 	var dataSource,
 		cancontain,
+		notcontain,
 		abilities,
 		itemtypes,
 		profiles,
 		entities,
+		actions,
 		parent,
 		attrs,
 		items,
@@ -32,9 +34,25 @@
 		"optionLabel": "name"
 	};
 
+	actions = {
+		"label": "Actions",
+		"property": "action",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
 	cancontain = {
 		"label": "Limited To Holding These Types",
 		"property": "cancontain",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	notcontain = {
+		"label": "Can not Holding These Types",
+		"property": "notcontain",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -164,6 +182,10 @@
 		"property": "rarity",
 		"type": "number"
 	}, {
+		"label": "Charges",
+		"property": "charges",
+		"type": "number"
+	}, {
 		"label": "Slots Used",
 		"property": "slots_used",
 		"type": "number"
@@ -183,6 +205,10 @@
 			"name": "Bag",
 			"id": "rssw-bag-render"
 		}]
+	}, {
+		"label": "Charged",
+		"property": "charged",
+		"type": "checkbox"
 	}, {
 		"label": "Attunement",
 		"property": "attunement",
@@ -252,9 +278,11 @@
 	},
 	slots,
 	cancontain,
-	itemtypes,
+	notcontain,
+	// itemtypes, // Deprecated but support is coded
 	types,
 	abilities,
+	actions,
 	items,
 	attrs,
 	stats,
@@ -301,6 +329,8 @@
 			abilities.source_index = this.universe.indexes.ability;
 			itemtypes.source_index = this.universe.indexes.itemtype;
 			cancontain.source_index = this.universe.indexes.type;
+			notcontain.source_index = this.universe.indexes.type;
+			actions.source_index = this.universe.indexes.action;
 			slots.source_index = this.universe.indexes.slot;
 			items.source_index = this.universe.indexes.item;
 			types.source_index = this.universe.indexes.type;

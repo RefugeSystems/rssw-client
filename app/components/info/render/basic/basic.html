@@ -64,10 +64,10 @@
 		<div class="direct-properties" v-if="showDirectProperties()">
 			<div class="property" v-for="property in keys" v-if="visible(property, record[property])" :class="toClassName(property)">
 				<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
-					<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index['knowledge:reference:' + property]">
+					<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index['knowledge:reference:' + property]" :class="nameClassing(property)">
 						<a class="rendered-value" :data-id="knowledgeLink[property] || ('knowledge:reference:' + property)">{{prettifyPropertyName(property, record)}}</a>
 					</span>
-					<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index[property + '_quicklink']">{{prettifyPropertyName(property, record)}}</span>
+					<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index['knowledge:reference:' + property]" :class="nameClassing(property)">{{prettifyPropertyName(property, record)}}</span>
 					<span class="divide">:</span>
 					<span v-if="!calculated[property] || !calculated[property].involved.length">
 						<span class="value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
@@ -272,6 +272,28 @@
 		</div>
 	</div>
 
+	<div v-if="actions.length">
+		<h3>Actions</h3>
+		<div class="control" v-for="action in actions">
+			<div class="record-action" v-if="action.targets">
+				<label>
+					<span>{{action.name}}</span>
+					<select v-model="action.target" v-if="action.targets.length" v-on:change="fireAction(action, action.target)">
+						<option value="">Choose Target</option>
+						<option value="cancel">Cancel</option>
+						<option disabled value="disabled">----------</option>
+						<option v-for="target in action.targets" :value="target.id">{{target.name}}</option>
+					</select>
+					<span v-if="action.targets.length === 0">| No Targets Available</span>
+				</label>
+			</div>
+			<button class="action direct" v-if="!action.targets" v-on:click="fireAction(action)">
+				<span :class="action.icon"></span>
+				<span>{{action.name}}</span>
+			</button>
+		</div>
+	</div>
+
 	<div v-if="note && player && player.master">
 		<div class="info-section" v-if="(record._class === 'location' || record._class === 'entity') && hiddenEntities.length">
 			<h3>Hidden or Obscured Here</h3>
@@ -319,10 +341,16 @@
 				<span>Must Know</span>
 			</button>
 		</div>
-		<div class="control" v-if="record._class === 'event' || record._class === 'party'">
+		<div class="control" v-if="record.active !== undefined && (record._class === 'event' || record._class === 'party')">
 			<button class="action" v-on:click="activateRecord()">
 				<span class="icon" :class="record.active?'far fa-check-square':'far fa-square'"></span>
 				<span>Active</span>
+			</button>
+		</div>
+		<div class="control" v-if="record.charged !== undefined">
+			<button class="action" v-on:click="dischargeRecord()">
+				<span class="icon" :class="record.charged?'far fa-check-square':'far fa-square'"></span>
+				<span>Charged</span>
 			</button>
 		</div>
 		<div class="control">

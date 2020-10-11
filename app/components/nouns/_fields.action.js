@@ -15,13 +15,11 @@
 
 	responses = {
 		"label": "Responses",
-		"property": "responses",
-		"type": "multiselect",
+		"property": "response",
+		"type": "multireference",
 		"optionValue": "id",
-		"optionLabel": "id"
+		"optionLabel": "name"
 	};
-
-
 
 	dataSource = [{
 		"label": "ID",
@@ -39,6 +37,10 @@
 		"knowledge": "knowledge:system:icons",
 		"type": "text"
 	},{
+		"label": "Label",
+		"property": "label",
+		"type": "text"
+	}, {
 		"label": "Renderer",
 		"property": "information_renderer",
 		"type": "text"
@@ -64,9 +66,9 @@
 		},
 		"data": function() {
 			var data = {};
+
 			data.fields = this.fields || {};
 			data.fields.action = dataSource;
-
 
 			return data;
 		},
@@ -74,7 +76,7 @@
 			parent.options = this.universe.indexes.action.listing;
 			parent.options.sortBy("name");
 
-			responses.source_index = RSAction.responses;
+			responses.source_index = RSAction.response;
 		},
 		"methods": {
 			"update": function() {
