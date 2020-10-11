@@ -1,13 +1,13 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsswEntityKnowledge
  * @constructor
  * @module Components
  */
 (function() {
-	
+
 	var controls = {
 		"formatter": {
 			"icon": function(icon) {
@@ -60,12 +60,15 @@
 			if(!this.state.paging.per) {
 				Vue.set(this.state.paging, "per", 20);
 			}
+			if(!this.state.paging.current) {
+				Vue.set(this.state.paging, "current", 0);
+			}
 			if(this.state && !this.state.headers) {
 				this.resetHeaders();
 			} else {
 				this.rebindHeaders();
 			}
-			
+
 			return data;
 		},
 		"mounted": function() {
@@ -111,7 +114,7 @@
 				var keys,
 					x,
 					c;
-				
+
 				keys = Object.keys(controls);
 				for(x=0; x<this.state.headers.length; x++) {
 					for(c=0; c<keys.length; c++) {
@@ -124,7 +127,7 @@
 							}
 						}
 					}
-					
+
 					switch(this.state.headers[x].field) {
 						case "time":
 							this.state.headers[x].formatter = (empty, record) => {
@@ -146,7 +149,7 @@
 								}
 								a = this.entity.learned[a.id] || 0;
 								b = this.entity.learned[b.id] || 0;
-								
+
 								if(a < b) {
 									return -1;
 								} else if(a > b) {
@@ -195,7 +198,7 @@
 								}
 								a = this.entity.related_status[a.id] || "";
 								b = this.entity.related_status[b.id] || "";
-								
+
 								if(a < b) {
 									return -1;
 								} else if(a > b) {
@@ -208,15 +211,15 @@
 						case "related":
 							this.state.headers[x].formatter = (empty, record) => {
 								var count = 0;
-								
+
 								if(record.related) {
 									count += record.related.length;
 								}
-								
+
 								if(!this.entity.related_mapping) {
 									return count;
 								}
-								
+
 								if(this.entity.related_mapping[record.id]) {
 									count += this.entity.related_mapping[record.id].length;
 								}
@@ -225,14 +228,14 @@
 							this.state.headers[x].sorter = (a, b) => {
 								var ca = 0,
 									cb = 0;
-								
+
 								if(a.related) {
 									ca += a.related.length;
 								}
 								if(b.related) {
 									cb += b.related.length;
 								}
-								
+
 								if(this.entity.related_mapping) {
 									if(this.entity.related_mapping[a.id]) {
 										ca += this.entity.related_mapping[a.id].length;
@@ -241,7 +244,7 @@
 										cb += this.entity.related_mapping[b.id].length;
 									}
 								}
-								
+
 								if(ca < cb) {
 									return -1;
 								} else if(ca > cb) {
@@ -255,12 +258,12 @@
 				}
 			},
 			"processAction": function(command) {
-				
+
 			},
 			"update": function() {
 				var buffer,
 					x;
-				
+
 				//TODO: Clean solution for forgetting data while open?
 				if(this.entity.knowledge && this.knowledge.listing.length !== this.entity.knowledge.length) {
 					for(x=0; x<this.entity.knowledge.length; x++) {

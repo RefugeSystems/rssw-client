@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsswDiceView
  * @constructor
  * @module Components
@@ -44,6 +44,12 @@
 			data.dice = [];
 			return data;
 		},
+		"watch": {
+			"roll": function(newRoll) {
+				this.dice.splice(0);
+				this.renderRoll(newRoll, this.dice);
+			}
+		},
 		"mounted": function() {
 			if(this.entity) {
 				this.entity.$on("modified", this.update);
@@ -74,7 +80,7 @@
 			"getRollExpression": function() {
 				var expression = "",
 					x;
-				
+
 				for(x=0; x<this.diceTypes.length; x++) {
 					if(this.roll[this.diceTypes[x]] || this.roll[this.diceTypes[x][0]]) {
 						if(expression) {
@@ -84,9 +90,9 @@
 						}
 					}
 				}
-				
+
 				console.log("Roll Expression: " + expression);
-				
+
 				return expression;
 			},
 			"clearRoll": function() {
@@ -103,11 +109,11 @@
 			},
 			"update": function() {
 				this.dice.splice(0);
-				
+
 				if(this.entity && this.skill && this.universe) {
 					this.setRoll(this.getSkillRoll(this.skill, this.entity));
 				}
-				
+
 				this.renderRoll(this.roll, this.dice);
 			}
 		},

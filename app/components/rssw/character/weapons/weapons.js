@@ -85,6 +85,7 @@
 			data.adjustments = {};
 			data.equipped = [];
 			data.items = [];
+			data.rolls = {};
 
 			for(x=0; x<rangeBands.length; x++) {
 				data.adjustments[rangeBands[x]] = {};
@@ -119,6 +120,7 @@
 			},
 			"getAttackDice": function(item) {
 				var pool = this.getSkillRoll(item.skill_check);
+
 
 				// TODO: Compute?
 
@@ -200,6 +202,10 @@
 									this.equipped.push(item);
 									this.isRanged[item.id] = item.is_ranged;
 									mapped[item.id] = true;
+									this.rolls[item.id] = this.getSkillRoll(item.skill_check);
+									if(item.skill_amend_direct_check) {
+										this.addRolls(this.rolls[item.id], Dice.parseDiceRoll(item.skill_amend_direct_check));
+									}
 								} else {
 									console.warn("Unknown Item? " + keys[x], this.entity.equipped.item[slot.id][i], item, this.entity);
 								}
@@ -229,6 +235,8 @@
 						Vue.set(this.adjustments[rangeBands[x]], this.diceTypes[i], this.entity["range_" + rangeBands[x] + "_" + this.diceTypes[i]]);
 					}
 				}
+
+
 
 				this.rangeBonus = this.entity.range || 0;
 			}

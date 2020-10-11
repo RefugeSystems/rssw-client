@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class RSComponentUtility
  * @constructor
  * @module Components
@@ -10,17 +10,17 @@
 (function() {
 	var skipped = /[^a-zA-Z0-9]/g,
 		spacing = /[ _-]/g;
-	
+
 	var dice = {};
 	dice.proficiency = "fas fa-dice-d12 rs-yellow";
 	dice.ability = "fas fa-dice-d8 rs-green";
-	dice.boost = "fas fa-dice-d6 rs-color";
+	dice.boost = "fas fa-dice-d6 rs-light-blue";
 	dice.challenge = "fas fa-dice-d12 rs-red";
 	dice.difficulty = "fas fa-dice-d8 rs-purple";
 	dice.setback = "fas fa-dice-d6 rs-black";
 	dice.force = "fas fa-dice-d12 rs-white";
 	dice.wash = "fal fa-dice-d6 rs-white";
-	
+
 	/**
 	 * Listed in render order
 	 * @property diceTypes
@@ -38,18 +38,21 @@
 		"wash",
 		"force"
 	];
-	
+
 	rsSystem.component("RSComponentUtility", {
 		"inherit": true,
 		"mixins": [
 		],
 		"props": {
+			"universe": {
+				"type": Object
+			}
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.diceTypes = diceTypes;
-			
+
 			return data;
 		},
 		"computed": {
@@ -57,7 +60,7 @@
 		"watch": {
 		},
 		"mounted": function() {
-			
+
 		},
 		"methods": {
 			"getDice": function(skill, entity) {
@@ -75,15 +78,21 @@
 				roll.setback = 0;
 				roll.setfoward = 0;
 				roll.force = 0;
-				
+
 				entity = entity || this.entity;
 				if(typeof(entity) === "string") {
+					if(!this.universe) {
+						throw new Error("Universe parameter required in " + this.$vnode.tag);
+					}
 					skill = this.universe.indexes.entity.lookup[skill];
 				}
 				if(typeof(skill) === "string") {
+					if(!this.universe) {
+						throw new Error("Universe parameter required in " + this.$vnode.tag);
+					}
 					skill = this.universe.indexes.skill.lookup[skill];
 				}
-				
+
 				if(skill && entity) {
 					for(x=0; x<entity[skill.base] || x<entity[skill.propertyKey]; x++) {
 						if(x<entity[skill.base] && x<entity[skill.propertyKey]) {
@@ -96,8 +105,36 @@
 						++roll.boost;
 					}
 				}
-				
+
+				if(this.entity["skill_amend_" + skill.property]) {
+					this.addRolls(roll, Dice.parseDiceRoll(this.entity["skill_amend_" + skill.property]));
+				}
+
 				return roll;
+			},
+			"addRolls": function(result, ...rolls) {
+				var i,
+					r;
+
+				if(!result) {
+					result = {};
+				}
+
+				for(i=0; i<diceTypes.length; i++) {
+					if(isNaN(result[diceTypes[i]])) {
+						result[diceTypes[i]] = 0;
+					}
+				}
+
+				for(r=0; r<rolls.length; r++) {
+					for(i=0; i<diceTypes.length; i++) {
+						if(!isNaN(rolls[r][diceTypes[i]])) {
+							result[diceTypes[i]] += rolls[r][diceTypes[i]];
+						}
+					}
+				}
+
+				return result;
 			},
 			"renderRoll": function(roll, rendering) {
 				rendering = rendering || [];
@@ -126,11 +163,11 @@
 			},
 			"isOwner": function(record, player) {
 				player = this.player || player;
-				
+
 				if(player.master) {
 					return true;
 				}
-				
+
 				if(record.is_public) {
 					return true;
 				} else if(record.is_private) {
@@ -147,7 +184,7 @@
 			},
 			/**
 			 * Compare to lists and find the first matched occurrence. Used primarily for comparing
-			 * itemtype lists for agreement. 
+			 * itemtype lists for agreement.
 			 * @method sharesOne
 			 * @param {Array} corpus The list of Strings with which to start.
 			 * @param {Array} compare The list of Strings against which to compare.
@@ -163,7 +200,7 @@
 						}
 					}
 				}
-				
+
 				return null;
 			},
 			"raceHasDataset": function(race) {
@@ -194,10 +231,10 @@
 				return generator;
 			},
 			/**
-			 *  
+			 *
 			 * @method idFromName
 			 * @param {String} name
-			 * @return {String} 
+			 * @return {String}
 			 */
 			"idFromName": function(name) {
 				if(name) {
@@ -206,7 +243,7 @@
 				return "";
 			},
 			/**
-			 * 
+			 *
 			 * @method uniqueByID
 			 * @param {Array} corpus The array to clean.
 			 * @return {Array} The passed array that is now cleaned.
@@ -215,10 +252,10 @@
 				if(!corpus) {
 					return corpus;
 				}
-				
+
 				var track = {},
 					x;
-				
+
 				for(x=corpus.length-1; 0<=x; x--) {
 					if(track[corpus[x].id]) {
 						corpus.splice(x, 1);
@@ -226,13 +263,13 @@
 						track[corpus[x].id] = true;
 					}
 				}
-				
+
 				return corpus;
 			},
 			"sortData": function(a, b) {
 				var aName,
 					bName;
-				
+
 				if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
 					if(a.order < b.order) {
 						return -1;
@@ -264,14 +301,14 @@
 					if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
 						return 1;
 					}
-					
+
 					if((a.date === undefined || a.date === null) && b.date !== undefined && b.date !== null) {
 						return -1;
 					}
 					if((b.date === undefined || b.date === null) && a.date !== undefined && a.date !== null) {
 						return 1;
 					}
-					
+
 					if(a.date < b.date) {
 						return -1;
 					} else if(a.date > b.date) {
@@ -284,9 +321,9 @@
 				} else if(a.id > b.id) {
 					return 1;
 				}
-				
+
 				return 0;
 			}
 		}
-	});	
+	});
 })();

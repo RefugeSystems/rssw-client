@@ -307,7 +307,7 @@
 	}, {
 		"label": "Mass",
 		"property": "mass",
-		"type": "text"
+		"type": "number"
 	}, {
 		"label": "Experience",
 		"property": "xp",

@@ -1,14 +1,14 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsswCharacterInfo
  * @constructor
  * @module Components
  */
 (function() {
 	var storageKey = "_rs_infoComponentKey";
-	
+
 	rsSystem.component("rsswCharacterInfo", {
 		"inherit": true,
 		"mixins": [
@@ -25,9 +25,9 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.storageKeyID = storageKey + this.character.id;
-			
+
 			data.race = null;
 			data.displayAbilityTrees = false;
 			data.energy_consumption = 0;
@@ -36,17 +36,17 @@
 			data.encumberance = 0;
 			data.experience = 0;
 			data.credits = 0;
-	
+
 			data.mdDescription = null;
 			data.description = "";
 			data.state = this.loadStorage(data.storageKeyID, {
 				"viewing": false
 			});
-			
+
 			data.piloting = null;
 			data.location = null;
 			data.inside = null;
-			
+
 			data.specializations = [];
 			data.abilities = [];
 			data.inventory = [];
@@ -54,11 +54,11 @@
 			data.effects = [];
 			data.items = [];
 			data.rooms = [];
-			
+
 			data.careers = [];
-			
+
 			data.calculating = false;
-			
+
 			return data;
 		},
 		"watch": {
@@ -71,11 +71,17 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-		
+
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
-					rsSystem.EventBus.$emit("display-info", follow);
+					rsSystem.EventBus.$emit("display-info", {
+						"source": this.character,
+						"base": this.character,
+						"record": follow
+					});
+					event.stopPropagation();
+					event.preventDefault();
 				}
 			};
 
@@ -89,6 +95,7 @@
 				if(this.isOwner(view)) {
 					rsSystem.EventBus.$emit("display-info", {
 						"source": this.character,
+						"base": this.character,
 						"record": view
 					});
 				}
@@ -210,7 +217,7 @@
 					}
 				}
 				Vue.set(this, "encumberance", hold);
-				
+
 				this.effects.splice(0);
 				if(this.character.effect) {
 					for(x=0; x<this.character.effect.length; x++) {
@@ -224,13 +231,13 @@
 			"update": function() {
 				var buffer,
 					x;
-				
+
 				Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
 				this.specializations.splice(0);
 				this.abilities.splice(0);
 				this.careers.splice(0);
 				this.rooms.splice(0);
-				
+
 				if(this.experience !== this.character.xp) {
 					Vue.set(this, "experience", this.character.xp || 0);
 				}
@@ -260,7 +267,7 @@
 						}
 					}
 				}
-				
+
 				if(this.character.archetype) {
 					for(x=0; x<this.character.archetype.length; x++) {
 						buffer = this.universe.nouns.archetype[this.character.archetype[x]];
@@ -276,10 +283,10 @@
 						}
 					}
 				}
-	
+
 				this.energy_consumption = this.character.energy_consume || 0;
 				this.energy_output = this.character.energy_out || 0;
-				
+
 				if(this.character.ability) {
 					for(x=0; x<this.character.ability.length; x++) {
 						buffer = this.universe.nouns.ability[this.character.ability[x]];

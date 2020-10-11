@@ -13,6 +13,9 @@
 
 		shownLength = 7;
 
+	// TODO: Track down bug putting this into the list
+	invisibleKeys.types = true;
+
 	invisibleKeys.property = true;
 	invisibleKeys.enhancementKey= true;
 	invisibleKeys.propertyKey = true;
@@ -38,6 +41,7 @@
 	invisibleKeys.known_objects = true;
 	invisibleKeys.modifierstats = true;
 	invisibleKeys.modifierattrs = true;
+	invisibleKeys.map_distance = true;
 	invisibleKeys.no_modifiers = true;
 	invisibleKeys.render_name = true;
 	invisibleKeys.auto_nearby = true;
@@ -91,6 +95,10 @@
 	invisibleKeys.x = true;
 	invisibleKeys.y = true;
 
+	invisibleKeys.wounds_start = true;
+	invisibleKeys.strain_start = true;
+	invisibleKeys.xp_start = true;
+
 	invisibleKeys.is_hostile= true;
 	invisibleKeys.is_public = true;
 	invisibleKeys.is_shop = true;
@@ -109,6 +117,7 @@
 	invisibleKeys.label_shadow = true;
 	invisibleKeys.label_thickness = true;
 	invisibleKeys.fill_thickness = true;
+	invisibleKeys.locked_ability = true;
 	invisibleKeys.label_opacity = true;
 	invisibleKeys.fill_opacity = true;
 	invisibleKeys.label_color = true;
@@ -146,6 +155,7 @@
 	referenceKeys.locals = "entity";
 	referenceKeys.mentioned = "all";
 
+	var cssClassBreaking = /[^a-zA-Z]/g;
 	var spaceBreaks = /[ _-]/;
 	var prettifyValues = {};
 	var prettifyNames = {};
@@ -157,6 +167,10 @@
 	prettifyNames.dependency = "Dependencies";
 	prettifyNames.itemtype = "Item Types";
 	prettifyNames.xp_cost = "XP";
+	prettifyNames.slowfire = "Slow Fire";
+	prettifyNames.autofire = "Auto-Fire";
+	prettifyNames.stundamage = "Stun Damage";
+	prettifyNames.limitedammo = "Limited Ammo";
 	prettifyNames.soldtypes = "Sold Types";
 	prettifyNames.entity = function(value, record) {
 		if(record._type === "entity") {
@@ -178,7 +192,10 @@
 		}
 	};
 
-	knowledgeLink.critical = "knowledge:combat:critical";
+	knowledgeLink.accurate = "ability:quality:accurate";
+	knowledgeLink.pierce = "ability:quality:pierce";
+	knowledgeLink.critical = "ability:quality:critical";
+	knowledgeLink.slowfire = "ability:quality:slowfire";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 
 	prettifyValues.category = function(property, value, record, universe) {
@@ -372,9 +389,9 @@
 			data.description = null;
 			data.calculated = {};
 			data.holdNote = null;
-			data.note = null;
 			data.profile = null;
 			data.image = null;
+			data.note = null;
 			data.id = null;
 
 			data.showDistribution = false;
@@ -474,7 +491,7 @@
 				}
 			},
 			"visible": function(key, value) {
-				return key && key !== "image" && value !== null && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
+				return key && value !== undefined && value !== null && value !== "" && key !== "image" && key[0] !== "_" && !invisibleKeys[key] && (!this.record.invisibleProperties || this.record.invisibleProperties.indexOf(key) === -1);
 			},
 			"isArray": function(value) {
 				return value instanceof Array;
@@ -567,8 +584,12 @@
 				return false;
 			},
 			"canLearnAbility": function() {
-				return !this.record.locked_ability && this.base && this.player && (this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
-						this.record._type === "ability" && !this.hasLearnedAbility() && this.hasLearnDependencies();
+				return !this.record.locked_ability &&
+						this.base && this.player &&
+						(this.player.master || this.base.owner === this.player.id || (this.base.owners && this.base.owners.indexOf(this.player.id) !== -1)) &&
+						(this.record._type === "ability" || this.record._class === "ability") &&
+						!this.hasLearnedAbility() &&
+						this.hasLearnDependencies();
 			},
 			"hasLearnedAbility": function() {
 				return this.record && this.base && this.base.ability && this.base.ability.indexOf(this.record.id) !== -1;
@@ -750,6 +771,8 @@
 			"prettifyKey": function(key) {
 			},
 			"prettifyPropertyName": function(property, record) {
+				var buffer;
+
 				switch(typeof(this.record._prettifyName)) {
 					case "function":
 						return this.record._prettifyName(property);
@@ -765,6 +788,13 @@
 							return prettifyNames[property];
 						case "function":
 							return prettifyNames[property](property, record, this.universe);
+					}
+				}
+
+				if(property.startsWith("skill_amend_")) {
+					buffer = this.universe.indexes.skill.index["skill:" + property.substring(12)];
+					if(buffer) {
+						return buffer.name + " Bonus";
 					}
 				}
 
@@ -826,6 +856,9 @@
 			},
 			"prettifyReferenceValue": function(reference, property, value) {
 
+			},
+			"toClassName": function(property) {
+				return "property-" + property.replace(cssClassBreaking, "-");
 			},
 			"displayInfo": function(record) {
 
@@ -936,6 +969,9 @@
 
 				Vue.set(this, "entityToMove", "");
 				Vue.set(this, "movingEntity", "");
+			},
+			"addMeasurePoint": function(point) {
+				rsSystem.EventBus.$emit("measure-point", point || this.record);
 			},
 			"restockLocation": function() {
 				if(!this.restocking) {

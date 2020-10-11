@@ -1,6 +1,6 @@
 /**
- * 
- * 
+ *
+ *
  * @class rsswSkillSection
  * @constructor
  * @module Components
@@ -34,7 +34,7 @@
 		"property": "despair",
 		"label": "Despair"
 	}];
-	
+
 	rsSystem.component("rsswSkillSection", {
 		"inherit": true,
 		"mixins": [
@@ -102,17 +102,17 @@
 			},
 			"getRollFormula": function(skill) {
 				var result;
-				
+
 				if(this.character[skill.base] < this.character[skill.propertyKey]) {
 					result = (this.character[skill.base] || 0) + "proficiency + " + ((this.character[skill.propertyKey] || 0) - (this.character[skill.base] || 0)) + "ability + ";
 				} else {
 					result = (this.character[skill.propertyKey] || 0) + "proficiency + " + ((this.character[skill.base] || 0) - (this.character[skill.propertyKey] || 0)) + "ability + ";
 				}
 				result += (this.character[skill.bonusKey] || 0) + "boost";
-				if(this.character["adjusts_" + skill.propertyKey]) {
-					result += " + " + (this.character["adjusts_" + skill.propertyKey]);
+				if(this.character["skill_amend_" + skill.property]) {
+					result += " + " + (this.character["skill_amend_" + skill.property]);
 				}
-				
+
 				return Dice.parseDiceRoll(result);
 			},
 			"getDice": function(skill) {
@@ -138,7 +138,7 @@
 					x;
 
 				this.skills.splice(0);
-				
+
 				if(this.named) {
 					for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
 						if(!this.universe.indexes.skill.listing[x].hidden && !this.universe.indexes.skill.listing[x].obscured && this.universe.indexes.skill.listing[x].section === this.named) {
@@ -146,7 +146,7 @@
 						}
 					}
 				}
-				
+
 				if(this.existing) {
 					for(x=0; x<this.existing.length; x++) {
 						this.skills.push(this.existing[x]);
@@ -155,12 +155,12 @@
 
 				this.uniqueByID(this.skills);
 				this.skills.sort(this.sortData);
-				
+
 				for(x=0; x<this.skills.length; x++) {
 					Vue.set(this.formulas, this.skills[x].id, this.getRollFormula(this.skills[x]));
 					Vue.set(this.rolls, this.skills[x].id, this.getDice(this.skills[x]));
 				}
-				
+
 				this.$forceUpdate();
 			}
 		},
@@ -168,5 +168,5 @@
 			this.character.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/character/skills/section.html")
-	});	
+	});
 })();

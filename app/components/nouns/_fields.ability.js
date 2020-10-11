@@ -1,19 +1,20 @@
 
 (function() {
-	
+
 	var dataSource,
-		
+
 		chargesOnIndex,
 		chargesOn,
-	
+
 		dependencies,
 		archetypes,
 		knowledges,
 		parent,
 		attrs,
 		stats,
+		types,
 		notes;
-	
+
 	chargesOnIndex = new SearchIndex();
 	chargesOnIndex.indexItem({
 		"name": "Session Start",
@@ -35,7 +36,7 @@
 		"name": "Top of Round",
 		"id": "entity:round_start"
 	});
-	
+
 	chargesOn = {
 		"label": "Charges On",
 		"property": "charges_on",
@@ -53,10 +54,18 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	archetypes = {
 		"label": "Archetypes",
 		"property": "archetypes",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	types = {
+		"label": "Types",
+		"property": "type",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -77,7 +86,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
@@ -85,7 +94,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	stats = {
 		"label": "Stats",
 		"property": "modifierstats",
@@ -93,7 +102,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	notes = {
 		"label": "Notes",
 		"property": "note",
@@ -101,7 +110,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -131,38 +140,39 @@
 		"type": "text"
 	},
 	chargesOn,
+	types,
 	{
-		"label": "Type",
-		"property": "type",
-		"type": "select",
-		"optionValue": "id",
-		"optionLabel": "name",
-		"options": [{
-			"name": "Building Ability",
-			"id": "building"
-		}, {
-			"name": "Character Ability",
-			"id": "character"
-		}, {
-			"name": "Piloting Ability",
-			"id": "pilot"
-		}, {
-			"name": "Planet Ability",
-			"id": "planet"
-		}, {
-			"name": "Room Ability",
-			"id": "room"
-		}, {
-			"name": "Ship Ability",
-			"id": "ship"
-		}, {
-			"name": "Star System Ability",
-			"id": "star_system"
-		}, {
-			"name": "Station Ability",
-			"id": "station"
-		}]
-	}, {
+	// 	"label": "Type",
+	// 	"property": "type",
+	// 	"type": "select",
+	// 	"optionValue": "id",
+	// 	"optionLabel": "name",
+	// 	"options": [{
+	// 		"name": "Building Ability",
+	// 		"id": "building"
+	// 	}, {
+	// 		"name": "Character Ability",
+	// 		"id": "character"
+	// 	}, {
+	// 		"name": "Piloting Ability",
+	// 		"id": "pilot"
+	// 	}, {
+	// 		"name": "Planet Ability",
+	// 		"id": "planet"
+	// 	}, {
+	// 		"name": "Room Ability",
+	// 		"id": "room"
+	// 	}, {
+	// 		"name": "Ship Ability",
+	// 		"id": "ship"
+	// 	}, {
+	// 		"name": "Star System Ability",
+	// 		"id": "star_system"
+	// 	}, {
+	// 		"name": "Station Ability",
+	// 		"id": "station"
+	// 	}]
+	// }, {
 		"label": "Activation",
 		"property": "activation",
 		"type": "select",
@@ -221,7 +231,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsAbility", {
 		"inherit": true,
 		"props": {
@@ -234,28 +244,29 @@
 			var data = {};
 			data.fields = this.fields || {};
 			data.fields.ability = dataSource;
-			
+
 
 			return data;
 		},
 		"mounted": function() {
 			parent.options = this.universe.indexes.ability.listing;
 			parent.options.sortBy("name");
-			
+
 			archetypes.source_index = this.universe.indexes.archetype;
 			dependencies.source_index = this.universe.indexes.ability;
 			knowledges.source_index = this.universe.indexes.knowledge;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
+			types.source_index = this.universe.indexes.type;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

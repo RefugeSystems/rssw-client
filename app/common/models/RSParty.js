@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @class RSParty
  * @extends RSObject
  * @constructor
@@ -13,15 +13,38 @@ class RSParty extends RSObject {
 		super(details, universe);
 	}
 
+	recalculateHook() {
+		var speed = 0,
+			entity,
+			x;
+
+		try {
+			if(this.entity && this.entity.length) {
+				entity = this.universe.indexes.entity.index[this.entity[0]];
+				speed = entity.speed || 0;
+				for(x=1; x<this.entity.length; x++) {
+					entity = this.universe.indexes.entity.index[this.entity[x]];
+					if(!isNaN(entity.speed) && entity.speed < speed) {
+						speed = entity.speed || 0;
+					}
+				}
+			}
+		} catch(exception) {
+			rsSystem.log.warn("Failed to calculate party[" + this.id + "] speed: ", exception);
+		}
+
+		this.speed = speed;
+	}
+
 	setLocation(location) {
 		var update = {},
 			hold,
 			x;
-	
+
 		update.location = location;
-		
+
 		this.commit(update);
-		
+
 		for(x=0; this.entity && x < this.entity.length; x++) {
 			hold = this.universe.indexes.entity.index[this.entity[x]];
 			if(hold) {
@@ -29,7 +52,7 @@ class RSParty extends RSObject {
 			}
 		}
 	}
-	
+
 	removeMember(member) {
 		this.universe.send("modify:entity:detail:subtractive", {
 			"id": this.id,
@@ -39,7 +62,7 @@ class RSParty extends RSObject {
 			}
 		});
 	}
-	
+
 	addMember(member) {
 		this.universe.send("modify:entity:detail:additive", {
 			"id": this.id,
@@ -49,11 +72,11 @@ class RSParty extends RSObject {
 			}
 		});
 	}
-	
+
 	giveCredits(credits) {
 		var update = {},
 			x;
-		
+
 		if(this.entity) {
 			update.delta = {};
 			update.delta.credits = credits;

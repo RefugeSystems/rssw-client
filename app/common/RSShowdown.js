@@ -45,12 +45,13 @@
 	};
 
 	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
-//		console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
+		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
 		var player = universe.indexes.player.index[universe.user.username],
 			properties,
 			tracking,
 			element,
 			target,
+			buffer,
 			value,
 			index,
 			mark,
@@ -75,14 +76,14 @@
 					case 3:
 						properties.classes = value[2];
 					case 2:
-						properties.id = value[1];
+						properties.id = value[1].trim();
 					case 1:
 						value = value[0];
 				}
 			}
 
 			if(value) {
-//				console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
+				console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 				if(value[0] === "=") {
 					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
 
@@ -105,6 +106,18 @@
 						value = entity[value[0]] || "";
 					}
 					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
+				} else if(value[0] === "?") {
+					value = value.substring(1).trim();
+					if(properties.id) {
+						buffer = universe.index.index[properties.id] || entity;
+					} else {
+						buffer = entity;
+					}
+					if(buffer && buffer._formulas && buffer._formulas[value]) {
+						element = $("<span class=\"rendered-value value-formula\">" + buffer._formulas[value] + "</span>");
+					} else {
+						element = $("<span class=\"rendered-value value-formula not-found not-known\">Unknown</span>");
+					}
 				} else if(value[0] === "#") {
 					value = value.substring(1).trim();
 					if(value && (value = universe.index.index[value])) {
@@ -133,6 +146,7 @@
 					element.css(properties.classes);
 				}
 
+				console.log("Element: ", element);
 				sourceText = sourceText.replace(tracking, element[0].outerHTML);
 			}
 

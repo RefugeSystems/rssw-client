@@ -207,6 +207,13 @@
 		"options": [
 			"map"
 		]
+	}, {
+		"label": "Map Distance",
+		"property": "map_distance",
+		"type": "number",
+		"condition": {
+			"linked": "map"
+		}
 	},
 	location,
 	profiles,

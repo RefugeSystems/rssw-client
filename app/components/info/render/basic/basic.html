@@ -1,4 +1,9 @@
 <div class="general-information" v-if="record && record.id">
+	<div class="base-subtitle" v-if="base">
+		<span>From</span>
+		<span class="named">{{(base).name}}</span>
+	</div>
+
 	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
 
 	<div v-if="record.is_shop">
@@ -57,7 +62,7 @@
 
 	<div class="properties" v-if="record._class !== 'datapoint' && record._class !== 'datausage'">
 		<div class="direct-properties" v-if="showDirectProperties()">
-			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
+			<div class="property" v-for="property in keys" v-if="visible(property, record[property])" :class="toClassName(property)">
 				<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
 					<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index['knowledge:reference:' + property]">
 						<a class="rendered-value" :data-id="knowledgeLink[property] || ('knowledge:reference:' + property)">{{prettifyPropertyName(property, record)}}</a>
@@ -450,5 +455,11 @@
 			</ul>
 		</div>
 
+		<div class="control" v-if="record.x && record.y">
+			<button class="action direct" v-on:click="addMeasurePoint(record)">
+				<span class="fas fa-drafting-compass"></span>
+				<span>Add Measuring Point</span>
+			</button>
+		</div>
 	</div>
 </div>

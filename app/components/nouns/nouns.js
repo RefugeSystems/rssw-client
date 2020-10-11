@@ -71,6 +71,7 @@
 			rsSystem.components.NounFieldsJournal,
 			rsSystem.components.NounFieldsSession,
 			rsSystem.components.NounFieldsSetting,
+			rsSystem.components.NounFieldsAction,
 			rsSystem.components.NounFieldsEntity,
 			rsSystem.components.NounFieldsEffect,
 			rsSystem.components.NounFieldsLocale,

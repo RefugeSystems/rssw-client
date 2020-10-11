@@ -86,8 +86,12 @@
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
 				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", {
+						"record": follow,
+						"base": this.viewing
+					});
 					event.stopPropagation();
-					rsSystem.EventBus.$emit("display-info", follow);
+					event.preventDefault();
 				}
 			};
 
@@ -108,6 +112,11 @@
 			"displayRecord": function(toView) {
 //				console.log("Info: ", toView);
 //				console.log("Current: ", this.viewing);
+				var previous = {
+					"viewing": this.viewing,
+					"target": this.target,
+					"base": this.base
+				};
 
 				if(toView && !(toView instanceof RSObject)) {
 					if(toView.record) {
@@ -135,7 +144,7 @@
 					if(!this.viewing || toView.id !== this.viewing.id) {
 						if(this.viewing) {
 							if(!this.history.length || (this.viewing.id !== toView.id)) {
-								this.history.unshift(this.viewing);
+								this.history.unshift(previous);
 							} else {
 								console.warn("Repeated Shift? ", this.viewing.id);
 							}
@@ -164,8 +173,11 @@
 			},
 			"backOne": function() {
 				if(this.history.length) {
-//					console.warn("Back[" + this.history.length + "]: ", this.history[0].id);
-					Vue.set(this, "viewing", this.history.shift());
+					console.warn("Back[" + this.history.length + "]: ", this.history[0]);
+					var buffer = this.history.shift();
+					Vue.set(this, "viewing", buffer.viewing);
+					Vue.set(this, "target", buffer.target);
+					Vue.set(this, "base", buffer.base);
 //					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
 					this.update();
 				}

@@ -1,6 +1,6 @@
 {
 	"name": "rs-gameui",
-	"version": "0.25.00",
+	"version": "0.25.01",
 	"description": "",
 	"main": "index.js",
 	"scripts": {

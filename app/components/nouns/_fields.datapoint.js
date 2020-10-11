@@ -47,9 +47,11 @@
 		"raw": true,
 		"options": [
 			"text",
+			"color", // TODO: Color Field Type
 			"textarea",
 			"checkbox",
 			"number",
+			"range", // TODO: Range Field Type
 			"date",
 			"select",
 			"multireference"
@@ -59,7 +61,7 @@
 		"property": "uniqueness",
 		"type": "checkbox",
 		"condition": {
-			"type": "select"
+			"type": "multireference"
 		}
 	}, {
 		"label": "Raw Values",

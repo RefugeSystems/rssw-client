@@ -3,12 +3,14 @@
 
 	var commonSource,
 		listSource,
+		conditions,
 		dataSource,
 		abilities,
 		effects,
 		skills,
 		ranges,
 		slots,
+		types,
 		dice;
 
 	ranges = [
@@ -29,6 +31,22 @@
 		"setback",
 		"setforward"
 	];
+
+	conditions = {
+		"label": "Conditions",
+		"property": "condition",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	types = {
+		"label": "Types",
+		"property": "type",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
 
 	abilities = {
 		"label": "Abilities",
@@ -71,10 +89,6 @@
 		"property": "name",
 		"type": "text"
 	}, {
-		"label": "Critical",
-		"property": "critical",
-		"type": "text"
-	}, {
 		"label": "Soak",
 		"property": "soak",
 		"type": "text"
@@ -97,18 +111,6 @@
 	}, {
 		"label": "XP Start",
 		"property": "xp_start",
-		"type": "text"
-	}, {
-		"label": "Damage",
-		"property": "damage",
-		"type": "text"
-	}, {
-		"label": "Crit. Bonus",
-		"property": "critical_damage_bonus",
-		"type": "text"
-	}, {
-		"label": "Pierce",
-		"property": "pierce_damage",
 		"type": "text"
 	}, {
 		"label": "General Defense",
@@ -155,6 +157,10 @@
 		"property": "mass",
 		"type": "text"
 	}, {
+		"label": "Speed",
+		"property": "speed",
+		"type": "text"
+	}, {
 		"label": "Cumbersome",
 		"property": "cumbersome",
 		"type": "text"
@@ -188,7 +194,7 @@
 		"type": "text"
 	}, {
 		"label": "Ship Specific Stats",
-		"property": "__charges",
+		"property": "__shipstats",
 		"type": "label"
 	}, {
 		"label": "Required Crew",
@@ -250,13 +256,143 @@
 		"label": "Short Rate",
 		"property": "charges_rate_short",
 		"type": "text"
+	}, {
+		"label": "Item Qualities",
+		"property": "__qualities",
+		"type": "label"
+	}, {
+		"label": "Damage",
+		"property": "damage",
+		"type": "text"
+	}, {
+		"label": "Critical",
+		"property": "critical",
+		"type": "text"
+	}, {
+		"label": "Critical Bonus",
+		"property": "critical_damage_bonus",
+		"type": "text"
+	}, {
+		"label": "Accurate",
+		"property": "accurate",
+		"type": "text"
+	}, {
+		"label": "Inaccurate",
+		"property": "inaccurate",
+		"type": "text"
+	}, {
+		"label": "Auto-Fire",
+		"property": "autofire",
+		"type": "text"
+	}, {
+		"label": "Slow Fire",
+		"property": "slowfire",
+		"type": "text"
+	}, {
+		"label": "Breach",
+		"property": "breach",
+		"type": "text"
+	}, {
+		"label": "Blast",
+		"property": "blast",
+		"type": "text"
+	}, {
+		"label": "Concussive",
+		"property": "concussive",
+		"type": "text"
+	}, {
+		"label": "Cortosis",
+		"property": "cortosis",
+		"type": "text"
+	}, {
+		"label": "Burn",
+		"property": "burn",
+		"type": "text"
+	}, {
+		"label": "Cumbersome",
+		"property": "cumbersome",
+		"type": "text"
+	}, {
+		"label": "Defensive",
+		"property": "defensive",
+		"type": "text"
+	}, {
+		"label": "Deflection",
+		"property": "deflection",
+		"type": "text"
+	}, {
+		"label": "Disorient",
+		"property": "disorient",
+		"type": "text"
+	}, {
+		"label": "Knockdown",
+		"property": "knockdown",
+		"type": "text"
+	}, {
+		"label": "Ensnare",
+		"property": "ensnare",
+		"type": "text"
+	}, {
+		"label": "Inferior",
+		"property": "inferior",
+		"type": "text"
+	}, {
+		"label": "Ion",
+		"property": "ion",
+		"type": "text"
+	}, {
+		"label": "Guided",
+		"property": "guided",
+		"type": "text"
+	}, {
+		"label": "Limited Ammo",
+		"property": "limitedammo",
+		"type": "text"
+	}, {
+		"label": "Linked",
+		"property": "linked",
+		"type": "text"
+	}, {
+		"label": "Pierce",
+		"property": "pierce",
+		"type": "text"
+	}, {
+		"label": "Prepare",
+		"property": "prepare",
+		"type": "text"
+	}, {
+		"label": "Stun Damage",
+		"property": "stundamage",
+		"type": "text"
+	}, {
+		"label": "Sunder",
+		"property": "sunder",
+		"type": "text"
+	}, {
+		"label": "Superior",
+		"property": "superior",
+		"type": "text"
+	}, {
+		"label": "Tractor",
+		"property": "tractor",
+		"type": "text"
+	}, {
+		"label": "Stun",
+		"property": "stun",
+		"type": "text"
+	}, {
+		"label": "Vicious",
+		"property": "vicious",
+		"type": "text"
 	}];
 
 	listSource = [
 		abilities,
 		effects,
 		skills,
-		slots
+		slots,
+		conditions,
+		types
 	];
 
 	commonSource = [{
@@ -362,6 +498,7 @@
 				});
 			}
 
+			/*
 			data.fields.modifierstats.push({
 				"label": "Skill Boosts",
 				"property": "__skillboosts",
@@ -374,6 +511,25 @@
 					"type": "text"
 				});
 			}
+			*/
+
+			data.fields.modifierstats.push({
+				"label": "Skill Amendments",
+				"property": "__skillamendments",
+				"type": "label"
+			});
+			data.fields.modifierstats.push({
+				"label": "Specific Check (+)",
+				"property": "skill_amend_direct_check",
+				"type": "text"
+			});
+			for(x=0; x<this.universe.indexes.skill.listing.length; x++) {
+				data.fields.modifierstats.push({
+					"label": this.universe.indexes.skill.listing[x].name + " (+)",
+					"property": "skill_amend_" + this.universe.indexes.skill.listing[x].property,
+					"type": "text"
+				});
+			}
 
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, listSource);
 			data.fields.modifierstats.push.apply(data.fields.modifierstats, commonSource);
@@ -381,9 +537,11 @@
 			return data;
 		},
 		"mounted": function() {
+			conditions.source_index = this.universe.indexes.condition;
 			abilities.source_index = this.universe.indexes.ability;
 			effects.source_index = this.universe.indexes.effect;
 			skills.source_index = this.universe.indexes.skill;
+			types.source_index = this.universe.indexes.type;
 			slots.source_index = this.universe.indexes.slot;
 		},
 		"methods": {

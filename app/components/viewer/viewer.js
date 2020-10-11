@@ -1,6 +1,18 @@
 
 /**
+ * First pass version at a basic image wrapping component to support advanced mark-up
+ * and stat tracking.
  *
+ * Due to massive inefficiencies, this component will need re-written to leverage a single
+ * canvas element and 2 image elements (record image & background) to reduce update processing
+ * and use custom point detection for hover effects to improve general performance.
+ *
+ * Additionally, render logic and data tracking will need to be compacted and "less squirrely".
+ *
+ * Considerations:
+ * + Abstracting the menu interface, reusability and cleans up the menu logic for readability
+ * 		of both the menu and viewer. Though where else would this be used and how easy is it
+ * 		to uncouple?
  *
  * @class rsViewer
  * @constructor
@@ -9,6 +21,8 @@
 (function() {
 	var storageKey = "_rs_viewerComponentKey";
 
+	var issuing = 0;
+
 	var generateLocationClassingMap = {
 		"star_system": "far fa-solar-system rotX60",
 		"planet": "fad fa-globe-europe",
@@ -16,6 +30,101 @@
 		"moon": "fas fa-moon",
 		"city": "fas fa-city",
 		"marker": "fas fa-map-marker"
+	};
+
+	var markAction = {
+		"options": [{
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-red rs-secondary-solid",
+			"event": "set-crosshair",
+			"text": "Mark: Red",
+			"color": "red"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-orange",
+			"event": "set-crosshair",
+			"text": "Mark: Orange",
+			"color": "orange"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-green",
+			"event": "set-crosshair",
+			"text": "Mark: Green",
+			"color": "green"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-yellow",
+			"event": "set-crosshair",
+			"text": "Mark: Yellow",
+			"color": "yellow"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-blue",
+			"event": "set-crosshair",
+			"text": "Mark: Blue",
+			"color": "blue"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-purple",
+			"event": "set-crosshair",
+			"text": "Mark: Purple",
+			"color": "purple"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-black",
+			"event": "set-crosshair",
+			"text": "Mark: Black",
+			"color": "black"
+		}, {
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-white",
+			"event": "set-crosshair",
+			"text": "Mark: White",
+			"color": "white"
+		}]
+	};
+
+	var clearAll = {
+		"icon": "fas fa-times rs-white",
+		"event": "clear-all-crosshair",
+		"text": "All Marks"
+	};
+
+	var markClearAction = {
+		"options": [{
+			"icon": "fad fa-map-marker-alt rs-white rs-secondary-red rs-secondary-solid",
+			"event": "clear-crosshair",
+			"text": "Mark: Red",
+			"color": "red"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-orange",
+			"event": "clear-crosshair",
+			"text": "Mark: Orange",
+			"color": "orange"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-green",
+			"event": "clear-crosshair",
+			"text": "Mark: Green",
+			"color": "green"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-yellow",
+			"event": "clear-crosshair",
+			"text": "Mark: Yellow",
+			"color": "yellow"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-blue",
+			"event": "clear-crosshair",
+			"text": "Mark: Blue",
+			"color": "blue"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-purple",
+			"event": "clear-crosshair",
+			"text": "Mark: Purple",
+			"color": "purple"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-black",
+			"event": "clear-crosshair",
+			"text": "Mark: Black",
+			"color": "black"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-white",
+			"event": "clear-crosshair",
+			"text": "Mark: White",
+			"color": "white"
+		},
+		clearAll]
 	};
 
 	rsSystem.component("rsViewer", {
@@ -43,6 +152,14 @@
 					"icon": "fal fa-crosshairs",
 					"event": "toggle-crosshair",
 					"text": "Crosshairs On",
+					"state": false
+				};
+			}
+			if(!data.state.pathing) {
+				data.state.pathing = {
+					"icon": "fad fa-chart-scatter rs-secondary-transparent",
+					"event": "toggle-pathing",
+					"text": "Point Path Off",
 					"state": false
 				};
 			}
@@ -75,6 +192,18 @@
 			if(data.state.path_fill === undefined) {
 				data.state.path_fill = "";
 			}
+			if(data.state.view_party === undefined) {
+				data.state.view_party = "";
+			}
+			if(data.state.distance_unit === undefined) {
+				data.state.distance_unit = "m";
+			}
+			if(data.state.distance === undefined) {
+				data.state.distance = 0;
+			}
+			if(data.state.measuring === undefined || data.state.measuring instanceof Array) {
+				data.state.measuring = {};
+			}
 
 			if(data.state.search) {
 				data.search_criteria = data.state.search.toLowerCase().split(" ");
@@ -82,8 +211,16 @@
 				data.search_criteria = [];
 			}
 
+			data.measurementCanvas = null;
+			data.initializing = true;
 			data.baseFontSize = 13;
 			data.scaledSize = 0;
+
+			data.lengths = rsSystem.math.distance.lengths;
+			data.distancing = [];
+			data.totalLength = 0;
+			data.totalTime = 0;
+			data.distance = 0;
 
 			data.searchPrevious = data.state.search;
 			data.searchError = "";
@@ -93,6 +230,7 @@
 			data.parchment = null;
 			data.element = null;
 			data.ready = false;
+			data.action = null;
 
 			data.isDragging = false;
 			data.dragX = null;
@@ -104,6 +242,7 @@
 			data.pointsOfInterest = [];
 			data.availablePOIs = [];
 			data.coordinates = [];
+			data.parties = [];
 			data.locales = [];
 			data.pins = true;
 			data.alter = "";
@@ -112,6 +251,18 @@
 			data.legendOpen = false;
 			data.legendHidden = {};
 			data.isMaster = null;
+
+			data.setMeasurements = {
+				"icon": "fas fa-ruler-combined",
+				"event": "set-measurement",
+				"text": "Set Distance"
+			};
+
+			data.takeMeasurements = {
+				"icon": "fas fa-drafting-compass",
+				"event": "measure-line",
+				"text": "Measure Line"
+			};
 
 			data.localeInfo = {
 				"event": "info-key",
@@ -220,6 +371,7 @@
 			}
 
 			rsSystem.register(this);
+			rsSystem.EventBus.$on("measure-point", this.receiveMeasurementPoint);
 			rsSystem.EventBus.$on("info:closed", this.clearSearch);
 			rsSystem.EventBus.$on("copied-id", this.setMenuID);
 			this.universe.$on("universe:modified", this.update);
@@ -362,13 +514,13 @@
 			"testSearchCriteria": function(string, criteria) {
 				var x;
 
-				console.log(" > " + string);
+				// console.log(" > " + string);
 				if(criteria && criteria.length) {
 					if(!string) {
 						return false;
 					}
 					for(x=0; x<criteria.length; x++) {
-						console.log(" ?[" + (string.indexOf(criteria[x]) === -1) + "]: " + criteria[x]);
+						// console.log(" ?[" + (string.indexOf(criteria[x]) === -1) + "]: " + criteria[x]);
 						if(string.indexOf(criteria[x]) === -1) {
 							return false;
 						}
@@ -388,8 +540,9 @@
 				Vue.set(this.state.hidden_legend, locale.id, !this.state.hidden_legend[locale.id]);
 				this.redrawPaths();
 			},
-			"processAction": function(item) {
+			"processAction": function(item, event) {
 //				console.log("Process Action: ", item);
+				var buffer;
 				switch(item.action) {
 					case "zoomin":
 						/*
@@ -412,6 +565,7 @@
 						break;
 					case "labels":
 						Vue.set(this.state, "labels", !this.state.labels);
+						this.redrawPaths();
 						break;
 					case "follow":
 						Vue.set(this.state, "follow", !this.state.follow);
@@ -421,14 +575,23 @@
 						break;
 					case "up":
 						if(this.location.location) {
-							this.$router.push("/map/" + this.location.location);
+							buffer = this.universe.indexes.location.index[this.location.location];
+							if(buffer) {
+								if(buffer.has_path) {
+									// Skip over routes/paths to their parent where an image shoould be present
+									if(buffer.location) {
+										this.$router.push("/map/" + buffer.location);
+									}
+								} else {
+									this.$router.push("/map/" + buffer.id);
+								}
+							}
 						}
 						break;
 					case "fullscreen":
 						Vue.set(this.state, "fullscreen", !this.state.fullscreen);
 						break;
 				}
-				this.redrawPaths();
 			},
 			"openActions": function(event) {
 				var xc = event.offsetX,
@@ -436,6 +599,14 @@
 					buffer,
 					locale,
 					x;
+
+				buffer = event.target.getAttribute("data-id") || event.target.parentNode.getAttribute("data-id");
+				if(buffer && (buffer = this.universe.index.index[buffer]) && buffer.x && buffer.y) {
+					console.log("Buffer: ", buffer);
+					xc = this.image.width * buffer.x/100;
+					yc = this.image.height * buffer.y/100;
+				}
+				console.log("Open Actions[" + xc + ", " + yc + "]: ", event);
 
 				if(event.ctrlKey) {
 					this.appendPath(xc/this.image.width*100, yc/this.image.height*100);
@@ -468,9 +639,10 @@
 						this.localeInfo.shown = false;
 					}
 
-					Vue.set(this.actions, "x", event.offsetX);
-					Vue.set(this.actions, "y", event.offsetY);
+					Vue.set(this.actions, "x", xc);
+					Vue.set(this.actions, "y", yc);
 					Vue.set(this.actions, "open", true);
+					Vue.set(this, "action", null);
 
 					setTimeout(() => {
 						$(this.$el).find("#viewgen").focus();
@@ -479,26 +651,50 @@
 			},
 			"closeActions": function() {
 				Vue.set(this.actions, "open", false);
+				Vue.set(this, "action", null);
 			},
 			"getActionMenuStyle": function() {
 				return "left: " + this.actions.x + "px; top: " + this.actions.y + "px;";
 			},
 			"fire": function(option, event) {
-//				console.log("Fire Option: ", option);
-				var buffer,
-					path;
+				var action = null,
+					buffer,
+					path,
+					i;
 
 				switch(option.event) {
 					case "set-crosshair":
 						this.coordinates.push({
+							"id": "cross:" + (issuing++) + ":" + Date.now(),
 							"x": (this.actions.x/this.image.width*100),
 							"y": (this.actions.y/this.image.height*100),
 							"standalone": this.state.crosshairing.state,
+							"pathed": this.state.pathing.state,
 							"color": option.color
 						});
 						this.location.commit({
 							"coordinates": this.coordinates
 						});
+						break;
+					case "clear-crosshair":
+						buffer = [];
+						for(i=0; i<this.coordinates.length; i++) {
+							if(this.coordinates[i].color === option.color) {
+								buffer.push(this.coordinates[i]);
+							}
+						}
+						if(buffer.length) {
+							this.location.commitSubtractions({
+								"coordinates": buffer
+							});
+						}
+						break;
+					case "clear-all-crosshair":
+						if(this.coordinates.length) {
+							this.location.commitSubtractions({
+								"coordinates": this.coordinates
+							});
+						}
 						break;
 					case "toggle-crosshair":
 						if(this.state.crosshairing.state) {
@@ -509,6 +705,17 @@
 							Vue.set(this.state.crosshairing, "icon", "fal fa-location-slash");
 							Vue.set(this.state.crosshairing, "text", "Crosshairs Off");
 							Vue.set(this.state.crosshairing, "state", true);
+						}
+						break;
+					case "toggle-pathing":
+						if(this.state.pathing.state) {
+							Vue.set(this.state.pathing, "icon", "fad fa-chart-scatter rs-secondary-transparent");
+							Vue.set(this.state.pathing, "text", "Point Path Off");
+							Vue.set(this.state.pathing, "state", false);
+						} else {
+							Vue.set(this.state.pathing, "icon", "fad fa-chart-network rs-secondary-transparent");
+							Vue.set(this.state.pathing, "text", "Point Path On");
+							Vue.set(this.state.pathing, "state", true);
 						}
 						break;
 					case "set-map":
@@ -549,12 +756,95 @@
 							this.generateLocationNoun(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						}
 						break;
+					case "set-mark":
+						if(this.action == markAction) {
+							Vue.set(this, "action", null);
+						} else {
+							Vue.set(this, "action", markAction);
+						}
+						return null;
+					case "clear-mark":
+						if(this.action == markClearAction) {
+							Vue.set(this, "action", null);
+						} else {
+							Vue.set(this, "action", markClearAction);
+						}
+						return null;
+					case "set-measurement":
+						var p1 = {},
+							p2 = {},
+							length;
+
+						p1.x = this.state.measuring[this.location.id][0].x * this.image.width;
+						p1.y = this.state.measuring[this.location.id][0].y * this.image.height;
+						p2.x = this.state.measuring[this.location.id][1].x * this.image.width;
+						p2.y = this.state.measuring[this.location.id][1].y * this.image.height;
+
+						length = rsSystem.math.distance.points2D(p1, p2) / (1 + .1 * this.state.image.zoom);
+						length = Math.floor(length + .5);
+						console.log("Set Length: " + length);
+						length = (this.state.distance * (rsSystem.math.distance.convert[this.state.distance_unit] || 1)) / length;
+						if(!isNaN(length)) {
+							this.location.commit({
+								"map_distance": length
+							});
+						}
+
+						/*
+						if(this.distancing.length) {
+							buffer = {
+								"x": this.actions.x / (1 + .1 * this.state.image.zoom),
+								"y": this.actions.y / (1 + .1 * this.state.image.zoom)
+							};
+
+							// TODO: Measure distance and set
+							buffer = rsSystem.math.distance.points2D(this.distancing[0], buffer);
+							path = this.state.distance * (rsSystem.math.distance.convert[this.state.distance_unit] || 1);
+							console.log("Commiting: " + buffer + " <> " + path + " = " + (path/buffer));
+							path = path/buffer;
+							if(!isNaN(path)) {
+								this.location.commit({
+									"map_distance": path
+								});
+							}
+							this.distancing.splice(0);
+						} else {
+							this.distancing.push({
+								"x": this.actions.x / (1 + .1 * this.state.image.zoom),
+								"y": this.actions.y / (1 + .1 * this.state.image.zoom)
+							});
+						}
+						*/
+						break;
+					case "clear-measuring":
+						if(this.state.measuring[this.location.id]) {
+							Vue.set(this, "totalLength", 0);
+							Vue.set(this, "totalTime", 0);
+							this.state.measuring[this.location.id].splice(0);
+							this.renderMeasurements();
+							this.buildMenu();
+						}
+						break;
+					case "measure-line":
+						if(!this.state.measuring[this.location.id]) {
+							Vue.set(this.state.measuring, this.location.id, []);
+						}
+						this.state.measuring[this.location.id].push({
+							"x": this.actions.x/this.image.width,
+							"y": this.actions.y/this.image.height
+						});
+						// this.renderMeasurements();
+						if(this.state.measuring[this.location.id].length === 1) {
+							this.buildMenu();
+						}
+						break;
 					case "info-key":
 //						console.log("Show Info: ", option);
 						this.showInfo(option.location);
 						break;
 				}
 
+				Vue.set(this, "action", null);
 				this.redrawPaths();
 				this.closeActions();
 			},
@@ -812,6 +1102,7 @@
 								this.availableCanvases[this.locales[x].id].width = applying.width;
 							}
 						}
+						Object.assign(this.image, applying);
 						this.redrawPaths();
 					} else {
 						if(this.image._lastlocation !== this.location.id) {
@@ -820,6 +1111,7 @@
 						if(this.image._lastzoom !== applying.zoom) {
 							this.image._lastzoom = applying.zoom;
 						}
+						Object.assign(this.image, applying);
 					}
 
 					this.parchment.css({
@@ -829,7 +1121,6 @@
 						"top": applying.top + "px"
 				    });
 
-					Object.assign(this.image, applying);
 					this.saveStorage(this.storageKeyID, this.state);
 				}
 			},
@@ -844,7 +1135,7 @@
 //					this.paintGrid();
 //				}
 
-//				console.log("Redraw");
+				//console.log("Redraw");
 
 				for(x=0; x<this.locales.length; x++) {
 					path = this.locales[x];
@@ -866,6 +1157,8 @@
 						}
 					}
 				}
+
+				this.renderMeasurements();
 			},
 			"drawPath": function(canvas, path) {
 				if(path && path.has_path && !this.state.hidden_legend[path.id]) {
@@ -968,6 +1261,194 @@
 				}
 
 				return canvas;
+			},
+			"receiveMeasurementPoint": function(point) {
+				if(point && point.x && point.y) {
+					var zoom =  (1 + .1 * this.image.zoom);
+					var x = point.x/100,
+						y = point.y/100;
+
+					if(!this.state.measuring[this.location.id]) {
+						Vue.set(this.state.measuring, this.location.id, []);
+					}
+					// console.log("Receiving Point: " + point.x + ", " + point.y, zoom, x, y, _p(this.image));
+					this.state.measuring[this.location.id].push({
+						"x": x,
+						"y": y
+					});
+					this.renderMeasurements();
+					if(this.state.measuring[this.location.id].length === 1) {
+						this.buildMenu();
+					}
+				}
+			},
+			"renderMeasurements": function() {
+				// console.warn("Measurements[" + this.state.image.zoom + "]...");
+				var canvas,
+					format,
+					party,
+					path,
+					zoom,
+
+					total_length = 0,
+					total_time = 0,
+					time,
+					len,
+
+					points,
+					x1,
+					y1,
+					x2,
+					y2,
+					mx,
+					my,
+					i,
+					j;
+
+				if(!this.measurementCanvas) {
+					canvas = $("#measuring");
+					if(canvas && canvas[0]) {
+						Vue.set(this, "measurementCanvas", canvas[0]);
+					}
+				}
+
+				if(this.state.view_party) {
+					party = this.universe.indexes.party.index[this.state.view_party];
+				}
+
+				canvas = this.measurementCanvas;
+				if(canvas) {
+					canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+					canvas.height = this.image.height;
+					canvas.width = this.image.width;
+					canvas = canvas.getContext("2d");
+					Vue.set(this, "initializing", false);
+					if(this.state.measuring[this.location.id] && this.state.measuring[this.location.id].length) {
+						points = [];
+						canvas.clearRect(0, 0, canvas.width, canvas.height);
+						canvas.font = (14 + this.state.image.zoom) + "px serif";
+						canvas.strokeStyle = "#FFFFFF";
+						canvas.lineWidth = 2;
+						canvas.globalAlpha = .7;
+						canvas.fillStyle = "#FFFFFF";
+
+						zoom = 1 + .1 * this.state.image.zoom;
+
+						// console.log("Rendering[" + this.image.width + "x" + this.image.height + "@" + zoom + "]: ", JSON.stringify(this.state.measuring[this.location.id], null, 4));
+						canvas.beginPath();
+						x1 = this.state.measuring[this.location.id][0].x * this.image.width;
+						y1 = this.state.measuring[this.location.id][0].y * this.image.height;
+						canvas.moveTo(x1, y1);
+						points.push([x1, y1]);
+						for(i=1; i<this.state.measuring[this.location.id].length; i++) {
+							x2 = this.state.measuring[this.location.id][i].x * this.image.width;
+							y2 = this.state.measuring[this.location.id][i].y * this.image.height;
+							mx = x1 + (x2 - x1)/2;
+							my = y1 + (y2 - y1)/2;
+							canvas.lineTo(x2, y2);
+							points.push([x2, y2]);
+
+							if(this.location.map_distance) {
+								path = rsSystem.math.distance.points2D(x1, y1, x2, y2) / zoom;
+								path = Math.floor(path + .5);
+								path = this.location.map_distance * path;
+								len = rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(path), "", ["pc", "ly", "km"]);
+								total_length += path;
+								if(party && party.speed) {
+									time = path / party.speed;
+									total_time += time;
+									time = rsSystem.math.time.reduceSeconds(time);
+									format = "";
+									if(time.Y) {
+										format += "$Yy ";
+									}
+									if(time.M) {
+										format += "$Mm ";
+									}
+									if(time.w) {
+										format += "$ww ";
+									}
+									if(time.d) {
+										format += "$dd";
+									}
+									len += " @" + rsSystem.math.time.display(time, format.trim());
+								}
+								//canvas.fillRect(tx - 5, ty - 5, len.length * (20 + this.image.zoom), 30 + this.image.zoom);
+								canvas.fillText(len, mx, my);
+							}
+
+							x1 = x2;
+							y1 = y2;
+						}
+						canvas.stroke();
+
+						canvas.strokeStyle = "#FF2121";
+						canvas.beginPath();
+						canvas.arc(points[0][0], points[0][1], canvas.lineWidth, 0, rsSystem.math.distance.pi2);
+						canvas.stroke();
+						canvas.strokeStyle = "#FFFFFF";
+						for(i=1; i<points.length; i++) {
+							canvas.beginPath();
+							canvas.arc(points[i][0], points[i][1], canvas.lineWidth, 0, rsSystem.math.distance.pi2);
+							canvas.stroke();
+						}
+
+						if(total_length) {
+							Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["pc", "ly", "km"]));
+						} else {
+							Vue.set(this, "totalLength", null);
+						}
+						if(total_time) {
+							time = rsSystem.math.time.reduceSeconds(total_time);
+							format = "";
+							if(time.Y) {
+								format += "$Yy ";
+							}
+							if(time.M) {
+								format += "$Mm ";
+							}
+							if(time.w) {
+								format += "$ww ";
+							}
+							if(time.d) {
+								format += "$dd";
+							}
+							Vue.set(this, "totalTime", rsSystem.math.time.display(time, format.trim()));
+						} else {
+							Vue.set(this, "totalTime", null);
+						}
+					}
+
+					// Pathed Points use the same Canvas for now in an attempt to save resources
+					if(this.coordinates && this.coordinates.length) {
+						points = {};
+
+						for(i=0; i<this.coordinates.length; i++) {
+							if(this.coordinates[i].pathed) {
+								if(!points[this.coordinates[i].color]) {
+									points[this.coordinates[i].color] = [];
+								}
+								points[this.coordinates[i].color].push({
+									"x": (this.coordinates[i].x/100) * this.image.width,
+									"y": (this.coordinates[i].y/100) * this.image.height
+								});
+							}
+						}
+
+						path = Object.keys(points);
+						for(i=0; i<path.length; i++) {
+							// canvas.strokeStyle = "#FFFFFF";
+							canvas.strokeStyle = path[i];
+							canvas.lineWidth = 2;
+							canvas.beginPath();
+							canvas.moveTo(points[path[i]][0].x, points[path[i]][0].y);
+							for(j=1; j<points[path[i]].length; j++) {
+								canvas.lineTo(points[path[i]][j].x, points[path[i]][j].y);
+							}
+							canvas.stroke();
+						}
+					}
+				}
 			},
 			"elementVisible": function(element, entity) {
 				if(element.template || element.hidden || (element.obscured && !this.player.master)) {
@@ -1090,167 +1571,186 @@
 			"minorUpdate": function() {
 				this.$forceUpdate();
 			},
-			"update": function() {
-//				console.warn("Update");
+			"submenuClasses": function() {
+				if(this.action && this.action.options) {
+					return "open";
+				}
+				return "close";
+			},
+			"buildMenu": function() {
+				this.actions.options.splice(0);
+				if(this.player.master) {
+					if(this.localeInfo.shown) {
+						this.actions.options.push(this.localeInfo);
+					}
+
+					this.actions.options.push({
+						"icon": "fas fa-map",
+						"event": "set-map",
+						"text": "Set Location View"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-map-marked",
+						"event": "set-current",
+						"text": "Show Map"
+					});
+
+					this.actions.options.push({
+						// TODO: Set Markings Action
+						"icon": "fas fa-map-marker-alt",
+						"event": "set-mark",
+						"text": "Set Mark"
+					});
+					this.actions.options.push({
+						// TODO: Set Markings Action
+						"icon": "fas fa-map-marker-alt-slash",
+						"event": "clear-mark",
+						"text": "Clear Marks"
+					});
+
+					this.actions.options.push(this.state.crosshairing);
+					this.actions.options.push(this.state.pathing);
+
+					this.actions.options.push(this.takeMeasurements);
+					/*
+					if(this.location.map_distance) {
+						this.actions.options.push(this.takeMeasurements);
+					} else {
+						this.actions.options.push(this.setMeasurements);
+					}
+					*/
+
+					if(this.state.measuring[this.location.id] && this.state.measuring[this.location.id].length) {
+						this.actions.options.push({
+							"icon": "far fa-compass-slash",
+							"event": "clear-measuring",
+							"text": "Clear Measuring"
+						});
+					}
+
+					this.actions.options.push({
+						"icon": "fas fa-chevron-double-right",
+						"event": "set-location",
+						"text": "Set Location"
+					});
+				}
+			},
+			"update": function(source) {
+				// console.log("Update: ", source);
 				var buffer,
 					hold,
 					x;
 
-				if(this.isMaster !== this.player.master) {
-					Vue.set(this, "isMaster", this.player.master);
-					this.actions.options.splice(0);
+				if( this.initializing || !source ||
+						((source.type === "location" || source.type === "entity" || source.type === "party") &&
+						source.modification &&
+						(source.modification.x !== undefined || source.modification.y !== undefined || source.modification.map_distance !== undefined))) {
 					if(this.player.master) {
-						this.actions.options.push({
-							"icon": "fas fa-map",
-							"event": "set-map",
-							"text": "Set Location View"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-map-marked",
-							"event": "set-current",
-							"text": "Show Map"
-						});
-
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Red",
-							"color": "red"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Orange",
-							"color": "orange"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Green",
-							"color": "green"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Yellow",
-							"color": "yellow"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Blue",
-							"color": "blue"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Purple",
-							"color": "purple"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: Black",
-							"color": "black"
-						});
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-crosshair",
-							"text": "Mark: White",
-							"color": "white"
-						});
-
-						this.actions.options.push(this.state.crosshairing);
-
-						this.actions.options.push({
-							"icon": "fas fa-chevron-double-right",
-							"event": "set-location",
-							"text": "Set Location"
-						});
+						this.buildMenu();
 					}
-				}
 
-				this.coordinates.splice(0);
-				if(this.location.coordinates && this.location.coordinates.length) {
-					this.coordinates.push.apply(this.coordinates, this.location.coordinates);
-				}
-
-
-				this.availablePOIs.splice(0);
-				// while(this.pointsOfInterest.length !== 0) {
-				// 	buffer = this.pointsOfInterest.pop();
-				// 	if(buffer.$off) {
-				// 		buffer.$off("modified", this.minorUpdate);
-				// 	}
-				// }
-				this.locales.splice(0);
-				for(x=0; x<this.universe.indexes.location.listing.length; x++) {
-					buffer = this.universe.indexes.location.listing[x];
-					if(buffer.location === this.location.id || ((hold = this.universe.indexes.location.index[buffer.location]) && hold.location === this.location.id && hold.has_path)) {
-						this.availablePOIs.push(buffer);
-						// buffer.$on("modified", this.minorUpdate);
-						if(buffer.has_path) {
-							this.locales.push(buffer);
+					this.coordinates.splice(0);
+					if(this.location.coordinates && this.location.coordinates.length) {
+						for(x=0; x<this.location.coordinates.length; x++) {
+							if(this.location.coordinates[x]) {
+								this.coordinates.push(this.location.coordinates[x]);
+							}
 						}
 					}
-				}
-				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
-					buffer = this.universe.indexes.entity.listing[x];
-					if(buffer.location === this.location.id) {
-						this.availablePOIs.push(buffer);
-						// buffer.$on("modified", this.minorUpdate);
-					}
-				}
-				for(x=0; x<this.universe.indexes.party.listing.length; x++) {
-					buffer = this.universe.indexes.party.listing[x];
-					if(buffer.location === this.location.id) {
-						this.availablePOIs.push(buffer);
-						// buffer.$on("modified", this.minorUpdate);
-					}
-				}
-//				this.locales.splice(0);
-//				for(x=0; x<this.universe.indexes.locale.listing.length; x++) {
-//					buffer = this.universe.indexes.locale.listing[x];
-//					if(buffer.residence === this.location.id) {
-//						this.locales.push(buffer);
-//					}
-//				}
 
-				if(this.location.image && (buffer = this.universe.nouns.image[this.location.image])) {
-					Vue.set(this, "ready", false);
-					if(buffer.linked) {
-						Vue.set(this, "sourceImage", buffer.url);
-					} else {
-						Vue.set(this, "sourceImage", buffer.data);
+					this.availablePOIs.splice(0);
+					// while(this.pointsOfInterest.length !== 0) {
+					// 	buffer = this.pointsOfInterest.pop();
+					// 	if(buffer.$off) {
+					// 		buffer.$off("modified", this.minorUpdate);
+					// 	}
+					// }
+					this.locales.splice(0);
+					for(x=0; x<this.universe.indexes.location.listing.length; x++) {
+						buffer = this.universe.indexes.location.listing[x];
+						if(buffer.location === this.location.id || ((hold = this.universe.indexes.location.index[buffer.location]) && hold.location === this.location.id && hold.has_path)) {
+							this.availablePOIs.push(buffer);
+							// buffer.$on("modified", this.minorUpdate);
+							if(buffer.has_path) {
+								this.locales.push(buffer);
+							}
+						}
 					}
-					this.getDimensions(this.sourceImage);
-				} else if(this.location.viewed !== this.sourceImage) {
-					Vue.set(this, "ready", false);
-					Vue.set(this, "sourceImage", this.location.viewed);
-					this.getDimensions(this.location.viewed);
-				}
-
-				if(this.location.background && (buffer = this.universe.nouns.image[this.location.background])) {
-					if(buffer.linked) {
-						Vue.set(this, "backgroundImage", buffer.url);
-					} else {
-						Vue.set(this, "backgroundImage", buffer.data);
+					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
+						buffer = this.universe.indexes.entity.listing[x];
+						if(buffer.location === this.location.id) {
+							this.availablePOIs.push(buffer);
+							// buffer.$on("modified", this.minorUpdate);
+						}
 					}
+					this.parties.splice(0);
+					for(x=0; x<this.universe.indexes.party.listing.length; x++) {
+						buffer = this.universe.indexes.party.listing[x];
+						if(buffer.active) {
+							this.parties.push(buffer);
+							if(buffer.location === this.location.id) {
+								this.availablePOIs.push(buffer);
+								// buffer.$on("modified", this.minorUpdate);
+							}
+						}
+					}
+	//				this.locales.splice(0);
+	//				for(x=0; x<this.universe.indexes.locale.listing.length; x++) {
+	//					buffer = this.universe.indexes.locale.listing[x];
+	//					if(buffer.residence === this.location.id) {
+	//						this.locales.push(buffer);
+	//					}
+	//				}
+
+					if(this.location.image && (buffer = this.universe.nouns.image[this.location.image])) {
+						Vue.set(this, "ready", false);
+						if(buffer.linked) {
+							Vue.set(this, "sourceImage", buffer.url);
+						} else {
+							Vue.set(this, "sourceImage", buffer.data);
+						}
+						this.getDimensions(this.sourceImage);
+					} else if(this.location.viewed !== this.sourceImage) {
+						Vue.set(this, "ready", false);
+						Vue.set(this, "sourceImage", this.location.viewed);
+						this.getDimensions(this.location.viewed);
+					}
+
+					if(this.location.background && (buffer = this.universe.nouns.image[this.location.background])) {
+						if(buffer.linked) {
+							Vue.set(this, "backgroundImage", buffer.url);
+						} else {
+							Vue.set(this, "backgroundImage", buffer.data);
+						}
+					}
+
+					if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
+	//					console.log("View State Sync: ", this.location, this.state);
+						Vue.set(this.state, "viewed_at", this.location.shown_at);
+						Object.assign(this.image, this.location.showing);
+						this.apply(this.image);
+					}
+
+					this.determinePOIs();
+					this.$forceUpdate();
+					this.redrawPaths();
+				} else if(source.modification && source.modification.coordinates !== undefined) {
+					this.coordinates.splice(0);
+					if(this.location.coordinates && this.location.coordinates.length) {
+						for(x=0; x<this.location.coordinates.length; x++) {
+							if(this.location.coordinates[x]) {
+								this.coordinates.push(this.location.coordinates[x]);
+							}
+						}
+					}
+					this.renderMeasurements();
 				}
 
-				if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
-//					console.log("View State Sync: ", this.location, this.state);
-					Vue.set(this.state, "viewed_at", this.location.shown_at);
-					Object.assign(this.image, this.location.showing);
-					this.apply(this.image);
-				}
-
-				this.determinePOIs();
-				this.$forceUpdate();
-				this.redrawPaths();
+				Vue.set(clearAll, "text", "All " + this.coordinates.length + " Marks");
 			}
 		},
 		"beforeDestroy": function() {
+			rsSystem.EventBus.$off("measure-point", this.receiveMeasurementPoint);
 			rsSystem.EventBus.$off("info:closed", this.clearSearch);
 			rsSystem.EventBus.$off("copied-id", this.setMenuID);
 			this.universe.$off("universe:modified", this.update);

@@ -11,7 +11,7 @@
 				<div class="name align-center">
 					<span class="fas fa-dice"></span>
 				</div>
-				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :skill="item.skill_check" :roll-name="item.name"/>
+				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :roll="rolls[item.id]" :roll-name="item.name"/>
 			</div>
 			<div class="damage band flex v element">
 				<div class="name align-center">

@@ -1,6 +1,6 @@
 
 (function() {
-	
+
 	var dataSource,
 		responses,
 		parent;
@@ -20,9 +20,9 @@
 		"optionValue": "id",
 		"optionLabel": "id"
 	};
-	
-	
-	
+
+
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -53,8 +53,8 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
-	rsSystem.component("NounFieldsAbility", {
+
+	rsSystem.component("NounFieldsAction", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -65,24 +65,24 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.ability = dataSource;
-			
+			data.fields.action = dataSource;
+
 
 			return data;
 		},
 		"mounted": function() {
 			parent.options = this.universe.indexes.action.listing;
 			parent.options.sortBy("name");
-			
+
 			responses.source_index = RSAction.responses;
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

@@ -18,6 +18,7 @@ class RSObject extends EventEmitter {
 		this._coreData = {};
 		this._registered = {};
 		this._knownKeys = [];
+		this._formulas = {};
 		this._owner = null;
 		this._known = {};
 		this._mods = [];
@@ -784,6 +785,7 @@ class RSObject extends EventEmitter {
 		if(this.universe.calculator) {
 			load = {};
 			for(x=0; x<base._calculated.length; x++) {
+				this._formulas[base._calculated[x]] = base[base._calculated[x]];
 				if(typeof(base[base._calculated[x]]) === "string" && base._calculated[x] !== "undefined" && !load[base._calculated[x]]) {
 					if(debug || this.debug || this.universe.debug) {
 						console.warn("Calculator Processing[" + base._calculated[x] + "]: ", base[base._calculated[x]]);
