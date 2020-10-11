@@ -58,6 +58,7 @@
 			rsSystem.components.NounFieldsModifierStats,
 			rsSystem.components.NounFieldsModifierAttrs,
 			rsSystem.components.NounFieldsArchetype,
+			rsSystem.components.NounFieldsCondition,
 			rsSystem.components.NounFieldsDatapoint,
 			rsSystem.components.NounFieldsDatausage,
 			rsSystem.components.NounFieldsKnowledge,

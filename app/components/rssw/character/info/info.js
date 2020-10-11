@@ -290,7 +290,9 @@
 				if(this.character.ability) {
 					for(x=0; x<this.character.ability.length; x++) {
 						buffer = this.universe.nouns.ability[this.character.ability[x]];
-						this.abilities.push(buffer);
+						if(buffer && buffer.type.indexOf("character") !== -1) {
+							this.abilities.push(buffer);
+						}
 					}
 				}
 			}

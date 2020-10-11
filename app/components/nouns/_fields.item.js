@@ -193,6 +193,12 @@
 	profiles,
 	skill,
 	{
+		"label": "Durability",
+		"property": "durability",
+		"type": "select",
+		"raw": true,
+		"options": [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+	}, {
 		"label": "Info Render",
 		"property": "information_renderer",
 		"type": "select",

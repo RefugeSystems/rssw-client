@@ -201,6 +201,14 @@
 	knowledgeLink.slowfire = "ability:quality:slowfire";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 
+	classNames.durability = function(property, value, record, universe) {
+		if(value === 0) {
+			return "issue-property";
+		}
+		if(value < 4) {
+			return "warned-property";
+		}
+	};
 	classNames.charged = function(property, value, record, universe) {
 		if(!value) {
 			return "issue-property";
@@ -409,9 +417,12 @@
 			data.referenceKeys = referenceKeys;
 			data.classNames = classNames;
 
+			data.calculatedEncumberance = 0;
+			data.adjustingDurability = 0;
+			data.adjustingCharges = 0;
+
 			data.collapsed = true;
 			data.relatedError = null;
-			data.calculatedEncumberance = 0;
 			data.knowledgeLink = knowledgeLink;
 			data.displayRaw = displayRaw;
 			data.holdDescription = null;
@@ -805,6 +816,16 @@
 					"screen": this.record.screen?false:true
 				});
 			},
+			"adjustDurability": function(durability) {
+				this.record.commit({
+					"durability": durability
+				});
+			},
+			"adjustCharges": function(charges) {
+				this.record.commit({
+					"charges": charges
+				});
+			},
 			"prettifyKey": function(key) {
 			},
 			"nameClassing": function(property) {
@@ -1114,6 +1135,13 @@
 					x,
 					y,
 					z;
+
+				if(!isNaN(this.record.durability)) {
+					Vue.set(this, "adjustingDurability", this.record.durability);
+				}
+				if(!isNaN(this.record.charges)) {
+					Vue.set(this, "adjustingCharges", this.record.charges);
+				}
 
 //				console.log("Check: " + this.id + " | " + this.record.id);
 				if(this.id && this.id !== this.record.id) {

@@ -203,30 +203,34 @@
 
 	<div v-if="record._class && canTransfer()">
 		<h3>Transfer {{record._class.capitalize()}}</h3>
-		<select v-model="transfer_target" v-on:change="transferObject()">
-			<option value="">Choose Target...</option>
-			<option value="cancel">Cancel</option>
-			<option disabled>--------------</option>
-			<option v-if="canTransferToSelf()" :value="base.id">{{base.name}}</option>
-			<option v-for="target in transfer_targets" :value="target.id">{{target.name}}</option>
-			<option disabled>--------------</option>
-			<option value="drop">Drop</option>
-		</select>
+		<div class="control">
+			<select v-model="transfer_target" v-on:change="transferObject()">
+				<option value="">Choose Target...</option>
+				<option value="cancel">Cancel</option>
+				<option disabled>--------------</option>
+				<option v-if="canTransferToSelf()" :value="base.id">{{base.name}}</option>
+				<option v-for="target in transfer_targets" :value="target.id">{{target.name}}</option>
+				<option disabled>--------------</option>
+				<option value="drop">Drop</option>
+			</select>
+		</div>
 	</div>
 
 	<div v-if="canAttach()">
 		<h3>Pass To Item</h3>
-		<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} of {{record.hardpoints}} attachments</span>
-		<span v-if="record.contents_max">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>
-		<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
-			<option value=""></option>
-			<option value="cancel">Cancel</option>
-			<option disabled>--------------</option>
-			<option v-for="target in attach_targets" :value="target.id">{{target.name}}</option>
-		</select>
-		<div v-if="attach_targets.length === 0">
-			<span class="fas fa-exclamation-triangle"></span>
-			<span>No Viable Items</span>
+		<div class="control">
+			<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} of {{record.hardpoints}} attachments</span>
+			<span v-if="record.contents_max">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>
+			<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
+				<option value=""></option>
+				<option value="cancel">Cancel</option>
+				<option disabled>--------------</option>
+				<option v-for="target in attach_targets" :value="target.id">{{target.name}}</option>
+			</select>
+			<div v-if="attach_targets.length === 0">
+				<span class="fas fa-exclamation-triangle"></span>
+				<span>No Viable Items</span>
+			</div>
 		</div>
 	</div>
 
@@ -358,6 +362,42 @@
 				<span class="icon" :class="record.screen?'far fa-check-square':'far fa-square'"></span>
 				<span>Screen</span>
 			</button>
+		</div>
+		<div class="control" v-if="record.durability !== undefined">
+			<label>
+				<span>Set Durability</span>
+				<select v-model.number="adjustingDurability" v-on:change="adjustDurability(adjustingDurability)">
+					<option value="10">10</option>
+					<option value="9">9</option>
+					<option value="8">8</option>
+					<option value="7">7</option>
+					<option value="6">6</option>
+					<option value="5">5</option>
+					<option value="4">4</option>
+					<option value="3">3</option>
+					<option value="2">2</option>
+					<option value="1">1</option>
+					<option value="0">0</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="record.charges !== undefined">
+			<label>
+				<span>Quick Set Charges</span>
+				<select v-model.number="adjustingCharges" v-on:change="adjustCharges(adjustingCharges)">
+					<option value="10">10</option>
+					<option value="9">9</option>
+					<option value="8">8</option>
+					<option value="7">7</option>
+					<option value="6">6</option>
+					<option value="5">5</option>
+					<option value="4">4</option>
+					<option value="3">3</option>
+					<option value="2">2</option>
+					<option value="1">1</option>
+					<option value="0">0</option>
+				</select>
+			</label>
 		</div>
 
 		<div class="control flex h">
