@@ -157,6 +157,22 @@
 		</div>
 	</div>
 
+	<div class="section" v-if="relatedAbilities && relatedAbilities.length">
+		<div class="reference-heading">Related Abilities</div>
+		<div class="subreference" v-for="data in relatedAbilities">
+			<a class="rendered-value" v-if="isOwner(data)" :data-id="data.id">{{data.name}}</a>
+			<span class="rendered-value" v-else>{{data.name}}</span>
+		</div>
+	</div>
+
+	<div class="section" v-if="relatedArchetypes && relatedArchetypes.length">
+		<div class="reference-heading">Related Specializations</div>
+		<div class="subreference" v-for="data in relatedArchetypes">
+			<a class="rendered-value" v-if="isOwner(data)" :data-id="data.id">{{data.name}}</a>
+			<span class="rendered-value" v-else>{{data.name}}</span>
+		</div>
+	</div>
+
 	<div class="control reference-values" v-if="locations.length">
 		<div class="reference-heading">Locations Here</div>
 		<div class="subreference" v-for="location in shownLocations">

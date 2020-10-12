@@ -35,7 +35,7 @@ class RSAction extends RSObject {
 			for(x=0; x<this.response.length; x++) {
 				response = RSAction.response.index[this.response[x]];
 				if(response && response.filter) {
-					targets = targets.filter(response.filter);
+					targets = targets.filter(response.filter(this));
 				}
 			}
 		}
@@ -138,8 +138,25 @@ setTimeout(function() {
 				});
 			}
 		},
-		"filter": function(entry) {
-			return entry && entry.charged === false;
+		"filter": function(record) {
+			return function(entry) {
+				var result = true;
+
+				if(!entry || entry.charged === true || entry.charged === undefined || entry.charged === null) {
+					return false;
+				}
+
+				if(record) {
+					if(result && record.cancontain && record.cancontain.length) {
+						result = record.cancontain.hasCommon(entry.type);
+					}
+					if(result && record.notcontain && record.notcontain.length) {
+						result = !record.notcontain.hasCommon(entry.type);
+					}
+				}
+
+				return result;
+			};
 		}
 	});
 

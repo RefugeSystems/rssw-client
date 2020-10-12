@@ -1,15 +1,17 @@
 /**
- * 
- * 
- * 
+ *
+ *
+ *
  */
 var Dice = (function() {
-	
-	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|a|b|c|d|p|s|f)[ \+\/-]/g;
-	var calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/;
-	var dndStatCurve = true;
-	var tX;
-	
+
+	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|hit|evade|a|b|c|d|p|s|f|h|e)[ \+\/-]/g,
+		calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/,
+		dndStatCurve = true,
+		spaces = / /g,
+		space = " ",
+		tX;
+
 	var rollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
 		["str", "strength"],
 		["dex", "dexterity"],
@@ -18,7 +20,7 @@ var Dice = (function() {
 		["wis", "wisdom"],
 		["cha", "charisma"]
 	];
-	
+
 	var dndRollMap = [ // TODO: Consider expansion to all skill names from skill object listing?
    		["str", "strength"],
 		["dex", "dexterity"],
@@ -35,7 +37,7 @@ var Dice = (function() {
    		["wil", "willpower"],
    		["pre", "pressence"]
    	];
-	
+
 	var rollLevelMap = [ // TODO Consider against other classes or simplify expression? This is in theory a deprecated representation
 		["level","self"],
 		["barbarian","class:barbarian"],
@@ -52,7 +54,7 @@ var Dice = (function() {
 		["wizard","class:wizard"]
 	];
 	var rollDirectMap = [
-		["pro", "proficiency"], // TODO: Consider DnD proficiency against SWRPG proficiency dice 
+		["pro", "proficiency"], // TODO: Consider DnD proficiency against SWRPG proficiency dice
 		["movement", "movement"],
 		["health", "health"],
 		["HP", "health"],
@@ -93,7 +95,7 @@ var Dice = (function() {
 		"d20",
 		"d100"
 	];
-	
+
 	var diceSummedCheck = {};
 	for(tX=0; tX<diceSummed.length; tX++) {
 		diceSummedCheck[diceSummed[tX]] = true;
@@ -127,8 +129,40 @@ var Dice = (function() {
 		"s",
 		"force",
 		"djf",
-		"f"
+		"f",
+		"hit",
+		"h",
+		"evade",
+		"e"
 	];
+
+	var diceMap = {
+		"ability": "a",
+		"dja": "a",
+		"a": "a",
+		"boost": "b",
+		"djb": "b",
+		"b": "b",
+		"challenge": "c",
+		"djc": "c",
+		"c": "c",
+		"difficulty": "d",
+		"djd": "d",
+		"d": "d",
+		"proficiency": "p",
+		"djp": "p",
+		"p": "p",
+		"setback": "s",
+		"djs": "s",
+		"s": "s",
+		"force": "f",
+		"djf": "f",
+		"f": "f",
+		"hit": "h",
+		"h": "h",
+		"evade": "e",
+		"e": "e"
+	};
 
 	var diceRoll = function(dice) {
 		var roll = parseInt(parseInt(dice.substring(1)) * Math.random()) + 1;
@@ -146,9 +180,9 @@ var Dice = (function() {
 	 * 		and "target.wis".
 	 */
 	var parseDiceRoll = function(expression, source, target) {
-		var x, sCasting, tCasting, regex, buffer = [], dice = {};
+		var x, sCasting, tCasting, regex, buffer = [], dice = {}, roll = {};
 		if(!expression) {
-			return dice;
+			return roll;
 		} else {
 			expression = expression.toString();
 		}
@@ -205,24 +239,24 @@ var Dice = (function() {
 				expression = expression.replace(regex, parseInt(source[rollDirectMap[x][1] || rollDirectMap[x][0]] || 0));
 			}
 		}
-		expression = expression.replace(/ /g, "") + " ";
+		expression = expression.replace(spaces, "") + space;
 		x = diceReductionRegEx.exec(expression);
 		while(x !== null) {
 			buffer.push(x[0]);
-			dice[x[2]] = dice[x[2]]?dice[x[2]] + "+" + x[1]:x[1];
+			dice[diceMap[x[2]]] = dice[diceMap[x[2]]]?dice[diceMap[x[2]]] + "+" + x[1]:x[1];
 			x = diceReductionRegEx.exec(expression);
 		}
 		for(x=0; x<buffer.length; x++) {
 			expression = expression.replace(buffer[x], "");
 		}
-		dice.null = expression;
+		roll.null = expression;
 //		console.log("Dice Expression: " + JSON.stringify(dice, null, 4));
 		for(x=0; x<diceOrder.length; x++) {
 			if(dice[diceOrder[x]]) {
-				dice[diceOrder[x]] = parseInt(calculate(dice[diceOrder[x]]));
+				roll[diceOrder[x]] = parseInt(calculate(dice[diceOrder[x]]));
 			}
 		}
-		return dice;
+		return roll;
 	};
 
 	var rawDiceRoll = function(expression, source, target) {
@@ -268,7 +302,7 @@ var Dice = (function() {
 			dice,
 			d,
 			x;
-		
+
 		if(typeof(expression) === "string") {
 			dice = parseDiceRoll(expression, source, target);
 		} else if(typeof(expression) === "object") {
@@ -327,10 +361,10 @@ var Dice = (function() {
 				}
 			}
 		}
-		
+
 		return result;
 	};
-	
+
 	var starWarsMap = {
 		"ability": {
 			"dice": "d8",
@@ -548,7 +582,7 @@ var Dice = (function() {
 			},
 			"6": {
 				"failure": 0,
-				"advantage": -1,	
+				"advantage": -1,
 				"threat": 1
 			},
 			"7": {
@@ -632,12 +666,12 @@ var Dice = (function() {
 			}
 		}
 	};
-	
+
 	var rollStarWarsDice = function(roll, result) {
 		var roll = starWarsMap[roll],
 			keys,
 			x;
-			
+
 		if(roll) {
 			roll = roll[diceRoll(roll.dice)];
 			if(roll) {
@@ -650,28 +684,28 @@ var Dice = (function() {
 				}
 			}
 		}
-		
+
 		return result;
 	};
-	
+
 	return {
-		
+
 		"calculateDiceRoll": calculateDiceRoll,
-		
-		
+
+
 		"parseDiceRoll": parseDiceRoll,
-		
-		
+
+
 		"reduceDiceRoll": reduceDiceRoll,
-		
-		
+
+
 		"rawDiceRoll": rawDiceRoll,
-		
+
 		"setDnD": function() {
 			rollMap = dndRollMap;
 			dndStatCurve = true;
 		},
-		
+
 		"setSWRPG": function() {
 			rollMap = swrpgRollMap;
 			dndStatCurve = false;

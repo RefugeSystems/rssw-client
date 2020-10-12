@@ -9,6 +9,10 @@
 (function() {
 	var storageKey = "_rs_infoComponentKey";
 
+	var careerText = "";
+
+	var specializationText = "";
+
 	rsSystem.component("rsswCharacterInfo", {
 		"inherit": true,
 		"mixins": [
@@ -27,6 +31,8 @@
 			var data = {};
 
 			data.storageKeyID = storageKey + this.character.id;
+			data.specializationText = specializationText;
+			data.careerText = careerText;
 
 			data.race = null;
 			data.displayAbilityTrees = false;
@@ -37,17 +43,26 @@
 			data.experience = 0;
 			data.credits = 0;
 
+			data.displaySpecializations = false;
+			data.availableSpecializations = [];
+			data.displayCareers = false;
+			data.availableCareers = [];
+			data.specializations = [];
+			data.careers = [];
+			data.archetypeStats = {};
+
 			data.mdDescription = null;
 			data.description = "";
 			data.state = this.loadStorage(data.storageKeyID, {
 				"viewing": false
 			});
 
+			data.state.panel_descriptions = true;
+
 			data.piloting = null;
 			data.location = null;
 			data.inside = null;
 
-			data.specializations = [];
 			data.abilities = [];
 			data.inventory = [];
 			data.loadout = [];
@@ -55,7 +70,6 @@
 			data.items = [];
 			data.rooms = [];
 
-			data.careers = [];
 
 			data.calculating = false;
 
@@ -110,11 +124,111 @@
 					"entity": null
 				});
 			},
+			"closeCareers": function() {
+				Vue.set(this, "displayCareers", false);
+			},
+			"openCareers": function() {
+				Vue.set(this, "displayCareers", true);
+			},
+			"getCareerXPCost": function(career) {
+				if(this.careers.length === 0) {
+					return 0;
+				}
+
+				return 10 * (this.careers.length + 1);
+			},
+			"getSpecializationsXPCost": function(specialization) {
+				var cost;
+
+				if(this.specializations.length === 0) {
+					return 0;
+				}
+
+				cost = 10 * (this.specializations.length + 1);
+				if(this.careers.contains(specialization.parent)) {
+					return cost;
+				}
+
+				return cost + 10;
+			},
+			"closeSpecializations": function() {
+				Vue.set(this, "displaySpecializations", false);
+			},
+			"openSpecializations": function() {
+				Vue.set(this, "displaySpecializations", true);
+			},
+			"styleSpecializationPanel": function(specialization) {
+				var classes = "";
+
+				if(this.careers.indexOf(specialization.parent) === -1) {
+					classes += "external-specialization ";
+				}
+				if(!this.archetypeStats[specialization.id] || this.character.xp < this.archetypeStats[specialization.id].cost) {
+					classes += "red-shadow ";
+				}
+
+				return classes;
+			},
+			"getSpecializationPanelText": function(specialization) {
+				var parent = this.universe.indexes.archetype.index[specialization.parent],
+					skills = [],
+					skill,
+					keys,
+					x;
+
+				keys = Object.keys(specialization);
+				for(x=0; x<keys.length; x++) {
+					if(keys[x].startsWith("skill_enhanced_")) {
+						skill = this.universe.indexes.skill.lookup["skill:" + keys[x].substring(15)];
+						if(skill) {
+							skills.push("<a class=\"linked-value\" data-id=\"" + skill.id + "\">" + skill.name + "</a>");
+						}
+					}
+				}
+				if(skills.length) {
+					skills = "<span>This specialization focuses in the following skills:</span><ul><li>" + skills.join("</li><li>") + "</li></ul>";
+				}
+				if(parent) {
+					return `<div class="panel-stats">
+						<div class="panel-stat">
+							<span class="stat-label">Career</span>
+							<span>:</span>
+							<span class="stat-value">` + parent.name + `</span>
+						</div>
+					</div>` + skills;
+				}
+
+				return "";
+			},
+			"previewSpecializationAbilities": function(specialization) {
+				Vue.set(this.state, "selected_archetype", specialization.id);
+				this.openAbilities();
+			},
+			"learnSpecialization": function(specialization) {
+				var cost = this.getSpecializationsXPCost(specialization),
+					changes;
+
+				if(this.displaySpecializations && cost <= this.experience) {
+					Vue.set(this, "displaySpecializations", false);
+					changes = {};
+					changes.archetype = [specialization.id];
+					changes.xp = -cost;
+					this.character.commitAdditions(changes);
+					Vue.set(this, "experience", this.experience - cost);
+				}
+			},
 			"closeAbilities": function() {
 				Vue.set(this, "displayAbilityTrees", false);
 			},
 			"openAbilities": function() {
 				Vue.set(this, "displayAbilityTrees", true);
+			},
+			"getXPCostClassing": function(cost) {
+				if(this.character.xp < cost) {
+					return "red-shadow";
+				}
+
+				return "";
 			},
 			"updateCharacter": function() {
 				if(!this.calculating) {
@@ -228,11 +342,14 @@
 					}
 				}
 			},
-			"update": function() {
+			"update": function(event) {
+				console.log("Update: ", event);
 				var buffer,
 					x;
 
 				Vue.set(this, "race", this.universe.nouns.race[this.character.race]);
+				this.availableSpecializations.splice(0);
+				this.availableCareers.splice(0);
 				this.specializations.splice(0);
 				this.abilities.splice(0);
 				this.careers.splice(0);
@@ -295,6 +412,18 @@
 						}
 					}
 				}
+
+				for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+					buffer = this.universe.indexes.archetype.listing[x];
+					if(buffer.classification === "secondary" && buffer.parent && this.specializations.indexOf(buffer) == -1) {
+						if(!this.archetypeStats[buffer.id]) {
+							this.archetypeStats[buffer.id] = {};
+						}
+						this.archetypeStats[buffer.id].cost = this.getSpecializationsXPCost(buffer);
+						this.availableSpecializations.push(buffer);
+					}
+				}
+				this.availableSpecializations.sortBy("parent");
 			}
 		},
 		"beforeDestroy": function() {

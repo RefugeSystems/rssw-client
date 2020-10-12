@@ -1,22 +1,22 @@
 /**
- * 
- * 
+ *
+ *
  * @class rsswCharacterImproveAbility
  * @constructor
  * @module Components
  */
 (function() {
 	var storageKey = "_rssw_characterabilityimproveComponentKey";
-	
+
 	var levelBars = [0,1,2,3,4];
 
 	var instance = 0;
-	
+
 	var sortArchetypes = function(a, b) {
 		if(a.classification == b.classification) {
 			return 0;
 		}
-		
+
 		switch(a.classification) {
 			case "primary":
 				return -1;
@@ -24,7 +24,7 @@
 				return 1;
 		}
 	};
-	
+
 	rsSystem.component("rsswCharacterImproveAbility", {
 		"inherit": true,
 		"mixins": [
@@ -47,7 +47,7 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
 			data.leveling = "";
@@ -55,32 +55,33 @@
 //				"hideNames": false,
 //				"search": ""
 //			});
-			
-			
+
+
 			data.filters = {};
 			data.filters.node = (node) => {
 //				console.log("Node[" + node.data.id + "]: ", node);
 //				console.log("Node: ", node);
 				var styling = {};
-				
+
 				if(!node.requires_ability || node.requires_ability.length === 0) {
 					styling["text-outline-color"] = "#000";
 					styling["background-color"] = "#0e57ea";
 				}
-				
+
 				if(this.character.ability && node && this.character.ability.indexOf(node.id) !== -1) {
 					styling["text-outline-color"] = "#000";
 					styling["background-color"] = "white";
 					styling["color"] = "white";
 				}
-				
+
 				if(node.activation === "active") {
 					styling["background-color"] = "#670505";
 				}
-				
+
 				return styling;
 			};
 
+			data.preview = null;
 			data.instance = instance++;
 			data.customSkills = [];
 			data.levelSkills = [];
@@ -90,7 +91,7 @@
 			data.dependencies = [];
 			data.archetypes = [];
 			data.abilities = [];
-			
+
 			return data;
 		},
 		"watch": {
@@ -113,6 +114,12 @@
 		"methods": {
 			"closeDisplay": function() {
 				this.$emit("close");
+				if(this.preview) {
+					if(this.state.selected_archetype === this.preview.id) {
+						Vue.delete(this.state, "selected_archetype");
+					}
+					Vue.set(this, "preview", null);
+				}
 			},
 			"selectArchetype": function(archetype) {
 				Vue.set(this.state, "selected_archetype", archetype);
@@ -148,21 +155,27 @@
 				this.dependencies.splice(0);
 				this.archetypes.splice(0);
 				this.abilities.splice(0);
-				
+
 				for(x=0; this.character.archetype && x<this.character.archetype.length; x++) {
 					buffer = this.universe.indexes.archetype.index[this.character.archetype[x]];
-					if(buffer) {
+					if(buffer && buffer.classification !== "primary") {
 						this.archetypes.push(buffer);
-					}
-					if(!this.state.selected_archetype) {
-						this.appendAbilities(buffer.id);
+						if(!this.state.selected_archetype) {
+							this.appendAbilities(buffer.id);
+						}
 					}
 				}
-				
+
 				if(this.state.selected_archetype) {
 					this.appendAbilities(this.state.selected_archetype);
 				}
-				
+				if(!this.character.archetype || this.character.archetype.indexOf(this.state.selected_archetype) === -1) {
+					buffer = this.universe.indexes.archetype.index[this.state.selected_archetype];
+					if(buffer) {
+						Vue.set(this, "preview", buffer);
+					}
+				}
+
 				this.archetypes.sort(sortArchetypes);
 			}
 		},
@@ -171,5 +184,5 @@
 			this.character.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/character/abilities/improve.html")
-	});	
+	});
 })();

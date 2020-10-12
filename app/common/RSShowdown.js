@@ -131,7 +131,7 @@
 					element = $("<a class=\"" + value.icon + "\" data-id=\"" + (value.id) + "\"></a>");
 				} else if(value[0] === "\"") {
 					value = value.substring(1).trim();
-					element = $("<span class=\"" + value + "\"></span>");
+					element = $("<span class=\"\">" + value + "</span>");
 				} else {
 					// Linked
 					mark = universe.index.index[properties.id || value];

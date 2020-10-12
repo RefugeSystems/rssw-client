@@ -141,10 +141,6 @@
 		"property": "slots_used",
 		"type": "number"
 	}, {
-		"label": "Max Charges",
-		"property": "charges_max",
-		"type": "number"
-	}, {
 		"label": "Energy Output",
 		"property": "energy_out",
 		"type": "text"
@@ -163,10 +159,6 @@
 	}, {
 		"label": "Speed",
 		"property": "speed",
-		"type": "text"
-	}, {
-		"label": "Cumbersome",
-		"property": "cumbersome",
 		"type": "text"
 	}, {
 		"label": "Encumberance",

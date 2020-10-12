@@ -173,12 +173,11 @@
 			},
 			"backOne": function() {
 				if(this.history.length) {
-					console.warn("Back[" + this.history.length + "]: ", this.history[0]);
+					// console.warn("Back[" + this.history.length + "]: ", this.history[0]);
 					var buffer = this.history.shift();
 					Vue.set(this, "viewing", buffer.viewing);
 					Vue.set(this, "target", buffer.target);
 					Vue.set(this, "base", buffer.base);
-//					console.warn("Waiting[" + this.history.length + "]: ", this.history[0]?this.history[0].id:null);
 					this.update();
 				}
 			},

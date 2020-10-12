@@ -1,11 +1,11 @@
 /**
- * 
+ *
  * @class String
  * @constructor
  */
 
 /**
- * 
+ *
  * @method capitalize
  * @return {String}
  */
@@ -17,14 +17,14 @@ String.prototype.capitalize = function() {
 };
 
 /**
- * 
+ *
  * @method pluralize
  * @param {Boolean} capitalize
  * @return {String}
  */
 String.prototype.pluralize = function(capitalize) {
 	var plural;
-	
+
 	switch(this[this.length-1]) {
 		case "y":
 			plural = this.substring(0, this.length-1) + "ies";
@@ -35,7 +35,7 @@ String.prototype.pluralize = function(capitalize) {
 		default:
 			plural = this + "s";
 	}
-	
+
 	if(capitalize) {
 		return plural[0].toUpperCase() + plural.substring(1);
 	} else {
@@ -75,6 +75,26 @@ if(!Array.prototype.purge) {
 		}
 		this.splice(index, 1);
 		return true;
+	};
+}
+
+/**
+ * Handles determining if the indicated entry is within this array leveraging the "id"
+ * property of objects but also checks for literals.
+ * @method contains
+ * @for Array
+ * @param {Boolean | Number | String | Object} entry
+ * @return {Boolean} Returns true if the indicated entry is in the array.
+ */
+if(!Array.prototype.contains) {
+	Array.prototype.contains = function(entry) {
+		for(var x=0; x<this.length; x++) {
+			if(this[x] && (this[x] === entry.id || this[x].id === entry.id || this[x] === entry || this[x].id === entry)) {
+				return true;
+			}
+		}
+
+		return this.indexOf(entry) !== -1;
 	};
 }
 
@@ -223,7 +243,7 @@ if(!Array.prototype.union) {
 }
 
 /**
- * 
+ *
  * @method hasCommon
  * @for Array
  * @param {Array} withArray
@@ -245,14 +265,14 @@ if(!Array.prototype.hasCommon) {
 				}
 			}
 		}
-		
+
 		return false;
 	};
 }
 
 (function() {
 	var sortBySorters = {};
-	
+
 	Array.prototype.sortBy = function(field) {
 		if(!sortBySorters[field]) {
 			sortBySorters[field] = function(a, b) {
@@ -265,7 +285,7 @@ if(!Array.prototype.hasCommon) {
 				}
 			};
 		}
-		
+
 		this.sort(sortBySorters[field]);
 	};
 })();

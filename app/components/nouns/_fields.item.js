@@ -43,7 +43,7 @@
 	};
 
 	cancontain = {
-		"label": "Limited To Holding These Types",
+		"label": "Limited To Containing or Effecting These Types",
 		"property": "cancontain",
 		"type": "multireference",
 		"optionValue": "id",
@@ -51,7 +51,7 @@
 	};
 
 	notcontain = {
-		"label": "Can not Holding These Types",
+		"label": "Can not Contain or Effect These Types",
 		"property": "notcontain",
 		"type": "multireference",
 		"optionValue": "id",

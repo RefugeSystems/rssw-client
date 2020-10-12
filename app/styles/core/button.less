@@ -1,7 +1,7 @@
 
 button {
 	cursor: pointer;
-	
+
 	&.flat {
 		padding: 0px;
 		margin: 0px;
@@ -9,7 +9,7 @@ button {
 		font-size: 1em;
 		background: transparent;
 	}
-	
+
 	&.simple {
 		border: 1px solid @rsLightBlue;
 		border-radius: 5px;
@@ -18,7 +18,7 @@ button {
 		margin: 6px;
 		color: @rsWhite;
 		transition: border-color .5s;
-		
+
 		&:hover {
 			border-color: @rsOrange;
 		}
@@ -27,6 +27,10 @@ button {
 
 a {
 	text-decoration: none;
+
+	&.linked-value {
+		text-decoration: underline;
+	}
 
 	&.action {
 		display: inline-block;

@@ -2,6 +2,7 @@
 (function() {
 
 	var dataSource,
+		conditions,
 		parent,
 		attrs,
 		stats,
@@ -36,6 +37,14 @@
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
+	conditions = {
+		"label": "Conditions",
+		"property": "condition",
 		"type": "multireference",
 		"optionValue": "id",
 		"optionLabel": "name"
@@ -96,6 +105,7 @@
 		"property": "obscured",
 		"type": "checkbox"
 	},
+	conditions,
 	attrs,
 	stats,
 	{
@@ -127,6 +137,7 @@
 			parent.options = this.universe.indexes.archetype.listing;
 			// parent.options.sort(this.sortDate);
 
+			conditions.source_index = this.universe.indexes.condition;
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 		},

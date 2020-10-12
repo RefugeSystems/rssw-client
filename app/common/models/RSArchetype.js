@@ -2,7 +2,7 @@
  * Archetypes are for concepts that are usually tied to some form of leveling where a linked list is
  * implemented and a pointed to the "next" set of modifiers to incur based on entity properties is
  * used.
- * 
+ *
  * @class RSArchetype
  * @extends RSObject
  * @constructor
@@ -15,9 +15,15 @@ class RSArchetype extends RSObject {
 	constructor(details, universe) {
 		super(details, universe);
 	}
-	
+
+	recalculateHook() {
+		if(this.parent && this.universe.indexes.archetype.index[this.parent]) {
+			this._search += " ||| " + this.universe.indexes.archetype.index[this.parent].name.toLowerCase();
+		}
+	}
+
 	/**
-	 * 
+	 *
 	 * Archetypes have different conditionals that can be applied to them to limit their application.
 	 * + condition
 	 * + singleton
@@ -30,7 +36,7 @@ class RSArchetype extends RSObject {
 	performModifications(base) {
 		var index,
 			x;
-		
+
 		if(this.singleton && this.singleton.length) {
 			index = base.archetype.indexOf(this);
 			for(x=0; x<this.singleton.length; x++) {
@@ -39,9 +45,9 @@ class RSArchetype extends RSObject {
 				}
 			}
 		}
-		
+
 //		console.log("RSObject Root Modify[" + this.id + "]: ", this, _p(base));
-		
+
 		if(this._coreData.modifierstats) {
 			for(x=0; x<this._coreData.modifierstats.length; x++) {
 				this.universe.nouns.modifierstats[this._coreData.modifierstats[x]].performModifications(base);

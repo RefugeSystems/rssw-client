@@ -165,6 +165,7 @@
 	var classNames = {};
 	var displayRaw = {};
 
+	prettifyNames.skill_amend_direct_check = "Related Skill Checks";
 	prettifyNames.mentioned = "Mentions";
 	prettifyNames.slot_usages = "Slots Used";
 	prettifyNames.dependency = "Dependencies";
@@ -198,7 +199,7 @@
 	knowledgeLink.accurate = "ability:quality:accurate";
 	knowledgeLink.pierce = "ability:quality:pierce";
 	knowledgeLink.critical = "ability:quality:critical";
-	knowledgeLink.slowfire = "ability:quality:slowfire";
+	knowledgeLink.slowfire = "ability:quality:slowfiring";
 	knowledgeLink.range = "knowledge:combat:rangebands";
 
 	classNames.durability = function(property, value, record, universe) {
@@ -476,7 +477,9 @@
 
 			data.equipped = [];
 
+			data.relatedArchetypes = [];
 			data.relatedKnowledge = [];
+			data.relatedAbilities = [];
 			data.keys = [];
 
 			return data;
@@ -859,6 +862,13 @@
 					buffer = this.universe.indexes.skill.index["skill:" + property.substring(12)];
 					if(buffer) {
 						return buffer.name + " Bonus";
+					}
+				}
+
+				if(property.startsWith("skill_enhanced_")) {
+					buffer = this.universe.indexes.skill.index["skill:" + property.substring(15)];
+					if(buffer) {
+						return buffer.name + " (Career)";
 					}
 				}
 
@@ -1354,6 +1364,26 @@
 					for(x=0; x<this.base.knowledge.length; x++) {
 						if((buffer = this.universe.indexes.knowledge.lookup[this.base.knowledge[x]]) && buffer.related && buffer.related.indexOf(this.record.id) !== -1) {
 							this.relatedKnowledge.push(buffer);
+						}
+					}
+				}
+
+				this.relatedAbilities.splice(0);
+				if(this.record._class === "archetype") {
+					for(x=0; x<this.universe.indexes.ability.listing.length; x++) {
+						buffer = this.universe.indexes.ability.listing[x];
+						if(buffer && buffer.archetypes && buffer.archetypes.indexOf(this.record.id) !== -1) {
+							this.relatedAbilities.push(buffer);
+						}
+					}
+				}
+
+				this.relatedArchetypes.splice(0);
+				if(this.record._class === "archetype") {
+					for(x=0; x<this.universe.indexes.archetype.listing.length; x++) {
+						buffer = this.universe.indexes.archetype.listing[x];
+						if(buffer && buffer.parent === this.record.id) {
+							this.relatedArchetypes.push(buffer);
 						}
 					}
 				}
