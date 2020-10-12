@@ -53,6 +53,7 @@
 	invisibleKeys.master_note = true;
 	invisibleKeys.background = true;
 	invisibleKeys.cancontain = true;
+	invisibleKeys.notcontain = true;
 	invisibleKeys.properties = true;
 //	invisibleKeys.indicators = true;
 	invisibleKeys.suppressed = true;
@@ -156,6 +157,7 @@
 	referenceKeys.soldtypes = "type";
 	referenceKeys.locals = "entity";
 	referenceKeys.mentioned = "all";
+	referenceKeys.skills_starting = "skill";
 
 	var cssClassBreaking = /[^a-zA-Z]/g;
 	var spaceBreaks = /[ _-]/;
@@ -165,6 +167,8 @@
 	var classNames = {};
 	var displayRaw = {};
 
+	prettifyNames.skills_starting = "Available Starting Skills";
+	prettifyNames.skills_starting_count = "Number of Starting Skills Selected";
 	prettifyNames.skill_amend_direct_check = "Related Skill Checks";
 	prettifyNames.mentioned = "Mentions";
 	prettifyNames.slot_usages = "Slots Used";
@@ -1435,7 +1439,7 @@
 									}
 									map.targets = this.universe.index.translate(map.targets);
 									if(map.source.filterTargets) {
-										map.targets = map.source.filterTargets(map.targets);
+										map.targets = map.source.filterTargets(map.targets, this.record);
 									}
 								}
 							}

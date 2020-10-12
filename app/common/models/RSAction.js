@@ -27,7 +27,7 @@ class RSAction extends RSObject {
 		}
 	}
 
-	filterTargets(targets) {
+	filterTargets(targets, base) {
 		var response,
 			x;
 
@@ -35,7 +35,7 @@ class RSAction extends RSObject {
 			for(x=0; x<this.response.length; x++) {
 				response = RSAction.response.index[this.response[x]];
 				if(response && response.filter) {
-					targets = targets.filter(response.filter(this));
+					targets = targets.filter(response.filter(this, base));
 				}
 			}
 		}
@@ -138,7 +138,7 @@ setTimeout(function() {
 				});
 			}
 		},
-		"filter": function(record) {
+		"filter": function(record, base) {
 			return function(entry) {
 				var result = true;
 
@@ -152,6 +152,14 @@ setTimeout(function() {
 					}
 					if(result && record.notcontain && record.notcontain.length) {
 						result = !record.notcontain.hasCommon(entry.type);
+					}
+				}
+				if(base) {
+					if(result && base.cancontain && base.cancontain.length) {
+						result = base.cancontain.hasCommon(entry.type);
+					}
+					if(result && base.notcontain && base.notcontain.length) {
+						result = !base.notcontain.hasCommon(entry.type);
 					}
 				}
 

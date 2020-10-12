@@ -116,7 +116,7 @@
 		},
 		"methods": {
 			"rollDice": function(item) {
-				console.log("Roll Item Dice: ", item);
+				// console.log("Roll Item Dice: ", item);
 			},
 			"getAttackDice": function(item) {
 				var pool = this.getSkillRoll(item.skill_check);

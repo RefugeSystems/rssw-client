@@ -406,7 +406,7 @@
 				if(this.character.ability) {
 					for(x=0; x<this.character.ability.length; x++) {
 						buffer = this.universe.nouns.ability[this.character.ability[x]];
-						if(buffer && buffer.type.indexOf("character") !== -1) {
+						if(buffer && buffer.type && buffer.type.indexOf("character") !== -1) {
 							this.abilities.push(buffer);
 						}
 					}

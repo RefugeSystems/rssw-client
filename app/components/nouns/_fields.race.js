@@ -1,13 +1,14 @@
 
 (function() {
-	
+
 	var dataSource,
 		datasets,
 		profiles,
+		skills,
 		attrs,
 		stats,
 		notes;
-	
+
 	profiles = {
 		"label": "Profile",
 		"property": "profile",
@@ -15,7 +16,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	datasets = {
 		"label": "Name Generation Dataset",
 		"property": "dataset",
@@ -23,7 +24,15 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
+	skills = {
+		"label": "Possible Starting Skills",
+		"property": "skills_starting",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name"
+	};
+
 	attrs = {
 		"label": "Attributes",
 		"property": "modifierattrs",
@@ -31,7 +40,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	stats = {
 		"label": "Stats",
 		"property": "modifierstats",
@@ -39,7 +48,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	notes = {
 		"label": "Notes",
 		"property": "note",
@@ -47,7 +56,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -67,7 +76,12 @@
 		"label": "Playable",
 		"property": "playable",
 		"type": "checkbox"
+	}, {
+		"label": "Skill Count",
+		"property": "skills_starting_count",
+		"type": "number"
 	},
+	skills,
 	datasets,
 	attrs,
 	stats,
@@ -82,7 +96,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsRace", {
 		"inherit": true,
 		"props": {
@@ -100,19 +114,20 @@
 		"mounted": function() {
 			profiles.options = this.universe.indexes.image.listing;
 			profiles.options.sortBy("name");
-			
+
 			attrs.source_index = this.universe.indexes.modifierattrs;
 			stats.source_index = this.universe.indexes.modifierstats;
 			datasets.source_index = this.universe.indexes.dataset;
+			skills.source_index = this.universe.indexes.skill;
 			notes.source_index = this.universe.indexes.note;
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

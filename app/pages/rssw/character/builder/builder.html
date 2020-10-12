@@ -4,40 +4,74 @@
 			<h1>Character Details</h1>
 		</div>
 		<div class="details">
-			<div class="text-block">
-				<label for="entity-name">
-					<span>Name:</span>
-				</label>
-				<input type="text" v-model="building.name" id="entity-name"/>
-				<div class="flex h centered" v-if="racialNaming">
-					<button class="simple flat" v-on:click="randomName()">
-						<span class="fas fa-retweet"></span>
-						<span>Random Name</span>
-					</button>
-					<button class="simple flat" v-on:click="generateName()">
-						<span class="fas fa-random"></span>
-						<span>Generate Name</span>
-					</button>
+			<div class="padding left"></div>
+			<div class="blocks">
+				<div class="block text">
+					<label for="entity-name">
+						<span>Name:</span>
+					</label>
+					<input type="text" v-model="building.name" id="entity-name"/>
+					<div class="flex h centered" v-if="racialNaming">
+						<button class="simple flat" v-on:click="randomName()">
+							<span class="fas fa-retweet"></span>
+							<span>Random</span>
+						</button>
+						<button class="simple flat" v-on:click="generateName()">
+							<span class="fas fa-random"></span>
+							<span>Generate</span>
+						</button>
+					</div>
+				</div>
+				<div class="block text">
+					<label for="entity-description">
+						<span>Description:</span>
+					</label>
+					<textarea v-model="building.description" id="entity-description"></textarea>
+				</div>
+				<div class="block text">
+					<label for="entity-obligations">
+						<span>Obligations:</span>
+					</label>
+					<textarea v-model="building.obligations" id="entity-obligations"></textarea>
+				</div>
+				<div class="block text">
+					<label for="entity-motivations">
+						<span>Motivations:</span>
+					</label>
+					<textarea v-model="building.motivations" id="entity-motivations"></textarea>
+				</div>
+				<div class="block selection" v-if="rankRaceOptions.length !== 0">
+					<div class="block-title">Racial Ranks</div>
+					<div class="block-subtitle">Choose {{race.skills_starting_count}} ({{race.skills_starting_count - rankedRace.length}} Remaining)</div>
+					<div class="option" v-for="skill in rankRaceOptions">
+						<label>
+							<input type="checkbox" v-model="rankedRace" :value="skill" />
+							<span>{{skill.name}}</span>
+						</label>
+					</div>
+				</div>
+				<div class="block selection">
+					<div class="block-title">Career Ranks</div>
+					<div class="block-subtitle">Choose 4 ({{4 - rankedCareer.length}} Remaining)</div>
+					<div class="option" v-for="skill in rankCareerOptions">
+						<label>
+							<input type="checkbox" v-model="rankedCareer" :value="skill" />
+							<span>{{skill.name}}</span>
+						</label>
+					</div>
+				</div>
+				<div class="block selection">
+					<div class="block-title">Specialization Ranks</div>
+					<div class="block-subtitle">Choose 1 ({{1 - rankedSpecialization.length}} Remaining)</div>
+					<div class="option" v-for="skill in rankSpecializationOptions">
+						<label>
+							<input type="checkbox" v-model="rankedSpecialization" :value="skill" />
+							<span>{{skill.name}}</span>
+						</label>
+					</div>
 				</div>
 			</div>
-			<div class="text-block">
-				<label for="entity-description">
-					<span>Description:</span>
-				</label>
-				<textarea v-model="building.description" id="entity-description"></textarea>
-			</div>
-			<div class="text-block">
-				<label for="entity-obligations">
-					<span>Obligations:</span>
-				</label>
-				<textarea v-model="building.obligations" id="entity-obligations"></textarea>
-			</div>
-			<div class="text-block">
-				<label for="entity-motivations">
-					<span>Motivations:</span>
-				</label>
-				<textarea v-model="building.motivations" id="entity-motivations"></textarea>
-			</div>
+			<div class="padding right"></div>
 		</div>
 		<button v-on:click="selected()" class="complete">
 			<span>Continue</span>
@@ -105,7 +139,7 @@
 		<!-- <rs-cards v-on:selected="selected($event)" :corpus="choices" :state="state" :universe="universe" :user="player" selection="Confirm"></rs-cards> -->
 		<rs-panel-select v-on:selected="selected($event)" :corpus="choices" :summary="summary.careers" :state="state.careers" :universe="universe" :user="user" :fields="fields.careers">
 			<div class="righted flex h" slot="controls" slot-scope="{record}">
-				<button class="simple flat action" v-on:click="showInfo(record)">
+				<button class="simple flat action" v-if="record.id" v-on:click="showInfo(record)">
 					<span class="fas fa-info-circle"></span>
 					<span>Info</span>
 				</button>

@@ -191,15 +191,17 @@
 				"handler": function() {
 					if(this.player && this.player.entity && !this.myentity) {
 						Vue.set(this, "myentity", this.universe.indexes.entity.index[this.player.entity]);
-						this.navigationItems.unshift({
-							"icon": this.myentity.icon || "fas fa-dice-d20",
-							"action": "navigate",
-							"label": this.myentity.name,
-							"path": "/dashboard/" + this.myentity.classification + "/" + this.player.entity,
-							"conditionals": [{
-								"master": false
-							}]
-						});
+						if(this.myentity) {
+							this.navigationItems.unshift({
+								"icon": this.myentity.icon || "fas fa-dice-d20",
+								"action": "navigate",
+								"label": this.myentity.name,
+								"path": "/dashboard/" + this.myentity.classification + "/" + this.player.entity,
+								"conditionals": [{
+									"master": false
+								}]
+							});
+						}
 					} else if(this.myentity && (!this.player || !this.player.entity)) {
 						Vue.set(this, "myentity", null);
 						this.navigationItems.pop();

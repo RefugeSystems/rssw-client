@@ -2,6 +2,15 @@
 	display: flex;
 	flex-direction: column;
 
+	.padding {
+		&.left {
+			flex-grow: 1;
+		}
+		&.right {
+			flex-grow: 10;
+		}
+	}
+
 	.stage {
 		display: flex;
 		flex-direction: column;
@@ -10,20 +19,34 @@
 		width: 100%;
 
 		.heading {
+			padding-left: 10px;
 			flex-shrink: 0;
 		}
 
 		.details {
 			display: flex;
-			flex-direction: column;
-			align-items: center;
+			flex-direction: row;
 			overflow: auto;
 			height: 100%;
 			max-width: 100%;
-			padding-left: 7px;
 		}
 
-		.text-block {
+		.block.pl {
+			flex-grow: 1;
+		}
+
+		.block.pr {
+			flex-grow: 5;
+		}
+
+		.blocks {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 300px;
+		}
+
+		.block {
 			position: relative;
 			width: 300px;
 			display: flex;
@@ -32,20 +55,39 @@
 			align-items: stretch;
 			margin-bottom: 17px;
 
-			label {
-				font-size: 1.6em;
-				font-weight: 700;
+			&.text {
+
+
+				label {
+					font-size: 1.6em;
+					font-weight: 700;
+				}
+
+				input[type=text] {
+					padding: 3px;
+					width: 100%;
+				}
+
+				textarea {
+					padding: 3px;
+					min-height: 150px;
+					min-width: 100%;
+					max-width: 100%;
+					width: 100%;
+				}
 			}
 
-			input[type=text] {
-				padding: 3px;
-				width: 100%;
-			}
+			&.selection {
 
-			textarea {
-				padding: 3px;
-				min-height: 150px;
-				width: 100%;
+
+				.block-title {
+					font-size: 1.6em;
+					font-weight: 700;
+				}
+
+				.option {
+					font-size: 18px;
+				}
 			}
 		}
 	}

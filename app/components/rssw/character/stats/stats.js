@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsswCharacterStats
  * @constructor
  * @module Components
@@ -20,10 +20,10 @@ rsSystem.component("rsswCharacterStats", {
 	},
 	"data": function() {
 		var data = {};
-		
+
 		data.keys = ["brawn", "agility", "intellect", "cunning", "willpower", "pressence"];
 		data.leveling = "";
-		
+
 		return data;
 	},
 	"mounted": function() {
@@ -41,7 +41,7 @@ rsSystem.component("rsswCharacterStats", {
 			Vue.set(this, "leveling", skill);
 		},
 		"noIncrease": function(stat) {
-			console.warn("Stat Check[" + stat + "]: ", this.character[stat], this.getXPCost(stat, 1), this.character.xp);
+			// console.warn("Stat Check[" + stat + "]: ", this.character[stat], this.getXPCost(stat, 1), this.character.xp);
 			return this.character[stat] >= 5 || this.getXPCost(stat, 1) > this.character.xp;
 		},
 		"canDecrease": function(stat) {
@@ -58,7 +58,7 @@ rsSystem.component("rsswCharacterStats", {
 			var calculating = this.character[stat] || 0,
 				cost = this.getXPCost(stat, direction),
 				change = {};
-			
+
 //			console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp), calculating}));
 			if(direction > 0 && cost <= this.character.xp) {
 				change[stat] = (this.character._coreData[stat] || 0) + 1;

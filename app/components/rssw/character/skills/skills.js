@@ -25,7 +25,6 @@
 				"type": Object
 			},
 			"state": {
-				"required": true,
 				"type": Object
 			}
 		},
@@ -45,7 +44,7 @@
 			data.levelSkills = [];
 			data.subSkills = [];
 
-			if(!this.state.rolls) {
+			if(this.state && !this.state.rolls) {
 				Vue.set(this.state, "rolls", {});
 			}
 
@@ -69,7 +68,7 @@
 		},
 		"methods": {
 			"viewSkill": function(skill) {
-				if(this.state.infoSkill) {
+				if(this.state && this.state.infoSkill) {
 					this.showInfo(this.universe.indexes.skill.lookup[skill], this.entity);
 				}
 			},
@@ -77,7 +76,7 @@
 				this.viewSkill(skill.id);
 			},
 			"skillRollTouched": function(skill) {
-				if(!skill.no_roll) {
+				if(this.state && !skill.no_roll) {
 					if(this.state.emitSkillRoll) {
 						this.character.$emit("roll-skill", skill);
 					} else if(this.state.rollSkill) {
@@ -94,7 +93,7 @@
 				}
 			},
 			"skillTouched": function(skill) {
-				if(this.state.rollSkill && !skill.no_roll) {
+				if(this.state && this.state.rollSkill && !skill.no_roll) {
 					console.log("Rolling Skill");
 					var expression = this.getDiceExpression(skill),
 						roll = Dice.calculateDiceRoll(expression);

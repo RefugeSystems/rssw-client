@@ -57,7 +57,6 @@
 				"type": String
 			},
 			"state": {
-				"required": true,
 				"type": Object
 			}
 		},
@@ -98,7 +97,7 @@
 				this.$emit("touched", skill);
 			},
 			"isVisible": function(skill) {
-				return !this.state.search || skill._search.indexOf(this.state.search) !== -1;
+				return !this.state || !this.state.search || skill._search.indexOf(this.state.search) !== -1;
 			},
 			"getRollFormula": function(skill) {
 				var result;
