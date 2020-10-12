@@ -28,7 +28,7 @@
 			<!-- div class="roll" :style="styleDiceDisplay(rolls[skill.id])">
 				<span class="dice" v-for="die in rolls[skill.id]" :class="die"></span>
 			</div-->
-			<rssw-dice-view class="roll"v-if="skill.base && !skill.no_roll" :style="styleDiceDisplay(rolls[skill.id])" :roll="formulas[skill.id]" :universe="universe" :entity="character" :emit="true" />
+			<rssw-dice-view class="roll" v-if="skill.base && !skill.no_roll" :style="styleDiceDisplay(rolls[skill.id])" :roll="formulas[skill.id]" :universe="universe" :entity="character" :emit="true" />
 		</td>
 	</tr>
 </table>

@@ -162,9 +162,11 @@
 					this.universe.send("entity:rolled", current);
 				}
 			},
+			// TODO: Condense logic to get skill roll expressions
 			"getSkillDiceExpression": function(skill, entity) {
 				if(entity = entity || this.entity) {
-					var roll = {},
+					var expression = "",
+						roll = {},
 						s,
 						x;
 
@@ -178,7 +180,11 @@
 						roll.p = s;
 					}
 
-					return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
+					if(entity["skill_amend_" + skill.property]) {
+						expression += " + " + (entity["skill_amend_" + skill.property]);
+					}
+
+					return Dice.reduceDiceRoll(roll.a + "a + " + roll.b + "b + " + roll.p + "p + " + expression);
 				}
 
 				return "";

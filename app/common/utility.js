@@ -12,14 +12,22 @@
 		spacing = /[ _-]/g;
 
 	var dice = {};
-	dice.proficiency = "fas fa-dice-d12 rs-yellow";
-	dice.ability = "fas fa-dice-d8 rs-green";
-	dice.boost = "fas fa-dice-d6 rs-light-blue";
-	dice.challenge = "fas fa-dice-d12 rs-red";
-	dice.difficulty = "fas fa-dice-d8 rs-purple";
-	dice.setback = "fas fa-dice-d6 rs-black";
-	dice.force = "fas fa-dice-d12 rs-white";
-	dice.wash = "fal fa-dice-d6 rs-white";
+	// dice.proficiency = "fas fa-dice-d12 rs-yellow";
+	// dice.ability = "fas fa-dice-d8 rs-green";
+	// dice.boost = "fas fa-dice-d6 rs-light-blue";
+	// dice.challenge = "fas fa-dice-d12 rs-red";
+	// dice.difficulty = "fas fa-dice-d8 rs-purple";
+	// dice.setback = "fas fa-dice-d6 rs-black";
+	// dice.force = "fas fa-dice-d12 rs-white";
+	// dice.wash = "fal fa-dice-d6 rs-white";
+	dice.p = "fas fa-dice-d12 rs-yellow";
+	dice.a = "fas fa-dice-d8 rs-green";
+	dice.b = "fas fa-dice-d6 rs-light-blue";
+	dice.c = "fas fa-dice-d12 rs-red";
+	dice.d = "fas fa-dice-d8 rs-purple";
+	dice.s = "fas fa-dice-d6 rs-black";
+	dice.f = "fas fa-dice-d12 rs-white";
+	dice.w = "fal fa-dice-d6 rs-white";
 
 	/**
 	 * Listed in render order
@@ -29,14 +37,22 @@
 	 * @static
 	 */
 	var diceTypes = [
-		"proficiency",
-		"ability",
-		"boost",
-		"challenge",
-		"difficulty",
-		"setback",
-		"wash",
-		"force"
+		"p",
+		"a",
+		"b",
+		"c",
+		"d",
+		"s",
+		"w",
+		"f"
+		// "proficiency",
+		// "ability",
+		// "boost",
+		// "challenge",
+		// "difficulty",
+		// "setback",
+		// "wash",
+		// "force"
 	];
 
 	rsSystem.component("RSComponentUtility", {

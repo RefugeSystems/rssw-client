@@ -1,17 +1,17 @@
 /**
- * 
- * 
+ *
+ *
  * @class rsswCharacterSkills
  * @constructor
  * @module Components
  */
 (function() {
 	var storageKey = "_rssw_characterskillsComponentKey";
-	
+
 	var levelBars = [0,1,2,3,4];
 
 	var instance = 0;
-	
+
 	rsSystem.component("rsswCharacterSkills", {
 		"inherit": true,
 		"mixins": [
@@ -25,12 +25,13 @@
 				"type": Object
 			},
 			"state": {
+				"required": true,
 				"type": Object
 			}
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.storageKeyID = storageKey + this.character.id;
 			data.levelBars = levelBars;
 			data.leveling = "";
@@ -43,11 +44,11 @@
 			data.customSkills = [];
 			data.levelSkills = [];
 			data.subSkills = [];
-			
+
 			if(!this.state.rolls) {
 				Vue.set(this.state, "rolls", {});
 			}
-			
+
 			return data;
 		},
 		"watch": {
@@ -80,7 +81,6 @@
 					if(this.state.emitSkillRoll) {
 						this.character.$emit("roll-skill", skill);
 					} else if(this.state.rollSkill) {
-						console.log("Rolling Skill");
 						var expression = this.getDiceExpression(skill),
 							roll = Dice.calculateDiceRoll(expression);
 						roll.id = this.character.id;
@@ -88,7 +88,7 @@
 						roll._label = skill.name;
 						Vue.set(this.state.rolls, skill.id, roll);
 						this.universe.send("entity:rolled", roll);
-						
+
 						//Vue.set(this.state.rolls, skill.id, Dice.calculateDiceRoll(this.getDiceExpression(skill)));
 					}
 				}
@@ -114,13 +114,13 @@
 				if(!skill) {
 					return "";
 				}
-				
+
 				var calculating = this.character[skill.propertyKey] || 0;
 //				console.log("Cal: ", calculating);
 				if(calculating >= 5) {
 					return "X";
 				}
-				
+
 				if(direction > 0) {
 					return (this.character[skill.enhancementKey]?5:10) * (calculating + 1);
 				} else {
@@ -136,7 +136,7 @@
 				var calculating = this.character[skill.propertyKey] || 0,
 					cost = this.getXPCost(skill.id, direction),
 					change = {};
-				
+
 //				console.log("Direction: ", JSON.stringify({"d": direction, "x": this.character.xp, "c": cost, "e": (cost <= this.character.xp)}));
 				if(direction > 0 && cost <= this.character.xp) {
 					change[skill.propertyKey] = calculating + 1;
@@ -152,11 +152,13 @@
 					}
 				}
 			},
+			// TODO: Condense logic to get skill roll expressions
 			"getDiceExpression": function(skill) {
-				var roll = {},
+				var expression = "",
+					roll = {},
 					s,
 					x;
-				
+
 				s = this.character[skill.propertyKey] || 0;
 				roll.b = this.character[skill.bonusKey] || 0;
 				if(this.character[skill.base] < s) {
@@ -166,8 +168,11 @@
 					roll.a = this.character[skill.base] - s;
 					roll.p = s;
 				}
+				if(this.character["skill_amend_" + skill.property]) {
+					expression += " + " + (this.character["skill_amend_" + skill.property]);
+				}
 
-				return roll.a + "a + " + roll.b + "b + " + roll.p + "p";
+				return Dice.reduceDiceRoll(roll.a + "a + " + roll.b + "b + " + roll.p + "p + " + expression);
 			},
 			"getDice": function(skill) {
 				var roll = [], x;
@@ -214,7 +219,7 @@
 				}
 				this.uniqueByID(this.levelSkills);
 				this.levelSkills.sort(this.sortData);
-				
+
 				this.$forceUpdate();
 			}
 		},
@@ -222,5 +227,5 @@
 			this.character.$off("modified", this.update);
 		},
 		"template": Vue.templified("components/rssw/character/skills.html")
-	});	
+	});
 })();

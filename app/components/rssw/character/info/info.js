@@ -343,7 +343,6 @@
 				}
 			},
 			"update": function(event) {
-				console.log("Update: ", event);
 				var buffer,
 					x;
 

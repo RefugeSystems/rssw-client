@@ -77,6 +77,7 @@
 					}
 				}
 			},
+			// TODO: Condense logic to get skill roll expressions
 			"getRollExpression": function() {
 				var expression = "",
 					x;
@@ -90,8 +91,6 @@
 						}
 					}
 				}
-
-				console.log("Roll Expression: " + expression);
 
 				return expression;
 			},
