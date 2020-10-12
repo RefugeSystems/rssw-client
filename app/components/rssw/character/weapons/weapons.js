@@ -19,29 +19,29 @@
 
 	var rangeBandDifficulty = {
 		"engaged": {
-			"difficulty": 1,
-			"challenge": 0,
-			"setback": 0
+			"d": 1,
+			"c": 0,
+			"s": 0
 		},
 		"short": {
-			"difficulty": 1,
-			"challenge": 0,
-			"setback": 0
+			"d": 1,
+			"c": 0,
+			"s": 0
 		},
 		"medium": {
-			"difficulty": 2,
-			"challenge": 0,
-			"setback": 0
+			"d": 2,
+			"c": 0,
+			"s": 0
 		},
 		"long": {
-			"difficulty": 3,
-			"challenge": 0,
-			"setback": 0
+			"d": 3,
+			"c": 0,
+			"s": 0
 		},
 		"extreme": {
-			"difficulty": 4,
-			"challenge": 0,
-			"setback": 0
+			"d": 4,
+			"c": 0,
+			"s": 0
 		}
 	};
 

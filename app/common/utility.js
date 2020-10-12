@@ -86,14 +86,14 @@
 				var roll = {},
 					x;
 
-				roll.proficiency = 0;
-				roll.ability = 0;
-				roll.boost = 0;
-				roll.challenge = 0;
-				roll.difficulty = 0;
-				roll.setback = 0;
-				roll.setfoward = 0;
-				roll.force = 0;
+				roll.p = 0;
+				roll.a = 0;
+				roll.b = 0;
+				roll.c = 0;
+				roll.d = 0;
+				roll.s = 0;
+				roll.s = 0;
+				roll.f = 0;
 
 				entity = entity || this.entity;
 				if(typeof(entity) === "string") {
@@ -112,13 +112,13 @@
 				if(skill && entity) {
 					for(x=0; x<entity[skill.base] || x<entity[skill.propertyKey]; x++) {
 						if(x<entity[skill.base] && x<entity[skill.propertyKey]) {
-							++roll.proficiency;
+							++roll.p;
 						} else {
-							++roll.ability;
+							++roll.a;
 						}
 					}
 					for(x=0; x<entity[skill.bonusKey]; x++) {
-						++roll.boost;
+						++roll.b;
 					}
 				}
 
