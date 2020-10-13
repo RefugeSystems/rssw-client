@@ -28,7 +28,7 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			if(this.$route.hash !== "") {
+			if(this.$route.path !== "/") {
 				this.connect();
 			}
 			

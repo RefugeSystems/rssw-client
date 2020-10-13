@@ -15,7 +15,7 @@ var storageKey = "_rs_connectComponentKey",
 	};
 
 self.addEventListener("install", function(event) {
-	console.log("SW Install");
+	// console.log("SW Install");
 	var result = caches.open(cacheID);
 	result.then(function(cache) {
 		return cache.addAll([

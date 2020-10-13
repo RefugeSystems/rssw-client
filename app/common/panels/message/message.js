@@ -34,15 +34,46 @@
 			 */
 			data.messages = [];
 			
+			
+			data.tracking = {};
+			
 			return data;
 		},
 		"watch": {
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+			this.universe.$on("track-progress", this.trackProgress);
 			this.universe.$on("error", this.receiveMessage);
 		},
 		"methods": {
+			/**
+			 * Emits an event on the universe matching the received tracker.id value with the message tracking
+			 * object as its parameter so that Vue.set controls can be used to update the message display with
+			 * progress.
+			 * 
+			 * Once retrieved, send a parameterless event with the tracker.id to mark the progress message as
+			 * dismissable.
+			 * 
+			 * @event track-progress
+			 * @param {Object} tracker
+			 * @param {String} tracker.message To display in the message (keep short)
+			 * @param {Number} tracker.processing Total number of "steps"
+			 * @param {String} tracker.id Basic identified, should generally match the exchange event
+			 */
+			"trackProgress": function(tracker) {
+				this.tracking[tracker.id] = {};
+				tracker.active = true;
+				tracker.type = "progress";
+				tracker.processed = 0;
+				this.messages.push(tracker);
+				
+				this.universe.$emit(tracker.id, tracker);
+				this.universe.$once(tracker.id, () => {
+					Vue.delete(this.tracking, tracker.id);
+				});
+			},
+			
 			/**
 			 * 
 			 * @method receiveMessage
@@ -54,6 +85,7 @@
 					event._display_time = new Date();
 				}
 				
+				event.type = "notification";
 				if(!event.message) {
 					if(event.data) {
 						if(event.data.message) {
@@ -84,6 +116,9 @@
 			 */
 			"dismissMessage": function(event) {
 				var index = this.messages.indexOf(event);
+				if(event.active) {
+					Vue.set(event, "active", false);
+				}
 				if(index !== -1) {
 					this.messages.splice(index, 1);
 				}

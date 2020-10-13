@@ -108,6 +108,11 @@
 							<span>{{imported}}</span>
 							<span>/</span>
 							<span>{{toImport}}</span>
+							<span v-if="failedIDs.length">
+								<span>|</span>
+								<span class="fas fa-exclamation-triangle"></span>
+								<span>{{failedIDs.length}}</span>
+							</span>
 							<span>)</span>
 						</div>
 					</td>
@@ -120,6 +125,11 @@
 						<div class="pad-aligned">
 							<span :class="importIcon"></span>
 							<span>{{importMessage}}</span>
+							<span v-if="failedIDs.length" v-on:click="showFailures()">
+								<span>|</span>
+								<span class="fas fa-exclamation-triangle"></span>
+								<span>{{failedIDs.length}}</span>
+							</span>
 						</div>
 					</td>
 				</tr>
@@ -138,8 +148,18 @@
 					</td>
 				</tr>
 			</table>
-			<h2>Server Info</h2>
+			<h2>Server Control</h2>
 			<table class="versions">
+				<tr>
+					<td class="align-right">State</td>
+					<td>
+						<button class="flat simple" v-on:click="toggleLocalDebug()">
+							<span v-if="universe.debugConnection" class="far fa-check-square"></span>
+							<span v-if="!universe.debugConnection" class="far fa-square"></span>
+							<span>Debug Connection</span>
+						</button>
+					</td>
+				</tr>
 				<tr v-if="!universe.indexes.setting.index['setting:control:stop']">
 					<td class="align-right">State</td>
 					<td>

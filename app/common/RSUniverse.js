@@ -31,6 +31,7 @@ class RSUniverse extends EventEmitter {
 		this.echoed = {};
 		this.nouns = {};
 
+		this.echoTimeout = 10000;
 		this.indexes.all = this.index;
 		this.latency = 0;
 
@@ -46,6 +47,13 @@ class RSUniverse extends EventEmitter {
 		this.connection.master = false;
 		this.connection.lastError = false;
 		this.connection.history = [];
+		
+		this.importing = {};
+		this.importing.active = false;
+		this.importing.abort = false;
+		this.importing.imported = [];
+		this.importing.skipped = [];
+		this.importing.failed = [];
 		/**
 		 *
 		 * @method connection.entry
@@ -247,7 +255,7 @@ class RSUniverse extends EventEmitter {
 
 					this.connection.entry(message.type + " Message received", message.type === "error"?50:30, message);
 					if(this.debugConnection || this.debug) {
-						console.warn("Emission[" + message.type + ":complete]: ", message.event);
+						console.log("Emission[" + message.type + ":complete]: ", message.event);
 					}
 					if(this.processEvent[message.type]) {
 						this.processEvent[message.type](message);
@@ -571,7 +579,7 @@ class RSUniverse extends EventEmitter {
 	 * @param {String} type
 	 * @param {Object} data
 	 */
-	send(type, data) {
+	send(type, data, callback) {
 		data = data || {};
 		if(this.connection.socket) {
 			this.connection.retries = 0;
@@ -590,7 +598,18 @@ class RSUniverse extends EventEmitter {
 			if(this.debugConnection) {
 				console.log("Connection - Sending: ", data);
 			}
-			this.echoed[data.echo] = data;
+			if(callback) {
+				this.echoed[data.echo] = callback;
+				this.timeouts[data.echo] = setTimeout(() => {
+					if(this.echoed[data.echo]) {
+						delete(this.echoed[data.echo]);
+						fail(new Error("Send Timedout"));
+					}
+				}, this.echoTimeout);
+				
+			} else {
+				this.echoed[data.echo] = data;
+			}
 			this.connection.socket.send(JSON.stringify(data));
 			return data.echo;
 		} else {
@@ -619,7 +638,9 @@ class RSUniverse extends EventEmitter {
 				if(this.debugConnection) {
 					console.log("Connection - Sending: ", data);
 				}
-				this.echoed[data.echo] = done;
+				this.echoed[data.echo] = () => {
+					done();
+				};
 				// this.echoed[data.echo] = (result) => {
 				// 	done(result);
 				// };
@@ -629,12 +650,168 @@ class RSUniverse extends EventEmitter {
 						delete(this.echoed[data.echo]);
 						fail(new Error("Send Timedout"));
 					}
-				}, 10000);
+				}, this.echoTimeout);
 			} else {
 				// IDEA: Buffer for connection restored
 				fail(new Error("Connection not available"));
 			}
 		});
 		return promised;
+	}
+	
+	
+	importData(value, overwrite) {
+		if(!this.importing.active) {
+			Vue.set(this.importing, "active", true);
+			Vue.set(this.importing, "abort", false);
+			var progress,
+				chain,
+				value,
+				keys,
+				eid,
+				i;
+
+			this.importing.count = 0;
+			keys = Object.keys(value);
+			
+			for(i=0; i<keys.length; i++) {
+				this.importing.count += (value[keys[i]]?value[keys[i]].length:0) || 0;
+			}
+
+			this.importing.imported.splice(0);
+			this.importing.skipped.splice(0);
+			this.importing.failed.splice(0);
+			
+			eid = Random.identifier("tracker");
+			this.$once(eid, (tracker) => {
+				progress = tracker;
+				Vue.set(progress, "processed", this.importing.imported.length);
+			});
+			this.$emit("track-progress", {
+				"message": "Importing Records",
+				"processing": this.importing.count,
+				"id": eid
+			});
+
+			keys.forEach((key) => {
+				value[key].forEach((record) => {
+					// Level class type properties
+					record._class = record._class || key;
+					record._type = record._type || key;
+					if(chain) {
+						chain = chain.then(() => {
+							return new Promise((done, fail) => {
+								setTimeout(() => {
+									if(progress && !progress.active) {
+										this.importing.abort = true;
+										progress = null;
+									}
+									
+									if(this.importing.abort) {
+										fail("Aborting");
+									} else {
+										if(overwrite || !this.indexes[record._class].index[record.id]) {
+											record._class = key;
+											record._type = key;
+											
+											if(this.debugConnection) {
+												console.log("Importing[" + record.id + "]");
+											}
+											
+											this.promisedSend("modify:" + record._class, record)
+											.then(done)
+											.catch(fail);
+										} else {
+											this.importing.skipped.push(record);
+											if(this.debugConnection) {
+												console.log("Skipping[" + record.id + "]");
+											}
+											if(progress) {
+												Vue.set(progress, "skipped", this.importing.skipped.length);
+											}
+											done();
+										}
+									}
+								}, 0);
+							});
+						});
+					} else {
+						if(this.importOverwrites || !this.indexes[record._class].index[record.id]) {
+							chain = this.promisedSend("modify:" + record._class, record);
+						} else {
+							this.importing.skipped.push(record);
+							if(progress) {
+								Vue.set(progress, "skipped", this.importing.skipped.length);
+							}
+							if(progress) {
+								Vue.set(progress, "skipped", this.importing.skipped.length);
+							}
+							chain = new Promise((done) => {done();});
+						}
+					}
+					chain = chain.then((msg) => {
+						this.importing.imported.push(record);
+						if(this.debugConnection) {
+							console.log(" > Finished |", record);
+						}
+						if(progress) {
+							Vue.set(progress, "processed", this.importing.imported.length + this.importing.failed.length);
+						}
+					}).catch((err) => {
+						if(!this.importing.abort) {
+							// Err will typically be a timeout
+							console.error(" > Failed |", record, err);
+							this.importing.failed.push(record);
+							if(progress) {
+								Vue.set(progress, "processed", this.importing.imported.length + this.importing.failed.length);
+								Vue.set(progress, "failed", this.importing.failed.length);
+							}
+						}
+					});
+				});
+			});
+			if(chain) {
+				chain.then(() => {
+					Vue.set(this.importing, "active", false);
+					if(progress && progress.active) {
+						Vue.set(progress, "icon", "fas fa-check rs-light-green");
+						if(overwrite) {
+							Vue.set(progress, "message", "Imported: " + this.importing.imported.length);
+						} else {
+							Vue.set(progress, "message", "Imported: " + this.importing.imported.length + " (Skipped: " + this.importing.skipped.length + ")");
+						}
+						this.$emit(progress.id);
+					}
+					if(this.debugConnection) {
+						console.warn("Import Completed");
+					}
+				}).catch((error) => {
+					Vue.set(this.importing, "active", false);
+					this.$emit(progress.id);
+					if(this.importing.abort) {
+						Vue.set(this.importing, "abort", false);
+						if(progress && progress.active) {
+							Vue.set(progress, "icon", "fas fa-check rs-light-red");
+							Vue.set(progress, "message", "Import Aborted");
+							Vue.set(progress, "aborted", true);
+						}
+						if(this.debugConnection) {
+							console.error("Import Aborted");
+						}
+					} else {
+						console.error("Import Error: ", error);
+						if(progress && progress.active) {
+							Vue.set(progress, "icon", "fas fa-exclamation-triangle rs-light-red");
+							Vue.set(progress, "message", error.message);
+						}
+						if(this.debugConnection) {
+							console.error("Import Failed");
+						}
+					}
+				});
+			} else {
+				Vue.set(this, "importing", false);
+			}
+		}
 	}
 }

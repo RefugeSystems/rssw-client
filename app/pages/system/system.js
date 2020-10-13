@@ -32,9 +32,11 @@
 			data.toImport = 0;
 			data.imported = 0;
 			data.skipped = 0;
+			data.failed = 0;
 
-			this.importedIDs = [];
-			this.skippedIDs = [];
+			data.importedIDs = [];
+			data.skippedIDs = [];
+			data.failedIDs = [];
 
 			return data;
 		},
@@ -50,12 +52,18 @@
 			"showInfo": function(record) {
 				rsSystem.EventBus.$emit("display-info", record);
 			},
+			"toggleLocalDebug": function() {
+				Vue.set(this.universe, "debugConnection", !this.universe.debugConnection);
+			},
 			"uncachedRefresh": function() {
 				// TODO: Align ServiceWorker versioning for cache tracking
 				caches.delete("rsswx_0.0.1")
 				.then(function() {
 					location.reload(true);
 				});
+			},
+			"showFailures": function() {
+				console.log("Failures: ", this.universe.importing.failed);
 			},
 			"checkImportSelection": function() {
 				var input = $(this.$el).find("#importFileSelection");
@@ -101,6 +109,20 @@
 				Vue.set(this, "importOverwrites", !this.importOverwrites);
 			},
 			"importUniverse": function() {
+				var input = $(this.$el).find("#importFileSelection");
+				
+				if(!this.universe.importing.active && input && input.length && input[0].files.length) {
+					this.readFile(input[0].files[0])
+					.then((result) => {
+						this.universe.importData(JSON.parse(result.data), this.importOverwrites);
+					})
+					.catch((err) => {
+						// Malformated JSON caught here
+						console.error("Import to Universe Error: ", err);
+					});
+				}
+				
+				/*
 				if(!this.importing) {
 					Vue.set(this, "importMessage", null);
 					Vue.set(this, "importing", true);
@@ -124,29 +146,30 @@
 							Vue.set(this, "toImport", j);
 							Vue.set(this, "imported", 0);
 							Vue.set(this, "skipped", 0);
+							Vue.set(this, "failed", 0);
 							this.importedIDs.splice(0);
 							this.skippedIDs.splice(0);
+							this.failedIDs.splice(0);
 
 							keys.forEach((key) => {
 								value[key].forEach((record) => {
+									// Level class type properties
 									record._class = record._class || key;
 									record._type = record._type || key;
-									if(this.debug || this.universe.debugConnection) {
-										console.log("Initiating Import: ", record);
-									}
 									if(chain) {
-										chain = chain.then((msg) => {
-											if(this.debug || this.universe.debugConnection) {
-												console.log("Imported: ", msg);
-											}
-											Vue.set(this, "imported", this.imported + 1);
-										}).then(() => {
+										chain = chain.then(() => {
 											if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
+												if(this.debug || this.universe.debugConnection) {
+													console.log("Importing[" + record.id + "]");
+												}
 												this.importedIDs.push(record);
 												record._class = key;
 												record._type = key;
 												return this.universe.promisedSend("modify:" + record._class, record);
 											} else {
+												if(this.debug || this.universe.debugConnection) {
+													console.log("Skipping[" + record.id + "]");
+												}
 												this.skippedIDs.push(record);
 												Vue.set(this, "skipped", this.skipped + 1);
 												return null;
@@ -160,31 +183,47 @@
 											chain = new Promise((done) => {done();});
 										}
 									}
-								});
-								if(chain) {
-									chain.then(() => {
-										Vue.set(this, "importing", false);
-										Vue.set(this, "importIcon", "fas fa-check rs-light-green");
-										if(this.importOverwrites) {
-											Vue.set(this, "importMessage", "Complete: Imported " + this.toImport);
-										} else {
-											Vue.set(this, "importMessage", "Complete: Imported " + this.toImport + " (Skipped: " + this.skipped + ")");
+									chain = chain.then((msg) => {
+										if(this.debug || this.universe.debugConnection) {
+											console.log(" > Finished |", record);
 										}
-										Vue.set(this, "importMessageType", "Success");
-									}).catch((error) => {
-										console.error("Import Error: ", error);
-										Vue.set(this, "importing", false);
-										Vue.set(this, "importIcon", "fas fa-exclamation-triangle rs-light-red");
-										Vue.set(this, "importMessage", error.message);
-										Vue.set(this, "importMessageType", "Error");
+										Vue.set(this, "imported", this.imported + 1);
+									}).catch((err) => {
+										console.error(" > Failed |", record);
+										this.failedIDs.push(record);
 									});
-								} else {
-									Vue.set(this, "importing", false);
-								}
+								});
 							});
+							if(chain) {
+								chain.then(() => {
+									Vue.set(this, "importing", false);
+									Vue.set(this, "importIcon", "fas fa-check rs-light-green");
+									if(this.importOverwrites) {
+										Vue.set(this, "importMessage", "Complete: Imported " + this.toImport);
+									} else {
+										Vue.set(this, "importMessage", "Complete: Imported " + this.toImport + " (Skipped: " + this.skipped + ")");
+									}
+									Vue.set(this, "importMessageType", "Success");
+									if(this.debug || this.universe.debugConnection) {
+										console.warn("Import Completed");
+									}
+								}).catch((error) => {
+									console.error("Import Error: ", error);
+									Vue.set(this, "importing", false);
+									Vue.set(this, "importIcon", "fas fa-exclamation-triangle rs-light-red");
+									Vue.set(this, "importMessage", error.message);
+									Vue.set(this, "importMessageType", "Error");
+									if(this.debug || this.universe.debugConnection) {
+										console.error("Import Failed");
+									}
+								});
+							} else {
+								Vue.set(this, "importing", false);
+							}
 						});
 					}
 				}
+				*/
 			},
 			"stopUniverse": function() {
 				this.universe.send("stop");

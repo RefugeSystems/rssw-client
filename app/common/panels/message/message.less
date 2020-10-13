@@ -18,8 +18,35 @@
 			margin: 5px 0px;
 		}
 		
+		.message {
+			min-width: 200px;
+		}
+		
 		.date {
 			
+		}
+		
+		.progression {
+			position: relative;
+			overflow: hidden;
+			color: @rsWhite;
+			border: 2px solid @rsGray;
+			
+			.progression-bar {
+				position: absolute;
+				height: 50px;
+				width: 0px;
+				transition: width .5s;
+				background-color: @rsDarkGreen;
+				z-index: 1;
+			}
+			
+			.progress-readout {
+				position: relative;
+				text-align: center;
+				line-height: 26px;
+				z-index: 5;
+			}
 		}
 	}
 	

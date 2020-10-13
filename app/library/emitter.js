@@ -166,14 +166,17 @@ class EventEmitter {
 		
 		listeners = this._onceListeners[event];
 		if(listeners && listeners.length) {
-			for(x=0; x<listeners.length; x++) {
-				try {
-					listeners[x](data);
-				} catch(exception) {
-					rsSystem.log.warn(exception);
-				}
-			}
-			listeners.splice(0, listeners.length);
+			listeners.forEach((listener) => {
+				// Remove "once" listeners being invoking to account for re-emission of the event
+				setTimeout(() => {
+					try {
+						listener(data);
+					} catch(exception) {
+						rsSystem.log.warn(exception);
+					}
+				}, 0);
+			});
+			listeners.splice(0);
 		}
 
 		// Needs revised but currently unused
