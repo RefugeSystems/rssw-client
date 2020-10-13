@@ -158,7 +158,7 @@
 					if(!copy) {
 						value.id = copyID;
 					} else if(copy.template && this.state.building[this.state.current].parent !== copy.id && (this.$route.params.oid !== copy.id || (this.$route.params.oid === copy.id && this.$route.query.copy === "true"))) {
-						console.log("> Template");
+//						console.log("> Template");
 						value = {};
 						value.parent = copy.id;
 						value.id = copy.id + ":" + Date.now();
@@ -167,7 +167,7 @@
 							if(copy.randomize_name_dataset && (buffer = this.universe.indexes.dataset.index[copy.randomize_name_dataset])) {
 								buffer = new NameGenerator(buffer.set);
 							} else if(copy.race) {
-								console.log("Copying by Race");
+								// console.log("Copying by Race");
 								buffer = this.getGenerator(copy.race);
 							}
 							if(copy.randomize_name_prefix) {

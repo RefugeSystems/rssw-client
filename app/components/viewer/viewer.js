@@ -408,7 +408,7 @@
 				} else {
 					for(x=0; !set && x<this.availablePOIs.length; x++) {
 						buffer = this.availablePOIs[x];
-						console.warn("Searching[" + buffer.id + "]: ", buffer);
+						// console.warn("Searching[" + buffer.id + "]: ", buffer);
 						if(buffer.x && buffer.y && this.testSearchCriteria(buffer._search, this.search_criteria)) {
 							Vue.set(this, "focusedLocation", buffer.id);
 							this.centerView(buffer);
@@ -602,11 +602,11 @@
 
 				buffer = event.target.getAttribute("data-id") || event.target.parentNode.getAttribute("data-id");
 				if(buffer && (buffer = this.universe.index.index[buffer]) && buffer.x && buffer.y) {
-					console.log("Buffer: ", buffer);
+					// console.log("Buffer: ", buffer);
 					xc = this.image.width * buffer.x/100;
 					yc = this.image.height * buffer.y/100;
 				}
-				console.log("Open Actions[" + xc + ", " + yc + "]: ", event);
+				// console.log("Open Actions[" + xc + ", " + yc + "]: ", event);
 
 				if(event.ctrlKey) {
 					this.appendPath(xc/this.image.width*100, yc/this.image.height*100);
@@ -782,7 +782,7 @@
 
 						length = rsSystem.math.distance.points2D(p1, p2) / (1 + .1 * this.state.image.zoom);
 						length = Math.floor(length + .5);
-						console.log("Set Length: " + length);
+						// console.log("Set Length: " + length);
 						length = (this.state.distance * (rsSystem.math.distance.convert[this.state.distance_unit] || 1)) / length;
 						if(!isNaN(length)) {
 							this.location.commit({
@@ -853,7 +853,7 @@
 				if(this.state.path_fill) {
 					buffer = this.universe.indexes.location.index[this.state.path_fill];
 					if(buffer && this.player.master) {
-						console.log("Update Path[" + buffer.id + "]: ", buffer);
+						// console.log("Update Path[" + buffer.id + "]: ", buffer);
 						buffer.appendPath(x, y);
 					}
 				}
