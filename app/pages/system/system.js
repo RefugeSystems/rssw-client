@@ -33,6 +33,9 @@
 			data.imported = 0;
 			data.skipped = 0;
 
+			this.importedIDs = [];
+			this.skippedIDs = [];
+
 			return data;
 		},
 		"mounted": function() {
@@ -121,6 +124,8 @@
 							Vue.set(this, "toImport", j);
 							Vue.set(this, "imported", 0);
 							Vue.set(this, "skipped", 0);
+							this.importedIDs.splice(0);
+							this.skippedIDs.splice(0);
 
 							keys.forEach((key) => {
 								value[key].forEach((record) => {
@@ -137,10 +142,12 @@
 											Vue.set(this, "imported", this.imported + 1);
 										}).then(() => {
 											if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
+												this.importedIDs.push(record);
 												record._class = key;
 												record._type = key;
 												return this.universe.promisedSend("modify:" + record._class, record);
 											} else {
+												this.skippedIDs.push(record);
 												Vue.set(this, "skipped", this.skipped + 1);
 												return null;
 											}
@@ -165,6 +172,7 @@
 										}
 										Vue.set(this, "importMessageType", "Success");
 									}).catch((error) => {
+										console.error("Import Error: ", error);
 										Vue.set(this, "importing", false);
 										Vue.set(this, "importIcon", "fas fa-exclamation-triangle rs-light-red");
 										Vue.set(this, "importMessage", error.message);
