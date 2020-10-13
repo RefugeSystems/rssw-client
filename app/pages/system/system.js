@@ -137,6 +137,8 @@
 											Vue.set(this, "imported", this.imported + 1);
 										}).then(() => {
 											if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
+												record._class = key;
+												record._type = key;
 												return this.universe.promisedSend("modify:" + record._class, record);
 											} else {
 												Vue.set(this, "skipped", this.skipped + 1);

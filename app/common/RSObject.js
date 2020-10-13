@@ -321,7 +321,7 @@ class RSObject extends EventEmitter {
 		}
 
 		json._class = this._class;
-		json._type = this._type;
+		json._type = this._class || this._type;
 
 		return json;
 	}

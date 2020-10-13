@@ -13,12 +13,6 @@
 		"mixins": [
 			rsSystem.components.StorageManager
 		],
-		"mounted": function() {
-			rsSystem.register(this);
-			if(this.$route.fullPath !== "/") {
-				this.connect();
-			}
-		},
 		"data": function() {
 			var data = {};
 
@@ -29,8 +23,25 @@
 				"username": "",
 				"address": ""
 			});
-
+			
 			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+			if(this.$route.hash !== "") {
+				this.connect();
+			}
+			
+			if(this.$route.query.address) {
+				Vue.set(this.store, "address", this.$route.query.address);
+				this.$emit("message", {
+					"class": "rsbd-orange",
+					"icon": "fas fa-exclamation-triangle",
+					"heading": "Connection Address Set",
+					"text": "The connection address has been updated to \"" + this.$route.query.address + "\" based on the received query information from the URL provided."
+				});
+				this.$router.push("/");
+			}
 		},
 		"methods": {
 			"toggleSecure": function() {

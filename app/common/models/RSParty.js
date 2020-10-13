@@ -24,7 +24,7 @@ class RSParty extends RSObject {
 				speed = entity.speed || 0;
 				for(x=1; x<this.entity.length; x++) {
 					entity = this.universe.indexes.entity.index[this.entity[x]];
-					if(!isNaN(entity.speed) && entity.speed < speed) {
+					if(entity && !isNaN(entity.speed) && entity.speed < speed) {
 						speed = entity.speed || 0;
 					}
 				}

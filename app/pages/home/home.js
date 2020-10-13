@@ -19,6 +19,7 @@ rsSystem.component("RSHome", {
 		var data = {};
 
 		data.messageHeading = "";
+		data.messageClass = "";
 		data.messageIcon = "";
 		data.message = "";
 		data.state = 0;
@@ -33,8 +34,18 @@ rsSystem.component("RSHome", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"receiveMessage": function(message) {
+			if(message) {
+				Vue.set(this, "messageClass", message.classes || "");
+				Vue.set(this, "messageIcon", message.icon);
+				Vue.set(this, "messageHeading", message.heading);
+				Vue.set(this, "message", message.text || message);
+			} else {
+				Vue.set(this, "message", null);
+			}
+		},
 		"connect": function(event) {
-			if(location.hash !== "#/" && this.universe && this.universe.loggedOut) {
+			if(this.$route.hash !== "" && this.universe && this.universe.loggedOut) {
 				this.universe.loggedOut = false;
 			} else {
 				Vue.set(this, "universe", new RSUniverse({}));
@@ -42,6 +53,7 @@ rsSystem.component("RSHome", {
 				Vue.set(this, "state", 1);
 
 				this.universe.$on("disconnected", () => {
+					Vue.set(this, "messageClass", "");
 					Vue.set(this, "messageIcon", "fas fa-info-circle rs-light-blue");
 					Vue.set(this, "messageHeading", "Disconnected");
 					Vue.set(this, "message", "Disconnected from the server");
@@ -49,6 +61,7 @@ rsSystem.component("RSHome", {
 				});
 				this.universe.$on("badlogin", () => {
 					this.universe.loggedOut = true;
+					Vue.set(this, "messageClass", "");
 					Vue.set(this, "messageIcon", "fas fa-exclamation-triangle rs-light-red");
 					Vue.set(this, "messageHeading", "Login Failed");
 					Vue.set(this, "message", "Bad Username or Passcode");
