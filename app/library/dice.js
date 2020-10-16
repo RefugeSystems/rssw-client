@@ -6,7 +6,7 @@
 var Dice = (function() {
 
 	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|hit|evade|a|b|c|d|p|s|f|h|e)[ \+\/-]/g,
-		calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/,
+		calculateSecurityRegEx = /^[<>0-9\(\)+-\/\*]*$/,
 		dndStatCurve = true,
 		spaces = / /g,
 		space = " ",
@@ -71,13 +71,19 @@ var Dice = (function() {
 	];
 
 	var calculate = function(expression) {
+		if(Dice.debug) {
+			console.log("Dice Calculate: " + expression);
+		}
 		if(expression && expression[0] === "+") { // Other operators would expressly be an issue
 			expression = expression.substring(1);
 		}
 
-		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression.trim())) {
 			try {
-				return parseInt(Math.floor(eval(expression)));
+				if(Dice.debug) {
+					console.log("Dice Evaluating: " + expression);
+				}
+				return Math.floor(eval(expression));
 			} catch(ignored) {
 				return expression;
 			}
@@ -161,7 +167,14 @@ var Dice = (function() {
 		"hit": "h",
 		"h": "h",
 		"evade": "e",
-		"e": "e"
+		"e": "e",
+		"d100": "d100",
+		"d20": "d20",
+		"d12": "d12",
+		"d10": "d10",
+		"d8": "d8",
+		"d6": "d6",
+		"d4": "d4"
 	};
 
 	var diceRoll = function(dice) {
@@ -183,7 +196,7 @@ var Dice = (function() {
 		var x, sCasting, tCasting, regex, buffer = [], dice = {}, roll = {};
 		if(!expression) {
 			return roll;
-		} else {
+		} else if(typeof(expression) !== "string") {
 			expression = expression.toString();
 		}
 
@@ -246,6 +259,9 @@ var Dice = (function() {
 			dice[diceMap[x[2]]] = dice[diceMap[x[2]]]?dice[diceMap[x[2]]] + "+" + x[1]:x[1];
 			x = diceReductionRegEx.exec(expression);
 		}
+		if(Dice.debug) {
+			console.log("Dice Clean Expression: " + expression, buffer);
+		}
 		for(x=0; x<buffer.length; x++) {
 			expression = expression.replace(buffer[x], "");
 		}
@@ -253,7 +269,7 @@ var Dice = (function() {
 //		console.log("Dice Expression: " + JSON.stringify(dice, null, 4));
 		for(x=0; x<diceOrder.length; x++) {
 			if(dice[diceOrder[x]]) {
-				roll[diceOrder[x]] = parseInt(calculate(dice[diceOrder[x]]));
+				roll[diceOrder[x]] = calculate(dice[diceOrder[x]]);
 			}
 		}
 		return roll;
