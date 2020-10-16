@@ -34,6 +34,7 @@
 			data.skipped = 0;
 			data.failed = 0;
 
+			data.connectedPlayers = [];
 			data.importedIDs = [];
 			data.skippedIDs = [];
 			data.failedIDs = [];
@@ -110,7 +111,7 @@
 			},
 			"importUniverse": function() {
 				var input = $(this.$el).find("#importFileSelection");
-				
+
 				if(!this.universe.importing.active && input && input.length && input[0].files.length) {
 					this.readFile(input[0].files[0])
 					.then((result) => {
@@ -121,109 +122,6 @@
 						console.error("Import to Universe Error: ", err);
 					});
 				}
-				
-				/*
-				if(!this.importing) {
-					Vue.set(this, "importMessage", null);
-					Vue.set(this, "importing", true);
-					var input = $(this.$el).find("#importFileSelection"),
-						chain,
-						value,
-						keys,
-						i,
-						j;
-
-					if(input && input.length && input[0].files.length) {
-						this.readFile(input[0].files[0])
-						.then((result) => {
-							value = JSON.parse(result.data);
-							keys = Object.keys(value);
-
-							j = 0;
-							for(i=0; i<keys.length; i++) {
-								j += (value[keys[i]]?value[keys[i]].length:0) || 0;
-							}
-							Vue.set(this, "toImport", j);
-							Vue.set(this, "imported", 0);
-							Vue.set(this, "skipped", 0);
-							Vue.set(this, "failed", 0);
-							this.importedIDs.splice(0);
-							this.skippedIDs.splice(0);
-							this.failedIDs.splice(0);
-
-							keys.forEach((key) => {
-								value[key].forEach((record) => {
-									// Level class type properties
-									record._class = record._class || key;
-									record._type = record._type || key;
-									if(chain) {
-										chain = chain.then(() => {
-											if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
-												if(this.debug || this.universe.debugConnection) {
-													console.log("Importing[" + record.id + "]");
-												}
-												this.importedIDs.push(record);
-												record._class = key;
-												record._type = key;
-												return this.universe.promisedSend("modify:" + record._class, record);
-											} else {
-												if(this.debug || this.universe.debugConnection) {
-													console.log("Skipping[" + record.id + "]");
-												}
-												this.skippedIDs.push(record);
-												Vue.set(this, "skipped", this.skipped + 1);
-												return null;
-											}
-										});
-									} else {
-										if(this.importOverwrites || !this.universe.indexes[record._class].index[record.id]) {
-											chain = this.universe.promisedSend("modify:" + record._class, record);
-										} else {
-											Vue.set(this, "skipped", this.skipped + 1);
-											chain = new Promise((done) => {done();});
-										}
-									}
-									chain = chain.then((msg) => {
-										if(this.debug || this.universe.debugConnection) {
-											console.log(" > Finished |", record);
-										}
-										Vue.set(this, "imported", this.imported + 1);
-									}).catch((err) => {
-										console.error(" > Failed |", record);
-										this.failedIDs.push(record);
-									});
-								});
-							});
-							if(chain) {
-								chain.then(() => {
-									Vue.set(this, "importing", false);
-									Vue.set(this, "importIcon", "fas fa-check rs-light-green");
-									if(this.importOverwrites) {
-										Vue.set(this, "importMessage", "Complete: Imported " + this.toImport);
-									} else {
-										Vue.set(this, "importMessage", "Complete: Imported " + this.toImport + " (Skipped: " + this.skipped + ")");
-									}
-									Vue.set(this, "importMessageType", "Success");
-									if(this.debug || this.universe.debugConnection) {
-										console.warn("Import Completed");
-									}
-								}).catch((error) => {
-									console.error("Import Error: ", error);
-									Vue.set(this, "importing", false);
-									Vue.set(this, "importIcon", "fas fa-exclamation-triangle rs-light-red");
-									Vue.set(this, "importMessage", error.message);
-									Vue.set(this, "importMessageType", "Error");
-									if(this.debug || this.universe.debugConnection) {
-										console.error("Import Failed");
-									}
-								});
-							} else {
-								Vue.set(this, "importing", false);
-							}
-						});
-					}
-				}
-				*/
 			},
 			"stopUniverse": function() {
 				this.universe.send("stop");
@@ -245,7 +143,18 @@
 				return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 			},
 			"update": function() {
+				var buffer,
+					x;
+
 				Vue.set(this.knownErrors, "navigator", this.universe.indexes.note.index[navigator.userAgent.sha256()] || this.universe.indexes.note.index[navigator.userAgent.toLowerCase().sha256()]);
+
+				this.connectedPlayers.splice(0);
+				for(x=0; x<this.universe.indexes.player.listing.length; x++) {
+				    if(this.universe.indexes.player.listing[x] && this.universe.indexes.player.listing[x].connections > 0) {
+				        this.connectedPlayers.push(this.universe.indexes.player.listing[x]);
+				    }
+				}
+
 				this.$forceUpdate();
 			}
 		},

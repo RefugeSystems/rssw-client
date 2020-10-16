@@ -15,7 +15,7 @@
 				<span class="fas fa-bug"></span>
 			</button>
 		</h2>
-		<table class="browser">
+		<table class="display browser">
 			<tr>
 				<td class="align-right">Browser:</td>
 				<td>{{navigator.name}}</td>
@@ -37,7 +37,7 @@
 		</table>
 
 		<h2>Connection Information</h2>
-		<table class="versions">
+		<table class="display versions">
 			<tr>
 				<td class="align-right">Connected At:</td>
 				<td>{{getDate(universe.connection.connectMark)}}</td>
@@ -79,6 +79,19 @@
 			<tr>
 				<td class="align-right">Reconnects:</td>
 				<td>{{universe.connection.reconnectAttempts}}</td>
+			</tr>
+		</table>
+
+		<h2>Connected Players</h2>
+		<table class="display players">
+			<tr v-for="player in connectedPlayers":id="player.id">
+				<td class="align-right">{{player.username}}</td>
+				<td>
+					<span v-if="player.master" class="fas fa-chess-king"></span>
+					<span v-else class="fas fa-user"></span>
+				</td>
+				<td>{{player.name}}</td>
+				<td v-if="player.entity">as <span class="rs-orange">{{universe.indexes.entity.index[player.entity]?universe.indexes.entity.index[player.entity].name:"Error[" + player.entity + "]"}}</span></td>
 			</tr>
 		</table>
 

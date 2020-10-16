@@ -18,10 +18,32 @@ class RSSession extends RSObject {
 		if(isNaN(this.destiny_dark)) {
 			this.destiny_dark = 0;
 		}
+		if(isNaN(this.active_players)) {
+			this.active_players = 0;
+		}
 	}
 
 	get name() {
 		return "Session " + this._coreData.name;
+	}
+
+	recalculateHook() {
+		this.countPlayers();
+	}
+
+	countPlayers() {
+		var players = 0,
+			x;
+
+		for(x=0; x<this.universe.indexes.player.listing.length; x++) {
+		    if(this.universe.indexes.player.listing[x].connections > 0) {
+		        players++;
+		    }
+		}
+
+		if(players !== this.active_players) {
+			this.active_players = players;
+		}
 	}
 
 	rollDestiny() {
@@ -31,11 +53,12 @@ class RSSession extends RSObject {
 			roll,
 			x;
 
-		for(x=0; x<this.universe.indexes.player.listing.length; x++) {
-		    if(this.universe.indexes.player.listing[x].connections > 0) {
-		        players++;
-		    }
+		if(this.active_players === 0) {
+			this.countPlayers();
 		}
+
+		// Remove Master
+		players = this.active_players - 1;
 
 		for(x=0; x<players; x++) {
 			roll = Dice.calculateDiceRoll("1f");
