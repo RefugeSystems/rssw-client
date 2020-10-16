@@ -1,6 +1,6 @@
 
 (function() {
-	
+
 	var dataSource,
 		related;
 
@@ -11,7 +11,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
@@ -32,6 +32,18 @@
 		"label": "Game Time",
 		"property": "time",
 		"type": "number"
+	}, {
+		"label": "Starting Destiny",
+		"property": "destiny_starting",
+		"type": "text"
+	}, {
+		"label": "Light",
+		"property": "destiny_light",
+		"type": "number"
+	}, {
+		"label": "Dark",
+		"property": "destiny_dark",
+		"type": "number"
 	},
 	related,
 	{
@@ -43,7 +55,7 @@
 		"property": "master_note",
 		"type": "textarea"
 	}];
-	
+
 	rsSystem.component("NounFieldsSession", {
 		"inherit": true,
 		"props": {
@@ -64,11 +76,11 @@
 		},
 		"methods": {
 			"update": function() {
-				
+
 			}
 		},
 		"beforeDestroy": function() {
-			
+
 		}
 	});
 })();

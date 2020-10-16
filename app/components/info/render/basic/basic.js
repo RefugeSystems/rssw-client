@@ -435,6 +435,7 @@
 			data.description = null;
 			data.calculated = {};
 			data.holdNote = null;
+			data.session = null;
 			data.profile = null;
 			data.image = null;
 			data.note = null;
@@ -1097,6 +1098,21 @@
 					"involved": this.id
 				});
 			},
+			"showDestinyUsage": function() {
+				// return this.session &&
+				// 	((this.base && ((this.base.is_hostile && this.session.destiny_dark > 0) || (!this.base.is_hostile && this.session.destiny_light > 0))) ||
+				// 	(!this.base && this.player.master && this.session.destiny_dark > 0));
+			},
+			"useDestinyToken": function(darkSide) {
+				if(this.session) {
+					if(darkSide && this.session.destiny_dark > 0) {
+						console.log("use");
+						this.universe.send("destiny:dark");
+					} else if(!darkSide && this.session.destiny_light > 0) {
+						this.universe.send("destiny:light");
+					}
+				}
+			},
 			"showAllLocations": function() {
 				this.shownLocations.splice(0);
 				for(var x=0; x<this.locations.length; x++) {
@@ -1150,6 +1166,10 @@
 					y,
 					z;
 
+				buffer = this.universe.indexes.setting.index["setting:current:session"];
+				if(buffer) {
+					Vue.set(this, "session", this.universe.indexes.session.index[buffer.value]);
+				}
 				if(!isNaN(this.record.durability)) {
 					Vue.set(this, "adjustingDurability", this.record.durability);
 				}
@@ -1371,6 +1391,7 @@
 						}
 					}
 				}
+				this.relatedKnowledge.sortBy("name");
 
 				this.relatedAbilities.splice(0);
 				if(this.record._class === "archetype") {
@@ -1381,6 +1402,7 @@
 						}
 					}
 				}
+				this.relatedAbilities.sortBy("name");
 
 				this.relatedArchetypes.splice(0);
 				if(this.record._class === "archetype") {
@@ -1391,6 +1413,7 @@
 						}
 					}
 				}
+				this.relatedArchetypes.sortBy("name");
 
 				this.availableEntities.splice(0);
 				for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
@@ -1398,6 +1421,7 @@
 						this.availableEntities.push(this.universe.indexes.entity.listing[x]);
 					}
 				}
+				this.availableEntities.sortBy("name");
 
 				this.equipped.splice(0);
 				if(this.record.equipped) {

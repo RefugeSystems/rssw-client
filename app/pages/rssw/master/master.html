@@ -26,6 +26,9 @@
 					</select>
 					<button class="flat rs-yellow far constrain" :class="state.constrained?'fa-check-square':'fa-square'" v-on:click="toggleConstrained()"></button>
 				</div>
+				<div class="control destiny">
+					<rssw-tokens-destiny :universe="universe"></rssw-tokens-destiny>
+				</div>
 				<div class="control results fill">
 					<rssw-master-results v-on:selecting="receiveRoll($event)" :universe="universe" :user="user" :player="player"></rssw-master-results>
 				</div>

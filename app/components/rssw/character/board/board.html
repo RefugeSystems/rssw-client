@@ -1,5 +1,5 @@
 <div class="rs-component rssw component-character-board">
-	<div class="container flow-h inline">
+	<div class="container flex h wrap justified">
 		<div class="stat soak flow-v inline">
 			<div class="label" v-on:click="infoStat('injury')">
 				<span class="ra ra-bleeding-hearts"></span>
@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="stat wounds flow-v inline">
 			<div class="label" v-if="character.classification == 'base'" v-on:click="infoStat('wounds:building')">
 				<span class="ra ra-cracked-shield"></span>
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="stat wounds flow-v inline">
 			<div class="label" v-if="character.classification == 'base'" v-on:click="infoStat('strain:building')">
 				<span class="ra ra-reactor"></span>
@@ -66,7 +66,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="stat soak flow-v inline">
 			<div class="label" v-on:click="infoStat('soak')">
 				<span class="fas fa-shield"></span>
@@ -85,7 +85,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="stat soak flow-v inline">
 			<div class="label" v-on:click="infoStat('defense:ranged')">
 				<span class="fas fa-user-shield"></span>
@@ -104,7 +104,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="stat soak flow-v inline">
 			<div class="label" v-on:click="infoStat('defense:melee')">
 				<span class="fas fa-user-shield"></span>

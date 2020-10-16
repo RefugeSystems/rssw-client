@@ -153,6 +153,18 @@
 		<input class="experience" type="number" v-model.number="experience" v-on:change="changed('xp', experience)"/>
 	</div>
 	-->
+	<div class="property destiny">
+		<span class="icon swg swg-phoenix"></span>
+		<span class="label">Destiny:</span>
+		<button v-for="token in destinyTokens" class="token-container" v-on:click="showTokenInfo()">
+			<span class="backdrop fas fa-hexagon rs-white"></span>
+			<span class="foreground fas fa-jedi rs-dark-blue"></span>
+		</button>
+		<button v-for="token in sithTokens" class="token-container" v-on:click="showTokenInfo()">
+			<span class="backdrop fas fa-hexagon rs-black"></span>
+			<span class="foreground fab fa-sith rs-red"></span>
+		</button>
+	</div>
 	<div class="property credits">
 		<span class="icon fad fa-coins"></span>
 		<span class="label">Credits:</span>

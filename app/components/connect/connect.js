@@ -18,20 +18,27 @@
 
 			data.passcode = "";
 			data.store = this.loadStorage(storageKey, {
-				"secure": false,
+				"secure": undefined,
 				"passcode": "",
 				"username": "",
 				"address": ""
 			});
-			
+
+			if(!data.store.address) {
+				data.store.address = location.host;
+			}
+			if(data.store.secure === undefined) {
+				data.store.secure = location.protocol === "http:"?false:true;
+			}
+
 			return data;
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			if(this.$route.path !== "/") {
+			if(this.$route.path !== "/" && this.store.username && this.store.address) {
 				this.connect();
 			}
-			
+
 			if(this.$route.query.address) {
 				Vue.set(this.store, "address", this.$route.query.address);
 				this.$emit("message", {

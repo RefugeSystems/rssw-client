@@ -48,7 +48,7 @@ class RSAction extends RSObject {
 			x;
 
 		this._targeted.splice(0);
-		if(this.response) {
+		if(this.response && RSAction.response) {
 			for(x=0; x<this.response.length; x++) {
 				response = RSAction.response.index[this.response[x]];
 				if(response && response.target) {

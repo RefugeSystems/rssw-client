@@ -292,6 +292,23 @@
 		</div>
 	</div>
 
+	<!-- TODO: Better support for "Tokens" however this doesn't seem to warrent its own class
+			as most other uses seem to fall to effect -->
+	<div v-if="session && (base || player.master) && (record.id === 'knowledge:token:destiny' || (record._class === 'session' && player.master))">
+		<div class="control" v-if="session && (base && ((base.is_hostile && session.destiny_dark > 0) || (!base.is_hostile && session.destiny_light > 0)))">
+			<button class="action direct" v-on:click="useDestinyToken(base.is_hostile)">
+				<span class="" :class="base.is_hostile?'fab fa-sith':'fas fa-jedi'"></span>
+				<span>Use {{base.is_hostile?'Dark':'Light'}} Destiny ({{base.is_hostile?session.destiny_dark:session.destiny_light}} Points)</span>
+			</button>
+		</div>
+		<div class="control" v-else-if="session && player.master && session.destiny_dark > 0">
+			<button class="action direct" v-on:click="useDestinyToken(true)">
+				<span class="fag fa-sith"></span>
+				<span>Use Dark Destiny ({{session.destiny_dark}} Points)</span>
+			</button>
+		</div>
+	</div>
+
 	<div v-if="actions.length">
 		<h3>Actions</h3>
 		<div class="control" v-for="action in actions">
@@ -439,6 +456,13 @@
 			<button class="action direct" v-on:click="openCombatEvent()">
 				<span class="fas fa-swords"></span>
 				<span>View Combat Event</span>
+			</button>
+		</div>
+
+		<div class="control flex h" v-if="record._class === 'session'">
+			<button class="action direct" v-on:click="record.rollDestiny()">
+				<span class="fas fa-dice"></span>
+				<span>Roll Destiny</span>
 			</button>
 		</div>
 

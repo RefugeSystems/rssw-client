@@ -2,9 +2,15 @@
 	display: inline-block;
 	position: relative;
 	user-select: none;
-	min-width: 360px;
+	max-width: 100%;
 	color: white;
-	overflow: hidden;
+	overflow: auto;
+
+	.table-container {
+		position: relative;
+		overflow: hidden;
+		width: fit-content;
+	}
 
 	table {
 		position: relative;

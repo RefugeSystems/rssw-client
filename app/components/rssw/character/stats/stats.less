@@ -2,16 +2,17 @@
 
 
 	.stats {
-		display: inline-flex;
+		display: flex;
 		flex-direction: row;
 		text-align: center;
-		min-width: 510px;
+		/*min-width: 510px;*/
 		justify-content: space-between;
-		
+		flex-wrap: wrap;
+
 		label {
 			display: inline-block;
 		}
-		
+
 		.stat {
 			display: flex;
 			flex-direction: column;
@@ -23,7 +24,8 @@
 			border-radius: 5px;
 			padding: 3px;
 			margin: 3px;
-			
+			flex-grow: 1;
+
 			.bubble {
 				display: flex;
 				justify-content: center;
@@ -35,14 +37,14 @@
 				border: 1px solid @rsBlue;
 				border-radius: 30px;
 			}
-			
+
 			.value {
 				color: @rsBlack;
 				font-size: 20px;
 			}
-			
+
 			.label {
-				
+
 			}
 		}
 	}

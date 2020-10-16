@@ -13,6 +13,8 @@
 
 	var specializationText = "";
 
+	var token = 0;
+
 	rsSystem.component("rsswCharacterInfo", {
 		"inherit": true,
 		"mixins": [
@@ -61,8 +63,11 @@
 
 			data.piloting = null;
 			data.location = null;
+			this.session = null;
 			data.inside = null;
 
+			data.destinyTokens = [];
+			data.sithTokens = [];
 			data.abilities = [];
 			data.inventory = [];
 			data.loadout = [];
@@ -287,11 +292,42 @@
 				change[property] = value;
 				this.character.commit(change);
 			},
+			"showTokenInfo": function() {
+				this.showInfo("knowledge:token:destiny");
+			},
+			"updateFromSession": function() {
+				if(this.session) {
+					while(this.session.destiny_light > this.destinyTokens.length) {
+						this.destinyTokens.push(token++);
+					}
+					if(this.session.destiny_light < this.destinyTokens.length) {
+						this.destinyTokens.splice(this.session.destiny_light);
+					}
+					while(this.session.destiny_dark > this.sithTokens.length) {
+						this.sithTokens.push(token++);
+					}
+					if(this.session.destiny_dark < this.sithTokens.length) {
+						this.sithTokens.splice(this.session.destiny_dark);
+					}
+				}
+			},
 			"updateFromUniverse": function() {
 				var buffer,
 					hold,
 					x;
 
+				buffer = this.universe.indexes.setting.index["setting:current:session"];
+				if(buffer) {
+					buffer = this.universe.indexes.session.index[buffer.value];
+					if(buffer != this.session) {
+						if(this.session) {
+							this.session.$off("modified", this.updateFromSession);
+						}
+						Vue.set(this, "session", buffer);
+						this.session.$on("modified", this.updateFromSession);
+						this.updateFromSession();
+					}
+				}
 				for(x=0; !hold && x<this.universe.indexes.entity.listing.length; x++) {
 					buffer = this.universe.indexes.entity.listing[x];
 					if(buffer.classification === "ship" && buffer.entity === this.character.id) {
@@ -426,6 +462,9 @@
 			}
 		},
 		"beforeDestroy": function() {
+			if(this.session) {
+				this.session.$off("modified", this.updateFromSession);
+			}
 			this.universe.$off("model:modified", this.updateFromUniverse);
 			this.character.$off("modified", this.update);
 		},

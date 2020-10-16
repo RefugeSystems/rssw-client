@@ -1,10 +1,9 @@
 .rs-component.rssw.component-character-board {
-	
+
 	.container {
-		min-width: 510px;
 		justify-content: space-between;
 	}
-	
+
 	.stat {
 		/*width: 90px;*/
 		overflow: hidden;
@@ -12,33 +11,33 @@
 		border-radius: 5px;
 		margin: 3px;
 		flex-grow: 2;
-		
+
 		.label {
 			text-align: center;
 			width: 100%;
 			margin: 2px 0px 0px 0px;
 			white-space: nowrap;
 		}
-		
+
 		.value {
 			width: 50%;
 			background-color: transparent;
 			color: @rsWhite;
 			flex-grow: 1;
-			
+
 			&.paired {
 				border-bottom-right-radius: 5px;
 				background-color: @rsDarkOrange;
 				color: @rsWhite;
 			}
-			
+
 			&.solo {
 				background-color: transparent;
 				width: 100%;
 			}
 		}
 	}
-	
+
 	.display {
 		display: flex;
 		align-items: center;
@@ -46,13 +45,13 @@
 		height: 25px;
 		font-size: 16px;
 	}
-	
+
 	select {
 		color: inherit;
 		background: transparent;
 		border: 0px;
 		font-size: inherit;
-		
+
 		option {
 			color: @rsBlack;
 		}
