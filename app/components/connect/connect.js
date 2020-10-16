@@ -13,6 +13,11 @@
 		"mixins": [
 			rsSystem.components.StorageManager
 		],
+		"props": {
+			"universe": {
+				"type": Object
+			}
+		},
 		"data": function() {
 			var data = {};
 
@@ -35,8 +40,12 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			if(this.$route.path !== "/" && this.store.username && this.store.address) {
-				this.connect();
+			if(!this.universe || !this.universe.loggedOut) {
+				if(this.$route.path !== "/" && this.store.username && this.store.address) {
+					this.connect();
+				}
+			} else if(this.universe && this.universe.loggedOut) {
+				this.universe.loggedOut = false;
 			}
 
 			if(this.$route.query.address) {
