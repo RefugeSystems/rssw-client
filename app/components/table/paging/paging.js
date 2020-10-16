@@ -1,7 +1,7 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsTable
  * @constructor
  * @module Components
@@ -9,7 +9,7 @@
  */
 (function() {
 	var storageKey = "_rs_menuComponentKey";
-	
+
 	rsSystem.component("rsTablePaging", {
 		"inherit": true,
 		"mixins": [
@@ -31,7 +31,7 @@
 		},
 		"data": function() {
 			var data = {};
-			
+
 			data.lastPage = 0;
 			data.pages = [];
 
@@ -76,27 +76,27 @@
 			},
 			"update": function() {
 				this.pages.splice(0);
-				
+
 				if(this.state.paging && this.state.paging.count) {
 					var max,
 						x;
-					
+
 					Vue.set(this, "lastPage", this.state.paging.count - 1);
-					
+
 					if(this.state.paging.spread) {
-						max = Math.min(this.state.paging.current + this.state.paging.spread, this.lastPage);
+						max = Math.min(this.state.paging.current + this.state.paging.spread, this.lastPage - 1);
 						x = Math.max(this.state.paging.current - this.state.paging.spread, 1);
 					} else {
 						x = 1;
 					}
-					
+
 //					console.log("Pages: ", x, max, _p(this.state.paging));
-					
-					for(; x<max; x++) {
+
+					for(; x<=max; x++) {
 						this.pages.push(x);
 					}
 				}
-				
+
 				this.$forceUpdate();
 			}
 		},

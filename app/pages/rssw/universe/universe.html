@@ -9,12 +9,12 @@
 		<div id="anchors">
 		</div>
 
-		<div class="controls rs-component flex h wrap">
+		<div class="rs-component flex h wrap">
 			<div class="rs-component index">
-				<div class="controls">
+				<div class="table-controls">
 					<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" v-on:action="processAction"></rs-table-controls>
 
-					<select v-model="target">
+					<select v-model="target" class="table-control">
 						<option value="">No Target</option>
 						<option disabled value="div">-- Entity Divide --</option>
 						<option v-for="en in listing.entity" :value="en.id">{{en.name}}</option>
@@ -25,7 +25,7 @@
 						<option disabled value="div">-- Player Divide --</option>
 						<option v-for="pl in listing.player" :value="pl.id">{{pl.name}}</option>
 					</select>
-					<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()">
+					<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()" class="table-control">
 						<option value="">Choose Action</option>
 						<option disabled value="div">-- Dashboards --</option>
 						<option value="dashboard-ships">Dashboard: Ships</option>
@@ -48,14 +48,14 @@
 						<option value="export">Export Selection</option>
 					</select>
 
-					<select v-model="state.activeIndex">
+					<select v-model="state.activeIndex" class="table-control">
 						<option value="">All</option>
 						<option v-for="index in availableIndexes" :value="index">{{index}}</option>
 					</select>
-					<select v-model.number="state.paging.per">
+					<select v-model.number="state.paging.per" class="table-control">
 						<option v-for="spread in getSpread()" :value="spread">{{spread}}</option>
 					</select>
-					<select v-model="state.filterTemplate">
+					<select v-model="state.filterTemplate" class="table-control">
 						<option value="shown">Shown</option>
 						<option value="only">Only</option>
 						<option value="out">Out</option>

@@ -261,7 +261,13 @@
 						}
 						break;
 					case "logout":
-						this.universe.logout();
+						if(this.$route.path !== "/") {
+							this.$router.push("/").then(() => {
+								this.universe.logout();
+							});
+						} else {
+							this.universe.logout();
+						}
 						break;
 					case "none":
 						break;

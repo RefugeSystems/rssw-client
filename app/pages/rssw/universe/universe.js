@@ -170,7 +170,7 @@
 				data.state.paging.per = 20;
 				data.state.paging.current = 0;
 				data.state.paging.pages = 0;
-				data.state.paging.spread = 10;
+				data.state.paging.spread = 3;
 			}
 			if(data.state.filterTemplate === undefined) {
 				data.state.filterTemplate = "shown";
