@@ -2,6 +2,7 @@
 (function() {
 
 	var dataSource,
+		linkedLocation,
 		shipAbilities,
 		knowledges,
 		archetypes,
@@ -85,6 +86,20 @@
 		"optionLabel": "name",
 		"condition": {
 			"classification": "ship"
+		}
+	};
+	
+	linkedLocation = {
+		"label": "Floor Plan",
+		"property": "linked_location",
+		"type": "select",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"classification": {
+				"operation": "contains",
+				"oneof": ["building", "ship", "station", "base"]
+			}
 		}
 	};
 
@@ -390,14 +405,16 @@
 				"oneof": ["station", "ship", "building", "base"]
 			}
 		}
-	}, {
+	},
+	linkedLocation,
+	{
 		"label": "Required Crew",
 		"property": "required_crew",
 		"type": "number",
 		"condition": {
 			"classification": {
 				"operation": "contains",
-				"oneof": ["station", "ship", "building", "base"]
+				"oneof": ["ship"]
 			}
 		}
 	}, {
@@ -407,7 +424,7 @@
 		"condition": {
 			"classification": {
 				"operation": "contains",
-				"oneof": ["station", "ship", "building", "base"]
+				"oneof": ["ship"]
 			}
 		}
 	},
@@ -668,6 +685,7 @@
 			return data;
 		},
 		"mounted": function() {
+			linkedLocation.options = this.universe.indexes.location.listing;
 			location.options = this.universe.indexes.location.listing;
 			location.options.sortBy("name");
 			datasets.options = this.universe.indexes.dataset.listing;

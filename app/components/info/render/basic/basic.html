@@ -4,7 +4,7 @@
 		<span class="named">{{(base).name}}</span>
 	</div>
 
-	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="record.linked?record:null"></rs-render-image>
+	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="linkedLocation"></rs-render-image>
 
 	<div v-if="record.is_shop">
 		<span class="fas fa-warehouse"></span>
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 
-	<rs-render-image class="record-image" v-if="image" :image="image" :linked="record.linked?record:null"></rs-render-image>
+	<rs-render-image class="record-image" v-if="image" :image="image" :linked="linkedLocation"></rs-render-image>
 	<div v-if="record.data && record._class === 'image' && !record.linked" class="general-image">
 		<img :src="record.data" />
 	</div>

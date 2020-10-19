@@ -66,6 +66,7 @@
 			rsSystem.components.NounFieldsItemType,
 			rsSystem.components.NounFieldsLocation,
 			rsSystem.components.NounFieldsPlaylist,
+			rsSystem.components.NounFieldsMinigame,
 			rsSystem.components.NounFieldsManeuver,
 			rsSystem.components.NounFieldsAbility,
 			rsSystem.components.NounFieldsDataset,

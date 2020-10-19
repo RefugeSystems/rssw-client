@@ -119,6 +119,7 @@ var config = {
 				"RSLogLevel",
 				"RSLocation",
 				"RSManeuver",
+				"RSMinigame",
 				"RSModifier",
 				"RSPlaylist",
 				"RSUniverse",

@@ -33,7 +33,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-
+	
 	actions = {
 		"label": "Actions",
 		"property": "action",

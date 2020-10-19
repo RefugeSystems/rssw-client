@@ -190,6 +190,10 @@ class RSEntity extends RSObject {
 		} else if(this.rarity_mean !== undefined && this.rarity_mean < this.rarity_min) {
 			this.rarity_mean = this.rarity_min;
 		}
+		
+		if(this.linked_location && (buffer = this.universe.indexes.location.index[this.linked_location]) && buffer.image) {
+			this.image = buffer.image;
+		}
 	}
 
 	/**

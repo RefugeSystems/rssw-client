@@ -431,6 +431,7 @@
 			data.knowledgeLink = knowledgeLink;
 			data.displayRaw = displayRaw;
 			data.holdDescription = null;
+			data.linkedLocation = null;
 			data.restocking = false;
 			data.description = null;
 			data.calculated = {};
@@ -1510,6 +1511,23 @@
 							}
 						}
 					}
+				}
+				
+				if(this.record.linked) {
+					Vue.set(this, "linkedLocation", this.record);
+				} else if(this.record.linked_location) {
+					if((buffer = this.universe.indexes.location.index[this.record.linked_location]) && (!this.linkedLocation || this.linkedLocation.id !== buffer.id)) {
+						if(this.linkedLocation) {
+							this.linkedLocation.$off("modified", this.update);
+						}
+						Vue.set(this, "linkedLocation", buffer);
+						this.linkedLocation.$on("modified", this.update);
+					}
+				} else if(this.linkedLocation) {
+					if(this.linkedLocation.id !== this.record.id) {
+						this.linkedLocation.$off("modified", this.update);
+					}
+					Vue.set(this, "linkedLocation", null);
 				}
 
 				if(this.record.restock_base && this.player.master) {

@@ -49,6 +49,7 @@ rsSystem.registerNoun(RSSlot, "slot");
 rsSystem.registerNoun(RSSkill, "skill");
 rsSystem.registerNoun(RSStreamURL, "streamurl");
 
+rsSystem.registerNoun(RSMinigame, "minigame");
 rsSystem.registerNoun(RSWidgetConfiguration, "widgetconfiguration");
 rsSystem.registerNoun(RSWidget, "widget");
 

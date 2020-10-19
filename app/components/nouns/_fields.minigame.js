@@ -2,30 +2,47 @@
 (function() {
 
 	var dataSource,
-		indexes;
+		provided,
+		types;
 
-	indexes = {
-		"label": "Option Index",
-		"property": "option_index",
-		"type": "select",
-		"raw": true,
+	provided = {
+		"label": "Provided Items",
+		"property": "provided",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"autocomplete": true,
 		"condition": {
-			"type": {
+			"medium": {
 				"operation": "contains",
-				"oneof": ["select", "multireference"]
-			},
-			"raw": {
-				"operation": "!"
+				"oneof": ["cards", "board"]
 			}
 		}
 	};
-
+	
+	types = {
+		"label": "Used Types",
+		"property": "used_types",
+		"type": "multireference",
+		"optionValue": "id",
+		"optionLabel": "name",
+		"condition": {
+			"medium": {
+				"operation": "contains",
+				"oneof": ["cards", "board"]
+			},
+			"inventory_additions": {
+				"operation": "exists"
+			}
+		}
+	};
+	
 	dataSource = [{
 		"label": "ID",
 		"property": "id",
 		"type": "text"
 	}, {
-		"label": "name",
+		"label": "Name",
 		"property": "name",
 		"type": "text"
 	}, {
@@ -66,18 +83,42 @@
 		"label": "Is Radial?",
 		"property": "radial",
 		"type": "checkbox"
+	}, {
+		"label": "Inner Unified",
+		"property": "radial_unified",
+		"type": "number",
+		"condition": {
+			"radial": {
+				"operation": "exists"
+			}
+		}
 
 	// Entity Carried Items Used
 
 	// Game Provided Items Used
 
-	}, {
+	},{
+		"label": "Uses Inventory",
+		"property": "inventory_additions",
+		"type": "checkbox"
+	},{
+		"label": "Player Selected",
+		"property": "inventory_additions_selected",
+		"type": "checkbox"
+	}, 
+	provided,
+	types,
+	{
 		"label": "Description",
 		"property": "description",
 		"type": "textarea"
+	}, {
+		"label": "Master Notes",
+		"property": "master_note",
+		"type": "textarea"
 	}];
 
-	rsSystem.component("NounFieldsDatapoint", {
+	rsSystem.component("NounFieldsMinigame", {
 		"inherit": true,
 		"props": {
 			"universe": {
@@ -88,12 +129,13 @@
 		"data": function() {
 			var data = {};
 			data.fields = this.fields || {};
-			data.fields.datapoint = dataSource;
+			data.fields.minigame = dataSource;
 
 			return data;
 		},
 		"mounted": function() {
-			indexes.options = [""].concat(rsSystem.listingNouns);
+			provided.source_index = this.universe.indexes.item;
+			types.source_index = this.universe.indexes.type;
 		},
 		"methods": {
 			"update": function() {

@@ -133,7 +133,7 @@
 			return data;
 		},
 		"mounted": function() {
-			minigames.options = this.universe.indexes.minigame;
+			minigames.options = this.universe.indexes.minigame.listing;
 			minigames.options.sortBy("name");
 
 			involved.source_index = this.universe.indexes.entity;
