@@ -58,6 +58,7 @@ rsSystem.component("RSSWLocality", {
 						if(buffer && buffer.owners && buffer.owners.indexOf(this.player.id) !== -1) {
 //							event.$on("modified", this.update);
 							this.events.push(event);
+							break;
 						}
 					}
 				}

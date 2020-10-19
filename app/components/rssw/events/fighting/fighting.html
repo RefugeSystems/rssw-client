@@ -1,10 +1,10 @@
 <div class="rs-component rs-fighting-view rs-combat-view">
 	<div class="entity-list">
 		<div class="entity-control flex h" v-for="entity in involved" :class="getEntityStyling(entity)">
-			<div class="current-indicator flex h center">
+			<div class="current-indicator flex v center">
 				<span class="icon" :class="getIndicatorStyling(entity)"></span>
 			</div>
-			<div class="state flex h center">
+			<div class="state flex v center">
 				<span class="far" :class="event.state[entity.id]?'fa-check-square':'fa-square'"></span>
 			</div>
 			<rssw-entity-summary :entity="entity" :universe="universe" :user="user" :key="entity.id"></rssw-entity-summary>
