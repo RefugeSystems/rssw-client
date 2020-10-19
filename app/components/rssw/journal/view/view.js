@@ -44,7 +44,6 @@ rsSystem.component("rsswJournalView", {
 	},
 	"methods": {
 		"filterEntries": function() {
-			console.log("Filtering...");
 			var buffer,
 				entry,
 				x;

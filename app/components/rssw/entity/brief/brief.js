@@ -74,7 +74,7 @@
 				});
 			},
 			"receiveRoll": function(event) {
-				console.log("Received Roll[" + this.entity.id + "]: ", event);
+//				console.log("Received Roll[" + this.entity.id + "]: ", event);
 			},
 			"update": function() {
 				this.wounds.current = this.entity.wounds || 0;
@@ -96,7 +96,6 @@
 			}
 		},
 		"beforeDestroy": function() {
-			console.log("Entity Disengaging...");
 			this.entity.$off("rolled", this.receiveRoll);
 			this.entity.$off("modified", this.update);
 		},

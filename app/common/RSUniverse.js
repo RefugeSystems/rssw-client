@@ -381,6 +381,10 @@ class RSUniverse extends EventEmitter {
 						break;
 				}
 			});
+			
+			this.$on("data:receive", (event) => {
+				this.loadData(event);
+			});
 
 			this.connection.socket = socket;
 			this.user = userInformation;
@@ -571,6 +575,16 @@ class RSUniverse extends EventEmitter {
 
 			this.$emit("universe:modified", this);
 		});
+	}
+	
+	loadData(event) {
+//		console.log("Receive Data[" + event.id + "]: ", event);
+		var noun = this.nouns[event._class][event.id];
+		if(noun) {
+			noun.loadData(event);
+		} else {
+			rsSystem.log.warn("Unable to locate noun for data: ", event);
+		}
 	}
 
 	/**

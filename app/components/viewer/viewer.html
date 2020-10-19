@@ -53,13 +53,13 @@
 								<span class="fas fa-code-commit"></span>
 								<span>Add Point</span>
 							</button>
-							<input type="text" v-model="state.alter" v-if="player.master"/>
 							<div class="set-distance flex h" v-if="player.master && state.measuring[location.id] && state.measuring[location.id].length === 2">
 								<input type="number" v-model.number="state.distance" v-on:keyup.enter="fire(setMeasurements, $event)"/>
 								<select v-model.number="state.distance_unit">
 									<option v-for="unit in lengths" :value="unit.symbol">{{unit.symbol}}</option>
 								</select>
 							</div>
+							<input type="text" v-model="state.alter" v-if="player.master"/>
 						</div>
 					</div>
 					<div class="action-suboptions" :class="submenuClasses()">
@@ -125,7 +125,7 @@
 					<span class="text">{{menuItems.fullscreen.text}}</span>
 				</button>
 			</div>
-			<select class="control master" v-model="state.master_view" v-if="player.master">
+			<select class="control master" v-model="state.master_view" v-if="player.master" v-on:change="filterPOIs()">
 				<option value="">Player Character</option>
 				<option value="master">Master</option>
 				<option v-for="entity in universe.indexes.entity.listing" :value="entity.id">{{entity.name}}</option>

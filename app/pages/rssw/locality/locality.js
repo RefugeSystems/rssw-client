@@ -38,7 +38,7 @@ rsSystem.component("RSSWLocality", {
 			this.update();
 		},
 		"update": function() {
-			console.log("Updating...");
+//			console.log("Updating...");
 			var location,
 				buffer,
 				event,
@@ -88,7 +88,7 @@ rsSystem.component("RSSWLocality", {
 		}
 	},
 	"beforeDestroy": function() {
-		console.log("Disengaging...");
+//		console.log("Disengaging...");
 		this.universe.$off("universe:modified:complete", this.update);
 //		for(var x=0; x<this.events.length; x++) {
 //			this.events[x].$off("modified", this.update);

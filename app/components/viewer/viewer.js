@@ -225,6 +225,8 @@
 			data.searchPrevious = data.state.search;
 			data.searchError = "";
 			data.original = {};
+			data.backgroundImageNoun = null;
+			data.sourceImageNoun = null;
 			data.backgroundImage = null;
 			data.sourceImage = null;
 			data.parchment = null;
@@ -485,6 +487,7 @@
 			},
 			"togglePOIFiltering": function() {
 				Vue.set(this.state, "poiFiltering", !this.state.poiFiltering);
+				this.filterPOIs();
 			},
 			"filterPOIs": function(text) {
 //				console.log("Filter: " + text);
@@ -1637,14 +1640,44 @@
 			},
 			"update": function(source) {
 				// console.log("Update: ", source);
-				var buffer,
+				var background,
+					image,
+					buffer,
 					hold,
 					x;
+				
 
-				if( this.initializing || !source ||
+				if(this.location.image && (!this.sourceImageNoun || this.sourceImageNoun.id !== this.location.image) && (image = this.universe.nouns.image[this.location.image])) {
+					if(this.sourceImageNoun) {
+						this.sourceImageNoun.$off("modified", this.update);
+					}
+					Vue.set(this, "sourceImageNoun", image);
+					this.sourceImageNoun.$on("modified", this.update);
+				} else {
+					image = this.sourceImageNoun;
+				}
+				if(this.location.background && (!this.backgroundImageNoun || this.backgroundImageNoun.id !== this.location.background) && (background = this.universe.nouns.image[this.location.background])) {
+					if(this.backgroundImageNoun) {
+						this.backgroundImageNoun.$off("modified", this.update);
+					}
+					Vue.set(this, "backgroundImageNoun", background);
+					this.backgroundImageNoun.$on("modified", this.update);
+				} else {
+					background = this.backgroundImageNoun;
+				}
+				
+				if(image && image.delayed_data) {
+					image.retrieve();
+				}
+
+				if(background && background.delayed_data) {
+					background.retrieve();
+				}
+
+				if((!image || !image.delayed_data) && (!background || !background.delayed_data) && (this.initializing || !source ||
 						((source.type === "location" || source.type === "entity" || source.type === "party") &&
 						source.modification &&
-						(source.modification.x !== undefined || source.modification.y !== undefined || source.modification.map_distance !== undefined))) {
+						(source.modification.x !== undefined || source.modification.y !== undefined || source.modification.map_distance !== undefined)))) {
 					if(this.player.master) {
 						this.buildMenu();
 					}
@@ -1702,25 +1735,26 @@
 	//					}
 	//				}
 
-					if(this.location.image && (buffer = this.universe.nouns.image[this.location.image])) {
+					if(image) {
 						Vue.set(this, "ready", false);
-						if(buffer.linked) {
-							Vue.set(this, "sourceImage", buffer.url);
+						if(image.linked) {
+							Vue.set(this, "sourceImage", image.url);
 						} else {
-							Vue.set(this, "sourceImage", buffer.data);
+							Vue.set(this, "sourceImage", image.data);
 						}
 						this.getDimensions(this.sourceImage);
 					} else if(this.location.viewed !== this.sourceImage) {
+						// TODO: Investigate; Not coded as needed
 						Vue.set(this, "ready", false);
 						Vue.set(this, "sourceImage", this.location.viewed);
 						this.getDimensions(this.location.viewed);
 					}
 
-					if(this.location.background && (buffer = this.universe.nouns.image[this.location.background])) {
-						if(buffer.linked) {
-							Vue.set(this, "backgroundImage", buffer.url);
+					if(background) {
+						if(background.linked) {
+							Vue.set(this, "backgroundImage", background.url);
 						} else {
-							Vue.set(this, "backgroundImage", buffer.data);
+							Vue.set(this, "backgroundImage", background.data);
 						}
 					}
 
@@ -1734,7 +1768,7 @@
 					this.determinePOIs();
 					this.$forceUpdate();
 					this.redrawPaths();
-				} else if(source.modification && source.modification.coordinates !== undefined) {
+				} else if(source && source.modification && source.modification.coordinates !== undefined) {
 					this.coordinates.splice(0);
 					if(this.location.coordinates && this.location.coordinates.length) {
 						for(x=0; x<this.location.coordinates.length; x++) {

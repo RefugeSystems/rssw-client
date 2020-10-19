@@ -100,7 +100,7 @@
 		},
 		"methods": {
 			"processAction": function(event) {
-				console.log("Action: ", event);
+//				console.log("Action: ", event);
 			},
 			/**
 			 *
@@ -110,7 +110,7 @@
 			 * @return {Object}
 			 */
 			"buildItem": function(entity, item, within) {
-				console.log("Build Item: ", entity, item, within);
+//				console.log("Build Item: ", entity, item, within);
 				var indexed = {};
 				indexed._entity = entity;
 				indexed._item = item;
@@ -138,10 +138,11 @@
 				indexed.inside = indexed._inside?indexed._inside.name:"";
 				indexed.within = indexed._within?indexed._within.name:"";
 				indexed._search = indexed._search.toLowerCase();
+				indexed.icon = item.icon;
 				return indexed;
 			},
 			"rebindEntity": function(entity) {
-				console.log("Rebind: ", entity);
+//				console.log("Rebind: ", entity);
 				if(!this.mapping[entity.id]) {
 					// entity.$on("modified", this.updateEntity);
 					Vue.set(this.mapping, entity.id, []);
@@ -150,7 +151,7 @@
 			},
 			"updateEntity": function(entity) {
 				if(entity && entity.id && entity._class === "entity" && entity.item) {
-					console.log("Updating: ", entity);
+//					console.log("Updating: ", entity);
 					var buffer,
 						i;
 
@@ -167,7 +168,7 @@
 					i;
 
 				var indexing = this.buildItem(entity, item, inside);
-				console.log("Indexing: ", indexing);
+//				console.log("Indexing: ", indexing);
 				this.inventory.indexItem(indexing);
 				if(item.item && item.item.length) {
 					for(i=0; i<item.item.length; i++) {
@@ -179,7 +180,7 @@
 				}
 			},
 			"unbindEntity": function(entity) {
-				console.log("Unbind: ", entity);
+//				console.log("Unbind: ", entity);
 				if(this.mapping[entity.id]) {
 					this.inventory.unindexItem(this.mapping[entity.id]);
 					// entity.$off("modified", this.updateEntity);

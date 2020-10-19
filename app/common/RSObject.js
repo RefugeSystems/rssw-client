@@ -20,6 +20,7 @@ class RSObject extends EventEmitter {
 		this._knownKeys = [];
 		this._formulas = {};
 		this._owner = null;
+		this._loading = {};
 		this._known = {};
 		this._mods = [];
 		this._shadow = JSON.parse(JSON.stringify(details));
@@ -817,6 +818,10 @@ class RSObject extends EventEmitter {
 //			console.log("Assembled: ", _p(this), _p(base));
 //		}
 
+		if(this.delayed_data && this.data !== undefined) {
+			this.delayed_data = false;
+		}
+		
 		this.rebuildKnown();
 
 		if(this.recalculateHook) {
@@ -1246,7 +1251,35 @@ class RSObject extends EventEmitter {
 		}
 	}
 
-
+	
+	retrieve() {
+		if(!this._loading.data) {
+//			console.log("Retrieving: " + this.id);
+			this._loading.data = setTimeout(() => {
+				if(this._loading.data) {
+					console.warn("Data load for object[" + this.id + "] timed out");
+					delete(this._loading.data);
+				}
+			}, RSObject.loadTimeout);
+			this.universe.send("data:retrieve", {
+				"_class": this._class,
+				"id": this.id
+			});
+		}
+	}
+	
+	loadData(event) {
+		if(this._loading.data) {
+			clearTimeout(this._loading.data);
+		}
+		
+		this.delayed_data = false;
+		this._coreData.data = event.data;
+		this._shadow.data = event.data;
+		this.data = event.data;
+		this.$emit("modified");
+	}
+	
 	isOwner(id) {
 		if(this._owner) {
 			return !!this._owner[id];
@@ -1370,3 +1403,5 @@ RSObject.consumeSlotsFor = function(record, id, slots) {
 		return false;
 	}
 };
+
+RSObject.loadTimeout = 5000;

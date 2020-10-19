@@ -16,6 +16,16 @@
 		"property": "linked",
 		"type": "checkbox"
 	}, {
+		"label": "Delayed",
+		"property": "delay_data",
+		"knowledge": "knowledge:image:delay",
+		"type": "checkbox",
+		"condition": {
+			"linked": {
+				"operation": "!"
+			}
+		}
+	}, {
 		"label": "URL",
 		"property": "url",
 		"knowledge": "knowledge:image:url",

@@ -50,7 +50,11 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			this.update();
+			if(this.image.delayed_data) {
+				this.image.retrieve();
+			} else {
+				this.update();
+			}
 		},
 		"methods": {
 			"update": function() {
