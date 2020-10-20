@@ -257,6 +257,10 @@
 		"property": "__qualities",
 		"type": "label"
 	}, {
+		"label": "Quality",
+		"property": "quality",
+		"type": "text"
+	}, {
 		"label": "Damage",
 		"property": "damage",
 		"type": "text"
