@@ -7,7 +7,7 @@
  * @module Pages
  */
 (function() {
-	var getAdrress = new RegExp("/([a-zA-Z0-9.:_-]+)/");
+	var getAddress = new RegExp("/([a-zA-Z0-9.:_-]+)/");
 
 	rsSystem.component("RSSystem", {
 		"inherit": true,
@@ -136,7 +136,7 @@
 				this.universe.send("modify:note", buffer);
 			},
 			"getServerAddress": function() {
-				return getAdrress.exec(this.universe.connection.address)[1];
+				return getAddress.exec(this.universe.connection.address)[1];
 			},
 			"getDate": function(time) {
 				var date = new Date(time);
