@@ -1,0 +1,60 @@
+<div class="rs-component rssw-shop-inventory">
+	<div class="listing-container">
+		<div class="stats">
+			<div class="data">
+				<table class="data-table">
+					<tr class="stat">
+						<td class="stat-label align-right">({{state.selected.length}}) Price</td>
+						<td class="stat-value">{{cart.price}}</td>
+						<td class="stat-value" v-if="customer" :class="customer.credits >= cart.price?'rsbd-green':'rsbd-red'">{{customer.credits}}</td>
+					</tr>
+					<tr class="stat">
+						<td class="stat-label align-right">Encum.</td>
+						<td class="stat-value">{{cart.encumberance}}</td>
+						<td class="stat-value" v-if="customer" :class="customer.encumberance_max >= customer.encumberance + cart.encumberance?'rsbd-green':'rsbd-red'">{{customer.encumberance}} / {{customer.encumberance_max}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="readout">
+			<div class="names flex v center">
+				<div class="name shop flex h">
+					<span class="icon" :class="entity.icon || 'fas fa-warehouse'"></span>
+					<span>{{entity.name}}</span>
+				</div>
+				<div class="name user flex h" v-if="customer">
+					<span class="icon" :class="customer.icon || 'fas fa-user'"></span>
+					<span>{{customer.name}}</span>
+				</div>
+			</div>
+			<div class="flex h center">
+				<rs-table-controls class="index flex h centered" :universe="universe" :corpus="corpus" :user="player" :index="inventory" :state="state" v-on:action="processAction"></rs-table-controls>
+			</div>
+			<div v-if="customer">
+				<button class="simple flat" v-if="checkingOut">
+					<span class="fas fa-spinner fa-pulse"></span>
+					<span>Checking Out</span>
+				</button>
+				<button class="simple flat" v-if="!checkingOut && !toHeavy && !toExpensive && state.selected.length" v-on:click="checkout()">
+					<span class="fas fa-shopping-cart"></span>
+					<span>Checkout</span>
+					<span>({{state.selected.length}} / {{inventory.listing.length}})</span>
+				</button>
+				<button class="simple flat" v-if="!checkingOut && toExpensive" v-on:click="showInfo('knowledge:reference:toexpensive')">
+					<span class="fas fa-coins rs-light-red"></span>
+					<span>To Expensive</span>
+					<span>({{state.selected.length}} / {{inventory.listing.length}})</span>
+				</button>
+				<button class="simple flat" v-if="!checkingOut && toHeavy" v-on:click="showInfo('knowledge:reference:toheavy')">
+					<span class="fas fa-balance-scale-left rs-light-red"></span>
+					<span>To Heavy</span>
+					<span>({{state.selected.length}} / {{inventory.listing.length}})</span>
+				</button>
+			</div>
+		</div>
+		<div class="inventory">
+			<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="inventory" :headers="headers" :state="state"></rs-table>
+			<rs-table-paging class="index" :universe="universe" :user="player" :index="inventory" :state="state"></rs-table-paging>
+		</div>
+	</div>
+</div>

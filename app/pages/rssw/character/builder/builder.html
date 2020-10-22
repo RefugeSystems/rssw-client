@@ -1,0 +1,182 @@
+<div class="rssw-page rs-component character-builder">
+	<div class="stage species" v-if="stage === 3">
+		<div class="heading">
+			<h1>Character Details</h1>
+		</div>
+		<div class="details">
+			<div class="padding left"></div>
+			<div class="blocks">
+				<div class="block text">
+					<label for="entity-name">
+						<span>Name:</span>
+					</label>
+					<input type="text" v-model="building.name" id="entity-name"/>
+					<div class="flex h centered" v-if="racialNaming">
+						<button class="simple flat" v-on:click="randomName()">
+							<span class="fas fa-retweet"></span>
+							<span>Random</span>
+						</button>
+						<button class="simple flat" v-on:click="generateName()">
+							<span class="fas fa-random"></span>
+							<span>Generate</span>
+						</button>
+					</div>
+				</div>
+				<div class="block text">
+					<label for="entity-description">
+						<span>Description:</span>
+					</label>
+					<textarea v-model="building.description" id="entity-description"></textarea>
+				</div>
+				<div class="block text">
+					<label for="entity-obligations">
+						<span>Obligations:</span>
+					</label>
+					<textarea v-model="building.obligations" id="entity-obligations"></textarea>
+				</div>
+				<div class="block text">
+					<label for="entity-motivations">
+						<span>Motivations:</span>
+					</label>
+					<textarea v-model="building.motivations" id="entity-motivations"></textarea>
+				</div>
+				<div class="block selection" v-if="rankRaceOptions.length !== 0">
+					<div class="block-title">Racial Ranks</div>
+					<div class="block-subtitle">Choose {{race.skills_starting_count}} ({{race.skills_starting_count - rankedRace.length}} Remaining)</div>
+					<div class="option" v-for="skill in rankRaceOptions">
+						<label>
+							<input type="checkbox" v-model="rankedRace" :value="skill" />
+							<span>{{skill.name}}</span>
+						</label>
+					</div>
+				</div>
+				<div class="block selection">
+					<div class="block-title">Career Ranks</div>
+					<div class="block-subtitle">Choose 4 ({{4 - rankedCareer.length}} Remaining)</div>
+					<div class="option" v-for="skill in rankCareerOptions">
+						<label>
+							<input type="checkbox" v-model="rankedCareer" :value="skill" />
+							<span>{{skill.name}}</span>
+						</label>
+					</div>
+				</div>
+				<div class="block selection">
+					<div class="block-title">Specialization Ranks</div>
+					<div class="block-subtitle">Choose 1 ({{1 - rankedSpecialization.length}} Remaining)</div>
+					<div class="option" v-for="skill in rankSpecializationOptions">
+						<label>
+							<input type="checkbox" v-model="rankedSpecialization" :value="skill" />
+							<span>{{skill.name}}</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="padding right"></div>
+		</div>
+		<button v-on:click="selected()" class="complete">
+			<span>Continue</span>
+			<span class="fas fa-chevron-circle-right"></span>
+		</button>
+	</div>
+	<div class="stage species" v-if="stage === 0">
+		<div class="heading">
+			<h1>Select Species</h1>
+		</div>
+		<!-- <rs-cards v-on:selected="selected($event)" :corpus="base.species" :state="state" :universe="universe" :user="player" labeling="Species"></rs-cards> -->
+		<rs-panel-select v-on:selected="selected($event)" :corpus="base.species" :summary="summary.species" :state="state.species" :universe="universe" :user="user" :fields="fields.species">
+			<div class="righted flex h" slot="controls" slot-scope="{record}">
+				<button class="simple flat action" v-on:click="showInfo(record)">
+					<span class="fas fa-info-circle"></span>
+					<span>Info</span>
+				</button>
+				<button class="simple flat action" v-on:click="selected(record)">
+					<span class="fas fa-check-square"></span>
+					<span>Select</span>
+				</button>
+			</div>
+		</rs-panel-select>
+	</div>
+	<div class="stage careers" v-else-if="stage === 1">
+		<div class="heading">
+			<h1>Select Career</h1>
+		</div>
+		<!-- <rs-cards class="cards" v-on:selected="selected($event)" :corpus="base.careers" :state="state" :universe="universe" :user="player" labeling="Career"></rs-cards> -->
+		<rs-panel-select v-on:selected="selected($event)" :corpus="base.careers" :summary="summary.careers" :state="state.careers" :universe="universe" :user="user" :fields="fields.careers">
+			<div class="righted flex h" slot="controls" slot-scope="{record}">
+				<button class="simple flat action" v-on:click="showInfo(record)">
+					<span class="fas fa-info-circle"></span>
+					<span>Info</span>
+				</button>
+				<button class="simple flat action" v-on:click="selected(record)">
+					<span class="fas fa-check-square"></span>
+					<span>Select</span>
+				</button>
+			</div>
+		</rs-panel-select>
+	</div>
+	<div class="stage specializations" v-else-if="stage === 2">
+		<div class="heading">
+			<h1>Select Specialization</h1>
+		</div>
+		<!-- <rs-cards v-on:selected="selected($event)" :corpus="base.specializations" :state="state" :universe="universe" :user="player" labeling="Specialization"></rs-cards> -->
+		<rs-panel-select v-on:selected="selected($event)" :corpus="base.specializations" :summary="summary.careers" :state="state.careers" :universe="universe" :user="user" :fields="fields.careers">
+			<div class="righted flex h" slot="controls" slot-scope="{record}">
+				<button class="simple flat action" v-on:click="showInfo(record)">
+					<span class="fas fa-info-circle"></span>
+					<span>Info</span>
+				</button>
+				<button class="simple flat action" v-on:click="selected(record)">
+					<span class="fas fa-check-square"></span>
+					<span>Select</span>
+				</button>
+			</div>
+		</rs-panel-select>
+	</div>
+	<div class="stage review" v-else-if="stage === 4">
+		<div class="heading">
+			<h1>Review Selections: <span class="rs-orange">{{building.name}}</span></h1>
+		</div>
+		<!-- <rs-cards v-on:selected="selected($event)" :corpus="choices" :state="state" :universe="universe" :user="player" selection="Confirm"></rs-cards> -->
+		<rs-panel-select v-on:selected="selected($event)" :corpus="choices" :summary="summary.careers" :state="state.careers" :universe="universe" :user="user" :fields="fields.careers">
+			<div class="righted flex h" slot="controls" slot-scope="{record}">
+				<button class="simple flat action" v-if="record.id" v-on:click="showInfo(record)">
+					<span class="fas fa-info-circle"></span>
+					<span>Info</span>
+				</button>
+				<button class="simple flat action" v-on:click="selected(record)">
+					<span class="fas fa-check-square"></span>
+					<span>Confirm All</span>
+				</button>
+			</div>
+		</rs-panel-select>
+	</div>
+	<button v-on:click="back()" class="regress" v-if="stage > 0 && stage < 5">
+		<span class="fas fa-chevron-circle-left"></span>
+		<span>Back</span>
+	</button>
+	<div class="stage creating" v-else-if="stage === 5">
+		<div class="heading">
+			<h1>
+				<span class="fas fa-spinner fa-pulse"></span>
+				<span>Creating</span>
+			</h1>
+		</div>
+	</div>
+	<div class="stage finalize" v-else-if="stage === 6">
+		<div class="heading">
+			<h1>
+				<span>Finalize</span>
+			</h1>
+		</div>
+		<div class="cards">
+			<rssw-character-info :character="building" :user="user" :universe="universe"></rssw-character-info>
+			<rssw-character-board :character="building" :user="user" :universe="universe"></rssw-character-board>
+			<rssw-character-stats :character="building" :user="user" :universe="universe"></rssw-character-stats>
+			<rssw-character-skills :character="building" :user="user" :universe="universe"></rssw-character-skills>
+		</div>
+		<button v-on:click="selected()" class="complete">
+			<span class="fas fa-check-circle"></span>
+			<span>Complete</span>
+		</button>
+	</div>
+</div>

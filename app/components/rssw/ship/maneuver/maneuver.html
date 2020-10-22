@@ -1,0 +1,21 @@
+<div class="rs-component rssw component-maneuvers">
+	<div class="backdrop" :style="maneuverStyleBackdrop()">
+	</div>
+	<div class="maneuver-speed" v-if="!display">
+		<span>{{getSpeedValue(locked)}}</span>
+	</div>
+	<div class="maneuver" v-for="(maneuver, i) in maneuvers" :style="maneuverStyleContainer(i, maneuver)" :index="i" :maneuver="maneuver">
+		<button class="indicator type" :style="maneuverStyleIcon(i, maneuver)" v-on:click="selectManeuver(maneuver)">
+			<span :class="maneuver.icon"></span>
+		</button>
+	</div>
+	<div class="maneuver" v-for="(maneuver, i) in maneuvers" :style="maneuverStyleSpeed(i, maneuver)" :index="i" :maneuver="maneuver">
+		<button class="indicator speed" :style="maneuverStyleIcon(i, maneuver)" v-on:click="selectManeuver(maneuver)">
+			<span>{{getSpeedValue(maneuver)}}</span>
+		</button>
+	</div>
+	<button class="maneuver-icon" v-on:click="toggleOpen()">
+		<span :class="locked.icon"></span>
+		<!--<span :class="maneuverIcon"></span>-->
+	</button>
+</div>

@@ -1,0 +1,34 @@
+
+<table>
+	<tr class="skill" v-for="skill in skills" v-if="isVisible(skill)">
+		<td class="name aligned-right" v-on:click="skillNameTouched(skill)">
+			<div class="skill-name flex v">
+				<span class="naming">
+					<span v-if="enhancedSkill(skill)" class="rs-green fas fa-check"></span>
+					{{skill.name}}
+				</span>
+				<span class="naming base">
+					{{(skill.base?skill.base:"").capitalize()}}
+				</span>
+			</div>
+		</td>
+		<td class="icon">
+			<span :class="skill.icon"></span>
+		</td>
+		<td class="stats" v-on:click="skillRollTouched(skill)">
+			<button class="roll-result flex h centered" :class="state && state.rolls && state.rolls[skill.id]?'show':''" v-on:click.stop="clearRoll(skill.id)">
+				<span class="result-property flex h center" v-for="result in rollProperties" v-if="state && state.rolls && state.rolls[skill.id] && state.rolls[skill.id][result.property] !== undefined">
+					<span>{{state.rolls[skill.id][result.property]}}</span>
+					<span class="result-icon" :class="result.icon"></span>
+				</span>
+			</button>
+			<div class="level">
+				<div class="level-block" v-for="level in levelBars" :class="{'acquired':level < character[skill.propertyKey], 'first':level === 0}"></div>
+			</div>
+			<!-- div class="roll" :style="styleDiceDisplay(rolls[skill.id])">
+				<span class="dice" v-for="die in rolls[skill.id]" :class="die"></span>
+			</div-->
+			<rssw-dice-view class="roll" v-if="skill.base && !skill.no_roll" :style="styleDiceDisplay(rolls[skill.id])" :roll="formulas[skill.id]" :universe="universe" :entity="character" :emit="true" />
+		</td>
+	</tr>
+</table>

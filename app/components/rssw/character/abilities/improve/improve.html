@@ -1,0 +1,19 @@
+<div class="rs-component rssw component-character-improve-ability flex v">
+	<div class="archetypes flex h">
+		<div class="select-container grow-10 flex h">
+			<button class="archetype select" v-on:click="selectArchetype(preview.id)" :class="state.selected_archetype === preview.id?'selected':''" v-if="preview">
+				<span :class="preview.icon"></span>
+				<span>Preview: {{preview.name}}</span>
+			</button>
+			<button class="archetype select" v-for="archetype in archetypes" v-on:click="selectArchetype(archetype.id)" :class="state.selected_archetype === archetype.id?'selected':''">
+				<span :class="archetype.icon"></span>
+				<span>{{archetype.name}}</span>
+			</button>
+		</div>
+		<button class="close select" v-on:click="closeDisplay()">
+			<span class="fas fa-times rs-light-red"></span>
+			<span>Close</span>
+		</button>
+	</div>
+	<rs-graph :id="character.id" :nodes="abilities" :edges="dependencies" :filters="filters" v-on:node="showInfo($event, character)"></rs-graph>
+</div>

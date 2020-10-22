@@ -1,0 +1,15 @@
+<div class="rssw-page page-dashboard page-characters">
+	<!-- 
+	<rssw-character-info :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-info>
+	<rssw-character-board :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-board>
+	<rssw-character-stats :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-stats>
+	<rssw-character-skills :character="entity" :entity="entity" :user="user" :universe="universe"></rssw-character-skills>
+	 -->
+	 
+	<div class="entity-column" v-if="entity">
+		<rs-container :entity="entity" :user="user" :universe="universe" :contents="widget" v-for="(widget, $index) in widgets" :key="widget.id" :index="$index"></rs-container>
+	</div>
+	<div class="entity-column" v-for="addchar in additional_characters">
+		<rs-container :entity="addchar" :user="user" :universe="universe" :contents="widget" v-for="(widget, $index) in widgets" :key="widget.id" :index="$index"></rs-container>
+	</div>
+</div>

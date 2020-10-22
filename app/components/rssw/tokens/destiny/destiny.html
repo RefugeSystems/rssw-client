@@ -1,0 +1,12 @@
+<div class="rssw-tokens rssw-tokens-destiny flex">
+	<span class="icon swg swg-phoenix"></span>
+	<span class="label">Destiny:</span>
+	<button v-for="token in destinyTokens" class="token-container" v-on:click="showTokenInfo()">
+		<span class="backdrop fas fa-hexagon rs-white"></span>
+		<span class="foreground fas fa-jedi rs-dark-blue"></span>
+	</button>
+	<button v-for="token in sithTokens" class="token-container" v-on:click="showTokenInfo()">
+		<span class="backdrop fas fa-hexagon rs-black"></span>
+		<span class="foreground fab fa-sith rs-red"></span>
+	</button>
+</div>

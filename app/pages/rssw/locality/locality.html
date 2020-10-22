@@ -1,0 +1,26 @@
+<div class="rssw-page page-locality">
+	<div class="event-container">
+		<div class="event-listing listing-container" v-for="event in events">
+			<rssw-fighting-view :event="event" :universe="universe" :user="user" :player="player"></rssw-fighting-view>
+		</div>
+	</div>
+	<div class="listing-container">
+		<rs-listing class="" :list="entities" :universe="universe" :user="user" :emit="true" :active="activeEntity?activeEntity.id:null" placeholder="Filter Entities..." v-on:open="focusEntity($event)"></rs-listing>
+	</div>
+	<div class="listing-container entity-container">
+		<h3 class="titling">{{activeEntity?"Near " + activeEntity.name:"No Entity"}}</h3>
+		<div class="subtitle" v-if="activeLocation" v-on:click="showInfo(activeLocation)">
+			<span :class="activeLocation.icon"></span>
+			<span>{{activeLocation.name}}</span>
+			<button class="info flat fas fa-info-circle"></button>
+		</div>
+		<div class="subtitle" v-if="currentlyInside" v-on:click="showInfo(currentlyInside)">
+			<span :class="currentlyInside.icon"></span>
+			<span>{{currentlyInside.name}}</span>
+			<button class="info flat fas fa-info-circle"></button>
+		</div>
+		<div class="entity-container">
+			<rs-listing class="" :list="nearBy" :universe="universe" :user="user" :checker="isOwner" placeholder="Filter Near By..." :infobase="activeEntity"></rs-listing>
+		</div>
+	</div>
+</div>

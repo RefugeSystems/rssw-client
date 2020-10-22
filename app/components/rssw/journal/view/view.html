@@ -1,0 +1,10 @@
+<div class="rs-component rs-journal-view">
+	<div class="flex h">
+		<rs-listing class="" :list="entityList" :universe="universe" :user="user" placeholder="Filter Entities..." :emit="true" v-on:open="focusEntity($event)" :active="activeEntity"></rs-listing>
+		<rs-listing class="" :list="known.listing" :universe="universe" :user="user" :emit="true" v-on:open="openEntry($event)"  placeholder="Filter Knowns..."></rs-listing>
+		<rs-listing class="" :list="shown" :universe="universe" :user="user" :emit="true" v-on:open="openEntry($event)" placeholder="Filter Entries..."></rs-listing>
+		<div class="active-known">
+			<rs-field :root="root" :field="field" v-on:complete="filterEntries()"></rs-field>
+		</div>
+	</div>
+</div>

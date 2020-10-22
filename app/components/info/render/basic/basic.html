@@ -1,0 +1,573 @@
+<div class="general-information" v-if="record && record.id">
+	<div class="base-subtitle" v-if="base">
+		<span>From</span>
+		<span class="named">{{(base).name}}</span>
+	</div>
+
+	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="linkedLocation"></rs-render-image>
+
+	<div v-if="record.is_shop">
+		<span class="fas fa-warehouse"></span>
+		<span>A Shop</span>
+	</div>
+
+	<div v-if="description" v-html="description" class="record-description"></div>
+
+	<div v-if="canDashboard(record)">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="viewDashboard(false)">
+				<span class="fas fa-tablet-android-alt"></span>
+				<span>View Dashboard</span>
+			</button>
+			<button class="action direct short" v-on:click="viewDashboard(true)">
+				<span class="fas fa-external-link-alt"></span>
+			</button>
+			<button class="action direct short" v-on:click="viewDashboard(true, true)">
+				<span class="fas fa-external-link-alt rot180"></span>
+			</button>
+		</div>
+	</div>
+	<div v-if="record.is_shop">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="viewShopInventory(false)">
+				<span class="far fa-boxes"></span>
+				<span>View Shop Inventory</span>
+				<span v-if="base">(As {{base.name}})</span>
+			</button>
+		</div>
+	</div>
+
+	<div v-if="relatedError" class="related-error">
+		<h3>
+			<span class="fas fa-exclamation-triangle rs-light-red"></span>
+			<span>Related Error</span>
+		</h3>
+		<div class="rs-light-red" v-html="relatedError"></div>
+	</div>
+
+	<div v-if="player.master && options.noMaster && record.restock_base">
+		<h3>Restock Distribution Preview</h3>
+		<div class="restock-graph">
+
+		</div>
+	</div>
+
+	<rs-render-image class="record-image" v-if="image" :image="image" :linked="linkedLocation"></rs-render-image>
+	<div v-if="record.data && record._class === 'image' && !record.linked" class="general-image">
+		<img :src="record.data" />
+	</div>
+	<div v-if="record.url && record._class === 'image' && record.linked" class="general-image">
+		<img :src="record.url" />
+	</div>
+
+	<div class="properties" v-if="record._class !== 'datapoint' && record._class !== 'datausage'">
+		<div class="direct-properties" v-if="showDirectProperties()">
+			<div class="property" v-for="property in keys" v-if="visible(property, record[property])" :class="toClassName(property)">
+				<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
+					<span class="key" v-if="knowledgeLink[property] || universe.indexes.knowledge.index['knowledge:reference:' + property]" :class="nameClassing(property)">
+						<a class="rendered-value" :data-id="knowledgeLink[property] || ('knowledge:reference:' + property)">{{prettifyPropertyName(property, record)}}</a>
+					</span>
+					<span class="key" v-if="!knowledgeLink[property] && !universe.indexes.knowledge.index['knowledge:reference:' + property]" :class="nameClassing(property)">{{prettifyPropertyName(property, record)}}</span>
+					<span class="divide">:</span>
+					<span v-if="!calculated[property] || !calculated[property].involved.length">
+						<span class="value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
+						<span class="raw" v-if="displayRaw[property]">{{value}}</span>
+					</span>
+					<button class="flat" v-if="calculated[property] && calculated[property].involved.length" v-on:click="toggleContributions(property)">
+						<span class="value calculated-value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
+						<span class="raw calculated-value" v-if="displayRaw[property]">{{value}}</span>
+						<span v-if="calculated[property].result != record[property]">
+							<span>(</span>
+							<span class="fas fa-sigma"></span>
+							<span class="calculated-value">{{calculated[property].result}}</span>
+							<span>)</span>
+						</span>
+					</button>
+				</div>
+				<div class="section contributions" :class="contributionClasses(property)" v-if="calculated[property] && calculated[property].involved">
+					<div class="subreference" v-for="involved in calculated[property].involved">
+						<a class="rendered-value" v-on:click="showInfo(involved, base)">
+							<span class="fad fa-layer-plus rs-secondary-dark-orange rs-secondary-solid"></span>
+							<span>{{involved.name}}</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="inherit-relations" v-if="showInheritRelations()">
+			<div class="section maneuver-dial" v-if="record.maneuver && record.maneuver.length">
+				<div class="reference-heading">Maneuver Dial</div>
+				<div class="subreference">
+					<rssw-ship-maneuver :universe="universe" :user="user" :entity="record" :display="true"></rssw-ship-maneuver>
+				</div>
+			</div>
+
+			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
+				<div class="reference" v-if="universe.indexes[property] || referenceKeys[property]">
+					<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
+						<div class="reference-heading">{{prettifyPropertyName(property, record).pluralize(true)}}</div>
+						<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord] && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].hidden">
+							<div class="reference-heading" v-if="!collapsed">
+								<span :class="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]?universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].icon:''"></span>
+								<span>{{universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]?universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>
+							</div>
+							<rs-object-info v-if="!collapsed" :record="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]" :universe="universe"></rs-object-info>
+							<a v-if="collapsed && universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord] && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].obscured" class="rendered-value" :data-id="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].id">{{universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].name}}</a>
+							<a v-if="collapsed && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]" class="rendered-value unknown">{{subrecord._sourced || subrecord}}[Unknown]</a>
+						</div>
+					</div>
+					<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
+						<div class="reference-heading">{{prettifyPropertyName(property, record).capitalize()}}</div>
+						<div class="subreference">
+							<div class="reference-heading" v-if="!collapsed">{{universe.indexes[referenceKeys[property] || property].lookup[record[property]]?universe.indexes[referenceKeys[property] || property].lookup[record[property]].name:record[property]}}</div>
+							<rs-object-info v-if="!collapsed && universe.indexes[referenceKeys[property] || property].lookup[record[property]] && !universe.indexes[referenceKeys[property] || property].lookup[record[property]].obscured" :record="universe.indexes[referenceKeys[property] || property].lookup[record[property]]" :universe="universe"></rs-object-info>
+							<a v-if="collapsed && universe.indexes[referenceKeys[property] || property].lookup[record[property]] && !universe.indexes[referenceKeys[property] || property].lookup[record[property]].obscured" class="rendered-value" :data-id="universe.indexes[referenceKeys[property] || property].lookup[record[property]].id">{{universe.indexes[referenceKeys[property] || property].lookup[record[property]].name}}</a>
+							<a v-if="collapsed && !universe.indexes[referenceKeys[property] || property].lookup[record[property]]" class="rendered-value unknown" >{{record[property]}}[Unknown]</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section" v-if="equipped.length">
+		<div class="reference-heading">Equipped Equipment</div>
+		<div class="subreference" v-for="equipped_equipment in equipped">
+			<a class="rendered-value" v-if="isOwner(equipped_equipment[1])" v-on:click="showInfo(equipped_equipment[1], record)">{{equipped_equipment[1].name}}</a>
+			<span class="rendered-value" v-else>{{equipped_equipment[1].name}}</span>
+			<span>To</span>
+			<a class="rendered-value" v-on:click="showInfo(equipped_equipment[0], record)">{{equipped_equipment[0].name}}</a>
+		</div>
+	</div>
+
+	<div class="section" v-if="base && relatedKnowledge.length">
+		<div class="reference-heading">{{base.name}}'s Related Knowledge</div>
+		<div class="subreference" v-for="knowledge in relatedKnowledge">
+			<a class="rendered-value" v-on:click="showInfo(knowledge, base)">{{knowledge.name}}</a>
+		</div>
+	</div>
+
+	<div class="section" v-if="record.related && record.related.length">
+		<div class="reference-heading">Related Data</div>
+		<div class="subreference" v-for="data in record.related" v-if="universe.index.lookup[data]">
+			<a class="rendered-value" v-if="isOwner(universe.index.lookup[data])" :data-id="data">{{universe.index.lookup[data].name}}</a>
+			<span class="rendered-value" v-else>{{universe.index.lookup[data].name}}</span>
+		</div>
+	</div>
+
+	<div class="section" v-if="relatedAbilities && relatedAbilities.length">
+		<div class="reference-heading">Related Abilities</div>
+		<div class="subreference" v-for="data in relatedAbilities">
+			<a class="rendered-value" v-if="isOwner(data)" :data-id="data.id">{{data.name}}</a>
+			<span class="rendered-value" v-else>{{data.name}}</span>
+		</div>
+	</div>
+
+	<div class="section" v-if="relatedArchetypes && relatedArchetypes.length">
+		<div class="reference-heading">Related Specializations</div>
+		<div class="subreference" v-for="data in relatedArchetypes">
+			<a class="rendered-value" v-if="isOwner(data)" :data-id="data.id">{{data.name}}</a>
+			<span class="rendered-value" v-else>{{data.name}}</span>
+		</div>
+	</div>
+
+	<div class="control reference-values" v-if="locations.length">
+		<div class="reference-heading">Locations Here</div>
+		<div class="subreference" v-for="location in shownLocations">
+			<a class="rendered-value" v-if="isOwner(location)" :data-id="location.id">{{location.name}}</a>
+			<span class="rendered-value" v-else>{{location.name}}</span>
+		</div>
+		<button class="action direct" v-if="locations.length !== shownLocations.length" v-on:click="showAllLocations()">
+			<span>Load Rest...</span>
+		</button>
+	</div>
+
+	<div class="control reference-values" v-if="entities.length">
+		<div class="reference-heading">Entities Here</div>
+		<div v-if="player && player.master">
+			<div class="subreference" v-for="entity in shownEntities">
+				<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
+			</div>
+		</div>
+		<div v-if="!player || !player.master">
+			<div class="subreference" v-for="entity in shownEntities">
+				<a class="rendered-value" v-if="isOwner(entity)" :data-id="entity.id">{{entity.name}}</a>
+				<span class="rendered-value" v-else>{{entity.name}}</span>
+			</div>
+		</div>
+		<button class="action direct" v-if="entities.length !== shownEntities.length" v-on:click="showAllEntities()">
+			<span>Load Rest...</span>
+		</button>
+	</div>
+
+	<div v-if="record._class === 'ability'" class="control">
+		<button class="action direct" v-if="canLearnAbility()" v-on:click="learnAbility(record.id)" :class="classByXP(record.xp_cost)">
+			<span class="fad fa-globe-africa"></span>
+			<span>Learn Ability ( </span>
+			<span class="rs-darkorange">{{record.xp_cost}}</span>
+			<span>XP )</span>
+		</button>
+		<button class="action direct" v-if="canForgetAbility()" v-on:click="forgetAbility(record.id)" :class="classByRequirements()">
+			<span class="fad fa-globe-africa"></span>
+			<span>Forget Ability ( +</span>
+			<span class="rs-darkorange">{{record.xp_cost}}</span>
+			<span>XP )</span>
+		</button>
+	</div>
+
+	<div v-if="record._class && canTransfer()">
+		<h3>Transfer {{record._class.capitalize()}}</h3>
+		<div class="control">
+			<select v-model="transfer_target" v-on:change="transferObject()">
+				<option value="">Choose Target...</option>
+				<option value="cancel">Cancel</option>
+				<option disabled>--------------</option>
+				<option v-if="canTransferToSelf()" :value="base.id">{{base.name}}</option>
+				<option v-for="target in transfer_targets" :value="target.id">{{target.name}}</option>
+				<option disabled>--------------</option>
+				<option value="drop">Drop</option>
+			</select>
+		</div>
+	</div>
+
+	<div v-if="canAttach()">
+		<h3>Pass To Item</h3>
+		<div class="control">
+			<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} of {{record.hardpoints}} attachments</span>
+			<span v-if="record.contents_max">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>
+			<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
+				<option value=""></option>
+				<option value="cancel">Cancel</option>
+				<option disabled>--------------</option>
+				<option v-for="target in attach_targets" :value="target.id">{{target.name}}</option>
+			</select>
+			<div v-if="attach_targets.length === 0">
+				<span class="fas fa-exclamation-triangle"></span>
+				<span>No Viable Items</span>
+			</div>
+		</div>
+	</div>
+
+	<div v-if="base && canMoveTo(base.id)">
+		<h3>Travel</h3>
+		<div class="control" v-if="canTravelTo(base.id)">
+			<button class="action direct" v-on:click="travelToHere(base.id)">
+				<span class="fad fa-globe-africa"></span>
+				<span>Travel Here as {{base.name}} </span>
+			</button>
+		</div>
+		<div class="control">
+			<label>
+				<span>Move Entity Here</span>
+				<select v-model="movingEntity" v-on:change="moveEntityHere(movingEntity)">
+					<option value="">{{movableEntities.length === 0?"None Available":""}}</option>
+					<option v-for="e in movableEntities" v-if="!e.template && !e.inactive" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
+		</div>
+	</div>
+
+	<div v-if="canUnequip()">
+		<div class="control">
+			<button class="action direct" v-on:click="unequip()">
+				<span class="fas fa-unlink"></span>
+				<span>Unequip from {{base.name}}</span>
+			</button>
+		</div>
+	</div>
+
+	<div v-if="canEquip() && !canUnequip()">
+		<h3>Equip To</h3>
+		<div class="control">
+			<label>
+				<select v-model="equipToSlot" v-on:change="equip(equipToSlot)">
+					<option value="">Choose Slot</option>
+					<option value="cancel">Cancel</option>
+					<option disabled value="disabled">----------</option>
+					<option v-for="slot in availableSlots" :value="slot.id">{{slot.name}}</option>
+				</select>
+			</label>
+		</div>
+	</div>
+
+	<!-- TODO: Better support for "Tokens" however this doesn't seem to warrent its own class
+			as most other uses seem to fall to effect -->
+	<div v-if="session && (base || player.master) && (record.id === 'knowledge:token:destiny' || (record._class === 'session' && player.master))">
+		<div class="control" v-if="session && (base && ((base.is_hostile && session.destiny_dark > 0) || (!base.is_hostile && session.destiny_light > 0)))">
+			<button class="action direct" v-on:click="useDestinyToken(base.is_hostile)">
+				<span class="" :class="base.is_hostile?'fab fa-sith':'fas fa-jedi'"></span>
+				<span>Use {{base.is_hostile?'Dark':'Light'}} Destiny ({{base.is_hostile?session.destiny_dark:session.destiny_light}} Points)</span>
+			</button>
+		</div>
+		<div class="control" v-else-if="session && player.master && session.destiny_dark > 0">
+			<button class="action direct" v-on:click="useDestinyToken(true)">
+				<span class="fab fa-sith"></span>
+				<span>Use Dark Destiny ({{session.destiny_dark}} Points)</span>
+			</button>
+		</div>
+	</div>
+
+	<div v-if="actions.length">
+		<h3>Actions</h3>
+		<div class="control" v-for="action in actions">
+			<div class="record-action" v-if="action.targets">
+				<label>
+					<span>{{action.name}}</span>
+					<select v-model="action.target" v-if="action.targets.length" v-on:change="fireAction(action, action.target)">
+						<option value="">Choose Target</option>
+						<option value="cancel">Cancel</option>
+						<option disabled value="disabled">----------</option>
+						<option v-for="target in action.targets" :value="target.id">{{target.name}}</option>
+					</select>
+					<span v-if="action.targets.length === 0">| No Targets Available</span>
+				</label>
+			</div>
+			<button class="action direct" v-if="!action.targets" v-on:click="fireAction(action)">
+				<span :class="action.icon"></span>
+				<span>{{action.name}}</span>
+			</button>
+		</div>
+	</div>
+
+	<div v-if="note && player && player.master">
+		<div class="info-section" v-if="(record._class === 'location' || record._class === 'entity') && hiddenEntities.length">
+			<h3>Hidden or Obscured Here</h3>
+			<ul class="general-list">
+				<li v-for="entity in hiddenEntities">
+					<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
+				</li>
+			</ul>
+		</div>
+
+		<h3>Master Note</h3>
+		 <div v-html="note"></div>
+	</div>
+
+	<div class="control" v-if="record._class === 'location'">
+		<button class="action direct" v-on:click="openStarwarsFandom()">
+			<span class="fas fa-external-link"></span>
+			<span>View on Star Wars Fandom</span>
+		</button>
+	</div>
+
+	<div v-if="player && player.master && !options.noMaster" class="master-controls">
+		<h3>Master Controls</h3>
+
+		<div class="record-id" v-on:click="highlight($event)">
+			<span>ID:</span>
+			<input class="displayed-id" :value="record.id" />
+		</div>
+
+		<div class="control">
+			<button class="action" v-on:click="hideRecord()">
+				<span class="icon" :class="record.hidden?'far fa-check-square':'far fa-square'"></span>
+				<span>Hidden</span>
+			</button>
+		</div>
+		<div class="control">
+			<button class="action" v-on:click="obscureRecord()">
+				<span class="icon" :class="record.obscured?'far fa-check-square':'far fa-square'"></span>
+				<span>Obscured</span>
+			</button>
+		</div>
+		<div class="control">
+			<button class="action" v-on:click="knownRecord()">
+				<span class="icon" :class="record.must_know?'far fa-check-square':'far fa-square'"></span>
+				<span>Must Know</span>
+			</button>
+		</div>
+		<div class="control" v-if="record.active !== undefined && (record._class === 'event' || record._class === 'party')">
+			<button class="action" v-on:click="activateRecord()">
+				<span class="icon" :class="record.active?'far fa-check-square':'far fa-square'"></span>
+				<span>Active</span>
+			</button>
+		</div>
+		<div class="control" v-if="record.charged !== undefined">
+			<button class="action" v-on:click="dischargeRecord()">
+				<span class="icon" :class="record.charged?'far fa-check-square':'far fa-square'"></span>
+				<span>Charged</span>
+			</button>
+		</div>
+		<div class="control">
+			<button class="action" v-on:click="screenRecord()">
+				<span class="icon" :class="record.screen?'far fa-check-square':'far fa-square'"></span>
+				<span>Screen</span>
+			</button>
+		</div>
+		<div class="control" v-if="record.durability !== undefined">
+			<label>
+				<span>Set Durability</span>
+				<select v-model.number="adjustingDurability" v-on:change="adjustDurability(adjustingDurability)">
+					<option value="10">10</option>
+					<option value="9">9</option>
+					<option value="8">8</option>
+					<option value="7">7</option>
+					<option value="6">6</option>
+					<option value="5">5</option>
+					<option value="4">4</option>
+					<option value="3">3</option>
+					<option value="2">2</option>
+					<option value="1">1</option>
+					<option value="0">0</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="record.charges !== undefined">
+			<label>
+				<span>Quick Set Charges</span>
+				<select v-model.number="adjustingCharges" v-on:change="adjustCharges(adjustingCharges)">
+					<option value="10">10</option>
+					<option value="9">9</option>
+					<option value="8">8</option>
+					<option value="7">7</option>
+					<option value="6">6</option>
+					<option value="5">5</option>
+					<option value="4">4</option>
+					<option value="3">3</option>
+					<option value="2">2</option>
+					<option value="1">1</option>
+					<option value="0">0</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="control flex h">
+			<button class="action direct" v-on:click="editRecord(false)">
+				<span class="fas fa-edit"></span>
+				<span>Edit</span>
+			</button>
+			<button class="action direct short" v-on:click="editRecord(true)">
+				<span class="far fa-external-link-alt"></span>
+			</button>
+			<button class="action direct short" v-on:click="editRecord(true, true)">
+				<span class="fas fa-external-link-alt rot180"></span>
+			</button>
+		</div>
+
+		<div class="control flex h" v-if="record.template && record._class === 'entity'">
+			<button class="action direct" v-on:click="spawnEntity(record)">
+				<span class="fas fa-copy"></span>
+				<span>Copy</span>
+			</button>
+		</div>
+		<div class="control flex h" v-if="record._class === 'event' && record.category === 'combat'">
+			<button class="action direct" v-on:click="openCombatEvent()">
+				<span class="fas fa-swords"></span>
+				<span>View Combat Event</span>
+			</button>
+		</div>
+
+		<div class="control flex h" v-if="record._class === 'session'">
+			<button class="action direct" v-on:click="record.rollDestiny()">
+				<span class="fas fa-dice"></span>
+				<span>Roll Destiny</span>
+			</button>
+		</div>
+
+		<div class="control flex h" v-if="!record.template && record.parent && !record.owner && (!record.owners || !record.owners.length)">
+			<button class="action direct" v-on:click="deleteRecord(record); $emit('close')">
+				<span class="fas fa-trash-alt"></span>
+				<span>Delete</span>
+			</button>
+		</div>
+
+		<div class="control flex h" v-if="record._class === 'session'">
+			<button class="action direct" v-on:click="setCurrentSession()">
+				<span class="fas fa-edit"></span>
+				<span>Set to this Session</span>
+			</button>
+		</div>
+
+
+		<div class="control" v-if="record.restock_base">
+			<h3>Restock Distribution</h3>
+			<button class="action direct" v-if="!showDistribution" v-on:click="showRestockDistribution()">
+				<span class="fas fa-chart-bar"></span>
+				<span>Show Distribution</span>
+			</button>
+			<div v-if="showDistribution" class="restock-graph">
+
+			</div>
+		</div>
+		<div class="control" v-if="record.is_shop">
+			<button class="action direct" v-if="record.restock_base" v-on:click="restockLocation()">
+				<span class="icon" :class="restocking?'far fa-sync fa-spin':'far fa-inventory'"></span>
+				<span>Restock Items</span>
+			</button>
+		</div>
+		<div class="control" v-if="record._class === 'location'">
+			<label>
+				<span>Copy Entity to Here</span>
+				<select v-model="copyToHere" v-on:change="copyEntityHere(copyToHere)">
+					<option value="">Select Template...</option>
+					<option v-for="e in availableTemplates.entity" v-if="e.template" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="record._class === 'item' && record.template">
+			<label>
+				<span>Copy Item to Entity:</span>
+				<select v-model="copyToEntity" v-on:change="copyItemToEntity(record.id, copyToEntity)">
+					<option value="">Select Entity...</option>
+					<option v-for="e in availableEntities" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="!record.template && (record._class === 'location' || record._class === 'entity')">
+			<div>
+				<label>
+					<span>Move Party Here</span>
+					<select v-model="partyToMove" v-on:change="movePartyHere(partyToMove)">
+						<option value=""></option>
+						<option v-for="p in parties" v-if="p.active" :value="p.id">{{p.name}}</option>
+					</select>
+				</label>
+			</div>
+			<div>
+				<label>
+					<span>Move Entity Here</span>
+					<select v-model="entityToMove" v-on:change="moveEntityHere(entityToMove)">
+						<option value=""></option>
+						<option v-for="e in universe.indexes.entity.listing" v-if="!e.template && !e.inactive" :value="e.id">{{e.name}}</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control" v-if="!record.template && record._class === 'event' && parties.length">
+			<label>
+				<span>Add Party to this Event</span>
+				<select v-model="partyToAdd" v-on:change="amendEventWithParty(partyToAdd)">
+					<option value="">[ Select Party ]</option>
+					<option v-for="p in parties" :value="p.id">{{p.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="control" v-if="!record.template && record._class === 'entity' && activeEvents.length">
+			<label>
+				<span>Reference in Event:</span>
+				<select v-model="eventToReference" v-on:change="addEntityToEvent(eventToReference)">
+					<option value="">[ Select Event ]</option>
+					<option v-for="e in activeEvents" :value="e.id">{{e.name}}</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="info-section" v-if="partiesPresent.length">
+			<h3>Parties Located Here</h3>
+			<ul class="general-list">
+				<li v-for="party in partiesPresent">
+					<a class="rendered-value" :data-id="party.id">{{party.name}}</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="control" v-if="record.x && record.y">
+			<button class="action direct" v-on:click="addMeasurePoint(record)">
+				<span class="fas fa-drafting-compass"></span>
+				<span>Add Measuring Point</span>
+			</button>
+		</div>
+	</div>
+</div>

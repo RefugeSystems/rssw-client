@@ -1,0 +1,18 @@
+<div class="rssw-page page-party">
+	<div v-if="!player.master" class="party-info">
+		<h1>Forbidden</h1>
+		<p>Party view is currently for Game Masters only</p>
+	</div>
+	<div v-if="player.master" class="party-info">
+		<div class="list" v-if="record">
+			<div class="listed-party">
+				<rssw-party :record="record" :universe="universe" :user="user"></rssw-party>
+			</div>
+		</div>
+		<div class="list" v-if="!record">
+			<div class="listed-party" v-for="party in parties" :key="party.id">
+				<rssw-party :record="party" :universe="universe" :user="user"></rssw-party>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+.rs-component.rs-entity-brief {
+	border: 1px solid @rsWhite;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 2px !important;
+	overflow: hidden;
+	width: 200px;
+	
+	.close {
+		display: block;
+		/* TODO: Clean this up... */
+		width: ~"calc(100% + 10px)";
+		height: 28px;
+		background-color: @rsDarkRed !important;
+		margin: -5px -5px 0px -5px;
+	}
+	
+	.naming {
+		display: block;
+		text-align: left;
+		font-size: 1.2em;
+		margin: 3px 0px;
+	}
+	
+	.vitals {
+		margin-bottom: 5px;
+	
+		.icon {
+			text-align: center;
+			margin: 3px 0px;
+		}
+	
+		.vital {
+			padding: 3px;
+			margin: 0px 3px;
+			border: 1px solid @rsOrange;
+			border-radius: 4px;
+			flex-grow: 1;
+		}
+		
+		.value {
+			text-align: center;
+		}
+	}
+	
+	.titling {
+		color: @rsOrange;
+	}
+	
+	.roll-skill select {
+		width: 100%;
+	}
+	
+	.point {
+		font-size: 16px;
+		color: @rsWhite;
+		padding: 3px;
+		margin: 2px;
+	}
+}

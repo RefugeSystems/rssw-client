@@ -1,0 +1,50 @@
+<div class="rs-component rssw component-entity-journal">
+	<div class="editor" :class="editorClass()">
+		<rs-field :root="state.entry" :field="titleField" v-on:changed="sync($event)">
+		</rs-field>
+		<rs-field :root="state.entry" :field="sessionField" v-on:changed="sync($event)">
+		</rs-field>
+		<rs-field :root="state.entry" :field="entryField" v-on:changed="sync($event)" v-on:changing="syncWait()" class="entry">
+		</rs-field>
+	</div>
+	
+	<div class="blocks flex h">
+		<div class="block large" :class="blockClass('render')">
+			<button class="block-toggle" v-on:click="toggleBlock('render')">
+				<span class="toggle-label rot270">Rendering</span>
+			</button>
+			<rs-object-info class="rendering" v-on:click="processRequest($event)" :record="state.entry" :universe="universe" :player="player"></rs-object-info>
+			<!-- div class="block-content rendering rs-white object-info" v-html="rendering"></div -->
+		</div>		
+		<div class="block small" :class="blockClass('entries')">
+			<button class="block-toggle" v-on:click="toggleBlock('entries')">
+				<span class="toggle-label rot270">Entries</span>
+			</button>
+			<div class="block-content listing entries">
+				<button :title="entry.name" class="listed entry" v-on:click="newEntry()" :class="getEntryClass()">
+					<span class="fas fa-spinner fa-pulse" v-if="syncLock && !universe.indexes.journal.index[state.entry.id]"></span>
+					<span class="entry-name">New Entry</span>
+				</button>
+				<button v-for="entry in entries" :title="entry.name" class="listed entry" v-on:click="editEntry(entry)" :class="getEntryClass(entry)">
+					<span class="fas fa-spinner fa-pulse" v-if="syncLock && state.entry.id === entry.id"></span>
+					<span class="entry-name">{{entry.name}}</span>
+				</button>
+			</div>
+		</div>
+		<div class="block small" :class="blockClass('knowns')">
+			<button class="block-toggle" v-on:click="toggleBlock('knowns')">
+				<span class="toggle-label rot270">Knowns</span>
+			</button>
+			<div class="block-content listing knowns">
+				<select v-model="addKnown" class="listed known" v-on:change="addKnownEntry(addKnown)">
+					<option value="">[ Choose to Add ]</option>
+					<option v-for="known in knowns" :value="known.id" v-if="state.entry.related.indexOf(known.id) === -1">{{known.name}}</option>
+				</select>
+				<!-- button v-for="entry in state.entry.related" :title="getRecordName(entry)" class="listed known" v-on:click="toggleRelated(entry)" :class="getKnownClass(entry)" -->
+				<button v-for="entry in state.entry.related" :title="getRecordName(entry)" class="listed known" v-on:click="toggleRelated(entry)">
+					<span class="entry-name">{{getRecordName(entry)}}</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

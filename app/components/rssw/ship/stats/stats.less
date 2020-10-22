@@ -1,0 +1,310 @@
+.rs-component.rssw.component-ship-stats {
+	
+
+	.ship-card {
+		display: inline-flex;
+		flex-direction: column;
+		width: 300px;
+							
+		.icon {
+			display: inline-block;
+			vertical-align: middle;
+			text-align: center;
+			
+			* {
+				vertical-align: middle;
+			}
+		}
+		
+		.icon-bubble {
+			display: inline-flex;
+			justify-content: center;
+			align-content: center;
+			align-items: center;
+		}
+	
+		.picture {
+			
+			
+			img {
+				width: 300px;
+			}
+		}
+		
+		.information {
+			
+			.skill {
+				border: 1px solid @rsGray;
+				border-radius: 30px;
+				padding: 4px;
+			}
+			
+			.pilot-info {
+				text-align: center;
+				margin: 0px 7px;
+				flex-grow: 10;
+			}
+			
+			.name-display {
+				margin-right: 4px;
+			}
+			
+			.alliance {
+				justify-content: center;
+				align-content: center;
+				align-items: center;
+			}
+			
+			.icon {
+				display: block;
+				line-height: 30px;
+				height: 30px;
+				width: 30px;
+				font-size: 22px;
+				text-align: center;
+			}
+			
+			input {
+				text-align: center;
+				flex-grow: 10;
+			}
+		}
+		
+		.data {
+			.stats {
+				.stat {
+					font-size: 28px;
+					align-items: center;
+					margin: 3px 0px;
+					
+					.icon-bubble {
+						height: 30px;
+						width: 30px;
+						border: 1px solid @rsGray;
+						border-radius: 17px;
+						font-size: 20px;
+						vertical-align: middle;
+					}
+					
+					.value {
+						margin-left: 5px;
+					}
+				}
+				
+				.point-bubble {
+					display: block;
+					height: 38px;
+					width: 38px;
+					line-height: 38px;
+					text-align: center;
+					border: 2px solid @rsGray;
+					border-radius: 15px;
+					vertical-align: middle;
+					font-size: 22px;
+				}
+			}
+			
+			.details {
+				padding: 0px 0px 0px 5px;
+				flex-grow: 10;
+				
+				.pilot-name {
+					white-space: nowrap;
+					margin-right: 8px;
+				}
+				
+				.pilot {
+					justify-content: flex-end;
+				}
+				
+				.pilot-ability {
+					position: relative;
+					flex-grow: 5;
+					/*margin: 5px 0px;*/
+						
+					p {
+						margin: 0px 0px 8px 0px;
+					}
+					
+					.pilot-ability-text {
+						padding-bottom: 26px;
+						padding: 3px;
+						border: 2px solid @rsGray;
+						background: @rsWhite;
+						border-radius: 5px;
+					}
+					
+					.edit-pilot-ability {
+						position: absolute;
+						background-color: transparent;
+						padding: 2px;
+						border: 0px;
+						margin: 0px;
+						bottom: 0px;
+						right: 0px;
+						
+						line-height: 16px;
+						font-size: 16px;
+						height: 20px;
+						width: 20px;
+						color: @rsOrange;
+					}
+					
+					&.object-info {
+						padding: 3px 0px 0px 3px !important;
+					}
+				}
+			
+				.abilities {
+					border: 2px solid @rsGray;
+					border-radius: 15px;
+				
+					.ability {
+						color: @rsLightBlue;
+						background: transparent;
+						font-size: 24px;
+						
+						padding: 3px;
+						border: 0px;
+						margin: 4px;
+					}
+				}
+			}
+		}
+		
+		.data-list {
+			
+			.property-link {
+				color: @rsLightBlue;
+				background: transparent;
+				font-size: .8em;
+				padding: 4px;
+				margin: 4px;
+				border: 0px;
+			}
+		}
+		
+		.mounts {
+			justify-content: space-between;
+			
+			.icon-bubble {
+				border: 1px solid @rsGray;
+				border-radius: 14px;
+				height: 26px;
+				line-height: 26px;
+				width: 26px;
+				flex-shrink: 0;
+				
+				.ship-icon {
+					color: @rsWhite;
+				}
+			}
+			
+			.slots {
+				justify-content: center;
+				flex-grow: 9;
+				
+				.slot {
+					line-height: 26px;
+					vertical-align: middle;
+				}
+			}
+			
+			.points {
+				line-height: 18px;
+				border: 1px solid @rsWhite;
+				padding: 3px 6px;
+				border-radius: 16px;
+				text-align: left;
+				position: relative;
+				flex-shrink: 0;
+				
+				.icon {
+					color: @rsWhite;
+					font-size: .7em;
+				}
+			}
+		}
+		
+		.data-list.items {
+			margin-top: 8px;
+		}
+	}
+	
+	.ship-effects {
+		width: 50px;
+		min-height: 50px;
+		padding-top: 50px;
+		z-index: 10;
+		
+		.effect-selector {
+			position: absolute;
+			z-index: 20;
+			top: 0px;
+			
+			background: @rsBlack;
+			transition: max-height .5s;
+			overflow: hidden;
+			max-height: 50px;
+		}
+		
+		.effect-toggle {
+			
+			
+			span {
+				transition: transform .5s, color .5s;
+			}
+		}
+		
+		.effect-token-container {
+			position: relative;
+		}
+		
+		button.effect-token {
+			height: 42px;
+			width: 42px;
+		}
+		
+		div.effect-token {
+			height: 32px;
+			width: 32px;
+		}
+		
+		.effect-token {
+			position: relative;
+		}
+		
+		.effect-button {
+			display: block;
+			padding: 4px;
+			margin: 4px;
+			border: 1px solid @rsGray;
+			border-radius: 15px;
+			background: transparent;
+			outline: none !important;
+			
+			span {
+				line-height: 32px;
+				font-size: 30px;
+			}
+		}
+		
+		button.effect-info {
+			position: absolute;
+			right: -40px;
+			top: 0px;
+			z-index: 30;
+			margin: 0px;
+			background: @rsBlack;
+		}
+		
+		select {
+			margin: -4px 4px 4px 4px;
+		    width: 42px;
+		}
+	}
+	
+	.fa-fubal {
+		margin-left: -1px;
+	}
+}

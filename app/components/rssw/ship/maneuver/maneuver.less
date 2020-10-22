@@ -1,0 +1,75 @@
+.rs-component.rssw.component-maneuvers {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	width: 160px;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+	font-size: 24px;
+	text-align: center;
+
+	button {
+		background: transparent;
+		padding: 0px;
+		border: 0px;
+		margin: 0px;
+		color: @rsWhite;
+	}
+
+	.backdrop {
+		position: absolute;
+		border-radius: 50%;
+		background-color: @rsBlack;
+		height: 40px;
+		width: 40px;
+		right: ~"calc(50% - 20px)";
+		overflow: hidden;
+		transition: width .2s, height .2s, right .2s;
+	}
+
+	.maneuver-icon {
+		display: block;
+		position: relative;
+		line-height: 30px;
+		height: 30px;
+		width: 30px;
+		z-index: 10;
+		outline-offset: 5px;
+	}
+
+	.maneuver-speed {
+		display: block;
+		position: absolute;
+		text-align: center;
+		width: 100%;
+		top: -6px;
+		font-size: 14px;
+	}
+
+	.maneuver {
+		position: absolute;
+		display: flex;
+		line-height: 30px;
+		height: 30px;
+		bottom: 0px;
+		right: 0px;
+		/*background-color: @rsBlack;*/
+		transition: width .2s, transform .2s, right .2s;
+		transform: rotate(0);
+		width: 0px;
+		right: 50%;
+		overflow: hidden;
+		z-index: 5;
+		transform-origin: right;
+
+		.indicator {
+			line-height: 30px;
+			width: 30px;
+			height: 30px;
+
+			span {
+			}
+		}
+	}
+}

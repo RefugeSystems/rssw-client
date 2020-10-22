@@ -1,0 +1,6 @@
+<div class="rssw-dice-view flex" :class="stacked?'v':'h'" v-on:click="sendToDiceBin()">
+	<div class="view-label" v-if="labeling">{{labeling}}</div>
+	<div class="flex h">
+		<div class="rssw-dice" v-for="die in dice" :class="die"></div>
+	</div>
+</div>

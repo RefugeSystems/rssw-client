@@ -2,7 +2,7 @@
 var fs = require("fs");
 var pkg = JSON.parse(fs.readFileSync("./package.json"));
 
-var seek = /^.*build[\/\\](components|pages|common)[\/\\]/;
+var seek = /^.*app[\/\\](components|pages|common)[\/\\]/;
 
 var config = {
 	"pkg": pkg,
@@ -22,8 +22,9 @@ var config = {
 				],
 				"comma-dangle": 2,
 				"quotes": [2, "double"],
-				"no-unused-vars": [2, {
-						"varsIgnorePattern": "^_?ignore"
+				"no-unused-vars": [1, {
+						"varsIgnorePattern": "^(_|[A-Z])",
+						"args": "after-used"
 					}
 				],
 				"block-scoped-var": 2,
@@ -32,8 +33,7 @@ var config = {
 				"max-depth": [1, {
 						"max": 10
 					}
-				],
-				"no-unused-vars": 1
+				]
 			},
 			"terminateOnCallback": false,
 			"callback": function (response) {
@@ -87,6 +87,7 @@ var config = {
 				"ERROR_Codes",
 				"Highcharts",
 				"showdown",
+				"d3",
 				"$0",
 				"$",
 
@@ -94,6 +95,7 @@ var config = {
 				"NameGenerator",
 				"EventEmitter",
 				"SearchIndex",
+				"filterXSS",
 				"Component",
 				"Invasion",
 				"Anomaly",
@@ -101,30 +103,42 @@ var config = {
 				"Dice",
 				"_p",
 
+				"RSWidgetConfiguration",
 				"RSModifierAttributes",
 				"UserInformation",
 				"RSModifierStats",
 				"RSCalculator",
-				"RSCondition",
 				"RSArchetype",
+				"RSCondition",
+				"RSDatapoint",
+				"RSDatausage",
 				"RSInventory",
-				"RSItemType",
 				"RSKnowledge",
-				"RSPlaylist",
+				"RSStreamURL",
+				"RSItemType",
 				"RSLogLevel",
 				"RSLocation",
-				"RSUniverse",
+				"RSManeuver",
+				"RSMinigame",
 				"RSModifier",
+				"RSPlaylist",
+				"RSUniverse",
 				"RSAbility",
+				"RSJournal",
+				"RSSetting",
 				"RSHistory",
 				"RSDataset",
 				"RSLoadout",
+				"RSSession",
+				"RSAction",
 				"RSPlayer",
 				"RSObject",
 				"RSEffect",
 				"RSEntity",
+				"RSLocale",
 				"RSPlanet",
 				"RSWidget",
+				"RSEvent",
 				"RSImage",
 				"RSParty",
 				"RSSkill",
@@ -134,21 +148,24 @@ var config = {
 				"RSRace",
 				"RSRoom",
 				"RSSlot",
+				"RSType",
 				"RSLog",
 				"RSSex"
 			]
 		},
 		"app": [
 			"spec/app/**/*.js",
-			"build/**/*.js",
-			"build/*.js"
+			"appWorker/**/*.js",
+			"appWorker/*.js",
+			"app/**/*.js",
+			"app/*.js"
 		]
 	},
 	"connect": {
 		"app": {
 			"options": {
 				"port": 3082,
-				"base": "app/",
+				"base": "deploy/",
 				"hostname": "*",
 				"livereload": 3083,
 				"middleware": function(connect, options, middlewares) {
@@ -181,79 +198,162 @@ var config = {
 			},
 			"files": [
 				"Gruntfile.js",
+				"appWorker/**/*.js",
 				"app/manifest.json",
-				"build/**/*.less",
-				"build/**/*.json",
-				"build/**/*.html",
-				"build/**/*.css",
-				"build/**/*.js",
+				"app/**/*.less",
+				"app/**/*.json",
+				"app/**/*.html",
+				"app/**/*.css",
+				"app/**/*.js",
 				"spec/**/*.js"
 			],
-			"tasks": ["build"]
+			"tasks": ["development"]
 		},
 		"docs": {
 			"files": [
-				"build/**/*.js"
+				"app/**/*.js"
 			],
 			"tasks": ["yuidoc:app"]
 		}
 	},
 	"concat": {
-		"app": {
+		// These files corrupt the sourcemap for main for whatever reason so they handled separately
+		"worker": {
+			"options": {
+				"sourceMap": false
+			},
+			"src": [
+				"appWorker/**/*.js",
+				"appWorker/*.js"
+			],
+			"dest": "deploy/worker.js"
+		},
+		"externals": {
 			"options": {
 				"sourceMap": true
 			},
 			"src": [
+				"external/cytoscape.js",
+				"external/cola.js",
+				"external/cytoscape-cola.js"
+			],
+			"dest": "deploy/externals.js"
+		},
+		"app": {
+			"options": {
+				"footer": "\nrsSystem.version=\"" + pkg.version + "\"",
+				"sourceMap": true
+			},
+			"src": [
+				"node_modules/xss/dist/xss.min.js",
 				"node_modules/hammerjs/hammer.js",
 				"node_modules/showdown/dist/showdown.min.js",
 				"node_modules/vue/dist/vue.js",
 				"node_modules/jquery/dist/jquery.min.js",
 				"node_modules/vue-router/dist/vue-router.js",
-				
-				"node_modules/cytoscape/dist/cytoscape.js",
-				"node_modules/cytoscape-cola/cola.js",
-				"node_modules/cytoscape-cola/cytoscape-cola.js",
+				"node_modules/d3/dist/d3.min.js",
 
 				"transient/templates.js",
-				"build/library/*.js",
-				"build/library/*/**/*.js",
+				"app/library/*.js",
+				"app/library/*/**/*.js",
 
-				"build/core/*.js",
-				"build/core/*/**/*.js",
+				"app/core/*.js",
+				"app/core/*/**/*.js",
 				
-				"build/common/*.js",
-				"build/common/*/**/*.js",
+				"app/common/*.js",
+				"app/common/*/**/*.js",
 				
-				"build/components/*.js",
-				"build/components/*/**/*.js",
+				"app/components/*.js",
+				"app/components/*/**/*.js",
 
-				"build/subcomponents/*.js",
-				"build/subcomponents/*/**/*.js",
+				"app/subcomponents/*.js",
+				"app/subcomponents/*/**/*.js",
 
-				"build/pages/*.js",
-				"build/pages/*/**/*.js",
+				"app/pages/*.js",
+				"app/pages/*/**/*.js",
 
-				"build/main/*/**/*.js",
-				"build/main/*.js"
+				"app/main/*/**/*.js",
+				"app/main/*.js"
 			],
-			"dest": "app/main.js"
+			"dest": "deploy/main.js"
 		},
 		"less": {
 			"src": [
-				"build/styles/*.less",
-				"build/styles/*/**/*.less",
-				"build/pages/**/*.less",
-				"build/common/**/*.less",
-				"build/components/**/*.less"
+				"app/styles/*.less",
+				"app/styles/*/**/*.less",
+				"app/pages/**/*.less",
+				"app/common/**/*.less",
+				"app/components/**/*.less"
 			],
-			"dest": "build/app.less"
+			"dest": "deploy/app.less"
+		}
+	},
+	"uglify": {
+		"options": {
+			"sourceMap": true
+		},
+		"app": {
+			"options": {
+				"footer": "\nrsSystem.version = \"" + pkg.version + "\"",
+				"reserved": ["rsSystem"]
+			},
+			"files": {
+				"deploy/main.js": [
+					"node_modules/xss/dist/xss.min.js",
+					"node_modules/hammerjs/hammer.js",
+					"node_modules/showdown/dist/showdown.min.js",
+					"node_modules/vue/dist/vue.js",
+					"node_modules/jquery/dist/jquery.min.js",
+					"node_modules/vue-router/dist/vue-router.js",
+					"node_modules/d3/dist/d3.min.js",
+
+					"transient/templates.js",
+					"app/library/*.js",
+					"app/library/*/**/*.js",
+
+					"app/core/*.js",
+					"app/core/*/**/*.js",
+					
+					"app/common/*.js",
+					"app/common/*/**/*.js",
+					
+					"app/components/*.js",
+					"app/components/*/**/*.js",
+
+					"app/subcomponents/*.js",
+					"app/subcomponents/*/**/*.js",
+
+					"app/pages/*.js",
+					"app/pages/*/**/*.js",
+
+					"app/main/*/**/*.js",
+					"app/main/*.js"
+				]
+			}
+		},
+		"externals": {
+			"files": {
+				"deploy/externals.js": [
+					"external/cytoscape.js",
+					"external/cola.js",
+					"external/cytoscape-cola.js"
+				]
+			}
+		},
+		"worker": {
+			"files": {
+				"deploy/worker.js": [
+					"appWorker/**/*.js",
+					"appWorker/*.js"
+				]
+			}
 		}
 	},
 	"less": {
 		"app": {
 			"files": {
-				"app/main.css": [
-					"build/app.less"
+				"deploy/main.css": [
+					"deploy/app.less"
 				]
 			}
 		}
@@ -264,7 +364,7 @@ var config = {
 		},
 		"app": {
 			"templates": [{
-					"path": "build/**/*.html",
+					"path": "app/**/*.html",
 					"rewrite": function (name) {
 						var ex = seek.exec(name);
 						if(ex) {
@@ -304,7 +404,7 @@ var config = {
 			"options": {
 				"outdir": "./docs",
 				"paths": [
-					"./build/"
+					"./app/"
 				]
 			}
 		}
@@ -323,6 +423,7 @@ module.exports = function (grunt) {
 
 	grunt.initConfig(config);
 
-	grunt.registerTask("build", ["eslint", "templify:app","concat:app","concat:less","less:app"]);
-	grunt.registerTask("default", ["build","connect:app","open:app", "watch:app"]);
+	grunt.registerTask("build", ["eslint", "templify:app","uglify:worker","uglify:externals","uglify:app","concat:less","less:app"]);
+	grunt.registerTask("development", ["eslint", "templify:app","concat:worker","concat:externals","concat:app","concat:less","less:app"]);
+	grunt.registerTask("default", ["development","concat:worker","concat:externals","connect:app","open:app", "watch:app"]);
 };

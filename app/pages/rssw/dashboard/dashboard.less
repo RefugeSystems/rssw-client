@@ -1,0 +1,83 @@
+.rssw-page.page-dashboard {
+	position: relative;
+	display: block;
+
+	.title {
+		font-size: 20px;
+		margin-bottom: 7px;
+	}
+
+	.navigation-button {
+		text-decoration: none;
+		color: @rsOrange;
+		display: inline-flex;
+		flex-direction: row;
+		align-items: center;
+
+		.link-label {
+			margin-left: 5px;
+		}
+
+		&:active,
+		&:hover {
+			color: @rsBlue;
+		}
+	}
+
+	button.ctrl {
+		background: transparent;
+		padding: 2px;
+		margin: 2px;
+		border: 0px;
+		cursor: pointer;
+	}
+
+	.ctrl-icon {
+		display: inline-block;
+		line-height: 20px;
+		font-size: 18px;
+		width: 20px;
+	}
+
+	.dashboards {
+		margin-left: 30px;
+	}
+
+	.dashboard {
+		font-size: 18px;
+		padding: 4px;
+		margin: 4px;
+	}
+
+	.self {
+		margin: 7px;
+		font-size: 17px;
+	}
+
+	.control {
+		margin: 7px;
+
+
+		.entities {
+			display: flex;
+			flex-direction: column;
+
+			.entity {
+				margin: 5px 0px;
+			}
+		}
+	}
+
+	.opened {
+		position: absolute;
+		display: block;
+		transition: left .5s;
+		left: 100%;
+		z-index: 5;
+		top: 0px;
+
+		&.loaded {
+			left: 0px;
+		}
+	}
+}

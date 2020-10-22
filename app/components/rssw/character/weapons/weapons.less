@@ -1,0 +1,53 @@
+.rs-component.rssw.component-entity-weapons {
+
+	.weapon-report {
+		margin-bottom: 6px;
+		min-height: 40px;
+	}
+
+	.element {
+		padding: 0px 5px;
+	}
+	
+	.name {
+		margin-top: 5px;
+	}
+	
+	.icon {
+		min-width: 40px;
+		min-height: 40px;
+		line-height: 40px;
+		font-size: 30px;
+	}
+	
+	.expanded {
+		.band {
+			border-left: 3px solid @rsWhite;
+		}
+	}
+	
+	.report.compacted {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.compacted {
+		.band {
+			border-top: 3px solid @rsWhite;
+		}
+		
+		.weapon-report {
+			width: 70px;
+			margin: 2px;
+		}
+	}
+		
+	.roll {
+		margin: 5px 0px;
+
+		.rssw-dice,
+		.dice {
+			margin: 0px 2px;
+		}
+	}
+}

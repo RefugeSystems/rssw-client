@@ -1,0 +1,18 @@
+<div class="rs-component rs-master-results">
+	<h3>
+		<span>Received Rolls</span>
+		<select v-model.number="state.max">
+			<option v-for="n in 10" :value="n">{{n}}</option>
+		</select>
+	</h3>
+	<div class="entity  flex h" v-for="(entity, index) in entities" :key="entity.id">
+		<div class="naming">
+			<rssw-entity-summary v-on:selected="dismissEntity(entity, index)" :entity="entity" :universe="universe" :user="user""></rssw-entity-summary>
+		</div>
+		<div class="rolls flex h">
+			<div class="roll-result" :class="state.active_roll === roll.echo?'active-roll':''" v-for="(roll, index) in state.seen[entity.id]" :key="roll.echo">
+				 <rssw-dice-result v-on:dismiss="selectRoll(roll)" v-on:menu="dismissRoll(entity, index)" :roll="roll" :options="state.options"></rssw-dice-result>
+			</div>
+		</div>
+	</div>
+</div>

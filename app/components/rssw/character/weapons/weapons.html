@@ -1,0 +1,62 @@
+<div class="rs-component rssw component-entity-weapons">
+
+	<div class="titling" v-if="compact">Equipped</div>
+	<div class="report" v-if="equipped.length && limited !== 'unequipped'" :class="compact?'compacted':'expanded'">
+		<h3 class="titling" v-if="!compact">Equipped Weapons</h3>
+		<div class="weapon-report flex wrap" v-for="item in equipped" :class="compact?'v':'h'">
+			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
+				<span :class="getItemIcon(item)"></span>
+			</div>
+			<div class="pool band flex v element" v-on:click="rollDice(item)">
+				<div class="name align-center">
+					<span class="fas fa-dice"></span>
+				</div>
+				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :roll="rolls[item.id]" :roll-name="item.name"/>
+			</div>
+			<div class="damage band flex v element">
+				<div class="name align-center">
+					<span class="ra ra-explosion"></span>
+				</div>
+				<div class="roll align-center">
+					{{getWeaponDamage(item)}}
+				</div>
+			</div>
+			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="(index === 0 || isRanged[item.id]) && index < item.range + rangeBonus" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+				<div class="name">
+					<span>{{band.substring(0,2).capitalize()}}</span>
+				</div>
+				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" :roll-name="item.name + '@' + band" />
+			</div>
+		</div>
+	</div>
+
+	<div class="titling" v-if="compact">Unequipped</div>
+	<div class="report" v-if="items.length && limited !== 'equipped'" :class="compact?'compacted':'expanded'">
+		<h3 class="titling" v-if="!compact">Unequipped Weapons</h3>
+		<div class="weapon-report flex wrap" v-for="item in items" :class="compact?'v':'h'">
+			<div class="icon flex v element center centered middled" v-on:click="showInfo(item)">
+				<span :class="item.icon"></span>
+			</div>
+			<div class="pool band flex v element" v-on:click="showInfo('knowledge:skillchecks:dice')">
+				<div class="name align-center">
+					<span class="fas fa-dice"></span>
+				</div>
+				<rssw-dice-view class="roll" :universe="universe" :entity="entity" :skill="item.skill_check" />
+			</div>
+			<div class="damage band flex v element">
+				<div class="name align-center">
+					<span class="ra ra-explosion"></span>
+				</div>
+				<div class="roll align-center">
+					{{getWeaponDamage(item)}}
+				</div>
+			</div>
+			<div class="range band flex v element" v-for="(band, index) in rangeBands" v-if="(index === 0 || isRanged[item.id]) && index < item.range" v-on:click="showInfo('knowledge:combat:rangebands:' + band)">
+				<div class="name">
+					<span>{{band.substring(0,2).capitalize()}}</span>
+				</div>
+				<rssw-dice-view class="roll" :roll="getRangeBandDifficultyRoll(item, band)" :universe="universe" :entity="entity" :roll-name="item.name + '@' + band" />
+			</div>
+		</div>
+	</div>
+</div>

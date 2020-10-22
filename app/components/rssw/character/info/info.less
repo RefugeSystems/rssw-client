@@ -1,0 +1,132 @@
+.rs-component.rssw.component-character-info {
+	min-height: 0px;
+
+	&.abilities {
+		min-height: 700px;
+	}
+
+	.ability-display {
+		position: absolute;
+		background-color: black;
+		overflow: hidden;
+		height: 0px;
+		width: 0px;
+		left: 0px;
+		top: 0px;
+
+		/*transition: height .5s, width .5s;*/
+		z-index: 50;
+
+		&.display-open {
+			height: 100%;
+			width: 100%;
+
+		}
+	}
+
+	a {
+		cursor: pointer;
+	}
+
+	.property {
+		max-width: 550px;
+		color: @rsWhite;
+		margin: 3px;
+
+		button.effect {
+			color: @rsWhite;
+		}
+	}
+
+	.divide {
+		color: @rsWhite;
+		margin: 0px 0px 0px 2px;
+	}
+
+	.icon {
+		display: inline-block;
+		width: 20px;
+		text-align: center;
+	}
+
+	.value {
+		color: @rsLightBlue;
+		font-size: 1.1em;
+	}
+
+	.property-action {
+		color: @rsOrange;
+		font-size: .9em;
+	}
+
+	.description {
+		min-height: 140px;
+		min-width: 360px;
+	}
+
+	button.token-container {
+		position: relative;
+		display: inline-flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		background: transparent;
+
+		padding: 0px;
+		margin: 0px;
+		border: 0px;
+		line-height: 28px;
+		width: 38px;
+		z-index: 1;
+
+		.backdrop {
+			position: absolute;
+			line-height: 28px;
+			width: 38px;
+			font-size: 27px;
+			z-index: 2;
+		}
+
+		.foreground {
+			line-height: 28px;
+			width: 38px;
+			font-size: 18px;
+			z-index: 3;
+		}
+	}
+
+	button.property-action,
+	button.value {
+		background: transparent;
+		font-family: inherit;
+		font-size: inherit;
+		padding: 0px;
+		border: 0px;
+		margin: 0px;
+	}
+
+	button.action {
+		color: white;
+	}
+
+	.text-container {
+		max-height: 550px;
+		max-width: inherit;
+		overflow: auto;
+
+		textarea {
+			width: 510px;
+			height: 300px;
+			max-height: 550px;
+			max-width: inherit;
+		}
+	}
+
+	.red-shadow {
+		box-shadow: 0px 0px 10px @rsLightRed;
+	}
+
+	a.linked-value {
+		color: @rsLightBlue;
+	}
+}
