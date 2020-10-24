@@ -423,6 +423,7 @@
 			data.classNames = classNames;
 
 			data.calculatedEncumberance = 0;
+			data.calculatedHardpoints = 0;
 			data.adjustingDurability = 0;
 			data.adjustingCharges = 0;
 
@@ -1163,6 +1164,7 @@
 					hold,
 					slot,
 					map,
+					hp,
 					x,
 					y,
 					z;
@@ -1512,7 +1514,7 @@
 						}
 					}
 				}
-				
+
 				if(this.record.linked) {
 					Vue.set(this, "linkedLocation", this.record);
 				} else if(this.record.linked_location) {
@@ -1535,6 +1537,17 @@
 						this.renderRestockDistribution();
 					}, 10);
 				}
+
+				buffer = this.universe.indexes.item.translate(this.record.item);
+				hp = 0;
+				for(x=0; x<buffer.length; x++) {
+					if(buffer.hardpoint_usage) {
+						hp += buffer.hardpoint_usage;
+					} else {
+						hp++;
+					}
+				}
+				Vue.set(this, "calculatedHardpoints", hp);
 
 				this.$forceUpdate();
 			},

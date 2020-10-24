@@ -169,6 +169,10 @@
 		"property": "encumberance_bonus",
 		"type": "text"
 	}, {
+		"label": "Hardpoint Usage",
+		"property": "hardpoint_usage",
+		"type": "text"
+	}, {
 		"label": "Max Contents",
 		"property": "contents_max",
 		"type": "text"

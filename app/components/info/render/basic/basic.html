@@ -235,7 +235,7 @@
 	<div v-if="canAttach()">
 		<h3>Pass To Item</h3>
 		<div class="control">
-			<span v-if="record.hardpoints">Currently has {{record.item?record.item.length:0}} of {{record.hardpoints}} attachments</span>
+			<span v-if="record.hardpoints">Currently has {{calculatedHardpoints}} of {{record.hardpoints}} attachments</span>
 			<span v-if="record.contents_max">Current Fill: {{calculatedEncumberance}} of {{record.contents_max}}</span>
 			<select v-model="attach_target" v-on:change="attachObject()" v-if="attach_targets.length">
 				<option value=""></option>

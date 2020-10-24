@@ -33,7 +33,7 @@
 		"optionValue": "id",
 		"optionLabel": "name"
 	};
-	
+
 	actions = {
 		"label": "Actions",
 		"property": "action",
@@ -164,6 +164,10 @@
 	}, {
 		"label": "Encumberance",
 		"property": "encumberance",
+		"type": "number"
+	}, {
+		"label": "Hardpoint Usage",
+		"property": "hardpoint_usage",
 		"type": "number"
 	}, {
 		"label": "Critical",
