@@ -1,24 +1,24 @@
 
 /**
- * 
- * 
+ *
+ *
  * @class rsGraph
  * @constructor
  * @module Components
  */
 (function() {
 	/**
-	 * 
+	 *
 	 * @property storageKey
 	 * @type String
 	 * @private
 	 * @static
 	 */
 	var storageKey = "_rs_graphComponentKey:";
-	
+
 	var layoutLookup = {};
 	var cytoLookup = {};
-	
+
 	var layoutOptions = {
 		"name": "cola",
 		"linkDistance": 1000,
@@ -27,7 +27,7 @@
 		"animate": true,
 		"fit": false
 	};
-	
+
 	rsSystem.component("rsGraph", {
 		"inherit": true,
 		"mixins": [
@@ -71,15 +71,15 @@
 			data.storageID = storageKey + this.id;
 			data.cytoLayout = null;
 			data.cyto = null;
-			
+
 			data.activeNodes = [];
 			data.indexNodes = {};
 			data.activeEdges = [];
 			data.indexEdges = {};
-			
+
 			data.notFound = false;
 			data.searchText = "";
-			
+
 			return data;
 		},
 		"watch": {
@@ -146,13 +146,13 @@
 					}
 				}]
 			});
-			
+
 			layoutLookup[this.id] = cytoLookup[this.id].layout(layoutOptions);
 			layoutLookup[this.id].run();
-			
+
 			cytoLookup[this.id].on("tap", "node", (event) => {
 				var data;
-				
+
 				if(event && event.target && event.target.data && (data = event.target.data())) {
 					this.$emit("node", data);
 				}
@@ -160,7 +160,7 @@
 			cytoLookup[this.id].on("tap", "edge", (event) => {
 				console.log("Tap[E]: ", event);
 			});
-			
+
 			this.sync();
 		},
 		"methods": {
@@ -175,7 +175,7 @@
 					found = false,
 					searching,
 					x;
-				
+
 				searching = function(el) {
 					console.log("Searching: ", el);
 					var data = el.data();
@@ -199,15 +199,15 @@
 						return true;
 					}
 				};
-				
+
 				this.getScape().animate({
 					"duration": 500,
 					"center": {
 						"eles": scape.filter(searching)
 					}
 				});
-				
-				
+
+
 				if(!found) {
 					Vue.set(this, "notFound", true);
 				}
@@ -254,9 +254,9 @@
 					style,
 					el,
 					x;
-				
+
 //				console.log("Syncing: ", this.nodes);
-				
+
 				buffer = Object.keys(this.indexNodes);
 				for(x=0; x<this.nodes.length; x++) {
 					if(this.indexNodes[this.nodes[x].id]) {
@@ -286,7 +286,7 @@
 					delete(this.indexNodes[buffer[x]]);
 					rerun = true;
 				}
-				
+
 
 				buffer = Object.keys(this.indexEdges);
 				for(x=0; x<this.edges.length; x++) {
@@ -309,10 +309,18 @@
 					delete(this.indexEdges[buffer[x]]);
 					rerun = true;
 				}
-				
+
 				if(rerun) {
 					this.runLayout();
 				}
+			}
+		},
+		"beforeDestroy": function() {
+			if(layoutLookup[this.id]) {
+				layoutLookup[this.id].stop();
+			}
+			if(cytoLookup[this.id]) {
+				cytoLookup[this.id].stop();
 			}
 		},
 		"template": Vue.templified("components/graph.html")

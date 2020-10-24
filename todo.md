@@ -19,17 +19,18 @@
 + Ability bonus for having something in a slot
 + Items disable other slot types when worn
 	+ For example a war helment disables "goggles" or "eye wear"
-+ Report damage by equipped weapon (Checking validity: Slots have an "Active Character Dmaage" to mark where a weapon gets calculated from)
++ Report damage by equipped weapon (Checking validity: Slots have an "Active Character Damage" to mark where a weapon gets calculated from)
 	+ Range band "advantage" & "disadvantage" dice gains for attacks
 	+ Possibly use weapon types
 	+ must include abilities
++ Hardpoint usage separated from encumberance (Allows encumberance reduction with hardpoint consumption)
 
 # Bugs
 √ Paged Table  
         + Doesn't properly follow current filter at load
         + When changing data sources and beyond the highest page, doesn't backtrack well
         + Changing data source seems problematic in general with regard to page
-+ Info "Back" button needs to rewind base and target as well as record
+√ Info "Back" button needs to rewind base and target as well as record
 
 # Data
 + Archetype Field Set
